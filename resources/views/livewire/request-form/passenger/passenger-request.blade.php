@@ -7,19 +7,29 @@
             <div class="form-row">
                 <fieldset class="form-group col-2">
                     <label for="for_passengerType">Pasajero</label>
-                    <select wire:model.live="passengerType" name="passengerType" class="form-control" disabled>
+                    <select wire:model.live="passengerType" name="passengerType" class="form-control">
                         <option value="">Seleccione...</option>
                         <option value="internal">SSI</option>
                         <option value="external">Externo</option>
                     </select>
                 </fieldset>
 
-                <fieldset class="form-group col-6">
-                    <label for="for_user_id">Funcionario*</label>
-                    @livewire('search-select-user', [
-                        'emit_name' => 'searchedPassenger']
-                    )
-                </fieldset>
+                @if($passengerType == 'internal')
+                    <fieldset class="form-group col-6">
+                        <label for="for_user_id">Funcionario*</label>
+                        @livewire('search-select-user', [
+                            'emit_name' => 'searchedPassenger']
+                        )
+                    </fieldset>
+                @elseif($passengerType == 'external')
+                    <fieldset class="form-group">
+                        <div class="alert alert-info alert-sm mt-4 ml-2" role="alert">
+                            <b>Estimado Usuario</b>: Ud. ha seleccionado compra para un usuario o funcionario no registrado.
+                        </div>
+                    </fieldset>
+                @else
+
+                @endif
           </div>
 
           <hr>
@@ -30,34 +40,59 @@
           <!-- <form wire:submit="submit"> -->
 
               <div class="form-row">
-                    <fieldset class="form-group col-sm-3">
-                        <label for="forName">Run</label>
-                        <input wire:model.live="run" name="name" class="form-control form-control-sm" type="text"
-                          value="{{ $run }}" readonly>
-                    </fieldset>
+                    @if($passengerType == 'internal')
+                        <fieldset class="form-group col-sm-3">
+                            <label for="forName">Run</label>
+                            <input wire:model.live="run" name="name" class="form-control form-control-sm" type="text"
+                            value="{{ $run }}" readonly>
+                        </fieldset>
 
-                    <fieldset class="form-group col-sm-1">
-                        <label for="forRut">DV</label>
-                        <input wire:model.live="dv" name="dv" class="form-control form-control-sm" type="text"
-                          value="{{ $dv }}" readonly>
-                    </fieldset>
+                        <fieldset class="form-group col-sm-1">
+                            <label for="forRut">DV</label>
+                            <input wire:model.live="dv" name="dv" class="form-control form-control-sm" type="text"
+                            value="{{ $dv }}" readonly>
+                        </fieldset>
+                    @else
+                        <fieldset class="form-group col-sm-2">
+                            <label for="forDocumentType">Tipo Documento</label>
+                            <select wire:model.live="document_type"
+                                name="document_type" 
+                                class="form-control form-control-sm" 
+                                {{ $inputsInternalPassengers }}>
+                                <option value="" selected>Seleccione...</option>
+                                <option value="identity card">Cédula</option>
+                                <option value="passport">Pasaporte</option>
+                                <option value="dni other">DNI u Otro</option>
+                            </select>
+                        </fieldset>
+                        
+                        <fieldset class="form-group col-sm-2">
+                            <label for="forName">Nro. Documento</label>
+                            <input wire:model.live="document_number" 
+                                placeholder="xx.xxx.xxx-x" 
+                                name="name" 
+                                class="form-control form-control-sm" 
+                                type="text"
+                            value="{{ $run }}" {{ $inputsInternalPassengers }}>
+                        </fieldset>
+                    @endif
 
                     <fieldset class="form-group col-sm-4">
                         <label for="forRut">Nombres</label>
                         <input wire:model.live="name" name="name" class="form-control form-control-sm" type="text"
-                          value="{{ $name }}" readonly>
+                          value="{{ $name }}" {{ $inputsInternalPassengers }}>
                     </fieldset>
 
                     <fieldset class="form-group col-sm-2">
                         <label for="forRut">Apellido Paterno</label>
                         <input wire:model.live="fathers_family" name="fathers_family" class="form-control form-control-sm" type="text"
-                          value="{{ $fathers_family }}" readonly>
+                          value="{{ $fathers_family }}" {{ $inputsInternalPassengers }}>
                     </fieldset>
 
                     <fieldset class="form-group col-sm-2">
                         <label for="forRut">Apellido Materno</label>
                         <input wire:model.live="mothers_family" name="mothers_family" class="form-control form-control-sm" type="text"
-                          value="{{ $mothers_family }}" readonly>
+                          value="{{ $mothers_family }}" {{ $inputsInternalPassengers }}>
                     </fieldset>
                 </div>
 
@@ -167,7 +202,7 @@
             <thead>
                 <tr>
                     <!-- <th>Item</th> -->
-                    <th>Run</th>
+                    <th>Run / Nro. Documento</th>
                     <th>Nombres y Apellidos</th>
                     <th>Fecha de Nacimiento</th>
                     <th>Teléfono</th>
@@ -185,7 +220,9 @@
               @foreach($passengers as $key => $item)
                       <tr>
                           <!-- <td>{{$key+1}}</td> -->
-                          <td>{{$item['run']."-".$item['dv']}}</td>
+                          <td>
+                                {{ ($item['passenger_type'] == 'internal') ? $item['run']."-".$item['dv'] : $item['document_number'] }}
+                          </td>
                           <td>{{$item['name']." ".$item['fathers_family']." ".$item['mothers_family']}}</td>
                           <td>{{ Carbon\Carbon::parse($item['birthday'])->format('d-m-Y') }}</td>
                           <td>{{$item['phone_number']}}</td>

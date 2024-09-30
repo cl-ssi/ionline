@@ -314,7 +314,7 @@
                 <thead class="text-center small">
                 <tr>
                     <th>#</th>
-                    <th width="70">RUT</th>
+                    <th width="70">Run / Nro. Documento</th>
                     <th>Nombres</th>
                     <th>Apellidos</th>
                     <th>Fecha Nac.</th>
@@ -334,7 +334,13 @@
                 @foreach($requestForm->passengers as $key => $passenger)
                     <tr>
                         <td>{{ $key+1 }}</td>
-                        <td>{{ number_format($passenger->run, 0, ",", ".") }}-{{ $passenger->dv }}</td>
+                        <td> 
+                            @if($passenger->passenger_type == 'internal') 
+                                {{ number_format($passenger->run, 0, ",", ".")}}-{{$passenger->dv}}
+                            @else
+                                {{ $passenger->document_number }}
+                            @endif
+                        </td>
                         <td>{{ $passenger->name }}</td>
                         <td>{{ $passenger->fathers_family }} {{ $passenger->mothers_family }}</td>
                         <td>{{ $passenger->birthday ? $passenger->birthday->format('d-m-Y') : '' }}</td>

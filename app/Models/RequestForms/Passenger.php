@@ -14,9 +14,9 @@ class Passenger extends Model implements Auditable
     use \OwenIt\Auditing\Auditable;
     
     protected $fillable = [
-        'user_id', 'run', 'dv' ,'name' ,'fathers_family', 'mothers_family',
-        'birthday', 'phone_number', 'email', 'round_trip', 'origin', 'destination',
-        'departure_date', 'return_date', 'baggage', 'unit_value', 'request_form_id'
+        'passenger_type', 'document_type', 'document_number', 'user_id', 'run', 'dv' ,'name',
+        'fathers_family', 'mothers_family', 'birthday', 'phone_number', 'email', 'round_trip', 
+        'origin', 'destination', 'departure_date', 'return_date', 'baggage', 'unit_value', 'request_form_id'
     ];
 
     public function budgetItem() {

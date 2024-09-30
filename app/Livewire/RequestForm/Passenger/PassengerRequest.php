@@ -22,9 +22,10 @@ class PassengerRequest extends Component
 
     public $searchedPassenger;
 
-    public $passengerType, $run, $dv, $name, $fathers_family, $mothers_family,
-          $birthday, $phone_number, $email, $round_trip, $origin, $destination,
-          $departure_date, $return_date, $baggage, $unitValue;
+    public $passengerType, $inputsInternalPassengers = "readonly", $run, $dv, 
+            $document_type, $document_number, $name, $fathers_family, $mothers_family,
+            $birthday, $phone_number, $email, $round_trip, $origin, $destination,
+            $departure_date, $return_date, $baggage, $unitValue;
 
     public $roundTripValue;
 
@@ -34,11 +35,9 @@ class PassengerRequest extends Component
 
     //Para Validar
 
+    /*
     protected $rules = [
-        // 'passengerType'     =>  'required',
-        'run'               =>  'required|integer|min:1',
         'dv'                =>  'required',
-        // 'dv'                =>  'required|numeric|min:1',
         'name'              =>  'required',
         'fathers_family'    =>  'required',
         'mothers_family'    =>  'required',
@@ -52,17 +51,16 @@ class PassengerRequest extends Component
         'return_date'       =>  'exclude_if:round_trip,one-way only|required',
         'baggage'           =>  'required',
         'unitValue'         =>  'required',
-
     ];
+    */
 
     protected $messages = [
-        // 'passengerType.required'    => 'Seleccione tipo de Pasajero.',
         'run.required'              => 'Campo Run es obligatorio.',
         'run.integer'               => 'Run debe ser número entero sin puntos ni dígito verificador.',
         'run.min'                   => 'Run debe ser mayor o igual a 1.',
         'dv.required'               => 'Campo DV es obligatorio.',
-        // 'dv.numeric'                => 'DV debe ser numérico.',
-        // 'dv.min'                    => 'DV debe ser mayor o igual a 0.1.',
+        'document_type.required'    => 'Campo Tipo Documento es obligatorio.',
+        'document_number.required'  => 'Campo Número Documento es obligatorio.',
         'name.required'             => 'Campo Nombre Completo',
         'fathers_family.required'   => 'Campo Apellido Paterno es requerido.',
         'mothers_family.required'   => 'Campo Apellido Materno es requerido',
@@ -81,25 +79,47 @@ class PassengerRequest extends Component
     ];
 
     public function addPassenger(){
-        $this->validate();
+        $validatedData = $this->validate([
+            ($this->passengerType == "internal") ? 'run' : 'run'    => ($this->passengerType == "internal") ? 'required|integer|min:1' : '',
+            ($this->passengerType == "internal") ? 'dv' : 'dv'      => ($this->passengerType == "internal") ? 'required' : '',
+            ($this->passengerType == "external") ? 'document_type' : 'document_type'        => ($this->passengerType == "external") ? 'required' : '',
+            ($this->passengerType == "external") ? 'document_number' : 'document_number'    => ($this->passengerType == "external") ? 'required' : '',
+            'name'              =>  'required',
+            'fathers_family'    =>  'required',
+            'mothers_family'    =>  'required',
+            'birthday'          =>  'required',
+            'phone_number'      =>  'required|integer',
+            'email'             =>  'required|email',
+            'round_trip'        =>  'required',
+            'origin'            =>  'required',
+            'destination'       =>  'required',
+            'departure_date'    =>  'required',
+            'return_date'       =>  'exclude_if:round_trip,one-way only|required',
+            'baggage'           =>  'required',
+            'unitValue'         =>  'required',
+        ]);
+
+        // $this->validate();
         $this->passengers[]=[
-              'id'                =>  null,
-              'passenger_type'    =>  $this->passengerType,
-              'run'               =>  $this->run,
-              'dv'                =>  $this->dv,
-              'name'              =>  $this->name,
-              'fathers_family'    =>  $this->fathers_family,
-              'mothers_family'    =>  $this->mothers_family,
-              'birthday'          =>  $this->birthday,
-              'phone_number'      =>  $this->phone_number,
-              'email'             =>  $this->email,
-              'round_trip'        =>  $this->round_trip,
-              'origin'            =>  $this->origin,
-              'destination'       =>  $this->destination,
-              'departure_date'    =>  $this->departure_date,
-              'return_date'       =>  $this->return_date,
-              'baggage'           =>  $this->baggage,
-              'unitValue'         =>  $this->unitValue
+              'id'                  => null,
+              'passenger_type'      => $this->passengerType,
+              'run'                 => ($this->passengerType == "internal") ? $this->run : null,
+              'dv'                  => ($this->passengerType == "internal") ? $this->dv : null,
+              'document_type'       => ($this->passengerType == "external") ? $this->document_type : null,
+              'document_number'     => ($this->passengerType == "external") ? $this->document_number : null,
+              'name'                =>  $this->name,
+              'fathers_family'      =>  $this->fathers_family,
+              'mothers_family'      =>  $this->mothers_family,
+              'birthday'            =>  $this->birthday,
+              'phone_number'        =>  $this->phone_number,
+              'email'               =>  $this->email,
+              'round_trip'          =>  $this->round_trip,
+              'origin'              =>  $this->origin,
+              'destination'         =>  $this->destination,
+              'departure_date'      =>  $this->departure_date,
+              'return_date'         =>  $this->return_date,
+              'baggage'             =>  $this->baggage,
+              'unitValue'           =>  $this->unitValue
         ];
         $this->totalValue();
         $this->cleanPassenger();
@@ -204,6 +224,8 @@ class PassengerRequest extends Component
             $this->passengers[]=[
                 'id'                =>  $passenger->id,
                 'passenger_type'    =>  $passenger->passenger_type,
+                'document_type'     =>  $passenger->document_type,
+                'document_number'   =>  $passenger->document_number,
                 'run'               =>  $passenger->run,
                 'dv'                =>  $passenger->dv,
                 'name'              =>  $passenger->name,
@@ -250,5 +272,32 @@ class PassengerRequest extends Component
     public function savedTypeOfCurrency($typeOfCurrency)
     {
       $this->precision_currency = $typeOfCurrency == 'peso' ? 0 : 2;
+    }
+
+    public function updatedPassengerType($PassengerTypeValue){
+        if($PassengerTypeValue == "external"){
+            $this->inputsInternalPassengers = null;
+
+            $this->run = null;
+            $this->dv = null;
+            $this->name = null;
+            $this->fathers_family = null;
+            $this->mothers_family = null;
+            $this->birthday = null;
+            $this->phone_number = null;
+            $this->email = null;
+        }
+        else{
+            $this->inputsInternalPassengers = "readonly";
+            
+            $this->run = null;
+            $this->dv = null;
+            $this->name = null;
+            $this->fathers_family = null;
+            $this->mothers_family = null;
+            $this->birthday = null;
+            $this->phone_number = null;
+            $this->email = null;
+        }
     }
 }

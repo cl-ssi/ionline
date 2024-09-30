@@ -187,23 +187,25 @@ class RequestFormCreate extends Component
         private function setPassengers($passenger)
         {
             $this->passengers[]=[
-                        'id'                =>  $passenger->id,
-                        'passenger_type'    =>  $passenger->passenger_type,
-                        'run'               =>  $passenger->run,
-                        'dv'                =>  $passenger->dv,
-                        'name'              =>  $passenger->name,
-                        'fathers_family'    =>  $passenger->fathers_family,
-                        'mothers_family'    =>  $passenger->mothers_family,
-                        'birthday'          =>  $passenger->birthday->format('Y-m-d'),
-                        'phone_number'      =>  $passenger->phone_number,
-                        'email'             =>  $passenger->email,
-                        'round_trip'        =>  $passenger->round_trip,
-                        'origin'            =>  $passenger->origin,
-                        'destination'       =>  $passenger->destination,
-                        'departure_date'    =>  $passenger->departure_date->format('Y-m-d\TH:i'),
-                        'return_date'       =>  $passenger->return_date ? $passenger->return_date->format('Y-m-d\TH:i') : null,
-                        'baggage'           =>  $passenger->baggage,
-                        'unitValue'         =>  $passenger->unit_value
+                'id'                =>  $passenger->id,
+                'passenger_type'    =>  $passenger->passenger_type,
+                'document_type'     =>  $passenger->document_type,
+                'document_number'   =>  $passenger->document_number,
+                'run'               =>  $passenger->run,
+                'dv'                =>  $passenger->dv,
+                'name'              =>  $passenger->name,
+                'fathers_family'    =>  $passenger->fathers_family,
+                'mothers_family'    =>  $passenger->mothers_family,
+                'birthday'          =>  $passenger->birthday->format('Y-m-d'),
+                'phone_number'      =>  $passenger->phone_number,
+                'email'             =>  $passenger->email,
+                'round_trip'        =>  $passenger->round_trip,
+                'origin'            =>  $passenger->origin,
+                'destination'       =>  $passenger->destination,
+                'departure_date'    =>  $passenger->departure_date->format('Y-m-d\TH:i'),
+                'return_date'       =>  $passenger->return_date ? $passenger->return_date->format('Y-m-d\TH:i') : null,
+                'baggage'           =>  $passenger->baggage,
+                'unitValue'         =>  $passenger->unit_value
             ];
         }
 
@@ -268,7 +270,6 @@ class RequestFormCreate extends Component
         }
 
         public function saveRequestForm($form_status){
-            // dd($this->contractManagerId);
             $this->form_status = $form_status;
 
             $this->withValidator(function (Validator $validator) {
@@ -280,7 +281,6 @@ class RequestFormCreate extends Component
             })->validate();
 
             $req = DB::transaction(function () {
-                // dd($this->program_id);
                 if($this->form_status == 'sent'){
                         $req = RequestForm::updateOrCreate(
                             [
@@ -366,6 +366,9 @@ class RequestFormCreate extends Component
                             ],
                             [
                                 'user_id'           =>  auth()->user()->id,
+                                'passenger_type'    =>  $passenger['passenger_type'],
+                                'document_type'     =>  $passenger['document_type'],
+                                'document_number'   =>  $passenger['document_number'],
                                 'run'               =>  $passenger['run'],
                                 'dv'                =>  $passenger['dv'],
                                 'name'              =>  $passenger['name'],
