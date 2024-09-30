@@ -2,6 +2,7 @@
 
 namespace App\Models\Parameters;
 
+use App\Models\Documents\Manual;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -37,5 +38,10 @@ class Module extends Model
     public function logs(): HasMany
     {
         return $this->hasMany(Log::class);
+    }
+
+    public function manuals(): HasMany
+    {
+        return $this->hasMany(Manual::class);
     }
 }

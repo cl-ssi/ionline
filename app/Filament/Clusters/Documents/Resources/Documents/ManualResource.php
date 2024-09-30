@@ -13,6 +13,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Storage;
 
 class ManualResource extends Resource
 {
@@ -95,13 +96,11 @@ class ManualResource extends Resource
                     ->icon('heroicon-o-document-duplicate')
                     ->requiresConfirmation()
                     ->color('primary'),
-                Tables\Actions\Action::make('view')
-                    ->label('Ver')
-                    ->action(function (Manual $record) {
-                        return redirect()->route('documents.manuals.show', $record->id);
-                    })
+                Tables\Actions\Action::make('Pdf')
+                    ->url(fn (Manual $record): string => Storage::url($record->file))
                     ->openUrlInNewTab()
-                    ->icon('heroicon-o-eye'),
+                    ->icon('heroicon-o-eye')
+                    ->visible(fn (Manual $record): bool => !empty($record->file)),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

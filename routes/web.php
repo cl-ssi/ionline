@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\Documents\ManualController;
 use App\Http\Controllers\Rrhh\AbsenteeismController;
 use App\Livewire\Rrhh\CreateAbsenteeism;
 use App\Livewire\Rrhh\ListAbsenteeisms;
@@ -1386,8 +1385,6 @@ Route::prefix('parameters')->as('parameters.')->middleware(['auth', 'must.change
 /** Fin de rutas de parametros */
 
 Route::prefix('documents')->as('documents.')->middleware(['auth', 'must.change.password'])->group(function () {
-
-    Route::get('manuals/{manual}', [ManualController::class, 'show'])->name('manuals.show');
 
     Route::get('create-from-template/{template}', [DocumentController::class, 'createFromTemplate'])->name('create_from_template');
 

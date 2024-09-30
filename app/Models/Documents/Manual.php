@@ -21,6 +21,7 @@ class Manual extends Model
         'title',
         'content',
         'modifications',
+        'file',
     ];
 
     protected $casts = [

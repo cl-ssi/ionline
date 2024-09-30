@@ -33,7 +33,7 @@ class HomeController extends Controller
             ->orderBy('id', 'desc')
             ->get();
 
-        $manuals = Manual::where('id', '!=', 1)
+        $manuals = Manual::whereNotNull('file')
             ->orderBy('title', 'desc')
             ->get();
 

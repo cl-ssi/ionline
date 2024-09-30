@@ -362,9 +362,10 @@
 
             <ul class="list-group">
                 @foreach ($manuals as $manual)
-                    <a href="{{ route('documents.manuals.show', $manual) }}"
-                        class="list-group-item list-group-item-action small">
-                            {{ $manual->title }}<i> V: {{ number_format($manual->version,1,'.','') }} </i>
+                    <a href="{{ Storage::url($manual->file) }}"
+                        class="list-group-item list-group-item-action small"
+                        target="_blank">
+                        {{ $manual->title }}<i> V: {{ number_format($manual->version,1,'.','') }} </i>
                     </a>
                 @endforeach
 

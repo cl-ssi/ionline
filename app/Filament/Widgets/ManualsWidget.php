@@ -6,6 +6,7 @@ use App\Models\Documents\Manual;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Filament\Widgets\TableWidget as BaseWidget;
+use Illuminate\Support\Facades\Storage;
 
 class ManualsWidget extends BaseWidget
 {
@@ -21,7 +22,7 @@ class ManualsWidget extends BaseWidget
         return $table
             ->query(
                 Manual::query()
-                    ->where('id', '!=', 1)
+                    ->whereNotNull('file')
                     ->orderBy('title', 'desc')
             )
             ->columns([
@@ -35,9 +36,7 @@ class ManualsWidget extends BaseWidget
             ->actions([
                 Tables\Actions\Action::make('view')
                     ->label('Ver')
-                    ->action(function (Manual $record) {
-                        return redirect()->route('documents.manuals.show', $record->id);
-                    })
+                    ->url(fn (Manual $record): string => Storage::url($record->file))
                     ->openUrlInNewTab()
                     ->icon('heroicon-o-eye'),
             ]);

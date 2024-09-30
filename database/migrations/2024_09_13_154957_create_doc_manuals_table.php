@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('title');
             $table->text('content');
             $table->text('modifications')->nullable();
+            $table->string('file')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
