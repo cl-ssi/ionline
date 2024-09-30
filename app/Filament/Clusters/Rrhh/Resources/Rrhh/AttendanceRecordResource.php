@@ -8,6 +8,7 @@ use App\Filament\Clusters\Rrhh\Resources\Rrhh\AttendanceRecordResource\RelationM
 use App\Models\Rrhh\AttendanceRecord;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Pages\SubNavigationPosition;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -18,13 +19,15 @@ class AttendanceRecordResource extends Resource
 {
     protected static ?string $model = AttendanceRecord::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-clock';
 
     protected static ?string $cluster = Rrhh::class;
 
     protected static ?string $modelLabel = 'registro de asistencia';
 
     protected static ?string $pluralModelLabel = 'registros de asistencia';
+
+    protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
 
     public static function form(Form $form): Form
     {
