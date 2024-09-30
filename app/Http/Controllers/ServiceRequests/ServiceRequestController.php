@@ -454,20 +454,24 @@ class ServiceRequestController extends Controller
 
     //signature flow
     if (auth()->user()->organizationalUnit->establishment_id == 38) {
-
-      $subdirections = OrganizationalUnit::where('name', 'LIKE', '%direc%')->where('establishment_id', 38)->orderBy('name', 'ASC')->get();
-      $responsabilityCenters = OrganizationalUnit::where('establishment_id', 38)->orderBy('name', 'ASC')->get();
+        $subdirections = OrganizationalUnit::where('name', 'LIKE', '%direc%')->where('establishment_id', 38)->orderBy('name', 'ASC')->get();
+        $responsabilityCenters = OrganizationalUnit::where('establishment_id', 38)->orderBy('name', 'ASC')->get();
     }
     //hospital
     elseif (auth()->user()->organizationalUnit->establishment_id == 1) {
-      $subdirections = OrganizationalUnit::where('name', 'LIKE', '%direc%')->where('establishment_id', 1)->orderBy('name', 'ASC')->get();
-      $responsabilityCenters = OrganizationalUnit::where('establishment_id', 1)
-        ->orderBy('name', 'ASC')->get();
+        $subdirections = OrganizationalUnit::where('name', 'LIKE', '%direc%')->where('establishment_id', 1)->orderBy('name', 'ASC')->get();
+        $responsabilityCenters = OrganizationalUnit::where('establishment_id', 1)
+            ->orderBy('name', 'ASC')->get();
+    }
+    elseif (auth()->user()->organizationalUnit->establishment_id == 41) {
+        $subdirections = OrganizationalUnit::where('name', 'LIKE', '%direc%')->where('establishment_id', 41)->orderBy('name', 'ASC')->get();
+        $responsabilityCenters = OrganizationalUnit::where('establishment_id', 41)
+            ->orderBy('name', 'ASC')->get();
     }
     //another
     else {
-      session()->flash('info', 'Usted no posee una unidad organizacional válida para ingresar hojas de ruta.');
-      return redirect()->back();
+        session()->flash('info', 'Usted no posee una unidad organizacional válida para ingresar hojas de ruta.');
+        return redirect()->back();
     }
 
     return view('service_requests.requests.create', compact('subdirections', 'responsabilityCenters', 'establishments', 'professions'));
