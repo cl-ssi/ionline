@@ -814,6 +814,12 @@
                             <i class="bi bi-clock"></i> {{ __('Justificar asistencia') }}
                         </a>
 
+                        @canany(['Attendance records: user','Attendance records: admin','be god'])
+                        <a class="dropdown-item" href="{{ route('filament.intranet.rrhh.resources.rrhh.attendance-records.index') }}">
+                            <i class="bi bi-clock"></i> {{ __('Registros de asistencia') }}
+                        </a>
+                        @endcanany
+
                         @if(auth()->user()->welfare || auth()->user()->can('be god') || auth()->user()->can('welfare: amipass') || auth()->user()->can('welfare: balance'))
                             <a class="dropdown-item" href="{{ route('welfare.index') }}">
                                 <i class="bi bi-egg-fried"></i> Módulo de Bienestar
