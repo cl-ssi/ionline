@@ -177,8 +177,8 @@
 			@foreach($transfers as $transfer)
 			<tr>
         		<td>{{$transfer->created_at->format('d/m/Y')}}</td>
-        		<td>{{$transfer->destine_from['name']}}</td>
-        		<td>{{$transfer->destine_to['name']}}</td>
+        		<td>{{$transfer->destiny_from['name']}}</td>
+        		<td>{{$transfer->destiny_to['name']}}</td>
 				<td>{{$transfer->product['name']}}</td>
 				<td>{{$transfer->quantity}}</td>
 				<td>{{$transfer->user['name']}} {{$transfer->user['fathers_family']}}</td>
