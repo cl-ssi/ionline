@@ -204,7 +204,8 @@ class UserResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
-                Impersonate::make(),
+                Impersonate::make()
+                    ->redirectTo(route('filament.intranet.pages.dashboard')),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

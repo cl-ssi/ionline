@@ -27,6 +27,7 @@
         "owen-it/laravel-auditing": "^13.5",
         "owenvoke/blade-fontawesome": "^2.6",
         "phpoffice/phpword": "^1.1",
+        "pxlrbt/filament-environment-indicator": "^2.0",
         "setasign/fpdf": "^1.8",
         "setasign/fpdi": "^2.3",
         "simplesoftwareio/simple-qrcode": "^4.2",

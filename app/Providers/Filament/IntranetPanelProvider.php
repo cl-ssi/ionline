@@ -21,6 +21,7 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
+use pxlrbt\FilamentEnvironmentIndicator\EnvironmentIndicatorPlugin;
 
 class IntranetPanelProvider extends PanelProvider
 {
@@ -67,6 +68,8 @@ class IntranetPanelProvider extends PanelProvider
             ->defaultAvatarProvider(GravatarProvider::class)
             ->plugins([
                 GravatarPlugin::make(),
+                EnvironmentIndicatorPlugin::make()
+                    ->visible(visible: fn (): bool|string => app()->environment('local')),
             ]);
     }
 }
