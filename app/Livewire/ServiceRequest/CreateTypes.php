@@ -45,12 +45,6 @@ class CreateTypes extends Component
     {
         //sst
         if (auth()->user()->organizationalUnit->establishment_id == 38) {
-            // if (Authority::getAuthorityFromDate(1, now(), ['manager']) == null) {
-            //     dd("falta ingresar autoridad de " . OrganizationalUnit::find(1)->name);
-            // }
-            // if (Authority::getAuthorityFromDate(2, now(), ['manager']) == null) {
-            //     dd("falta ingresar autoridad de " . OrganizationalUnit::find(2)->name);
-            // }
             if (Authority::getAuthorityFromDate(40, now(), ['manager']) == null) {
                 dd("falta ingresar autoridad de " . OrganizationalUnit::find(40)->name);
             }
@@ -62,7 +56,7 @@ class CreateTypes extends Component
             }
         }
         //hetg
-        else {
+        elseif(auth()->user()->organizationalUnit->establishment_id == 1) {
             if (Authority::getAuthorityFromDate(111, now(), ['manager']) == null) {
                 dd("falta ingresar autoridad de " . OrganizationalUnit::find(111)->name);
             }
@@ -82,7 +76,17 @@ class CreateTypes extends Component
                 dd("falta ingresar autoridad de " . OrganizationalUnit::find(84)->name);
             }
         }
-
+        elseif(auth()->user()->organizationalUnit->establishment_id == 41) {
+            if (Authority::getAuthorityFromDate(364, now(), ['manager']) == null) {
+                dd("falta ingresar autoridad de " . OrganizationalUnit::find(364)->name);
+            }
+            if (Authority::getAuthorityFromDate(337, now(), ['manager']) == null) {
+                dd("falta ingresar autoridad de " . OrganizationalUnit::find(337)->name);
+            }
+            if (Authority::getAuthorityFromDate(246, now(), ['manager']) == null) {
+                dd("falta ingresar autoridad de " . OrganizationalUnit::find(246)->name);
+            }
+        }
 
         $this->signatureFlows = [];
         if (auth()->user()->organizationalUnit->establishment_id == 1){
@@ -94,6 +98,10 @@ class CreateTypes extends Component
             }
             $this->signatureFlows[Authority::getAuthorityFromDate(87, now(), ['manager'])->position . " - " . Authority::getAuthorityFromDate(87, now(), ['manager'])->organizationalUnit->name] = Authority::getAuthorityFromDate(87, now(), ['manager'])->user->id;
             $this->signatureFlows[Authority::getAuthorityFromDate(84, now(), ['manager'])->position . " - " . Authority::getAuthorityFromDate(84, now(), ['manager'])->organizationalUnit->name] = Authority::getAuthorityFromDate(84, now(), ['manager'])->user->id;
+        }elseif(auth()->user()->organizationalUnit->establishment_id == 41){
+            $this->signatureFlows[Authority::getAuthorityFromDate(364, now(), ['manager'])->position . " - " . Authority::getAuthorityFromDate(364, now(), ['manager'])->organizationalUnit->name] = Authority::getAuthorityFromDate(364, now(), ['manager'])->user->id;
+            $this->signatureFlows[Authority::getAuthorityFromDate(337, now(), ['manager'])->position . " - " . Authority::getAuthorityFromDate(337, now(), ['manager'])->organizationalUnit->name] = Authority::getAuthorityFromDate(337, now(), ['manager'])->user->id; 
+            $this->signatureFlows[Authority::getAuthorityFromDate(246, now(), ['manager'])->position . " - " . Authority::getAuthorityFromDate(246, now(), ['manager'])->organizationalUnit->name] = Authority::getAuthorityFromDate(246, now(), ['manager'])->user->id;
         }else{
             $this->signatureFlows[Authority::getAuthorityFromDate(59, now(), ['manager'])->position . " - " . Authority::getAuthorityFromDate(59, now(), ['manager'])->organizationalUnit->name] = Authority::getAuthorityFromDate(59, now(), ['manager'])->user->id; // 59 - Planificación y Control de Gestión de Recursos Humanos
             $this->signatureFlows[Authority::getAuthorityFromDate(44, now(), ['manager'])->position . " - " . Authority::getAuthorityFromDate(44, now(), ['manager'])->organizationalUnit->name] = Authority::getAuthorityFromDate(44, now(), ['manager'])->user->id; // 44 - Subdirección de Gestión y Desarrollo de las Personas
