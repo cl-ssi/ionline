@@ -37,6 +37,8 @@ class RoleAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'Allowances: sirh', 'description' => 'Permite revisión inicial del formulario e ingreso de folio sirh']);
         Permission::create(['name' => 'amiPASS', 'description' => 'Permiso para acceder al modulo de bienestar/amipass']);
         Permission::create(['name' => 'Asignacion Estimulos', 'description' => '']);
+        Permission::create(['name' => 'Attendance records: user', 'description' => 'Permite registrar su asistencia en iOnline']);
+        Permission::create(['name' => 'Attendance records: admin', 'description' => 'Administrador del modulo de registros de asistencia']);
         Permission::create(['name' => 'Authorities: create', 'description' => 'Permite crear autoridades']);
         Permission::create(['name' => 'Authorities: edit', 'description' => 'Permite editar una autoridad (sólo para expertos)']);
         Permission::create(['name' => 'Authorities: view', 'description' => 'Permite ver el módulo de autoridades']);
