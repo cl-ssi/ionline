@@ -37,6 +37,7 @@ class ManualResource extends Resource
                 Forms\Components\TextInput::make('version')
                     ->label('Versión')
                     ->numeric()
+                    ->step(0.1)
                     ->inputMode('decimal'),
                 Forms\Components\TextInput::make('title')
                     ->label('Título')
@@ -89,6 +90,8 @@ class ManualResource extends Resource
                     ->label('Clonar')
                     ->action(function (Manual $record, $data) {
                         $clonedManual = $record->replicate();
+                        $clonedManual->file = null;
+                        $clonedManual->version = 1.0;
                         $clonedManual->save();
 
                         return redirect()->route('filament.intranet.documents.resources.documents.manuals.edit', $clonedManual);

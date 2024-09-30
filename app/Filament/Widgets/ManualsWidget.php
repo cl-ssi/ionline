@@ -31,7 +31,8 @@ class ManualsWidget extends BaseWidget
                     ->sortable(),
                 Tables\Columns\TextColumn::make('version')
                     ->searchable()
-                    ->sortable(),
+                    ->sortable()
+                    ->formatStateUsing(fn ($state) => number_format($state, 1, '.', '')),
             ])
             ->actions([
                 Tables\Actions\Action::make('view')
