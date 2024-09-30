@@ -6,10 +6,10 @@
         <div class="card-body">
             <div class="form-row">
                 <fieldset class="form-group col-2">
-                    <label for="for_passengerType">Pasajero</label>
+                    <label for="for_passengerType">Tipo Pasajero</label>
                     <select wire:model.live="passengerType" name="passengerType" class="form-control">
                         <option value="">Seleccione...</option>
-                        <option value="internal">SSI</option>
+                        <option value="internal">Servicio de Salud</option>
                         <option value="external">Externo</option>
                     </select>
                 </fieldset>

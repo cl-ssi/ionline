@@ -151,25 +151,37 @@ class PassengerRequest extends Component
 
     public function editPassenger($key){
         $this->resetErrorBag();
-        $this->edit                     = true;
 
-        $this->run            = $this->passengers[$key]['run'];
-        $this->dv             = $this->passengers[$key]['dv'];
-        $this->name           = $this->passengers[$key]['name'];
-        $this->fathers_family = $this->passengers[$key]['fathers_family'];
-        $this->mothers_family = $this->passengers[$key]['mothers_family'];
-        $this->birthday       = $this->passengers[$key]['birthday'];
-        $this->phone_number   = $this->passengers[$key]['phone_number'];
-        $this->email          = $this->passengers[$key]['email'];
-        $this->round_trip     = $this->passengers[$key]['round_trip'];
-        $this->origin         = $this->passengers[$key]['origin'];
-        $this->destination    = $this->passengers[$key]['destination'];
-        $this->departure_date = $this->passengers[$key]['departure_date'];
-        $this->return_date    = $this->passengers[$key]['return_date'];
-        $this->baggage        = $this->passengers[$key]['baggage'];
-        $this->unitValue      = $this->passengers[$key]['unitValue'];
+        if($this->passengers[$key]['passenger_type'] == 'internal' || $this->passengers[$key]['passenger_type'] == null){
+            $this->passengerType = 'internal';
+            $this->inputsInternalPassengers = 'readonly';
+        }
+        else{
+            $this->passengerType = 'external';
+            $this->inputsInternalPassengers = null;
+        }
 
-        $this->key                      = $key;
+        $this->edit             = true;
+
+        $this->document_type    = $this->passengers[$key]['document_type'];
+        $this->document_number  = $this->passengers[$key]['document_number'];
+        $this->run              = $this->passengers[$key]['run'];
+        $this->dv               = $this->passengers[$key]['dv'];
+        $this->name             = $this->passengers[$key]['name'];
+        $this->fathers_family   = $this->passengers[$key]['fathers_family'];
+        $this->mothers_family   = $this->passengers[$key]['mothers_family'];
+        $this->birthday         = $this->passengers[$key]['birthday'];
+        $this->phone_number     = $this->passengers[$key]['phone_number'];
+        $this->email            = $this->passengers[$key]['email'];
+        $this->round_trip       = $this->passengers[$key]['round_trip'];
+        $this->origin           = $this->passengers[$key]['origin'];
+        $this->destination      = $this->passengers[$key]['destination'];
+        $this->departure_date   = $this->passengers[$key]['departure_date'];
+        $this->return_date      = $this->passengers[$key]['return_date'];
+        $this->baggage          = $this->passengers[$key]['baggage'];
+        $this->unitValue        = $this->passengers[$key]['unitValue'];
+
+        $this->key              = $key;
     }
 
     public function updatePassenger(){
