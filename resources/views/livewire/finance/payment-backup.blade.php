@@ -119,7 +119,7 @@
                         @include('finance.payments.partials.receptions-info')
                     </td>
                     <td>
-                        <div wire:ignore>
+                        <div>
                             <!-- SIGFE Compromiso y Devengo -->
                             <small>Compromiso</small>
                             @livewire('finance.sigfe-folio-compromiso',
