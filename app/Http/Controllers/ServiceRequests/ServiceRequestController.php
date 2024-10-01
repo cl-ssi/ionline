@@ -70,42 +70,6 @@ class ServiceRequestController extends Controller
   //función queda de respaldo, no se utiliza desde 14/04/2023
   public function index_bak()
   {
-    // $start_date = '2022-01-01';
-    // $end_date = '2022-01-02';
-    // $serviceRequests = ServiceRequest::where('end_date','>=',$start_date)
-    //                                   ->where('end_date','<=',$end_date)
-    //                                   ->whereDoesntHave("fulfillments", function ($subQuery) {
-    //                                     $subQuery->whereHas("FulfillmentItems", function ($subQuery) {
-    //                                       $subQuery->where('type', 'Renuncia voluntaria');
-    //                                     });
-    //                                   })
-    //                                   ->whereDoesntHave("fulfillments", function ($subQuery) {
-    //                                     $subQuery->whereHas("FulfillmentItems", function ($subQuery) {
-    //                                       $subQuery->where('type', 'Abandono de funciones');
-    //                                     });
-    //                                   })
-    //                                   ->whereDoesntHave("fulfillments", function ($subQuery) {
-    //                                     $subQuery->whereHas("FulfillmentItems", function ($subQuery) {
-    //                                       $subQuery->where('type', 'Término de contrato anticipado');
-    //                                     });
-    //                                   })
-    //                                   ->orderBy('start_date')
-    //                                   ->get();
-
-    // $array = array();
-    // foreach($serviceRequests as $key => $serviceRequest)
-    // {
-    //   $array[$key]['employee']['run'] = $serviceRequest->employee->runFormat();
-    //   $array[$key]['employee']['name'] = $serviceRequest->employee->getFullNameAttribute();
-    //   $array[$key]['employee']['email'] = $serviceRequest->email;
-    //   $array[$key]['employee']['phone'] = $serviceRequest->phone_number;
-
-    //   $array[$key]['contract']['number'] = $serviceRequest->contract_number;
-    //   $array[$key]['contract']['type'] = $serviceRequest->contract_type;
-    //   $array[$key]['contract']['end_date'] = $serviceRequest->end_date->format("d-m-Y");
-    // }
-    // dd(json_encode($array));
-
     $user_id = auth()->id();
     $users = User::orderBy('name', 'ASC')->get();
 
@@ -500,27 +464,6 @@ class ServiceRequestController extends Controller
       }
     }
 
-    // Valida cuando se crea una solicitud en el hospital, que no se sobrepase la cantidad tope permitida en mantenedor
-    // solo para hetg se obtiene con el programa 'OTROS PROGRAMAS HETG', para el resto se obtiene con todos los programas
-    
-    // if(OrganizationalUnit::find($request->responsability_center_ou_id)->establishment_id == 1){
-    //     $active_contract_count  = OrganizationalUnit::find($request->responsability_center_ou_id)
-    //                                                     ->activeContractCount('OTROS PROGRAMAS HETG','Mensual');
-
-    //     $serviceRequestLimit = OrganizationalUnit::find($request->responsability_center_ou_id)->serviceRequestLimit;
-    //     if($serviceRequestLimit){
-    //         $serviceRequestLimit = OrganizationalUnit::find($request->responsability_center_ou_id)->serviceRequestLimit ? OrganizationalUnit::find($request->responsability_center_ou_id)->serviceRequestLimit->max_value : 0;
-    //         if($active_contract_count >= $serviceRequestLimit){
-    //             session()->flash('danger', 'ATENCIÓN! Se alcanzó el máximo de solicitudes de contrato para esta unidad, contacte a RRHH.');
-    //             return redirect()->back();
-    //         }
-    //     }
-    // }
-
-
-
-
-
     // 07/09/2023: solo para usuarios que no pertenezcan a RRHH del hospital
     // 07/09/2023: validación solicitada por samantha: en HETGH no se pueden crear más de 412 contratos (se obtienen en la consulta) suma alzada que 
     // sean del programa COVID 2022
@@ -655,13 +598,13 @@ class ServiceRequestController extends Controller
       if ($serviceRequest->fulfillments->count() == 0) {
             foreach ($periods as $key => $period) {
             $program_contract_type = "Mensual";
-            $start_date_period = $period->format("d-m-Y");
-            $end_date_period = Carbon::createFromFormat('d-m-Y', $period->format("d-m-Y"))->endOfMonth()->format("d-m-Y");
+            $start_date_period = $period->format("Y-m-d");
+            $end_date_period = Carbon::createFromFormat('Y-m-d', $period->format("Y-m-d"))->endOfMonth()->format("Y-m-d");
             if ($key == 0) {
-                $start_date_period = $serviceRequest->start_date->format("d-m-Y");
+                $start_date_period = $serviceRequest->start_date->format("Y-m-d");
             }
             if (($cont_periods - 1) == $key) {
-                $end_date_period = $serviceRequest->end_date->format("d-m-Y");
+                $end_date_period = $serviceRequest->end_date->format("Y-m-d");
                 $program_contract_type = "Parcial";
             }
 
@@ -1925,7 +1868,7 @@ class ServiceRequestController extends Controller
 
       $array[$key]['contract']['number'] = $serviceRequest->contract_number;
       $array[$key]['contract']['type'] = $serviceRequest->contract_type;
-      $array[$key]['contract']['end_date'] = $serviceRequest->end_date->format("d-m-Y");
+      $array[$key]['contract']['end_date'] = $serviceRequest->end_date->format("Y-m-d");
     }
     return $array;
   }
