@@ -553,16 +553,17 @@ class User extends Authenticatable implements Auditable, FilamentUser
 
     /**
      * Un mutador para 'organizational_unit_id' que también actualiza 'establishment_id'.
+     * reemplazado por el observer UserObserver
      */
-    protected function organizationalUnitId(): Attribute
-    {
-        return Attribute::make(
-            set: function ($value) {
-                $this->attributes['establishment_id'] = OrganizationalUnit::find($value)?->establishment_id;
-                return $value;
-            },
-        );
-    }
+    // protected function organizationalUnitId(): Attribute
+    // {
+    //     return Attribute::make(
+    //         set: function ($value) {
+    //             $this->attributes['establishment_id'] = OrganizationalUnit::find($value)?->establishment_id;
+    //             return $value;
+    //         },
+    //     );
+    // }
 
     public function boss()
     {
