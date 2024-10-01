@@ -137,6 +137,33 @@
     </div>
 </div>
 
+@can('Programming: audit')
+    <hr />
+    @if ($task)
+        <h6><i class="fas fa-info-circle"></i> Auditoría Interna</h6>
+
+        <div class="accordion" id="accordionExample">
+            <div class="card">
+                <div class="card-header" id="headingOne">
+                    <h2 class="mb-0">
+                        <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse"
+                            data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                            Tareas
+                        </button>
+                    </h2>
+                </div>
+
+                <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
+                    data-parent="#accordionExample">
+                    <div class="card-body">
+                        @include('partials.audit', ['audits' => $task->audits()])
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
+@endcan
+
 @endsection
 
 @section('custom_js')

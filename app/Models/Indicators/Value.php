@@ -7,9 +7,11 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
+use OwenIt\Auditing\Contracts\Auditable;
 
-class Value extends Model
+class Value extends Model implements Auditable
 {
+    use \OwenIt\Auditing\Auditable;
     use SoftDeletes;
     protected $table = 'ind_values';
     protected $fillable = ['activity_name', 'commune', 'establishment', 'month', 'factor', 'value', 'valueable_id', 'valueable_type', 'created_by', 'updated_by'];
