@@ -5,6 +5,7 @@
             <tr>
                 <th>Fecha</th>
                 <th>Usuario</th>
+                <th>Url</th>
                 <th>Acción</th>
                 <th>Modificaciones</th>
             </tr>
@@ -17,6 +18,7 @@
                 <tr>
                     <td nowrap>{{ $audit->created_at }}</td>
                     <td nowrap>{{ optional($audit->user)->tinnyName }}</td>
+                    <td nowrap>{{ $audit->url }}</td>
                     <td nowrap>{{ $audit->event }}</td>
                     <td>
                         @switch($audit->event)
