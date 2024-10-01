@@ -50,7 +50,8 @@ abstract class BaseAuditsRelationManager extends RelationManager
 
                         return new HtmlString(implode('<br> ', $formatted));
                     }),
-                Tables\Columns\TextColumn::make('url'),
+                Tables\Columns\TextColumn::make('url')
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('old_values')
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('new_values')
@@ -60,10 +61,10 @@ abstract class BaseAuditsRelationManager extends RelationManager
                 //
             ])
             ->headerActions([
-                Tables\Actions\CreateAction::make(),
+                // Tables\Actions\CreateAction::make(),
             ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
+                // Tables\Actions\ViewAction::make(),
                 // Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
