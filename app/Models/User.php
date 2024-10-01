@@ -2,15 +2,23 @@
 
 namespace App\Models;
 
+use App\Helpers\DateHelper;
 use App\Models\Documents\Document;
-use App\Models\Documents\DocumentEvent;
+use App\Models\Inv\EstablishmentUser;
+use App\Models\Inv\InventoryUser;
+use App\Models\Lobby\Meeting;
+use App\Models\Parameters\AccessLog;
+use App\Models\Pharmacies\Destiny;
 use App\Models\Pharmacies\Dispatch;
 use App\Models\Pharmacies\Pharmacy;
 use App\Models\Pharmacies\Purchase;
 use App\Models\Pharmacies\Receiving;
-use App\Models\Pharmacies\Destiny;
+use App\Models\ProfAgenda\OpenHour;
+use App\Models\ProfAgenda\Proposal;
+use App\Models\Profile\Subrogation;
 use App\Models\ReplacementStaff\RequestReplacementStaff;
 use App\Models\RequestForms\EventRequestForm;
+use App\Models\RequestForms\RequestForm;
 use App\Models\Requirements\Event;
 use App\Models\Requirements\Label;
 use App\Models\Requirements\Requirement;
@@ -19,74 +27,54 @@ use App\Models\Resources\Computer;
 use App\Models\Resources\Mobile;
 use App\Models\Resources\Printer;
 use App\Models\Resources\Telephone;
-use Attribute;
-use Carbon\Carbon;
-use App\Models\Country;
-use App\Models\Rrhh\Authority;
-use Carbon\CarbonPeriod;
-use App\Models\ClCommune;
-use App\Models\Rrhh\Shift;
-use App\Helpers\DateHelper;
-use App\Models\Rrhh\AmiLoad;
-use App\Models\Establishment;
-
-use App\Models\Lobby\Meeting;
-use App\Models\Rrhh\Contract;
-use App\Models\Warehouse\Store;
 use App\Models\Rrhh\Absenteeism;
-use App\Models\Sirh\WelfareUser;
-use App\Models\Rrhh\OrganizationalUnit;
-use App\Models\Suitability\Result;
-use App\Models\ProfAgenda\OpenHour;
-use App\Models\ProfAgenda\Proposal;
-use App\Models\Profile\Subrogation;
-use App\Models\Warehouse\StoreUser;
-use App\Models\Parameters\AccessLog;
-
-use App\Models\Inv\InventoryUser;
-
+use App\Models\Rrhh\AmiLoad;
+use App\Models\Rrhh\Authority;
 use App\Models\Rrhh\CompensatoryDay;
-use App\Models\Rrhh\UserBankAccount;
-use Filament\Models\Contracts\FilamentUser;
-use Filament\Panel;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Support\Facades\Auth;
-use App\Models\Inv\EstablishmentUser;
-use App\Models\Welfare\Amipass\Charge;
-
-use Spatie\Permission\Traits\HasRoles;
+use App\Models\Rrhh\Contract;
 use App\Models\Rrhh\NoAttendanceRecord;
-use App\Models\RequestForms\RequestForm;
-use Illuminate\Notifications\Notifiable;
-use OwenIt\Auditing\Contracts\Auditable;
+use App\Models\Rrhh\OrganizationalUnit;
+use App\Models\Rrhh\Shift;
+use App\Models\Rrhh\UserBankAccount;
+use App\Models\ServiceRequests\ServiceRequest;
+use App\Models\Sirh\WelfareUser;
+use App\Models\Suitability\Result;
+use App\Models\Warehouse\Store;
+use App\Models\Warehouse\StoreUser;
+use App\Models\Welfare\Amipass\Charge;
 use App\Models\Welfare\Amipass\NewCharge;
 use App\Models\Welfare\Amipass\PendingAmount;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use App\Models\ServiceRequests\ServiceRequest;
 use App\Models\Welfare\Amipass\Regularization;
-use Illuminate\Contracts\Auth\CanResetPassword;
-// Para resetear contraseñas
-use Illuminate\Database\Eloquent\Relations\hasOne;
-
-use Illuminate\Database\Eloquent\Relations\hasMany;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-
 use App\Observers\UserObserver;
+use Carbon\Carbon;
+use Carbon\CarbonPeriod;
+use Filament\Models\Contracts\FilamentUser;
+use Filament\Panel;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
+use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\hasMany;
+use Illuminate\Database\Eloquent\Relations\hasOne;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use OwenIt\Auditing\Contracts\Auditable;
+use Spatie\Permission\Traits\HasRoles;
 
 #[ObservedBy([UserObserver::class])]
 class User extends Authenticatable implements Auditable, FilamentUser
 {
+    use HasFactory, HasRoles, Notifiable, SoftDeletes;
     use \OwenIt\Auditing\Auditable;
-    use Notifiable, HasRoles, SoftDeletes, HasFactory;
+
+    public $incrementing = false;
 
     /**
      * El id no es incremental ya que es el run sin digito verificador
      */
     protected $primaryKey = 'id';
-    public $incrementing = false;
 
     /**
      * The attributes that are mass assignable.
@@ -118,7 +106,7 @@ class User extends Authenticatable implements Auditable, FilamentUser
         'organizational_unit_id',
         'email_personal',
         'email_verified_at',
-        'deleted_at'
+        'deleted_at',
     ];
 
     /**
@@ -137,8 +125,11 @@ class User extends Authenticatable implements Auditable, FilamentUser
      * @var array
      */
     protected $casts = [
+        'birthday'          => 'date:Y-m-d',
+        'active'            => 'boolean',
+        'external'          => 'boolean',
+        'gravatar'          => 'boolean',
         'email_verified_at' => 'datetime',
-        'birthday' => 'date:Y-m-d',
     ];
 
     /**
@@ -159,8 +150,6 @@ class User extends Authenticatable implements Auditable, FilamentUser
 
     /**
      * Get the establishment that owns the user.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function establishment(): BelongsTo
     {
@@ -169,8 +158,6 @@ class User extends Authenticatable implements Auditable, FilamentUser
 
     /**
      * Get the organizational unit that owns the user.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function organizationalUnit(): BelongsTo
     {
@@ -179,8 +166,6 @@ class User extends Authenticatable implements Auditable, FilamentUser
 
     /**
      * Get the telephones for the user.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function telephones(): BelongsToMany
     {
@@ -189,8 +174,6 @@ class User extends Authenticatable implements Auditable, FilamentUser
 
     /**
      * Get the computers for the user.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function computers(): BelongsToMany
     {
@@ -199,8 +182,6 @@ class User extends Authenticatable implements Auditable, FilamentUser
 
     /**
      * Get the printers for the user.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function printers(): BelongsToMany
     {
@@ -209,8 +190,6 @@ class User extends Authenticatable implements Auditable, FilamentUser
 
     /**
      * Get the mobile for the user.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
     public function mobile(): HasOne
     {
@@ -219,8 +198,6 @@ class User extends Authenticatable implements Auditable, FilamentUser
 
     /**
      * Get the commune that owns the user.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function commune(): BelongsTo
     {
@@ -229,8 +206,6 @@ class User extends Authenticatable implements Auditable, FilamentUser
 
     /**
      * Get the country that owns the user.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function country(): BelongsTo
     {
@@ -239,8 +214,6 @@ class User extends Authenticatable implements Auditable, FilamentUser
 
     /**
      * Get the pharmacies for the user.
-     *
-     * @return BelongsToMany
      */
     public function pharmacies(): BelongsToMany
     {
@@ -249,8 +222,6 @@ class User extends Authenticatable implements Auditable, FilamentUser
 
     /**
      * Get the bank account for the user.
-     *
-     * @return HasOne
      */
     public function bankAccount(): HasOne
     {
@@ -259,8 +230,6 @@ class User extends Authenticatable implements Auditable, FilamentUser
 
     /**
      * Get the request forms for the user.
-     *
-     * @return BelongsToMany
      */
     public function requestForms(): BelongsToMany
     {
@@ -270,8 +239,6 @@ class User extends Authenticatable implements Auditable, FilamentUser
 
     /**
      * Get the supervisor request forms for the user.
-     *
-     * @return HasMany
      */
     public function supervisorRequestForms(): HasMany
     {
@@ -280,8 +247,6 @@ class User extends Authenticatable implements Auditable, FilamentUser
 
     /**
      * Get the event request forms for the user.
-     *
-     * @return HasMany
      */
     public function eventRequestForms(): HasMany
     {
@@ -290,8 +255,6 @@ class User extends Authenticatable implements Auditable, FilamentUser
 
     /**
      * Get the subrogations for the user.
-     *
-     * @return HasMany
      */
     public function subrogations(): HasMany
     {
@@ -300,8 +263,6 @@ class User extends Authenticatable implements Auditable, FilamentUser
 
     /**
      * Get the access logs for the user.
-     *
-     * @return HasMany
      */
     public function accessLogs(): HasMany
     {
@@ -310,8 +271,6 @@ class User extends Authenticatable implements Auditable, FilamentUser
 
     /**
      * Get the switch logs for the user.
-     *
-     * @return HasMany
      */
     public function switchLogs(): HasMany
     {
@@ -320,8 +279,6 @@ class User extends Authenticatable implements Auditable, FilamentUser
 
     /**
      * Get the contracts for the user.
-     *
-     * @return HasMany
      */
     public function contracts(): HasMany
     {
@@ -330,8 +287,6 @@ class User extends Authenticatable implements Auditable, FilamentUser
 
     /**
      * Get the absenteeisms for the user.
-     *
-     * @return HasMany
      */
     public function absenteeisms(): HasMany
     {
@@ -340,8 +295,6 @@ class User extends Authenticatable implements Auditable, FilamentUser
 
     /**
      * Get the ami loads for the user.
-     *
-     * @return HasMany
      */
     public function amiLoads(): HasMany
     {
@@ -350,8 +303,6 @@ class User extends Authenticatable implements Auditable, FilamentUser
 
     /**
      * Get the charges for the user.
-     *
-     * @return HasMany
      */
     public function charges(): HasMany
     {
@@ -360,8 +311,6 @@ class User extends Authenticatable implements Auditable, FilamentUser
 
     /**
      * Get the new charges for the user.
-     *
-     * @return HasMany
      */
     public function newCharges(): HasMany
     {
@@ -370,8 +319,6 @@ class User extends Authenticatable implements Auditable, FilamentUser
 
     /**
      * Get the regularizations for the user.
-     *
-     * @return HasMany
      */
     public function regularizations(): HasMany
     {
@@ -380,18 +327,14 @@ class User extends Authenticatable implements Auditable, FilamentUser
 
     /**
      * Get the shifts for the user.
-     *
-     * @return HasMany
      */
     public function shifts(): HasMany
     {
         return $this->hasMany(Shift::class, 'user_id');
     }
-    
+
     /**
      * Get the compensatory days for the user.
-     *
-     * @return HasMany
      */
     public function compensatoryDays(): HasMany
     {
@@ -400,8 +343,6 @@ class User extends Authenticatable implements Auditable, FilamentUser
 
     /**
      * Get the pending amounts for the user.
-     *
-     * @return HasMany
      */
     public function pendingAmounts(): HasMany
     {
@@ -410,8 +351,6 @@ class User extends Authenticatable implements Auditable, FilamentUser
 
     /**
      * Get the welfare for the user.
-     *
-     * @return HasOne
      */
     public function welfare(): HasOne
     {
@@ -420,8 +359,6 @@ class User extends Authenticatable implements Auditable, FilamentUser
 
     /**
      * Authority relation: Is Manager from ou.
-     *
-     * @return HasMany
      */
     public function manager(): HasMany
     {
@@ -429,11 +366,9 @@ class User extends Authenticatable implements Auditable, FilamentUser
             ->where('type', 'manager')
             ->where('date', today());
     }
-    
+
     /**
      * Authority relation: Is Secretary from ou.
-     *
-     * @return HasMany
      */
     public function secretary(): HasMany
     {
@@ -441,11 +376,9 @@ class User extends Authenticatable implements Auditable, FilamentUser
             ->where('type', 'secretary')
             ->where('date', today());
     }
-    
+
     /**
      * Authority relation: Is Delegate from ou.
-     *
-     * @return HasMany
      */
     public function delegate(): HasMany
     {
@@ -456,14 +389,12 @@ class User extends Authenticatable implements Auditable, FilamentUser
 
     /**
      * Get the service requests for the user.
-     *
-     * @return HasMany
      */
     public function serviceRequests(): HasMany
     {
         return $this->hasMany(ServiceRequest::class);
     }
-    
+
     // /**
     //  * Get the document events for the user.
     //  *
@@ -473,132 +404,106 @@ class User extends Authenticatable implements Auditable, FilamentUser
     // {
     //     return $this->hasMany(DocumentEvent::class);
     // }
-    
+
     /**
      * Get the agenda proposals for the user.
-     *
-     * @return HasMany
      */
     public function agendaProposals(): HasMany
     {
         return $this->hasMany(Proposal::class);
     }
-    
+
     /**
      * Get the documents for the user.
-     *
-     * @return HasMany
      */
     public function documents(): HasMany
     {
         return $this->hasMany(Document::class);
     }
-    
+
     /**
      * Get the requirement labels for the user.
-     *
-     * @return HasMany
      */
     public function reqLabels(): HasMany
     {
         return $this->hasMany(Label::class);
     }
-    
+
     /**
      * Get the requirement statuses for the user.
-     *
-     * @return HasMany
      */
     public function requirementStatus(): HasMany
     {
         return $this->hasMany(RequirementStatus::class);
     }
-    
+
     /**
      * Get the requirements for the user.
-     *
-     * @return HasMany
      */
     public function requirements(): HasMany
     {
         return $this->hasMany(Requirement::class);
     }
-    
+
     /**
      * Get the requirement events from the user.
-     *
-     * @return HasMany
      */
     public function requirementsEventsFrom(): HasMany
     {
         return $this->hasMany(Event::class, 'from_user_id');
     }
-    
+
     /**
      * Get the requirement events to the user.
-     *
-     * @return HasMany
      */
     public function requirementsEventsTo(): HasMany
     {
         return $this->hasMany(Event::class, 'to_user_id');
     }
-    
+
     /**
      * Get the purchases for the user.
-     *
-     * @return HasMany
      */
     public function purchases(): HasMany
     {
         return $this->hasMany(Purchase::class);
     }
-    
+
     /**
      * Get the inventory users for the user.
-     *
-     * @return HasMany
      */
     public function inventoryUsers(): HasMany
     {
         return $this->hasMany(InventoryUser::class);
     }
-    
+
     /**
      * Get the dispatches for the user.
-     *
-     * @return HasMany
      */
     public function dispatches(): HasMany
     {
         return $this->hasMany(Dispatch::class);
     }
-    
+
     /**
      * Get the receivings for the user.
-     *
-     * @return HasMany
      */
     public function receivings(): HasMany
     {
         return $this->hasMany(Receiving::class);
     }
-    
+
     /**
      * Get the establishments for the user.
-     *
-     * @return BelongsToMany
      */
     public function destines(): BelongsToMany
     {
         return $this->belongsToMany(Destiny::class, 'frm_destines_users')
-                    ->withTimestamps();
+            ->withTimestamps();
     }
-    
+
     /**
      * Get the requests for the user.
-     *
-     * @return HasMany
      */
     public function requests(): HasMany
     {
@@ -623,9 +528,9 @@ class User extends Authenticatable implements Auditable, FilamentUser
     public function stores()
     {
         return $this->belongsToMany(Store::class, 'wre_store_user')
-           ->using(StoreUser::class)
-           ->withPivot(['role_id', 'status'])
-           ->withTimestamps();
+            ->using(StoreUser::class)
+            ->withPivot(['role_id', 'status'])
+            ->withTimestamps();
     }
 
     public function establishmentInventories()
@@ -647,7 +552,7 @@ class User extends Authenticatable implements Auditable, FilamentUser
     }
 
 
-    
+
     /**
      * Un mutador para 'organizational_unit_id' que también actualiza 'establishment_id'.
      *
@@ -658,28 +563,25 @@ class User extends Authenticatable implements Auditable, FilamentUser
         return Attribute::make(
             set: function ($value) {
                 $this->attributes['establishment_id'] = OrganizationalUnit::find($value)?->establishment_id;
+
                 return $value;
             },
         );
     }
-
     public function boss()
     {
-        if($this->organizationalUnit AND $this->organizationalUnit->currentManager) {
-            if($this->organizationalUnit->level == 1 and ($this->organizationalUnit->currentManager->user_id == auth()->id())) {
-                if($this->organizationalUnit->establishment->father_organizational_unit_id) {
+        if ($this->organizationalUnit and $this->organizationalUnit->currentManager) {
+            if ($this->organizationalUnit->level == 1 and ($this->organizationalUnit->currentManager->user_id == auth()->id())) {
+                if ($this->organizationalUnit->establishment->father_organizational_unit_id) {
                     return $this->currentBoss($this->organizationalUnit->establishment->ouFather);
-                }
-                else {
+                } else {
                     /** Retorna una relación nula si no tiene OU asociada */
                     return $this->belongsTo(User::class);
                 }
-            }
-            else {
+            } else {
                 return $this->currentBoss($this->organizationalUnit);
             }
-        }
-        else  {
+        } else {
             /** Retorna una relación nula si no tiene OU asociada */
             return $this->belongsTo(User::class);
         }
@@ -688,67 +590,68 @@ class User extends Authenticatable implements Auditable, FilamentUser
     /** Busca recursivamente el jefe, es necearia para la relación de arriba */
     public function currentBoss(OrganizationalUnit $ou)
     {
-        if($ou->currentManager) {
-            if($ou->currentManager->user_id == $this->id) {
-                if($ou->father) {
+        if ($ou->currentManager) {
+            if ($ou->currentManager->user_id == $this->id) {
+                if ($ou->father) {
                     /** Si tiene una OU padre se llama a si misma (recursiva) */
                     return $this->currentBoss($ou->father);
-                }
-                else {
+                } else {
                     /** Retorna una relación nula si no tiene una ou padre */
                     return $this->belongsTo(User::class);
                 }
-            }
-            else {
+            } else {
                 return $ou->currentManager->user();
             }
-        }
-        else {
+        } else {
             /** Retorna una relación nula si no tiene current manager */
             return $this->belongsTo(User::class);
         }
     }
 
-    public function getAgeAttribute()
+    protected function age(): Attribute
     {
-        return $this->birthday ? Carbon::parse($this->birthday)->age : 0;
+        return Attribute::make(
+            get: fn (): int => $this->birthday ? $this->birthday->age : 0
+        );
     }
-    
-    public function getAgeMonthsAttribute()
+
+    protected function ageMonths(): Attribute
     {
-        return $this->birthday ? Carbon::parse($this->birthday)->diffInMonths(Carbon::now()) % 12 : 0;
+        return Attribute::make(
+            get: fn (): int => $this->birthday ? $this->birthday->diffInMonths(now()) % 12 : 0
+        );
     }
 
     public function scopeFindByUser($query, $searchText)
     {
         $array_search = explode(' ', $searchText);
-        foreach($array_search as $word)
-        {
-            $query->where(function($q) use($word) {
+        foreach ($array_search as $word) {
+            $query->where(function ($q) use ($word) {
                 $q->where('name', 'LIKE', '%'.$word.'%')
-                ->orwhere('fathers_family','LIKE', '%'.$word.'%')
-                ->orwhere('mothers_family','LIKE', '%'.$word.'%')
-                ->orwhere('id','LIKE', '%'.$word.'%');
+                    ->orwhere('fathers_family', 'LIKE', '%'.$word.'%')
+                    ->orwhere('mothers_family', 'LIKE', '%'.$word.'%')
+                    ->orwhere('id', 'LIKE', '%'.$word.'%');
             });
         }
+
         return $query;
     }
 
     public function scopeSearch($query, $name)
     {
-        if($name != "")
-        {
+        if ($name != '') {
             return $query->where('name', 'LIKE', '%'.$name.'%')
                 ->orWhere('fathers_family', 'LIKE', '%'.$name.'%')
                 ->orWhere('mothers_family', 'LIKE', '%'.$name.'%');
         }
     }
 
-    public function scopeFilter($query, $column, $value) {
-        if(isset($value)) {
-            switch($column) {
+    public function scopeFilter($query, $column, $value)
+    {
+        if (isset($value)) {
+            switch ($column) {
                 case 'organizational_unit_id':
-                    $query->where($column,$value);
+                    $query->where($column, $value);
                     break;
                 case 'permission':
                     $query->permission($value);
@@ -763,21 +666,22 @@ class User extends Authenticatable implements Auditable, FilamentUser
     /**
      * Retorna Usuarios según contenido en $searchText
      * Busqueda realizada en: nombres, apellidos, rut.
+     *
      * @return ?
      */
     public static function scopeFullSearch($query, $searchText)
     {
         $query->withTrashed();
         $array_search = explode(' ', $searchText);
-        foreach($array_search as $word)
-        {
-            $query->where(function($q) use($word) {
+        foreach ($array_search as $word) {
+            $query->where(function ($q) use ($word) {
                 $q->where('name', 'LIKE', '%'.$word.'%')
-                  ->orwhere('fathers_family','LIKE', '%'.$word.'%')
-                  ->orwhere('mothers_family','LIKE', '%'.$word.'%')
-                  ->orwhere('id','LIKE', '%'.$word.'%');
+                    ->orwhere('fathers_family', 'LIKE', '%'.$word.'%')
+                    ->orwhere('mothers_family', 'LIKE', '%'.$word.'%')
+                    ->orwhere('id', 'LIKE', '%'.$word.'%');
             });
         }/* End foreach */
+
         return $query;
     }/* End getPatientsBySearch */
 
@@ -787,66 +691,49 @@ class User extends Authenticatable implements Auditable, FilamentUser
         $user_id = $this->id;
 
         $serviceRequestsOthersPendings = [];
-        $serviceRequestsMyPendings = [];
-        $serviceRequestsAnswered = [];
-        $serviceRequestsCreated = [];
-        $serviceRequestsRejected = [];
+        $serviceRequestsMyPendings     = [];
+        $serviceRequestsAnswered       = [];
+        $serviceRequestsCreated        = [];
+        $serviceRequestsRejected       = [];
 
         $serviceRequests = ServiceRequest::query()
-            ->whereHas("SignatureFlows", function($subQuery) use($user_id){
-                $subQuery->where('responsable_id',$user_id);
-                $subQuery->orwhere('user_id',$user_id);
+            ->whereHas('SignatureFlows', function ($subQuery) use ($user_id) {
+                $subQuery->where('responsable_id', $user_id);
+                $subQuery->orwhere('user_id', $user_id);
             })
-            ->orderBy('id','asc')
+            ->orderBy('id', 'asc')
             ->get();
 
-        foreach ($serviceRequests as $key => $serviceRequest)
-        {
+        foreach ($serviceRequests as $key => $serviceRequest) {
             //not rejected
-            if ($serviceRequest->SignatureFlows->where('status','===',0)->count() == 0)
-            {
-                foreach ($serviceRequest->SignatureFlows->sortBy('sign_position') as $key2 => $signatureFlow)
-                {
+            if ($serviceRequest->SignatureFlows->where('status', '===', 0)->count() == 0) {
+                foreach ($serviceRequest->SignatureFlows->sortBy('sign_position') as $key2 => $signatureFlow) {
                     //with responsable_id
-                    if ($user_id == $signatureFlow->responsable_id)
-                    {
-                        if ($signatureFlow->status == NULL)
-                        {
-                            if ($serviceRequest->SignatureFlows->where('sign_position',$signatureFlow->sign_position-1)->first()->status == NULL)
-                            {
+                    if ($user_id == $signatureFlow->responsable_id) {
+                        if ($signatureFlow->status == null) {
+                            if ($serviceRequest->SignatureFlows->where('sign_position', $signatureFlow->sign_position - 1)->first()->status == null) {
                                 $serviceRequestsOthersPendings[$serviceRequest->id] = $serviceRequest;
-                            }
-                            else
-                            {
+                            } else {
                                 $serviceRequestsMyPendings[$serviceRequest->id] = $serviceRequest;
                             }
-                        }
-                        else
-                        {
+                        } else {
                             $serviceRequestsAnswered[$serviceRequest->id] = $serviceRequest;
                         }
                     }
                     //with organizational unit authority
-                    if ($user_id == $signatureFlow->ou_id)
-                    {
+                    if ($user_id == $signatureFlow->ou_id) {
 
                     }
                 }
-            }
-            else
-            {
+            } else {
                 $serviceRequestsRejected[$serviceRequest->id] = $serviceRequest;
             }
         }
 
-        foreach ($serviceRequests as $key => $serviceRequest)
-        {
-            if (!array_key_exists($serviceRequest->id,$serviceRequestsOthersPendings))
-            {
-                if (!array_key_exists($serviceRequest->id,$serviceRequestsMyPendings))
-                {
-                    if (!array_key_exists($serviceRequest->id,$serviceRequestsAnswered))
-                    {
+        foreach ($serviceRequests as $key => $serviceRequest) {
+            if (! array_key_exists($serviceRequest->id, $serviceRequestsOthersPendings)) {
+                if (! array_key_exists($serviceRequest->id, $serviceRequestsMyPendings)) {
+                    if (! array_key_exists($serviceRequest->id, $serviceRequestsAnswered)) {
                         $serviceRequestsCreated[$serviceRequest->id] = $serviceRequest;
                     }
                 }
@@ -862,66 +749,49 @@ class User extends Authenticatable implements Auditable, FilamentUser
         $user_id = $this->id;
 
         $serviceRequestsOthersPendings = [];
-        $serviceRequestsMyPendings = [];
-        $serviceRequestsAnswered = [];
-        $serviceRequestsCreated = [];
-        $serviceRequestsRejected = [];
+        $serviceRequestsMyPendings     = [];
+        $serviceRequestsAnswered       = [];
+        $serviceRequestsCreated        = [];
+        $serviceRequestsRejected       = [];
 
         $serviceRequests = ServiceRequest::query()
-            ->whereHas("SignatureFlows", function($subQuery) use($user_id) {
+            ->whereHas('SignatureFlows', function ($subQuery) use ($user_id) {
                 $subQuery->where('responsable_id', $user_id);
                 $subQuery->orwhere('user_id', $user_id);
             })
-            ->orderBy('id','asc')
+            ->orderBy('id', 'asc')
             ->get();
 
-        foreach ($serviceRequests as $key => $serviceRequest)
-        {
+        foreach ($serviceRequests as $key => $serviceRequest) {
             /* not rejected */
-            if ($serviceRequest->SignatureFlows->where('status','===',0)->count() == 0)
-            {
-                foreach ($serviceRequest->SignatureFlows->sortBy('sign_position') as $key2 => $signatureFlow)
-                {
+            if ($serviceRequest->SignatureFlows->where('status', '===', 0)->count() == 0) {
+                foreach ($serviceRequest->SignatureFlows->sortBy('sign_position') as $key2 => $signatureFlow) {
                     /* with responsable_id */
-                    if ($user_id == $signatureFlow->responsable_id)
-                    {
-                        if ($signatureFlow->status == NULL)
-                        {
-                            if ($serviceRequest->SignatureFlows->where('sign_position',$signatureFlow->sign_position-1)->first()->status == NULL)
-                            {
+                    if ($user_id == $signatureFlow->responsable_id) {
+                        if ($signatureFlow->status == null) {
+                            if ($serviceRequest->SignatureFlows->where('sign_position', $signatureFlow->sign_position - 1)->first()->status == null) {
                                 $serviceRequestsOthersPendings[$serviceRequest->id] = $serviceRequest;
-                            }
-                            else
-                            {
+                            } else {
                                 $serviceRequestsMyPendings[$serviceRequest->id] = $serviceRequest;
                             }
-                        }
-                        else
-                        {
+                        } else {
                             $serviceRequestsAnswered[$serviceRequest->id] = $serviceRequest;
                         }
                     }
                     /* with organizational unit authority */
-                    if ($user_id == $signatureFlow->ou_id)
-                    {
+                    if ($user_id == $signatureFlow->ou_id) {
                         /* TODO: Revisar */
                     }
                 }
-            }
-            else
-            {
+            } else {
                 $serviceRequestsRejected[$serviceRequest->id] = $serviceRequest;
             }
         }
 
-        foreach ($serviceRequests as $key => $serviceRequest)
-        {
-            if (!array_key_exists($serviceRequest->id,$serviceRequestsOthersPendings))
-            {
-                if (!array_key_exists($serviceRequest->id,$serviceRequestsMyPendings))
-                {
-                    if (!array_key_exists($serviceRequest->id,$serviceRequestsAnswered))
-                    {
+        foreach ($serviceRequests as $key => $serviceRequest) {
+            if (! array_key_exists($serviceRequest->id, $serviceRequestsOthersPendings)) {
+                if (! array_key_exists($serviceRequest->id, $serviceRequestsMyPendings)) {
+                    if (! array_key_exists($serviceRequest->id, $serviceRequestsAnswered)) {
                         $serviceRequestsCreated[$serviceRequest->id] = $serviceRequest;
                     }
                 }
@@ -936,8 +806,8 @@ class User extends Authenticatable implements Auditable, FilamentUser
      */
     public function getPosition()
     {
-        if(is_null($this->position)) {
-            return "";
+        if (is_null($this->position)) {
+            return '';
         } else {
             return $this->position;
         }
@@ -945,53 +815,57 @@ class User extends Authenticatable implements Auditable, FilamentUser
 
     public function getGender()
     {
-        if(is_null($this->gender)) {
-            return "";
+        if (is_null($this->gender)) {
+            return '';
         } else {
-            if($this->gender == "male"){ return "Masculino"; }
-            elseif($this->gender == "female"){ return "Femenino"; }
-            else{ return "Otro"; }
+            if ($this->gender == 'male') {
+                return 'Masculino';
+            } elseif ($this->gender == 'female') {
+                return 'Femenino';
+            } else {
+                return 'Otro';
+            }
         }
     }
 
     /**
      * Retorna Usuarios según contenido en $searchText
      * Busqueda realizada en: nombres, apellidos, rut.
+     *
      * @return ??
      */
     public static function getUsersBySearch($searchText)
     {
         $users = User::query()->withTrashed();
-        if($searchText) {
+        if ($searchText) {
             $array_search = explode(' ', $searchText);
-            foreach($array_search as $word)
-            {
-                $users->where(function($q) use($word) {
+            foreach ($array_search as $word) {
+                $users->where(function ($q) use ($word) {
                     $q->where('name', 'LIKE', '%'.$word.'%')
-                    ->orwhere('fathers_family','LIKE', '%'.$word.'%')
-                    ->orwhere('mothers_family','LIKE', '%'.$word.'%')
-                    ->orwhere('id','LIKE', '%'.$word.'%');
+                        ->orwhere('fathers_family', 'LIKE', '%'.$word.'%')
+                        ->orwhere('mothers_family', 'LIKE', '%'.$word.'%')
+                        ->orwhere('id', 'LIKE', '%'.$word.'%');
                     //->orwhere('dv','LIKE', '%'.$word.'%');
                 });
             }
         }
+
         return $users;
     }
 
     public static function dvCalculate($num)
     {
-        if(is_numeric($num))
-        {
+        if (is_numeric($num)) {
             $run = intval($num);
-            $s=1;
-            for($m=0;$run!=0;$run/=10)
-                $s=($s+$run%10*(9-$m++%6))%11;
-            $dv = chr($s?$s+47:75);
+            $s   = 1;
+            for ($m = 0; $run != 0; $run /= 10) {
+                $s = ($s + $run % 10 * (9 - $m++ % 6)) % 11;
+            }
+            $dv = chr($s ? $s + 47 : 75);
+
             return $dv;
-        }
-        else
-        {
-            return "Run no Válido";
+        } else {
+            return 'Run no Válido';
         }
     }
 
@@ -1008,68 +882,64 @@ class User extends Authenticatable implements Auditable, FilamentUser
 
     public function runFormat()
     {
-        return number_format($this->id, 0,'.','.') . '-' . $this->dv;
+        return number_format($this->id, 0, '.', '.').'-'.$this->dv;
     }
 
     public function runNotFormat()
     {
-        return $this->id . '-' . $this->dv;
+        return $this->id.'-'.$this->dv;
     }
 
     public function getRunFormatAttribute()
     {
-      return number_format($this->id, 0, '.', '.') . '-' . $this->dv;
+        return number_format($this->id, 0, '.', '.').'-'.$this->dv;
     }
 
     public function getFullNameAttribute()
     {
-        return mb_convert_case(mb_strtolower("{$this->name} {$this->fathers_family} {$this->mothers_family}"), MB_CASE_TITLE, "UTF-8");
+        return mb_convert_case(mb_strtolower("{$this->name} {$this->fathers_family} {$this->mothers_family}"), MB_CASE_TITLE, 'UTF-8');
     }
 
     public function getFullNameUpperAttribute()
     {
-        return mb_convert_case(mb_strtoupper("{$this->name} {$this->fathers_family} {$this->mothers_family}"), MB_CASE_UPPER, "UTF-8");
+        return mb_convert_case(mb_strtoupper("{$this->name} {$this->fathers_family} {$this->mothers_family}"), MB_CASE_UPPER, 'UTF-8');
     }
 
     /* $user->shortName (PrimerNombre Apellido1 Apellido2), para las Marías contempla sus segundo nombre */
     public function getShortNameAttribute()
     {
-        return implode(' ', array(
+        return implode(' ', [
             $this->firstName,
-            mb_convert_case($this->fathers_family,MB_CASE_TITLE, 'UTF-8'),
-            mb_convert_case($this->mothers_family,MB_CASE_TITLE, 'UTF-8')
-        ));
+            mb_convert_case($this->fathers_family, MB_CASE_TITLE, 'UTF-8'),
+            mb_convert_case($this->mothers_family, MB_CASE_TITLE, 'UTF-8'),
+        ]);
     }
 
     /* $user->tinyName (PrimerNombre Apellido1) */
     public function getTinnyNameAttribute()
     {
-        if(!is_null($this->name))
-        {
-            return $this->firstName . ' ' . mb_convert_case($this->fathers_family,MB_CASE_TITLE, 'UTF-8');
+        if (! is_null($this->name)) {
+            return $this->firstName.' '.mb_convert_case($this->fathers_family, MB_CASE_TITLE, 'UTF-8');
+        } else {
+            return '';
         }
-        else
-            return "";
     }
 
     public function getFirstNameAttribute()
     {
-        $names = explode(' ',trim(mb_convert_case($this->name,MB_CASE_TITLE, 'UTF-8')));
+        $names     = explode(' ', trim(mb_convert_case($this->name, MB_CASE_TITLE, 'UTF-8')));
         $cantNames = count($names);
-        if($cantNames >=2 AND ($names[0] == 'María' OR $names [0] == 'Maria')) {
-            if($cantNames >= 3 AND ($names[1] == 'De' OR $names[1] == 'Del')) {
-                if($cantNames >=4 AND ($names[2] == 'Los' OR $names[2] == 'Las')) {
-                    $firstName = $names[0] . ' ' . $names[1] . ' ' . $names[2] . ' ' . $names[3];
+        if ($cantNames >= 2 and ($names[0] == 'María' or $names[0] == 'Maria')) {
+            if ($cantNames >= 3 and ($names[1] == 'De' or $names[1] == 'Del')) {
+                if ($cantNames >= 4 and ($names[2] == 'Los' or $names[2] == 'Las')) {
+                    $firstName = $names[0].' '.$names[1].' '.$names[2].' '.$names[3];
+                } else {
+                    $firstName = $names[0].' '.$names[1].' '.$names[2];
                 }
-                else {
-                    $firstName = $names[0] . ' ' . $names[1] . ' ' . $names[2];
-                }
+            } elseif ($cantNames >= 2) {
+                $firstName = $names[0].' '.$names[1];
             }
-            else if($cantNames >=2 ) {
-                $firstName = $names[0] . ' ' . $names[1];
-            }
-        }
-        else {
+        } else {
             $firstName = $names[0];
         }
 
@@ -1078,9 +948,9 @@ class User extends Authenticatable implements Auditable, FilamentUser
 
     public function getInitialsAttribute()
     {
-        $a = array('À', 'Á', 'Â', 'Ã', 'Ä', 'Å', 'Æ', 'Ç', 'È', 'É', 'Ê', 'Ë', 'Ì', 'Í', 'Î', 'Ï', 'Ð', 'Ñ', 'Ò', 'Ó', 'Ô', 'Õ', 'Ö', 'Ø', 'Ù', 'Ú', 'Û', 'Ü', 'Ý', 'ß', 'à', 'á', 'â', 'ã', 'ä', 'å', 'æ', 'ç', 'è', 'é', 'ê', 'ë', 'ì', 'í', 'î', 'ï', 'ñ', 'ò', 'ó', 'ô', 'õ', 'ö', 'ø', 'ù', 'ú', 'û', 'ü', 'ý', 'ÿ', 'Ā', 'ā', 'Ă', 'ă', 'Ą', 'ą', 'Ć', 'ć', 'Ĉ', 'ĉ', 'Ċ', 'ċ', 'Č', 'č', 'Ď', 'ď', 'Đ', 'đ', 'Ē', 'ē', 'Ĕ', 'ĕ', 'Ė', 'ė', 'Ę', 'ę', 'Ě', 'ě', 'Ĝ', 'ĝ', 'Ğ', 'ğ', 'Ġ', 'ġ', 'Ģ', 'ģ', 'Ĥ', 'ĥ', 'Ħ', 'ħ', 'Ĩ', 'ĩ', 'Ī', 'ī', 'Ĭ', 'ĭ', 'Į', 'į', 'İ', 'ı', 'Ĳ', 'ĳ', 'Ĵ', 'ĵ', 'Ķ', 'ķ', 'Ĺ', 'ĺ', 'Ļ', 'ļ', 'Ľ', 'ľ', 'Ŀ', 'ŀ', 'Ł', 'ł', 'Ń', 'ń', 'Ņ', 'ņ', 'Ň', 'ň', 'ŉ', 'Ō', 'ō', 'Ŏ', 'ŏ', 'Ő', 'ő', 'Œ', 'œ', 'Ŕ', 'ŕ', 'Ŗ', 'ŗ', 'Ř', 'ř', 'Ś', 'ś', 'Ŝ', 'ŝ', 'Ş', 'ş', 'Š', 'š', 'Ţ', 'ţ', 'Ť', 'ť', 'Ŧ', 'ŧ', 'Ũ', 'ũ', 'Ū', 'ū', 'Ŭ', 'ŭ', 'Ů', 'ů', 'Ű', 'ű', 'Ų', 'ų', 'Ŵ', 'ŵ', 'Ŷ', 'ŷ', 'Ÿ', 'Ź', 'ź', 'Ż', 'ż', 'Ž', 'ž', 'ſ', 'ƒ', 'Ơ', 'ơ', 'Ư', 'ư', 'Ǎ', 'ǎ', 'Ǐ', 'ǐ', 'Ǒ', 'ǒ', 'Ǔ', 'ǔ', 'Ǖ', 'ǖ', 'Ǘ', 'ǘ', 'Ǚ', 'ǚ', 'Ǜ', 'ǜ', 'Ǻ', 'ǻ', 'Ǽ', 'ǽ', 'Ǿ', 'ǿ');
-        $b = array('A', 'A', 'A', 'A', 'A', 'A', 'AE', 'C', 'E', 'E', 'E', 'E', 'I', 'I', 'I', 'I', 'D', 'N', 'O', 'O', 'O', 'O', 'O', 'O', 'U', 'U', 'U', 'U', 'Y', 's', 'a', 'a', 'a', 'a', 'a', 'a', 'ae', 'c', 'e', 'e', 'e', 'e', 'i', 'i', 'i', 'i', 'n', 'o', 'o', 'o', 'o', 'o', 'o', 'u', 'u', 'u', 'u', 'y', 'y', 'A', 'a', 'A', 'a', 'A', 'a', 'C', 'c', 'C', 'c', 'C', 'c', 'C', 'c', 'D', 'd', 'D', 'd', 'E', 'e', 'E', 'e', 'E', 'e', 'E', 'e', 'E', 'e', 'G', 'g', 'G', 'g', 'G', 'g', 'G', 'g', 'H', 'h', 'H', 'h', 'I', 'i', 'I', 'i', 'I', 'i', 'I', 'i', 'I', 'i', 'IJ', 'ij', 'J', 'j', 'K', 'k', 'L', 'l', 'L', 'l', 'L', 'l', 'L', 'l', 'l', 'l', 'N', 'n', 'N', 'n', 'N', 'n', 'n', 'O', 'o', 'O', 'o', 'O', 'o', 'OE', 'oe', 'R', 'r', 'R', 'r', 'R', 'r', 'S', 's', 'S', 's', 'S', 's', 'S', 's', 'T', 't', 'T', 't', 'T', 't', 'U', 'u', 'U', 'u', 'U', 'u', 'U', 'u', 'U', 'u', 'U', 'u', 'W', 'w', 'Y', 'y', 'Y', 'Z', 'z', 'Z', 'z', 'Z', 'z', 's', 'f', 'O', 'o', 'U', 'u', 'A', 'a', 'I', 'i', 'O', 'o', 'U', 'u', 'U', 'u', 'U', 'u', 'U', 'u', 'U', 'u', 'A', 'a', 'AE', 'ae', 'O', 'o');
-        $name = str_replace($a, $b, $this->name);
+        $a       = ['À', 'Á', 'Â', 'Ã', 'Ä', 'Å', 'Æ', 'Ç', 'È', 'É', 'Ê', 'Ë', 'Ì', 'Í', 'Î', 'Ï', 'Ð', 'Ñ', 'Ò', 'Ó', 'Ô', 'Õ', 'Ö', 'Ø', 'Ù', 'Ú', 'Û', 'Ü', 'Ý', 'ß', 'à', 'á', 'â', 'ã', 'ä', 'å', 'æ', 'ç', 'è', 'é', 'ê', 'ë', 'ì', 'í', 'î', 'ï', 'ñ', 'ò', 'ó', 'ô', 'õ', 'ö', 'ø', 'ù', 'ú', 'û', 'ü', 'ý', 'ÿ', 'Ā', 'ā', 'Ă', 'ă', 'Ą', 'ą', 'Ć', 'ć', 'Ĉ', 'ĉ', 'Ċ', 'ċ', 'Č', 'č', 'Ď', 'ď', 'Đ', 'đ', 'Ē', 'ē', 'Ĕ', 'ĕ', 'Ė', 'ė', 'Ę', 'ę', 'Ě', 'ě', 'Ĝ', 'ĝ', 'Ğ', 'ğ', 'Ġ', 'ġ', 'Ģ', 'ģ', 'Ĥ', 'ĥ', 'Ħ', 'ħ', 'Ĩ', 'ĩ', 'Ī', 'ī', 'Ĭ', 'ĭ', 'Į', 'į', 'İ', 'ı', 'Ĳ', 'ĳ', 'Ĵ', 'ĵ', 'Ķ', 'ķ', 'Ĺ', 'ĺ', 'Ļ', 'ļ', 'Ľ', 'ľ', 'Ŀ', 'ŀ', 'Ł', 'ł', 'Ń', 'ń', 'Ņ', 'ņ', 'Ň', 'ň', 'ŉ', 'Ō', 'ō', 'Ŏ', 'ŏ', 'Ő', 'ő', 'Œ', 'œ', 'Ŕ', 'ŕ', 'Ŗ', 'ŗ', 'Ř', 'ř', 'Ś', 'ś', 'Ŝ', 'ŝ', 'Ş', 'ş', 'Š', 'š', 'Ţ', 'ţ', 'Ť', 'ť', 'Ŧ', 'ŧ', 'Ũ', 'ũ', 'Ū', 'ū', 'Ŭ', 'ŭ', 'Ů', 'ů', 'Ű', 'ű', 'Ų', 'ų', 'Ŵ', 'ŵ', 'Ŷ', 'ŷ', 'Ÿ', 'Ź', 'ź', 'Ż', 'ż', 'Ž', 'ž', 'ſ', 'ƒ', 'Ơ', 'ơ', 'Ư', 'ư', 'Ǎ', 'ǎ', 'Ǐ', 'ǐ', 'Ǒ', 'ǒ', 'Ǔ', 'ǔ', 'Ǖ', 'ǖ', 'Ǘ', 'ǘ', 'Ǚ', 'ǚ', 'Ǜ', 'ǜ', 'Ǻ', 'ǻ', 'Ǽ', 'ǽ', 'Ǿ', 'ǿ'];
+        $b       = ['A', 'A', 'A', 'A', 'A', 'A', 'AE', 'C', 'E', 'E', 'E', 'E', 'I', 'I', 'I', 'I', 'D', 'N', 'O', 'O', 'O', 'O', 'O', 'O', 'U', 'U', 'U', 'U', 'Y', 's', 'a', 'a', 'a', 'a', 'a', 'a', 'ae', 'c', 'e', 'e', 'e', 'e', 'i', 'i', 'i', 'i', 'n', 'o', 'o', 'o', 'o', 'o', 'o', 'u', 'u', 'u', 'u', 'y', 'y', 'A', 'a', 'A', 'a', 'A', 'a', 'C', 'c', 'C', 'c', 'C', 'c', 'C', 'c', 'D', 'd', 'D', 'd', 'E', 'e', 'E', 'e', 'E', 'e', 'E', 'e', 'E', 'e', 'G', 'g', 'G', 'g', 'G', 'g', 'G', 'g', 'H', 'h', 'H', 'h', 'I', 'i', 'I', 'i', 'I', 'i', 'I', 'i', 'I', 'i', 'IJ', 'ij', 'J', 'j', 'K', 'k', 'L', 'l', 'L', 'l', 'L', 'l', 'L', 'l', 'l', 'l', 'N', 'n', 'N', 'n', 'N', 'n', 'n', 'O', 'o', 'O', 'o', 'O', 'o', 'OE', 'oe', 'R', 'r', 'R', 'r', 'R', 'r', 'S', 's', 'S', 's', 'S', 's', 'S', 's', 'T', 't', 'T', 't', 'T', 't', 'U', 'u', 'U', 'u', 'U', 'u', 'U', 'u', 'U', 'u', 'U', 'u', 'W', 'w', 'Y', 'y', 'Y', 'Z', 'z', 'Z', 'z', 'Z', 'z', 's', 'f', 'O', 'o', 'U', 'u', 'A', 'a', 'I', 'i', 'O', 'o', 'U', 'u', 'U', 'u', 'U', 'u', 'U', 'u', 'U', 'u', 'A', 'a', 'AE', 'ae', 'O', 'o'];
+        $name    = str_replace($a, $b, $this->name);
         $fathers = str_replace($a, $b, $this->fathers_family);
         $mothers = str_replace($a, $b, $this->mothers_family);
 
@@ -1095,23 +965,21 @@ class User extends Authenticatable implements Auditable, FilamentUser
     public function getActiveStoreAttribute()
     {
         $storeActive = $this->stores->where('pivot.status', '=', 1)->first();
-        if($storeActive)
+        if ($storeActive) {
             return $storeActive;
-        else
+        } else {
             return null;
+        }
     }
 
     public function getSubrogantAttribute()
     {
-        if($this->absent)
-        {
+        if ($this->absent) {
             return $this->subrogations
-                ->where('subrogant.absent',false)
+                ->where('subrogant.absent', false)
                 ->first()
                 ->subrogant ?? null;
-        }
-        else
-        {
+        } else {
             return $this;
         }
     }
@@ -1123,29 +991,28 @@ class User extends Authenticatable implements Auditable, FilamentUser
 
         $subrogations = Subrogation::query()
             ->with('user')
-            ->where('type',null)
-            ->where('subrogant_id',$this->id)
-            ->whereRelation('user','absent',true)
+            ->where('type', null)
+            ->where('subrogant_id', $this->id)
+            ->whereRelation('user', 'absent', true)
             ->get();
 
-        foreach($subrogations as $subrogation)
-        {
-            if($subrogation->user->subrogant == $this)
-            {
+        foreach ($subrogations as $subrogation) {
+            if ($subrogation->user->subrogant == $this) {
                 unset($subrogation->user->subrogations);
                 $users[] = $subrogation->user;
             }
         }
+
         return $users;
     }
 
     /** Devuelve todas los modelos authoritys junto con la ou de la que es manager el usuario */
-    public function getAmIAuthorityFromOuAttribute() 
+    public function getAmIAuthorityFromOuAttribute()
     {
         return Authority::with('organizationalUnit')
-            ->where('user_id',$this->id)
-            ->where('date',today())
-            ->where('type','manager')
+            ->where('user_id', $this->id)
+            ->where('date', today())
+            ->where('type', 'manager')
             ->get();
     }
 
@@ -1156,9 +1023,9 @@ class User extends Authenticatable implements Auditable, FilamentUser
      */
     public function getIAmSubrogantNoAuthorityAttribute()
     {
-        return Subrogation::where('organizational_unit_id',null)
-            ->where('type',null)
-            ->where('subrogant_id',auth()->user()->id)
+        return Subrogation::where('organizational_unit_id', null)
+            ->where('type', null)
+            ->where('subrogant_id', auth()->user()->id)
             ->get();
 
     }
@@ -1166,41 +1033,36 @@ class User extends Authenticatable implements Auditable, FilamentUser
     /**
      * Get either a Gravatar URL for a specified email address.
      *
-     * @param string $s Size in pixels, defaults to 80px [ 1 - 2048 ]
-     * @param string $d Default imageset to use [ 404 | mp | identicon | monsterid | wavatar ]
-     * @param string $r Maximum rating (inclusive) [ g | pg | r | x ]
-     * example:
-     * <img src="{{ auth()->user()->gravatarUrl }}" class="img-thumbnail rounded-circle" alt="Avatar">
-     * example with params:
-     * <img src="{{ auth()->user()->gravatarUrl }}?s=80&d=mp&r=g" class="img-thumbnail rounded-circle" alt="Avatar">
+     * @param  string  $s  Size in pixels, defaults to 80px [ 1 - 2048 ]
+     * @param  string  $d  Default imageset to use [ 404 | mp | identicon | monsterid | wavatar ]
+     * @param  string  $r  Maximum rating (inclusive) [ g | pg | r | x ]
+     *                     example:
+     *                     <img src="{{ auth()->user()->gravatarUrl }}" class="img-thumbnail rounded-circle" alt="Avatar">
+     *                     example with params:
+     *                     <img src="{{ auth()->user()->gravatarUrl }}?s=80&d=mp&r=g" class="img-thumbnail rounded-circle" alt="Avatar">
      */
     public function getGravatarUrlAttribute()
     {
         $hash = md5(strtolower(trim($this->attributes['email'])));
+
         return "https://www.gravatar.com/avatar/$hash";
     }
 
     public function getCheckGravatarAttribute()
     {
-        $hash = md5($this->email);
-        $uri = 'https://www.gravatar.com/avatar/' . $hash . '?d=404';
+        $hash    = md5($this->email);
+        $uri     = 'https://www.gravatar.com/avatar/'.$hash.'?d=404';
         $headers = @get_headers($uri);
 
         /* Permite login local si no hay conexión a internet */
-        if ($headers)
-        {
-            if (preg_match("|200|", $headers[0]))
-            {
-                if (!$this->gravatar)
-                {
+        if ($headers) {
+            if (preg_match('|200|', $headers[0])) {
+                if (! $this->gravatar) {
                     $this->gravatar = true;
                     $this->save();
                 }
-            }
-            else
-            {
-                if ($this->gravatar)
-                {
+            } else {
+                if ($this->gravatar) {
                     $this->gravatar = false;
                     $this->save();
                 }
@@ -1208,18 +1070,19 @@ class User extends Authenticatable implements Auditable, FilamentUser
         }
     }
 
-    public function checkEmailFormat(){
+    public function checkEmailFormat()
+    {
         if (filter_var($this->email_personal, FILTER_VALIDATE_EMAIL)) {
             return true;
-        }else{
+        } else {
             return false;
         }
 
     }
 
     /**
-    * Checkea si estoy en god mode
-    */
+     * Checkea si estoy en god mode
+     */
     public function getGodModeAttribute()
     {
         return session()->has('god');
@@ -1228,33 +1091,30 @@ class User extends Authenticatable implements Auditable, FilamentUser
     /**
      * Amipass
      */
-
-     public function getAmipassData($startDate, 
-                                    $endDate, 
-                                    $holidays, 
-                                    $holidaysNextMonth,
-                                    $compensatoryAbsenteeismType){
+    public function getAmipassData($startDate,
+        $endDate,
+        $holidays,
+        $holidaysNextMonth,
+        $compensatoryAbsenteeismType)
+    {
         // $output = [];
 
         /* Valor de amipass */
         $this->dailyAmmount = 4480;
         $this->shiftAmmount = 5840;
-        
+
         // dd($this);
 
         // si tiene turnos
-        if($this->shifts->count()>0)
-        {
-            foreach($this->shifts as $shift){
+        if ($this->shifts->count() > 0) {
+            foreach ($this->shifts as $shift) {
                 $shift->ammount = $shift->quantity * $this->shiftAmmount;
-                
+
                 // se genera array para exportación de montos
                 // if(!array_key_exists($this->id,$output)){$output[$this->id] = 0;}
                 // $output[$this->id] += $shift->ammount;
             }
-        }
-        else
-        {
+        } else {
 
             // $this->array[$row] = "none";
             /**
@@ -1268,7 +1128,7 @@ class User extends Authenticatable implements Auditable, FilamentUser
              * - Incorporar calculo con valores 4.800 y 5.800 para los con turno
              * - Almacenar el archivo de carga de amipass, para mostrar columna "Cargado en AMIPASS" wel_ami_recargas (ingles)
              * - Que hacer con la fecha de alejamiento?  01-01-2023 -> 31-12-2023 fecha alejamiento (05-06-023)
-             *   Sobre 33 hrs se considera para calculo amipass. 
+             *   Sobre 33 hrs se considera para calculo amipass.
              * - Contratos que se suman, por ejemplo. dos contrtos de 22 horas, suman 44, cuando en el mismo instante del tiempo, tenga 44
              *   ej: 14105981
              *   11 horas           1....................30
@@ -1303,43 +1163,43 @@ class User extends Authenticatable implements Auditable, FilamentUser
              * PERMISO GREMIAL no se descuenta
              * L.M. ENFERMEDAD GRAVE HIJO MENOR DE UN AÑO  si se descuenta
              * FALLECIMIENTO HERMANO/A si se descuenta
-             * 
+             *
              * No incluir funcionarios con contrato y que sean turno (shift = 1)
              */
             $this->totalAbsenteeisms = 0;
 
-            $lastdate=null;
-            
+            $lastdate = null;
+
             $numero_horas = 0;
             $businessDays = 0;
 
             // Obtiene array de días según contratos (ejemplo Contrato del 1 al 30, Contrato del 15 al 30, Result del 15 al 30)
             // Intersectar horas de posibles contratos
-            $dateResult = array();
-            $contractDates = array();
+            $dateResult    = [];
+            $contractDates = [];
             // dd($startDate,$endDate);
             // dd($this->contracts);
-            foreach($this->contracts as $key => $contract) {
+            foreach ($this->contracts as $key => $contract) {
                 // obtiene la suma de horas estupiladas en los contratos (para analisis más abajo)
                 $numero_horas += $contract->numero_horas;
 
                 // se hace este if, porque hay contratos que no tienen fecha de término (son indefinidos, y no se puede usar el valor fecha_termino_contrato)
-                if($contract->fecha_termino_contrato){
+                if ($contract->fecha_termino_contrato) {
                     // Se crea array con fechas del periodo de cada contrato
-                    $period = CarbonPeriod::create($contract->fecha_inicio_contrato->isAfter($startDate) ? $contract->fecha_inicio_contrato : $startDate, 
-                                                    $contract->fecha_termino_contrato->isBefore($endDate) ? $contract->fecha_termino_contrato : $endDate);
-                }else{
+                    $period = CarbonPeriod::create($contract->fecha_inicio_contrato->isAfter($startDate) ? $contract->fecha_inicio_contrato : $startDate,
+                        $contract->fecha_termino_contrato->isBefore($endDate) ? $contract->fecha_termino_contrato : $endDate);
+                } else {
                     // Se crea array con fechas del periodo de cada contrato
-                    $period = CarbonPeriod::create($contract->fecha_inicio_contrato->isAfter($startDate) ? $contract->fecha_inicio_contrato : $startDate, 
-                                                    $endDate);
+                    $period = CarbonPeriod::create($contract->fecha_inicio_contrato->isAfter($startDate) ? $contract->fecha_inicio_contrato : $startDate,
+                        $endDate);
                 }
-               
+
                 $dateResult[$key] = $period->toArray();
-                
+
                 // se dejan solo fechas que se intercepten
-                if($key > 0){
-                    $contractDates = array_intersect($dateResult[$key-1], $period->toArray());
-                }else{
+                if ($key > 0) {
+                    $contractDates = array_intersect($dateResult[$key - 1], $period->toArray());
+                } else {
                     $contractDates = $period->toArray();
                 }
             }
@@ -1347,99 +1207,93 @@ class User extends Authenticatable implements Auditable, FilamentUser
 
             // se obtiene primera y ultima fecha (keys del array) del cruce (para analisis posterior)
             $first_key = array_key_first($contractDates);
-            $last_key = array_key_last($contractDates);
+            $last_key  = array_key_last($contractDates);
             // dd($first_key,$last_key);
             $businessDays = [];
-            if(count($contractDates) > 0){
+            if (count($contractDates) > 0) {
 
                 // días laborales reales (considerando cruze de contratos)
                 // Se deben obtener días del mes siguiente, por ende se suma un mes a la fecha de analisis
                 $businessDays_search_start_date = $contractDates[$first_key]->addMonth();
-                $businessDays_search_end_date = $businessDays_search_start_date->copy()->endOfMonth();
+                $businessDays_search_end_date   = $businessDays_search_start_date->copy()->endOfMonth();
                 // dd($businessDays_search_start_date, $businessDays_search_end_date);
 
                 $businessDays = DateHelper::getBusinessDaysByDateRangeHolidays($businessDays_search_start_date, $businessDays_search_end_date, $holidaysNextMonth)->toArray();
                 // $businessDays = DateHelper::getBusinessDaysByDateRangeHolidays($contractDates[$first_key],$contractDates[$last_key],$holidays)->toArray();
             }
-            
+
             //cantidad de días laborales
             // dd($businessDays);
-            $businessDays = count($businessDays);
+            $businessDays       = count($businessDays);
             $this->businessDays = $businessDays;
 
             // variable para mostrar horas en vista
             $this->contract_hours = $numero_horas;
-            
+
             // si es menor o igual a 33, no se sigue con el analisis para este usuario
-            if($numero_horas <= 33){
+            if ($numero_horas <= 33) {
                 return $this;
             }
-            
 
-
-            
-            
-            foreach($this->absenteeisms->sortBy('finicio') as $key => $absenteeism) {
+            foreach ($this->absenteeisms->sortBy('finicio') as $key => $absenteeism) {
                 // si el tipo de ausentismo no considera descuento, se sigue en la siguiente iteración
-                if(!$absenteeism->type->discount){
+                if (! $absenteeism->type->discount) {
                     $absenteeism->totalDays = 0;
+
                     continue;
                 }
 
                 // condición desde un valor
-                if($absenteeism->type->from){
-                    if($absenteeism->total_dias_ausentismo >= $absenteeism->type->from){
+                if ($absenteeism->type->from) {
+                    if ($absenteeism->total_dias_ausentismo >= $absenteeism->type->from) {
 
-                    }else{
+                    } else {
                         $absenteeism->totalDays = 0;
+
                         continue;
                     }
                 }
                 // condición sobre un valor
-                if($absenteeism->type->over){
-                    if($absenteeism->total_dias_ausentismo > $absenteeism->type->over){
+                if ($absenteeism->type->over) {
+                    if ($absenteeism->total_dias_ausentismo > $absenteeism->type->over) {
 
-                    }else{
+                    } else {
                         $absenteeism->totalDays = 0;
+
                         continue;
                     }
                 }
 
                 $absenteeismStartDate = $absenteeism->finicio->isBefore($startDate) ? $startDate : $absenteeism->finicio;
-                $absenteeismEndDate = $absenteeism->ftermino->isAfter($endDate) ? $endDate : $absenteeism->ftermino;
+                $absenteeismEndDate   = $absenteeism->ftermino->isAfter($endDate) ? $endDate : $absenteeism->ftermino;
 
                 // solapamiento de contratos.
                 // si fecha de contrato anterior es mayor a la de inicio actual, se comienza desde el dia siguiente de fecha anterior.
-                if($lastdate>=$absenteeismStartDate){
+                if ($lastdate >= $absenteeismStartDate) {
                     $absenteeismStartDate = $lastdate->addDays(1);
                 }
                 $lastdate = $absenteeismEndDate->copy();
 
                 // dd($absenteeismStartDate, $absenteeismEndDate);
-                $absenteeism->totalDays = DateHelper::getBusinessDaysByDateRangeHolidays($absenteeismStartDate,$absenteeismEndDate,$holidays)->count();
-                // $absenteeism->totalDays = DateHelper::getBusinessDaysByDateRangeHolidays($absenteeismStartDate->copy()->addMonth(), 
-                //                                                                          $absenteeismEndDate->copy()->addMonth(), 
+                $absenteeism->totalDays = DateHelper::getBusinessDaysByDateRangeHolidays($absenteeismStartDate, $absenteeismEndDate, $holidays)->count();
+                // $absenteeism->totalDays = DateHelper::getBusinessDaysByDateRangeHolidays($absenteeismStartDate->copy()->addMonth(),
+                //                                                                          $absenteeismEndDate->copy()->addMonth(),
                 //                                                                          $holidaysNextMonth)->count();
                 // dd($absenteeism->totalDays);
                 $this->totalAbsenteeisms += $absenteeism->totalDays;
 
                 // $this->absenteeisms[$this->id] = $absenteeism;
-                
+
             }
 
             $this->totalAbsenteeismsEnBd = $this->absenteeisms->sum('total_dias_ausentismo');
 
-            
-
-            
-
-
             // dd($this->compensatoryDays);
             // dias compensatorios
-            foreach($this->compensatoryDays as $key => $compensatoryDay){
+            foreach ($this->compensatoryDays as $key => $compensatoryDay) {
                 // genera array con inicio y termino de cada periodo del rango
                 $start = $compensatoryDay->start_date;
-                $end = $compensatoryDay->end_date;
+                $end   = $compensatoryDay->end_date;
 
                 // obtiene días hábiles (sin feriados ni fds)
                 $habiles = DateHelper::getBusinessDaysByDateRangeHolidays($start, $end, $holidays)->toArray();
@@ -1448,11 +1302,11 @@ class User extends Authenticatable implements Auditable, FilamentUser
                 // $businessDays_search_end_date = $businessDays_search_start_date->copy()->endOfMonth();
                 // $habiles = DateHelper::getBusinessDaysByDateRangeHolidays($businessDays_search_start_date, $businessDays_search_end_date, $holidaysNextMonth)->toArray();
 
-                $dates = [];
+                $dates      = [];
                 $datesArray = iterator_to_array(new \DatePeriod($start, new \DateInterval('P1D'), $end));
-                array_walk($datesArray, function ($value, $key) use (&$dates, $start, $end, $habiles) {
+                array_walk($datesArray, function ($value, $key) use (&$dates, $end, $habiles) {
                     // solo se agrega si el día que se analiza existe en array de días hábiles
-                    if(in_array($value->format('Y-m-d'), $habiles)){
+                    if (in_array($value->format('Y-m-d'), $habiles)) {
                         $dates[$key]['start'] = (
                             ($key == 0) ? $value->format('Y-m-d H:i:s') : $value->setTime(00, 0, 00)->format('Y-m-d H:i:s')
                         );
@@ -1463,58 +1317,55 @@ class User extends Authenticatable implements Auditable, FilamentUser
                         $dates[$key]['end'] = $endDate->format('Y-m-d H:i:s');
                     }
                 });
-                
-                // verifica si el día compensatorio por día es mayor a 8
-                $cant_dias = 0;
-                $cant_dias_dias_compensatorios = 0;
-                foreach($dates as $key => $date){
-                    $start = Carbon::parse($date['start']);
-                    $end = Carbon::parse($date['end']);
 
-                    if($compensatoryAbsenteeismType->over!=null){
+                // verifica si el día compensatorio por día es mayor a 8
+                $cant_dias                     = 0;
+                $cant_dias_dias_compensatorios = 0;
+                foreach ($dates as $key => $date) {
+                    $start = Carbon::parse($date['start']);
+                    $end   = Carbon::parse($date['end']);
+
+                    if ($compensatoryAbsenteeismType->over != null) {
                         // sobre
-                        if($start->diffInHours($end) > $compensatoryAbsenteeismType->over){
+                        if ($start->diffInHours($end) > $compensatoryAbsenteeismType->over) {
                             $cant_dias += 1;
                             // si es que está dentro del rango
-                            if($start->between($startDate, $endDate)){
+                            if ($start->between($startDate, $endDate)) {
                                 $cant_dias_dias_compensatorios += 1;
                             }
                         }
-                    }elseif($compensatoryAbsenteeismType->from!=null){
+                    } elseif ($compensatoryAbsenteeismType->from != null) {
                         // desde
-                        if($start->diffInHours($end) >= $compensatoryAbsenteeismType->from){
+                        if ($start->diffInHours($end) >= $compensatoryAbsenteeismType->from) {
                             $cant_dias += 1;
                             // si es que está dentro del rango
-                            if($start->between($startDate, $endDate)){
+                            if ($start->between($startDate, $endDate)) {
                                 $cant_dias_dias_compensatorios += 1;
                             }
                         }
                     }
-                    
+
                 }
 
                 $compensatoryDay->total_dias_ausentismo = $cant_dias;
-                $compensatoryDay->totalDays = $cant_dias_dias_compensatorios; 
+                $compensatoryDay->totalDays             = $cant_dias_dias_compensatorios;
             }
 
             // Se suma el valor a la cantidad de ausentismos (para suma calculo de cantidad total sumando ausentismos)
             // dd($this->compensatoryDays);
-            if(count($this->compensatoryDays)>0){
+            if (count($this->compensatoryDays) > 0) {
                 $this->totalAbsenteeismsEnBd += $this->compensatoryDays->sum('total_dias_ausentismo');
                 $this->totalAbsenteeisms += $this->compensatoryDays->sum('totalDays');
             }
 
-
-
-
             // obtiene monto a pagar de la ausencia y la asigna a usuario
-            $this->ammount = $this->dailyAmmount * ( $businessDays - $this->totalAbsenteeisms);
-            
+            $this->ammount = $this->dailyAmmount * ($businessDays - $this->totalAbsenteeisms);
+
             // se genera array para exportación de montos
             // if(!array_key_exists($this->id,$output)){$output[$this->id] = 0;}
             // $output[$this->id] += $this->ammount;
 
-            // 
+            //
             // foreach($this->contracts as $contract) {
             //     /** Días laborales */
             //     $contract->businessDays =
@@ -1539,7 +1390,7 @@ class User extends Authenticatable implements Auditable, FilamentUser
         }
 
         // obtiene monto pagado y cargado en tabla ami_loads
-        foreach($this->amiLoads as $amiLoad) {
+        foreach ($this->amiLoads as $amiLoad) {
             $this->AmiLoadMount += $amiLoad->monto;
         }
 
@@ -1547,23 +1398,21 @@ class User extends Authenticatable implements Auditable, FilamentUser
         // if($this->shifts->count() > 0){$this->diff = $this->shifts->sum('ammount') - $this->AmiLoadMount;}
         // else{$this->diff = $this->contracts->sum('ammount') - $this->AmiLoadMount;}
 
-
-
-
         // se agrega para realizar comparación con información de tabla 'Charges' (se debe eiminar dsps)
-        $meses[] = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
-        foreach($this->charges as $key => $charge){
-            list($day, $month, $year) = explode('-', $charge->fecha);
-            $date_string = '2023-' . $day . "-" . str_pad((array_search($month, $meses)+1), 2, "0", STR_PAD_LEFT);
-            $charge->date = Carbon::parse($date_string);
+        $meses[] = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
+        foreach ($this->charges as $key => $charge) {
+            [$day, $month, $year] = explode('-', $charge->fecha);
+            $date_string          = '2023-'.$day.'-'.str_pad((array_search($month, $meses) + 1), 2, '0', STR_PAD_LEFT);
+            $charge->date         = Carbon::parse($date_string);
 
-            if($charge->date >= $startDate && $charge->date <= $endDate){
-                $this->dias_ausentismo = $charge->dias_ausentismo;
+            if ($charge->date >= $startDate && $charge->date <= $endDate) {
+                $this->dias_ausentismo      = $charge->dias_ausentismo;
                 $this->valor_debia_cargarse = $charge->valor_debia_cargarse;
                 break;
             }
         }
 
         return $this;
-     }
+    }
+
 }

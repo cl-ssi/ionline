@@ -61,7 +61,7 @@ post_max_size = 66M
 - Detener issue en el que se estaba trabajando
 
 ## Update laravel 11
-
+Update MariaDb Driver
 # "require":
 "php": "^8.2",
 "ext-gd": "*",
