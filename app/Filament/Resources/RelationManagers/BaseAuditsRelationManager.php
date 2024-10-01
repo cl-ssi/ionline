@@ -43,7 +43,9 @@ abstract class BaseAuditsRelationManager extends RelationManager
                         $formatted = [];
 
                         foreach ($modified as $key => $values) {
-                            $formatted[] = "$key: old = {$values['old']}, new = {$values['new']}";
+                            $oldValue = isset($values['old']) ? $values['old'] : '';
+                            $newValue = isset($values['new']) ? $values['new'] : '';
+                            $formatted[] = "<b>$key</b>: $oldValue => $newValue";
                         }
 
                         return new HtmlString(implode('<br> ', $formatted));
