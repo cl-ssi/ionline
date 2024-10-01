@@ -34,7 +34,7 @@ class UserResource extends Resource
                         ->disabledOn('edit')
                         ->required()
                         ->numeric()
-                        ->unique()
+                        ->unique(ignoreRecord: true)
                         ->columnSpan(3),
                     Forms\Components\TextInput::make('dv')
                         ->required()
@@ -220,6 +220,7 @@ class UserResource extends Resource
             RelationManagers\TelephonesRelationManager::class,
             RelationManagers\RolesRelationManager::class,
             RelationManagers\PermissionsRelationManager::class,
+            RelationManagers\AuditsRelationManager::class,
             // AuditsRelationManager::class,
         ];
     }
