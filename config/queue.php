@@ -72,14 +72,14 @@ return [
             'project'               => env('GOOGLE_CLOUD_PROJECT_ID', ''),
             'location'              => env('GOOGLE_CLOUD_LOCATION', ''),
             'queue'                 => env('GOOGLE_CLOUD_TASKS_QUEUE', 'default'),
+            
+            // Required when not using AppEngine
             'handler'               => env('GOOGLE_CLOUD_TASKS_HANDLER', ''),
             'service_account_email' => env('GOOGLE_CLOUD_TASKS_SERVICE_EMAIL', ''),
-            // True or false depending if you want extra security by signing the audience of your tasks. May misbehave in certain Cloud Run setups. Defaults to true.
-            'signed_audience'       => false,
-            // Optional: The deadline in seconds for requests sent to the worker. If the worker
-            // does not respond by this deadline then the request is cancelled and the attempt
-            // is marked as a DEADLINE_EXCEEDED failure.
-            'dispatch_deadline' => null,
+
+            'backoff' => 0,
+
+            /** Se ejecuta la cola depues de realizar commit en la BD, no estoy seguro que funcione */
             'after_commit' => true,
         ],
 
