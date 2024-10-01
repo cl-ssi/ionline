@@ -551,23 +551,19 @@ class User extends Authenticatable implements Auditable, FilamentUser
         return $this->hasMany(OpenHour::class, 'profesional_id');
     }
 
-
-
     /**
      * Un mutador para 'organizational_unit_id' que también actualiza 'establishment_id'.
-     *
-     * @return \Illuminate\Database\Eloquent\Casts\Attribute
      */
     protected function organizationalUnitId(): Attribute
     {
         return Attribute::make(
             set: function ($value) {
                 $this->attributes['establishment_id'] = OrganizationalUnit::find($value)?->establishment_id;
-
                 return $value;
             },
         );
     }
+
     public function boss()
     {
         if ($this->organizationalUnit and $this->organizationalUnit->currentManager) {
