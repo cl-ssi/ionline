@@ -35,6 +35,10 @@
             }
         });
     });
+
+    document.addEventListener('livewire:update', function() {
+        $('.selectpicker').selectpicker('refresh');
+    });
 </script>
 
 @endsection

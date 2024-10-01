@@ -5,6 +5,7 @@ namespace App\Livewire;
 use Livewire\Component;
 
 use App\Models\Parameters\Program;
+use Livewire\Attributes\On;
 
 class SearchSelectProgram extends Component
 {
@@ -37,6 +38,8 @@ class SearchSelectProgram extends Component
 
     public $emit_name;
 
+    public $year;
+
     public function setProgram(Program $program)
     {
         $this->query = '';
@@ -66,11 +69,11 @@ class SearchSelectProgram extends Component
 
     public function addSearchedProgram($programId){
         $this->searchedProgram = $programId;
-        $this->dispatch($this->emit_name ?? 'searchedProgram', program: $this->searchedProgram);
+        $this->dispatch($this->emit_name ?? 'searchedProgram', searchedProgram: $this->searchedProgram);
     }
 
     public function mount()
-    {   
+    {           
         if($this->program) {
             $this->setProgram($this->program);
         }
@@ -79,6 +82,7 @@ class SearchSelectProgram extends Component
     public function updatedQuery()
     {
         $this->programs = Program::getProgramsBySearch($this->query)
+            ->where('period', $this->year)
             ->orderBy('name','Asc')
             ->orderBy('period', 'Desc')
             ->get();
@@ -92,6 +96,12 @@ class SearchSelectProgram extends Component
         else {
             $this->msg_too_many = false;
         }
+    }
+
+    #[On('contentChanged')]
+    public function contentChanged($contentChanged)
+    {
+        $this->year = $contentChanged;
     }
 
     public function render()

@@ -128,6 +128,6 @@ class Program extends Model implements Auditable
             });
         }
 
-        return $programs->where('period', '>=', 2024);
+        return $programs;
     }
 }

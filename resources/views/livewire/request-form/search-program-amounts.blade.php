@@ -1,31 +1,36 @@
 <div>
     <form class="form-horizontal" wire:submit="submit">
-    <div class="form-row">
-        <fieldset class="form-group col-sm-2">
-            <label for="year">Año</label>
-            <select class="form-control selectpicker show-tick" id="for_year" name="year" wire:model.live.debounce.500ms="selectedYear" required>
-                <option value="">Selección...</option>
-                @foreach(range(now()->year, 2022) as $period)
-                <option value="{{$period}}">{{$period}}</option>
-                @endforeach
-            </select>
-            @error('selectedYear') <span class="error">{{ $message }}</span> @enderror
-        </fieldset>
-        <fieldset class="form-group col-sm-7">
-            <label for="program">Programa</label>
-            <select class="form-control selectpicker" id="for_program" name="program" data-live-search="true" data-actions-box="true" wire:model.live.debounce.500ms="selectedProgram" required>
-                <option style="font-size:70%;" value="">Selección...</option>
-                @foreach($programs as $program)
-                <option style="font-size:70%;" value="{{ $program->id }}">{{ $program->alias_finance }} - Folio {{ $program->folio }} - Subtítulo {{$program->Subtitle->name}}</option>
-                @endforeach
-            </select>
-            @error('selectedProgram') <span class="error">{{ $message }}</span> @enderror
-        </fieldset>
-    </div>
-    <!-- <button type="submit" class="btn btn-primary float-right"><i class="fas fa-chart-pie"></i> Consultar</button> -->
-    </form>
+        <div class="form-row">
+            <fieldset class="form-group col-sm-6">
+                <label for="year">Año</label>
+                <select class="form-control" id="for_year" name="year" wire:model.live="selectedYear" required>
+                    <option value="">Selección...</option>
+                    @foreach(range(now()->year, 2022) as $period)
+                    <option value="{{$period}}">{{$period}}</option>
+                    @endforeach
+                </select>
+                @error('selectedYear') <span class="error">{{ $message }}</span> @enderror
+            </fieldset>
 
-    <div wire:loading wire:target="selectedProgram">Cargando...</div>
+            <fieldset class="form-group col-6">
+                <label for="for_program">Programa</label>
+                @livewire('search-select-program',[
+                        'emit_name' => 'searchedProgram',
+                        'year'      => $selectedYear ?? null
+                ])
+            </fieldset>
+        </div>
+
+        <div class="form-row float-right">
+            <button 
+                type="button"
+                class="btn btn-primary"
+                wire:click="search">
+                <i class="fas fa-chart-pie"></i> Consultar
+            </button>
+        </div>
+        <!-- <button type="submit" class="btn btn-primary float-right"><i class="fas fa-chart-pie"></i> Consultar</button> -->
+    </form>
 
     @if($requestForms)
     <div class="row" wire:loading.remove>
@@ -123,6 +128,7 @@
 @section('custom_js')
 <script>
 
+/*
 document.addEventListener("DOMContentLoaded", () => {
     Livewire.hook('message.received', (message, component) => {
         $('select').selectpicker('destroy');
@@ -132,6 +138,7 @@ document.addEventListener("DOMContentLoaded", () => {
 window.addEventListener('contentChanged', event => {
     $('select').selectpicker();
 });
+*/
 
 </script>
 @endsection
