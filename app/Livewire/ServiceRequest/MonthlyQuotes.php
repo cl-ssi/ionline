@@ -195,7 +195,7 @@ class MonthlyQuotes extends Component
         // $mes = $meses[($fecha->format('n')) - 1];
         
         if ($serviceRequest->start_date->format('Y-m-d') == $serviceRequest->start_date->firstOfMonth()->format('Y-m-d') and $serviceRequest->end_date->format('Y-m-d') == $serviceRequest->end_date->endOfMonth()->format('Y-m-d')) {
-            $nroCuotas = $serviceRequest->start_date->diffInMonths($serviceRequest->end_date) + 1;
+            $nroCuotas = (int)$serviceRequest->start_date->diffInMonths($serviceRequest->end_date) + 1;
             $valor_mensual = $serviceRequest->net_amount;
             $string = $nroCuotas . " cuotas,";
             $interval = DateInterval::createFromDateString('1 month');
@@ -215,13 +215,13 @@ class MonthlyQuotes extends Component
         //son cuotas valores diferentes
         {
             // la persona trabaja menos de 1 mes
-            $diff_in_months = $serviceRequest->end_date->diffInMonths($serviceRequest->start_date);
+            $diff_in_months = (int)$serviceRequest->end_date->diffInMonths($serviceRequest->start_date);
             if ($diff_in_months < 1) {
                 $string = "1 cuota de $";
                 $string .= number_format($serviceRequest->gross_amount);
             } else {
                 if ($serviceRequest->start_date->format('Y-m-d') != $serviceRequest->start_date->firstOfMonth()->format('Y-m-d') and $serviceRequest->end_date->format('Y-m-d') != $serviceRequest->end_date->endOfMonth()->format('Y-m-d')) {
-                    $nroCuotas = $serviceRequest->start_date->diffInMonths($serviceRequest->end_date) + 2;
+                    $nroCuotas = (int)$serviceRequest->start_date->diffInMonths($serviceRequest->end_date) + 2;
                     $valor_mensual = $serviceRequest->net_amount;
                     $string = $nroCuotas . " cuotas,";
                     $interval = DateInterval::createFromDateString('1 month');
@@ -245,7 +245,7 @@ class MonthlyQuotes extends Component
                     }
                 } elseif ($serviceRequest->start_date->format('Y-m-d') != $serviceRequest->start_date->firstOfMonth()->format('Y-m-d')) {
                     //La Persona no parte a trabajar en un mes cerrado
-                    $nroCuotas = $serviceRequest->start_date->diffInMonths($serviceRequest->end_date) + 1;
+                    $nroCuotas = (int)$serviceRequest->start_date->diffInMonths($serviceRequest->end_date) + 1;
                     $valor_mensual = $serviceRequest->net_amount;
                     $string = $nroCuotas . " cuotas,";
                     $interval = DateInterval::createFromDateString('1 month');
@@ -275,7 +275,7 @@ class MonthlyQuotes extends Component
                 }
                 //la persona termina de trabajar en un día que no es fin de mes
                 elseif ($serviceRequest->end_date->format('Y-m-d') != $serviceRequest->end_date->endOfMonth()->format('Y-m-d')) {
-                    $nroCuotas = $serviceRequest->start_date->diffInMonths($serviceRequest->end_date) + 1;
+                    $nroCuotas = (int)$serviceRequest->start_date->diffInMonths($serviceRequest->end_date) + 1;
                     $valor_mensual = $serviceRequest->net_amount;
                     $string = $nroCuotas . " cuotas,";
                     $interval = DateInterval::createFromDateString('1 month');
