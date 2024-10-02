@@ -651,24 +651,12 @@ class ReportController extends Controller
 
   public function pending(Request $request, $who)
   {
-    // servicio
-    if (auth()->user()->organizationalUnit->establishment_id == 38) {
-        $responsabilityCenters = OrganizationalUnit::where('establishment_id', 38)->orderBy('name', 'ASC')->get();
-    }
-    //hospital hetg
-    elseif (auth()->user()->organizationalUnit->establishment_id == 1) {
-        $responsabilityCenters = OrganizationalUnit::where('establishment_id', 1)->orderBy('name', 'ASC')->get();
-    }
-    //hospital hospicio
-    else
-    {
-        $responsabilityCenters = OrganizationalUnit::where('establishment_id', auth()->user()->organizationalUnit->establishment_id)->orderBy('name', 'ASC')->get();
-    }
-
+    $responsabilityCenters = OrganizationalUnit::where('establishment_id', auth()->user()->organizationalUnit->establishment_id)->orderBy('name', 'ASC')->get();
     $establishments = Establishment::all();
     $user_id = auth()->id();
     $query = Fulfillment::query();
     $responsability_center = $request->responsability_center;
+    $establishment_id = auth()->user()->organizationalUnit->establishment_id;
 
     // dd($request->responsability_center);
     $query->Search($request)
@@ -677,6 +665,14 @@ class ReportController extends Controller
         return $q->whereHas("serviceRequest", function ($subQuery) use ($responsability_center) {
           $subQuery->where('responsability_center_ou_id', $responsability_center);
         });
+      })
+      ->whereHas("serviceRequest", function ($subQuery) use ($establishment_id) {
+            $subQuery->when($establishment_id == 38, function ($q) {
+                            return $q->whereNotIn('establishment_id', [1, 41]);
+                        })
+                        ->when($establishment_id != 38, function ($q) use ($establishment_id) {
+                            return $q->where('establishment_id',$establishment_id);
+                        });
       })
       ->orderBy('year')
       ->orderBy('month');

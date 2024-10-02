@@ -81,13 +81,13 @@ class FulfillmentController extends Controller
                                             ->when($id != NULL, function ($q) use ($id) {
                                                     return $q->where('id',$id);
                                                 })
-                                            //    ->when($establishment_id != null && $establishment_id != 0, function ($q) use ($establishment_id) {
-                                            //      return $q->where('establishment_id', $establishment_id);
-                                            //    })
-                                            //    ->when($establishment_id != null && $establishment_id == 0, function ($q) use ($establishment_id) {
-                                            //      return $q->whereNotIn('establishment_id',[1,12]);
-                                            //    })
-                                            ->where('establishment_id',$establishment_id)
+                                            // si es sst, se devuelve toda la info que no sea hetg ni hah.
+                                            ->when($establishment_id == 38, function ($q) {
+                                                return $q->whereNotIn('establishment_id', [1, 41]);
+                                            })
+                                            ->when($establishment_id != 38, function ($q) use ($establishment_id) {
+                                                return $q->where('establishment_id',$establishment_id);
+                                            })
                                             ->orderBy('id','asc')
                                             ->paginate(100);
 
@@ -155,7 +155,8 @@ class FulfillmentController extends Controller
           }
         }
 
-        $responsabilityCenters = OrganizationalUnit::orderBy('name', 'ASC')->get();
+        $responsabilityCenters = OrganizationalUnit::where('establishment_id',$establishment_id)
+                                                    ->orderBy('name')->get();
         $professions = Profession::orderBy('name', 'ASC')->get();
 
         return view('service_requests.requests.fulfillments.index',compact('serviceRequests','responsabilityCenters','request','professions'));
@@ -179,38 +180,11 @@ class FulfillmentController extends Controller
      */
     public function store(Request $request)
     {
-      $fulfillment = new Fulfillment($request->All());
-      // $fulfillment->responsable_approbation = 1;
-      // $fulfillment->responsable_approver_id = auth()->id();
-      $fulfillment->save();
+        $fulfillment = new Fulfillment($request->All());
+        $fulfillment->save();
 
-      // //turnos
-      // if ($request->record != null) {
-      //   foreach (ServiceRequest::find($request->service_request_id)->shiftControls as $key => $shiftControl) {
-      //
-      //     $flag = 0;
-      //     foreach ($request->record as $key => $record) {
-      //       $record = json_decode($record);
-      //       if ($record->start_date == $shiftControl->start_date && $record->end_date == $shiftControl->end_date) {
-      //         $flag = 1;
-      //       }
-      //     }
-      //     //guarda
-      //     $fulfillmentItem = new FulfillmentItem();
-      //     $fulfillmentItem->fulfillment_id = $fulfillment->id;
-      //     $fulfillmentItem->start_date = $shiftControl->start_date;
-      //     $fulfillmentItem->end_date = $shiftControl->end_date;
-      //     $fulfillmentItem->type = "Turno";
-      //     $fulfillmentItem->responsable_approbation = $flag;
-      //     $fulfillmentItem->responsable_approver_id = auth()->id();
-      //     $fulfillmentItem->observation = $shiftControl->observation;
-      //     $fulfillmentItem->save();
-      //
-      //   }
-      // }
-
-      session()->flash('success', 'Se ha registrado la información del período.');
-      return redirect()->back();
+        session()->flash('success', 'Se ha registrado la información del período.');
+        return redirect()->back();
     }
 
     /**
@@ -242,13 +216,6 @@ class FulfillmentController extends Controller
             /* Envío al log de errores el id para su chequeo */
             logger("El ServiceRequest no tiene signature flows creados", ['id' => $serviceRequest->id]);
         }
-
-        // foreach($serviceRequest->SignatureFlows as $signatureFlows){
-        //     if($signatureFlows->status != 1){
-        //         session()->flash('warning', 'La solicitud de contratación aún no ha sido aprobada, una vez que esta este aprobada su circuito de firmas completamente, podrá ingresar a esta pantalla.');
-        //         return redirect()->back();
-        //     }
-        // }
 
         //se hizo esto para los casos en que no existan fulfillments
         if ($serviceRequest->fulfillments->count() == 0) {

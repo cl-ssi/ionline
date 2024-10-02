@@ -309,7 +309,6 @@ class ServiceRequestController extends Controller
     $type = $request->type;
 
     $establishment_id = auth()->user()->organizationalUnit->establishment_id;
-    // $establishment_id = $request->establishment_id;
 
     // dd($responsability_center_ou_id);
     $serviceRequests = ServiceRequest::when($responsability_center_ou_id != NULL, function ($q) use ($responsability_center_ou_id) {
@@ -337,18 +336,19 @@ class ServiceRequestController extends Controller
         ->when($id != NULL, function ($q) use ($id) {
             return $q->where('id', $id);
         })
-        //   ->when($establishment_id != null && $establishment_id != 0, function ($q) use ($establishment_id) {
-        //     return $q->where('establishment_id', $establishment_id);
-        //   })
-        //   ->when($establishment_id != null && $establishment_id == 0, function ($q) use ($establishment_id) {
-        //     return $q->whereNotIn('establishment_id', [1, 12]);
-        //   })
-        ->where('establishment_id',$establishment_id)
+        // si es sst, se devuelve toda la info que no sea hetg ni hah.
+        ->when($establishment_id == 38, function ($q) {
+            return $q->whereNotIn('establishment_id', [1, 41]);
+        })
+        ->when($establishment_id != 38, function ($q) use ($establishment_id) {
+            return $q->where('establishment_id',$establishment_id);
+        })
         ->orderBy('id', 'asc')
         ->paginate(100);
     // ->get();
     
-    $responsabilityCenters = OrganizationalUnit::orderBy('name', 'ASC')->get();
+    $responsabilityCenters = OrganizationalUnit::where('establishment_id',$establishment_id)
+                                                ->orderBy('name')->get();   
     $professions = Profession::orderBy('name', 'ASC')->get();
 
     return view('service_requests.requests.aditional_data_list', compact('serviceRequests', 'responsabilityCenters', 'request','professions'));
