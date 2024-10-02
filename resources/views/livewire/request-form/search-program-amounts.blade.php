@@ -32,21 +32,27 @@
         </div>
     </form>
 
+    <!-- Mensaje de Cargando -->
+    <div wire:loading wire:target="search">
+        <p class="text-center">Cargando resultados...</p>
+    </div>
+
     @if($requestForms)
-        <div class="row mt-5" wire:loading.remove>
+    <div wire:loading.remove wire:target="search">
+        <div class="row mt-5">
             <div class="col">
                 <p class="font-weight-lighter">Total de Registros: <b>{{ $requestForms->count() }}</b></p>
             </div>
         </div>
         
-        <div class="row mt-3" wire:loading.remove>
+        <div class="row mt-3">
             <div class="col">
                 <h4>{{ $selectedProgram['name'] }}</h4>
                 <h6>{{ $selectedProgram['period'] }}</h6>
             </div>
         </div>
 
-        <div class="table-responsive" wire:loading.remove>
+        <div class="table-responsive">
             <table class="table table-sm table-bordered table-striped table-hover small">
                 <thead>
                     <tr class="text-center">
@@ -126,6 +132,7 @@
                 @endif
             </table>
         </div>
+    </div>
     @endif
 </div>
 
