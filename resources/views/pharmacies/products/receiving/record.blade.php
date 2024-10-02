@@ -4,8 +4,6 @@
 
 @section('content')
 
-<?php setlocale(LC_ALL, 'es_CL.UTF-8');?>
-
 @if(auth()->user()->pharmacies->firstWhere('id', session('pharmacy_id'))->id == 1 || auth()->user()->pharmacies->firstWhere('id', session('pharmacy_id'))->id == 2)
     <div>
         <div style="width: 49%; display: inline-block;">
@@ -17,7 +15,7 @@
             </div>
         </div>
         <div class="right" style="width: 49%; display: inline-block;">
-            Iquique {{ $receiving->date->formatLocalized('%d de %B del %Y') }}<br>
+            Iquique {{ $receiving->date->locale('es')->isoFormat('D [de] MMMM [del] YYYY') }}<br>
         </div>
     </div>
 @endif
@@ -35,7 +33,7 @@
             </div>
         </div>
         <div class="right" style="width: 49%; display: inline-block;">
-            Iquique {{ $receiving->date->formatLocalized('%d de %B del %Y') }}<br>
+            Iquique {{ $receiving->date->locale('es')->isoFormat('D [de] MMMM [del] YYYY') }}<br>
         </div>
     </div>
 @endif
@@ -53,7 +51,7 @@
             </div>
         </div>
         <div class="right" style="width: 49%; display: inline-block;">
-            Iquique {{ $receiving->date->formatLocalized('%d de %B del %Y') }}<br>
+            Iquique {{ $receiving->date->locale('es')->isoFormat('D [de] MMMM [del] YYYY') }}<br>
         </div>
     </div>
 @endif
