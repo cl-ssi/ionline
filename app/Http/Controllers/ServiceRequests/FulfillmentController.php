@@ -49,47 +49,48 @@ class FulfillmentController extends Controller
           $array[] = $authority->organizational_unit_id;
         }
 
-        // $establishment_id = auth()->user()->organizationalUnit->establishment_id;
-        $establishment_id = $request->establishment_id;
+        $establishment_id = auth()->user()->organizationalUnit->establishment_id;
+        // $establishment_id = $request->establishment_id;
 
         if (auth()->user()->can('Service Request: fulfillments responsable')) {
-          $serviceRequests = ServiceRequest::whereHas("SignatureFlows", function($subQuery) use($user, $array){
-                                               $subQuery->where('responsable_id',$user->id);
-                                               // $subQuery->orwhere('user_id',$user->id);
-                                               $subQuery->orWhereIn('ou_id',$array);
-                                          })
-                                          // ->orWhere('responsability_center_ou_id',$user->organizational_unit_id)
-                                          ->when($responsability_center_ou_id != NULL, function ($q) use ($responsability_center_ou_id) {
-                                               return $q->where('responsability_center_ou_id',$responsability_center_ou_id);
+            $serviceRequests = ServiceRequest::whereHas("SignatureFlows", function($subQuery) use($user, $array){
+                                                $subQuery->where('responsable_id',$user->id);
+                                                // $subQuery->orwhere('user_id',$user->id);
+                                                $subQuery->orWhereIn('ou_id',$array);
                                             })
-                                          ->when($program_contract_type != NULL, function ($q) use ($program_contract_type) {
-                                                 return $q->where('program_contract_type',$program_contract_type);
-                                               })
-                                          // ->when($estate != NULL, function ($q) use ($estate) {
-                                          //       return $q->where('estate',$estate);
-                                          //      })
-                                          ->when($profession_id != NULL, function ($q) use ($profession_id) {
-                                            return $q->where('profession_id', $profession_id);
-                                          })
-                                           ->when(($name != NULL), function ($q) use ($name) {
-                                                   return $q->whereHas("employee", function($subQuery) use ($name){
-                                                              $subQuery->where('name','LIKE','%'.$name.'%');
-                                                              $subQuery->orwhere('fathers_family', 'LIKE', '%' . $name . '%');
-                                                              $subQuery->orwhere('mothers_family', 'LIKE', '%' . $name . '%');
-                                                         });
+                                            // ->orWhere('responsability_center_ou_id',$user->organizational_unit_id)
+                                            ->when($responsability_center_ou_id != NULL, function ($q) use ($responsability_center_ou_id) {
+                                                return $q->where('responsability_center_ou_id',$responsability_center_ou_id);
                                                 })
-                                          ->when($id != NULL, function ($q) use ($id) {
-                                                 return $q->where('id',$id);
-                                               })
-                                           ->when($establishment_id != null && $establishment_id != 0, function ($q) use ($establishment_id) {
-                                             return $q->where('establishment_id', $establishment_id);
-                                           })
-                                           ->when($establishment_id != null && $establishment_id == 0, function ($q) use ($establishment_id) {
-                                             return $q->whereNotIn('establishment_id',[1,12]);
-                                           })
-                                           ->orderBy('id','asc')
-                                           ->paginate(100);
-                                           // ->get();
+                                            ->when($program_contract_type != NULL, function ($q) use ($program_contract_type) {
+                                                    return $q->where('program_contract_type',$program_contract_type);
+                                                })
+                                            // ->when($estate != NULL, function ($q) use ($estate) {
+                                            //       return $q->where('estate',$estate);
+                                            //      })
+                                            ->when($profession_id != NULL, function ($q) use ($profession_id) {
+                                                return $q->where('profession_id', $profession_id);
+                                            })
+                                            ->when(($name != NULL), function ($q) use ($name) {
+                                                    return $q->whereHas("employee", function($subQuery) use ($name){
+                                                                $subQuery->where('name','LIKE','%'.$name.'%');
+                                                                $subQuery->orwhere('fathers_family', 'LIKE', '%' . $name . '%');
+                                                                $subQuery->orwhere('mothers_family', 'LIKE', '%' . $name . '%');
+                                                            });
+                                                    })
+                                            ->when($id != NULL, function ($q) use ($id) {
+                                                    return $q->where('id',$id);
+                                                })
+                                            //    ->when($establishment_id != null && $establishment_id != 0, function ($q) use ($establishment_id) {
+                                            //      return $q->where('establishment_id', $establishment_id);
+                                            //    })
+                                            //    ->when($establishment_id != null && $establishment_id == 0, function ($q) use ($establishment_id) {
+                                            //      return $q->whereNotIn('establishment_id',[1,12]);
+                                            //    })
+                                            ->where('establishment_id',$establishment_id)
+                                            ->orderBy('id','asc')
+                                            ->paginate(100);
+
         }
         // Service Request: fulfillments rrhh - Service Request: fulfillments finance
         else{
@@ -116,12 +117,13 @@ class FulfillmentController extends Controller
                                           ->when($id != NULL, function ($q) use ($id) {
                                                 return $q->where('id',$id);
                                                })
-                                           ->when($establishment_id != null && $establishment_id != 0, function ($q) use ($establishment_id) {
-                                             return $q->where('establishment_id', $establishment_id);
-                                           })
-                                           ->when($establishment_id != null && $establishment_id == 0, function ($q) use ($establishment_id) {
-                                             return $q->whereNotIn('establishment_id',[1,12]);
-                                           })
+                                            //    ->when($establishment_id != null && $establishment_id != 0, function ($q) use ($establishment_id) {
+                                            //      return $q->where('establishment_id', $establishment_id);
+                                            //    })
+                                            //    ->when($establishment_id != null && $establishment_id == 0, function ($q) use ($establishment_id) {
+                                            //      return $q->whereNotIn('establishment_id',[1,12]);
+                                            //    })
+                                            ->where('establishment_id',$establishment_id)
                                            // ->where('program_contract_type','Mensual')
                                            ->paginate(100);
                                            // ->get();

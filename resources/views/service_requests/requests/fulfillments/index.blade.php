@@ -52,15 +52,15 @@
             </select>
         </fieldset>
 
-        <fieldset class="form-group col-6 col-md">
+        <!-- <fieldset class="form-group col-6 col-md">
             <label>Establecimiento</label>
             <select class="form-control" data-live-search="true" name="establishment_id" data-size="5">
                 <option value="">Todos</option>
                 <option value="1" @if($request->establishment_id == "1") selected @endif>Hospital Ernesto Torres Galdames</option>
-                <option value="12" @if($request->establishment_id == "12") selected @endif>Dr. Héctor Reyno G.</option>
+                <option value="41" @if($request->establishment_id == "41") selected @endif>Hospital Alto Hospicio</option>
                 <option value="0" @if($request->establishment_id == "0") selected @endif>Dirección SSI</option>
             </select>
-        </fieldset>
+        </fieldset> -->
 
         <fieldset class="form-group col-4 col-md-1">
             <label>ID</label>

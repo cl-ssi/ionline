@@ -56,7 +56,7 @@
         @endforeach
       </select>
     </div>
-    <div class="col-6 col-md-3">
+    <!-- <div class="col-6 col-md-3">
       <label>Establecimiento</label>
       <select class="form-control selectpicker" data-live-search="true" name="establishment_id" data-size="5">
         <option value="">Todos</option>
@@ -64,7 +64,7 @@
         <option value="12" @if($request->establishment_id == "12") selected @endif>Dr. Héctor Reyno G.</option>
         <option value="0" @if($request->establishment_id == "0") selected @endif>Dirección SSI</option>
       </select>
-    </div>
+    </div> -->
     <div class="col-6 col-md-3">
       <label>Id</label>
       <input type="text" class="form-control " name="id" value="{{$request->id}}">

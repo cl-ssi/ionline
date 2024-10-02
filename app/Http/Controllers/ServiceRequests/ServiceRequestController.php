@@ -300,8 +300,6 @@ class ServiceRequestController extends Controller
 
   public function aditional_data_list(Request $request)
   {
-
-    // dd($request);
     $responsability_center_ou_id = $request->responsability_center_ou_id;
     $program_contract_type = $request->program_contract_type;
     $name = $request->name;
@@ -310,44 +308,46 @@ class ServiceRequestController extends Controller
     $id = $request->id;
     $type = $request->type;
 
-    // $establishment_id = auth()->user()->organizationalUnit->establishment_id;
-    $establishment_id = $request->establishment_id;
+    $establishment_id = auth()->user()->organizationalUnit->establishment_id;
+    // $establishment_id = $request->establishment_id;
 
     // dd($responsability_center_ou_id);
     $serviceRequests = ServiceRequest::when($responsability_center_ou_id != NULL, function ($q) use ($responsability_center_ou_id) {
-      return $q->where('responsability_center_ou_id', $responsability_center_ou_id);
-    })
-      ->when($program_contract_type != NULL, function ($q) use ($program_contract_type) {
-        return $q->where('program_contract_type', $program_contract_type);
-      })
-      ->when($type != NULL, function ($q) use ($type) {
-        return $q->where('type', $type);
-      })
-      // ->when($estate != NULL, function ($q) use ($estate) {
-      //   return $q->where('estate', $estate);
-      // })
-      ->when($profession_id != NULL, function ($q) use ($profession_id) {
-        return $q->where('profession_id', $profession_id);
-      })
-      ->when(($name != NULL), function ($q) use ($name) {
-        return $q->whereHas("employee", function ($subQuery) use ($name) {
-          $subQuery->where('name', 'LIKE', '%' . $name . '%');
-          $subQuery->orwhere('fathers_family', 'LIKE', '%' . $name . '%');
-          $subQuery->orwhere('mothers_family', 'LIKE', '%' . $name . '%');
-        });
-      })
-      ->when($id != NULL, function ($q) use ($id) {
-        return $q->where('id', $id);
-      })
-      ->when($establishment_id != null && $establishment_id != 0, function ($q) use ($establishment_id) {
-        return $q->where('establishment_id', $establishment_id);
-      })
-      ->when($establishment_id != null && $establishment_id == 0, function ($q) use ($establishment_id) {
-        return $q->whereNotIn('establishment_id', [1, 12]);
-      })
-      ->orderBy('id', 'asc')
-      ->paginate(100);
+        return $q->where('responsability_center_ou_id', $responsability_center_ou_id);
+        })
+        ->when($program_contract_type != NULL, function ($q) use ($program_contract_type) {
+            return $q->where('program_contract_type', $program_contract_type);
+        })
+        ->when($type != NULL, function ($q) use ($type) {
+            return $q->where('type', $type);
+        })
+        // ->when($estate != NULL, function ($q) use ($estate) {
+        //   return $q->where('estate', $estate);
+        // })
+        ->when($profession_id != NULL, function ($q) use ($profession_id) {
+            return $q->where('profession_id', $profession_id);
+        })
+        ->when(($name != NULL), function ($q) use ($name) {
+            return $q->whereHas("employee", function ($subQuery) use ($name) {
+            $subQuery->where('name', 'LIKE', '%' . $name . '%');
+            $subQuery->orwhere('fathers_family', 'LIKE', '%' . $name . '%');
+            $subQuery->orwhere('mothers_family', 'LIKE', '%' . $name . '%');
+            });
+        })
+        ->when($id != NULL, function ($q) use ($id) {
+            return $q->where('id', $id);
+        })
+        //   ->when($establishment_id != null && $establishment_id != 0, function ($q) use ($establishment_id) {
+        //     return $q->where('establishment_id', $establishment_id);
+        //   })
+        //   ->when($establishment_id != null && $establishment_id == 0, function ($q) use ($establishment_id) {
+        //     return $q->whereNotIn('establishment_id', [1, 12]);
+        //   })
+        ->where('establishment_id',$establishment_id)
+        ->orderBy('id', 'asc')
+        ->paginate(100);
     // ->get();
+    
     $responsabilityCenters = OrganizationalUnit::orderBy('name', 'ASC')->get();
     $professions = Profession::orderBy('name', 'ASC')->get();
 
