@@ -200,12 +200,6 @@ class PurchasePlanController extends Controller
 
         /* APROBACION CORRESPONDIENTE A FINANZAS */
         $prev_approval = $purchasePlan->approvals()->create([
-            "module"                        => "Plan de Compras",
-            "module_icon"                   => "fas fa-shopping-cart",
-            "subject"                       => 'Solicitud de Aprobacion Depto. Gestion Financiera<br>'.
-                                                '<small><b>Asunto</b>: '.$purchasePlan->subject.'<br>'.
-                                                '<b>Subtitulo</b>: '.$purchasePlan->program.'</small>',
-            "sent_to_ou_id"                 => Parameter::get('ou', 'FinanzasSSI'),
             "document_route_name"           => "purchase_plan.show_approval",
             "document_route_params"         => json_encode(["purchase_plan_id" => $purchasePlan->id]),
             "previous_approval_id"          => $prev_approval->id,
@@ -215,9 +209,32 @@ class PurchasePlanController extends Controller
                 'purchase_plan_id'  => $purchasePlan->id,
                 "process"           => null
             ]),
+
+            "module"                => "Plan de Compras",
+            "module_icon"           => "fas fa-shopping-cart",
+            "subject"               => 'Solicitud de Aprobacion Depto. Gestion Financiera<br>'.
+                                        '<small><b>Asunto</b>: '.$purchasePlan->subject.'<br>'.
+                                        '<b>Subtitulo</b>: '.$purchasePlan->program.'</small>',
+            "sent_to_ou_id"         => Parameter::get('ou', 'FinanzasSSI'),
+            "document_route_name"   => "purchase_plan.documents.show_purchase_plan_pdf",
+            "document_route_params" => json_encode(["purchase_plan_id" => $purchasePlan->id]),
+            "active"                => false,
+            "previous_approval_id"  => $prev_approval->id,
+            "position"              => "right",
+            "start_y"               => -30,
+            "filename"              => "ionline/purchase_plan/pdf/".$purchasePlan->id.".pdf",
+            "digital_signature"     => true,
+            "callback_controller_method"        => "App\Http\Controllers\PurchasePlan\PurchasePlanController@approvalCallback",
+            "callback_controller_params"        => json_encode([
+                'purchase_plan_id'  => $purchasePlan->id,
+                'process'           => 'end'
+            ]),
         ]);
 
-        /* APROBACION CORRESPONDIENTE A SDA */
+        /* APROBACION CORRESPONDIENTE A SDA
+
+        SE ELIMINA 02-10-2024 
+
         $prev_approval = $purchasePlan->approvals()->create([
             "module"                => "Plan de Compras",
             "module_icon"           => "fas fa-shopping-cart",
@@ -239,6 +256,7 @@ class PurchasePlanController extends Controller
                 'process'           => 'end'
             ]),
         ]);
+        */
 
         $purchasePlan->update(['status' => 'sent']);
 

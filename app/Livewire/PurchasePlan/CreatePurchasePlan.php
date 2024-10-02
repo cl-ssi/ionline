@@ -37,6 +37,8 @@ class CreatePurchasePlan extends Component
     /* PurchasePlan to edit */
     public $purchasePlanToEdit;
 
+    public $validateMessage;
+
     protected function messages(){
         return [
             /* Mensajes para Allowance */
@@ -71,10 +73,10 @@ class CreatePurchasePlan extends Component
     }
 
     #[On('searchedProgram')]
-    public function searchedProgram(Program $program){
-        $this->searchedProgram = $program;
-        $this->program_id = $program->id;
-        $this->period = $program->period;
+    public function searchedProgram(Program $searchedProgram){
+        $this->searchedProgram = $searchedProgram;
+        $this->program_id = $searchedProgram->id;
+        $this->period = $searchedProgram->period;
     }
 
     #[On('savedItems')]

@@ -40,7 +40,8 @@
             @livewire('search-select-program',[
                     'emit_name' => 'searchedProgram',
                     'program'   => $purchasePlanToEdit->programName ?? null,
-                    'disabled'  => $disabled
+                    'disabled'  => $disabled,
+                    'year'      => '2024'
             ])
         </fieldset>
     </div>
