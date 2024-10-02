@@ -13,7 +13,7 @@
             <input name="rut" class="form-control" placeholder="Run o nombre" value="{{ old('rut') }}" aucomplete="off">
             </input>
         </fieldset>
-        <fieldset class="form-group col-6 col-md-3">
+        <!-- <fieldset class="form-group col-6 col-md-3">
             <label for="for_year">Establecimiento</label>
             <select name="establishment" class="form-control">
                 <option value=""></option>
@@ -21,7 +21,7 @@
                 <option value="12" {{ (old('establishment')==12)?'selected':'' }}>Reyno</option>
                 <option value="38" {{ (old('establishment')==38)?'selected':'' }}>SSI</option>
             </select>
-        </fieldset>
+        </fieldset> -->
 
         <fieldset class="form-group col-4 col-md-1">
             <label for="for_year">Año</label>
@@ -61,7 +61,7 @@
                 <option value="No" @if($request->input('certificate')=='No') selected @endif>Sin Certificado</option>
             </select>
         </fieldset>
-        <fieldset class="form-group col-6 col-md-2">
+        <fieldset class="form-group col-6 col-md-3">
             <label for="for_ok_responsable">Responsable</label>
             <select name="ok_responsable" class="form-control">
                 <option value="">Todos</option>
@@ -195,16 +195,6 @@
         </fieldset>
 
     </div>
-
-
-    <!-- <button type="submit" name="excel" class="form-control btn btn-primary"><i class="fas fa-file-excel"></i></button> -->
-
-
-    <!--
-        <a type="button" class="btn btn-outline-primary" title="Descargar Excel" href="#"
-        id="downloadLink">Descargar Excel <small>(todos)</small> <i class="fas fa-file-excel"></i> </a> -->
-
-
 
 </form>
 

@@ -30,13 +30,9 @@ class ReportController extends Controller
 {
   public function toPay(Request $request)
   {
-    // if($request->establishment_id){
-    //     $establishment_id = $request->establishment_id;
-    // }else{
-    //     $establishment_id = auth()->user()->organizationalUnit->establishment_id;
-    // }
-    
-    $establishment_id = $request->establishment_id;
+    $establishment_id = auth()->user()->organizationalUnit->establishment_id;
+    // $establishment_id = $request->establishment_id;
+
     $type = $request->type;
     $programm_name = $request->programm_name;
     $pay_type = $request->pay_type;
@@ -49,11 +45,6 @@ class ReportController extends Controller
 
         $topay_fulfillments1 = Fulfillment::whereHas("ServiceRequest", function ($subQuery) {
             $subQuery->where('has_resolution_file', 1);
-        })
-        ->when($establishment_id != null, function ($q) use ($establishment_id) {
-            return $q->whereHas("ServiceRequest", function ($subQuery) use ($establishment_id) {
-                $subQuery->where('establishment_id', $establishment_id);
-            });
         })
         ->when($type != null, function ($q) use ($type) {
             return $q->whereHas("ServiceRequest", function ($subQuery) use ($type) {
@@ -77,17 +68,20 @@ class ReportController extends Controller
         ->where('responsable_approbation', 1)
         ->where('rrhh_approbation', 1)
         ->where('finances_approbation', 1)
+        ->whereHas("ServiceRequest", function ($subQuery) use ($establishment_id) {
+            $subQuery->when($establishment_id == 38, function ($q) {
+                return $q->whereNotIn('establishment_id', [1, 41]);
+            })
+            ->when($establishment_id != 38, function ($q) use ($establishment_id) {
+                return $q->where('establishment_id',$establishment_id);
+            });
+        })
         ->whereNull('total_paid')
         ->get();
 
         if($pay_type != "remanente"){
             $topay_fulfillments2 = Fulfillment::whereHas("ServiceRequest", function ($subQuery) {
                 $subQuery->where('has_resolution_file', 1);
-            })
-            ->when($request->establishment_id != null, function ($q) use ($establishment_id) {
-                return $q->whereHas("ServiceRequest", function ($subQuery) use ($establishment_id) {
-                    $subQuery->where('establishment_id', $establishment_id);
-                });
             })
             ->when($type != null, function ($q) use ($type) {
                 return $q->whereHas("ServiceRequest", function ($subQuery) use ($type) {
@@ -104,6 +98,14 @@ class ReportController extends Controller
             ->whereNotNull('signatures_file_id')
             ->whereIn('type', ['Horas', 'Horas No Médicas']) // no necesita visaciones
             ->whereNull('total_paid')
+            ->whereHas("ServiceRequest", function ($subQuery) use ($establishment_id) {
+                $subQuery->when($establishment_id == 38, function ($q) {
+                    return $q->whereNotIn('establishment_id', [1, 41]);
+                })
+                ->when($establishment_id != 38, function ($q) use ($establishment_id) {
+                    return $q->where('establishment_id',$establishment_id);
+                });
+            })
             ->get();
         }
 
@@ -118,7 +120,9 @@ class ReportController extends Controller
 
   public function payed(Request $request)
   {
-    $establishment_id = $request->establishment_id;
+    $establishment_id = auth()->user()->organizationalUnit->establishment_id;
+    // $establishment_id = $request->establishment_id;
+
     $service_request_id = $request->service_request_id;
     $working_day_type = $request->working_day_type;
 
@@ -136,60 +140,69 @@ class ReportController extends Controller
     $payed_fulfillments1 = Fulfillment::whereHas("ServiceRequest", function ($subQuery) {
       $subQuery->where('has_resolution_file', 1);
     })
-      ->when($establishment_id != null, function ($q) use ($establishment_id) {
+    ->when($establishment_id != null, function ($q) use ($establishment_id) {
         return $q->whereHas("ServiceRequest", function ($subQuery) use ($establishment_id) {
-          $subQuery->where('establishment_id', $establishment_id);
+          $subQuery->when($establishment_id == 38, function ($q) {
+                        return $q->whereNotIn('establishment_id', [1, 41]);
+                    })
+                    ->when($establishment_id != 38, function ($q) use ($establishment_id) {
+                        return $q->where('establishment_id',$establishment_id);
+                    });
         });
-      })
-      ->when($service_request_id != null, function ($q) use ($service_request_id) {
-        return $q->whereHas("ServiceRequest", function ($subQuery) use ($service_request_id) {
-          $subQuery->where('id', $service_request_id);
-        });
-      })
-      ->when($working_day_type != null, function ($q) use ($working_day_type) {
-        return $q->whereHas("ServiceRequest", function ($subQuery) use ($working_day_type) {
-          $subQuery->where('working_day_type', $working_day_type);
-        });
-      })
-      ->when($from != null, function ($q) use ($from, $to) {
-        return $q->whereBetween('payment_date', [$from, $to]);
-      })
-      ->where('has_invoice_file', 1)
-      ->whereIn('type', ['Mensual', 'Parcial'])
-      ->where('responsable_approbation', 1)
-      ->where('rrhh_approbation', 1)
-      ->where('finances_approbation', 1)
-      ->whereNotNull('total_paid')
-      ->get();
+    })
+    ->when($service_request_id != null, function ($q) use ($service_request_id) {
+    return $q->whereHas("ServiceRequest", function ($subQuery) use ($service_request_id) {
+        $subQuery->where('id', $service_request_id);
+    });
+    })
+    ->when($working_day_type != null, function ($q) use ($working_day_type) {
+    return $q->whereHas("ServiceRequest", function ($subQuery) use ($working_day_type) {
+        $subQuery->where('working_day_type', $working_day_type);
+    });
+    })
+    ->when($from != null, function ($q) use ($from, $to) {
+    return $q->whereBetween('payment_date', [$from, $to]);
+    })
+    ->where('has_invoice_file', 1)
+    ->whereIn('type', ['Mensual', 'Parcial'])
+    ->where('responsable_approbation', 1)
+    ->where('rrhh_approbation', 1)
+    ->where('finances_approbation', 1)
+    ->whereNotNull('total_paid')
+    ->get();
 
     $payed_fulfillments2 = Fulfillment::whereHas("ServiceRequest", function ($subQuery) {
       $subQuery->where('has_resolution_file', 1);
     })
-      ->when($request->establishment_id != null, function ($q) use ($establishment_id) {
+    ->when($establishment_id != null, function ($q) use ($establishment_id) {
         return $q->whereHas("ServiceRequest", function ($subQuery) use ($establishment_id) {
-          $subQuery->where('establishment_id', $establishment_id);
+          $subQuery->when($establishment_id == 38, function ($q) {
+                        return $q->whereNotIn('establishment_id', [1, 41]);
+                    })
+                    ->when($establishment_id != 38, function ($q) use ($establishment_id) {
+                        return $q->where('establishment_id',$establishment_id);
+                    });
         });
-      })
-      ->when($service_request_id != null, function ($q) use ($service_request_id) {
-        return $q->whereHas("ServiceRequest", function ($subQuery) use ($service_request_id) {
-          $subQuery->where('id', $service_request_id);
-        });
-      })
-      ->when($working_day_type != null, function ($q) use ($working_day_type) {
-        return $q->whereHas("ServiceRequest", function ($subQuery) use ($working_day_type) {
-          $subQuery->where('working_day_type', $working_day_type);
-        });
-      })
-      ->when($from != null, function ($q) use ($from, $to) {
-        return $q->whereBetween('payment_date', [$from, $to]);
-      })
-      ->where('has_invoice_file', 1)
-      ->whereNotIn('type', ['Mensual', 'Parcial'])
-      ->whereNotNull('total_paid')
-      ->get();
+    })
+    ->when($service_request_id != null, function ($q) use ($service_request_id) {
+    return $q->whereHas("ServiceRequest", function ($subQuery) use ($service_request_id) {
+        $subQuery->where('id', $service_request_id);
+    });
+    })
+    ->when($working_day_type != null, function ($q) use ($working_day_type) {
+    return $q->whereHas("ServiceRequest", function ($subQuery) use ($working_day_type) {
+        $subQuery->where('working_day_type', $working_day_type);
+    });
+    })
+    ->when($from != null, function ($q) use ($from, $to) {
+    return $q->whereBetween('payment_date', [$from, $to]);
+    })
+    ->where('has_invoice_file', 1)
+    ->whereNotIn('type', ['Mensual', 'Parcial'])
+    ->whereNotNull('total_paid')
+    ->get();
 
     $payed_fulfillments = $payed_fulfillments1->merge($payed_fulfillments2);
-    //$payed_fulfillments = $payed_fulfillments->paginate(100);
     $payed_fulfillments = $this->paginate($payed_fulfillments);
 
     return view('service_requests.reports.payed', compact('payed_fulfillments', 'request'));
@@ -259,7 +272,12 @@ class ReportController extends Controller
     })
     ->when($establishment_id != null, function ($q) use ($establishment_id) {
         return $q->whereHas("ServiceRequest", function ($subQuery) use ($establishment_id) {
-            $subQuery->where('establishment_id', $establishment_id);
+          $subQuery->when($establishment_id == 38, function ($q) {
+                        return $q->whereNotIn('establishment_id', [1, 41]);
+                    })
+                    ->when($establishment_id != 38, function ($q) use ($establishment_id) {
+                        return $q->where('establishment_id',$establishment_id);
+                    });
         });
     })
     ->when($programm_name != null, function ($q) use ($programm_name) {
@@ -289,7 +307,12 @@ class ReportController extends Controller
         })
         ->when($establishment_id != null, function ($q) use ($establishment_id) {
             return $q->whereHas("ServiceRequest", function ($subQuery) use ($establishment_id) {
-            $subQuery->where('establishment_id', $establishment_id);
+              $subQuery->when($establishment_id == 38, function ($q) {
+                            return $q->whereNotIn('establishment_id', [1, 41]);
+                        })
+                        ->when($establishment_id != 38, function ($q) use ($establishment_id) {
+                            return $q->where('establishment_id',$establishment_id);
+                        });
             });
         })
         ->when($programm_name != null, function ($q) use ($programm_name) {
@@ -355,9 +378,17 @@ class ReportController extends Controller
 
   public function pendingResolutions(Request $request)
   {
-    $serviceRequests = ServiceRequest::whereNull('has_resolution_file')->orWhere('has_resolution_file', '===', 0)
-      ->paginate(100);
-    //->get();
+    $establishment_id = auth()->user()->organizationalUnit->establishment_id;
+    $serviceRequests = ServiceRequest::when($establishment_id == 38, function ($q) {
+                                        return $q->whereNotIn('establishment_id', [1, 41]);
+                                    })
+                                    ->when($establishment_id != 38, function ($q) use ($establishment_id) {
+                                        return $q->where('establishment_id',$establishment_id);
+                                    })
+                                    ->whereNull('has_resolution_file')
+                                    ->orWhere('has_resolution_file', '===', 0)
+                                    ->paginate(100);
+
     foreach ($serviceRequests as $key => $serviceRequest) {
       //only completed
       if ($serviceRequest->SignatureFlows->where('status', '===', 0)->count() == 0 && $serviceRequest->SignatureFlows->whereNull('status')->count() == 0) {
@@ -384,8 +415,18 @@ class ReportController extends Controller
 
   public function withBankDetails()
   {
-
-    $userbankaccounts = UserBankAccount::paginate(50);
+    $establishment_id = auth()->user()->organizationalUnit->establishment_id;
+    $userbankaccounts = UserBankAccount::when($establishment_id != null, function ($q) use ($establishment_id) {
+                                            return $q->whereHas("user", function ($subQuery) use ($establishment_id) {
+                                                $subQuery->when($establishment_id == 38, function ($q) {
+                                                                return $q->whereNotIn('establishment_id', [1, 41]);
+                                                            })
+                                                            ->when($establishment_id != 38, function ($q) use ($establishment_id) {
+                                                                return $q->where('establishment_id',$establishment_id);
+                                                            });
+                                                });
+                                        })
+                                        ->paginate(50);
 
     return view('service_requests.reports.with_bank_details', compact('userbankaccounts'));
   }
@@ -580,13 +621,16 @@ class ReportController extends Controller
 
   public function payRejected(Request $request)
   {
+    $establishment_id = auth()->user()->organizationalUnit->establishment_id;
+    // $establishment_id = $request->establishment_id;
 
     $program_contract_type = $request->program_contract_type;
     $working_day_type = $request->working_day_type;
-    $responsabilityCenters = OrganizationalUnit::orderBy('name', 'ASC')->get();
+    $responsabilityCenters = OrganizationalUnit::where('establishment_id',$establishment_id)
+                                                ->orderBy('name')
+                                                ->get(); 
     $establishments = Establishment::orderBy('name', 'ASC')->get();
     $responsability_center_ou_id = $request->responsability_center_ou_id;
-    $establishment_id = $request->establishment_id;
     $type = $request->type;
 
     $fulfillments = Fulfillment::where('payment_ready', 0)
@@ -607,7 +651,12 @@ class ReportController extends Controller
       })
       ->when($establishment_id != null, function ($q) use ($establishment_id) {
         return $q->whereHas("ServiceRequest", function ($subQuery) use ($establishment_id) {
-          $subQuery->where('establishment_id', $establishment_id);
+          $subQuery->when($establishment_id == 38, function ($q) {
+                        return $q->whereNotIn('establishment_id', [1, 41]);
+                    })
+                    ->when($establishment_id != 38, function ($q) use ($establishment_id) {
+                        return $q->where('establishment_id',$establishment_id);
+                    });
         });
       })
       ->when($type != null, function ($q) use ($type) {
@@ -615,17 +664,9 @@ class ReportController extends Controller
           $subQuery->where('type', $type);
         });
       })
-
       ->orderByDesc('id')
       ->get();
 
-    // if(isset($program_contract_type))
-    // {
-    //   $fulfillments = $fulfillments::with('ServiceRequest')->whereHas("ServiceRequest", function ($subQuery) use ($program_contract_type) {
-    //     $subQuery->where('program_contract_type', $program_contract_type);
-    //   })->get();
-
-    // }
     $request->flash();
     return view('service_requests.reports.pay_rejected', compact('fulfillments', 'request', 'responsabilityCenters', 'establishments'));
   }
@@ -714,11 +755,20 @@ class ReportController extends Controller
 
   public function compliance(Request $request)
   {
-    //$users = User::getUsersBySearch($request->get('name'))->orderBy('name','Asc')->paginate(150);
+    $establishment_id = auth()->user()->organizationalUnit->establishment_id;
+
     $fulfillments = Fulfillment::Search($request)
-      ->whereHas('ServiceRequest')
-      ->orderBy('id', 'Desc')
-      ->paginate(200);
+        ->whereHas('ServiceRequest')
+        ->whereHas("ServiceRequest", function ($subQuery) use ($establishment_id) {
+            $subQuery->when($establishment_id == 38, function ($q) {
+                return $q->whereNotIn('establishment_id', [1, 41]);
+            })
+            ->when($establishment_id != 38, function ($q) use ($establishment_id) {
+                return $q->where('establishment_id',$establishment_id);
+            });
+        })
+        ->orderBy('id', 'Desc')
+        ->paginate(200);
 
     /* Año actual y año anterior */
     $years[] = now()->format('Y');
@@ -727,13 +777,9 @@ class ReportController extends Controller
 
     $request->flash();
     if ($request->has('excel')) {
-      //$this->complianceExport($request);
       return Excel::download(new ComplianceExport($request), 'reporte-de-cumplimiento.xlsx');
     }
 
-
-
-    //$this->complianceExport($request);
     else {
       return view(
         'service_requests.requests.fulfillments.reports.compliance',
@@ -798,54 +844,64 @@ class ReportController extends Controller
   }
 
 
-  public function duplicateContracts(Request $request)
-  {
-    $srall = ServiceRequest::all();
-    $srUnique = $srall->unique('user_id');
-    $serviceRequestssinordenar = $srall->diff($srUnique);
-    $serviceRequests = $serviceRequestssinordenar->sortBy('user_id');
-    //$serviceRequests = $serviceRequests->paginate(100);
-    return view('service_requests.reports.duplicate_contracts', compact('request', 'serviceRequests'));
-  }
+    public function duplicateContracts(Request $request)
+    {
+        $establishment_id = auth()->user()->organizationalUnit->establishment_id;
 
-  public function overlappingContracts(Request $request)
-  {
-
-    //se
-    ///$users = User::with(['posts' => function ($query) {
-    //   $query->orderBy('created_at', 'desc');
-    // }])->get();
-
-
-    $users = User::with(['serviceRequests'
-    => function ($query) {
-      $query->orderBy('start_date', 'asc');
-    }])
-      ->has('serviceRequests', '>=', 2)->get('id');
-    foreach ($users as $user) {
-
-      foreach ($user->serviceRequests as $sr) {
-        //dd($sr);
-        foreach ($user->serviceRequests as $srtemporal)
-          if ($sr != $srtemporal) {
-            if ($srtemporal->start_date >= $sr->start_date and $srtemporal->end_date <= $sr->end_date) {
-              //dd("encontre algo ".$sr->user_id);
-              if ($sr->srsolapados != null) {
-                $sr->srsolapados->push($srtemporal);
-                dd($sr->srsolapados);
-              }
-            }
-          }
-      }
+        $srall = ServiceRequest::when($establishment_id == 38, function ($q) {
+                                    return $q->whereNotIn('establishment_id', [1, 41]);
+                                })
+                                ->when($establishment_id != 38, function ($q) use ($establishment_id) {
+                                    return $q->where('establishment_id',$establishment_id);
+                                })
+                                ->get();
+        $srUnique = $srall->unique('user_id');
+        $serviceRequestssinordenar = $srall->diff($srUnique);
+        $serviceRequests = $serviceRequestssinordenar->sortBy('user_id');
+        //$serviceRequests = $serviceRequests->paginate(100);
+        return view('service_requests.reports.duplicate_contracts', compact('request', 'serviceRequests'));
     }
-  }
+
+    public function overlappingContracts(Request $request)
+    {
+        $establishment_id = auth()->user()->organizationalUnit->establishment_id;
+
+        $users = User::with(['serviceRequests' => function ($query) {
+                                                    $query->orderBy('start_date', 'asc');
+                                                }
+                            ])
+                            ->when($establishment_id == 38, function ($q) {
+                                return $q->whereNotIn('establishment_id', [1, 41]);
+                            })
+                            ->when($establishment_id != 38, function ($q) use ($establishment_id) {
+                                return $q->where('establishment_id',$establishment_id);
+                            })
+                            ->has('serviceRequests', '>=', 2)
+                            ->get('id');
+        foreach ($users as $user) {
+
+        foreach ($user->serviceRequests as $sr) {
+            //dd($sr);
+            foreach ($user->serviceRequests as $srtemporal)
+            if ($sr != $srtemporal) {
+                if ($srtemporal->start_date >= $sr->start_date and $srtemporal->end_date <= $sr->end_date) {
+                //dd("encontre algo ".$sr->user_id);
+                if ($sr->srsolapados != null) {
+                    $sr->srsolapados->push($srtemporal);
+                    dd($sr->srsolapados);
+                }
+                }
+            }
+        }
+        }
+    }
 
 
 
   public function contract(Request $request)
   {
-    $responsabilityCenters = OrganizationalUnit::where('establishment_id', auth()->user()->organizationalUnit->establishment_id)->orderBy('name', 'ASC')->get();
-    //dd($responsabilityCenters);
+    $establishment_id = auth()->user()->organizationalUnit->establishment_id;
+    $responsabilityCenters = OrganizationalUnit::where('establishment_id', $establishment_id)->orderBy('name', 'ASC')->get();
 
     $srs = array();
     $total_srs = 0;
@@ -854,6 +910,13 @@ class ReportController extends Controller
     if (isset($request->option)) {
 
       $srs = ServiceRequest::query();
+
+      $srs = $srs->when($establishment_id == 38, function ($q) {
+                    return $q->whereNotIn('establishment_id', [1, 41]);
+                })
+                ->when($establishment_id != 38, function ($q) use ($establishment_id) {
+                    return $q->where('establishment_id',$establishment_id);
+                });
 
       if ($request->has('excel')) {
         return Excel::download(new ContractExport($request), 'reporte-de-contrato.xlsx');

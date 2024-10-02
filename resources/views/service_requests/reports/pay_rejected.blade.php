@@ -51,7 +51,7 @@
       </select>
     </div>
 
-    <div class="form-group col-md-5">
+    <!-- <div class="form-group col-md-5">
       <label>Establecimiento</label>
       <select class="form-control" data-live-search="true" name="establishment_id" data-size="5">
         <option value=""></option>
@@ -62,7 +62,7 @@
         @endif
 
       </select>
-    </div>
+    </div> -->
 
 
 

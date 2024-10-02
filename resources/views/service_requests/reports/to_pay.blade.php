@@ -17,14 +17,14 @@
 <div class="form-group">
 
     <div class="form-row">
-         <div class="form-group col-12 col-md-2">
+         <!-- <div class="form-group col-12 col-md-2">
             <label>Establecimiento</label>
             <select class="form-control" name="establishment_id">
                 @foreach($establishments as $establishment)
                     <option value="{{$establishment->id}}" @selected($request->establishment_id == $establishment->id)>{{$establishment->name}}</option>
                 @endforeach
             </select>
-        </div>
+        </div> -->
         <div class="form-group col-12 col-md-2">
             <label>Tipo de Contrato</label>
             <select class="form-control" name="type">

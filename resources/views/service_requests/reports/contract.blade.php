@@ -21,7 +21,6 @@
             </select>
         </fieldset>
 
-
         <fieldset class="form-group col-md-3">
             <label for="for_from">Desde*</label>
             <input type="date" class="form-control" min="2020-01-01" name="from" value="{{ old('from') }}" required>

@@ -919,124 +919,40 @@ class ServiceRequestController extends Controller
     // set_time_limit(7200);
     // ini_set('memory_limit', '2048M');
     
-    // $establishment_id = auth()->user()->organizationalUnit->establishment_id;
-    $establishment_id = $request->establishment_id;
+    $establishment_id = auth()->user()->organizationalUnit->establishment_id;
     $year = $request->year;
     $semester = $request->semester;
-    // $month = $request->month;
 
     //solicitudes activas
     $serviceRequests = ServiceRequest::whereDoesntHave("SignatureFlows", function ($subQuery) {
-      $subQuery->where('status', 0);
+        $subQuery->where('status', 0);
     })
-    ->when($establishment_id != null && $establishment_id != 0, function ($q) use ($establishment_id) {
-      return $q->where('establishment_id', $establishment_id);
+    ->when($establishment_id == 38, function ($q) {
+        return $q->whereNotIn('establishment_id', [1, 41]);
     })
-    ->when($establishment_id != null && $establishment_id == 0, function ($q) use ($establishment_id) {
-      return $q->whereNotIn('establishment_id', [1, 12]);
+    ->when($establishment_id != 38, function ($q) use ($establishment_id) {
+        return $q->where('establishment_id',$establishment_id);
     })
     ->whereYear('start_date',$year)
-    // ->when($semester == 1, function ($q) use ($semester) {
-    //     // return $q->whereIn(DB::raw('MONTH(start_date)'), [1,2,3,4,5,6]);
-    //     return $q->where(function($query) {
-    //                 $query->whereMonth('start_date',1)
-    //                         ->orWhereMonth('start_date',2)
-    //                         ->orWhereMonth('start_date',3)
-    //                         ->orWhereMonth('start_date',4);
-    //             });
-    //   })
-    //   ->when($semester == 2, function ($q) use ($semester) {
-    //     // return $q->whereIn(DB::raw('MONTH(start_date)'), [1,2,3,4,5,6]);
-    //     return $q->where(function($query) {
-    //                 $query->whereMonth('start_date',5)
-    //                         ->orWhereMonth('start_date',6)
-    //                         ->orWhereMonth('start_date',7)
-    //                         ->orWhereMonth('start_date',8);
-    //             });
-    //   })
-    // ->when($semester == 3, function ($q) use ($semester) {
-    //     // return $q->whereIn(DB::raw('MONTH(start_date)'), [7,8,9,10,11,12]);
-    //     return $q->where(function($query) {
-    //                 $query->whereMonth('start_date',7)
-    //                         ->orWhereMonth('start_date',9)
-    //                         ->orWhereMonth('start_date',10)
-    //                         ->orWhereMonth('start_date',11)
-    //                         ->orWhereMonth('start_date',12);
-    //             });
-    // })
     ->whereMonth('start_date',$semester)
     ->with('SignatureFlows','shiftControls','fulfillments','establishment','employee','profession','responsabilityCenter')
     ->orderBy('request_date', 'asc')
     ->paginate(50);
 
-    // foreach ($serviceRequests as $key => $serviceRequest) {
-    //   foreach ($serviceRequest->shiftControls as $key => $shiftControl) {
-    //     // $start_date = Carbon::parse($shiftControl->start_date);
-    //     // $end_date = Carbon::parse($shiftControl->end_date);
-    //     $dateDiff = $shiftControl->start_date->diffInHours($shiftControl->end_date);
-    //     $serviceRequest->ControlHrs += $dateDiff;
-    //   }
-    // }
-
     //solicitudes Rechazadas
     $serviceRequestsRejected = ServiceRequest::whereHas("SignatureFlows", function ($subQuery) {
-      $subQuery->where('status', 0);
+        $subQuery->where('status', 0);
     })
-    ->when($establishment_id != null && $establishment_id != 0, function ($q) use ($establishment_id) {
-      return $q->where('establishment_id', $establishment_id);
+    ->when($establishment_id == 38, function ($q) {
+        return $q->whereNotIn('establishment_id', [1, 41]);
     })
-    ->when($establishment_id != null && $establishment_id == 0, function ($q) use ($establishment_id) {
-      return $q->whereNotIn('establishment_id', [1, 12]);
+    ->when($establishment_id != 38, function ($q) use ($establishment_id) {
+        return $q->where('establishment_id',$establishment_id);
     })
-    // ->where('start_date','>=','2023-01-01 00:00')
     ->whereYear('start_date',$request->year)
-    // ->when($semester == 1, function ($q) use ($semester) {
-    //     // return $q->whereIn(DB::raw('MONTH(start_date)'), [1,2,3,4,5,6]);
-    //     return $q->where(function($query) {
-    //                 $query->whereMonth('start_date',1)
-    //                         ->orWhereMonth('start_date',2)
-    //                         ->orWhereMonth('start_date',3)
-    //                         ->orWhereMonth('start_date',4);
-    //             });
-    //   })
-    //   ->when($semester == 2, function ($q) use ($semester) {
-    //     // return $q->whereIn(DB::raw('MONTH(start_date)'), [1,2,3,4,5,6]);
-    //     return $q->where(function($query) {
-    //                 $query->whereMonth('start_date',5)
-    //                         ->orWhereMonth('start_date',6)
-    //                         ->orWhereMonth('start_date',7)
-    //                         ->orWhereMonth('start_date',8);
-    //             });
-    //   })
-    // ->when($semester == 3, function ($q) use ($semester) {
-    //     // return $q->whereIn(DB::raw('MONTH(start_date)'), [7,8,9,10,11,12]);
-    //     return $q->where(function($query) {
-    //                 $query->whereMonth('start_date',7)
-    //                         ->orWhereMonth('start_date',9)
-    //                         ->orWhereMonth('start_date',10)
-    //                         ->orWhereMonth('start_date',11)
-    //                         ->orWhereMonth('start_date',12);
-    //             });
-    // })
     ->whereMonth('start_date',$semester)
     ->with('SignatureFlows','shiftControls','fulfillments','establishment','employee','profession','responsabilityCenter')
     ->orderBy('request_date', 'asc')->get();
-    
-    // foreach ($serviceRequestsRejected as $key => $serviceRequest) {
-    //   foreach ($serviceRequest->shiftControls as $key => $shiftControl) {
-    //     // $start_date = Carbon::parse($shiftControl->start_date);
-    //     // $end_date = Carbon::parse($shiftControl->end_date);
-    //     $dateDiff = $shiftControl->start_date->diffInHours($shiftControl->end_date);
-    //     $serviceRequest->ControlHrs += $dateDiff;
-    //   }
-    // }
-    
-    // if($request->request->count()>0){
-    //     // return Excel::download(new ConsolidatedDataExport($request), 'consolidated-data.xlsx');
-    //     // return Excel::download(new ConsolidatedDeclineDataExport($request), 'consolidated-declined-data.xlsx');
-    //     return (new ConsolidatedMasterDataExport(2018))->download('consolidated-data.xlsx');
-    // }
-    // return view('service_requests.requests.consolidated_data', compact('request'));
     
     return view('service_requests.requests.consolidated_data', compact('serviceRequests', 'serviceRequestsRejected', 'request'));
   }
@@ -1692,10 +1608,20 @@ class ServiceRequestController extends Controller
 
   public function pending_requests(Request $request)
   {
+    $establishment_id = auth()->user()->organizationalUnit->establishment_id;
+
     //solicitudes activas
     $serviceRequests = ServiceRequest::orderBy('id', 'asc')
-      // ->whereBetween('start_date',[$request->dateFrom,$request->dateTo])
-      ->get();
+                    ->with('SignatureFlows')
+                    ->whereYear('start_date','>=',2023)
+                    // si es sst, se devuelve toda la info que no sea hetg ni hah.
+                    ->when($establishment_id == 38, function ($q) {
+                        return $q->whereNotIn('establishment_id', [1, 41]);
+                    })
+                    ->when($establishment_id != 38, function ($q) use ($establishment_id) {
+                        return $q->where('establishment_id',$establishment_id);
+                    })
+                    ->get();
 
     $array = [];
     $hoja_ruta_falta_aprobar = 0;
@@ -1724,60 +1650,47 @@ class ServiceRequestController extends Controller
         }
       }
     }
-    // dd($array,$hoja_ruta_falta_aprobar);
-    //
-    // //obtener subtotales
-    // $group_array = [];
-    // $hoja_ruta_falta_aprobar = 0;
-    // foreach ($array as $key => $data) {
-    //   $group_array[$data['falta_aprobar']] = 0;
-    //   // $group_array['rechazados'] = 0;
-    // }
-    // foreach ($array as $key => $data) {
-    //   if ($data['rechazados'] == 0 && $data['falta_aprobar'] != "") {
-    //     $group_array[$data['falta_aprobar']] += 1;
-    //     $hoja_ruta_falta_aprobar+=1;
-    //   }
-    // }
-
+    
     arsort($array);
-    // dd($array);
-
 
     $serviceRequests = ServiceRequest::orderBy('id', 'asc')
-      ->where('program_contract_type', 'Mensual')
-      ->whereDoesntHave("SignatureFlows", function ($subQuery) {
-        $subQuery->where('status', 0);
-      })
-      ->whereDoesntHave("SignatureFlows", function ($subQuery) {
-        $subQuery->whereNull('status');
-      })
-      ->get();
+                        ->where('program_contract_type', 'Mensual')
+                        ->whereDoesntHave("SignatureFlows", function ($subQuery) {
+                            $subQuery->where('status', 0);
+                        })
+                        ->whereDoesntHave("SignatureFlows", function ($subQuery) {
+                            $subQuery->whereNull('status');
+                        })
+                        ->get();
 
 
     //cumplimiento
     $fulfillments_missing = [];
     $cumplimiento_falta_ingresar = 0;
     foreach ($serviceRequests as $key => $serviceRequest) {
-      // $fulfillments_missing[$serviceRequest->SignatureFlows->where('sign_position',2)->first()->user->getFullNameAttribute()][$serviceRequest->SignatureFlows->where('sign_position',2)->first()->organizationalUnit->name] = 0;
-      $fulfillments_missing[$serviceRequest->SignatureFlows->where('sign_position', 2)->first()->user->getFullNameAttribute()] = 0;
+        if($serviceRequest->SignatureFlows->where('sign_position', 2)->count() > 0){
+            $fulfillments_missing[$serviceRequest->SignatureFlows->where('sign_position', 2)->first()->user->getFullNameAttribute()] = 0;
+        }
     }
 
     foreach ($serviceRequests as $key => $serviceRequest) {
 
-      //si es que no tiene cumplimiento
-      if ($serviceRequest->fulfillments->count() == 0) {
-        $cumplimiento_falta_ingresar += 1;
-        // $fulfillments_missing[$serviceRequest->SignatureFlows->where('sign_position',2)->first()->user->getFullNameAttribute()][$serviceRequest->SignatureFlows->where('sign_position',2)->first()->organizationalUnit->name] += 1;
-        $fulfillments_missing[$serviceRequest->SignatureFlows->where('sign_position', 2)->first()->user->getFullNameAttribute()] += 1;
-      }
+        //si es que no tiene cumplimiento
+        if ($serviceRequest->fulfillments->count() == 0) {
+            $cumplimiento_falta_ingresar += 1;
+            if($serviceRequest->SignatureFlows->where('sign_position', 2)->count() > 0){
+                $fulfillments_missing[$serviceRequest->SignatureFlows->where('sign_position', 2)->first()->user->getFullNameAttribute()] += 1;
+            }
+        }
 
-      //si es que tiene cumplimiento, pero no aprobado
-      if ($serviceRequest->fulfillments->whereNull('responsable_approbation')->count() > 0) {
-        $cumplimiento_falta_ingresar += 1;
-        // $fulfillments_missing[$serviceRequest->SignatureFlows->where('sign_position',2)->first()->user->getFullNameAttribute()][$serviceRequest->SignatureFlows->where('sign_position',2)->first()->organizationalUnit->name] += 1;
-        $fulfillments_missing[$serviceRequest->SignatureFlows->where('sign_position', 2)->first()->user->getFullNameAttribute()] += 1;
-      }
+        //si es que tiene cumplimiento, pero no aprobado
+        if ($serviceRequest->fulfillments->whereNull('responsable_approbation')->count() > 0) {
+            $cumplimiento_falta_ingresar += 1;
+            if($serviceRequest->SignatureFlows->where('sign_position', 2)->count() > 0){
+                $fulfillments_missing[$serviceRequest->SignatureFlows->where('sign_position', 2)->first()->user->getFullNameAttribute()] += 1;
+            }
+            
+        }
     }
 
     arsort($fulfillments_missing);
