@@ -15,7 +15,6 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use STS\FilamentImpersonate\Tables\Actions\Impersonate;
-use Tapp\FilamentAuditing\RelationManagers\AuditsRelationManager;
 
 class UserResource extends Resource
 {
@@ -220,8 +219,7 @@ class UserResource extends Resource
             RelationManagers\TelephonesRelationManager::class,
             RelationManagers\RolesRelationManager::class,
             RelationManagers\PermissionsRelationManager::class,
-            RelationManagers\AuditsRelationManager::class,
-            // AuditsRelationManager::class,
+            \App\Filament\RelationManagers\AuditsRelationManager::class,
         ];
     }
 

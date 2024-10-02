@@ -1,5 +1,5 @@
 <?php
-namespace App\Filament\Resources\RelationManagers;
+namespace App\Filament\RelationManagers;
 
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -10,8 +10,10 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\HtmlString;
 use OwenIt\Auditing\Models\Audit;
 
-abstract class BaseAuditsRelationManager extends RelationManager
+class AuditsRelationManager extends RelationManager
 {
+    protected static string $relationship = 'audits';
+
     public function form(Form $form): Form
     {
         return $form
@@ -43,18 +45,14 @@ abstract class BaseAuditsRelationManager extends RelationManager
                         $formatted = [];
 
                         foreach ($modified as $key => $values) {
-                            $oldValue = isset($values['old']) ? $values['old'] : '';
-                            $newValue = isset($values['new']) ? $values['new'] : '';
+                            $oldValue = $values['old'] ?? '';
+                            $newValue = $values['new'] ?? '';
                             $formatted[] = "<b>$key</b>: $oldValue => $newValue";
                         }
 
                         return new HtmlString(implode('<br> ', $formatted));
                     }),
                 Tables\Columns\TextColumn::make('url')
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('old_values')
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('new_values')
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
