@@ -24,6 +24,10 @@ class ListAttendanceRecords extends ListRecords
         $tabs['mis registros'] = Tab::make()
             ->modifyQueryUsing(callback: fn (Builder $query): Builder => $query->where(column: 'user_id', operator: auth()->id()));
 
+        if (auth()->user()->canAny(abilities: ['be god','Attendance records: admin'])) {
+            $tabs[auth()->user()->establishment->name] = Tab::make()
+                ->modifyQueryUsing(callback: fn (Builder $query): Builder => $query->where('establishment_id', auth()->user()->establishment_id));
+        }
         if (auth()->user()->can(abilities: 'be god')) {
             $tabs['todos'] = Tab::make();
         }

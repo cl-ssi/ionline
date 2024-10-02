@@ -13,6 +13,7 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class AttendanceRecordResource extends Resource
@@ -73,34 +74,64 @@ class AttendanceRecordResource extends Resource
                 Tables\Columns\TextColumn::make('observation')
                     ->label('Observación')
                     ->searchable(),
+                Tables\Columns\TextColumn::make('sirh_at')
+                    ->date('Y-m-d H:i')
+                    ->sortable()
+                    ->description(description: fn (AttendanceRecord $record): string => $record->rrhhUser->shortName ?? '')
+                    ->visible(condition: fn (): bool => auth()->user()->canAny(['be god','Attendance records: admin'])),
                 // Tables\Columns\TextColumn::make('establishment.name')
                 //     ->numeric()
                 //     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
+                    ->label('Fecha de creación')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('deleted_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                // Tables\Columns\TextColumn::make('updated_at')
+                //     ->dateTime()
+                //     ->sortable()
+                //     ->toggleable(isToggledHiddenByDefault: true),
+                // Tables\Columns\TextColumn::make('deleted_at')
+                //     ->dateTime()
+                //     ->sortable()
+                // ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 //
             ])
             ->actions([
+                Tables\Actions\Action::make('markAsProcessed')
+                    ->label('Sirh OK')
+                    ->action(function ($record) {
+                        $record->sirh_at = now();
+                        $record->rrhh_user_id = auth()->id();
+                        $record->save();
+                    })
+                    ->requiresConfirmation()
+                    ->visible(fn ($record) => is_null($record->sirh_at)),
                 Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\DeleteAction::make()
+                    ->visible(fn ($record) => $record->created_at->gt(now()->subHours(24))),
             ])
             ->bulkActions([
                 // Tables\Actions\BulkActionGroup::make([
                 //     Tables\Actions\DeleteBulkAction::make(),
                 // ]),
-            ]);
+                Tables\Actions\BulkAction::make('markAsProcessedBulk')
+                    ->label('Sirh OK')
+                    ->action(function (Collection $records) {
+                        $records->each(function ($record) {
+                            if (is_null($record->sirh_at)) {
+                                $record->sirh_at = now();
+                                $record->rrhh_user_id = auth()->id();
+                                $record->save();
+                            }
+                        });
+                    })
+                    ->requiresConfirmation(),
+            ])
+            ->defaultSort('created_at', 'desc')
+            ->checkIfRecordIsSelectableUsing(callback: fn (AttendanceRecord $record): bool => $record->sirh_at === null);
     }
 
     public static function getRelations(): array
