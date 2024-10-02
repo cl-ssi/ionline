@@ -110,6 +110,14 @@ class SearchProgramAmounts extends Component
 
     public function search()
     {
+        $this->validate([
+            'selectedYear'      => 'required|integer',
+            'selectedProgram'   => 'required'
+        ], [
+            'selectedYear.required'     => 'Por favor, selecciona un año.',
+            'selectedProgram.required'  => 'Por favor, selecciona un programa.'
+        ]);
+
         $this->requestForms = RequestForm::with('father:id,folio,has_increased_expense', 'purchasingProcess.details', 'purchasingProcess.detailsPassenger', 'immediatePurchases.dtes')->where('program_id', $this->selectedProgram)->where('status', 'approved')->get();
     }
 
