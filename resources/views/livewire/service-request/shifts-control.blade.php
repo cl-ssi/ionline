@@ -60,12 +60,12 @@
                 <tr>
 
                   <td>{{$shiftControl->start_date->format('Y-m-d H:i')}}
-                    @if(\Carbon\Carbon::parse($shiftControl->start_date->format('Y-m-d 00:00'))->addHours(24)->diffInHours(\Carbon\Carbon::parse($shiftControl->start_date->format('Y-m-d 00:00'))) != 24)
+                    @if($shiftControl->start_date->diffInHours($shiftControl->start_date->addDay()) != 24.0)
                       <span class="badge badge-danger">(Cambio de hora)</span>
                     @endif
                   </td>
                   <td>@if($shiftControl->end_date){{$shiftControl->end_date->format('Y-m-d H:i')}}@endif</td>
-                  <td>@if($shiftControl->end_date){{$shiftControl->end_date->diffInMinutes($shiftControl->start_date)/60}}@endif</td>
+                  <td>@if($shiftControl->end_date){{$shiftControl->start_date->diffInMinutes($shiftControl->end_date)/60}}@endif</td>
                   <td>{{$shiftControl->observation}}</td>
                   <td>
 
