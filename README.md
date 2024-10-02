@@ -99,8 +99,8 @@ Update MariaDb Driver
 "laravel/pint": "^1.17",
 "laravel/sail": "^1.31",
 "mockery/mockery": "^1.6",
-"nunomaduro/collision": "^8.4", // actualizar
-"phpunit/phpunit": "^11.3", // actualizar
+"nunomaduro/collision": "^8.1", // actualizar
+"phpunit/phpunit": "^11.0", // actualizar
 "spatie/laravel-ignition": "^2.8"
 
 ## Prompt para ordenar los modelos
