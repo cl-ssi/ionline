@@ -185,7 +185,7 @@
                 }
 
                 $('#days_year').val(calc.toFixed(2));
-                $('#days_programming').val(366 - calc.toFixed(2));
+                $('#days_programming').val(365 - calc.toFixed(2));
 
             });
     </script>

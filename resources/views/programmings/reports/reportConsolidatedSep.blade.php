@@ -9,7 +9,7 @@
 
 <button onclick="tableExcel('xlsx')" class="btn btn-success float-right btn-sm">Exportar Excel</button>
 
-<h4 class="mb-3"> Reporte actividades directas Consolidado Separado año {{$year}}</h4>
+<h4 class="mb-3"> Reporte actividades directas Consolidado año {{$year}}</h4>
 <form method="GET" class="form-horizontal small" action="{{ route('programming.reportConsolidatedSep') }}" enctype="multipart/form-data">
 
     <div class="form-row">
@@ -45,7 +45,7 @@
 <table id="tblData" class="table table-striped  table-sm table-bordered table-condensed fixed_headers table-hover  ">
     <thead>
         <tr style="font-size:75%;">
-            <th class="text-center align-middle" colspan="{{$isTracer == 'SI' ? 5 : 4}}">REPORTE ACTIVIDADES DIRECTAS CONSOLIDADO SEPARADO {{$year}}</th>
+            <th class="text-center align-middle" colspan="{{$isTracer == 'SI' ? 5 : 4}}">REPORTE ACTIVIDADES DIRECTAS CONSOLIDADO {{$year}}</th>
         </tr>
         <tr class="small " style="font-size:60%;">
             @if($isTracer == 'SI')<th class="text-center align-middle">Nº TRAZADORA</th>@endif
@@ -61,7 +61,7 @@
         <tr class="small">
             @if($isTracer == 'SI')<td class="text-center align-middle">{{ $programmingitem->int_code }}</td> @endif
             <td class="text-center align-middle">{{ $programmingitem->activity_name }}</td>
-            <td class="text-center align-middle">{{ $programmingitem->cycle }}</td>
+            <td class="text-center align-middle">{{ $programmingitem->vital_cycle }}</td>
             {{--<td class="text-center align-middle">{{ $programmingitem->professional }}</td>--}}
             <td class="text-center align-middle font-weight-bold">{{ number_format($programmingitem->activity_total,0, ',', '.') }}</td>
             <td class="text-left align-middle">{{ $programmingitem->establishments }}</td>

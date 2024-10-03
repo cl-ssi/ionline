@@ -120,8 +120,8 @@ class ProgrammingReportController extends Controller
 
         $programmingItems = ProgrammingItem::select(
                                  'T6.int_code'
-                                ,'pro_programming_items.activity_name'
-                                ,'pro_programming_items.cycle'
+                                ,'T6.activity_name'
+                                ,'T6.vital_cycle'
                                 // ,'T4.name AS professional'
                                 , DB::raw('sum(pro_programming_items.activity_total) AS activity_total')
                                 , DB::raw('GROUP_CONCAT(DISTINCT T1.name) AS establishments') )
