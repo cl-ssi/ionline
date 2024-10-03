@@ -30,9 +30,9 @@ class Derive extends Component
 
     public function derivar()
     {
+        $establishment_id = auth()->user()->organizationalUnit->establishment_id;
 
         /* Acá va el código para derivar desde $user_form_id a $user_to_id */
-
         $user_from_id = $this->user_from_id;        
         $user_to_id = $this->user_to_id;
         $sender_name = User::find($user_from_id)->getFullNameAttribute();
@@ -40,12 +40,7 @@ class Derive extends Component
         $receiver_email = User::find($user_to_id)->email;
         $type = $this->type;
 
-        $serviceRequests = ServiceRequest::
-                                            // whereHas("SignatureFlows", function ($subQuery) use ($user_from_id) {
-                                            //     $subQuery->whereNull('status');
-                                            //     $subQuery->where('responsable_id', $user_from_id);
-                                            // })
-                                            when($type != "Todas", function ($q) use ($type, $user_from_id) {
+        $serviceRequests = ServiceRequest::when($type != "Todas", function ($q) use ($type, $user_from_id) {
                                                 return $q->whereHas("SignatureFlows", function ($subQuery) use ($type, $user_from_id) {
                                                             $subQuery->whereNull('status');
                                                             $subQuery->where('type',$type)
@@ -57,6 +52,13 @@ class Derive extends Component
                                                             $subQuery->whereNull('status');
                                                             $subQuery->where('responsable_id', $user_from_id);
                                                         });
+                                            })
+                                            // si es sst, se devuelve toda la info que no sea hetg ni hah.
+                                            ->when($establishment_id == 38, function ($q) {
+                                                return $q->whereNotIn('establishment_id', [1, 41]);
+                                            })
+                                            ->when($establishment_id != 38, function ($q) use ($establishment_id) {
+                                                return $q->where('establishment_id',$establishment_id);
                                             })
                                             ->orderBy('id', 'asc')
                                             ->get();
@@ -89,6 +91,8 @@ class Derive extends Component
 
     public function render()
     {
+        $establishment_id = auth()->user()->organizationalUnit->establishment_id;
+
         if ($this->user_from_id != NULL) {
             $user_id = $this->user_from_id;
             $type = $this->type;
@@ -99,23 +103,29 @@ class Derive extends Component
             $serviceRequestsCreated = [];
             $serviceRequestsRejected = [];
 
-            $serviceRequests = ServiceRequest::
-                                when($type != "Todas", function ($q) use ($type,$user_id) {
-                                    return $q->whereHas("SignatureFlows", function ($subQuery) use ($type,$user_id) {
-                                                $subQuery->whereNull('status');
-                                                $subQuery->where('type',$type)
-                                                        ->where('responsable_id', $user_id);
-                                            });
-                                })
-                                ->when($type == "Todas", function ($q) use ($user_id) {
-                                    return $q->whereHas("SignatureFlows", function ($subQuery) use ($user_id) {
-                                                $subQuery->whereNull('status');
-                                                $subQuery->where('responsable_id', $user_id);
-                                            });
-                                })
-                                ->orderBy('id', 'asc')
-                                ->with('SignatureFlows')
-                                ->get();
+            $serviceRequests = ServiceRequest::when($type != "Todas", function ($q) use ($type,$user_id) {
+                                                    return $q->whereHas("SignatureFlows", function ($subQuery) use ($type,$user_id) {
+                                                                $subQuery->whereNull('status');
+                                                                $subQuery->where('type',$type)
+                                                                        ->where('responsable_id', $user_id);
+                                                            });
+                                                })
+                                                ->when($type == "Todas", function ($q) use ($user_id) {
+                                                    return $q->whereHas("SignatureFlows", function ($subQuery) use ($user_id) {
+                                                                $subQuery->whereNull('status');
+                                                                $subQuery->where('responsable_id', $user_id);
+                                                            });
+                                                })
+                                                // si es sst, se devuelve toda la info que no sea hetg ni hah.
+                                                ->when($establishment_id == 38, function ($q) {
+                                                    return $q->whereNotIn('establishment_id', [1, 41]);
+                                                })
+                                                ->when($establishment_id != 38, function ($q) use ($establishment_id) {
+                                                    return $q->where('establishment_id',$establishment_id);
+                                                })
+                                                ->orderBy('id', 'asc')
+                                                ->with('SignatureFlows')
+                                                ->get();
 
             foreach ($serviceRequests as $key => $serviceRequest) {
                 //not rejected
@@ -157,13 +167,6 @@ class Derive extends Component
             $this->serviceRequestsOthersPendingsCount = count($serviceRequestsOthersPendings);
         }
 
-        /* Mostrar sólo usuarios que tengan solicitudes para derivara para alivianar la vista */
-        //$this->users = User::orderBy('name','ASC')->get();
-
-        // Carga solo los campos necesarios de los usuarios
-        //  $this->users = User::select('id', 'name', 'fathers_family', 'mothers_family')
-        //  ->orderBy('name', 'ASC')
-        //  ->cursor();
         return view('livewire.service-request.derive');
     }
 

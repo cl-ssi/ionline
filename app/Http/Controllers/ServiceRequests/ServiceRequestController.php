@@ -361,8 +361,17 @@ class ServiceRequestController extends Controller
 
   public function change_signature_flow_view(Request $request)
   {
+    $establishment_id = auth()->user()->organizationalUnit->establishment_id;
     $users = User::orderBy('name', 'ASC')->get();
-    $serviceRequests = ServiceRequest::find($request->id);
+    $serviceRequests = ServiceRequest::where('id',$request->id)
+                                        // si es sst, se devuelve toda la info que no sea hetg ni hah.
+                                        ->when($establishment_id == 38, function ($q) {
+                                            return $q->whereNotIn('establishment_id', [1, 41]);
+                                        })
+                                        ->when($establishment_id != 38, function ($q) use ($establishment_id) {
+                                            return $q->where('establishment_id',$establishment_id);
+                                        })
+                                        ->first();
     return view('service_requests.requests.change_signature_flow', compact('users', 'request', 'serviceRequests'));
   }
 
