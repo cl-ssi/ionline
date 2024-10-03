@@ -66,7 +66,7 @@
                 </div>
         </li>
 
-        <li class="nav-item dropdown ">
+        <!-- <li class="nav-item dropdown ">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <i class="fa fa-bed"></i> Reserva de cabañas </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -83,7 +83,7 @@
 
                     @canany(['welfare: hotel booking administrator'])
 
-                        <div class="dropdown-divider"></div> <!-- Agregamos una línea divisora -->
+                        <div class="dropdown-divider"></div>
 
                         <a class="dropdown-item {{ active('hotel_booking.hotels.index') }}"
                             href="{{ route('hotel_booking.hotels.index') }}">
@@ -110,7 +110,7 @@
                             <i class="fa fa-list"></i> Administrador de reservas
                         </a>
 
-                        <div class="dropdown-divider"></div> <!-- Línea divisora para separar los reportes -->
+                        <div class="dropdown-divider"></div>
                         
                         <a class="dropdown-item {{ active('hotel_booking.reports.discount_sheet') }}"
                             href="{{ route('hotel_booking.reports.discount_sheet') }}">
@@ -119,7 +119,7 @@
                     @endcanany
 
                 </div>
-        </li>
+        </li> -->
     @endif
 
 
