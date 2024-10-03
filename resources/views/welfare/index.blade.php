@@ -12,8 +12,8 @@
 
             <div class="alert alert-warning" role="alert" style="font-size: 22px; color: #856404; background-color: #fff3cd; border-color: #ffeeba;">
                 <strong>Módulo de reserva de cabañas</strong><br>
-                El módulo de reserva de cabañas se encuentra en mantención temporalmente. Lo anterior, con el fin de mejorar el servicio a nuestros socios y socias.
-                <br>Desde hoy toda reserva se realizará de forma presencial en Oficina de Bienestar Hospital o al teléfono Anexo
+                El módulo de reserva de cabañas se encuentra en mantención temporalmente. Lo anterior, con el fin de mejorar el servicio a nuestros socios y socias.<br><br>
+                Desde hoy toda reserva se realizará de forma presencial en Oficina de Bienestar Hospital o al teléfono Anexo
                 Minsal <b>576143</b> o otro <b>572-536143</b>.
             </div><br>
 
