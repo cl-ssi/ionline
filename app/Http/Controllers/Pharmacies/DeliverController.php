@@ -39,12 +39,12 @@ class DeliverController extends Controller
                                 ->orderBy('name','ASC')->get();
 
             $filter = $request->get('filter') ?? $destines->pluck('id')->toArray();
-            $filterDestine = function($query) use ($filter) {
+            $filterDestiny = function($query) use ($filter) {
                 $query->whereIn('id', (array) $filter);
             };
 
-            $pending_deliveries = Deliver::with('destine:id,name', 'product:id,name', 'document:id')
-                                        ->when($filter, function ($q) use ($filterDestine) {
+            $pending_deliveries = Deliver::with('destiny:id,name', 'product:id,name', 'document:id')
+                                        ->when($filter, function ($q) use ($filterDestiny) {
                                             $q->whereHas('destiny', $filterDestiny);
                                         })
                                         ->where('remarks', 'PENDIENTE')

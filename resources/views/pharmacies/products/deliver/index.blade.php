@@ -12,7 +12,7 @@
 	<form method="GET" action="{{route('pharmacies.products.deliver.index')}}" class="d-inline">
 	<select name="filter" onchange="this.form.submit()" class="selectpicker destiny" data-live-search="true" data-width="fit" data-style="btn btn-link">
 		<option value=" ">TODOS</option>
-		@foreach ($destinies as $destiny)
+		@foreach ($destines as $destiny)
 		<option value="{{$destiny->id}}" {{$destiny->id == $filter ? 'selected' : ''}}>{{$destiny->name}}</option>
 		@endforeach
 	</select>
