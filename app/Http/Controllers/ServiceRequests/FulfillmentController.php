@@ -117,13 +117,13 @@ class FulfillmentController extends Controller
                                           ->when($id != NULL, function ($q) use ($id) {
                                                 return $q->where('id',$id);
                                                })
-                                            //    ->when($establishment_id != null && $establishment_id != 0, function ($q) use ($establishment_id) {
-                                            //      return $q->where('establishment_id', $establishment_id);
-                                            //    })
-                                            //    ->when($establishment_id != null && $establishment_id == 0, function ($q) use ($establishment_id) {
-                                            //      return $q->whereNotIn('establishment_id',[1,12]);
-                                            //    })
-                                            ->where('establishment_id',$establishment_id)
+                                            // si es sst, se devuelve toda la info que no sea hetg ni hah.
+                                            ->when($establishment_id == 38, function ($q) {
+                                                return $q->whereNotIn('establishment_id', [1, 41]);
+                                            })
+                                            ->when($establishment_id != 38, function ($q) use ($establishment_id) {
+                                                return $q->where('establishment_id',$establishment_id);
+                                            })
                                            // ->where('program_contract_type','Mensual')
                                            ->paginate(100);
                                            // ->get();
