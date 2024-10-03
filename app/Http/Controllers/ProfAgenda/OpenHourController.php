@@ -299,7 +299,7 @@ class OpenHourController extends Controller
             foreach (CarbonPeriod::create($start_date, $request->duration . " minutes", $end_date)->excludeEndDate() as $key => $hour) {
                 $newOpenHour = new OpenHour();
                 $newOpenHour->start_date = $date->format('Y-m-d') . " " . $hour->format('H:i');
-                $newOpenHour->end_date = Carbon::parse($date->format('Y-m-d') . " " . $hour->format('H:i'))->addMinutes($request->duration)->format('Y-m-d H:i');
+                $newOpenHour->end_date = Carbon::parse($date->format('Y-m-d') . " " . $hour->format('H:i'))->addMinutes((int)$request->duration)->format('Y-m-d H:i');
                 $newOpenHour->profesional_id = $request->profesional_id;
                 $newOpenHour->profession_id = $request->profession_id; 
                 $newOpenHour->activity_type_id = $request->activity_type_id;
