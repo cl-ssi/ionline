@@ -1018,7 +1018,7 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
         Route::get('/index/{type}', [ServiceRequestController::class, 'index'])->name('index');
         Route::get('/create', [ServiceRequestController::class, 'create'])->name('create');
         Route::post('/store', [ServiceRequestController::class, 'store'])->name('store');
-        Route::get('/{serviceRequest}/edit', [ServiceRequestController::class, 'edit'])->name('edit');
+        Route::get('/{serviceRequest}/edit', [ServiceRequestController::class, 'edit'])->name('edit')->middleware('can:update,serviceRequest');
         Route::put('/{serviceRequest}/update', [ServiceRequestController::class, 'update'])->name('update');
         Route::delete('{serviceRequest}/destroy', [ServiceRequestController::class, 'destroy'])->name('destroy');
 
