@@ -1070,7 +1070,7 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
             Route::get('{fulfillment}/destroy', [FulfillmentController::class, 'destroy'])->name('destroy');
             Route::get('{fulfillment}/add_remainder', [FulfillmentController::class, 'add_remainder'])->name('add_remainder');
             // fin descomposición
-            Route::get('/edit/{serviceRequest}', [FulfillmentController::class, 'edit_fulfillment'])->name('edit');
+            Route::get('/edit/{serviceRequest}', [FulfillmentController::class, 'edit_fulfillment'])->name('edit')->middleware('can:update,serviceRequest');
             Route::get('/save-approbed-fulfillment/{serviceRequest}', [FulfillmentController::class, 'save_approbed_fulfillment'])->name('save_approbed_fulfillment');
             Route::get('/confirm-fulfillment-by-sign-position/{Fulfillment}/{approbed?}', [FulfillmentController::class, 'confirmFulfillmentBySignPosition'])->name('confirm_Fulfillment_By_SignPosition');
             Route::get('/approval-activation/{fulfillment}', [FulfillmentController::class, 'ApprovalActivation'])->name('approval-activation');
