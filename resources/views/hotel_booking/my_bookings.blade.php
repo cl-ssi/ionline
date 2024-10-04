@@ -21,6 +21,7 @@
 <table class="table table-striped table-sm table-bordered">
 	<thead>
 		<tr>
+            <th>ID</th>
             <th>Recinto</th>
             <th>Hospedaje</th>
 			<th>Entrada</th>
@@ -36,6 +37,7 @@
         @if(!$roomBooking->status)
 		<tr style="background-color:#E3B4B4" class="sub-container">
         @endif
+            <td nowrap>{{ $roomBooking->id}}</td>
             <td nowrap>{{ $roomBooking->room->hotel->name}}</td>
             <td nowrap>{{ $roomBooking->room->identifier}}</td>
 			<td nowrap>{{ $roomBooking->start_date->format('Y-m-d') }}</td>
@@ -46,7 +48,7 @@
             <td nowrap>
                 {{ $roomBooking->status == "Cancelado" ? 'Anulado' : $roomBooking->status }}  
             </td>
-            <td nowrap class="display: flex; flex-direction: row;">
+            <td nowrap style="display: flex; flex-direction: row; align-items: center; gap: 5px;">
                 <!-- solo si está reservado se deja modificar el tipo de pago -->
                 @if($roomBooking->status == "Reservado")
                     @livewire('hotel-booking.change-payment-type', ['roomBooking' => $roomBooking])

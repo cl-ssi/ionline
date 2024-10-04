@@ -128,7 +128,7 @@ class Calendar extends Component
         
         // marca los días ya ocupados
         $rooms_array = $this->configurations->pluck('room_id')->toArray();
-        $roomBookings = RoomBooking::whereIn('status',['Confirmado','Bloqueado'])
+        $roomBookings = RoomBooking::whereIn('status',['Reservado','Confirmado','Bloqueado'])
                                     ->whereIn('room_id',$rooms_array)
                                     ->where(function($query) {
                                         $query->whereBetween('start_date', [$this->startOfMonth, $this->endOfMonth])

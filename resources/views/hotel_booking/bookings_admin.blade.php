@@ -17,27 +17,27 @@
 @if($roomBookings)
 
 <form method="GET" class="form-horizontal" action="{{ route('hotel_booking.booking_admin') }}" id="filter-form">
-    @foreach(request()->except('status') as $key => $value)
+    @foreach(request()->except('status', 'funcionario') as $key => $value)
         <input type="hidden" name="{{ $key }}" value="{{ $value }}">
     @endforeach
+
     <div class="row mb-3">
-        <div class="col-md-2">
-            <input type="checkbox" id="reservado" name="status[]" value="Reservado" 
-                   {{ in_array('Reservado', request('status', ['Reservado'])) ? 'checked' : '' }}
-                   onchange="document.getElementById('filter-form').submit()">
-            <label for="reservado">Reservado</label>
+        <div class="col-md-4">
+            <label for="status">Estado de la Reserva</label>
+            <select id="status" name="status" class="form-control">
+                <option value="Todos" {{ request('status', 'Reservado') == 'Todos' ? 'selected' : '' }}>Todos</option>
+                <option value="Reservado" {{ request('status', 'Reservado') == 'Reservado' ? 'selected' : '' }}>Reservado</option>
+                <option value="Confirmado" {{ request('status', 'Reservado') == 'Confirmado' ? 'selected' : '' }}>Confirmado</option>
+                <option value="Cancelado" {{ request('status', 'Reservado') == 'Cancelado' ? 'selected' : '' }}>Anulado</option>
+            </select>
+        </div>
+        <div class="col-md-4">
+            <label for="funcionario">Funcionario</label>
+            <input type="text" id="funcionario" name="funcionario" value="{{ request('funcionario', '') }}" class="form-control">
         </div>
         <div class="col-md-2">
-            <input type="checkbox" id="confirmado" name="status[]" value="Confirmado" 
-                   {{ in_array('Confirmado', request('status', [])) ? 'checked' : '' }}
-                   onchange="document.getElementById('filter-form').submit()">
-            <label for="confirmado">Confirmado</label>
-        </div>
-        <div class="col-md-2">
-            <input type="checkbox" id="cancelado" name="status[]" value="Cancelado" 
-                   {{ in_array('Cancelado', request('status', [])) ? 'checked' : '' }}
-                   onchange="document.getElementById('filter-form').submit()">
-            <label for="cancelado">Anulado</label>
+            <label for="funcionario"><br></label>
+            <button type="submit" class="btn btn-primary form-control">Filtrar</button>
         </div>
     </div>
 </form>
@@ -77,8 +77,14 @@
                     <td nowrap>
                         {{ $roomBooking->status != "Cancelado" ? $roomBooking->status : "Anulado" }}
                     </td>
-                    <td nowrap class="display: flex; flex-direction: row;">
-                        {{ $roomBooking->payment_type }}
+                    <td nowrap style="display: flex; flex-direction: row; align-items: center; gap: 5px;">
+                        <!-- {{ $roomBooking->payment_type }} -->
+                        @if($roomBooking->status == "Reservado")
+                            @livewire('hotel-booking.change-payment-type', ['roomBooking' => $roomBooking])
+                        @else
+                            {{ $roomBooking->payment_type }}
+                        @endif
+
                         @if($roomBooking->payment_type == "Transferencia")
                             @if($roomBooking->files->count() != 0)
                                 @foreach($roomBooking->files as $key => $file) 

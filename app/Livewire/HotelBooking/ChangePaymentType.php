@@ -4,6 +4,8 @@ namespace App\Livewire\HotelBooking;
 
 use Livewire\Component;
 use App\Models\HotelBooking\RoomBooking;
+use App\Notifications\HotelBooking\NewBooking;
+use App\Jobs\HotelBooking\ExecuteVerificationAfterFiveHours;
 
 class ChangePaymentType extends Component
 {
@@ -33,7 +35,18 @@ class ChangePaymentType extends Component
         $this->roomBooking->payment_type = $this->payment_type;
         $this->roomBooking->save();
 
-        return redirect()->route('hotel_booking.my_bookings'); // Reemplaza 'desired.route' con la ruta a la que deseas redirigir.
+        if($this->roomBooking->payment_type == "Transferencia"){
+
+            if ($this->roomBooking->user && $this->roomBooking->user->email != null) {
+                // Notificar al usuario sobre el cambio a Transferencia
+                $this->roomBooking->user->notify(new NewBooking($this->roomBooking));
+            }
+
+            ExecuteVerificationAfterFiveHours::dispatch($this->roomBooking)->delay(now()->addHours(5));
+            session()->flash('success', 'Se debe subir comprobante de transferencia. Tienes 5 horas para hacerlo, de lo contrario, la reserva será anulada.');
+        }
+
+        return redirect()->route('hotel_booking.my_bookings');
     }
 
     public function render()

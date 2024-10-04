@@ -117,7 +117,7 @@ class HotelBookingController extends Controller
             && $flag_not_configurated == 0){
 
                 $roomBookings = RoomBooking::where('room_id',$bookingConfiguration->room_id)
-                                        ->whereIn('status',['Confirmado','Bloqueado'])
+                                        ->whereIn('status',['Reservado','Confirmado','Bloqueado'])
                                         ->get();
 
                 // se verifica si dia actuales son compatible con días reservados/bloqueados
@@ -154,26 +154,39 @@ class HotelBookingController extends Controller
     }
 
     public function my_bookings(){
-        $roomBookings = RoomBooking::where('user_id',auth()->user()->id)->paginate(50);
+        $roomBookings = RoomBooking::where('user_id',auth()->user()->id)->orderBy('id','DESC')->paginate(50);
         return view('hotel_booking.my_bookings',compact('roomBookings'));
     }
 
     public function booking_admin(Request $request){
         $room = null;
         $roomBookings = null;
-
-        // Validar si el parámetro 'status' existe en la solicitud
-        $statuses = $request->has('status') ? $request->status : ['Reservado'];
-
+    
+        // Obtener el estado, por defecto 'Reservado'
+        $status = $request->get('status', 'Reservado');
+    
         if($request->room_id){
-            $room = Room::find($request->room_id);
-            $roomBookings = RoomBooking::where('room_id',$request->room_id)
-                                        ->whereIn('status',$statuses)
-                                        ->paginate(50);
+            $query = RoomBooking::where('room_id', $request->room_id);
+    
+            // Aplicar filtro solo si el estado no es "Todos"
+            if ($status !== 'Todos') {
+                $query->where('status', $status);
+            }
+    
+            // Filtrar por funcionario si se proporciona
+            if ($request->funcionario) {
+                $query->whereHas('user', function($q) use ($request) {
+                    $q->where('name', 'like', '%' . $request->funcionario . '%');
+                });
+            }
+    
+            $roomBookings = $query->paginate(50);
         }
         
-        return view('hotel_booking.bookings_admin',compact('roomBookings','room'));
+        return view('hotel_booking.bookings_admin', compact('roomBookings', 'room'));
     }
+    
+    
 
     public function booking_cancelation(Request $request, RoomBooking $roomBooking){
         $roomBooking->status = "Cancelado";

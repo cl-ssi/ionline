@@ -47,17 +47,17 @@ class BookingCancelation extends Notification implements ShouldQueue
      */
     public function toMail($notifiable)
     {
-        $cc_mails = explode(', ', Parameter::get('welfare: cabañas','correos solicitudes'));
+        $cc_mails = explode(', ', Parameter::get('welfare: cabañas','correos anulación'));
 
         $roomBooking = $this->roomBooking;
         return (new MailMessage)
                     ->level('info')
                     ->replyTo($cc_mails)
-                    ->subject('Se ha cancelado una reserva')
+                    ->subject('Se ha anulado una reserva')
                     ->greeting('Hola ' . $notifiable->shortName)
                     ->line(new HtmlString('Se ha <b>ANULADO</b> una reserva en <b>' . $roomBooking->room->identifier . '</b> en el complejo <b>' . $roomBooking->room->hotel->name . '</b>.'))
                     ->line(new HtmlString('Motivo: ' . $roomBooking->cancelation_observation))
-                    ->line(new HtmlString('Para conocer los detalles de la cancelación, ingrese al módulo de reservas o bien contácte al área de bienestar.'))
+                    ->line(new HtmlString('Para conocer los detalles de la anulación, ingrese al módulo de reservas o bien contácte al área de bienestar.'))
                     ->cc($cc_mails)
                     ->salutation('Saludos cordiales');
     }

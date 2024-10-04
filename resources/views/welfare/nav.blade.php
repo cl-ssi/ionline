@@ -66,7 +66,8 @@
                 </div>
         </li>
 
-        <!-- <li class="nav-item dropdown ">
+        @canany(['welfare: hotel booking administrator'])
+        <li class="nav-item dropdown ">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <i class="fa fa-bed"></i> Reserva de cabañas </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -119,7 +120,8 @@
                     @endcanany
 
                 </div>
-        </li> -->
+        </li>
+        @endcanany
     @endif
 
 
