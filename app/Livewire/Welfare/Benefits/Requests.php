@@ -30,11 +30,11 @@ class Requests extends Component
 
     public $requested_amount;
     public $email;
-    public $banks;
-    public $bankaccount;
-    public $bank_id;
-    public $account_number;
-    public $pay_method;
+    // public $banks;
+    // public $bankaccount;
+    // public $bank_id;
+    // public $account_number;
+    // public $pay_method;
     public $user_id;
     public $newFile;
     public $showFileInput = false;
@@ -45,10 +45,10 @@ class Requests extends Component
         'subsidy.recipient' => 'required',
         'user_id' => 'required|numeric',
         'requested_amount' => 'required|numeric',
-        'email' => 'required|email',
-        'account_number' => 'required|regex:/^\d+$/',
-        'bank_id' => 'required|integer',
-        'pay_method' => 'required|string',
+        // 'email' => 'required|email',
+        // 'account_number' => 'required|regex:/^\d+$/',
+        // 'bank_id' => 'required|integer',
+        // 'pay_method' => 'required|string',
         'subsidy_id' => 'required|integer',
         'files.*' => 'nullable|file|mimes:pdf|max:5120', // Maximum of 5MB
     ];
@@ -57,14 +57,14 @@ class Requests extends Component
         'user_id.required' => 'Debe seleccionar un funcionario',
         'requested_amount.required' => 'Debe ingresar un monto a solicitar',
         'requested_amount.numeric' => 'El monto solicitado debe ser un número.',
-        'email.required' => 'El correo electrónico es obligatorio.',
-        'email.email' => 'Debe ingresar un correo electrónico válido.',
-        'account_number.required' => 'El número de cuenta es obligatorio.',
-        'account_number.regex' => 'Debe ingresar solo números en el número de cuenta, ej: 01300239397.',
-        'bank_id.required' => 'El ID del banco es obligatorio.',
-        'bank_id.integer' => 'El ID del banco debe ser un número entero.',
-        'pay_method.required' => 'El método de pago es obligatorio.',
-        'pay_method.string' => 'El método de pago debe ser una cadena de texto.',
+        // 'email.required' => 'El correo electrónico es obligatorio.',
+        // 'email.email' => 'Debe ingresar un correo electrónico válido.',
+        // 'account_number.required' => 'El número de cuenta es obligatorio.',
+        // 'account_number.regex' => 'Debe ingresar solo números en el número de cuenta, ej: 01300239397.',
+        // 'bank_id.required' => 'El ID del banco es obligatorio.',
+        // 'bank_id.integer' => 'El ID del banco debe ser un número entero.',
+        // 'pay_method.required' => 'El método de pago es obligatorio.',
+        // 'pay_method.string' => 'El método de pago debe ser una cadena de texto.',
         'subsidy_id.required' => 'El ID del subsidio es obligatorio.',
         'subsidy_id.integer' => 'El ID del subsidio debe ser un número entero.',
         'files.*.file' => 'Cada archivo debe ser un archivo válido.',
@@ -80,22 +80,21 @@ class Requests extends Component
         $this->subsidies = collect();
         $this->subsidy = new Subsidy();
 
-        $this->banks = Bank::all();
-        $this->bankaccount = auth()->user()->bankAccount;
+        // $this->banks = Bank::all();
+        // $this->bankaccount = auth()->user()->bankAccount;
+        // $this->email = auth()->user()->email;
 
-        $this->email = auth()->user()->email;
-
-        if($this->bankaccount){
-            if ($this->bankaccount->bank) {
-              $this->bank_id = $this->bankaccount->bank_id;
-              $this->account_number = $this->bankaccount->number;
-              $this->pay_method = $this->bankaccount->type;
-            }
-        }else{
-            $this->bank_id = null;
-            $this->account_number = null;
-            $this->pay_method = null;
-        }
+        // if($this->bankaccount){
+        //     if ($this->bankaccount->bank) {
+        //       $this->bank_id = $this->bankaccount->bank_id;
+        //       $this->account_number = $this->bankaccount->number;
+        //       $this->pay_method = $this->bankaccount->type;
+        //     }
+        // }else{
+        //     $this->bank_id = null;
+        //     $this->account_number = null;
+        //     $this->pay_method = null;
+        // }
     }
 
     protected $listeners = ['loadUserData' => 'loadUserData'];
@@ -103,22 +102,22 @@ class Requests extends Component
     public function loadUserData(User $User){
         $this->user_id = $User->id;
 
-        $this->banks = Bank::where('active_agreement',true)->get();
-        $this->bankaccount = $User->bankAccount;
+        // $this->banks = Bank::where('active_agreement',true)->get();
+        // $this->bankaccount = $User->bankAccount;
 
-        $this->email = $User->email;
+        // $this->email = $User->email;
 
-        if($this->bankaccount){
-            if ($this->bankaccount->bank) {
-              $this->bank_id = $this->bankaccount->bank_id;
-              $this->account_number = $this->bankaccount->number;
-              $this->pay_method = $this->bankaccount->type;
-            }
-        }else{
-            $this->bank_id = null;
-            $this->account_number = null;
-            $this->pay_method = null;
-        }
+        // if($this->bankaccount){
+        //     if ($this->bankaccount->bank) {
+        //       $this->bank_id = $this->bankaccount->bank_id;
+        //       $this->account_number = $this->bankaccount->number;
+        //       $this->pay_method = $this->bankaccount->type;
+        //     }
+        // }else{
+        //     $this->bank_id = null;
+        //     $this->account_number = null;
+        //     $this->pay_method = null;
+        // }
     }
 
     public function showCreateForm()
@@ -154,23 +153,23 @@ class Requests extends Component
     {
         $this->validate([
             'requested_amount' => 'required|numeric',
-            'email' => 'required|email', // Asegúrate de validar el formato del correo electrónico
-            'account_number' => 'required|regex:/^\d+$/', // Verifica que contiene solo dígitos
-            'bank_id' => 'required|integer',
-            'pay_method' => 'required|string',
+            // 'email' => 'required|email', // Asegúrate de validar el formato del correo electrónico
+            // 'account_number' => 'required|regex:/^\d+$/', // Verifica que contiene solo dígitos
+            // 'bank_id' => 'required|integer',
+            // 'pay_method' => 'required|string',
             'subsidy_id' => 'required|integer',
             'files.*' => 'nullable|file|mimes:pdf|max:5120', // Maximum of 5MB
         ], [
             'requested_amount.required' => 'El monto solicitado es obligatorio.',
             'requested_amount.numeric' => 'El monto solicitado debe ser un número.',
-            'email.required' => 'El correo electrónico es obligatorio.',
-            'email.email' => 'Debe ingresar un correo electrónico válido.',
-            'account_number.required' => 'El número de cuenta es obligatorio.',
-            'account_number.regex' => 'Debe ingresar solo números en el número de cuenta, ej: 01300239397.',
-            'bank_id.required' => 'El ID del banco es obligatorio.',
-            'bank_id.integer' => 'El ID del banco debe ser un número entero.',
-            'pay_method.required' => 'El método de pago es obligatorio.',
-            'pay_method.string' => 'El método de pago debe ser una cadena de texto.',
+            // 'email.required' => 'El correo electrónico es obligatorio.',
+            // 'email.email' => 'Debe ingresar un correo electrónico válido.',
+            // 'account_number.required' => 'El número de cuenta es obligatorio.',
+            // 'account_number.regex' => 'Debe ingresar solo números en el número de cuenta, ej: 01300239397.',
+            // 'bank_id.required' => 'El ID del banco es obligatorio.',
+            // 'bank_id.integer' => 'El ID del banco debe ser un número entero.',
+            // 'pay_method.required' => 'El método de pago es obligatorio.',
+            // 'pay_method.string' => 'El método de pago debe ser una cadena de texto.',
             'subsidy_id.required' => 'El ID del subsidio es obligatorio.',
             'subsidy_id.integer' => 'El ID del subsidio debe ser un número entero.',
             'files.*.file' => 'Cada archivo debe ser un archivo válido.',
@@ -217,17 +216,17 @@ class Requests extends Component
 
         // guarda email
         $user = User::updateOrCreate(
-            ['id' => $this->user_id],
-            ['email' => $this->email]
+            ['id' => $this->user_id]
+            // ['email' => $this->email]
         );
 
-        // guarda datos bancarios
-        $userBankAccount = UserBankAccount::updateOrCreate(
-            ['user_id' => $this->user_id],
-            ['bank_id' => $this->bank_id,
-            'number' => $this->account_number,
-            'type' => $this->pay_method]
-        );
+        // // guarda datos bancarios
+        // $userBankAccount = UserBankAccount::updateOrCreate(
+        //     ['user_id' => $this->user_id],
+        //     ['bank_id' => $this->bank_id,
+        //     'number' => $this->account_number,
+        //     'type' => $this->pay_method]
+        // );
 
         // envia notificación
         if($request->applicant){
