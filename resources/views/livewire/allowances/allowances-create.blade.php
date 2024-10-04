@@ -22,16 +22,14 @@
                     'emit_name'     => 'searchedUser',
                     'user'          => ($allowanceToEdit) ? $allowanceToEdit->userAllowance : $allowanceToReplicate->userAllowance,
                     'restrict'      => $restrict
-                ],
-                key('edit'))
+                ])
             @else
                 @livewire('search-select-user', [
                     'selected_id'   => 'user_allowance_id',
                     'required'      => 'required',
                     'emit_name'     => 'searchedUser',
                     'restrict'      => $restrict
-                ],
-                key('create'))
+                ])
             @endif
         </fieldset>
         
