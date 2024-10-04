@@ -128,7 +128,7 @@
         HOSPITAL DR. ERNESTO TORRES GALDAMES<br>
     @elseif($fulfillment->serviceRequest->responsabilityCenter->establishment_id == 38)
         SERVICIO SALUD TARAPACÁ<br>
-    @elseif($fulfillment->serviceRequest->responsabilityCenter->establishment_id == 38)
+    @elseif($fulfillment->serviceRequest->responsabilityCenter->establishment_id == 41)
         HOSPITAL DE ALTO HOSPICIO<br>
     @endif
     SUBDIRECCIÓN DE GESTIÓN Y DESARROLLO DE LAS PERSONAS
