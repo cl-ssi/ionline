@@ -10,15 +10,9 @@ use App\Models\Parameters\PurchaseMechanism;
 class PassengerRequest extends Component
 {
     public $edit, $tittle;
-    //public $items, $key;
 
     /* Mantenedores */
     public $lstPurchaseMechanism;
-
-
-    // public $program, $justification, $run, $dv, $names, $fathersName, $mothersName, $birthDay,
-    //        $telephoneNumber, $email, $trip, $origin, $destiny, $departureDate, $fromDate,
-    //        $baggage, $passengerType;
 
     public $searchedPassenger;
 
@@ -35,26 +29,8 @@ class PassengerRequest extends Component
 
     //Para Validar
 
-    /*
-    protected $rules = [
-        'dv'                =>  'required',
-        'name'              =>  'required',
-        'fathers_family'    =>  'required',
-        'mothers_family'    =>  'required',
-        'birthday'          =>  'required',
-        'phone_number'      =>  'required|integer',
-        'email'             =>  'required|email',
-        'round_trip'        =>  'required',
-        'origin'            =>  'required',
-        'destination'       =>  'required',
-        'departure_date'    =>  'required',
-        'return_date'       =>  'exclude_if:round_trip,one-way only|required',
-        'baggage'           =>  'required',
-        'unitValue'         =>  'required',
-    ];
-    */
-
     protected $messages = [
+        'passengerType.required'    => 'Campo Tipo de Pasajero es obligatorio.',
         'run.required'              => 'Campo Run es obligatorio.',
         'run.integer'               => 'Run debe ser número entero sin puntos ni dígito verificador.',
         'run.min'                   => 'Run debe ser mayor o igual a 1.',
@@ -79,25 +55,37 @@ class PassengerRequest extends Component
     ];
 
     public function addPassenger(){
-        $validatedData = $this->validate([
-            ($this->passengerType == "internal") ? 'run' : 'run'    => ($this->passengerType == "internal") ? 'required|integer|min:1' : '',
-            ($this->passengerType == "internal") ? 'dv' : 'dv'      => ($this->passengerType == "internal") ? 'required' : '',
-            ($this->passengerType == "external") ? 'document_type' : 'document_type'        => ($this->passengerType == "external") ? 'required' : '',
-            ($this->passengerType == "external") ? 'document_number' : 'document_number'    => ($this->passengerType == "external") ? 'required' : '',
-            'name'              =>  'required',
-            'fathers_family'    =>  'required',
-            ($this->passengerType == "internal") ? 'mothers_family' : 'mothers_family' =>  ($this->passengerType == "internal") ? 'required' : null,
-            'birthday'          =>  'required',
-            'phone_number'      =>  'required|integer',
-            'email'             =>  'required|email',
-            'round_trip'        =>  'required',
-            'origin'            =>  'required',
-            'destination'       =>  'required',
-            'departure_date'    =>  'required',
-            'return_date'       =>  'exclude_if:round_trip,one-way only|required',
-            'baggage'           =>  'required',
-            'unitValue'         =>  'required',
-        ]);
+        $rules = [
+            'passengerType'  => 'required',
+            'name'           => 'required',
+            'fathers_family' => 'required',
+            'birthday'       => 'required',
+            'phone_number'   => 'required|integer',
+            'email'          => 'required|email',
+            'round_trip'     => 'required',
+            'origin'         => 'required',
+            'destination'    => 'required',
+            'departure_date' => 'required',
+            'baggage'        => 'required',
+            'unitValue'      => 'required',
+        ];
+    
+        if ($this->passengerType == "internal") {
+            $rules['run'] = 'required|integer|min:1';
+            $rules['dv'] = 'required';
+            $rules['mothers_family'] = 'required';
+        }
+    
+        if ($this->passengerType == "external") {
+            $rules['document_type'] = 'required';
+            $rules['document_number'] = 'required';
+        }
+    
+        if ($this->round_trip != 'one-way only') {
+            $rules['return_date'] = 'required';
+        }
+    
+        $validatedData = $this->validate($rules);
 
         // $this->validate();
         $this->passengers[]=[
@@ -131,7 +119,7 @@ class PassengerRequest extends Component
     {
         $this->edit  = false;
         $this->resetErrorBag();
-        $this->document_type=$this->document_number=$this->run=$this->run=$this->dv=$this->name=
+        $this->passengerType=$this->document_type=$this->document_number=$this->run=$this->run=$this->dv=$this->name=
         $this->fathers_family=$this->mothers_family=$this->birthday=$this->phone_number=$this->email=
         $this->round_trip=$this->origin=$this->destination=$this->departure_date=
         $this->return_date=$this->baggage=$this->unitValue = "";
