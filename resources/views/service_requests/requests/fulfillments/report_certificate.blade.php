@@ -125,9 +125,11 @@
 
 <div class="siete" style="padding-top: 3px;">
     @if($fulfillment->serviceRequest->responsabilityCenter->establishment_id == 1)
-      HOSPITAL DR. ERNESTO TORRES GALDAMES<br>
-    @else
-      SERVICIO SALUD TARAPACÁ<br>
+        HOSPITAL DR. ERNESTO TORRES GALDAMES<br>
+    @elseif($fulfillment->serviceRequest->responsabilityCenter->establishment_id == 38)
+        SERVICIO SALUD TARAPACÁ<br>
+    @elseif($fulfillment->serviceRequest->responsabilityCenter->establishment_id == 38)
+        HOSPITAL DE ALTO HOSPICIO<br>
     @endif
     SUBDIRECCIÓN DE GESTIÓN Y DESARROLLO DE LAS PERSONAS
 </div>
