@@ -12,9 +12,12 @@ class CreateAttendanceRecord extends CreateRecord
 
     protected function mutateFormDataBeforeCreate(array $data): array
     {
+        // Reemplazado por el Observer
         $data['user_id'] = auth()->id();
         $data['establishment_id'] = auth()->user()->establishment_id;
+        $data['record_at'] = now();
     
         return $data;
+
     }
 }

@@ -34,10 +34,11 @@ class AttendanceRecordResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\DateTimePicker::make('record_at')
+                // Este campo no se almacena, solo informativo, en el AttendanceRecordObserver se asigna el valor
+                Forms\Components\DateTimePicker::make('current_time')
                     ->label('Fecha y hora')
                     ->default(now())
-                    ->required(),
+                    ->disabled(),
                 Forms\Components\Select::make('type')
                     ->label('Tipo')
                     ->options([
@@ -79,9 +80,9 @@ class AttendanceRecordResource extends Resource
                     ->sortable()
                     ->description(description: fn (AttendanceRecord $record): string => $record->rrhhUser->shortName ?? '')
                     ->visible(condition: fn (): bool => auth()->user()->canAny(['be god','Attendance records: admin'])),
-                // Tables\Columns\TextColumn::make('establishment.name')
-                //     ->numeric()
-                //     ->sortable(),
+                Tables\Columns\TextColumn::make('establishment.name')
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('created_at')
                     ->label('Fecha de creación')
                     ->dateTime()
@@ -94,10 +95,13 @@ class AttendanceRecordResource extends Resource
                 // Tables\Columns\TextColumn::make('deleted_at')
                 //     ->dateTime()
                 //     ->sortable()
-                // ->toggleable(isToggledHiddenByDefault: true),
+                //     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
+                Tables\Filters\TernaryFilter::make('sirh_at')
+                    ->label('Sirh OK')
+                    ->nullable()
+                    ->visible(fn () => auth()->user()->canAny(['be god','Attendance records: admin'])),
             ])
             ->actions([
                 Tables\Actions\Action::make('markAsProcessed')
@@ -108,10 +112,11 @@ class AttendanceRecordResource extends Resource
                         $record->save();
                     })
                     ->requiresConfirmation()
-                    ->visible(fn ($record) => is_null($record->sirh_at)),
-                Tables\Actions\EditAction::make(),
+                    ->visible(fn ($record) => is_null($record->sirh_at) && auth()->user()->canAny(['be god','Attendance records: admin'])),
+                Tables\Actions\EditAction::make()
+                    ->visible(fn () => auth()->user()->canAny(['be god'])),
                 Tables\Actions\DeleteAction::make()
-                    ->visible(fn ($record) => $record->created_at->gt(now()->subHours(24))),
+                    ->visible(fn () => auth()->user()->canAny(['be god'])),
             ])
             ->bulkActions([
                 // Tables\Actions\BulkActionGroup::make([
@@ -128,7 +133,8 @@ class AttendanceRecordResource extends Resource
                             }
                         });
                     })
-                    ->requiresConfirmation(),
+                    ->requiresConfirmation()
+                    ->visible(fn () => auth()->user()->canAny(['be god','Attendance records: admin'])),
             ])
             ->defaultSort('created_at', 'desc')
             ->checkIfRecordIsSelectableUsing(callback: fn (AttendanceRecord $record): bool => $record->sirh_at === null);
@@ -145,8 +151,8 @@ class AttendanceRecordResource extends Resource
     {
         return [
             'index' => Pages\ListAttendanceRecords::route('/'),
-            'create' => Pages\CreateAttendanceRecord::route('/create'),
-            'edit' => Pages\EditAttendanceRecord::route('/{record}/edit'),
+            // 'create' => Pages\CreateAttendanceRecord::route('/create'),
+            // 'edit' => Pages\EditAttendanceRecord::route('/{record}/edit'),
         ];
     }
 }

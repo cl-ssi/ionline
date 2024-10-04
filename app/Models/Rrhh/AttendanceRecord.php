@@ -4,11 +4,14 @@ namespace App\Models\Rrhh;
 
 use App\Models\Establishment;
 use App\Models\User;
+use App\Observers\Rrhh\AttendanceRecordObserver;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+#[ObservedBy([AttendanceRecordObserver::class])]
 class AttendanceRecord extends Model
 {
     use HasFactory, SoftDeletes;

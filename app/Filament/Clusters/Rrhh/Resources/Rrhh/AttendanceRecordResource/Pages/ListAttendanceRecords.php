@@ -3,7 +3,9 @@
 namespace App\Filament\Clusters\Rrhh\Resources\Rrhh\AttendanceRecordResource\Pages;
 
 use App\Filament\Clusters\Rrhh\Resources\Rrhh\AttendanceRecordResource;
+use App\Filament\Exports\Rrhh\AttendanceRecordExporter;
 use Filament\Actions;
+use Filament\Actions\Exports\Enums\ExportFormat;
 use Filament\Resources\Components\Tab;
 use Filament\Resources\Pages\ListRecords;
 use Illuminate\Database\Eloquent\Builder;
@@ -16,6 +18,14 @@ class ListAttendanceRecords extends ListRecords
     {
         return [
             Actions\CreateAction::make(),
+            Actions\ExportAction::make()
+                ->label('Exportar registros')
+                ->exporter(AttendanceRecordExporter::class)
+                ->formats([
+                    ExportFormat::Xlsx,
+                ])
+                ->visible(fn () => auth()->user()->canAny(['be god', 'Attendance records: admin']))
+                ->columnMapping(false),
         ];
     }
 
