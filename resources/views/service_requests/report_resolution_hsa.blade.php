@@ -303,7 +303,7 @@
         </p>
       @elseif($ServiceRequest->responsabilityCenter->establishment_id == 41)
         <p class="justify">
-          En Iquique, a {{$inputs['Fecha']}}, comparece por una parte el <b>HOSPITAL DE ALTO HOSPICIO</b>, persona jurídica de derecho público, RUT. 61.606.100-3, con domicilio en calle Aníbal
+          En Iquique, a {{$inputs['Fecha']}}, comparece por una parte el <b>HOSPITAL DE ALTO HOSPICIO</b>, persona jurídica de derecho público, RUT. 65.228.694-1, con domicilio en calle
           Alemania N°3240 de la comuna de Alto hospicio, representado por su {{ App\Models\Rrhh\Authority::getAuthorityFromDate(246,now(),['manager'])->position }} <b>{{App\Models\Rrhh\Authority::getAuthorityFromDate(246,now(),['manager'])->user->FullNameUpper}}</b> chileno, Cédula Nacional de Identidad N°{{App\Models\Rrhh\Authority::getAuthorityFromDate(246,now(),['manager'])->user->runFormat()}}, del mismo domicilio del servicio público que representa, en
           adelante , "{{ App\Models\Rrhh\Authority::getAuthorityFromDate(246,now(),['manager'])->position }} del Hospital de Alto hospicio", y por la otra don <b>{{$ServiceRequest->employee->getFullNameAttribute()}}</b>@if($ServiceRequest->profession), {{$ServiceRequest->profession->name}}@endif, RUT:{{$ServiceRequest->employee->id}}-{{$ServiceRequest->employee->dv}}, chileno,
           con domicilio en {{$ServiceRequest->address}}, de la ciudad de {{$ServiceRequest->employee->commune->name}}, en adelante “El Profesional” y exponen lo siguiente:
