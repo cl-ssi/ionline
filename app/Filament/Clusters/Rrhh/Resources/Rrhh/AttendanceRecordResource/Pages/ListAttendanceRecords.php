@@ -25,8 +25,7 @@ class ListAttendanceRecords extends ListRecords
                     ExportFormat::Xlsx,
                 ])
                 ->visible(fn () => auth()->user()->canAny(['be god', 'Attendance records: admin']))
-                ->columnMapping(false)
-                ->fileDisk('local'),
+                ->columnMapping(false),
         ];
     }
 
