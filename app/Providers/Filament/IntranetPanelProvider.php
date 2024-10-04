@@ -70,6 +70,7 @@ class IntranetPanelProvider extends PanelProvider
                 GravatarPlugin::make(),
                 EnvironmentIndicatorPlugin::make()
                     ->visible(visible: fn (): bool|string => app()->environment('local')),
-            ]);
+            ])
+            ->databaseNotifications();
     }
 }
