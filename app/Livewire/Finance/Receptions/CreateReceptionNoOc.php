@@ -299,7 +299,7 @@ class CreateReceptionNoOc extends Component
 
         if($user_id OR $this->signer_id) {
             $this->approvals[$position]['sent_to_user_id'] = $user_id ?? $this->signer_id;
-            $this->approvals[$position]['signerShortName'] = User::find($user_id ?? $this->signer_id)->shortName;
+            $this->approvals[$position]['signerShortName'] = (User::find($user_id) ?? $this->signer_id)->shortName;
         }
         else if($this->signer_ou_id) {
             $this->approvals[$position]['sent_to_ou_id']   = $this->signer_ou_id;
