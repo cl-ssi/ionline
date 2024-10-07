@@ -233,7 +233,7 @@ class CreateReceptionNoOc extends Component
 
         if( array_key_exists('sent_to_user_id', end($approvalsOrderedByPriority) ) ) {
             $this->reception['responsable_id'] = end($approvalsOrderedByPriority)['sent_to_user_id'];
-            $this->reception['responsable_ou_id'] = User::find($this->reception['responsable_id'])->organizational_unit_id;
+            $this->reception['responsable_ou_id'] = User::find($this->reception['responsable_id']->id)->organizational_unit_id;
         }
         else {
             /* Si la ultima firma fue enviada a una OU */
