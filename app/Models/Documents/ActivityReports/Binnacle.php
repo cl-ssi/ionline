@@ -4,7 +4,8 @@ namespace App\Models\Documents\ActivityReports;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Binnacle extends Model
 {
@@ -23,8 +24,8 @@ class Binnacle extends Model
         'date' => 'date'
     ];
 
-    public function activity(): BelongsTo
+    public function activities(): HasMany
     {
-        return $this->belongsTo(Activity::class);
+        return $this->hasMany(Activity::class);
     }
 }

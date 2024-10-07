@@ -23,7 +23,7 @@ class Activity extends Model
         'date' => 'date'
     ];
 
-    public function period(): BelongsTo
+    public function binnacle(): BelongsTo
     {
         return $this->belongsTo(Binnacle::class);
     }
