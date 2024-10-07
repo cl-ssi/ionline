@@ -68,24 +68,24 @@
                             @if($dte->emisor)
                                 @include('finance.payments.partials.dte-info')
                             @else
-                                <div wire:ignore>
+                                <div>
                                     @livewire('finance.upload-pdf', ['dteId' => $dte->id, 'type' => 'documento'], key('document-upload-pdf-' . rand() * $dte->id))
                                 </div>
                                 <hr>
                             @endif
                         <small>Resolucion</small>
-                        <div wire:ignore>
+                        <div>
                             @livewire('finance.upload-pdf', ['dteId' => $dte->id, 'type' => 'resolucion'], key('resolucion-upload-pdf-' . rand() * $dte->id))
                         </div>
                         <hr>
                         <small>Comprobante Bancario</small>
-                        <div wire:ignore>
+                        <div>
                             @livewire('finance.upload-pdf', ['dteId' => $dte->id, 'type' => 'comprobante_bancario'], key('bank-upload-pdf-' . rand() * $dte->id))
                         </div>
                     </td>
                     <td class="small">
                         @if($dte->receptions)
-                            <div wire:ignore>
+                            <div>
                                 @include('finance.payments.partials.receptions-info')
                             </div>
                         @else
@@ -95,17 +95,17 @@
                     <td class="small">
                         <div class="container">
                             @foreach($dte->filesPdf as $file)
-                                <div wire:ignore>
+                                <div>
                                     @livewire('finance.list-pdf', ['dteId' => $dte->id, 'file'=> $file], key('list-pdf-' . rand() * $file->id))
                                 </div>
                             @endforeach
                         </div>
-                        <div wire:ignore>
+                        <div>
                             @livewire('finance.upload-pdf', ['dteId' => $dte->id, 'type' => 'adjunto', 'small' => 'true'], key('attachment-upload-pdf-' . rand() * $dte->id))
                         </div>
                     </td>
                     <td class="small">
-                        <div wire:ignore>
+                        <div>
                             <!-- SIGFE Compromiso y Devengo -->
                             <small>Compromiso</small>
                             @livewire('finance.sigfe-folio-compromiso',
