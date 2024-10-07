@@ -356,24 +356,5 @@ class CreatePurchasePlan extends Component
         else{
             unset($this->files[$key]);
         }
-        /*
-        $fileToDelete = $this->files[$key];
-        $objectToDelete = File::find($fileToDelete['id']);
-        
-        if($fileToDelete['id'] != ''){
-            $purchasePlan = $objectToDelete->fileable;
-            if(count($this->files) > 1 && str_contains(strtolower($purchasePlan->program), 'institucional')){
-                unset($this->files[$key]);
-                $objectToDelete = File::find($itemToDelete['id']);
-                $objectToDelete->delete();
-            }
-            else{
-                $this->deleteFileMessage = "Estimado Usuario: No es posible eliminar el adjunto, el Plan de Compras con cargo institucional debe incluír al menos un archivo adjunto.";
-            }
-        }
-        else{
-            unset($this->files[$key]);
-        }
-        */
     }
 }

@@ -168,12 +168,18 @@
                         <td class="brd-l text-center">{{ $loop->iteration }}</td>
                         <td class="text-center">{{ $file['fileName'] }}</td>
                         <td class="text-center">
-                            <a class="btn btn-secondary btn-sm" 
-                                title="Abrir" 
-                                wire:click="showFile({{ $key }})" 
-                                target="_blank">
-                                <i class="fas fa-file"></i>
-                            </a>
+                            @if($file['id'] != '')
+                                <a class="btn btn-secondary btn-sm" 
+                                    title="Abrir" 
+                                    wire:click="showFile({{ $key }})" 
+                                    target="_blank">
+                                    <i class="fas fa-file"></i>
+                                </a>
+                            @else
+                                <a class="btn btn-secondary btn-sm disabled">
+                                    <i class="fas fa-file"></i>
+                                </a>
+                            @endif
                         </td>
                         <td width="5%" class="text-center">
                             <a class="btn btn-danger btn-sm" 

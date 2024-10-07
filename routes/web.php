@@ -2326,6 +2326,7 @@ Route::prefix('purchase_plan')->as('purchase_plan.')->middleware(['auth', 'must.
         // Route::get('/show_form_items_export', [RequestFormController::class, 'show_form_items_export'])->name('show_form_items_export');
         Route::get('{purchase_plan_id}/show_purchase_plan_pdf', [PurchasePlanController::class, 'show_purchase_plan_pdf'])->name('show_purchase_plan_pdf');
         Route::get('{purchasePlan}/download_resol_pdf', [PurchasePlanController::class, 'download_resol_pdf'])->name('download_resol_pdf');
+        Route::get('{file}/show_attachment', [PurchasePlanController::class, 'show_attachment'])->name('show_attachment');
     });
     
 });

@@ -12,6 +12,8 @@ use App\Models\Parameters\Parameter;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Storage;
 
+use App\Models\File;
+
 class PurchasePlanController extends Controller
 {
     /**
@@ -301,5 +303,9 @@ class PurchasePlanController extends Controller
         else {
             return redirect()->back()->with('warning', 'El archivo no se ha encontrado.');
         }
+    }
+
+    public function show_attachment(File $file){
+        return Storage::response($file->storage_path);
     }
 }

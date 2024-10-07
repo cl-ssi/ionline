@@ -207,6 +207,42 @@
     </table>
 </div>
 
+<div class="row mt-3"> 
+    <div class="col-12 col-md-2">
+        <h6><i class="fas fa-paperclip mt-2"></i> Adjuntos</h6>
+    </div>
+</div>
+
+@if($purchasePlan->files)
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered table-sm small" name="items">
+            <thead>
+                <tr class="bg-light text-center">
+                    <th>#</th>
+                    <th>Nombre archivo</th>
+                    <th>Archivo</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($purchasePlan->files as $key => $file)
+                <tr>
+                    <td class="brd-l text-center">{{ $loop->iteration }}</td>
+                    <td class="text-center">{{ $file->name }}</td>
+                    <td class="text-center">
+                        <a class="btn btn-secondary btn-sm" 
+                            title="Abrir" 
+                            href="{{ route('purchase_plan.documents.show_attachment', $file) }}"
+                            target="_blank">
+                            <i class="fas fa-file"></i>
+                        </a>
+                    </td>
+                </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
+@endif
+
 <br>
 
 <div class="row"> 
