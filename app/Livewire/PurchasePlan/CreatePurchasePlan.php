@@ -10,9 +10,14 @@ use App\Models\PurchasePlan\PurchasePlan;
 use App\Models\PurchasePlan\PurchasePlanItem;
 use Illuminate\Support\Facades\DB;
 use App\Models\Parameters\Parameter;
+use Livewire\WithFileUploads;
+use App\Models\File;
+use Illuminate\Support\Facades\Storage;
 
 class CreatePurchasePlan extends Component
 {
+    use WithFileUploads;
+
     public $idPurchasePlan, 
         $userResponsibleId, 
         $telephone, 
@@ -39,9 +44,20 @@ class CreatePurchasePlan extends Component
 
     public $validateMessage;
 
+    /* Archivos */
+    public $idFile;
+    public $fileName;
+    public $fileStoragePath;
+    public $fileAttached;
+    public $files = array();
+    public $key;
+    public $deleteFileMessage;
+
+    public $iterationFileClean = 0;
+
     protected function messages(){
         return [
-            /* Mensajes para Allowance */
+            /* Mensajes para Formulario Plan de Compras */
             'userResponsibleId.required'    => 'Debe ingresar funcionario responsable para plan de compra.',
             'telephone.required'            => 'Debe ingresar un teléfono.',
             'email.required'                => 'Debe ingresar un correo electrónico.',
@@ -51,7 +67,11 @@ class CreatePurchasePlan extends Component
             'subject.required'              => 'Debe ingresar un asunto.',
             'period.required'               => 'Debe ingresar un periodo',
             'items.required'                => 'Debe ingresar al menos un item',
-            'program_id.required'           => 'Debe ingresar un programa'
+            'program_id.required'           => 'Debe ingresar un programa',
+
+            /* Mensajes para archivos */
+            'fileName.required'                 => 'Debe ingresar un nombre para el archivo.',
+            'fileAttached.required'             => 'Debe ingresar un archivo adjunto.',
         ];
     }
 
@@ -103,7 +123,7 @@ class CreatePurchasePlan extends Component
               'totalValue'               => $item->expense,
               'articleFile'              => $item->article_file
         ];
-      }
+    }
 
     public function savePurchasePlan($purchase_plan_status){
         if($this->purchasePlanToEdit && $this->purchasePlanToEdit->getStatus() == "Rechazado"){
@@ -127,7 +147,7 @@ class CreatePurchasePlan extends Component
             'subject'           => 'required',
             'period'            => 'required',
             'program_id'        => 'required',
-            'items'             => 'required'
+            'items'             => 'required',
         ]);
 
         $purchasePlan = DB::transaction(function () {
@@ -194,6 +214,23 @@ class CreatePurchasePlan extends Component
                 $purchasePlan->update(['status' => 'save']);
             }
         }
+
+        if($this->files){
+            foreach($this->files as $file){
+                $now = now()->format('Y_m_d_H_i_s');
+                $purchasePlan->files()->updateOrCreate(
+                    [
+                        'id'            => $file['id'] ? $file['id'] : null,
+                    ],
+                    [
+                        'storage_path'  => $file['file'],
+                        'stored'        => true,
+                        'name'          => $file['fileName'],
+                        'stored_by_id'  => auth()->id(),
+                    ]
+                );
+            }
+        }
         
         if($returnView == 'edit'){
             return redirect()->route('purchase_plan.edit', $purchasePlan->id);
@@ -223,6 +260,10 @@ class CreatePurchasePlan extends Component
             foreach($this->purchasePlanToEdit->purchasePlanItems as $item){
                 $this->setItems($item);
             }
+
+            foreach($this->purchasePlanToEdit->files as $file){
+                $this->setFiles($file);
+            }
         }
     }
 
@@ -243,5 +284,96 @@ class CreatePurchasePlan extends Component
             if($this->purchasePlanToEdit->approvals()->where('approver_ou_id', Parameter::get('ou', 'AbastecimientoSSI'))->exists())
                 $this->disabled = 'disabled';
         }
+    }
+
+    /* Metodos para Archivos */
+    public function addFile(){
+        $this->validateMessage = 'file';
+        $validatedData = $this->validate([
+            'fileName'      => 'required',
+            'fileAttached'  => 'required' 
+        ]);
+
+        $count = ($this->files == null) ? 0 : count($this->files); 
+
+        $now = now()->format('Y_m_d_H_i_s');
+        $this->fileStoragePath = $this->fileAttached->storeAs('/ionline/purchase_plan/attachments', $now.'_'.$count.'_purchase_plan_file.'.$this->fileAttached->extension(), 'gcs');
+
+        $this->files[] = [
+            'id'        => '',
+            'fileName'  => $this->fileName.'.'.$this->fileAttached->extension(),
+            'file'      => $this->fileStoragePath
+        ];
+
+        $this->cleanFile();
+    }
+
+    public function cleanFile(){   
+        $this->fileName     = null;
+        $this->fileAttached = null;
+        $this->iterationFileClean++;
+    }
+
+    private function setFiles($file){
+        $this->files[] = [
+            'id'        => $file->id,
+            'fileName'  => $file->name,
+            'file'      => $file->storage_path
+        ];
+    }
+
+    public function showFile($key){
+        $file = File::where('id', $fileId)->first();
+        return Storage::response($file->storage_path);
+    }
+
+    public function deleteFile($key){
+        $fileToDelete = $this->files[$key];
+        $objectToDelete = File::find($fileToDelete['id']);
+        if($objectToDelete){
+            $purchasePlan = $objectToDelete->fileable;
+        }
+
+        if($fileToDelete['id'] != ''){
+            if(str_contains(strtolower($purchasePlan->program), 'institucional')){
+                // ELIMINAR SI ES PRESUPUESTO INSTITUCIONAL
+                if(count($this->files) > 1){
+                    unset($this->files[$key]);
+                    $objectToDelete = File::find($itemToDelete['id']);
+                    $objectToDelete->delete();
+                }
+                else{
+                    $this->deleteFileMessage = "Estimado Usuario: No es posible eliminar el adjunto, el Plan de Compras con cargo institucional debe incluír al menos un archivo adjunto.";
+                }
+            }
+            else{
+                // ELIMINAR SI NO ES PRESUPUESTO INSTITUCIONAL
+                unset($this->files[$key]);
+                $objectToDelete = File::find($fileToDelete['id']);
+                $objectToDelete->delete();
+            }
+        }
+        else{
+            unset($this->files[$key]);
+        }
+        /*
+        $fileToDelete = $this->files[$key];
+        $objectToDelete = File::find($fileToDelete['id']);
+        
+        if($fileToDelete['id'] != ''){
+            $purchasePlan = $objectToDelete->fileable;
+            if(count($this->files) > 1 && str_contains(strtolower($purchasePlan->program), 'institucional')){
+                unset($this->files[$key]);
+                $objectToDelete = File::find($itemToDelete['id']);
+                $objectToDelete->delete();
+            }
+            else{
+                $this->deleteFileMessage = "Estimado Usuario: No es posible eliminar el adjunto, el Plan de Compras con cargo institucional debe incluír al menos un archivo adjunto.";
+            }
+        }
+        else{
+            unset($this->files[$key]);
+        }
+        */
     }
 }

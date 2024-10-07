@@ -12,6 +12,8 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 use App\Models\Documents\Approval;
 use App\Models\RequestForms\RequestForm;
 
+use App\Models\File;
+
 class PurchasePlan extends Model implements Auditable
 {
     use HasFactory;
@@ -101,6 +103,14 @@ class PurchasePlan extends Model implements Auditable
     }
     public function trashedApprovals(): MorphMany{
         return $this->morphMany(Approval::class, 'approvable')->withTrashed();
+    }
+
+    /**
+     * Get all of the files of a model.
+     */
+    public function files(): MorphMany
+    {
+        return $this->morphMany(File::class, 'fileable');
     }
 
     public function hasApprovals(){

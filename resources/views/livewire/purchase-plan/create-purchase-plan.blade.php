@@ -96,14 +96,105 @@
         </div>
     @endif
 
-    <div class="row g-3">
+    <div class="row mt-3"> 
+        <div class="col-12 col-md-2">
+            <h6><i class="fas fa-paperclip mt-2"></i> Adjuntos</h6>
+        </div>
+    </div>
+    
+    <form wire:submit="addFile">
+        <div class="row g-3 mt-3">
+            <div class="col-md-6">
+                <fieldset class="form-group">
+                    <label for="for_file_name">Nombre Archivo</label>
+                    <input class="form-control" 
+                        type="text" 
+                        autocomplete="off" 
+                        id="for_file_name"
+                        wire:model="fileName" 
+                        {{ $disabled }}>
+                </fieldset>
+            </div>
+            
+            <div class="col-md-5">
+                <fieldset class="form-group mt-4">
+                    <input class="form-control" 
+                        type="file" 
+                        wire:model="fileAttached" 
+                        id="for_file_attached">
+                    <div wire:loading wire:target="fileAttached">Cargando archivo...</div>
+                </fieldset>
+            </div>
+
+            <div class="form-group col-12 col-md-1">
+                <label for="for_button"><br></label>
+                <button class="btn btn-primary" type="submit" wire:loading.attr="disabled">Agregar</button>
+            </div>
+        </div>
+    </form>
+    
+    @if(count($errors) > 0 && $validateMessage == "file")
+        <div class="alert alert-danger mt-3">
+            <p>Corrige los siguientes errores:</p>
+            <ul>
+                @foreach ($errors->all() as $message)
+                    <li>{{ $message }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
+    @if($files)
+        <br>
+        @if($deleteFileMessage)
+            <div class="alert alert-danger" role="alert">
+                {{ $deleteFileMessage }}
+            </div>
+        @endif
+
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered table-sm small" name="items">
+                <thead>
+                    <tr class="bg-light text-center">
+                        <th>#</th>
+                        <th>Nombre archivo</th>
+                        <th>Archivo</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($files as $key => $file)
+                    <tr>
+                        <td class="brd-l text-center">{{ $loop->iteration }}</td>
+                        <td class="text-center">{{ $file['fileName'] }}</td>
+                        <td class="text-center">
+                            <a class="btn btn-secondary btn-sm" 
+                                title="Abrir" 
+                                wire:click="showFile({{ $key }})" 
+                                target="_blank">
+                                <i class="fas fa-file"></i>
+                            </a>
+                        </td>
+                        <td width="5%" class="text-center">
+                            <a class="btn btn-danger btn-sm" 
+                                id="upload{{ $iterationFileClean }}" 
+                                title="Eliminar" 
+                                wire:click="deleteFile({{ $key }})">
+                                <i class="fas fa-trash-alt"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+    @endif
+
+    <div class="row g-3 mt-3">
         <div class="col-12">
             <button wire:click="savePurchasePlan('save')" class="btn btn-primary float-end" type="button">
                 <i class="fas fa-save"></i> Guardar
             </button>
-            {{--<button wire:click="savePurchasePlan('sent')" class="btn btn-success float-end me-2" type="button" @if($purchasePlanToEdit && $purchasePlanToEdit->hasApprovals()) disabled @endif>
-                <i class="fas fa-paper-plane"></i> Guardar y Enviar
-            </button>--}}
         </div>
     </div>
     
@@ -146,6 +237,7 @@
                                     </tr>
                                 @endforeach
                             </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
