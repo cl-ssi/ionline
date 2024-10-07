@@ -103,7 +103,7 @@ class MonthlyQuotes extends Component
                 case 'Atraso':
                     $mes_completo = false;
                     //$hrs_descuento += $item->end_date->diffInHours($item->start_date);
-                    $mins_descuento += $item->end_date->diffInMinutes($item->start_date);
+                    $mins_descuento += $item->start_date->diffInMinutes($item->end_date);
                     //dd($hrs_descuento);
                     break;
             }
@@ -215,7 +215,7 @@ class MonthlyQuotes extends Component
         //son cuotas valores diferentes
         {
             // la persona trabaja menos de 1 mes
-            $diff_in_months = (int)$serviceRequest->end_date->diffInMonths($serviceRequest->start_date);
+            $diff_in_months = (int)$serviceRequest->start_date->diffInMonths($serviceRequest->end_date);
             if ($diff_in_months < 1) {
                 $string = "1 cuota de $";
                 $string .= number_format($serviceRequest->gross_amount);
