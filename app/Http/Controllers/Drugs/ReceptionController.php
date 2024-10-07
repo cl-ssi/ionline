@@ -16,9 +16,9 @@ use App\Models\Drugs\Destruction;
 use App\Models\Drugs\Protocol;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Contracts\View\View;
 
 class ReceptionController extends Controller
 {
@@ -94,6 +94,17 @@ class ReceptionController extends Controller
         $lawyer_observer = optional(User::Find(Parameter::get('drugs','MinistroDeFeJuridico')))->FullName;
 
         return view('drugs.receptions.show', compact('reception', 'substances', 'trashedDestructions','manager','observer','lawyer_observer'));
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Models\Drugs\Reception  $reception
+     * @return \Illuminate\Http\Response
+     */
+    public function history(Reception $reception): View
+    {
+        return view(view: 'drugs.receptions.history', data: compact('reception'));
     }
 
     /**

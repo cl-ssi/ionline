@@ -7,11 +7,11 @@
             <form method="POST" class="form-horizontal" action="{{ route('drugs.destructions.store') }}">
                 @csrf
                 <input type="hidden" name="reception_id" value="{{ $reception->id }}">
-                <div class="form-row">
+                <div class="row g-2">
 
                     <fieldset class="form-group col">
                         <label for="for_police">Policia</label>
-                        <select name="police" id="for_police" class="form-control">
+                        <select name="police" id="for_police" class="form-select">
                             <option>Policía de Investigaciones</option>
                             <option>Carabineros de Chile</option>
                             <option>Armada de Chile</option>

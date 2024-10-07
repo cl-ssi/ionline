@@ -5,7 +5,7 @@
         <div class="form-group">
             <label for="search">Filtrar por rama</label>
             <!-- filtro por rama de la sustancia -->
-            <select wire:model.live="rama" class="form-control">
+            <select wire:model.live="rama" class="form-select mb-3">
                 <option value="">Todas las sustancias</option>
                 @foreach($ramas as $rama)
                     <option value="{{ $rama }}">{{ $rama }}</option>

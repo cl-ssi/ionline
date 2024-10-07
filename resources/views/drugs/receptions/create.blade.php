@@ -40,7 +40,7 @@
 
         <fieldset class="form-group col-5">
             <label for="for_parte_police_unit">Origen *</label>
-            <select class="form-control" id="for_parte_police_unit"
+            <select class="form-select" id="for_parte_police_unit"
             name="parte_police_unit_id" required>
                 @foreach($policeUnits as $police_unit)
                 <option value="{{ $police_unit->id }}">{{ $police_unit->name }}</option>
@@ -50,7 +50,7 @@
 
         <fieldset class="form-group col-5">
             <label for="for_court">Fiscalia *</label>
-            <select name="court_id" id="for_court" class="form-control" required>
+            <select name="court_id" id="for_court" class="form-select" required>
                 @foreach($courts as $court)
                 <option value="{{ $court->id }}">{{ $court->name }}</option>
                 @endforeach
@@ -70,7 +70,7 @@
         <fieldset class="form-group col-5">
             <label for="for_police_unit">Origen Oficio *</label>
             <select name="document_police_unit_id" id="for_police_unit"
-                    class="form-control" required>
+                    class="form-select" required>
                 @foreach($policeUnits as $police_unit)
                 <option value="{{ $police_unit->id }}">{{ $police_unit->name }}</option>
                 @endforeach

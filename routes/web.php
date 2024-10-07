@@ -1861,6 +1861,7 @@ Route::prefix('drugs')->as('drugs.')->middleware('can:Drugs', 'auth', 'drugs')->
     Route::get('receptions/alerts', [App\Http\Controllers\Drugs\ReceptionController::class, 'alerts'])->name('receptions.alerts');
     Route::get('receptions/export/{year}', [App\Http\Controllers\Drugs\ReceptionController::class, 'export'])->name('receptions.export');
     Route::get('receptions/{reception}/record', [App\Http\Controllers\Drugs\ReceptionController::class, 'showRecord'])->name('receptions.record');
+    Route::get('receptions/{reception}/history', [App\Http\Controllers\Drugs\ReceptionController::class, 'history'])->name('receptions.history');
     Route::get('receptions/{receptionitem}/edit_item', [App\Http\Controllers\Drugs\ReceptionController::class, 'editItem'])->name('receptions.edit_item');
     Route::put('receptions/{receptionitem}/update_item', [App\Http\Controllers\Drugs\ReceptionController::class, 'updateItem'])->name('receptions.update_item');
     Route::delete('receptions/{receptionitem}/destroy_item', [App\Http\Controllers\Drugs\ReceptionController::class, 'destroyItem'])->name('receptions.destroy_item');

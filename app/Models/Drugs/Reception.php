@@ -131,6 +131,12 @@ class Reception extends Model implements Auditable
         return $this->hasOne(Destruction::class);
     }
 
+    // relación con destrucion pero solo los trashed
+    public function deletedDestructions(): HasMany
+    {
+        return $this->hasMany(Destruction::class)->onlyTrashed();
+    }
+
     /**
      * Get the sample to ISP for the reception.
      */

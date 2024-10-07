@@ -1,4 +1,4 @@
-@extends('layouts.bt4.app')
+@extends('layouts.bt5.app')
 
 @section('title', 'Editar Recepción')
 
@@ -11,7 +11,10 @@
 <table class="table table-sm table-bordered">
     <tr>
         <th>N° Acta: </th>
-        <td><a href="{{ route('drugs.receptions.show', $reception->id) }}">{{ $reception->id }}</a></td>
+        <td>
+            <a href="{{ route('drugs.receptions.show', $reception->id) }}">{{ $reception->id }}</a> 
+            <a href="{{ route('drugs.receptions.history', $reception->id) }}" target="_blank">  <i class="bi bi-clock-history"></i> </a>
+        </td>
 
         <th>Fecha Acta</th>
         <td>{{ $reception->date->format('d-m-Y') }}</td>

@@ -33,7 +33,7 @@
                             @csrf
                             @method('PUT')
                             <input type="hidden" name="sample" value="{{ $i }}">
-                            <div class="form-row align-items-center">
+                            <div class="row g-2 align-items-center">
                                 <!--div class="col-auto">
                                     <label for="for_id">N° Protocolo</label>
                                     <input type="text" class="form-control" id="for_id" name="id" required>

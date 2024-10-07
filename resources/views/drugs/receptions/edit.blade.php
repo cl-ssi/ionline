@@ -51,7 +51,7 @@
 
         <fieldset class="form-group col-5">
             <label for="for_police_unit">Origen</label>
-            <select name="parte_police_unit_id" id="for_police_unit" class="form-control">
+            <select name="parte_police_unit_id" id="for_police_unit" class="form-select">
                 @foreach($policeUnits as $police_unit)
                 <option value="{{ $police_unit->id }}"
                     @if($reception->parte_police_unit_id == $police_unit->id) selected @endif >
@@ -62,7 +62,7 @@
 
         <fieldset class="form-group col-5">
             <label for="for_court">Fiscalia</label>
-            <select name="court_id" id="for_court" class="form-control">
+            <select name="court_id" id="for_court" class="form-select">
                 @foreach($courts as $court)
                 <option value="{{ $court->id }}"
                     @if($reception->court_id == $court->id) selected @endif >
@@ -82,7 +82,7 @@
 
         <fieldset class="form-group col-5">
             <label for="for_police_unit">Origen Oficio</label>
-            <select name="document_police_unit_id" id="for_police_unit" class="form-control">
+            <select name="document_police_unit_id" id="for_police_unit" class="form-select">
                 @foreach($policeUnits as $police_unit)
                 <option disabled selected value></option>
                 <option value="{{ $police_unit->id }}"

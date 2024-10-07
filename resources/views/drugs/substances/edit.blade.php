@@ -1,4 +1,4 @@
-@extends('layouts.bt4.app')
+@extends('layouts.bt5.app')
 
 @section('title', 'Crear Banda Ancha Movil')
 
@@ -34,7 +34,7 @@
 
     <fieldset class="form-group">
         <label for="forcategory">Rama*</label>
-        <select class="form-control" id="forrama" name="rama">
+        <select class="form-select" id="forrama" name="rama">
             <option disabled value></option>
             <option @if ($substance->rama == "Alucinógenos") selected="selected" @endif value="Alucinógenos">Alucinógenos</option>
             <option @if ($substance->rama == "Estimulantes") selected="selected" @endif value="Estimulantes">Estimulantes</option>
@@ -45,7 +45,7 @@
 
     <fieldset class="form-group">
         <label for="forunit">Unidad*</label>
-        <select class="form-control" id="forunit" name="unit">
+        <select class="form-select" id="forunit" name="unit">
             <option value="">Seleccione...</option>
             <option @if ($substance->unit == "Ampollas") selected="selected" @endif value="Ampollas">Ampollas</option>
             <option @if ($substance->unit == "Gramos") selected="selected" @endif value="Gramos">Gramos</option>
@@ -56,7 +56,7 @@
 
     <fieldset class="form-group">
         <label for="forlaboratory">Laboratorio</label>
-        <select class="form-control" id="forlaboratory" name="laboratory">
+        <select class="form-select" id="forlaboratory" name="laboratory">
             <option></option>
             <option @if ($substance->laboratory == "SEREMI") selected="selected" @endif value="SEREMI">SEREMI</option>
             <option @if ($substance->laboratory == "ISP") selected="selected" @endif value="ISP">ISP</option>

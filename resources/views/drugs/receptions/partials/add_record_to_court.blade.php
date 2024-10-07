@@ -7,7 +7,7 @@
             @csrf
             @method('POST')
 
-            <div class="form-row">
+            <div class="row g-2">
 
                 <fieldset class="form-group col-2">
                     <label for="for_number">N° de Documento</label>

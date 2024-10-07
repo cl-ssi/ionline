@@ -1,4 +1,4 @@
-@extends('layouts.bt4.app')
+@extends('layouts.bt5.app')
 
 @section('title', 'Sustancias')
 
@@ -31,7 +31,7 @@
 
     <fieldset class="form-group">
         <label for="forcategory">Rama*</label>
-        <select class="form-control" id="forrama" name="rama"  required="">
+        <select class="form-select" id="forrama" name="rama"  required="">
             <option disabled selected value></option>
             <option value="Alucinógenos">Alucinógenos</option>
             <option value="Estimulantes">Estimulantes</option>
@@ -42,7 +42,7 @@
 
     <fieldset class="form-group">
         <label for="forunit">Unidad*</label>
-        <select class="form-control" id="forunit" name="unit" required="">
+        <select class="form-select" id="forunit" name="unit" required="">
             <option disabled selected value></option>
             <option value="Ampollas">Ampollas</option>
             <option value="Gramos">Gramos</option>
@@ -53,7 +53,7 @@
 
     <fieldset class="form-group">
         <label for="forlaboratory">Laboratorio</label>
-        <select class="form-control" id="forlaboratory" name="laboratory">
+        <select class="form-select" id="forlaboratory" name="laboratory">
             <option></option>
             <option value="SEREMI">SEREMI</option>
             <option value="ISP">ISP</option>

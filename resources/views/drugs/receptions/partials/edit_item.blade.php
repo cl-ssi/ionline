@@ -8,7 +8,7 @@
             @csrf
             @method('PUT')
 
-            <div class="form-row">
+            <div class="row g-2">
 
                 <fieldset class="form-group col-2">
                     <label for="for_nue">NUE</label>
@@ -18,7 +18,7 @@
 
                 <fieldset class="form-group col-4">
                     <label for="for_substance">Sustancia</label>
-                    <select name="substance_id" id="for_substance" class="form-control">
+                    <select name="substance_id" id="for_substance" class="form-select">
                         @foreach($substances as $substance)
                         <option @if($item->substance_id == $substance->id) selected @endif
                             value="{{ $substance->id }}">{{ $substance->name }}</option>
@@ -53,7 +53,7 @@
 
             </div>
 
-            <div class="form-row">
+            <div class="row g-2">
 
                 <fieldset class="form-group col">
                     <label for="for_gross_weight">Peso Bruto *</label>
@@ -94,7 +94,7 @@
 
             </div>
 
-            <div class="form-row">
+            <div class="row g-2">
                 <fieldset class="form-group col">
                     <label for="for_description">Descripción</label>
                     <textarea name="description" class="form-control" id="for_description" rows="3" required="required">{{ $item->description }}</textarea>

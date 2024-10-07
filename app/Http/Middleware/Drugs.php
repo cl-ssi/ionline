@@ -20,7 +20,7 @@ class Drugs
         $now = Carbon::now();
 
         $start = Carbon::createFromTimeString('07:30');
-        $end = Carbon::createFromTimeString('17:30');
+        $end = Carbon::createFromTimeString('18:30');
 
         if ($now->between($start, $end)) {
             return $next($request);

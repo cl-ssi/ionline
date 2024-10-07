@@ -7,19 +7,17 @@
         </div>
         <div class="col-2">
             <fieldset class="form-group">
-                <input type="text" class="form-control" wire:model.live..debounce.700ms="nue" placeholder="nue">
+                <input type="text" class="form-control" wire:model.live.debounce.700ms="nue" placeholder="nue">
             </fieldset>
         </div>
         <div class="col-4">
             <fieldset class="form-group">
                 <div class="input-group input-group">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text" id="filter-by">
-                            Filtrar por
-                        </span>
-                    </div>
+                    <span class="input-group-text" id="filter-by">
+                        Filtrar por
+                    </span>
 
-                    <select id="filter-by" wire:model="filter" class="form-control form-control">
+                    <select id="filter-by" wire:model="filter" class="form-select">
                         <option value="all">Todos</option>
                         <option value="">Últimos 15 días</option>
                         <option value="pending">Pendientes de Destrucción</option>
@@ -35,21 +33,17 @@
         <div class="input-group">
 
             @can('Drugs: create receptions')
-                <div class="input-group-prepend">
-                    <a class="btn btn-primary" href="{{ route('drugs.receptions.create') }}">
-                        <i class="fas fa-plus"></i> Agregar nueva
-                    </a>
-                </div>
+                <a class="btn btn-primary" href="{{ route('drugs.receptions.create') }}">
+                    <i class="fas fa-plus"></i> Agregar nueva
+                </a>
             @endcan
 
             <input type="text" wire:model="search" class="form-control" id="for-search" onkeyup="filter(0)"
                 placeholder="Escriba el número de acta y presione la lupa.">
 
-            <div class="input-group-append">
-                <button class="btn btn-outline-secondary" type="submit" wire:click="getReceptions">
-                    <i class="fas fa-search" aria-hidden="true"></i>
-                </button>
-            </div>
+            <button class="btn btn-outline-secondary" type="submit" wire:click="getReceptions">
+                <i class="fas fa-search" aria-hidden="true"></i>
+            </button>
 
         </div>
 
