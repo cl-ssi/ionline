@@ -11,16 +11,18 @@ class Activity extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name',
+        'start_at',
+        'end_at',
         'description',
-        'date',
-        'period_id'
+        'status',
     ];
 
     protected $table = 'act_activities';
 
     protected $casts = [
-        'date' => 'date'
+        'start_at' => 'datetime',
+        'end_at'   => 'datetime',
+        'status'   => 'boolean',
     ];
 
     public function binnacle(): BelongsTo
