@@ -1858,6 +1858,7 @@ Route::prefix('drugs')->as('drugs.')->middleware('can:Drugs', 'auth', 'drugs')->
     Route::get('users', [UserController::class, 'drugs'])->name('users');
 
     Route::get('receptions/report', [App\Http\Controllers\Drugs\ReceptionController::class, 'report'])->name('receptions.report');
+    Route::get('receptions/alerts', [App\Http\Controllers\Drugs\ReceptionController::class, 'alerts'])->name('receptions.alerts');
     Route::get('receptions/export/{year}', [App\Http\Controllers\Drugs\ReceptionController::class, 'export'])->name('receptions.export');
     Route::get('receptions/{reception}/record', [App\Http\Controllers\Drugs\ReceptionController::class, 'showRecord'])->name('receptions.record');
     Route::get('receptions/{receptionitem}/edit_item', [App\Http\Controllers\Drugs\ReceptionController::class, 'editItem'])->name('receptions.edit_item');

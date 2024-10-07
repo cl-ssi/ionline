@@ -16,7 +16,7 @@
 <p class="justify indent">
     En Iquique, a <strong>{{ $reception->date->day }} de {{ $reception->date->monthName }} del {{ $reception->date->year }}</strong>
     siendo las <strong>{{ $reception->date->format('H:i') }}</strong> horas
-    en la Unidad de Drogas de Servicio de Salud Tarapacá,
+    en la Unidad de Drogas de {{ env('APP_SS') }},
     en conformidad a la ley 20.000/2005, se ha recibido el
     Ordinario N° <strong>{{ $reception->document_number }}</strong>
     de <strong>{{ $reception->documentPoliceUnit->name }}</strong>
@@ -26,8 +26,9 @@
     <strong>{{ $reception->partePoliceUnit->name }}</strong>,
     @endif
     a <strong>{{ $reception->court->name }}</strong>
-    para muestreo en el Servicio de Salud Tarapacá,
-    las siguientes sustancias:
+    para muestreo de las siguientes sustancias, de acuerdo a “Norma Técnica General N° 7. Santiago, Chile; 2002”, 
+    y Guía de toma de muestras para análisis de sustancias controladas en decomisos del 
+    Departamento de Salud Ambiental del Instituto de Salud Pública de Chile:
 </p>
 
 <!-- Usar vieñas con letras sólo si hay más de un item -->

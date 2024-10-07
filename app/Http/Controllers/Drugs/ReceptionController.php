@@ -279,6 +279,48 @@ class ReceptionController extends Controller
         return view('drugs.receptions.report', compact('items_sin_destruir','years'));
     }
 
+    public function alerts()
+    {
+        /**
+         * Obtiene todas las recepciones que contengan sustancias que ISP y Presumidas sea true y 
+         * que no tengan relación con sampleToIsp (no han sido enviadas al ISP)
+         */
+        $receptionsNotSentToIsp = Reception::whereHas('items', function ($query) {
+            $query->whereHas('substance', function ($substanceQuery) {
+                $substanceQuery->where('isp', true)
+                               ->where('presumed', true);
+            });
+        })
+        ->doesntHave('sampleToIsp')  // Aquí se filtran las recepciones sin relación con sampleToIsp
+        ->get();
+
+        /**
+         * Obtiene todas las recepciones que tengan relación con destrucción y que no se les ha creado recordToCourt
+         * (no se ha enviado a fiscalía)
+         */
+        $receptionsWithDestructionNotSendedToCourt = Reception::with('destruction')
+            ->whereHas('destruction', function ($query) {
+                $query->where('destructed_at', '<=', now()->subDays(5));
+            })
+            ->has('destruction')
+            ->doesntHave('recordToCourt')
+            ->get();
+
+        /**
+         * Obtiene todas las recepciones que no tengan relación con recordToCourt
+         * y cuya fecha de recepción (created_at) sea mayor a 30 días
+         */
+        $receptionsWithoutRecordToCourtOlderThan30Days = Reception::doesntHave('recordToCourt')
+            ->where('created_at', '<=', now()->subDays(30)) // Filtra las recepciones creadas hace más de 30 días
+            ->get();
+
+        return view('drugs.receptions.alerts', compact(
+            'receptionsNotSentToIsp', 
+            'receptionsWithDestructionNotSendedToCourt',
+            'receptionsWithoutRecordToCourtOlderThan30Days'
+        ));
+    }
+
     public function export($year) 
     {
         return Excel::download(new ReceptionExport($year), 'report.xlsx');

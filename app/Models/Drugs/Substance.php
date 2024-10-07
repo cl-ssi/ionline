@@ -20,12 +20,18 @@ class Substance extends Model
      * @var array
      */
     protected $fillable = [
+        'presumed',
         'name',
         'rama',
         'unit',
         'laboratory',
         'isp',
-        'presumed',
+    ];
+
+    //cast
+    protected $casts = [
+        'isp' => 'boolean',
+        'presumed' => 'boolean',
     ];
 
     /**

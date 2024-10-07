@@ -4,7 +4,7 @@
     <li class="nav-item">
         <a class="nav-link {{ active('drugs.receptions.index') }}"
                       href="{{ route('drugs.receptions.index') }}">
-            <i class="fas fa-inbox"></i> Actas de Recepción
+            <i class="fas fa-inbox"></i> Recepciones
         </a>
     </li>
     @endcan
@@ -13,7 +13,7 @@
     <li class="nav-item">
         <a class="nav-link {{ active('drugs.receptions.create') }}"
                       href="{{ route('drugs.receptions.create') }}">
-            <i class="fas fa-plus"></i> Agregar nueva
+            <i class="fas fa-plus"></i> Agregar
         </a>
     </li>
     @endcan
@@ -23,6 +23,12 @@
         <a class="nav-link {{ active('drugs.receptions.report') }}"
                       href="{{ route('drugs.receptions.report') }}">
             <i class="fas fa-file-invoice"></i> Reporte
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link {{ active('drugs.receptions.alerts') }}"
+                      href="{{ route('drugs.receptions.alerts') }}">
+            <i class="fas fa-bell"></i> Alertas
         </a>
     </li>
     @endcan
@@ -58,7 +64,7 @@
     <li class="nav-item">
         <a class="nav-link {{ active('drugs.police_units.index') }}"
                       href="{{ route('drugs.police_units.index') }}">
-            <i class="fas fa-cog"></i> Unidades Policiales
+            <i class="fas fa-cog"></i> U. Policiales
         </a>
     </li>
     @endcan
