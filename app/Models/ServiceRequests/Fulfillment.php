@@ -393,7 +393,7 @@ class Fulfillment extends Model implements AuditableContract
                     $total_dias_trabajados = 30;
                     $mes_completo = true;
                 } else {
-                    $total_dias_trabajados = $fulfillment->start_date->diff($fulfillment->end_date)->days + 1;
+                    $total_dias_trabajados = (int)$fulfillment->start_date->diffInDays($fulfillment->end_date) + 1;
                     $mes_completo = false;
                 }
             }
@@ -408,18 +408,18 @@ class Fulfillment extends Model implements AuditableContract
                     case 'Inasistencia Injustificada':
                     case 'Licencia no covid':
                         $mes_completo = false;
-                        $dias_descuento += $item->end_date->diff($item->start_date)->days + 1;
+                        $dias_descuento += (int)$item->end_date->diffInDays($item->start_date) + 1;
                         break;
                     case 'Licencia media jornada no covid':
                         $mes_completo = false;
-                        $dias_descuento_t = $item->end_date->diff($item->start_date)->days + 1;
+                        $dias_descuento_t = (int)$item->end_date->diffInDays($item->start_date) + 1;
                         $dias_descuento += ($dias_descuento_t / 2);
                         break;
                     case 'Abandono de funciones':
                     case 'Renuncia voluntaria':
                     case 'Término de contrato anticipado':
                         $mes_completo = false;
-                        $dias_descuento += $item->end_date->diff($item->start_date)->days + 1;
+                        $dias_descuento += (int)$item->end_date->diffInDays($item->start_date) + 1;
                         $dias_trabajado_antes_retiro = ((int)$item->end_date->format("d")) - (int)$fulfillment->start_date->format("d");
                         break;
                     case 'Atraso':
@@ -506,8 +506,8 @@ class Fulfillment extends Model implements AuditableContract
                 }
             }
         } else {
-            $diff_in_months = $serviceRequest->end_date->diffInMonths($serviceRequest->start_date);
-
+            
+            $diff_in_months = (int)$serviceRequest->start_date->diffInMonths($serviceRequest->end_date);
             if ($diff_in_months < 1) {
                 if ($serviceRequest->start_date->month != $serviceRequest->end_date->month) {
                     goto here;
@@ -518,6 +518,7 @@ class Fulfillment extends Model implements AuditableContract
                 } else {
                     $valores_mensualizados[$serviceRequest->start_date->month] = "Revise los datos ingresados en el cuadro de responsable.";
                 }
+                // dd($valores_mensualizados);
             } else {
                 here:
 
@@ -527,9 +528,9 @@ class Fulfillment extends Model implements AuditableContract
                     $interval = DateInterval::createFromDateString('1 month');
                     $periods   = new DatePeriod($serviceRequest->start_date, $interval, $serviceRequest->end_date->addMonth());
                     $periods = iterator_to_array($periods);
-                    $dias_trabajados1 = $serviceRequest->start_date->diff($serviceRequest->start_date->lastOfMonth())->days + 1;
+                    $dias_trabajados1 = (int)$serviceRequest->start_date->diffInDays($serviceRequest->start_date->lastOfMonth()) + 1;
                     $valor_diferente1 = round($dias_trabajados1 * ($valor_mensual / 30));
-                    $dias_trabajados2 = $serviceRequest->end_date->firstOfMonth()->diff($serviceRequest->end_date)->days + 1;
+                    $dias_trabajados2 = (int)$serviceRequest->end_date->firstOfMonth()->diffInDays($serviceRequest->end_date) + 1;
                     $valor_diferente2 = round($dias_trabajados2 * ($valor_mensual / 30));
 
                     foreach ($periods as $key => $period) {
@@ -554,21 +555,28 @@ class Fulfillment extends Model implements AuditableContract
                         }
                     }
                 } elseif ($serviceRequest->start_date->format('Y-m-d') != $serviceRequest->start_date->firstOfMonth()->format('Y-m-d')) {
-                    $nroCuotas = $serviceRequest->start_date->diffInMonths($serviceRequest->end_date) + 1;
-                    $valor_mensual = $serviceRequest->net_amount;
+                    $nroCuotas = (int)$serviceRequest->start_date->diffInMonths($serviceRequest->end_date) + 1;
+                    $valor_mensual = $serviceRequest->net_amount; //valor que se utilizará para calculos después del primer mes
                     $interval = DateInterval::createFromDateString('1 month');
                     $periods   = new DatePeriod($serviceRequest->start_date->firstOfMonth(), $interval, $serviceRequest->end_date->endOfMonth());
                     $periods = iterator_to_array($periods);
-                    $dias_trabajados = $serviceRequest->start_date->diff($serviceRequest->start_date->lastOfMonth())->days + 1;
-                    $valor_diferente = round($dias_trabajados * ($valor_mensual / 30));
+                    // valor para utilizar el primer mes
+                    $dias_trabajados_primer_mes = (int)$serviceRequest->start_date->diffInDays($serviceRequest->start_date->lastOfMonth()) + 1;
+                    $valor_diferente_primer_mes = round($dias_trabajados_primer_mes * ($valor_mensual / 30));
 
                     foreach ($periods as $key => $period) {
                         if ($this->items_verification(intval($period->format("m")))) {
-                            $valores_mensualizados[intval($period->format("m"))] = number_format($this->monto_con_inasistencias(false, intval($period->format("m")), $valor_diferente));
+                            // para el primer mes se usa un valor, y para el resto el otro valor
+                            if($key == 0){
+                                $valores_mensualizados[intval($period->format("m"))] = number_format($this->monto_con_inasistencias(false, intval($period->format("m")), $valor_diferente_primer_mes));
+                            }else{
+                                $valores_mensualizados[intval($period->format("m"))] = number_format($this->monto_con_inasistencias(false, intval($period->format("m")), $valor_mensual));
+                            }
                         } else {
                             $valores_mensualizados[intval($period->format("m"))] = "Revise los datos ingresados en el cuadro de responsable.";
                         }
                     }
+                    // dd($valores_mensualizados);
                 } elseif ($serviceRequest->end_date->format('Y-m-d') != $serviceRequest->end_date->endOfMonth()->format('Y-m-d')) {
                     $nroCuotas = $serviceRequest->start_date->diffInMonths($serviceRequest->end_date) + 1;
                     $valor_mensual = $serviceRequest->net_amount;
