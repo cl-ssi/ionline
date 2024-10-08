@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Filament\Clusters\Rrhh\Resources\Rrhh\AttendanceRecordResource\Pages;
+namespace App\Filament\Clusters\Rrhh\Resources\AttendanceRecordResource\Pages;
 
-use App\Filament\Clusters\Rrhh\Resources\Rrhh\AttendanceRecordResource;
+use App\Filament\Clusters\Rrhh\Resources\AttendanceRecordResource;
 use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
 

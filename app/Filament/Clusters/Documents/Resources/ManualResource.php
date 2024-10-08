@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Filament\Clusters\Documents\Resources\Documents;
+namespace App\Filament\Clusters\Documents\Resources;
 
 use App\Filament\Clusters\Documents;
-use App\Filament\Clusters\Documents\Resources\Documents\ManualResource\Pages;
-use App\Filament\Clusters\Documents\Resources\Documents\ManualResource\RelationManagers;
+use App\Filament\Clusters\Documents\Resources\ManualResource\Pages;
+use App\Filament\Clusters\Documents\Resources\ManualResource\RelationManagers;
 use App\Models\Documents\Manual;
 use Filament\Forms;
 use Filament\Forms\Form;

@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Filament\Clusters\Rrhh\Resources\Rrhh\AttendanceRecordResource\Pages;
+namespace App\Filament\Clusters\Rrhh\Resources\AttendanceRecordResource\Pages;
 
-use App\Filament\Clusters\Rrhh\Resources\Rrhh\AttendanceRecordResource;
+use App\Filament\Clusters\Rrhh\Resources\AttendanceRecordResource;
 use App\Filament\Exports\Rrhh\AttendanceRecordExporter;
 use Filament\Actions;
 use Filament\Actions\Exports\Enums\ExportFormat;

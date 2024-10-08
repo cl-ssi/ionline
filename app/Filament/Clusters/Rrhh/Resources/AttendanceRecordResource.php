@@ -1,10 +1,9 @@
 <?php
 
-namespace App\Filament\Clusters\Rrhh\Resources\Rrhh;
+namespace App\Filament\Clusters\Rrhh\Resources;
 
 use App\Filament\Clusters\Rrhh;
-use App\Filament\Clusters\Rrhh\Resources\Rrhh\AttendanceRecordResource\Pages;
-use App\Filament\Clusters\Rrhh\Resources\Rrhh\AttendanceRecordResource\RelationManagers;
+use App\Filament\Clusters\Rrhh\Resources\AttendanceRecordResource\Pages;
 use App\Models\Rrhh\AttendanceRecord;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -12,9 +11,7 @@ use Filament\Pages\SubNavigationPosition;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class AttendanceRecordResource extends Resource
 {
@@ -79,7 +76,7 @@ class AttendanceRecordResource extends Resource
                     ->date('Y-m-d H:i')
                     ->sortable()
                     ->description(description: fn (AttendanceRecord $record): string => $record->rrhhUser->shortName ?? '')
-                    ->visible(condition: fn (): bool => auth()->user()->canAny(['be god','Attendance records: admin'])),
+                    ->visible(condition: fn (): bool => auth()->user()->canAny(['be god', 'Attendance records: admin'])),
                 Tables\Columns\TextColumn::make('establishment.name')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
@@ -101,18 +98,18 @@ class AttendanceRecordResource extends Resource
                 Tables\Filters\TernaryFilter::make('sirh_at')
                     ->label('Sirh OK')
                     ->nullable()
-                    ->visible(fn () => auth()->user()->canAny(['be god','Attendance records: admin'])),
+                    ->visible(fn () => auth()->user()->canAny(['be god', 'Attendance records: admin'])),
             ])
             ->actions([
                 Tables\Actions\Action::make('markAsProcessed')
                     ->label('Sirh OK')
                     ->action(function ($record) {
-                        $record->sirh_at = now();
+                        $record->sirh_at      = now();
                         $record->rrhh_user_id = auth()->id();
                         $record->save();
                     })
                     ->requiresConfirmation()
-                    ->visible(fn ($record) => is_null($record->sirh_at) && auth()->user()->canAny(['be god','Attendance records: admin'])),
+                    ->visible(fn ($record) => is_null($record->sirh_at) && auth()->user()->canAny(['be god', 'Attendance records: admin'])),
                 Tables\Actions\EditAction::make()
                     ->visible(fn () => auth()->user()->canAny(['be god'])),
                 Tables\Actions\DeleteAction::make()
@@ -127,14 +124,14 @@ class AttendanceRecordResource extends Resource
                     ->action(function (Collection $records) {
                         $records->each(function ($record) {
                             if (is_null($record->sirh_at)) {
-                                $record->sirh_at = now();
+                                $record->sirh_at      = now();
                                 $record->rrhh_user_id = auth()->id();
                                 $record->save();
                             }
                         });
                     })
                     ->requiresConfirmation()
-                    ->visible(fn () => auth()->user()->canAny(['be god','Attendance records: admin'])),
+                    ->visible(fn () => auth()->user()->canAny(['be god', 'Attendance records: admin'])),
             ])
             ->defaultSort('created_at', 'desc')
             ->checkIfRecordIsSelectableUsing(callback: fn (AttendanceRecord $record): bool => $record->sirh_at === null);
