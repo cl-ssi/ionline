@@ -65,9 +65,10 @@ class CreatePurchasePlan extends Component
             'description.required'          => 'Debe ingresar una descripción.',
             'purpose.required'              => 'Debe ingresar un propósito.',
             'subject.required'              => 'Debe ingresar un asunto.',
-            'period.required'               => 'Debe ingresar un periodo',
-            'items.required'                => 'Debe ingresar al menos un item',
-            'program_id.required'           => 'Debe ingresar un programa',
+            'period.required'               => 'Debe ingresar un periodo.',
+            'items.required'                => 'Debe ingresar al menos un item.',
+            'program_id.required'           => 'Debe ingresar un programa.',
+            'files.required'                => 'Debe ingresar Decreto o Resolucion que asigna el presupuesto.',
 
             /* Mensajes para archivos */
             'fileName.required'                 => 'Debe ingresar un nombre para el archivo.',
@@ -148,6 +149,7 @@ class CreatePurchasePlan extends Component
             'period'            => 'required',
             'program_id'        => 'required',
             'items'             => 'required',
+            'files'             => ($this->searchedProgram != null && str_contains(strtolower($this->searchedProgram->name), 'institucional')) ? 'required' : '',
         ]);
 
         $purchasePlan = DB::transaction(function () {
@@ -291,7 +293,7 @@ class CreatePurchasePlan extends Component
         $this->validateMessage = 'file';
         $validatedData = $this->validate([
             'fileName'      => 'required',
-            'fileAttached'  => 'required' 
+            'fileAttached'  => 'required'
         ]);
 
         $count = ($this->files == null) ? 0 : count($this->files); 

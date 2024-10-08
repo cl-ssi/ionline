@@ -207,13 +207,13 @@
     </table>
 </div>
 
-<div class="row mt-3"> 
-    <div class="col-12 col-md-2">
-        <h6><i class="fas fa-paperclip mt-2"></i> Adjuntos</h6>
+@if($purchasePlan->files->count() > 0)
+    <div class="row mt-3"> 
+        <div class="col-12 col-md-2">
+            <h6><i class="fas fa-paperclip mt-2"></i> Adjuntos</h6>
+        </div>
     </div>
-</div>
 
-@if($purchasePlan->files)
     <div class="table-responsive">
         <table class="table table-striped table-bordered table-sm small" name="items">
             <thead>
