@@ -13,6 +13,11 @@ class Authority extends Model implements Auditable
 {
     use \OwenIt\Auditing\Auditable;
 
+    const TYPE_MANAGER = 'manager';
+    const TYPE_SECRETARY = 'secretary';
+    const TYPE_DELEGATE = 'delegate';
+
+
     /**
      * The table associated with the model.
      *
@@ -74,7 +79,7 @@ class Authority extends Model implements Auditable
     /**
      * Get the user that the authority represents.
      */
-    public function represents(): BelongsTo
+    public function representation(): BelongsTo
     {
         return $this->belongsTo(User::class, 'representation_id')->withTrashed();
     }

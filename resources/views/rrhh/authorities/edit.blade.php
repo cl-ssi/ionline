@@ -34,7 +34,7 @@
 
         <fieldset class="form-group col-12 col-md-6">
             <label for="for_user_id">En representación de (opcional)</label>
-            @livewire('search-select-user', ['selected_id' => 'representation_id', 'user' => $authority->represents])
+            @livewire('search-select-user', ['selected_id' => 'representation_id', 'user' => $authority->representation])
         </fieldset>
 
     </div>

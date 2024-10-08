@@ -43,7 +43,7 @@ class SubrogationsRelationManager extends RelationManager
                     ])
                     ->required()
                     ->columnSpan(4),
-                // Forms\Components\Toggle::make('deactivated')
+                // Forms\Components\Toggle::make('active')
                 //     ->required(),
             ])
             ->columns(12);

@@ -51,8 +51,8 @@ class RequirementController extends Controller
                     /** Esto permite ver también la bandeja del "representa"
                      * que se puede agregar al crear una autoridad
                      */
-                    if ($authority_chief->represents) {
-                        $allowed_users->push($authority_chief->represents);
+                    if ($authority_chief->representation) {
+                        $allowed_users->push($authority_chief->representation);
                     }
                     // 0 => 14104369 Carlos Calvo
                     // 1 => 10278387 José Donoso
