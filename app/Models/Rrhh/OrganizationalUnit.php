@@ -2,9 +2,12 @@
 
 namespace App\Models\Rrhh;
 
+use App\Models\Documents\Document;
 use App\Models\User;
 use App\Models\Establishment;
 use App\Models\Profile\Subrogation;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Requirements\Category;
 use Illuminate\Database\Eloquent\Model;
@@ -45,47 +48,42 @@ class OrganizationalUnit extends Model implements Auditable
      */
 
 
-    public function users()
+    public function users(): HasMany
     {
         return $this->hasMany(User::class)->orderBy('name');
     }
 
-    public function father()
+    public function father(): BelongsTo
     {
-        return $this->belongsTo('\App\Models\Rrhh\OrganizationalUnit', 'organizational_unit_id');
+        return $this->belongsTo(OrganizationalUnit::class, 'organizational_unit_id');
     }
 
-    public function childs()
+    public function childs(): HasMany
     {
-        return $this->hasMany('\App\Models\Rrhh\OrganizationalUnit', 'organizational_unit_id');
+        return $this->hasMany(OrganizationalUnit::class, 'organizational_unit_id');
     }
 
-    public function authorities()
+    public function authorities(): HasMany
     {
-        return $this->hasMany('\App\Models\Rrhh\Authority');
+        return $this->hasMany(Authority::class);
     }
 
-    public function documents()
+    public function documents(): HasMany
     {
-        return $this->hasMany('\App\Models\Documents\Document');
+        return $this->hasMany(Document::class);
     }
 
-    public function documentEvents()
-    {
-        return $this->hasMany('\App\Models\Documents\DocumentEvent');
-    }
-
-    public function establishment()
+    public function establishment(): BelongsTo
     {
         return $this->belongsTo(Establishment::class);
     }
 
-    public function requestForms()
+    public function requestForms(): HasMany
     {
         return $this->hasMany(RequestForm::class, 'applicant_ou_id');
     }
 
-    public function categories()
+    public function categories(): HasMany
     {
         return $this->hasMany(Category::class);
     }
@@ -95,7 +93,7 @@ class OrganizationalUnit extends Model implements Auditable
         return $this->hasOne(OrganizationalUnitLimit::class);
     }
 
-    public function currentManager()
+    public function currentManager(): HasOne
     {
         return $this->hasOne(Authority::class)
             ->with('user')
@@ -103,7 +101,7 @@ class OrganizationalUnit extends Model implements Auditable
             ->where('type', 'manager');
     }
 
-    public function currentDelegate()
+    public function currentDelegate(): HasOne
     {
         return $this->hasOne(Authority::class)
             ->with('user')
@@ -111,12 +109,22 @@ class OrganizationalUnit extends Model implements Auditable
             ->where('type', 'delegate');
     }
 
-    public function currentSecretary()
+    public function currentSecretary(): HasOne
     {
         return $this->hasOne(Authority::class)
             ->with('user')
             ->where('date', today())
             ->where('type', 'secretary');
+    }
+
+    public function subrogations(): HasMany
+    {
+        // return $this->hasManyThrough(User::class, Subrogation::class, 'organizational_unit_id', 'id', 'id', 'user_id')
+        //     ->where('type', Subrogation::TYPE_MANAGER)
+        //     ->orderBy('level', 'asc');
+        return $this->hasMany(Subrogation::class)
+            ->orderBy('type')
+            ->orderBy('level', 'asc');
     }
 
     public function subrogationsManager()
