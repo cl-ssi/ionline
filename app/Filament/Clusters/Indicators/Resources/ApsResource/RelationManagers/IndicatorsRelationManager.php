@@ -2,6 +2,9 @@
 
 namespace App\Filament\Clusters\Indicators\Resources\ApsResource\RelationManagers;
 
+use App\Models\Indicators\Aps;
+use App\Models\Indicators\Indicator;
+use DB;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
@@ -101,6 +104,7 @@ class IndicatorsRelationManager extends RelationManager
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('name')
+                    ->wrap()
                     ->searchable(),
                 // Tables\Columns\TextColumn::make('weighting_by_section')
                 //     ->numeric()
@@ -154,6 +158,46 @@ class IndicatorsRelationManager extends RelationManager
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\Action::make('clone')
+                    ->label('Clonar')
+                    ->action(function (Indicator $record, array $data) {
+                        DB::transaction(function () use ($record, $data) {
+                            $newRecord = $record->replicate();
+                            $newRecord->indicatorable_id = $data['aps_id'];
+                            $newRecord->indicatorable_type = Aps::class;
+                            $newRecord->created_at = now()->startOfYear();
+                            $newRecord->save();
+                        });
+
+                        \Filament\Notifications\Notification::make()
+                            ->title('Registro clonado exitosamente.')
+                            ->success()
+                            ->send();
+
+                        // return redirect()->route('filament.intranet.indicators.resources.aps.edit', [
+                        //     'record' => $data['aps_id'],
+                        // ]);
+                    })
+                    ->form(function (Indicator $record) {
+                        $apsSlug = $record->indicatorable->slug;
+                        $currentYear = $record->indicatorable->year;
+                    
+                        return [
+                            Forms\Components\Select::make('aps_id')
+                                ->label('Seleccionar APS')
+                                ->options(
+                                    Aps::where('slug', $apsSlug)
+                                        ->where('year', '!=', $currentYear)
+                                        ->orderBy('year', 'desc')
+                                        ->pluck('year', 'id')
+                                )
+                                ->required(),
+                        ];
+                    })
+                    ->modalHeading('Clonar Indicador')
+                    ->modalButton('Clonar')
+                    ->icon('heroicon-o-document-duplicate')
+                    ->requiresConfirmation(),
                 Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([

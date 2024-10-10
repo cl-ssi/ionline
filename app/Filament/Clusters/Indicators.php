@@ -6,5 +6,7 @@ use Filament\Clusters\Cluster;
 
 class Indicators extends Cluster
 {
-    protected static ?string $navigationIcon = 'heroicon-o-squares-2x2';
+    protected static ?string $navigationIcon = 'heroicon-o-chart-bar';
+
+    protected static ?string $navigationLabel = 'Indicadores';
 }

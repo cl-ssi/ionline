@@ -8,6 +8,7 @@ use App\Filament\Clusters\Indicators\Resources\ApsResource\RelationManagers;
 use App\Models\Indicators\Aps;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Pages\SubNavigationPosition;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Enums\FiltersLayout;
@@ -22,6 +23,8 @@ class ApsResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     protected static ?string $cluster = Indicators::class;
+
+    protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
 
     public static function form(Form $form): Form
     {
@@ -73,6 +76,20 @@ class ApsResource extends Resource
             ->persistFiltersInSession()
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\Action::make('clone')
+                    ->label('Clonar')
+                    ->action(function (Aps $record) {
+                        $newRecord = $record->replicate();
+                        $newRecord->year = now()->year;
+                        $newRecord->created_at = now()->startOfYear();
+                        $newRecord->save();
+
+                        // return redirect()->route('filament.intranet.indicators.resources.aps.edit', $newRecord);
+                    })
+                    ->icon('heroicon-o-document-duplicate')
+                    ->requiresConfirmation()
+                    ->modalHeading('Clonar Indicador APS')
+                    ->modalDescription('El registro se clonará en el año ' . now()->year . '. ¿Desea continuar?'),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
