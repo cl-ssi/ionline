@@ -132,96 +132,96 @@ class CreateReceptionNoOc extends Component
     public function save()
     {        
         
-        // $this->validate();
-        // $tipo = $this->tipoDocumentoMap[$this->reception['dte_type']];
+        $this->validate();
+        $tipo = $this->tipoDocumentoMap[$this->reception['dte_type']];
 
-        // $value = preg_replace('/[^0-9K]/', '', strtoupper(trim($this->emisor)));
-        // $dv = substr($value, -1);
-        // $id = substr($value, 0, -1);
-        // $this->emisor = number_format($id, 0, '', '.').'-'.$dv;
+        $value = preg_replace('/[^0-9K]/', '', strtoupper(trim($this->emisor)));
+        $dv = substr($value, -1);
+        $id = substr($value, 0, -1);
+        $this->emisor = number_format($id, 0, '', '.').'-'.$dv;
 
-        // $existingDte = Dte::where('tipo_documento', $this->reception['dte_type'])
-        // ->where('folio', $this->folio)
-        // ->where('emisor', $this->emisor)
-        // ->first();
+        $existingDte = Dte::where('tipo_documento', $this->reception['dte_type'])
+        ->where('folio', $this->folio)
+        ->where('emisor', $this->emisor)
+        ->first();
 
 
-        // if ($existingDte) {
-        //     $dte_manual = $existingDte;
-        // } else {
-        //     // Si no existe, crear un nuevo registro en la tabla Dte
-        //     $dte_manual = Dte::create([
-        //         'tipo_documento' => $this->reception['dte_type'],
-        //         'folio' => $this->folio,
-        //         'emisor' => $this->emisor,
-        //         'emision' => $this->reception['dte_date'],
-        //         'razon_social_emisor' => $this->razonSocial,
-        //         'monto_neto' => isset($this->montoNeto) ? $this->montoNeto : null,
-        //         'monto_exento' => isset($this->montoExento) ? $this->montoExento : null,
-        //         'monto_iva' => isset($this->montoIva) ? $this->montoIva : null,
-        //         'monto_total' => $this->montoTotal,
-        //         'tipo' => $tipo,
-        //         'establishment_id' => auth()->user()->organizationalUnit->establishment_id,
-        //     ]);
-        // }
+        if ($existingDte) {
+            $dte_manual = $existingDte;
+        } else {
+            // Si no existe, crear un nuevo registro en la tabla Dte
+            $dte_manual = Dte::create([
+                'tipo_documento' => $this->reception['dte_type'],
+                'folio' => $this->folio,
+                'emisor' => $this->emisor,
+                'emision' => $this->reception['dte_date'],
+                'razon_social_emisor' => $this->razonSocial,
+                'monto_neto' => isset($this->montoNeto) ? $this->montoNeto : null,
+                'monto_exento' => isset($this->montoExento) ? $this->montoExento : null,
+                'monto_iva' => isset($this->montoIva) ? $this->montoIva : null,
+                'monto_total' => $this->montoTotal,
+                'tipo' => $tipo,
+                'establishment_id' => auth()->user()->organizationalUnit->establishment_id,
+            ]);
+        }
 
         
         
-        // $receptionData = [
-        //     'reception_type_id' => $this->reception['reception_type_id'],
-        //     'date' => $this->reception['date'],
-        //     'creator_id' => auth()->user()->id,
-        //     'creator_ou_id' => auth()->user()->organizational_unit_id,
-        //     'responsable_id' => auth()->user()->id,
-        //     'responsable_ou_id' => auth()->user()->organizational_unit_id,
-        //     'establishment_id' => auth()->user()->organizationalUnit->establishment_id,
-        //     'dte_type' => $this->reception['dte_type'],
-        //     'dte_number' => $this->folio,
-        //     'dte_date' => $this->reception['dte_date'],
-        //     'header_notes' => $this->reception['header_notes'] ?? null,
-        //     'neto' => isset($this->montoNeto) ? $this->montoNeto : null,
-        //     'subtotal' => isset($this->montoNeto) ? $this->montoNeto : null,
-        //     'iva' => isset($this->montoIva) ? $this->montoIva : null,
-        //     'total' => $this->montoTotal,
-        // ];
+        $receptionData = [
+            'reception_type_id' => $this->reception['reception_type_id'],
+            'date' => $this->reception['date'],
+            'creator_id' => auth()->user()->id,
+            'creator_ou_id' => auth()->user()->organizational_unit_id,
+            'responsable_id' => auth()->user()->id,
+            'responsable_ou_id' => auth()->user()->organizational_unit_id,
+            'establishment_id' => auth()->user()->organizationalUnit->establishment_id,
+            'dte_type' => $this->reception['dte_type'],
+            'dte_number' => $this->folio,
+            'dte_date' => $this->reception['dte_date'],
+            'header_notes' => $this->reception['header_notes'] ?? null,
+            'neto' => isset($this->montoNeto) ? $this->montoNeto : null,
+            'subtotal' => isset($this->montoNeto) ? $this->montoNeto : null,
+            'iva' => isset($this->montoIva) ? $this->montoIva : null,
+            'total' => $this->montoTotal,
+        ];
     
-        // // Determinar qué campo utilizar para el ID del documento
-        // if ($this->reception['dte_type'] === 'guias_despacho') {
-        //     $receptionData['guia_id'] = $dte_manual->id;
-        // } else {
-        //     $receptionData['dte_id'] = $dte_manual->id;
-        // }
+        // Determinar qué campo utilizar para el ID del documento
+        if ($this->reception['dte_type'] === 'guias_despacho') {
+            $receptionData['guia_id'] = $dte_manual->id;
+        } else {
+            $receptionData['dte_id'] = $dte_manual->id;
+        }
     
-        // $reception = Reception::create($receptionData);
+        $reception = Reception::create($receptionData);
         
 
-        // foreach ($this->items as $index => $item) {
-        //     ReceptionItem::create([
-        //         'reception_id' => $reception->id,
-        //         'item_position' => $index,
-        //         'Producto' => $item['producto'],
-        //         'Unidad' => $item['unidad'],
-        //         'Cantidad' => $item['cantidad'],
-        //         'PrecioNeto' => !empty($item['precioNeto']) ? $item['precioNeto'] : null,
-        //         'PrecioExento' => !empty($item['precioExento']) ? $item['precioExento'] : null,
-        //         'Total' => $item['total'],
+        foreach ($this->items as $index => $item) {
+            ReceptionItem::create([
+                'reception_id' => $reception->id,
+                'item_position' => $index,
+                'Producto' => $item['producto'],
+                'Unidad' => $item['unidad'],
+                'Cantidad' => $item['cantidad'],
+                'PrecioNeto' => !empty($item['precioNeto']) ? $item['precioNeto'] : null,
+                'PrecioExento' => !empty($item['precioExento']) ? $item['precioExento'] : null,
+                'Total' => $item['total'],
                 
-        //     ]);
-        // }
+            ]);
+        }
 
-        // if($this->digitalInvoiceFile) {
-        //     $storage_path = 'ionline/finances/receptions/no_oc';
-        //     $filename = $reception->id.'.pdf';
+        if($this->digitalInvoiceFile) {
+            $storage_path = 'ionline/finances/receptions/no_oc';
+            $filename = $reception->id.'.pdf';
 
-        //     $this->digitalInvoiceFile->storeAs($storage_path, $filename);
+            $this->digitalInvoiceFile->storeAs($storage_path, $filename);
 
-        //     $reception->files()->create([
-        //         'storage_path' => $storage_path.'/'.$filename,
-        //         'stored' => true,
-        //         'type' => 'no_oc',
-        //         'stored_by_id' => auth()->id(),
-        //     ]);
-        // }
+            $reception->files()->create([
+                'storage_path' => $storage_path.'/'.$filename,
+                'stored' => true,
+                'type' => 'no_oc',
+                'stored_by_id' => auth()->id(),
+            ]);
+        }
 
         $priorityOrder = ['left', 'center', 'right'];
         foreach($priorityOrder as $element) {
