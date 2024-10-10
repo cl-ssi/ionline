@@ -23,4 +23,17 @@ class Aps extends Model
     {
         return $this->morphMany(Indicator::class, 'indicatorable');
     }
+
+    /**
+     * Obtiene un listado de años distintos registrados en la tabla.
+     *
+     * @return \Illuminate\Support\Collection
+     */
+    public static function getDistinctYears()
+    {
+        return self::select('year')
+            ->distinct()
+            ->orderBy('year', 'desc')
+            ->pluck('year');
+    }
 }
