@@ -13,6 +13,7 @@
                 <th>Descripción</th>
                 <th>Programa</th>
                 <th>Usuario Gestor</th>
+                <th>Establecimiento</th>
                 <th>Unidad Organizacional</th>
                 <th>Comprador</th>
                 {{--<th>Items</th>--}}
@@ -43,6 +44,7 @@
                 <td nowrap>{{ $requestForm->name }}</td>
                 <td nowrap>{{ $requestForm->associateProgram ? $requestForm->associateProgram->alias_finance.' '.$requestForm->associateProgram->period : $requestForm->program }}</td>
                 <td nowrap>{{ $requestForm->user->FullName }}</td>
+                <td nowrap>{{ $requestForm->userOrganizationalUnit->establishment->name }}</td>
                 <td nowrap>{{ $requestForm->userOrganizationalUnit->name }}</td>
                 <td nowrap>{{ $requestForm->purchasers->first()->FullName ?? 'No asignado' }}</td>
                 {{--<td class="text-center">{{ $requestForm->itemRequestForms->count() }}</td>--}}
