@@ -31,6 +31,7 @@ class CreateReceptionNoOc extends Component
     public $authority = false;
     public $signer_id;
     public $signer_ou_id;
+    public $signer_ou_manager;
     public $approvals = [];
     public $items = [];
     public $showFacturaElectronicaFields = false;
@@ -297,14 +298,19 @@ class CreateReceptionNoOc extends Component
             // "start_y"       => 0,
         ]);
 
+        // dd($this->signer_id);
+
         if($user_id OR $this->signer_id) {
             $this->approvals[$position]['sent_to_user_id'] = $user_id ?? $this->signer_id;
             $this->approvals[$position]['signerShortName'] = (User::find($user_id) ?? $this->signer_id)->shortName;
         }
         else if($this->signer_ou_id) {
             $this->approvals[$position]['sent_to_ou_id']   = $this->signer_ou_id;
+            $this->approvals[$position]['sent_to_user_id'] = $this->signer_ou_manager;
             $this->approvals[$position]['signerShortName'] = $this->authority;
         }
+        // dd($this->approvals['left']);
+        dd($this->approvals['left']);
     }
 
     #[On('setTemplate')]
@@ -321,6 +327,7 @@ class CreateReceptionNoOc extends Component
             if($ou->currentManager) {
                 $this->authority = $ou->currentManager->user->shortName;
                 $this->signer_ou_id = $organizationalUnitId;
+                $this->signer_ou_manager = $ou->currentManager->user->id;
             }
             else {
                 $this->signer_ou_id = null;
