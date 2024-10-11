@@ -2,7 +2,7 @@
 
 @section('title', 'Recepción ' . $reception->id)
 
-@section('linea1', $reception->responsableOu->name)
+@section('linea1', $reception->responsableOu?->name)
 
 @section('linea3', 'id: ' . $reception->id . ' - ' . $reception->creator->initials)
 
