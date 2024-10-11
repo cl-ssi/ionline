@@ -904,13 +904,13 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
         Route::get('/show/{userId}/{periodId}', [CalificationController::class, 'show'])->name('show');
     });
     
-    Route::prefix('absenteeisms')->name('absenteeisms.')->group(function () {
+    Route::prefix('absenteeisms')->name('absenteeisms.')->middleware('auth')->group(function () {
         Route::get('/', ListAbsenteeisms::class)->name('index');
         Route::get('/create', CreateAbsenteeism::class)->name('create');
         Route::get('/{absenteeism}', [AbsenteeismController::class,'show'])->name('show');
     });
 
-    Route::prefix('absence-types')->name('absence-types.')->group(function () {
+    Route::prefix('absence-types')->name('absence-types.')->middleware('auth')->group(function () {
         Route::get('/', [AbsenteeismTypeController::class, 'index'])->name('index');
         Route::get('/create', [AbsenteeismTypeController::class, 'create'])->name('create');
         Route::post('/store', [AbsenteeismTypeController::class, 'store'])->name('store');
