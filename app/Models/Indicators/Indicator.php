@@ -43,6 +43,11 @@ class Indicator extends Model
         'establishment_cods',
     ];
 
+    protected $casts = [
+        'precision' => 'boolean',
+        // 'establishment_cods' => 'array',
+    ];
+
     public function indicatorable(): MorphTo
     {
         return $this->morphTo();
@@ -75,6 +80,17 @@ class Indicator extends Model
             ->withTimestamps()
             ->orderBy('referrer_number');
     }
+
+    // /**
+    //  * Set the establishment_cods attribute.
+    //  */
+    // protected function establishmentCods(): Attribute
+    // {
+    //     return Attribute::make(
+    //         get: fn ($value): array|bool => explode(separator: ',', string: $value),
+    //         set: fn ($value): string => implode(separator: ',', array: $value),
+    //     );
+    // }
 
     public function getReferrer($number)
     {

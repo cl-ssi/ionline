@@ -21,6 +21,8 @@ class IndicatorsRelationManager extends RelationManager
     {
         return $form
         ->schema([
+            // Forms\Components\Placeholder::make('id')
+            //     ->content(fn ($record): ?string => $record->id),
             Forms\Components\TextInput::make('number')
                 ->required()
                 ->numeric(),
@@ -204,6 +206,7 @@ class IndicatorsRelationManager extends RelationManager
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
-            ]);
+            ])
+            ->defaultSort('number', 'asc');
     }
 }
