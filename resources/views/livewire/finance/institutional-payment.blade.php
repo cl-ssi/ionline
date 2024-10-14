@@ -135,8 +135,8 @@
                     </td>
                     <td class="small">
                         <div wire:key="fecha_{{$dte->id}}">
-                            @if ($dte->fecha[$dte->id])
-                                {{$dte->fecha[$dte->id]}}
+                            @if ($dte->fecha)
+                                {{$dte->fecha}}
                                 <button type="button" class="btn btn-primary btn-sm mt-2" wire:loading.attr="disabled" wire:click="delete({{$dte->id}}, 'fecha')"><i class="fa fa-trash"></i></button>
                             @else
                                 <form class="form-inline" wire:submit="save({{$dte->id}}, 'fecha')">
