@@ -306,11 +306,11 @@ class CreateReceptionNoOc extends Component
         }
         else if($this->signer_ou_id) {
             $this->approvals[$position]['sent_to_ou_id']   = $this->signer_ou_id;
-            $this->approvals[$position]['sent_to_user_id'] = $this->signer_ou_manager;
+            // $this->approvals[$position]['sent_to_user_id'] = $this->signer_ou_manager;
             $this->approvals[$position]['signerShortName'] = $this->authority;
         }
-        // dd($this->approvals['left']);
-        dd($this->approvals['left']);
+        
+        
     }
 
     #[On('setTemplate')]
