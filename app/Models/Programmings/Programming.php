@@ -72,8 +72,14 @@ class Programming extends Model implements Auditable
     public function getCountActivities(){
         $activities=collect();
         foreach($this->items as $item){
-            if($item->activityItem && $item->activityItem->int_code != null && $item->activityItem->tracer == "SI"){
-                $activities->add($item->activityItem);
+            if($this->year >= 2025){
+                if($item->activityItem && $item->activityItem->int_code != null){
+                    $activities->add($item->activityItem);
+                }
+            }else{
+                if($item->activityItem && $item->activityItem->int_code != null && $item->activityItem->tracer == "SI"){
+                    $activities->add($item->activityItem);
+                }
             }
         }
         return count($activities->unique('int_code'));

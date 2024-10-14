@@ -36,11 +36,15 @@
         </a>
 
         <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-            {{--<a class="dropdown-item" href="{{ route('programming.reportConsolidated') }}">Reporte act. directas Consolidado</a>--}}
             <a class="dropdown-item" href="{{ route('programming.reportConsolidatedSep') }}">Reporte act. directas Consolidado</a>
+            <a class="dropdown-item" href="{{ route('programming.reportConsolidatedSep') }}">Reporte act. indirectas Consolidado</a>
             <a class="dropdown-item" href="{{ route('programming.reportConsolidatedSporadic') }}">Reporte act. indirectas esporádicas Consolidado</a>
+            <a class="dropdown-item" href="{{ route('programming.reportConsolidatedSporadic') }}">Reporte act. indirectas designación de horas Consolidado</a>
             <a class="dropdown-item" href="{{ route('programming.reportUsers') }}">Reporte Usuarios</a>
             <a class="dropdown-item" href="{{ route('programming.reportTotalRrhh') }}">Reporte Total RRHH</a>
+            @if(Request::get('programming_id'))
+            <a class="dropdown-item" href="{{ route('programming.reportObservation',['programming_id' => Request::get('programming_id')]) }}">Reporte de Observaciones</a>
+            @endif
         </div>
     </div>
     @endcan

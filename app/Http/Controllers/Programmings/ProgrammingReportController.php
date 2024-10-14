@@ -182,7 +182,7 @@ class ProgrammingReportController extends Controller
     public function reportObservation(request $request) 
     {
         $reviewItems = ReviewItem::with('programItem.activityItem', 'user:id,name,fathers_family,mothers_family')
-                                 ->Where('rectified','NO')
+                                //  ->Where('rectified','NO')
                                  ->Where('answer','NO')
                                  ->whereHas('programItem', function($q) use ($request){ 
                                     return $q->where('programming_id', $request->programming_id); 
