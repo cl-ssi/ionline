@@ -4,7 +4,7 @@
 @include('suitability.nav')
 
 <div class="container">
-    <h1>Usuarios con de Plataforma Idoneidad</h1>
+    <h1>Usuarios de Plataforma Idoneidad</h1>
 
     <form method="GET" action="{{ route('suitability.users.indexUser') }}" class="mb-3">
         <div class="row">
@@ -47,9 +47,9 @@
                         <td>{{ $user->psiRequests?->last()->school->name }}</td>
                         <td>
                             <div class="d-flex justify-content-between">
-                                                                <!-- <a href="#" class="btn btn-info btn-sm">
-                                    <i class="fas fa-edit"></i> Editar
-                                </a> -->
+                                <a href="{{ route('suitability.users.editUser', $user->id) }}" class="btn btn-info btn-sm">
+                                    <i class="fas fa-edit"></i> Editar Datos Usuario
+                                </a>
                                 <form method="POST" action="{{ route('suitability.users.convertAdmin') }}">
                                     @csrf
                                     <input type="hidden" name="user_external_id" value="{{ $user->id }}">

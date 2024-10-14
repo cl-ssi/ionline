@@ -2655,6 +2655,11 @@ Route::prefix('suitability')->as('suitability.')->middleware(['auth', 'must.chan
         Route::post('/store-user-admin', [SchoolUserController::class, 'storeUserAdmin'])->name('storeUserAdmin');
         Route::get('{userExternal}/editUserAdmin', [SchoolUserController::class, 'editUserAdmin'])->name('editUserAdmin');
         Route::put('/update-admin/{userExternal}', [SchoolUserController::class, 'updateUserAdmin'])->name('updateUserAdmin');
+        
+        // Nueva ruta para editar un usuario común
+        Route::get('{userExternal}/editUser', [SchoolUserController::class, 'editUser'])->name('editUser');
+        Route::put('/update-user/{userExternal}', [SchoolUserController::class, 'updateUser'])->name('updateUser');
+
         Route::post('/convert-admin', [SchoolUserController::class, 'convertAdmin'])->name('convertAdmin');
 
     });

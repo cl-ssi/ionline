@@ -166,9 +166,10 @@ class SchoolUserController extends Controller
      * @param  \App\Models\SchoolUser  $schoolUser
      * @return \Illuminate\Http\Response
      */
-    public function edit(SchoolUser $schoolUser)
+    public function editUser(UserExternal $userExternal)
     {
-        //
+        return view('suitability.users.edit', ['userExternal' => $userExternal]);  
+        
     }
 
 
@@ -179,9 +180,12 @@ class SchoolUserController extends Controller
      * @param  \App\Models\SchoolUser  $schoolUser
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, SchoolUser $schoolUser)
+    public function updateUser(Request $request, UserExternal $userExternal)
     {
-        //
+        $userExternal->fill($request->all());
+        $userExternal->save();
+        session()->flash('success', 'Usuario Externo actualizado exitosamente');
+        return redirect()->route('suitability.users.indexUser');
     }
 
     /**
