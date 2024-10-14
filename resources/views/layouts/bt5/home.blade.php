@@ -243,7 +243,7 @@
 
             <!-- Se restringe la visualización a usuarios de bienestar y administradores -->
             @if(auth()->user()->welfare || auth()->user()->can('be god') || auth()->user()->can('welfare: amipass') || auth()->user()->can('welfare: balance'))
-                <h5 class="text-white p-2 bg_azul_gob mt-3 text-center">
+                <!-- <h5 class="text-white p-2 bg_azul_gob mt-3 text-center">
                     <i class="fas fa-file-signature"></i>
                     Reserva de cabañas - Bienestar
                 </h5>
@@ -257,7 +257,7 @@
                             <iframe src="https://drive.google.com/file/d/1YsmCsLqlfcdSqODBUwtUb3xoDdSMzljo/preview" width="100%" height="315" allow="autoplay; fullscreen" allowfullscreen></iframe>
                         </fieldset>
                     </div>
-                </div>
+                </div> -->
 
                 <h5 class="text-white p-2 bg_azul_gob mt-3 text-center">
                     <i class="fas fa-file-signature"></i>
@@ -373,10 +373,10 @@
                     class="list-group-item list-group-item-action small" target="_blank">
                     Bienestar - Solicitud de beneficios.
                 </a>
-                <a href="https://docs.google.com/document/d/1UzWY4S5DXlgnYAhbtNhgGiYmP3R9UyxJ/edit?usp=sharing&ouid=100875180090664492720&rtpof=true&sd=true"
+                <!-- <a href="https://docs.google.com/document/d/1UzWY4S5DXlgnYAhbtNhgGiYmP3R9UyxJ/edit?usp=sharing&ouid=100875180090664492720&rtpof=true&sd=true"
                     class="list-group-item list-group-item-action small" target="_blank">
                     Bienestar - Reserva de cabañas.
-                </a>
+                </a> -->
                 <a href="https://docs.google.com/document/d/1Mqx_1KxClnLT-7JGbrxD6lfdPWXuNBcH/edit?usp=sharing&ouid=100875180090664492720&rtpof=true&sd=true"
                     class="list-group-item list-group-item-action small" target="_blank">
                     Creación de formularios de requerimiento.
