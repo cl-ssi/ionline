@@ -18,8 +18,8 @@ class InstitutionalPayment extends Component
 
     protected $paginationTheme = 'bootstrap';
 
-    public $fecha;
-    public $receptor;
+    public Array $fecha;
+    public Array $receptor;
 
     public $filters = [
         'id' => null,
@@ -44,14 +44,12 @@ class InstitutionalPayment extends Component
     public function save($dte_id)
     {
         $dte = Dte::find($dte_id);
-        if($this->fecha != null){
-            $dte->update(['fecha' => $this->paid_date]);
+        if(isset($this->fecha[$dte_id])){
+            $dte->update(['fecha' => $this->fecha[$dte_id]]);
         }
-        if($this->receptor != null){
-            $dte->update(['receptor' => $this->receptor]);
+        if(isset($this->receptor[$dte_id])){
+            $dte->update(['receptor' => $this->receptor[$dte_id]]);
         }
-        $this->fecha == null;
-        $this->receptor == null;
         return [];
     }
 
