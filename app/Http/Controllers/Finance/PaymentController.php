@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Finance;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
 use App\Models\Finance\Dte;
 use App\Models\Finance\PaymentFlow;
 use Illuminate\Database\Eloquent\Builder;
@@ -134,7 +133,7 @@ class PaymentController extends Controller
      */
     public function indexOwn()
     {
-        $userId = Auth::id();
+        $userId = auth()->id();
         $dtes = Dte::whereHas('immediatePurchase.requestForm', function ($query) use ($userId) {
             $query->where('request_user_id', $userId)
                 ->orWhere('contract_manager_id', $userId);
@@ -206,13 +205,13 @@ class PaymentController extends Controller
     public function sendToReadyInbox(Dte $dte)
     {
         $dte->payment_ready = 1;
-        $dte->sender_id = Auth::id();
+        $dte->sender_id = auth()->id();
         $dte->sender_ou = auth()->user()->organizational_unit_id;
         $dte->sender_at = now();
         $dte->save();
         PaymentFlow::create([
             'dte_id' => $dte->id,
-            'user_id' => Auth::id(),
+            'user_id' => auth()->id(),
             'status' => 'Enviado a Pendiente Para Pago',
         ]);
 
@@ -228,7 +227,7 @@ class PaymentController extends Controller
         $dte->save();
         PaymentFlow::create([
             'dte_id' => $dte->id,
-            'user_id' => Auth::id(),
+            'user_id' => auth()->id(),
             'status' => 'Retornado a bandeja DTE',
         ]);
 
