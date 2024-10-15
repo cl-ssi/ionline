@@ -2,24 +2,25 @@
 
 namespace App\Models\Finance\Receptions;
 
+use App\Models\File;
+use App\Models\User;
+use App\Models\Finance\Dte;
+use App\Models\Establishment;
+use App\Models\Documents\Approval;
+use App\Models\Pharmacies\Purchase;
+use App\Models\Documents\Numeration;
+use App\Models\Finance\PurchaseOrder;
+use App\Models\Rrhh\OrganizationalUnit;
+use Illuminate\Database\Eloquent\Model;
+use OwenIt\Auditing\Contracts\Auditable;
+use App\Models\Finance\Receptions\ReceptionItem;
+use App\Models\Finance\Receptions\ReceptionType;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
-use Illuminate\Database\Eloquent\Relations\MorphMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use App\Models\User;
-use App\Models\Rrhh\OrganizationalUnit;
-use App\Models\Finance\Receptions\ReceptionType;
-use App\Models\Finance\Receptions\ReceptionItem;
-use App\Models\Finance\PurchaseOrder;
-use App\Models\Finance\Dte;
-use App\Models\File;
-use App\Models\Establishment;
-use App\Models\Documents\Numeration;
-use App\Models\Documents\Approval;
-use OwenIt\Auditing\Contracts\Auditable;
 
 class Reception extends Model implements Auditable
 {
@@ -142,7 +143,12 @@ class Reception extends Model implements Auditable
     {
         return $this->hasMany(ReceptionItem::class);
     }
-    
+
+    public function purchases(): HasMany
+    {
+        return $this->hasMany(Purchase::class);
+    }
+        
     /**
      * Get all of the approvations of a model.
      */

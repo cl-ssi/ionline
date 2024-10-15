@@ -36,6 +36,7 @@ class PurchaseItem extends Model
         'batch',
         'batch_id',
         'created_at',
+        'reception_item_id'
     ];
 
     /**

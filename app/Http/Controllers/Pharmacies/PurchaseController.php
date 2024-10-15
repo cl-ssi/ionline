@@ -97,6 +97,15 @@ class PurchaseController extends Controller
       return view('pharmacies.products.purchase.edit', compact('suppliers','purchase','products'));
     }
 
+    public function edit_imported_reception(Purchase $purchase)
+    {
+        $suppliers = Supplier::where('pharmacy_id',session('pharmacy_id'))
+                           ->orderBy('name','ASC')->get();
+        $products = Product::where('pharmacy_id',session('pharmacy_id'))
+                         ->orderBy('name','ASC')->get();
+        return view('pharmacies.products.purchase.edit-imported-reception', compact('suppliers','purchase','products'));
+    }
+
     /**
      * Update the specified resource in storage.
      *
@@ -174,5 +183,9 @@ class PurchaseController extends Controller
       session()->flash('success', $message);
       //return redirect()->back();
       return redirect()->route('pharmacies.products.purchase.index');
+    }
+
+    public function importReception(){
+        return view('pharmacies.products.purchase.import-reception');
     }
 }

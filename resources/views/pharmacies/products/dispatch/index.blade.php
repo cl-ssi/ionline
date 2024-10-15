@@ -8,6 +8,10 @@
 
 <h3>Listado de Egresos</h3>
 
+<div class="alert alert-warning alert-dismissible fade show rounded" role="alert">
+    <strong>Atención!</strong> Para eliminar un egreso, debe primero eliminar el detalle (ítems) dentro de él.
+</div>
+
 <div class="mb-3">
 	{{-- @canany(['Pharmacy: create']) --}}
 	@can('Pharmacy: create')
@@ -65,7 +69,7 @@
 					<form method="POST" action="{{ route('pharmacies.products.dispatch.destroy', $dispatch) }}" class="d-inline">
 			            @csrf
 			            @method('DELETE')
-						<button type="submit" class="btn btn-outline-secondary btn-sm" onclick="return confirm('¿Está seguro de eliminar la información?');">
+						<button type="submit" @disabled($dispatch->dispatchItems->count() > 0) class="btn btn-outline-secondary btn-sm" onclick="return confirm('¿Está seguro de eliminar la información?');">
 							<span class="fas fa-trash-alt" aria-hidden="true"></span>
 						</button>
 					</form>

@@ -2,12 +2,14 @@
 
 namespace App\Models\Pharmacies;
 
-use App\Models\Documents\SignaturesFile;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use App\Models\Documents\SignaturesFile;
+use App\Models\Finance\Receptions\Reception;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Purchase extends Model
 {
@@ -46,6 +48,7 @@ class Purchase extends Model
         //'content',
         'invoice_amount',
         'user_id',
+        'reception_id',
         'created_at',
     ];
 
@@ -109,5 +112,10 @@ class Purchase extends Model
     public function signedRecord(): BelongsTo
     {
         return $this->belongsTo(SignaturesFile::class, 'signed_record_id');
+    }
+
+    public function reception(): BelongsTo
+    {
+        return $this->belongsTo(Reception::class, 'reception_id');
     }
 }

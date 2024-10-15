@@ -23,18 +23,18 @@
 </div>
 
 <div class="form-row">
-  <fieldset class="form-group col-2">
+  <fieldset class="form-group col-3">
       <label for="for_text">OC</label>
       <input type="text" class="form-control" id="for_text" placeholder="" name="purchase_order" value="{{$purchase->purchase_order}}" disabled>
   </fieldset>
-  <fieldset class="form-group col-2">
+  <fieldset class="form-group col-3">
         <label for="for_order_number">N° pedido</label>
         <input type="text" class="form-control" id="for_order_number" placeholder="" name="order_number" value="{{$purchase->order_number}}" disabled>
     </fieldset>
-  <fieldset class="form-group col-2">
+  <!-- <fieldset class="form-group col-2">
       <label for="for_text">Año</label>
       <input type="text" class="form-control" id="for_text" placeholder="" name="purchase_order_dato" value="{{$purchase->purchase_order_dato}}" disabled>
-  </fieldset>
+  </fieldset> -->
   <fieldset class="form-group col-3">
       <label for="for_date">Fecha OC</label>
       <input type="text" class="form-control" id="for_date" name="date" value="{{ Carbon\Carbon::parse($purchase->purchase_order_date)->format('d/m/Y')}}" disabled>

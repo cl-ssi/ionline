@@ -207,6 +207,7 @@ use App\Http\Controllers\HotelBooking\ServiceController;
 use App\Http\Controllers\Parameters\ParameterController;
 use App\Http\Controllers\Rrhh\AbsenteeismTypeController;
 use App\Livewire\Finance\Receptions\IndexReception;
+use App\Livewire\Pharmacies\ImportReception;
 use App\Livewire\Inventory\InventoryLastReceptions;
 use App\Livewire\Pharmacies\Products\IndexProducts;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
@@ -2186,6 +2187,8 @@ Route::prefix('pharmacies')->as('pharmacies.')->middleware(['auth', 'must.change
         Route::get('dispatch/{dispatch}/file', [App\Http\Controllers\Pharmacies\DispatchController::class, 'openFile'])->name('dispatch.openFile');
         Route::get('dispatch/storePrivateVerification/{dispatch}', [App\Http\Controllers\Pharmacies\DispatchController::class, 'storePrivateVerification'])->name('dispatch.storePrivateVerification');
 
+        // Route::get('purchase/importReception', ImportReception::class)->name('purchase.import-reception');
+        Route::get('purchase/importReception', [PurchaseController::class, 'importReception'])->name('purchase.import-reception');
         Route::resource('purchase', App\Http\Controllers\Pharmacies\PurchaseController::class);
         Route::resource('purchase_item', App\Http\Controllers\Pharmacies\PurchaseItemController::class);
         Route::get('purchase/sendForSignature/{purchase}/', [App\Http\Controllers\Pharmacies\PurchaseController::class, 'sendForSignature'])->name('purchase.sendForSignature');
@@ -2193,6 +2196,7 @@ Route::prefix('pharmacies')->as('pharmacies.')->middleware(['auth', 'must.change
         Route::get('purchase/record-pdf/{purchase}', [App\Http\Controllers\Pharmacies\PurchaseController::class, 'recordPdf'])->name('purchase.record_pdf');
         Route::get('/callback-firma-record/{message}/{modelId}/{signaturesFile?}', [PurchaseController::class, 'callbackFirmaRecord'])->name('callbackFirmaRecord');
         Route::get('/signed-record-pdf/{purchase}', [PurchaseController::class, 'signedRecordPdf'])->name('signed_record_pdf');
+        Route::get('/edit-imported-reception/{purchase}', [PurchaseController::class, 'edit_imported_reception'])->name('purchase.edit_imported_reception');
 
         Route::prefix('inventory_adjustments')->as('inventory_adjustments.')->group(function () {
             Route::get('/', [InventoryAdjustmentController::class, 'index'])->name('index');

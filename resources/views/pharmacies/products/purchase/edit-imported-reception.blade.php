@@ -1,12 +1,68 @@
 @extends('layouts.bt4.app')
 
-@section('title', 'Editar compra')
+@section('title', 'Editar compra importada de recepción')
 
 @section('content')
 
 @include('pharmacies.nav')
 
-<h3>Editar Compra</h3>
+<h3>Editar compra importada de recepción <b>#{{ $purchase->reception->id }}</b></h3>
+
+<div class="row">
+    <div class="col-md">
+        <h4 class="mb-4">Información de la Recepción</h4>
+        <div class="card bg-warning shadow-sm rounded">
+            <div class="card-body p-4">
+                <div class="row">
+                    <div class="col-md-6">
+                        <p><strong>Fecha de Recepción:</strong> {{ $purchase->reception->date->format('d/m/Y') }}</p>
+                        <p><strong>Proveedor:</strong> {{ $purchase->reception->purchaseOrder->json->Listado[0]->Proveedor->Nombre ?? 'N/A' }}</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>Guía de Despacho:</strong> {{ $purchase->reception->guia?->folio ?? 'N/A' }}</p>
+                        <p><strong>Factura:</strong> {{ $purchase->reception->dte?->folio ?? 'N/A' }}</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>Fecha de Emisión Factura:</strong> {{ $purchase->reception->dte?->emision->format('d/m/Y') ?? 'N/A' }}</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>Monto Neto:</strong> <span class="text-success">${{ number_format($purchase->reception->neto, 0, ',', '.') }}</span></p>
+                    </div>
+                </div>
+
+                <hr class="my-4">
+
+                <h5 class="mt-4">Items de la Recepción</h5>
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped bg-white">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th>Producto</th>
+                                <th>Cantidad</th>
+                                <th>Precio Neto</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($purchase->reception->items as $item)
+                            <tr>
+                                <td>{{ $item->Producto }}</td>
+                                <td>{{ $item->Cantidad }}</td>
+                                <td>${{ number_format($item->PrecioNeto, 0, ',', '.') }}</td>
+                                <td>${{ number_format($item->Total, 0, ',', '.') }}</td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<hr>
 
 <form method="POST" action="{{ route('pharmacies.products.purchase.update',$purchase) }}">
   @method('PUT')
@@ -124,45 +180,7 @@
 @endsection
 
 @section('custom_js')
-
-    <script>
-        $( document ).ready(function() {
-        document.getElementById("for_barcode").focus();
-        });
-    </script>
-
-  <!-- <script>
-    $( document ).ready(function() {
-      document.getElementById("for_barcode").focus();
-    });
-
-
-    document.onkeydown=function(evt){
-        var keyCode = evt ? (evt.which ? evt.which : evt.keyCode) : event.keyCode;
-        var barcode = document.getElementById("for_barcode").value;
-        if(keyCode == 13)
-        {
-          @foreach ($products as $key => $product)
-            if ({{$product->barcode}} == barcode) {
-              document.getElementById("for_product").value = {{$product->id}};
-              document.getElementById("for_unity").value = "{{$product->unit}}";
-            }
-          @endforeach
-
-        }
-    }
-
-    function jsCambiaSelect(selectObject)
-    {
-      var value = selectObject.value;
-      @foreach ($products as $key => $product)
-        if ({{$product->id}} == value) {
-          document.getElementById("for_barcode").value = {{$product->barcode}};
-          document.getElementById("for_unity").value = "{{$product->unit}}";
-          document.getElementById("for_quantity").focus();
-        }
-      @endforeach
-    }
-  </script> -->
-
+<script>
+    // Aquí puedes agregar scripts personalizados si necesitas manejar alguna interacción en esta página.
+</script>
 @endsection

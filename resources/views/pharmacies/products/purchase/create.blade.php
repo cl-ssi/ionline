@@ -30,18 +30,18 @@
 		</div>
 
 		<div class="form-row">
-			<fieldset class="form-group col-2">
+			<fieldset class="form-group col-3">
 					<label for="for_text">OC (*)</label>
 					<input type="text" class="form-control" id="for_text" placeholder="" name="purchase_order" required="">
 			</fieldset>
-            <fieldset class="form-group col-2">
+            <fieldset class="form-group col-3">
 					<label for="for_order_number">N° pedido (*)</label>
 					<input type="text" class="form-control" id="for_order_number" placeholder="" name="order_number" required="">
 			</fieldset>
-			<fieldset class="form-group col-2">
+			<!-- <fieldset class="form-group col-2">
 					<label for="for_text">Año</label>
 					<input type="text" class="form-control" id="for_text" placeholder="" name="purchase_order_dato">
-			</fieldset>
+			</fieldset> -->
 			<fieldset class="form-group col-3">
           <label for="for_date">Fecha de emisión factura (*)</label>
           <input type="date" class="form-control" id="for_date" name="purchase_order_date" required="required">

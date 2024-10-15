@@ -8,15 +8,24 @@
 
 <h3>Listado de Compras</h3>
 
+<div class="alert alert-warning alert-dismissible fade show rounded" role="alert">
+    <strong>Atención!</strong> Para eliminar una compra, debe primero eliminar el detalle (ítems) dentro de ella.
+</div>
+
 <div class="mb-3">
 	@canany(['Pharmacy: create'])
 	<a class="btn btn-primary"
 		href="{{ route('pharmacies.products.purchase.create') }}">
 		<i class="fas fa-shopping-cart"></i> Nueva compra
 	</a>
+
+    <a class="btn btn-warning"
+		href="{{ route('pharmacies.products.purchase.import-reception') }}">
+		<i class="fas fa-shopping-cart"></i> Importar recepción
+	</a>
 	@endcanany
 
-	<button type="button" class="btn btn-outline-primary"
+	<button type="button" class="btn btn-outline-success"
 		onclick="tableToExcel('tabla_purchase', 'Compras')">
 		<i class="fas fa-download"></i>
 	</button>
@@ -51,17 +60,24 @@
 				<td>{{ $purchase->purchase_order_amount }}</td>
 				<td nowrap>
 					@can('Pharmacy: edit_delete')
-					<a href="{{ route('pharmacies.products.purchase.edit', $purchase->id) }}"
-						class="btn btn-outline-secondary btn-sm">
-						<span class="fas fa-edit" aria-hidden="true"></span>
-					</a>
-					<form method="POST" action="{{ route('pharmacies.products.purchase.destroy', $purchase) }}" class="d-inline">
-						@csrf
-						@method('DELETE')
-						<button type="submit" class="btn btn-outline-secondary btn-sm" onclick="return confirm('¿Está seguro de eliminar la información?');">
-							<span class="fas fa-trash-alt" aria-hidden="true"></span>
-						</button>
-					</form>
+                        @if(!$purchase->reception)
+                            <a href="{{ route('pharmacies.products.purchase.edit', $purchase->id) }}"
+                                class="btn btn-outline-secondary btn-sm">
+                                <span class="fas fa-edit" aria-hidden="true"></span>
+                            </a>
+                        @else
+                            <a href="{{ route('pharmacies.products.purchase.edit_imported_reception', $purchase->id) }}"
+                                class="btn btn-warning btn-outline-dark btn-sm">
+                                <span class="fas fa-edit" aria-hidden="true"></span>
+                            </a>
+                        @endif
+                        <form method="POST" action="{{ route('pharmacies.products.purchase.destroy', $purchase) }}" class="d-inline">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" @disabled($purchase->purchaseItems->count() > 0) class="btn btn-outline-secondary btn-sm" onclick="return confirm('¿Está seguro de eliminar la información?');">
+                                <span class="fas fa-trash-alt" aria-hidden="true"></span>
+                            </button>
+                        </form>
 					@endcan
 
 					<a href="{{ route('pharmacies.products.purchase.record', $purchase) }}"
