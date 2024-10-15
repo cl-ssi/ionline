@@ -258,22 +258,26 @@ class DteResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('establishment.alias')
                     ->label('Estab.')
-                    ->sortable(),
+                    ->sortable()
+                    ->toggleable(),
                 Tables\Columns\TextColumn::make('emisor')
                     ->description(fn (Dte $record): string => $record->razon_social_emisor)
                     ->searchable()
-                    ->wrap(),
+                    ->wrap()
+                    ->toggleable(),
                 Tables\Columns\TextColumn::make('folio')
                     ->label('Documento')
                     ->prefix(fn (Dte $record): string => $record->tipo_documento_iniciales .' ')
                     ->searchable()
                     ->wrap()
                     ->url(fn(Dte $record) => $record->uri ? $record->uri : null)
-                    ->description(fn (Dte $record): string => str_replace('_', ' ', $record->estado_reclamo) ?? ''),
+                    ->description(fn (Dte $record): string => str_replace('_', ' ', $record->estado_reclamo) ?? '')
+                    ->toggleable(),
                 Tables\Columns\TextColumn::make('purchaseOrder.code')
                     ->label('OC')
                     ->description(fn (Dte $record): string => $record->purchaseOrder?->json?->Listado[0]?->Estado ?? '')
-                    ->searchable(),
+                    ->searchable()
+                    ->toggleable(),
                 Tables\Columns\TextColumn::make('requestForm.folio')
                     ->label('FR')
                     ->description(fn (Dte $record): string => $record->requestForm?->contractManager?->tinnyName ?? '')
@@ -281,18 +285,21 @@ class DteResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('receptions.id')
                     ->label('Recepción')
-                    ->bulleted(),
+                    ->bulleted()
+                    ->toggleable(),
                 Tables\Columns\TextColumn::make('fecha_recepcion_sii')
                     ->label('Fecha Aceptación SII (días)')
                     ->date('Y-m-d')
                     ->description(fn (Dte $record): string => $record->fecha_recepcion_sii ? '(' . (int) $record->fecha_recepcion_sii->diffInDays(now()) .' días)': '')
                     ->sortable()
-                    ->wrap(),
+                    ->wrap()
+                    ->toggleable(),
                 Tables\Columns\TextColumn::make('all_receptions_at')
                     ->label('A Revisión')
                     ->description(fn (Dte $record): string => $record->allReceptionsUser ? $record->allReceptionsUser?->shortName : '', position: 'above')
                     ->tooltip(fn (Dte $record): string => "{$record->allReceptionsOU?->name}")
-                    ->sortable(),
+                    ->sortable()
+                    ->toggleable(),
 
                     // {{$dte->allReceptionsUser?->shortName}}<br>
                     // {{$dte->allReceptionsOU?->name}}<br>
@@ -518,8 +525,9 @@ class DteResource extends Resource
                     })
                     ->requiresConfirmation()
                     ->icon('heroicon-o-currency-dollar')
-                    ->color('success'),
-                Tables\Actions\Action::make('A pendiente tgr')
+                    ->color('success')
+                    ->visible(condition: fn (Dte $record): bool => $record->all_receptions === false),
+                Tables\Actions\Action::make('pendienteTgr')
                     ->label('Pendiente TGR')
                     ->action(action: function ($record): void {
                         $record->update([
@@ -539,7 +547,8 @@ class DteResource extends Resource
                     })
                     ->requiresConfirmation()
                     ->icon('heroicon-o-currency-dollar')
-                    ->color('success'),
+                    ->color('success')
+                    ->hidden( fn (Dte $record) => $record->payment_ready),
                 Tables\Actions\Action::make('Devolver a revisión')
                     ->label('Devolver a revisión')
                     ->action(action: function ($record): void {
@@ -560,7 +569,8 @@ class DteResource extends Resource
                     })
                     ->requiresConfirmation()
                     ->icon('heroicon-o-currency-dollar')
-                    ->color('success'),
+                    ->color('success')
+                    ->visible( fn (Dte $record) => $record->payment_ready),
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
