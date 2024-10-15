@@ -52,7 +52,7 @@
 					<div class="input-group">
 						<select class="form-control selectpicker show-tick" id="for_year_id" name="year" required>
 							<option value="">Selección...</option>
-							<option value="2024" @if($request->year == '2025') selected @endif>2025</option>
+							<option value="2025" @if($request->year == '2025') selected @endif>2025</option>
 							<option value="2024" @if($request->year == '2024') selected @endif>2024</option>
 							<option value="2023" @if($request->year == '2023') selected @endif>2023</option>
 							<option value="2022" @if($request->year == '2022') selected @endif>2022</option>
