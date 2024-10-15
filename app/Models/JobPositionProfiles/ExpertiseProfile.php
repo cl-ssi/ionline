@@ -18,7 +18,7 @@ class ExpertiseProfile extends Model implements Auditable
     ];
 
     public function expertise() {
-        return $this->belongsTo('App\Models\JobPositionProfiles\Expertise', 'expertise_id');
+        return $this->belongsTo('App\Models\JobPositionProfiles\Expertise', 'expertise_id')->withTrashed();
     }
 
     /**
