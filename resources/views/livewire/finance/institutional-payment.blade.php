@@ -68,18 +68,18 @@
                             @if($dte->emisor)
                                 @include('finance.payments.partials.dte-info')
                             @else
-                                <div>
+                                <div wire:key="document-upload-pdf-{{$dte->id}}">
                                     @livewire('finance.upload-pdf', ['dteId' => $dte->id, 'type' => 'documento'], key('document-upload-pdf-' . $dte->id))
                                 </div>
                                 <hr>
                             @endif
                         <small>Resolucion</small>
-                        <div>
+                        <div wire:key="resolucion-upload-pdf-{{$dte->id}}">
                             @livewire('finance.upload-pdf', ['dteId' => $dte->id, 'type' => 'resolucion'], key('resolucion-upload-pdf-' . $dte->id))
                         </div>
                         <hr>
                         <small>Comprobante Bancario</small>
-                        <div>
+                        <div wire:key="bank-upload-pdf-{{$dte->id}}">
                             @livewire('finance.upload-pdf', ['dteId' => $dte->id, 'type' => 'comprobante_bancario'], key('bank-upload-pdf-' . $dte->id))
                         </div>
                     </td>
@@ -95,12 +95,12 @@
                     <td class="small">
                         <div class="container">
                             @foreach($dte->filesPdf as $file)
-                                <div>
+                                <div wire:key="dte-{{$dte->id}}-list-pdf-{{$file->id}}">
                                     @livewire('finance.list-pdf', ['dteId' => $dte->id, 'file'=> $file], key('dte-' . $dte->id . '-list-pdf-' . $file->id))
                                 </div>
                             @endforeach
                         </div>
-                        <div>
+                        <div wire:key="attachment-upload-pdf-{{$dte->id}}">
                             @livewire('finance.upload-pdf', ['dteId' => $dte->id, 'type' => 'adjunto', 'small' => 'true'], key('attachment-upload-pdf-' . $dte->id))
                         </div>
                     </td>
@@ -108,39 +108,21 @@
                         <div>
                             <!-- SIGFE Compromiso y Devengo -->
                             <small>Compromiso</small>
-                            
-                            @livewire('finance.sigfe-folio-compromiso',
-                            [
-                                'dte' => $dte,
-                                'onlyRead' => 'true'
-                            ],
-                            key('compromiso-folio-' . $dte->id))
-
-                            @livewire('finance.sigfe-archivo-compromiso',
-                            [
-                                'dte' => $dte,
-                                'onlyRead' => 'true'
-                            ],
-                            key('compromiso-file-' . $dte->id))
-
+                            <div wire:key="compromiso-folio-{{$dte->id}}">
+                                @livewire('finance.sigfe-folio-compromiso', ['dte' => $dte, 'onlyRead' => 'true'], key('compromiso-folio-' . $dte->id))
+                            </div>
+                            <div wire:key="compromiso-file-{{$dte->id}}">
+                                @livewire('finance.sigfe-archivo-compromiso', ['dte' => $dte, 'onlyRead' => 'true'], key('compromiso-file-' . $dte->id))
+                            </div>
                             <hr>
-
                             <small>Devengo</small>
-
-                            @livewire('finance.sigfe-folio-devengo', [
-                                'dte' => $dte,
-                                'onlyRead' => 'true'
-                            ],
-                            key('devengo-folio-' . $dte->id))
-
+                            <div wire:key="devengo-folio-{{$dte->id}}">
+                                @livewire('finance.sigfe-folio-devengo', ['dte' => $dte, 'onlyRead' => 'true'], key('devengo-folio-' . $dte->id))
+                            </div>
                             <hr>
-                            @livewire('finance.sigfe-archivo-devengo',
-                            [
-                                'dte' => $dte,
-                                'onlyRead' => 'true'
-                            ],
-                            key('devengo-file-' . $dte->id))
-
+                            <div wire:key="devengo-file-{{$dte->id}}">
+                                @livewire('finance.sigfe-archivo-devengo', ['dte' => $dte, 'onlyRead' => 'true'], key('devengo-file-' . $dte->id))
+                            </div>
                         </div>
                     </td>
                     <td class="small">
@@ -158,7 +140,7 @@
                             @endif
                         </div>
                     </td>
-                    <td class="small">
+                    <td class="small" wire:key="upload-pdf-{{$dte->id}}">
                         @livewire('finance.upload-pdf', ['dteId' => $dte->id, 'type' => 'comprobante_pago'], key('upload-pdf-' . $dte->id))
                     </td>
                     <td class="small">
