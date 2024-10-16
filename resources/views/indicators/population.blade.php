@@ -13,12 +13,12 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-sm-6">
-            <br />
+        <div class="col-sm-4 text-justify mt-3">
             Para efectos de consultas a población preliminar en su totalidad se dispone de enlaces a archivos excel para su descarga según año de interés.
         </div>
-        <div class="col-sm-6">
+        <div class="col-sm-8 mt-3">
           <ul class="list-group list-group-horizontal">
+		  	<li class="list-group-item"><a href="{{ route('indicators.population.percapita', 2025) }}"><i class="far fa-file-excel"></i> Descargar preliminar 2025</li></a>
             <li class="list-group-item"><a href="{{ route('indicators.population.percapita', 2024) }}"><i class="far fa-file-excel"></i> Descargar preliminar 2024</li></a>
             <li class="list-group-item"><a href="{{ route('indicators.population.percapita', 2023) }}"><i class="far fa-file-excel"></i> Descargar preliminar 2023</li></a>
             <li class="list-group-item"><a href="{{ route('indicators.population.percapita', 2022) }}"><i class="far fa-file-excel"></i> Descargar preliminar 2022</li></a>
