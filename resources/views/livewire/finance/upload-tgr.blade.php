@@ -6,7 +6,7 @@
     <h3 class="mb-3">Cargar archivo de TGR con reporte de Pagos a Proveedores</h3>
     <a href="{{ asset('upload-template/formato_pago_proveedores.xls') }}" target="_blank">Descargar formato del archivo de Pagos a Proveedores</a> 
     <br><br>
-    <form wire:submit="upload">
+    <form wire:submit="uploadSuppliers">
         <div>
             @if (session()->has('message'))
                 <div class="alert alert-success" role="alert">

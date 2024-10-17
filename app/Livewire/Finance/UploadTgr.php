@@ -18,7 +18,7 @@ class UploadTgr extends Component
     
 
 
-    public function upload()
+    public function uploadSuppliers()
     {
         $this->validate([
             'tgrs' => 'required|mimes:xlx,xls,xlsx'
