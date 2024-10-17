@@ -94,7 +94,7 @@
                                         <i class="fas fa-fw fa-file-pdf"></i>
                                     </a>
                                 @else
-                                    <span class="badge badge-secondary" title="Dias restantes para su destrucción">
+                                    <span class="badge text-bg-secondary" title="Dias restantes para su destrucción">
                                         {{ (int) $reception->date->diffInDays(now()) - 15 }}
                                     </span>
                                 @endif

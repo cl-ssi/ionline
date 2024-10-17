@@ -296,12 +296,13 @@ class ReceptionController extends Controller
          * Obtiene todas las recepciones que contengan sustancias que ISP y Presumidas sea true y 
          * que no tengan relación con sampleToIsp (no han sido enviadas al ISP)
          */
-        $receptionsNotSentToIsp = Reception::whereHas('items', function ($query) {
-            $query->whereHas('substance', function ($substanceQuery) {
-                $substanceQuery->where('isp', true)
-                               ->where('presumed', true);
-            });
-        })
+        $receptionsNotSentToIsp = Reception::with('items','items.substance')
+            ->whereHas('items', function ($query) {
+                $query->whereHas('substance', function ($substanceQuery) {
+                    $substanceQuery->where('isp', true)
+                                ->where('presumed', true);
+                });
+            })
         ->doesntHave('sampleToIsp')  // Aquí se filtran las recepciones sin relación con sampleToIsp
         ->get();
 
@@ -309,7 +310,7 @@ class ReceptionController extends Controller
          * Obtiene todas las recepciones que tengan relación con destrucción y que no se les ha creado recordToCourt
          * (no se ha enviado a fiscalía)
          */
-        $receptionsWithDestructionNotSendedToCourt = Reception::with('destruction')
+        $receptionsWithDestructionNotSendedToCourt = Reception::with('items','items.substance','destruction')
             ->whereHas('destruction', function ($query) {
                 $query->where('destructed_at', '<=', now()->subDays(5));
             })
@@ -321,7 +322,8 @@ class ReceptionController extends Controller
          * Obtiene todas las recepciones que no tengan relación con recordToCourt
          * y cuya fecha de recepción (created_at) sea mayor a 30 días
          */
-        $receptionsWithoutRecordToCourtOlderThan30Days = Reception::doesntHave('recordToCourt')
+        $receptionsWithoutRecordToCourtOlderThan30Days = Reception::with('items','items.substance','destruction')
+            ->doesntHave('recordToCourt')
             ->where('created_at', '<=', now()->subDays(30)) // Filtra las recepciones creadas hace más de 30 días
             ->get();
 
