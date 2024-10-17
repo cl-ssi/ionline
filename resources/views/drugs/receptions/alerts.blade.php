@@ -34,7 +34,7 @@
                                                 {{ (int) $reception->date->diffInDays(now()) }} días
                                             </td>
                                             <td class="text-right">
-                                                <a href="{{ route('drugs.receptions.edit', $reception->id) }}"> <i
+                                                <a href="{{ route('drugs.receptions.show', $reception->id) }}"> <i
                                                         class="fas fa-edit"></i></a>
                                             </td>
                                         </tr>
