@@ -116,13 +116,16 @@ class ReceptionResource extends Resource
                                 'factura_exenta' => 'Factura Electronica Exenta',
                                 'boleta_honorarios' => 'Boleta Honorarios',
                             ])
+                            ->required()
                             ->default(null),
                         Forms\Components\TextInput::make('dte_number')
                             ->label('Número')
                             ->maxLength(255)
+                            ->required()
                             ->default(null),
                         Forms\Components\DatePicker::make('dte_date')
                             ->label('Fecha de emisión')
+                            ->required(),
                     ])
                     ->columns(4)
                     ->visible(fn (Get $get) => $get('globalPurchaseOrder') instanceof PurchaseOrder),
@@ -135,6 +138,7 @@ class ReceptionResource extends Resource
                             ->placeholder('Automático'),
                         Forms\Components\DatePicker::make('date')
                             ->label('Fecha')
+                            ->default(now())
                             ->required(),
                         Forms\Components\Select::make('reception_type_id')
                             ->label('Tipo')
@@ -203,6 +207,7 @@ class ReceptionResource extends Resource
                                     ->label('Recepción parcial')
                                     ->boolean()
                                     ->inline()
+                                    ->required()
                                     ->inlineLabel(false),
                                 Forms\Components\Toggle::make('purchaseOrder_completed')
                                     ->label('Orden de compra completada')
@@ -316,7 +321,6 @@ class ReceptionResource extends Resource
                                 $data['module_icon']         = 'fas fa-list';
                                 $data['subject']             = 'Acta de recepción conforme';
                                 $data['document_route_name'] = 'finance.receptions.show';
-                                $data['digital_signature']   = true;
 
                                 return $data;
                             })
