@@ -163,7 +163,7 @@ class ReceptionResource extends Resource
                                 Forms\Components\TextInput::make('Cantidad')
                                     ->required()
                                     ->numeric()
-                                    ->live()
+                                    ->live(onBlur: true)
                                     ->afterStateUpdated(function (?string $state, Set $set, Get $get) {
                                         $cantidad = $state;
                                         $precioNeto = $get('PrecioNeto');
@@ -173,7 +173,7 @@ class ReceptionResource extends Resource
                                 Forms\Components\TextInput::make('PrecioNeto')
                                     ->required()
                                     ->numeric()
-                                    ->live()
+                                    ->live(onBlur: true)
                                     ->afterStateUpdated(function (?string $state, Set $set, Get $get) {
                                         $precioNeto = $state;
                                         $cantidad = $get('Cantidad');
