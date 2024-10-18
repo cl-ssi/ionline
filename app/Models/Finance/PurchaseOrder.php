@@ -2,6 +2,7 @@
 
 namespace App\Models\Finance;
 
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -37,17 +38,17 @@ class PurchaseOrder extends Model
         // 'data' => 'object', // Para poder importar desde MP no puedo ocupar esto
     ];
 
-    public function dtes()
+    public function dtes(): HasMany
     {
         return $this->hasMany(Dte::class,'folio_oc','code');
     }
 
-    public function receptions()
+    public function receptions(): HasMany
     {
         return $this->hasMany(Reception::class,'purchase_order','code')->where('rejected',false);
     }
 
-    public function rejections()
+    public function rejections(): HasMany
     {
         return $this->hasMany(Reception::class,'purchase_order','code')->where('rejected',true);
     }

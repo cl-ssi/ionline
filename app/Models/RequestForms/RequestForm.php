@@ -3,6 +3,8 @@
 namespace App\Models\RequestForms;
 
 use App\Models\Finance\Cdp;
+use App\Observers\RequestForms\RequestFormObserver;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -29,6 +31,7 @@ use App\Models\Documents\SignaturesFile;
 use App\Models\PurchasePlan\PurchasePlan;
 use App\Models\Warehouse\Control;
 
+#[ObservedBy([RequestFormObserver::class])]
 class RequestForm extends Model implements Auditable
 {
     use \OwenIt\Auditing\Auditable;
