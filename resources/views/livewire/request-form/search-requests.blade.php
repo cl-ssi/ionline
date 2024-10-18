@@ -584,6 +584,7 @@
                                         @endif
                                     </td>
                                     <td nowrap>
+                                        aquí
                                         @if($loop->first)
                                             @if($requestForm->purchasingProcess)
                                                 {{ $requestForm->purchasingProcess->getStatus() }}

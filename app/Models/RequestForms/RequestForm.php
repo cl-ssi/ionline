@@ -30,6 +30,7 @@ use App\Models\Parameters\Program;
 use App\Models\Documents\SignaturesFile;
 use App\Models\PurchasePlan\PurchasePlan;
 use App\Models\Warehouse\Control;
+use App\Enums\RequestForms\Status;
 
 #[ObservedBy([RequestFormObserver::class])]
 class RequestForm extends Model implements Auditable
@@ -84,7 +85,8 @@ class RequestForm extends Model implements Auditable
      * @var array
      */
     protected $casts = [
-        'approved_at' => 'datetime',
+        'approved_at'   => 'datetime',
+        'status'        => Status::class,
     ];
 
     /**
