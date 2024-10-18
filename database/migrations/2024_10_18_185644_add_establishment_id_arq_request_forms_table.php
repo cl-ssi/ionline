@@ -29,6 +29,7 @@ return new class extends Migration
         Schema::table('arq_request_forms', function (Blueprint $table) {
             $table->foreignId('establishment_id')
                 ->nullable(false)
+                ->constrained('establishments')
                 ->change();
         });
     }
