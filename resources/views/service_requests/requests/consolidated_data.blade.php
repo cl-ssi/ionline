@@ -74,9 +74,7 @@
 </a> -->
 
 <a class="btn btn-outline-success btn-sm mb-3" 
-    @if($request->establishment_id)
-    href="{{ route('rrhh.service-request.report.consolidated_data_excel_download',[$request->establishment_id,$request->year, $request->semester]) }}"
-    @endif
+    href="{{ route('rrhh.service-request.report.consolidated_data_excel_download',[auth()->user()->organizationalUnit->establishment_id,$request->year, $request->semester]) }}"
     >
     Descargar en excel
 </a>
