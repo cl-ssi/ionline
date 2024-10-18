@@ -75,6 +75,19 @@ class PurchaseOrder extends Model
         return json_decode($this->data);
     }
 
+    /**
+    * Obtener el proveedor
+    */
+    public function getProviderAttribute()
+    {
+        return json_decode($this->data)->Listado[0]?->Proveedor?->Nombre ?? '';
+    }
+
+    public function getIvaAttribute()
+    {
+        return json_decode($this->data)->Listado[0]?->PorcentajeIva ?? 0;
+    }
+
     public function dateFormat($date)
     {
         $parse = Carbon::parse($date);

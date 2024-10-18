@@ -139,9 +139,9 @@ class CreateReception extends Component
 
             $this->reception = [
                 'purchase_order'    => $this->purchaseOrderCode,
-                'establishment_id'  => auth()->user()->organizationalUnit->establishment_id,
-                'creator_id'        => auth()->id(),
-                'creator_ou_id'     => auth()->user()->organizational_unit_id,
+                // 'establishment_id'  => auth()->user()->organizationalUnit->establishment_id,
+                // 'creator_id'        => auth()->id(),
+                // 'creator_ou_id'     => auth()->user()->organizational_unit_id,
             ];
 
             //dd($this->purchaseOrder->json->Listado[0]->Items);
@@ -157,7 +157,7 @@ class CreateReception extends Component
 
 
         if($reception_id and $control_id == 0) {
-            $reception               = Reception::find($reception_id);
+            $reception               = Reception::with('items')->find($reception_id);
             $this->reception         = $reception->toArray();
             //dd($reception->toArray());
             $this->purchaseOrderCode = $reception->purchase_order;

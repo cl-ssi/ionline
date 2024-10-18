@@ -430,6 +430,10 @@ class Dte extends Model implements Auditable
         }
     }
 
+    // public function getTipoDocumentoAttribute(){
+    //     return strtoupper(str_replace('_',' ',$this->tipo_documento));
+    // }
+
     /** Compras Inmediatas */
     // public function immediatePurchases()
     // {
