@@ -14,6 +14,8 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Pages\SubNavigationPosition;
+use Filament\Tables\Actions\ExportAction;
+use App\Filament\Exports\PurchasingProcess\PurchasingProcessesExporter;
 
 class PurchasingProcessResource extends Resource
 {
@@ -59,6 +61,16 @@ class PurchasingProcessResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->headerActions([
+                ExportAction::make()
+                    ->exporter(PurchasingProcessesExporter::class)
+                    ->label('Exportar')
+                    ->modalHeading('Exportar Informe de Procesos de Compra')
+                    ->modalSubmitActionLabel('Exportar')
+                    ->color('success') // Cambia el color a verde
+                    ->icon('heroicon-o-arrow-down-tray') // Cambia a un ícono de Excel, si tienes uno personalizado, puedes usar su ruta
+                    ->columnMapping(false),
+            ])
             ->columns([
                 Tables\Columns\TextColumn::make('requestForm.id')
                     ->label('ID Form.')
