@@ -73,11 +73,13 @@
     Descargar en excel
 </a> -->
 
+@if($request->semester)
 <a class="btn btn-outline-success btn-sm mb-3" 
     href="{{ route('rrhh.service-request.report.consolidated_data_excel_download',[auth()->user()->organizationalUnit->establishment_id,$request->year, $request->semester]) }}"
     >
     Descargar en excel
 </a>
+@endif
 
 <iframe id="txtArea1" style="display:none"></iframe>
 <table class="table table-sm table-bordered table-responsive small" id="table_id">
