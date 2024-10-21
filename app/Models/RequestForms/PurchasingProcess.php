@@ -13,6 +13,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use OwenIt\Auditing\Contracts\Auditable;
+use App\Enums\RequestForms\PurchasingProcess\Status;
+
 
 /*
  * Diferentes estados del Proceso de Compra
@@ -136,6 +138,10 @@ class PurchasingProcess extends Model implements Auditable
                 break;
         }
     }
+
+    protected $casts = [
+        'status'        => Status::class,
+    ];
 
     /**
     * The table associated with the model.

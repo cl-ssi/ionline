@@ -8,20 +8,18 @@ use Filament\Support\Contracts\HasLabel;
 
 enum Status: string implements HasLabel
 {
-    case Pending    = 'pending';
-    case Rejected   = 'rejected';
-    case Approved   = 'approved';
-    case Closed     = 'closed';
-    case Saved      = 'saved';
+    case In_process = 'in_process';
+    case Purchased  = 'purchased';
+    case Finalized  = 'finalized';
+    case Canceled   = 'canceled';
 
     public function getLabel(): ?string
     {
         return match ($this) {
-            self::Pending   => 'Pendiente',
-            self::Rejected  => 'Rechazado',
-            self::Approved  => 'Aprobado',
-            self::Closed    => 'Cerrado',
-            self::Saved     => 'Guardado',
+            self::In_process    => 'En proceso',
+            self::Purchased     => 'Comprado',
+            self::Finalized     => 'Finalizado',
+            self::Canceled      => 'Anulado',
         };
     }
 }

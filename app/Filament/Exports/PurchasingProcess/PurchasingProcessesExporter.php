@@ -45,8 +45,11 @@ class PurchasingProcessesExporter extends Exporter
                 ->label('Impuesto'),
             ExportColumn::make('details.expense')
                 ->label('Valor Total'),
-            ExportColumn::make('details.status')
-                ->label('Estado de Compra'),
+            ExportColumn::make('status')
+                ->label('Estado de Compra')
+                ->formatStateUsing(function ($record) {
+                    return $record->status->getLabel(); // Llama al método getLabel() del Enum
+                }),
             ExportColumn::make('purchasingProcessDetails.immediatePurchase.po_id')
                 ->label('OC'),
             ExportColumn::make('purchasingProcessDetails.immediatePurchase.po_supplier_name')
