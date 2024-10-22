@@ -395,7 +395,7 @@ class RequestForm extends Model implements Auditable
     {
         $total = 0;
         foreach ($this->children as $child) {
-            if ($child->status == 'approved')
+            if ($child->status->value == 'approved')
                 $total += $child->estimated_expense;
         }
         return $total;

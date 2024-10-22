@@ -504,7 +504,7 @@
                         </thead>
                         <tbody>
                         @forelse($requestForm->children as $key => $child)
-                            <tr @if($child->status != 'approved') class="text-muted" @endif>
+                            <tr @if($child->status->value != 'approved') class="text-muted" @endif>
                                 <td>{{ $key+1 }}</td>
                                 <td>{{ $child->id }}<br>
                                     @switch($child->getStatus())
@@ -528,7 +528,7 @@
 
                                     @endswitch
                                 </td>
-                                <td>@if($child->status == 'approved')
+                                <td>@if($child->status->value == 'approved')
                                         <a href="{{ route('request_forms.show', $child) }}">{{ $child->folio }}</a>
                                     @else
                                         {{ $child->folio }}

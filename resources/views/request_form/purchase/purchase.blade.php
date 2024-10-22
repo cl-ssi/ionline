@@ -608,7 +608,7 @@
 
 <!-- COMPRA INMEDIATA A PARTIR DE OTRO RF o COMPRA ÁGIL (cod 7) o CONVENIO MARCO MENOR A 1.000 UTM (cod 4) -->
 @if( $requestForm->father || in_array($requestForm->purchase_type_id, [4, 7]))
-@include('request_form.purchase.partials.immediate_purchase_form')
+    @include('request_form.purchase.partials.immediate_purchase_form')
 @endif
 
 {{--@if(env('APP_ENV') == 'local')
@@ -776,7 +776,7 @@
                 </thead>
                 <tbody>
                     @forelse($requestForm->children as $key => $child)
-                    <tr @if($child->status != 'approved') class="text-muted" @endif>
+                    <tr @if($child->status->value != 'approved') class="text-muted" @endif>
                         <td>{{ $key+1 }}</td>
                         <td>{{ $child->id }}<br>
                             @switch($child->getStatus())
@@ -800,7 +800,7 @@
 
                             @endswitch
                         </td>
-                        <td>@if($child->status == 'approved')<a href="{{ route('request_forms.supply.purchase', $child) }}">{{ $child->folio }}</a> @else {{ $child->folio }} @endif<br>
+                        <td>@if($child->status->value == 'approved')<a href="{{ route('request_forms.supply.purchase', $child) }}">{{ $child->folio }}</a> @else {{ $child->folio }} @endif<br>
                         <td>{{ $child->created_at->format('d-m-Y H:i') }}</td>
                         <td>{{ ($requestForm->purchaseMechanism) ? $requestForm->purchaseMechanism->PurchaseMechanismValue : '' }}<br>
                             {{ $requestForm->SubtypeValue }}

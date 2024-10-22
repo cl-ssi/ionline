@@ -1,4 +1,4 @@
-<div class="card">
+<div class="card mt-3">
     <div class="card-header">
         @if($requestForm->father) 
             ORDEN DE COMPRA
