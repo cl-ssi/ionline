@@ -59,7 +59,7 @@ class TgrsImport implements WithHeadingRow, ToCollection,WithChunkReading
                     if (!empty($row['cuenta_tgr'])) {
                         $dte->paid_automatic = true;
                     } else {
-                        $dte->paid_manual = true;
+                        // $dte->paid_manual = true;
                     }
                     $dte->save();
                 } else {
