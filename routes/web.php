@@ -3,6 +3,7 @@
 use App\Http\Controllers\Rrhh\AbsenteeismController;
 use App\Livewire\Rrhh\CreateAbsenteeism;
 use App\Livewire\Rrhh\ListAbsenteeisms;
+use App\Models\Rrhh\OvertimeRefund;
 use Illuminate\Http\Request;
 use App\Livewire\TicResources;
 use App\Models\Pharmacies\Purchase;
@@ -352,6 +353,7 @@ use App\Http\Controllers\Parameters\ProgramController as ParametersProgramContro
 use App\Http\Controllers\Warehouse\CategoryController as WarehouseCategoryController;
 use App\Http\Controllers\Documents\Sign\SignatureController as SignSignatureController;
 use App\Http\Controllers\Finance\Receptions\ReceptionController as FinReceptionController;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 /*
 |--------------------------------------------------------------------------
@@ -893,11 +895,18 @@ Route::prefix('integrity')->as('integrity.')->group(function () {
 });
 
 Route::prefix('rrhh')->as('rrhh.')->group(function () {
+
+    // Show usado en filament
+    Route::get('/overtime-refunds/{record}', function (OvertimeRefund $record) {
+        return Pdf::loadView('rrhh.overtime-refunds.show', [
+            'record' => $record
+        ])->stream('download.pdf');
+    })->name('overtime-refunds.show');
+
     Route::prefix('sirh')->as('sirh.')->group(function () {
         Route::get('/unidades', \App\Livewire\Sirh\UnidadesIndex::class)->name('unidades');
     });
 
-    
     Route::prefix('performance-report')->name('performance-report.')->middleware('auth')->group(function () {
         Route::get('/period', Period::class)->name('period');
         Route::get('/received-report', ReceivedReport::class)->name('received_report');
