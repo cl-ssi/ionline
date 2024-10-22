@@ -273,6 +273,7 @@ class RoleAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'Users: show access logs', 'description' => 'Permite ver el registro de accesos al sistema de los usuarios']);
         Permission::create(['name' => 'Users: absenteeism user', 'description' => 'Permite hacer solicitudes de ausentismo']);
         Permission::create(['name' => 'Users: absenteeism admin', 'description' => 'Administrador de solicitudes de ausentismo']);
+        Permission::create(['name' => 'Users: overtime refund admin', 'description' => 'Administrador de devoluciones de horas extras']);
         Permission::create(['name' => 'welfare: amipass', 'description' => 'Permiso para acceder a la opción gestor de amipass en bienestar']);
         Permission::create(['name' => 'welfare: balance', 'description' => 'Para acceder a la opción balance de bienestar']);
         Permission::create(['name' => 'welfare: benefits', 'description' => 'Para acceder a las opciones de administración de beneficios']);
