@@ -39,12 +39,35 @@ class PurchasingProcessesExporter extends Exporter
                 ->label('Especificaciones Técnicas'),
             ExportColumn::make('details.quantity')
                 ->label('Cantidad'),
+                /*
+                ->formatStateUsing(function ($record) {
+                    foreach($record->details as $detail){
+                        return number_format($detail->quantity, 0, ',', '.');
+                    }
+                }),
+                */
             ExportColumn::make('details.unit_value')
                 ->label('Valor Unitario'),
+                /*
+                ->formatStateUsing(function ($record) {
+                    foreach($record->details as $detail){
+                        return number_format($detail->unit_value, 0, ',', '.');
+                    }
+                }),
+                */
             ExportColumn::make('details.tax')
                 ->label('Impuesto'),
             ExportColumn::make('details.expense')
                 ->label('Valor Total'),
+                /*
+                ->formatStateUsing(function ($record) {
+                    $detailsRow = [];
+                    foreach($record->details as $detail){
+                        $detailsRow[] = number_format($detail->expense, 0, ',', '.');
+                    }
+                    return implode(', ', $detailsRow);
+                }),
+                */
             ExportColumn::make('status')
                 ->label('Estado de Compra')
                 ->formatStateUsing(function ($record) {
@@ -58,24 +81,70 @@ class PurchasingProcessesExporter extends Exporter
                 ->label('RUT Proveedor'),
             ExportColumn::make('purchasingProcessDetails.quantity')
                 ->label('Cantidad'),
+                /*
+                ->formatStateUsing(function ($record) {
+                    foreach($record->details as $detail){
+                        return number_format($detail->unit_value, 0, ',', '.');
+                    }
+                }),
+                */
             ExportColumn::make('purchasingProcessDetails.unit_value')
                 ->label('Valor Unitario OC'),
+                /*
+                ->formatStateUsing(function ($record) {
+                    foreach($record->purchasingProcessDetails as $purchasingProcessDetail){
+                        return number_format($purchasingProcessDetail->unit_value, 0, ',', '.');
+                    }
+                }),
+                */
             ExportColumn::make('purchasingProcessDetails.expense')
                 ->label('Total Item'),
             ExportColumn::make('total_oc')
                 ->label('Total OC')
                 ->formatStateUsing(function ($record) {
-                    return $record->purchasingProcessDetails->sum('expense');
+                    return number_format($record->purchasingProcessDetails->sum('expense'), 0, ',', '.');
                 }),
             ExportColumn::make('diferencia')
                 ->label('Diferencia Presupuesto / OC')
                 ->formatStateUsing(function ($record) {
                     $totalPoAmount = $record->purchasingProcessDetails->sum('expense');
 
-                    return $record->requestForm->estimated_expense - $totalPoAmount;
+                    return number_format($record->requestForm->estimated_expense - $totalPoAmount, 0, ',', '.');
                 }),
         ];
     }
+
+    /*
+    public static function export($query, array $columns)
+    {
+        $rows = [];
+
+        // Recorremos cada registro principal
+        foreach ($query->get() as $record) {
+            // Recorremos los detalles relacionados (hasMany) y generamos filas individuales
+            foreach ($record->details as $detail) {
+                $rows[] = [
+                    // Datos del PurchasingProcess principal
+                    'requestForm.id' => $record->requestForm->id,
+                    'requestForm.folio' => $record->requestForm->folio,
+                    'requestForm.program' => $record->requestForm->program,
+                    'requestForm.estimated_expense' => number_format($record->requestForm->estimated_expense, 0, ',', '.'),
+                    'status' => $record->status->getLabel(),
+
+                    // Detalle específico
+                    'details.product.name' => $detail->product->name,
+                    'details.specification' => $detail->specification,
+                    'details.quantity' => $detail->quantity,
+                    'details.unit_value' => number_format($detail->unit_value, 0, ',', '.'),
+                    'details.expense' => number_format($detail->expense, 0, ',', '.'),
+                ];
+            }
+        }
+
+        // Retornamos las filas individuales generadas para cada detalle
+        return static::exportRows($rows, $columns);
+    }
+    */
 
     public static function getCompletedNotificationBody(Export $export): string
     {
