@@ -779,21 +779,21 @@
                     <tr @if($child->status->value != 'approved') class="text-muted" @endif>
                         <td>{{ $key+1 }}</td>
                         <td>{{ $child->id }}<br>
-                            @switch($child->getStatus())
+                            @switch($child->status->getLabel())
                             @case('Pendiente')
                             <i class="fas fa-clock"></i>
                             @break
 
                             @case('Aprobado')
                             <span style="color: green;">
-                                <i class="fas fa-check-circle" title="{{ $requestForm->getStatus() }}"></i>
+                                <i class="fas fa-check-circle" title="{{ $requestForm->status->getLabel() }}"></i>
                             </span>
                             @break
 
                             @case('Rechazado')
                             <a href="">
                                 <span style="color: Tomato;">
-                                    <i class="fas fa-times-circle" title="{{ $requestForm->getStatus() }}"></i>
+                                    <i class="fas fa-times-circle" title="{{ $requestForm->status->getLabel() }}"></i>
                                 </span>
                             </a>
                             @break

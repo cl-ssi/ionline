@@ -507,7 +507,7 @@
                             <tr @if($child->status->value != 'approved') class="text-muted" @endif>
                                 <td>{{ $key+1 }}</td>
                                 <td>{{ $child->id }}<br>
-                                    @switch($child->getStatus())
+                                    @switch($child->status->getLabel())
                                         @case('Pendiente')
                                         <i class="fas fa-clock"></i>
                                         @break
