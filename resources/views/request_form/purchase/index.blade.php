@@ -40,7 +40,7 @@
                 <tr>
                     <td>{{ $requestForm->id }} <br>
                         @if($requestForm->purchasingProcess)
-                        <span class="badge badge-{{$requestForm->purchasingProcess->getColor()}}">{{$requestForm->purchasingProcess->getStatus()}}</span>
+                        <span class="badge badge-{{$requestForm->purchasingProcess->getColor()}}">{{$requestForm->purchasingProcess->status->getlabel()}}</span>
                         @else
                         <span class="badge badge-warning">En proceso</span>
                         @endif
@@ -129,7 +129,7 @@
                 <tr>
                     <td>{{ $requestForm->id }} <br>
                         @if($requestForm->purchasingProcess)
-                        <span class="badge badge-{{$requestForm->purchasingProcess->getColor()}}">{{$requestForm->purchasingProcess->getStatus()}}</span>
+                        <span class="badge badge-{{$requestForm->purchasingProcess->getColor()}}">{{$requestForm->purchasingProcess->status->getLabel()}}</span>
                         @else
                         <span class="badge badge-warning">En proceso</span>
                         @endif

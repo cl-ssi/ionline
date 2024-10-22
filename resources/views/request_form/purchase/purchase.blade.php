@@ -12,7 +12,7 @@
         <div class="col-md-8">
             <div class="table-responsive">
                 <h6><i class="fas fa-info-circle"></i> Detalle Formulario ID {{$requestForm->id}} @if($requestForm->purchasingProcess)
-                    <span class="badge badge-{{$requestForm->purchasingProcess->getColor()}}">{{$requestForm->purchasingProcess->getStatus()}}</span>
+                    <span class="badge badge-{{$requestForm->purchasingProcess->getColor()}}">{{$requestForm->purchasingProcess->status->getLabel()}}</span>
                     @else
                     <span class="badge badge-warning">En proceso</span>
                     @endif
