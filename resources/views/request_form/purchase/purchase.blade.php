@@ -7,153 +7,152 @@
 
 @include('request_form.partials.nav')
 
-<!-- <div class="container-fluid"> -->
-    <div class="row">
-        <div class="col-md-8">
-            <div class="table-responsive">
-                <h6><i class="fas fa-info-circle"></i> Detalle Formulario ID {{$requestForm->id}} @if($requestForm->purchasingProcess)
-                    <span class="badge badge-{{$requestForm->purchasingProcess->getColor()}}">{{$requestForm->purchasingProcess->status->getLabel()}}</span>
-                    @else
-                    <span class="badge badge-warning">En proceso</span>
-                    @endif
-                </h6>
-                <table class="table table-sm table-striped table-bordered">
-                    <tbody class="small">
-                        <tr>
-                            <th class="table-active" scope="row">Folio</th>
-                            <td>{{ $requestForm->folio }}
-                            @if($requestForm->father)
-                                <br>(<a href="{{ route('request_forms.show', $requestForm->father->id) }}"
-                                        target="_blank">{{ $requestForm->father->folio }}</a>)
-                            @endif
-                        </td>
-                        </tr>
-                        <tr>
-                            <th class="table-active" scope="row">Fecha de Creación</th>
-                            <td>{{ $requestForm->created_at->format('d-m-Y H:i') }}</td>
-                        </tr>
-                        <tr>
-                            <th class="table-active" style="width: 33%">Nombre</th>
-                            <td>{{ $requestForm->name }}</td>
-                        </tr>
-                        <tr>
-                            <th class="table-active" style="width: 33%">Gasto Estimado</th>
-                            <td>{{$requestForm->symbol_currency}}{{ number_format($requestForm->estimated_expense,$requestForm->precision_currency,",",".") }}</td>
-                        </tr>
-                        {{--@if($requestForm->has_increased_expense)
-                        <tr>
-                            <th class="table-active" style="width: 33%">Nuevo Presupuesto</th>
-                            <td>{{$requestForm->symbol_currency}}{{ number_format($requestForm->new_estimated_expense,$requestForm->precision_currency,",",".") }}</td>
-                        </tr>
-                        @endif--}}
-                        <tr>
-                            <th class="table-active" scope="row">Nombre del Solicitante</th>
-                            <td>{{ $requestForm->user ? $requestForm->user->FullName : 'Usuario eliminado' }}</td>
-                        </tr>
-                        <tr>
-                            <th class="table-active" scope="row">Unidad Organizacional</th>
-                            <td>{{ $requestForm->user ? $requestForm->userOrganizationalUnit->name : 'Usuario eliminado' }}</td>
-                        </tr>
-                        <tr>
-                            <th class="table-active" scope="row">Administrador de Contrato</th>
-                            <td>{{ $requestForm->contractManager ? $requestForm->contractManager->FullName : 'Usuario eliminado' }}</td>
-                        </tr>
-                        <tr>
-                            <th class="table-active" scope="row">Mecanismo de Compra</th>
-                            <td>{{ $requestForm->getPurchaseMechanism()}}</td>
-                        </tr>
-                        <tr>
-                            <th class="table-active" scope="row">Tipo de Compra</th>
-                            <td>{{ $requestForm->purchaseType->name }}</td>
-                        </tr>
-                        <tr>
-                            <th class="table-active" scope="row">Unidad de Compra</th>
-                            <td>{{ $requestForm->purchaseUnit->name  }}</td>
-                        </tr>
-                        <tr>
-                            <th class="table-active" scope="row">Caracteristica de Compra</th>
-                            <td>{{ $requestForm->SubtypeValue }}</td>
-                        </tr>
-                        <tr>
-                            <th class="table-active" scope="row">Programa Asociado</th>
-                            <td>{{ $requestForm->associateProgram ? $requestForm->associateProgram->alias_finance.' '.$requestForm->associateProgram->period : $requestForm->program }}</td>
-                        </tr>
-                        <tr>
-                            <th class="table-active" scope="row">Folio SIGFE</th>
-                            <td>{{ $requestForm->associateProgram->folio ?? $requestForm->sigfe }}</td>
-                        </tr>
-                        <tr>
-                            <th class="table-active" scope="row">Financiamiento</th>
-                            <td>{{ $requestForm->associateProgram->financing ?? '' }}</td>
-                        </tr>
-                        <tr>
-                            <th class="table-active" scope="row">Justificación de Adquisición</th>
-                            <td>{{ $requestForm->justification }}</td>
-                        </tr>
-                        <tr>
-                            <th class="table-active" scope="row">Comprador</th>
-                            <td>{{ $requestForm->purchasers->first()->FullName ?? 'No asignado' }}</td>
-                        </tr>
-
-                    </tbody>
-                </table>
-            </div>
-
-            @if($requestForm->isPurchaseInProcess())
-            <!-- <div class="float-right"> -->
-                <!-- Button trigger modal -->
-                <button type="button" class="btn btn-success btn-sm float-right" data-toggle="modal" @if($requestForm->purchasingProcess == null || ($requestForm->purchasingProcess && $requestForm->purchasingProcess->details->count() == 0 && $requestForm->purchasingProcess->detailsPassenger->count() == 0)) onclick="return alert('No hay registro de compras para dar término al proceso de compra') || event.stopImmediatePropagation()" @endif data-target="#processClosure" data-status="finished">
-                    Terminar <i class="fas fa-shopping-cart"></i>
-                </button>
-                <!-- Button trigger modal -->
-                <button type="button" class="btn btn-danger btn-sm float-right mr-2" data-toggle="modal" onclick="return confirm('¿Está seguro/a de anular proceso de compra?') || event.stopImmediatePropagation()" data-target="#processClosure" data-status="canceled">
-                    Anular <i class="fas fa-shopping-cart"></i>
-                </button>
-
-                @include('request_form.purchase.modals.purchasing_process_closure')
-
-                <!-- Button trigger modal -->
-                <button type="button" class="btn btn-primary btn-sm float-right mr-2" data-toggle="modal" data-target="#exampleModal">
-                    Agregar nuevo proceso de compra
-                </button>
-
-                @include('request_form.purchase.modals.select_purchase_mechanism')
-
-                <!-- Button trigger modal -->
-                <button type="button" class="btn btn-primary btn-sm float-right mr-2" data-toggle="modal" data-target="#requestBudget" @if($isBudgetEventSignPending) disabled @endif >
-                    Cambiar presupuesto
-                </button>
-
-                @include('request_form.purchase.modals.request_new_budget')
-            <!-- </div> -->
-            @endif
-        </div>
-        <div class="col-md-4">
-            <h6><i class="fas fa-paperclip"></i> Adjuntos</h6>
-            <div class="list-group">
-                @foreach($requestForm->requestFormFiles as $requestFormFile)
-                <a href="{{ route('request_forms.show_file', $requestFormFile) }}" class="list-group-item list-group-item-action py-2 small" target="_blank">
-                    <i class="fas fa-file"></i> {{ $requestFormFile->name }} -
-                    <i class="fas fa-calendar-day"></i> {{ $requestFormFile->created_at->format('d-m-Y H:i') }}</a>
-                @endforeach
-
-                @if($requestForm->father)
-                @foreach($requestForm->father->requestFormFiles as $requestFormFile)
-                <a href="{{ route('request_forms.show_file', $requestFormFile) }}" class="list-group-item list-group-item-action py-2 small" target="_blank">
-                    <i class="fas fa-file"></i> {{ $requestFormFile->name }} -
-                    <i class="fas fa-calendar-day"></i> {{ $requestFormFile->created_at->format('d-m-Y H:i') }}</a>
-                @endforeach
+<div class="row">
+    <div class="col-md-8">
+        <div class="table-responsive">
+            <h6><i class="fas fa-info-circle"></i> Detalle Formulario ID {{$requestForm->id}} @if($requestForm->purchasingProcess)
+                <span class="badge badge-{{$requestForm->purchasingProcess->getColor()}}">{{$requestForm->purchasingProcess->status->getLabel()}}</span>
+                @else
+                <span class="badge badge-warning">En proceso</span>
                 @endif
+            </h6>
+            <table class="table table-sm table-striped table-bordered">
+                <tbody class="small">
+                    <tr>
+                        <th class="table-active" scope="row">Folio</th>
+                        <td>{{ $requestForm->folio }}
+                        @if($requestForm->father)
+                            <br>(<a href="{{ route('request_forms.show', $requestForm->father->id) }}"
+                                    target="_blank">{{ $requestForm->father->folio }}</a>)
+                        @endif
+                    </td>
+                    </tr>
+                    <tr>
+                        <th class="table-active" scope="row">Fecha de Creación</th>
+                        <td>{{ $requestForm->created_at->format('d-m-Y H:i') }}</td>
+                    </tr>
+                    <tr>
+                        <th class="table-active" style="width: 33%">Nombre</th>
+                        <td>{{ $requestForm->name }}</td>
+                    </tr>
+                    <tr>
+                        <th class="table-active" style="width: 33%">Gasto Estimado</th>
+                        <td>{{$requestForm->symbol_currency}}{{ number_format($requestForm->estimated_expense,$requestForm->precision_currency,",",".") }}</td>
+                    </tr>
+                    {{--@if($requestForm->has_increased_expense)
+                    <tr>
+                        <th class="table-active" style="width: 33%">Nuevo Presupuesto</th>
+                        <td>{{$requestForm->symbol_currency}}{{ number_format($requestForm->new_estimated_expense,$requestForm->precision_currency,",",".") }}</td>
+                    </tr>
+                    @endif--}}
+                    <tr>
+                        <th class="table-active" scope="row">Nombre del Solicitante</th>
+                        <td>{{ $requestForm->user ? $requestForm->user->FullName : 'Usuario eliminado' }}</td>
+                    </tr>
+                    <tr>
+                        <th class="table-active" scope="row">Unidad Organizacional</th>
+                        <td>{{ $requestForm->user ? $requestForm->userOrganizationalUnit->name : 'Usuario eliminado' }}</td>
+                    </tr>
+                    <tr>
+                        <th class="table-active" scope="row">Administrador de Contrato</th>
+                        <td>{{ $requestForm->contractManager ? $requestForm->contractManager->FullName : 'Usuario eliminado' }}</td>
+                    </tr>
+                    <tr>
+                        <th class="table-active" scope="row">Mecanismo de Compra</th>
+                        <td>{{ $requestForm->getPurchaseMechanism()}}</td>
+                    </tr>
+                    <tr>
+                        <th class="table-active" scope="row">Tipo de Compra</th>
+                        <td>{{ $requestForm->purchaseType->name }}</td>
+                    </tr>
+                    <tr>
+                        <th class="table-active" scope="row">Unidad de Compra</th>
+                        <td>{{ $requestForm->purchaseUnit->name  }}</td>
+                    </tr>
+                    <tr>
+                        <th class="table-active" scope="row">Caracteristica de Compra</th>
+                        <td>{{ $requestForm->SubtypeValue }}</td>
+                    </tr>
+                    <tr>
+                        <th class="table-active" scope="row">Programa Asociado</th>
+                        <td>{{ $requestForm->associateProgram ? $requestForm->associateProgram->alias_finance.' '.$requestForm->associateProgram->period : $requestForm->program }}</td>
+                    </tr>
+                    <tr>
+                        <th class="table-active" scope="row">Folio SIGFE</th>
+                        <td>{{ $requestForm->associateProgram->folio ?? $requestForm->sigfe }}</td>
+                    </tr>
+                    <tr>
+                        <th class="table-active" scope="row">Financiamiento</th>
+                        <td>{{ $requestForm->associateProgram->financing ?? '' }}</td>
+                    </tr>
+                    <tr>
+                        <th class="table-active" scope="row">Justificación de Adquisición</th>
+                        <td>{{ $requestForm->justification }}</td>
+                    </tr>
+                    <tr>
+                        <th class="table-active" scope="row">Comprador</th>
+                        <td>{{ $requestForm->purchasers->first()->FullName ?? 'No asignado' }}</td>
+                    </tr>
 
-            </div>
+                </tbody>
+            </table>
+        </div>
+
+        @if($requestForm->isPurchaseInProcess())
+        <!-- <div class="float-right"> -->
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-success btn-sm float-right" data-toggle="modal" @if($requestForm->purchasingProcess == null || ($requestForm->purchasingProcess && $requestForm->purchasingProcess->details->count() == 0 && $requestForm->purchasingProcess->detailsPassenger->count() == 0)) onclick="return alert('No hay registro de compras para dar término al proceso de compra') || event.stopImmediatePropagation()" @endif data-target="#processClosure" data-status="finished">
+                Terminar <i class="fas fa-shopping-cart"></i>
+            </button>
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-danger btn-sm float-right mr-2" data-toggle="modal" onclick="return confirm('¿Está seguro/a de anular proceso de compra?') || event.stopImmediatePropagation()" data-target="#processClosure" data-status="canceled">
+                Anular <i class="fas fa-shopping-cart"></i>
+            </button>
+
+            @include('request_form.purchase.modals.purchasing_process_closure')
+
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-primary btn-sm float-right mr-2" data-toggle="modal" data-target="#exampleModal">
+                Agregar nuevo proceso de compra
+            </button>
+
+            @include('request_form.purchase.modals.select_purchase_mechanism')
+
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-primary btn-sm float-right mr-2" data-toggle="modal" data-target="#requestBudget" @if($isBudgetEventSignPending) disabled @endif >
+                Cambiar presupuesto
+            </button>
+
+            @include('request_form.purchase.modals.request_new_budget')
+        <!-- </div> -->
+        @endif
+    </div>
+    <div class="col-md-4">
+        <h6><i class="fas fa-paperclip"></i> Adjuntos</h6>
+        <div class="list-group">
+            @foreach($requestForm->requestFormFiles as $requestFormFile)
+            <a href="{{ route('request_forms.show_file', $requestFormFile) }}" class="list-group-item list-group-item-action py-2 small" target="_blank">
+                <i class="fas fa-file"></i> {{ $requestFormFile->name }} -
+                <i class="fas fa-calendar-day"></i> {{ $requestFormFile->created_at->format('d-m-Y H:i') }}</a>
+            @endforeach
+
+            @if($requestForm->father)
+            @foreach($requestForm->father->requestFormFiles as $requestFormFile)
+            <a href="{{ route('request_forms.show_file', $requestFormFile) }}" class="list-group-item list-group-item-action py-2 small" target="_blank">
+                <i class="fas fa-file"></i> {{ $requestFormFile->name }} -
+                <i class="fas fa-calendar-day"></i> {{ $requestFormFile->created_at->format('d-m-Y H:i') }}</a>
+            @endforeach
+            @endif
+
         </div>
     </div>
-<!-- </div> -->
+</div>
 
 <br>
 
 </div>
 
+<!-- PROCESO DE FIRMAS -->
 <div class="container-fluid">
     <div class="row">
         <div class="col">
@@ -214,38 +213,39 @@
     </div>
 </div>
 
+<!-- OBSERVACIONES PREVIAS -->
 @if($requestForm->eventRequestForms->whereNotNull('deleted_at')->count() > 0)
-<div class="container-fluid">
-    <div class="row">
-        <div class="col">
-            <div class="table-responsive">
-                <h6><i class="fas fa-eye"></i> Observaciones previas</h6>
-                <table class="table table-sm table-striped table-bordered">
-                    <tbody class="small">
-                        @foreach($requestForm->eventRequestForms->whereNotNull('deleted_at') as $event)
-                        @if($event->comment != null)
-                        <tr>
-                            <td>@if($event->StatusValue == 'Aprobado')
-                                <span style="color: green;">
-                                    <i class="fas fa-check-circle text-left"></i> {{ $event->StatusValue }} <br>
-                                </span>
-                                @else
-                                <span style="color: Tomato;">
-                                    <i class="fas fa-times-circle"></i> {{ $event->StatusValue }} <br>
-                                </span> 
-                                @endif
-                            </td>
-                            <td><i class="fas fa-calendar"></i> {{ $event->signature_date->format('d-m-Y H:i:s') }} por: {{ $event->signerUser->FullName }} en calidad de {{ $event->EventTypeValue }}</td>
-                            <td class="text-left font-italic"><i class="fas fa-comment"></i> "{{ $event->comment }}"</td>
-                        </tr>
-                        @endif
-                        @endforeach
-                    </tbody>
-                </table>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col">
+                <div class="table-responsive">
+                    <h6><i class="fas fa-eye"></i> Observaciones previas</h6>
+                    <table class="table table-sm table-striped table-bordered">
+                        <tbody class="small">
+                            @foreach($requestForm->eventRequestForms->whereNotNull('deleted_at') as $event)
+                            @if($event->comment != null)
+                            <tr>
+                                <td>@if($event->StatusValue == 'Aprobado')
+                                    <span style="color: green;">
+                                        <i class="fas fa-check-circle text-left"></i> {{ $event->StatusValue }} <br>
+                                    </span>
+                                    @else
+                                    <span style="color: Tomato;">
+                                        <i class="fas fa-times-circle"></i> {{ $event->StatusValue }} <br>
+                                    </span> 
+                                    @endif
+                                </td>
+                                <td><i class="fas fa-calendar"></i> {{ $event->signature_date->format('d-m-Y H:i:s') }} por: {{ $event->signerUser->FullName }} en calidad de {{ $event->EventTypeValue }}</td>
+                                <td class="text-left font-italic"><i class="fas fa-comment"></i> "{{ $event->comment }}"</td>
+                            </tr>
+                            @endif
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
-</div>
 @endif
 
 <br>
@@ -253,22 +253,22 @@
 @if($requestForm->isPurchaseInProcess())
     @if($requestForm->purchase_mechanism_id == 1)
         @if($requestForm->purchase_type_id == 1)
-        <form method="POST" class="form-horizontal" action="{{ route('request_forms.supply.create_petty_cash', $requestForm) }}" enctype="multipart/form-data">
+            <form method="POST" class="form-horizontal" action="{{ route('request_forms.supply.create_petty_cash', $requestForm) }}" enctype="multipart/form-data">
         @endif
         @if($requestForm->purchase_type_id == 2)
-        <form method="POST" class="form-horizontal" action="{{ route('request_forms.supply.create_internal_oc', $requestForm) }}">
+            <form method="POST" class="form-horizontal" action="{{ route('request_forms.supply.create_internal_oc', $requestForm) }}">
         @endif
         @if($requestForm->purchase_type_id == 3)
-        <form method="POST" class="form-horizontal" action="{{ route('request_forms.supply.create_fund_to_be_settled', $requestForm) }}">
+            <form method="POST" class="form-horizontal" action="{{ route('request_forms.supply.create_fund_to_be_settled', $requestForm) }}">
         @endif
     @endif
 
     @if($requestForm->purchase_mechanism_id == 2)
         @if($requestForm->father || $requestForm->purchase_type_id == 4)
         <!-- OC ejecución inmediata desde trato directo con ejecucion en el tiempo o CONVENIO MARCO MENOR A 1.000 UTM -->
-        <form method="POST" class="form-horizontal" action="{{ route('request_forms.supply.create_oc', $requestForm) }}" enctype="multipart/form-data">
+            <form method="POST" class="form-horizontal" action="{{ route('request_forms.supply.create_oc', $requestForm) }}" enctype="multipart/form-data">
         @else
-        <form method="POST" class="form-horizontal" action="{{ route('request_forms.supply.create_convenio_marco', $requestForm) }}" enctype="multipart/form-data">
+            <form method="POST" class="form-horizontal" action="{{ route('request_forms.supply.create_convenio_marco', $requestForm) }}" enctype="multipart/form-data">
         @endif
     @endif
 

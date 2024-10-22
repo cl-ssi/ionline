@@ -458,7 +458,7 @@ class RequestForm extends Model implements Auditable
 
     public function isPurchaseInProcess()
     {
-        return $this->purchasingProcess == null || ($this->purchasingProcess && $this->purchasingProcess->status == 'in_process');
+        return $this->purchasingProcess == null || ($this->purchasingProcess && $this->purchasingProcess->status->value == 'in_process');
     }
 
     public function getSubtypeValueAttribute()
