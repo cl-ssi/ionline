@@ -216,22 +216,22 @@
                     @foreach($request_forms as $requestForm)
                     <tr>
                         <th>{{ $requestForm->id }} <br>
-                            @switch($requestForm->getStatus())
-                                @case('Pendiente')
+                            @switch($requestForm->status->value)
+                                @case('pending')
                                     <i class="fas fa-clock"></i>
                                 @break
 
-                                @case('Aprobado')
+                                @case('approved')
                                     <span style="color: green;">
-                                    <i class="fas fa-check-circle" title="{{ $requestForm->getStatus() }}"></i>
+                                        <i class="fas fa-check-circle" title="{{ $requestForm->getStatus() }}"></i>
                                     </span>
                                     @if($requestForm->purchasingProcess)
-                                        <span class="badge badge-{{$requestForm->purchasingProcess->getColor()}}">{{$requestForm->purchasingProcess->getStatus()}}</span>
+                                        <span class="badge badge-{{$requestForm->purchasingProcess->getColor()}}">{{ $requestForm->purchasingProcess->status->getLabel() }}</span>
                                     @else
                                         <span class="badge badge-warning">En proceso</span>
                                     @endif
                                 @break$
-                                @case('Rechazado')
+                                @case('rejected')
                                     <a href="">
                                         <span style="color: Tomato;">
                                             <i class="fas fa-times-circle" title="{{ $requestForm->getStatus() }}"></i>

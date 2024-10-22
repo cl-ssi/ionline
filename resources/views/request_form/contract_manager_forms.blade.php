@@ -44,21 +44,21 @@
                   @foreach($contract_manager_forms as $requestForm)
                         <tr>
                             <th>{{ $requestForm->id }} <br>
-                                @switch($requestForm->getStatus())
+                                @switch($requestForm->status->getLabel())
                                     @case('Pendiente')
                                         <i class="fas fa-clock"></i>
                                         @break
 
                                     @case('Aprobado')
                                         <span style="color: green;">
-                                          <i class="fas fa-check-circle" title="{{ $requestForm->getStatus() }}"></i>
+                                          <i class="fas fa-check-circle" title="{{ $requestForm->status->getLabel() }}"></i>
                                         </span>
                                         @break
 
                                     @case('Rechazado')
                                         <a href="">
                                             <span style="color: Tomato;">
-                                                <i class="fas fa-times-circle" title="{{ $requestForm->getStatus() }}"></i>
+                                                <i class="fas fa-times-circle" title="{{ $requestForm->status->getLabel() }}"></i>
                                             </span>
                                         </a>
                                         @break

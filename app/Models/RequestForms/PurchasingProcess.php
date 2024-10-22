@@ -105,6 +105,7 @@ class PurchasingProcess extends Model implements Auditable
     //   return $this->belongsTo(ItemRequestForm::class, 'item_request_form_id');
     // }
 
+    /*
     public function getStatus(){
         switch ($this->status) {
             case "in_process":
@@ -121,9 +122,10 @@ class PurchasingProcess extends Model implements Auditable
                 break;
         }
     }
+    */
 
     public function getColor(){
-        switch ($this->status) {
+        switch ($this->status->value) {
             case "in_process":
                 return 'warning';
                 break;
