@@ -14,6 +14,7 @@ use Filament\Pages\SubNavigationPosition;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Support\HtmlString;
 
 class OvertimeRefundResource extends Resource
 {
@@ -196,6 +197,32 @@ class OvertimeRefundResource extends Resource
                             ->label('Total horas nocturnas')
                             ->readOnly(),
 
+                        Forms\Components\Placeholder::make('notas')
+                            ->hiddenLabel()
+                            ->content(new HtmlString('
+                                <strong>NOTAS</strong><br>
+                                1. Las horas extraordinarias solicitadas serán valorizadas y previamente evaluadas para su autorización, modificación o rechazo.<br>
+                                2. Las fundamentaciones de las horas extras solicitadas deben ser claras y específicas (no siendo generalizadas), de lo contrario se dejará sin efecto esa solicitud.<br>
+                                3. El tope de horas extraordinarias diurnas corresponde a 40 horas mensuales, las cuales están establecidas por ley.<br>
+                                4. Las horas extraordinarias nocturnas no mantienen un tope legal, pero deben ajustarse a las necesidades de cada servicio o unidad.<br>
+                                5. Cualquier duda o consulta dirigirse a la U. de GESTIÓN de P. y C.V.L.
+                                ')
+                            )
+                            ->columnSpanFull(),
+
+                        Forms\Components\Placeholder::make('articulo')
+                            ->hiddenLabel()
+                            ->content(new HtmlString('
+                                    <strong>Articulo 66, Estatuto Administrativo:</strong> El jefe superior de la institución, el Secretario Regional Ministerial o 
+                                    el Director Regional de servicios nacionales desconcentrados, según corresponda, podrá ordenar trabajos 
+                                    extraordinarios a continuación de la jornada ordinaria, de noche o en días sábado, domingo y festivos, 
+                                    cuando hayan de cumplirse tareas impostergables.<br>
+                                    1. Para las jornadas de 44 horas se contabiliza como hora extraordinaria a partir del minuto 30.<br>
+                                    2. La jornada extraordinaria nocturna se contempla entre las 21:00 horas hasta las 07:00 horas, sábados y domingos y festivos.<br>
+                                    3. La jornada extraordinaria diurna se contempla entre las 08:00 horas hasta 21:00 horas.<br>
+                                ')
+                            )
+                            ->columnSpanFull(),
 
                     ])
                     ->columns(5)

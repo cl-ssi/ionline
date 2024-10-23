@@ -67,35 +67,37 @@
     <br>
 
     @foreach ($record->getWeeks() as $week)
-        <table class="tabla">
-            <tr>
-                <th>Fecha</th>
-                <th>Horas Diurnas</th>
-                <th>Horas Nocturnas</th>
-                <th>Justificación</th>
-            </tr>
-            @foreach ($week['days'] as $days)
+        @if($week['days'])
+            <table class="tabla">
                 <tr>
-                    <td width="60">{{ $days['date'] }}</td>
-                    <td width="74" class="right">{{ $days['hours_day'] }} min</td>
-                    <td width="74" class="right">{{ $days['hours_night'] }} min</td>
-                    <td>{{ $days['justification'] }}</td>
+                    <th>Fecha</th>
+                    <th>Horas Diurnas</th>
+                    <th>Horas Nocturnas</th>
+                    <th>Justificación</th>
                 </tr>
-            @endforeach
-            <tr>
-                <th>
-                    Total horas
-                </th>
-                <th style="text-align: right;">
-                    ({{ $week['totals']['total_hours_day_converted'] }}) {{ $week['totals']['total_hours_day'] }} min
-                </th>
-                <th style="text-align: right;">
-                    ({{ $week['totals']['total_hours_night_converted'] }}) {{ $week['totals']['total_hours_night'] }} min
-                </th>
-                <th></th>
-            </tr>
-        </table>
+                @foreach ($week['days'] as $days)
+                    <tr>
+                        <td width="60">{{ $days['date'] }}</td>
+                        <td width="74" class="right">{{ $days['hours_day'] }} min</td>
+                        <td width="74" class="right">{{ $days['hours_night'] }} min</td>
+                        <td>{{ $days['justification'] }}</td>
+                    </tr>
+                @endforeach
+                <tr>
+                    <th>
+                        Total horas
+                    </th>
+                    <th style="text-align: right;">
+                        ({{ $week['totals']['total_hours_day_converted'] }}) {{ $week['totals']['total_hours_day'] }} min
+                    </th>
+                    <th style="text-align: right;">
+                        ({{ $week['totals']['total_hours_night_converted'] }}) {{ $week['totals']['total_hours_night'] }} min
+                    </th>
+                    <th></th>
+                </tr>
+            </table>
         <br>
+        @endif
     @endforeach
 
     <table>

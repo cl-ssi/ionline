@@ -900,7 +900,7 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
     Route::get('/overtime-refunds/{record}', function (OvertimeRefund $record) {
         return Pdf::loadView('rrhh.overtime-refunds.show', [
             'record' => $record
-        ])->stream('download.pdf');
+        ])->stream('descarga-ionline.pdf');
     })->name('overtime-refunds.show');
 
     Route::prefix('sirh')->as('sirh.')->group(function () {
