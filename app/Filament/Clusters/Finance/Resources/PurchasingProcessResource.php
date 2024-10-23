@@ -81,6 +81,10 @@ class PurchasingProcessResource extends Resource
                     ->searchable()
                     ->numeric()
                     ->url(fn($record)=>route('request_forms.show', $record->id)),
+                Tables\Columns\TextColumn::make('created_at')
+                    ->label('Fecha Form.')
+                    ->dateTime('d-m-Y H:i:s')
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('requestForm.program')
                     ->label('Programa')
                     ->searchable(),

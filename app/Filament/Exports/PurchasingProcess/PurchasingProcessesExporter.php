@@ -18,6 +18,11 @@ class PurchasingProcessesExporter extends Exporter
                 ->label('ID Form.'),
             ExportColumn::make('requestForm.folio')
                 ->label('Folio'),
+            ExportColumn::make('created_at')
+                ->label('Fecha Form.')
+                ->formatStateUsing(function ($record) {
+                    return $record->created_at ? $record->created_at->format('d-m-Y H:i:s') : null;
+                }),
             ExportColumn::make('requestForm.program')
                 ->label('Programa'),
             ExportColumn::make('requestForm.associateProgram.alias_finance')
