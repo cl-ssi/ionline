@@ -27,9 +27,10 @@ class CreatePurchasePlan extends Component
         $purpose,
         $subdirectorate, 
         $organizationalUnit, 
-        $subject,
-        $program_id,
+        // $selectedYear,
         $period,
+        $program_id,
+        $subject,
         $disabled;
 
     /* Listeners */
@@ -358,5 +359,16 @@ class CreatePurchasePlan extends Component
         else{
             unset($this->files[$key]);
         }
+    }
+
+    public function updatedPeriod($value)
+    {
+        $this->dispatch('contentChanged', contentChanged: $value);
+    }
+
+    #[On('clearSearchedProgram')]
+    public function clearSearchedProgram(){
+        $this->searchedProgram = null;
+        $this->program_id = null;
     }
 }

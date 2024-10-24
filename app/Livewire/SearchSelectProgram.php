@@ -57,10 +57,11 @@ class SearchSelectProgram extends Component
         $this->programs = [];
         $this->program = null;
         $this->selectedProgramName = null;
-        /*
-        if($this->emit_name == 'searchedRequesterOu'){
-            $this->dispatch('clearRequesterOu');
+        if($this->emit_name == 'searchedProgram'){
+            $this->dispatch('clearSearchedProgram');
         }
+        
+        /*
         if($this->emit_name == 'searchedAdminOu'){
             $this->dispatch('clearAdminOu');
         }
@@ -101,6 +102,7 @@ class SearchSelectProgram extends Component
     #[On('contentChanged')]
     public function contentChanged($contentChanged)
     {
+        $this->resetx();
         $this->year = $contentChanged;
     }
 
