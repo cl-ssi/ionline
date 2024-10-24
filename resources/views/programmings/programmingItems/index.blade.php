@@ -57,7 +57,7 @@
             <span class="badge badge-primary">{{$programming->countTotalReviewsBy('Accepted rectified')}}</span>
         </a>
         @if($programming->pendingItems != null || $programming->pendingIndirectItems != null)
-        <button type="button" class="btn btn-outline-warning btn-sm mb-1" data-toggle="modal" data-target="#exampleModal" @unlessrole('Programming: Review|Programming: Admin') disabled @endunlessrole>
+        <button type="button" class="btn btn-outline-warning btn-sm mb-1" data-toggle="modal" data-target="#exampleModal" @cannot('Reviews: create') disabled @endcannot>
         <i class="fas fa-exclamation-triangle"></i> Actividades pendientes <span class="badge badge-warning">{{$programming->pendingItems->count() + $programming->pendingIndirectItems->count()}}</span>
         </button> 
         @endif
@@ -85,7 +85,7 @@
                                     <option style="font-size:70%;" value="Designación">OTRA ACTIVIDAD INDIRECTA POR DESIGNACIÓN DE ROL PENDIENTE</option>
                                 @foreach($pendingActivities as $activity)
                                     <option style="font-size:70%;" value="{{ $activity->id }}">
-                                        {{ Str::limit($activity->tracer.' - '.$activity->activity_name.' - '.$activity->def_target_population.' - '.$activity->professional, 300, '(...)') }}
+                                        {{ Str::limit($activity->tracer.' - '.$activity->activity_name.' - '.$activity->def_target_population.' - '.$activity->professional, 170, '(...)') }}
                                     </option>
                                 @endforeach
                             </select>
@@ -100,7 +100,7 @@
                         </div>
                     </div>
                 </form>
-                <br><br><br>
+                <br><br><br><br><br><br>
       </div>
     </div>
   </div>
