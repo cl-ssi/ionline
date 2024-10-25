@@ -38,6 +38,7 @@ class CreateReceptionNoOc extends Component
     public $showFacturaExentaFields = false;
     public $readonly = true;
     public $showAllFields = false;
+    public $no_oc_header_notes;
 
     public $receptionItems = [];
     public $exento = false;

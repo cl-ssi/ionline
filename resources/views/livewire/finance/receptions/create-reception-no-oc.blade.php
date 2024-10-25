@@ -257,14 +257,14 @@
                     id="for-header_notes"
                     rows="6"
                     class="form-control"
-                    wire:model="reception.header_notes"></textarea>
+                    wire:model="no_oc_header_notes"></textarea>
 
                 <div>
                     @livewire(
                         'text-templates.controls-text-template',
                         [
                             'module' => 'Receptions',
-                            'input' => 'reception.header_notes',
+                            'input' => 'no_oc_header_notes',
                         ],
                         key('head_notes')
                     )
