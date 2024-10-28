@@ -180,7 +180,7 @@ class CreateReceptionNoOc extends Component
             'dte_type' => $this->reception['dte_type'],
             'dte_number' => $this->folio,
             'dte_date' => $this->reception['dte_date'],
-            'header_notes' => $this->reception['header_notes'] ?? null,
+            'header_notes' => $no_oc_header_notes ?? null,
             'neto' => isset($this->montoNeto) ? $this->montoNeto : null,
             'subtotal' => isset($this->montoNeto) ? $this->montoNeto : null,
             'iva' => isset($this->montoIva) ? $this->montoIva : null,
