@@ -387,9 +387,16 @@ class CreateReceptionNoOc extends Component
 
     public function calculateTotalAmount()
     {
+        // Validador montoNeto si es null o esta vacio
         $neto = $this->montoNeto ?? 0;
+        $neto = ($neto != '') ? $neto :0;
+        // Validador montoExento si es null o esta vacio
         $exento = $this->montoExento ?? 0;
+        $exento = ($exento != '') ? $exento :0;
+        // Validador montoIva si es null o esta vacio y 0 si no es factura electronica afecta
         $iva = $this->showFacturaElectronicaFields ? ($this->montoIva ?? 0) : 0;
+        $iva = ($iva != '') ? $iva : 0;
+        // Suma para generar montoTotal
         $this->montoTotal = $neto + $iva + $exento;
     }
 
