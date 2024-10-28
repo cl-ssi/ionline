@@ -178,7 +178,7 @@ class ComparativeRequirementImport implements ToCollection, WithStartRow,WithChu
                         $dte->paid_folio = $row[8];
                         $dte->paid_at = isset($row[1]) && strpos($row[9], '/') !== false ? Carbon::createFromFormat('d/m/Y', $row[9]) : null;
                         $dte->paid_effective_amount = isset($row[10]) ? (int)str_replace('.', '', $row[10]) : null;
-                        $dte->paid_manual = true;
+                        // $dte->paid_manual = true; // Estan llegando a pagos institucionales
                         $dte->save();
                         $dte_rut_emisor = $dte->emisor;
                         $tipo_documento = $dte->tipo_documento;
