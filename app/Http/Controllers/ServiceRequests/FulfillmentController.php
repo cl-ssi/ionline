@@ -88,14 +88,13 @@ class FulfillmentController extends Controller
                                             ->when($establishment_id != 38, function ($q) use ($establishment_id) {
                                                 return $q->where('establishment_id',$establishment_id);
                                             })
-                                            ->orderBy('id','asc')
+                                            ->orderBy('id','desc')
                                             ->paginate(100);
 
         }
         // Service Request: fulfillments rrhh - Service Request: fulfillments finance
         else{
-          $serviceRequests = ServiceRequest::orderBy('id','asc')
-                                          ->when($responsability_center_ou_id != NULL, function ($q) use ($responsability_center_ou_id) {
+          $serviceRequests = ServiceRequest::when($responsability_center_ou_id != NULL, function ($q) use ($responsability_center_ou_id) {
                                                 return $q->where('responsability_center_ou_id',$responsability_center_ou_id);
                                             })
                                           ->when($program_contract_type != NULL, function ($q) use ($program_contract_type) {
@@ -125,6 +124,7 @@ class FulfillmentController extends Controller
                                                 return $q->where('establishment_id',$establishment_id);
                                             })
                                            // ->where('program_contract_type','Mensual')
+                                           ->orderBy('id','desc')
                                            ->paginate(100);
                                            // ->get();
         }

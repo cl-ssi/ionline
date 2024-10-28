@@ -343,7 +343,7 @@ class ServiceRequestController extends Controller
         ->when($establishment_id != 38, function ($q) use ($establishment_id) {
             return $q->where('establishment_id',$establishment_id);
         })
-        ->orderBy('id', 'asc')
+        ->orderBy('id', 'desc')
         ->paginate(100);
     // ->get();
     
