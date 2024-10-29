@@ -21,6 +21,8 @@ class HealthServiceResource extends Resource
 
     protected static ?string $cluster = Parameters::class;
 
+    protected static ?string $navigationGroup = 'Establecimientos';
+
     protected static ?string $modelLabel = 'servicio de salud';
 
     protected static ?string $pluralModelLabel = 'servicios de salud';

@@ -30,6 +30,7 @@ class IntranetPanelProvider extends PanelProvider
         return $panel
             ->default()
             ->id('intranet')
+            ->sidebarCollapsibleOnDesktop()
             ->path('intranet')
             ->brandLogo(fn () => view('filament.logo'))
             ->login(CustomLogin::class)

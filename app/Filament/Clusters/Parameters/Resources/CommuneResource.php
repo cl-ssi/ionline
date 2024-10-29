@@ -22,6 +22,8 @@ class CommuneResource extends Resource
 
     protected static ?string $cluster = Parameters::class;
 
+    protected static ?string $navigationGroup = 'Establecimientos';
+
     protected static ?string $modelLabel = 'Comunas';
 
     public static function form(Form $form): Form

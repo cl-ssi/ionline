@@ -23,6 +23,8 @@ class ProgramResource extends Resource
 
     protected static ?string $cluster = Parameters::class;
 
+    protected static ?string $navigationGroup = 'Servicio';
+
     protected static ?string $modelLabel = 'Programa';
 
     public static function form(Form $form): Form
