@@ -24,6 +24,8 @@ class EstablishmentResource extends Resource
 
     protected static ?string $modelLabel = 'establecimiento';
 
+    protected static ?string $navigationGroup = 'Establecimientos';
+
     protected static ?string $pluralModelLabel = 'establecimientos';
 
     public static function form(Form $form): Form

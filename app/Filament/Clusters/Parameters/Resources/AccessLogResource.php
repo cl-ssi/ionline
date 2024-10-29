@@ -29,6 +29,8 @@ class AccessLogResource extends Resource
 
     protected static ?string $cluster = Parameters::class;
 
+    protected static ?string $navigationGroup = 'Sistema';
+
     public static function form(Form $form): Form
     {
         return $form

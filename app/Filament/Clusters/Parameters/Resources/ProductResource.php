@@ -24,6 +24,8 @@ class ProductResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-shopping-bag';
 
+    protected static ?string $navigationGroup = 'UNSPSC';
+
     protected static ?string $cluster = Parameters::class;
 
     public static function form(Form $form): Form

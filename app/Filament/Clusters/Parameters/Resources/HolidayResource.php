@@ -23,6 +23,8 @@ class HolidayResource extends Resource
 
     protected static ?string $modelLabel = 'feriado';
 
+    protected static ?string $navigationGroup = 'Servicio';
+
     protected static ?string $pluralModelLabel = 'feriados';
 
     public static function form(Form $form): Form

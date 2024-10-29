@@ -25,6 +25,8 @@ class PhraseOfTheDayResource extends Resource
 
     protected static ?string $modelLabel = 'Frase del Día';
 
+    protected static ?string $navigationGroup = 'Sistema';
+
     protected static ?string $pluralModelLabel = 'Frases del Día';
 
     public static function form(Form $form): Form
