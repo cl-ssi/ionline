@@ -2,18 +2,18 @@
 
 namespace App\Policies\Parameters;
 
-use App\Models\Unspsc\Product;
+use App\Models\Parameters\AccessLog;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
 
-class ProductPolicy
+class AccessLogPolicy
 {
-        /**
+    /**
      * Perform pre-authorization checks.
      * For administrative purposes, the user with the 'be god' ability can do anything.
      * If null is returned, the authorization check will fall through to the policy method
      */
-    public function before(User $user): ? bool
+    public function before(User $user): ?bool
     {
         if ($user->can('be god')) {
             return true;
@@ -33,7 +33,7 @@ class ProductPolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, Product $Product): bool
+    public function view(User $user, AccessLog $AccessLog): bool
     {
         return false;
     }
@@ -49,7 +49,7 @@ class ProductPolicy
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, Product $Product): bool
+    public function update(User $user, AccessLog $AccessLog): bool
     {
         return false;
     }
@@ -57,7 +57,7 @@ class ProductPolicy
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, Product $Product): bool
+    public function delete(User $user, AccessLog $AccessLog): bool
     {
         return false;
     }
@@ -65,7 +65,7 @@ class ProductPolicy
     /**
      * Determine whether the user can restore the model.
      */
-    public function restore(User $user, Product $Product): bool
+    public function restore(User $user, AccessLog $AccessLog): bool
     {
         return false;
     }
@@ -73,7 +73,7 @@ class ProductPolicy
     /**
      * Determine whether the user can permanently delete the model.
      */
-    public function forceDelete(User $user, Product $Product): bool
+    public function forceDelete(User $user, AccessLog $AccessLog): bool
     {
         return false;
     }
