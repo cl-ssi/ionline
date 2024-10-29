@@ -75,7 +75,9 @@
                     @endif
                     {{ $approval->module }}
                     <br>
-                    ID: {{ $approval->approvable_id }}
+                    @if($approval->module != 'Viáticos')
+                        {{ $approval->approvable_id }}
+                    @endif
                 </td>
                 <td>
                     {!! $approval->subject !!}
