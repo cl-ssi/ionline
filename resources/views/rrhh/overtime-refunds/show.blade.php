@@ -110,3 +110,16 @@
     </table>
 
 @endsection
+
+@section('approvals')
+    <!-- Sección de las aprobaciones -->
+    <div class="signature-footer">
+        @foreach($record->approvals as $approval)
+            <div class="signature" style="padding-left: 6px;">
+                @include('sign.approvation', [
+                    'approval' => $approval,
+                ])
+            </div>
+        @endforeach
+    </div>
+@endsection

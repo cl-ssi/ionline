@@ -193,6 +193,61 @@ class OrganizationalUnit extends Model implements Auditable
         return $initials;
     }
 
+    /**
+     * Retorna un array de las OrganizationalUnits ascendentes, incluyendo la unidad inicial,
+     * cada una con su relación manager cargada.
+     *
+     * @return array
+     */
+    public function getAncestorUnitsArray(): array
+    {
+        $units = [];
+    
+        // Incluir la unidad actual con su relación manager cargada
+        $units[] = ['id' => $this->id, 'name' => $this->name, 'manager' => $this->manager->id ?? null, 'level' => $this->level];
+    
+        // Verificar si la unidad tiene un padre
+        if ($this->father) {
+            // Obtener las unidades ascendentes del padre
+            $ancestorUnits = $this->father->getAncestorUnitsArray();
+            // Fusionar las unidades del padre con las unidades actuales
+            $units = array_merge($units, $ancestorUnits);
+        }
+
+        return $units;
+    }
+
+    /**
+     * Obtiene todas las unidades organizacionales descendientes de la unidad actual en base a un array de IDs.
+     */
+    public function getHierarchicalUnits(User $user): array
+    {
+        $organizationalUnits = $this->getAncestorUnitsArray();
+    
+        // Filtrar unidades donde el manager es el mismo que el del siguiente
+        $organizationalUnits = array_values(array_filter($organizationalUnits, function ($unit, $key) use ($organizationalUnits) {
+            return !isset($organizationalUnits[$key + 1]) || $unit['manager'] != $organizationalUnits[$key + 1]['manager'];
+        }, ARRAY_FILTER_USE_BOTH));
+    
+        // Filtrar unidades donde el manager es el usuario actual
+        $organizationalUnits = array_values(array_filter($organizationalUnits, function ($unit) use ($user) {
+            return $user->id != $unit['manager'];
+        }));
+    
+        // Verificar la condición adicional sobre el nivel de la primera unidad
+        if (!empty($organizationalUnits)) {
+            $firstUnit = $organizationalUnits[0];
+            $lastIndex = count($organizationalUnits) - 1;
+    
+            if ($firstUnit['level'] > 2 || ($firstUnit['level'] == 2 && $user->id != $firstUnit['manager'])) {
+                unset($organizationalUnits[$lastIndex]);
+            }
+        }
+    
+        // Reindexar el array para devolverlo con índices consecutivos
+        return array_values($organizationalUnits);
+    }
+
     public function getTree($getBrothers = false, $getChilds = false)
     {
         // ARBOL PARA GOOGLE CHART

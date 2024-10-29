@@ -2,15 +2,19 @@
 
 namespace App\Models\Rrhh;
 
+use App\Models\Documents\Approval;
 use App\Models\Establishment;
+use App\Models\Parameters\Parameter;
 use App\Models\User;
 use App\Observers\Rrhh\OvertimeRefundObserver;
+use Filament\Support\Contracts\HasColor;
 use Filament\Support\Contracts\HasLabel;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 #[ObservedBy([OvertimeRefundObserver::class])]
 class OvertimeRefund extends Model
@@ -31,13 +35,15 @@ class OvertimeRefund extends Model
         'details',
         'total_minutes_day',
         'total_minutes_night',
+        'status',
         'establishment_id',
     ];
 
     protected $casts = [
-        'date' => 'date',
+        'date'    => 'date',
         'details' => 'array',
-        'type' => Type::class,
+        'type'    => Type::class,
+        'status'  => Status::class,
     ];
 
     public function user(): BelongsTo
@@ -60,25 +66,73 @@ class OvertimeRefund extends Model
         return $this->belongsTo(Establishment::class);
     }
 
-    protected function totalMinutesDayInHours(): Attribute
+    /**
+     * Get all of the approvations of a model.
+     */
+    public function approvals(): MorphMany
     {
-        return Attribute::make(
-            get: fn () => $this->convertMinutesToHoursAndMinutes($this->total_minutes_day),
-        );
+        return $this->morphMany(Approval::class, 'approvable');
     }
 
-    protected function totalMinutesNightInHours(): Attribute
+    public function createApprovals(): void
     {
-        return Attribute::make(
-            get: fn () => $this->convertMinutesToHoursAndMinutes($this->total_minutes_night),
-        );
-    } 
+        $organizationalUnitsArray = $this->organizationalUnit->getHierarchicalUnits($this->user);
+        $ouSubRRHH                = Parameter::get('ou', 'SubRRHH', $this->establishment_id);
+
+        if (! $ouSubRRHH) {
+            abort(403, 'Falta setear el Parámetro SubRRHH para el establecimiento.');
+        }
+
+        // Agregar el SubRRHH al final del array siempre y cuando no sea el último
+        if ($organizationalUnitsArray[count($organizationalUnitsArray) - 1]['id'] != $ouSubRRHH) {
+            $organizationalUnitsArray[] = [
+                'id' => $ouSubRRHH,
+            ];
+        }
+
+        $previousApprovalId = null;
+        $positions          = ['left', 'center', 'right'];
+
+        foreach ($organizationalUnitsArray as $index => $organizationalUnit) {
+            $userApproval = $this->approvals()->create([
+                'module'                => 'Devolución Horas Extras',
+                'module_icon'           => 'bi bi-clock',
+                'subject'               => 'Solicitud Devolución Horas Extras',
+                'document_route_name'   => 'rrhh.overtime-refunds.show',
+                'document_route_params' => json_encode([
+                    'record' => $this->id,
+                ]),
+                'sent_to_ou_id'        => $organizationalUnit['id'],
+                'approvable_callback'  => true,
+                'active'               => $index === 0, // Solo el primero es activo
+                'previous_approval_id' => $previousApprovalId,
+                'position'             => $positions[$index % 3], // Ciclo de 'left', 'center', 'right'
+                'start_y'              => $index < 3 ? 80 : null, // Solo los primeros 3 elementos tienen stary_y en 80
+            ]);
+
+            // Actualizar el ID del último approval creado
+            $previousApprovalId = $userApproval->id;
+        }
+    }
+
+    public function approvalCallback(): void
+    {
+        // Verificar los estados de los approvals
+        if ($this->approvals->every(fn ($approval) => $approval->status === true)) {
+            $this->update(['status' => 'approved']);
+        } elseif ($this->approvals->contains(fn ($approval) => $approval->status === false)) {
+            $this->update(['status' => 'rejected']);
+        } 
+        // elseif ($this->approvals->contains(fn ($approval) => $approval->status === null)) {
+        //     $this->update(['status' => 'pending']);
+        // }
+    }
 
     public function getWeeks(): array
     {
-        $weeks = [];
+        $weeks        = [];
         $startOfMonth = $this->date->startOfMonth();
-        $endOfMonth = $this->date->endOfMonth();
+        $endOfMonth   = $this->date->endOfMonth();
 
         $currentDate = $startOfMonth->copy();
 
@@ -86,23 +140,23 @@ class OvertimeRefund extends Model
             $weekNumber = $currentDate->weekOfYear;
             $dateString = $currentDate->toDateString();
 
-            if (!isset($weeks[$weekNumber])) {
+            if (! isset($weeks[$weekNumber])) {
                 $weeks[$weekNumber] = [
-                    'days' => [],
+                    'days'   => [],
                     'totals' => [
-                        'total_hours_day' => 0,
-                        'total_hours_night' => 0,
-                        'total_hours_day_converted' => '00H,00m',
+                        'total_hours_day'             => 0,
+                        'total_hours_night'           => 0,
+                        'total_hours_day_converted'   => '00H,00m',
                         'total_hours_night_converted' => '00H,00m',
                     ],
                 ];
             }
 
             $detailsForDate = collect($this->details)->firstWhere('date', $dateString);
-            $details = $detailsForDate ?? [
-                'hours_day' => 0,
-                'hours_night' => 0,
-                'active' => true,
+            $details        = $detailsForDate ?? [
+                'hours_day'     => 0,
+                'hours_night'   => 0,
+                'active'        => true,
                 'justification' => null,
             ];
 
@@ -120,32 +174,71 @@ class OvertimeRefund extends Model
 
         // Convertir los totales de minutos a horas y minutos
         foreach ($weeks as $weekNumber => $week) {
-            $weeks[$weekNumber]['totals']['total_hours_day_converted'] = $this->convertMinutesToHoursAndMinutes($week['totals']['total_hours_day']);
+            $weeks[$weekNumber]['totals']['total_hours_day_converted']   = $this->convertMinutesToHoursAndMinutes($week['totals']['total_hours_day']);
             $weeks[$weekNumber]['totals']['total_hours_night_converted'] = $this->convertMinutesToHoursAndMinutes($week['totals']['total_hours_night']);
         }
 
         return $weeks;
     }
 
+    protected function totalMinutesDayInHours(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->convertMinutesToHoursAndMinutes($this->total_minutes_day),
+        );
+    }
+
+    protected function totalMinutesNightInHours(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->convertMinutesToHoursAndMinutes($this->total_minutes_night),
+        );
+    }
+
     private function convertMinutesToHoursAndMinutes($totalMinutes): string
     {
-        $hours = floor($totalMinutes / 60);
+        $hours   = floor($totalMinutes / 60);
         $minutes = $totalMinutes % 60;
+
         return sprintf('%02dH:%02dm', $hours, $minutes);
     }
 }
 
-
 enum Type: string implements HasLabel
 {
-    case Pay = 'pay';
+    case Pay    = 'pay';
     case Return = 'return';
 
     public function getLabel(): ?string
     {
         return match ($this) {
-            self::Pay => 'Pago',
+            self::Pay    => 'Pago',
             self::Return => 'Devolución',
+        };
+    }
+}
+
+enum Status: string implements HasLabel, HasColor
+{
+    case Pending  = 'pending';
+    case Approved = 'approved';
+    case Rejected = 'rejected';
+
+    public function getLabel(): ?string
+    {
+        return match ($this) {
+            self::Pending  => 'Pendiente',
+            self::Approved => 'Aprobado',
+            self::Rejected => 'Rechazado',
+        };
+    }
+
+    public function getColor(): string | array | null
+    {
+        return match ($this) {
+            self::Pending => 'gray',
+            self::Approved => 'success',
+            self::Rejected => 'danger',
         };
     }
 }

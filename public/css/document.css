@@ -130,12 +130,11 @@ br {
     bottom: 50px; 
 }
 
-/* Este es para dejar las signatures antes del footer */
+/* Este es para dejar las signatures antes del en footer @section('approvals')*/
 .signature-footer {
     position: absolute;
-    margin-left: 88px;
+    margin-left: 76px;
     bottom: 50px;
-    height: 50px;
 }
 
 .signature {
@@ -145,6 +144,7 @@ br {
     padding-right: 1px;
     padding-bottom: 2px;
     width: 207.3px;
+    /* padding-left: 6px; */
 }
 
 .danger {

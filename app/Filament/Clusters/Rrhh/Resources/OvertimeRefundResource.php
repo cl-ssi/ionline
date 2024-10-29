@@ -249,14 +249,19 @@ class OvertimeRefundResource extends Resource
                 Tables\Columns\BadgeColumn::make('type')
                     ->label('Tipo')
                     ->sortable(),
+                Tables\Columns\BadgeColumn::make('status')
+                    ->label('Estado')
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('total_hours_day')
                     ->label('Horas diurnas')
                     ->numeric()
-                    ->sortable(),
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('total_hours_night')
                     ->label('Horas nocturnas')
                     ->numeric()
-                    ->sortable(),
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('establishment.alias')
                     ->label('Establecimiento')
                     ->sortable()

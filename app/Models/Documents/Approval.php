@@ -118,7 +118,23 @@ class Approval extends Model
             /* (Opcional) Se puede enviar directo a una persona (es el user_id), pero hay que evitarlo */
             //"sent_to_user_id" => 15287582,
 
-            /* (Opcional) Metodo que se ejecutará al realizar la aprobación o rechazo */
+            /**
+             * (Opcional) Nueva forma de llamar al callback.
+             * Si es true ejecutará: $approval->approvable->approvalCallback()
+             * 
+             * Deberás crear en tu modelo un método approvalCallback()
+             * Ejemplo:
+             *     public function approvalCallback(): void
+             *     {
+             *         $this->update(['boss_position' => 'Aprobado']);
+             *     }
+             **/
+            // 'approvable_callback' => true, // true or false
+
+
+            /* (Opcional) (legacy) preferencia al el callback anterior
+             * Metodo de un controller que se ejecutará al realizar la aprobación o rechazo 
+             **/
             //"callback_controller_method" => "App\Http\Controllers\Rrhh\NoAttendanceRecordController@approvalCallback",
 
             /* (Opcional) Parámetros que se le pasarán al método callback */
@@ -232,6 +248,7 @@ class Approval extends Model
         'approver_at',          // Datetime, asignar en caso de aprobación/rechazo
         'status',               // True or False, asignar en caso de aprobación/rechazo
         
+        'approvable_callback',    // Nueva forma para llamar al callback, true or false ejecutará $approval->approvable->approvalCallback()
         'callback_controller_method',
         'callback_controller_params',
         'callback_feedback_inputs',
@@ -367,8 +384,8 @@ class Approval extends Model
         $this->status = null;
 
         if($this->filename) {
-            if(Storage::disk('gcs')->exists($this->filename)) {
-                Storage::disk('gcs')->delete($this->filename);
+            if(Storage::exists($this->filename)) {
+                Storage::delete($this->filename);
             }
         }
 
@@ -380,9 +397,9 @@ class Approval extends Model
     {
         $link = null;
 
-        if(Storage::disk('gcs')->exists($this->filename))
+        if(Storage::exists($this->filename))
         {
-            $link = Storage::disk('gcs')->url($this->filename);
+            $link = Storage::url($this->filename);
         }
 
         return $link;
@@ -390,7 +407,7 @@ class Approval extends Model
 
     public function getFilenameBase64Attribute()
     {
-        $documentBase64Pdf = base64_encode(Storage::disk('gcs')->get($this->filename));
+        $documentBase64Pdf = base64_encode(Storage::get($this->filename));
 
         return $documentBase64Pdf;
     }

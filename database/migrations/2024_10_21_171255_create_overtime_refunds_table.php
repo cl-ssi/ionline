@@ -24,6 +24,7 @@ return new class extends Migration
             $table->text('details')->nullable();
             $table->unsignedInteger('total_minutes_day')->nullable();
             $table->unsignedInteger('total_minutes_night')->nullable();
+            $table->enum('status',['pending','approved','rejected'])->default('pending');
             $table->foreignId('establishment_id')->constrained();
             $table->timestamps();
             $table->softDeletes();

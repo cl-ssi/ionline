@@ -93,7 +93,7 @@ trait ApprovalTrait
                 /**
                  * Si tiene un callback, se ejecuta en cola
                  */
-                if($approval->callback_controller_method) {
+                if($approval->callback_controller_method OR $approval->approvable_callback) {
                     ProcessApproval::dispatch($approval);
                 }
             }
@@ -125,7 +125,7 @@ trait ApprovalTrait
                     /**
                      * Si tiene un callback, se ejecuta en cola
                      */
-                    if($approval->callback_controller_method) {
+                    if($approval->callback_controller_method OR $approval->approvable_callback) {
                         ProcessApproval::dispatch($approval);
                     }
                 }
@@ -147,7 +147,7 @@ trait ApprovalTrait
                      */
                     if($approval->document_pdf_path) {
                         // METODO get() obtiene el contenido.
-                        $response = Storage::disk('gcs')->get($approval->document_pdf_path);
+                        $response = Storage::get($approval->document_pdf_path);
 
                         $files[] = $response;
                     }
@@ -175,7 +175,7 @@ trait ApprovalTrait
                             /**
                              * Si tiene un callback, se ejecuta en cola
                              */
-                            if($approvalsSignatures[$key]->callback_controller_method) {
+                            if($approval->callback_controller_method OR $approval->approvable_callback) {
                                 ProcessApproval::dispatch($approvalsSignatures[$key]);
                             }
                         }
@@ -240,7 +240,7 @@ trait ApprovalTrait
         /**
          * Guarda el archivo en el storage
          */
-        Storage::disk('gcs')->put($approval->filename, $response->original, ['CacheControl' => 'no-store']);
+        Storage::put($approval->filename, $response->original, ['CacheControl' => 'no-store']);
     }
 
 }
