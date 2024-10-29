@@ -896,13 +896,6 @@ Route::prefix('integrity')->as('integrity.')->group(function () {
 
 Route::prefix('rrhh')->as('rrhh.')->group(function () {
 
-    // Show usado en filament
-    Route::get('/overtime-refunds/{record}', function (OvertimeRefund $record) {
-        return Pdf::loadView('rrhh.overtime-refunds.show', [
-            'record' => $record
-        ])->stream('descarga-ionline.pdf');
-    })->name('overtime-refunds.show');
-
     Route::prefix('sirh')->as('sirh.')->group(function () {
         Route::get('/unidades', \App\Livewire\Sirh\UnidadesIndex::class)->name('unidades');
     });

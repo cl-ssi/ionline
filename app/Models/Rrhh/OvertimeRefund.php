@@ -156,12 +156,11 @@ class OvertimeRefund extends Model
             $details        = $detailsForDate ?? [
                 'hours_day'     => 0,
                 'hours_night'   => 0,
-                'active'        => true,
                 'justification' => null,
             ];
 
             // Solo incluir registros donde active es true
-            if ($details['active']) {
+            if ($details['hours_day'] > 0 || $details['hours_night'] > 0) {
                 $weeks[$weekNumber]['days'][$dateString] = $details;
 
                 // Sumar las horas del día y de la noche

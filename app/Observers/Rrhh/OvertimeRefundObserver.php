@@ -15,7 +15,7 @@ class OvertimeRefundObserver
         $overtimeRefund->establishment()->associate(auth()->user()->establishment);
         $overtimeRefund->organizationalUnit()->associate(auth()->user()->organizationalUnit);
         $overtimeRefund->boss()->associate(auth()->user()->boss);
-        $overtimeRefund->update(['boss_position', auth()->user()->boss_position]);
+        $overtimeRefund->boss_position = auth()->user()->boss->position;
     }
 
     /**

@@ -6,6 +6,7 @@ use App\Filament\Clusters\Rrhh;
 use App\Filament\Clusters\Rrhh\Resources\OvertimeRefundResource\Pages;
 use App\Models\Rrhh\Attendance;
 use App\Models\Rrhh\OvertimeRefund;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
@@ -36,45 +37,66 @@ class OvertimeRefundResource extends Resource
             ->schema([
                 Forms\Components\Grid::make()
                     ->schema([
-                        Forms\Components\DatePicker::make('date')
+                        Forms\Components\Radio::make('type')
+                            ->hiddenLabel()
+                            ->options([
+                                'pay'    => 'Pago',
+                                'return' => 'Devolución',
+                            ])
+                            ->inline()
+                            ->inlineLabel(false)
+                            ->required()
+                            ->live(),
+                        Forms\Components\Select::make('date')
                             ->hiddenLabel()
                             ->live()
-                            ->required(),
+                            ->required()
+                            ->options(fn () => Attendance::where('user_id', auth()->id())
+                                ->orderBy('date', 'desc')
+                                ->pluck('date', 'date')
+                                ->map(fn ($date) => $date->format('Y-m'))
+                                ->toArray()
+                            )
+                            ->disableOptionWhen(fn (string $value, Get $get) => OvertimeRefund::where('user_id', auth()->id())
+                                ->where('date', $value)
+                                ->where('type', $get('type'))
+                                ->exists()
+                            )
+                            ->disabled(fn (Get $get) => is_null($get('type'))),
                         Forms\Components\Actions::make([
                             Forms\Components\Actions\Action::make('Buscar')
                                 ->action(function (Get $get, Set $set) {
                                     $attendance = Attendance::where('user_id', auth()->id())
                                         ->whereDate('date', $get('date'))
                                         ->first();
-                                
+
                                     if ($attendance) {
                                         $set('attendance', $attendance);
-                                
+
                                         // Obtener detalles de overTimeRefundDetails
                                         $overTimeRefundDetails = $attendance->overTimeRefundDetails;
-                                
+
                                         // Obtener detalles de $record->details
                                         $recordDetails = $get('details') ?? [];
-                                
+
                                         // Función para fusionar los detalles
                                         $mergedDetails = array_map(function ($detail) use ($recordDetails) {
                                             // Buscar el detalle correspondiente en $recordDetails
                                             $recordDetail = collect($recordDetails)->firstWhere('date', $detail['date']);
-                                
+
                                             // Si no existe, completar con valores predeterminados
                                             if (!$recordDetail) {
                                                 $recordDetail = [
                                                     'hours_day' => 0,
                                                     'hours_night' => 0,
-                                                    'active' => false,
                                                     'justification' => null,
                                                 ];
                                             }
-                                
+
                                             // Fusionar los detalles, manteniendo la primera columna de overTimeRefundDetails
-                                            return array_merge($detail, array_intersect_key($recordDetail, array_flip(['hours_day', 'hours_night', 'active', 'justification'])));
+                                            return array_merge($detail, array_intersect_key($recordDetail, array_flip(['hours_day', 'hours_night', 'justification'])));
                                         }, $overTimeRefundDetails);
-                                
+
                                         $set('details', $mergedDetails);
                                         $set('grado', $attendance->grado);
                                     }
@@ -94,15 +116,6 @@ class OvertimeRefundResource extends Resource
                         Forms\Components\TextInput::make('planta')
                             ->maxLength(255)
                             ->default(null),
-                        Forms\Components\Radio::make('type')
-                            ->label('Tipo')
-                            ->options([
-                                'pay'    => 'Pago',
-                                'return' => 'Devolución',
-                            ])
-                            ->inline()
-                            ->inlineLabel(false)
-                            ->required(),
                         Forms\Components\Placeholder::make('Jefatura')
                             ->content(fn (): int|string|null => auth()->user()->boss->shortName),
                         Forms\Components\Placeholder::make('Cargo de la jefatura')
@@ -115,21 +128,22 @@ class OvertimeRefundResource extends Resource
                                     ->disabled()
                                     ->dehydrated()
                                     ->columnSpan(2),
+                                Forms\Components\TextInput::make('entrada_real')
+                                    ->label('Entrada')
+                                    ->disabled(),
+                                Forms\Components\TextInput::make('salida_real')
+                                    ->label('Salida')
+                                    ->disabled(),
                                 Forms\Components\TextInput::make('overtime')
-                                    ->label('Horas extras')
-                                    ->disabled()
-                                    ->columnSpan(2),
-                                Forms\Components\Toggle::make('active')
-                                    ->label('Contar')
-                                    ->required()
-                                    ->inline(false),
+                                    ->label('Min extras')
+                                    ->disabled(),
                                 Forms\Components\TextInput::make('hours_day')
-                                    ->label('Horas diurnas')
+                                    ->label('Horas diurnas (en min)')
                                     ->required()
                                     ->numeric()
                                     ->columnSpan(2),
                                 Forms\Components\TextInput::make('hours_night')
-                                    ->label('Horas nocturnas')
+                                    ->label('Horas nocturnas (en min)')
                                     ->required()
                                     ->numeric()
                                     ->columnSpan(2),
@@ -137,7 +151,7 @@ class OvertimeRefundResource extends Resource
                                     ->label('Justificación')
                                     ->maxLength(255)
                                     ->columnSpan(3)
-                                    ->requiredIf('active',true),
+                                    ->requiredIf(fn (Get $get) => $get('hours_day') > 0 || $get('hours_night') > 0, true),
                             ])
                             ->columns(12)
                             ->columnSpanFull()
@@ -150,18 +164,10 @@ class OvertimeRefundResource extends Resource
                                 ->action(function (Get $get, Set $set) {
                                     $items         = $get('details') ?? [];
                                     $totalMinutesDay = array_reduce($items, function ($carry, $item) {
-                                        if (isset($item['active']) && $item['active']) {
-                                            return $carry + ($item['hours_day'] ?? 0);
-                                        }
-
-                                        return $carry;
+                                        return $carry + ($item['hours_day'] ?? 0);
                                     }, 0);
                                     $totalMinutesNight = array_reduce($items, function ($carry, $item) {
-                                        if (isset($item['active']) && $item['active']) {
                                             return $carry + ($item['hours_night'] ?? 0);
-                                        }
-
-                                        return $carry;
                                     }, 0);
                     
                                     // Función para convertir minutos a horas y minutos
@@ -288,8 +294,13 @@ class OvertimeRefundResource extends Resource
                     ->label('Ver')
                     ->color('success')
                     ->icon('heroicon-o-document')
-                    ->url(fn (OvertimeRefund $record) => route('rrhh.overtime-refunds.show', $record))
-                    ->openUrlInNewTab(),
+                    ->action(function (OvertimeRefund $record) {
+                        return response()->streamDownload(function () use ($record) {
+                            echo Pdf::loadView('rrhh.overtime-refunds.show', [
+                                'record' => $record
+                            ])->output();
+                        }, 'descarga-ionline.pdf');
+                    }),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
