@@ -578,7 +578,7 @@
 
         <h3 class="text-center mb-3">Acta de recepción conforme</h3>
 
-        <p style="white-space: pre-wrap;">{{ $reception['header_notes'] ?? '' }}</p>
+        <p style="white-space: pre-wrap;">{{ $no_oc_header_notes ?? '' }}</p>
 
         <table class="table table-sm table-bordered">
             <tr>
