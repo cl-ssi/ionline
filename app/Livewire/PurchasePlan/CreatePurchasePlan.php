@@ -69,7 +69,7 @@ class CreatePurchasePlan extends Component
             'period.required'               => 'Debe ingresar un periodo.',
             'items.required'                => 'Debe ingresar al menos un item.',
             'program_id.required'           => 'Debe ingresar un programa.',
-            'files.required'                => 'Debe ingresar Decreto o Resolucion que asigna el presupuesto.',
+            // 'files.required'                => 'Debe ingresar Decreto o Resolucion que asigna el presupuesto.',
 
             /* Mensajes para archivos */
             'fileName.required'                 => 'Debe ingresar un nombre para el archivo.',
@@ -150,7 +150,7 @@ class CreatePurchasePlan extends Component
             'period'            => 'required',
             'program_id'        => 'required',
             'items'             => 'required',
-            'files'             => ($this->searchedProgram != null && str_contains(strtolower($this->searchedProgram->name), 'institucional')) ? 'required' : '',
+            //'files'             => ($this->searchedProgram != null && str_contains(strtolower($this->searchedProgram->name), 'institucional')) ? 'required' : '',
         ]);
 
         $purchasePlan = DB::transaction(function () {
