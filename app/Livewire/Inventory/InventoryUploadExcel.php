@@ -137,16 +137,13 @@ class InventoryUploadExcel extends Component
 
             if ($row[18]) {
                 $inventory = Inventory::where('old_number', $row[18])->whereNull('deleted_at')->first();
-                /**
-                 *  FIX: No deja que se actualicen los campos con cambios del excel. 
-                **/
-                
-                // if ($inventory) {
-                //     $msg .= 'El número de inventario antiguo de la fila '.($key + 1).' cuyo número antiguo es '.$inventory->old_number.' ya se encuentra en nuestros sistemas. <br>';
-                //     $rows_fail += 1;
-                //     $allRowsGood = false;
-                //     continue;
-                // }
+                if ($inventory && empty($row[0])) {
+                    // $msg .= 'El número de inventario antiguo de la fila '.($key + 1).' cuyo número antiguo es '.$inventory->old_number.' ya se encuentra en nuestros sistemas. <br>';
+                    $msg .= 'Registro sin número de inventario con número de inventario antiguo de la fila '.($key + 1).' cuyo número antiguo es '.$inventory->old_number.' no puede ser actualizado. <br>';
+                    $rows_fail += 1;
+                    $allRowsGood = false;
+                    continue;
+                }
             }
 
             switch ($row[8]) {
