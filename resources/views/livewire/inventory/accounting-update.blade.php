@@ -101,7 +101,7 @@
                         </select>
                     </td>
                     <td>
-                        {{$inventory->control->date->format('d-m-Y')}}
+                        {{$inventory->control?->date->format('d-m-Y')}}
                     </td>
                 </tr>
                 @empty
