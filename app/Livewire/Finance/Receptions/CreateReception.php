@@ -524,6 +524,7 @@ class CreateReception extends Component
         /* Guardar Items */
         foreach($this->receptionItems as $item) {
             if($item['Cantidad'] > 0) {
+                $item['Cantidad'] = ($item['Cantidad'] == (int)$item['Cantidad'])?$item['Cantidad']:ceil($item['Cantidad']);
                 $reception->items()->updateOrCreate(
                     ['id' => $item['id'] ?? null],
                     $item
