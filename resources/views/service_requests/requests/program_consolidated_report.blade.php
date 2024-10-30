@@ -11,13 +11,13 @@
 <form method="GET" class="form-horizontal" action="{{ route('rrhh.service-request.report.program_consolidated_report') }}">
 	<div class="form-row mb-3">
         <div class="form-group col">
-			<label>Año Inicio de Contrato</label>
+            <label>Año Inicio de Contrato</label>
 			<select class="form-control" data-live-search="true" name="year" data-size="5">
-				<option value="2023" @if($request->year == "2023") selected @endif>2023</option>
-                <option value="2022" @if($request->year == "2022") selected @endif>2022</option>
-                <option value="2021" @if($request->year == "2021") selected @endif>2021</option>
-                <option value="2020" @if($request->year == "2020") selected @endif>2020</option>
-                <option value="2019" @if($request->year == "2019") selected @endif>2019</option>
+                <option value="{{now()->addYear(-3)->format('Y')}}" @selected($request->year == now()->addYear(-3)->format('Y'))> {{now()->addYear(-3)->format('Y')}}</option>
+                <option value="{{now()->addYear(-2)->format('Y')}}" @selected($request->year == now()->addYear(-2)->format('Y'))> {{now()->addYear(-2)->format('Y')}}</option>
+                <option value="{{now()->addYear(-1)->format('Y')}}" @selected($request->year == now()->addYear(-1)->format('Y'))> {{now()->addYear(-1)->format('Y')}}</option>
+				<option value="{{now()->format('Y')}}" @selected($request->year == now()->format('Y'))> {{now()->format('Y')}}</option>
+                <option value="{{now()->addYear()->format('Y')}}"  @selected($request->year == now()->addYear()->format('Y'))> {{now()->addYear()->format('Y')}}</option>
 			</select>
 		</div>
         <div class="form-group col">
