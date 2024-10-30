@@ -495,7 +495,9 @@
                         @endif                        
                     </td>
                     <td>
-                        @livewire('inventory.toggle-print',['inventory' => $inventory],key($inventory->id))
+                        <div wire:key="{{$inventory->id}}">
+                            @livewire('inventory.toggle-print',['inventory' => $inventory], key($inventory->id))
+                        </div>
                     </td>
                     <td class="text-center d-print-none">
                         <a
