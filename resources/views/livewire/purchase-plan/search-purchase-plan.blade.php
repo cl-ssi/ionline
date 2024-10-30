@@ -139,7 +139,6 @@
                                     <span class="badge bg-{{$purchasePlan->getColorStatus()}} badge-sm">{{ $purchasePlan->getStatus() }}</span>
                                 </td>
                                 <td class="text-center">
-                                    {{ $purchasePlan->status }}
                                     <a href="{{ route('purchase_plan.show', $purchasePlan) }}"
                                         class="btn btn-outline-secondary btn-sm mb-1"><i class="fas fa-eye fa-fw"></i></a>
                                     @if($index == 'own')
