@@ -816,7 +816,7 @@
 
                         @canany(['Attendance records: user','Attendance records: admin','be god'])
                         <a class="dropdown-item" href="{{ route('filament.intranet.rrhh.resources.attendance-records.index') }}">
-                            <i class="bi bi-clock"></i> {{ __('Registros de asistencia') }}
+                            <i class="bi bi-clock"></i> {{ __('Registrar asistencia') }}
                         </a>
                         @endcanany
 
