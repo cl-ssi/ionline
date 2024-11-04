@@ -356,6 +356,28 @@ Procesos de convenios, son 5
    - prorrogas
    - resoluciones de continuidad
 
+Formatos:
+ 1. Convenio de ejecución
+ 2. Reso Aprobatoria de Convenio de ejecución
+ 3. Convenio afecto
+ 4. Reso Aprobatoria de Convenio Afecta
+ 5. Reso de Primera Prórroga (Continuidad)
+ 6. Reso de Segunda Prórroga (Doble continuidad)
+ 7. Reso Sub 21
+ 8. Reso Sub 22
+ 9. Adendum
+10. Reso Adendum
+11. Reso modificatorias (de cualquier reso)
+12. Reso modificatoria de Prórroga
+
+
+Reunión Lupa:
+- No aparece nuevo addendum si no está terminado la resolución del convenio
+- Ley 20919 es diferente en la cuotasç
+- Dejar de trabajar con word
+- Caso hoja horizontal
+- Municipalidad y sus subrogantes y alcaldes
+
 
 Articulado 
 Subtitulo 24 presupuesto de las municipalidades
@@ -377,6 +399,10 @@ Trabajar en el visto bueno de la comuna.
 
 Seguimiento del proceso del convenio. (ej 3 meses)
 
+Solo para convenios nuevos (todo lo que vaya a contraloría)
+-CDP (Finanzas)
+-Certificado de rendiciones (Finanzas)
+-Certificado de no fraccionamiento (Finanzas)
 
 No tanta pestaña
 
@@ -457,3 +483,35 @@ Word.
 
 Perfiles. (Comuna, Referente, Admin de convenios (eliminar))
 Alertas de que necesitan realizar una acción
+
+
+
+Finanzas:
+fin_extra_sistema
+(Compra extra sistema)
+Fondo a rendir
+Fondo fijo
+Reembolso
+Viáticos
+
+## Honorarios Firma digital
+- Funcionario tiene que logearse
+- Sus contratos y presiona aceptar (timestamp, status = firmado) Include firma clave única
+
+   -> Approval COPIA del PDF
+   -> Bloquear para no edición y mostrar que ya fue firmado por el funcionario
+
+
+- Firma directora (Firma Avanzada)
+   -> $approval->callback 
+	-> Envíar el pdf al funcionario
+
+
+- Subir la reso 
+
+
+¿La directora va a firmar digitalmente los contratos?
+
+- Visaciones
+- Enviar firma del funcionario (se fija el documento)
+- 

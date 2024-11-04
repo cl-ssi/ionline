@@ -4,11 +4,11 @@ namespace App\Filament\Clusters\Finance\Resources;
 
 use App\Filament\Clusters\Finance;
 use App\Filament\Clusters\Finance\Resources\ReceptionResource\Pages;
-use App\Filament\Clusters\Finance\Resources\ReceptionResource\RelationManagers;
 use App\Models\Establishment;
 use App\Models\Finance\PurchaseOrder;
 use App\Models\Finance\Receptions\Reception;
 use App\Models\Rrhh\OrganizationalUnit;
+use App\Models\WebService\MercadoPublico;
 use CodeWithDennis\FilamentSelectTree\SelectTree;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -19,7 +19,6 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class ReceptionResource extends Resource
 {
@@ -49,7 +48,7 @@ class ReceptionResource extends Resource
                     ->maxLength(255)
                     ->placeholder('Orden de Compra')
                     ->columnSpan(2),
-                    // ->helperText('1272565-444-AG23'),
+                // ->helperText('1272565-444-AG23'),
                 Forms\Components\Actions::make([
                     Forms\Components\Actions\Action::make('Buscar')
                         ->action(function (Get $get, Set $set) {
@@ -57,10 +56,26 @@ class ReceptionResource extends Resource
                                 ->where('code', $get('purchase_order'))
                                 ->first();
 
+                            if (! $globalPurchaseOrder) {
+                                $status = MercadoPublico::getPurchaseOrderV2($get('purchase_order'));
+                                if ($status === true) {
+                                    $globalPurchaseOrder = PurchaseOrder::with(['requestForm', 'receptions', 'dtes'])
+                                        ->where('code', $get('purchase_order'))
+                                        ->first();
+                                } else {
+                                    // Manejar el error si no se pudo obtener la orden de compra
+                                    // Por ejemplo, puedes lanzar una excepción o establecer un mensaje de error
+                                    $set('searchOcMessage', $status);
+                                }
+                            }
                             // Almacenar la orden de compra en una variable de estado
                             $set('globalPurchaseOrder', $globalPurchaseOrder);
                         }),
-                    ]),
+                ]),
+                Forms\Components\Placeholder::make('searchOcMessage')
+                    ->hiddenLabel(true)
+                    ->columnSpan(2)
+                    ->content(fn (Get $get) => $get('searchOcMessage') ?? null),
 
                 Forms\Components\Section::make('Información de la orden de compra')
                     ->schema([
@@ -68,6 +83,7 @@ class ReceptionResource extends Resource
                             ->label('FR')
                             ->content(function (Get $get): string {
                                 $purchaseOrder = $get('globalPurchaseOrder');
+
                                 return $purchaseOrder->requestForm->folio ?? 'No existe ningún proceso de compra para la OC ingresada. Contácte a abastecimiento.';
                             }),
 
@@ -78,6 +94,7 @@ class ReceptionResource extends Resource
                                 if ($purchaseOrder) {
                                     return $purchaseOrder->code;
                                 }
+
                                 return 'No se encontró la OC';
                             }),
 
@@ -85,9 +102,9 @@ class ReceptionResource extends Resource
                             ->label('Actas creadas para esta OC')
                             ->content(function (Get $get): string {
                                 $purchaseOrder = $get('globalPurchaseOrder');
-                                if ($purchaseOrder && !$purchaseOrder->receptions->isEmpty()) {
+                                if ($purchaseOrder && ! $purchaseOrder->receptions->isEmpty()) {
                                     return $purchaseOrder->receptions->map(function ($reception) {
-                                        return $reception->id . ': ' . $reception->description;
+                                        return $reception->id.': '.$reception->description;
                                     })->implode("\n");
                                 } else {
                                     return 'No se encontraron actas creadas para esta OC.';
@@ -115,10 +132,11 @@ class ReceptionResource extends Resource
                         Forms\Components\Select::make('dte_type')
                             ->label('Tipo')
                             ->options([
-                                'guias_despacho' => 'Guía de despacho',
+                                'boleta_honorarios'   => 'Boleta Honorarios',
                                 'factura_electronica' => 'Factura Electronica Afecta',
-                                'factura_exenta' => 'Factura Electronica Exenta',
-                                'boleta_honorarios' => 'Boleta Honorarios',
+                                'factura_exenta'      => 'Factura Electronica Exenta',
+                                'guias_despacho'      => 'Guía de despacho',
+                                'orden_trabajo'       => 'Orden de Trabajo',
                             ])
                             ->required()
                             ->default(null),
@@ -157,7 +175,7 @@ class ReceptionResource extends Resource
                             ->maxLength(255)
                             ->default(null)
                             ->helperText('En caso que la unidad tenga su propio correlativo'),
-                
+
                         Forms\Components\Textarea::make('header_notes')
                             ->label('Encabezado')
                             ->columnSpanFull(),
@@ -173,7 +191,7 @@ class ReceptionResource extends Resource
                                     ->numeric()
                                     ->live(onBlur: true)
                                     ->afterStateUpdated(function (?string $state, Set $set, Get $get) {
-                                        $cantidad = $state;
+                                        $cantidad   = $state;
                                         $precioNeto = $get('PrecioNeto');
                                         $set('Total', $cantidad * $precioNeto);
                                         self::updateTotals($set, $get);
@@ -184,7 +202,7 @@ class ReceptionResource extends Resource
                                     ->live(onBlur: true)
                                     ->afterStateUpdated(function (?string $state, Set $set, Get $get) {
                                         $precioNeto = $state;
-                                        $cantidad = $get('Cantidad');
+                                        $cantidad   = $get('Cantidad');
                                         $set('Total', $cantidad * $precioNeto);
                                         self::updateTotals($set, $get);
                                     }),
@@ -202,8 +220,6 @@ class ReceptionResource extends Resource
                             ->defaultItems(1)
                             ->minItems(1)
                             ->columnSpanFull(),
-    
-                        
 
                         Forms\Components\Split::make([
                             Forms\Components\Section::make([
@@ -238,7 +254,7 @@ class ReceptionResource extends Resource
                                     ->disabled()
                                     ->dehydrated(),
                                 Forms\Components\TextInput::make('iva')
-                                    ->label(fn (Get $get) => 'IVA (' . $get('globalPurchaseOrder')->iva . '%)')
+                                    ->label(fn (Get $get) => 'IVA ('.$get('globalPurchaseOrder')->iva.'%)')
                                     ->numeric()
                                     ->disabled()
                                     ->dehydrated(),
@@ -246,10 +262,23 @@ class ReceptionResource extends Resource
                             ])->grow(false),
                         ])->columnSpanFull(),
 
-
-
                     ])
                     ->columns(4)
+                    ->visible(fn (Get $get) => $get('globalPurchaseOrder') instanceof PurchaseOrder),
+
+                Forms\Components\Repeater::make('files')
+                    ->relationship()
+                    ->label('Archivos')
+                    ->simple(
+                        Forms\Components\FileUpload::make('storage_path')
+                            ->required()
+                            ->directory('ionline/finances/receptions/support_documents')
+                            ->storeFileNamesIn('name')
+                            ->acceptedFileTypes(['application/pdf'])
+                            ->label('Archivo'),
+                    )
+                    ->columnSpanFull()
+                    ->defaultItems(0)
                     ->visible(fn (Get $get) => $get('globalPurchaseOrder') instanceof PurchaseOrder),
 
                 Forms\Components\Section::make('Firmas')
@@ -261,15 +290,15 @@ class ReceptionResource extends Resource
                                 Forms\Components\Grid::make(3)
                                     ->schema([
                                         Forms\Components\Hidden::make('position')
-                                            ->default(fn(Get $get) => match (count($get('../../approvals'))) {
-                                                1 => 'left',
-                                                2 => 'center',
-                                                3 => 'right',
+                                            ->default(fn (Get $get) => match (count($get('../../approvals'))) {
+                                                1       => 'left',
+                                                2       => 'center',
+                                                3       => 'right',
                                                 default => 'left', // Puedes cambiar 'default_value' por el valor que desees para otros casos
                                             }),
                                         Forms\Components\Select::make('establishment_id')
                                             ->label('Establecimiento')
-                                            ->options(Establishment::whereIn('id', explode(',',env('APP_SS_ESTABLISHMENTS')))->pluck('name', 'id'))
+                                            ->options(Establishment::whereIn('id', explode(',', env('APP_SS_ESTABLISHMENTS')))->pluck('name', 'id'))
                                             ->default(auth()->user()->establishment_id)
                                             ->live(),
                                         SelectTree::make('sent_to_ou_id')
@@ -278,8 +307,8 @@ class ReceptionResource extends Resource
                                                 relationship: 'sentToOu',
                                                 titleAttribute: 'name',
                                                 parentAttribute: 'organizational_unit_id',
-                                                modifyQueryUsing: fn($query, $get) => $query->where('establishment_id', $get('establishment_id'))->orderBy('name'),
-                                                modifyChildQueryUsing: fn($query, $get) => $query->where('establishment_id', $get('establishment_id'))->orderBy('name')
+                                                modifyQueryUsing: fn ($query, $get) => $query->where('establishment_id', $get('establishment_id'))->orderBy('name'),
+                                                modifyChildQueryUsing: fn ($query, $get) => $query->where('establishment_id', $get('establishment_id'))->orderBy('name')
                                             )
                                             ->searchable()
                                             ->parentNullValue(null)
@@ -297,8 +326,8 @@ class ReceptionResource extends Resource
                                                     ->columnSpanFull(),
                                             ])
                                             ->collapsed()
-                                            ->compact()
-                                    ])
+                                            ->compact(),
+                                    ]),
                             ])
                             ->afterStateUpdated(function ($state, Set $set) {
                                 // Reasignar posiciones para los elementos restantes
@@ -314,10 +343,11 @@ class ReceptionResource extends Resource
                                 // Actualizar el estado de los ítems en el Repeater
                                 $set('approvals', $state);
                             })
-                            ->itemLabel(fn(array $state): ?string => 'Firmante: ' . OrganizationalUnit::find($state['sent_to_ou_id'])?->manager?->short_name ?? null)
+                            ->itemLabel(fn (array $state): ?string => 'Firmante: '.OrganizationalUnit::find($state['sent_to_ou_id'])?->manager?->short_name ?? null)
                             ->mutateRelationshipDataBeforeFillUsing(function (array $data): array {
                                 // TODO: Averiguar si se puede acceder al record, para usar la relacion en vez de hacer la queery a OUs
                                 $data['establishment_id'] = OrganizationalUnit::find($data['sent_to_ou_id'])?->establishment_id;
+
                                 return $data;
                             })
                             ->mutateRelationshipDataBeforeCreateUsing(function (array $data, Get $get): array {
@@ -329,8 +359,8 @@ class ReceptionResource extends Resource
                                 return $data;
                             })
                             ->maxItems(3),
-                        ])
-                        ->visible(fn (Get $get) => $get('globalPurchaseOrder') instanceof PurchaseOrder),
+                    ])
+                    ->visible(fn (Get $get) => $get('globalPurchaseOrder') instanceof PurchaseOrder),
 
                 // Forms\Components\Select::make('guia_id')
                 //     ->relationship('guia', 'id')
@@ -364,11 +394,12 @@ class ReceptionResource extends Resource
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('purchase_order')
+                    ->label('Orden de compra')
                     ->url(fn (Reception $record) => $record->purchaseOrder ? route('finance.purchase-orders.show', $record->purchaseOrder) : null)
                     ->searchable(),
                 Tables\Columns\TextColumn::make('purchaseOrder.provider')
-                    ->wrap()
-                    ->searchable(),
+                    ->label('Proveedor')
+                    ->wrap(),
                 Tables\Columns\TextColumn::make('items_count')
                     ->label('Items')
                     ->counts('items')
@@ -479,29 +510,30 @@ class ReceptionResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListReceptions::route('/'),
+            'index'  => Pages\ListReceptions::route('/'),
             'create' => Pages\CreateReception::route('/create'),
-            'edit' => Pages\EditReception::route('/{record}/edit'),
+            'edit'   => Pages\EditReception::route('/{record}/edit'),
         ];
     }
 
     protected static function updateTotals(Set $set, Get $get)
     {
         $items = $get('../../items');
-        $neto = array_reduce($items, function ($carry, $item) {
-            $cantidad = $item['Cantidad'] ?? 0;
+        $neto  = array_reduce($items, function ($carry, $item) {
+            $cantidad   = $item['Cantidad'] ?? 0;
             $precioNeto = $item['PrecioNeto'] ?? 0;
+
             return $carry + ($cantidad * $precioNeto);
         }, 0);
         $set('../../neto', $neto);
 
         $descuentos = $get('../../descuentos') ?? 0;
-        $cargos = $get('../../cargos') ?? 0;
-        $subtotal = $neto - $descuentos + $cargos;
+        $cargos     = $get('../../cargos') ?? 0;
+        $subtotal   = $neto - $descuentos + $cargos;
         $set('../../subtotal', $subtotal);
 
         $globalPurchaseOrder = $get('../../globalPurchaseOrder');
-        $iva = $subtotal * $globalPurchaseOrder->iva / 100;
+        $iva                 = $subtotal * $globalPurchaseOrder->iva / 100;
         $set('../../iva', $iva);
 
         $total = $subtotal + $iva;
