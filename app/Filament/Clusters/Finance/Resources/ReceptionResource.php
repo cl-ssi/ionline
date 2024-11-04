@@ -543,7 +543,7 @@ class ReceptionResource extends Resource
         $set('../../subtotal', $subtotal);
 
         $globalPurchaseOrder = $get('../../globalPurchaseOrder');
-        $iva                 = $subtotal * $globalPurchaseOrder->iva / 100;
+        $iva                 = round($subtotal * $globalPurchaseOrder->iva / 100);
         $set('../../iva', $iva);
 
         $total = $subtotal + $iva;
