@@ -262,23 +262,33 @@ class ReceptionResource extends Resource
                             ])->grow(false),
                         ])->columnSpanFull(),
 
+                        Forms\Components\Repeater::make('SupportFile')
+                            ->relationship('supportFile')
+                            ->label('Archivo')
+                            ->schema([
+                                Forms\Components\Select::make('type')
+                                    ->label('Tipo')
+                                    ->options(['support_file' => 'Documento de soporte'])
+                                    ->required(),
+                                Forms\Components\FileUpload::make('storage_path')
+                                    ->label('Archivo')
+                                    ->directory('ionline/finances/receptions/support_documents')
+                                    ->storeFileNamesIn('name')
+                                    ->acceptedFileTypes(['application/pdf'])
+                                    ->afterStateUpdated(function ($state, $set) {
+                                        if ($state) {
+                                            $set('supportFile.type', 'support_file');
+                                        }
+                                    })
+                                    ->required(),
+                            ])
+                            ->defaultItems(0)
+                            ->columns(2)
+                            ->maxItems(1)
+                            ->columnSpanFull(),
+
                     ])
                     ->columns(4)
-                    ->visible(fn (Get $get) => $get('globalPurchaseOrder') instanceof PurchaseOrder),
-
-                Forms\Components\Repeater::make('files')
-                    ->relationship()
-                    ->label('Archivos')
-                    ->simple(
-                        Forms\Components\FileUpload::make('storage_path')
-                            ->required()
-                            ->directory('ionline/finances/receptions/support_documents')
-                            ->storeFileNamesIn('name')
-                            ->acceptedFileTypes(['application/pdf'])
-                            ->label('Archivo'),
-                    )
-                    ->columnSpanFull()
-                    ->defaultItems(0)
                     ->visible(fn (Get $get) => $get('globalPurchaseOrder') instanceof PurchaseOrder),
 
                 Forms\Components\Section::make('Firmas')
