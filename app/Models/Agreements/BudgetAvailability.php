@@ -4,6 +4,7 @@ namespace App\Models\Agreements;
 
 use App\Models\Documents\Document;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -49,7 +50,7 @@ class BudgetAvailability extends Model
     /**
      * Get the referrer.
      */
-    public function referrer(): BelongsTo
+    public function referrer(): BelongsTo|Builder
     {
         return $this->belongsTo(User::class)->withTrashed();
     }

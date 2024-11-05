@@ -70,6 +70,14 @@ class Program extends Model implements Auditable
     }
 
     /**
+     * Get the components for the program.
+     */
+    public function components(): HasMany
+    {
+        return $this->hasMany(ProgramComponent::class);
+    }
+
+    /**
      * Get the establishment that owns the program.
      */
     public function establishment(): BelongsTo

@@ -281,7 +281,7 @@ Procesos de convenios, son 5
 Formatos:
  1. Convenio de ejecución
  2. Reso Aprobatoria de Convenio de ejecución
- 3. Convenio afecto
+ 3. Convenio de ejecución afecto
  4. Reso Aprobatoria de Convenio Afecta
  5. Reso de Primera Prórroga (Continuidad)
  6. Reso de Segunda Prórroga (Doble continuidad)
