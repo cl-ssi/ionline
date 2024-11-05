@@ -79,7 +79,6 @@ class ReceptionController extends Controller
      * Display the specified resource.
      *
      * @param  \App\Models\Drugs\Reception  $reception
-     * @return \Illuminate\Http\Response
      */
     public function show(Reception $reception)
     {
@@ -96,7 +95,6 @@ class ReceptionController extends Controller
      * Display the specified resource.
      *
      * @param  \App\Models\Drugs\Reception  $reception
-     * @return \Illuminate\Http\Response
      */
     public function history(Reception $reception): View
     {
