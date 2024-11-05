@@ -31,50 +31,25 @@ class MunicipalityResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('name_municipality')
+                Forms\Components\TextInput::make('name')
+                    ->label('Nombre')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('rut_municipality')
+                Forms\Components\TextInput::make('rut')
+                    ->label('RUT')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('email_municipality')
-                    ->email()
-                    ->maxLength(255)
-                    ->default(null),
-                Forms\Components\TextInput::make('email_municipality_2')
-                    ->email()
-                    ->maxLength(255)
-                    ->default(null),
-                Forms\Components\TextInput::make('adress_municipality')
+                Forms\Components\TagsInput::make('emails')
+                    ->label('Emails'),
+                Forms\Components\TextInput::make('address')
+                    ->label('Dirección')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('appellative_representative')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('decree_representative')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('name_representative')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('rut_representative')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('commune_id')
-                    ->required()
-                    ->numeric(),
-                Forms\Components\TextInput::make('name_representative_surrogate')
-                    ->maxLength(255)
-                    ->default(null),
-                Forms\Components\TextInput::make('rut_representative_surrogate')
-                    ->maxLength(255)
-                    ->default(null),
-                Forms\Components\TextInput::make('decree_representative_surrogate')
-                    ->maxLength(255)
-                    ->default(null),
-                Forms\Components\TextInput::make('appellative_representative_surrogate')
-                    ->maxLength(255)
-                    ->default(null),
+                Forms\Components\Select::make('commune_id')
+                    ->label('Comuna')
+                    ->searchable()
+                    ->relationship('commune', 'name')
+                    ->required(),
             ]);
     }
 
@@ -82,26 +57,18 @@ class MunicipalityResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('name_municipality')
+                Tables\Columns\TextColumn::make('name')
+                    ->label('Nombre')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('rut_municipality')
+                Tables\Columns\TextColumn::make('rut')
+                    ->label('RUT')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('email_municipality')
+                Tables\Columns\TextColumn::make('emails')
+                    ->label('Emails')
+                    ->badge()
                     ->searchable(),
-                Tables\Columns\TextColumn::make('email_municipality_2')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('adress_municipality')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('appellative_representative')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('decree_representative')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('name_representative')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('rut_representative')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('commune_id')
-                    ->numeric()
+                Tables\Columns\TextColumn::make('commune.name')
+                    ->label('Comuna')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
@@ -111,14 +78,6 @@ class MunicipalityResource extends Resource
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('name_representative_surrogate')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('rut_representative_surrogate')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('decree_representative_surrogate')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('appellative_representative_surrogate')
-                    ->searchable(),
             ])
             ->filters([
                 //
@@ -127,16 +86,16 @@ class MunicipalityResource extends Resource
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
+                // Tables\Actions\BulkActionGroup::make([
+                //     Tables\Actions\DeleteBulkAction::make(),
+                // ]),
             ]);
     }
 
     public static function getRelations(): array
     {
         return [
-            //
+            RelationManagers\AlcaldesRelationManager::class,
         ];
     }
 
