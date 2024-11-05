@@ -228,7 +228,7 @@
 
 </br>
 
-<h6><i class="fas fa-list-ol"></i> Listado de cargos</h6>
+<h6><i class="fas fa-list-ol"></i> Listado de cargos </h6>
 
 <div class="table-responsive">
     <table class="table table-sm table-hover table-bordered">
@@ -269,6 +269,76 @@
         </tbody>
     </table>
 </div>
+
+<h6 class="mt-3"><i class="fas fa-user"></i> Selección de RR.HH.</h6>
+@if($requestReplacementStaff->technicalEvaluation->technical_evaluation_status == 'complete' || $requestReplacementStaff->technicalEvaluation->technical_evaluation_status == 'rejected')
+    <div class="table-responsive">
+        <table class="table table-sm table-striped table-bordered">
+            <thead class="text-center small">
+                <tr>
+                    <th width="3%">#</th>
+                    <th width="20%">Detalle Convocatoria</th>
+                    <th width="10%">Fecha Ingreso</th>
+                    <th colspan="2" width="40%">Datos del Seleccionado</th>
+                    <th width="3%"></th>
+                <tr>
+            </thead>
+            <tbody class="small">
+                @php
+                    $contador = 0;
+                @endphp
+                @foreach($requestReplacementStaff->positions as $position)
+                    @foreach($position->selectedPositions as $key => $selectedPosition)
+                    <tr>
+                        <th class="text-center">
+                            {{ $contador + 1 }}
+                        </th>
+                        <td class="text-left">
+                            <b>Estamento</b>: {{ $position->profile_manage->name ?? '' }}<br>
+
+                            @if($position->degree)
+                                <b>Grado</b>: {{ $position->degree }}
+                            @else
+                                <b>Renta</b>: ${{ number_format($position->salary, 0, ",", ".") }}
+                            @endif
+                            <br>
+                            <b>Calidad Contractual</b>: {{ $position->legalQualityManage->NameValue ?? '' }} <br>
+                            <b>Fundamento</b>: {{ $position->fundamentManage->NameValue ?? '' }} <br>
+                            <b>Detalle</b>: {{ $position->fundamentDetailManage->NameValue ?? '' }} <br>
+                            <b>Jornada</b>: {{ $position->WorkDayValue ?? '' }}
+                        </td>
+                        <td class="text-center">
+                            {{ $selectedPosition->start_date ? $selectedPosition->start_date->format('d-m-Y') : '' }}
+                            @if($selectedPosition->start_date != NULL)
+                                <span class="badge badge-warning mt-3">3 meses: {{ $selectedPosition->start_date ? $selectedPosition->start_date->addMonths(3)->format('d-m-Y') : '' }}</span> 
+                                <span class="badge badge-danger">6 meses: {{ $selectedPosition->start_date ? $selectedPosition->start_date->addMonths(6)->format('d-m-Y') : '' }}</span> 
+                            @endif
+                        </td>
+                        @if($selectedPosition->run != null)
+                        <td width="20%" class="text-center">
+                            {{ $selectedPosition->run }}-{{ $selectedPosition->dv }}
+                        </td>
+                        <td class="text-center">
+                            {{ $selectedPosition->name }}
+                        </td>
+                        @else
+                        <td colspan="2" class="text-center">
+                            <span class="badge badge-warning">No seleccionado</span>
+                        </td>
+                        @endif
+                        <td>
+                        </td>
+                    </tr>
+                    @php
+                        $contador++;
+                    @endphp
+                    @endforeach
+                @endforeach
+
+            </tbody>
+        </table>
+    </div>
+@endif
 <br>
 @endif
 

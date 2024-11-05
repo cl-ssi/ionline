@@ -10,12 +10,11 @@ use OwenIt\Auditing\Contracts\Auditable;
 class SelectedPosition extends Model implements Auditable
 {
     use HasFactory;
-    use softDeletes;
-    use softDeletes;
+    use SoftDeletes;
     use \OwenIt\Auditing\Auditable;
 
     protected $fillable = [
-        'position_id', 'run', 'dv', 'name'
+        'position_id', 'start_date', 'run', 'dv', 'name'
     ];
 
     /**
@@ -26,6 +25,10 @@ class SelectedPosition extends Model implements Auditable
 
     protected $hidden = [
         'created_at', 'updated_at'
+    ];
+
+    protected $casts = [
+        'start_date' => 'date',
     ];
 
     protected $table = 'rst_selected_positions';
