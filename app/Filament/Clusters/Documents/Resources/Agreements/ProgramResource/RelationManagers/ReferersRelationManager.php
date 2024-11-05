@@ -14,6 +14,8 @@ class ReferersRelationManager extends RelationManager
 {
     protected static string $relationship = 'referers';
 
+    protected static ?string $title = 'Referentes';
+
     public function form(Form $form): Form
     {
         return $form
@@ -29,7 +31,8 @@ class ReferersRelationManager extends RelationManager
         return $table
             ->recordTitleAttribute('fathers_family')
             ->columns([
-                Tables\Columns\TextColumn::make('shortName'),
+                Tables\Columns\TextColumn::make('shortName')
+                    ->label('Nombre'),
             ])
             ->filters([
                 //
