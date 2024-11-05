@@ -11,9 +11,9 @@ class Fusion extends Component
     public $input_item_a;
     public $input_item_b;
 
-    public $item_a;
-    public $item_b;
-    public $fusion;
+    public Inventory $item_a;
+    public Inventory $item_b;
+    public $fusion = [];
 
     public $movements = [];
 
@@ -59,7 +59,7 @@ class Fusion extends Component
     /**
      * Fusion
      */
-    public function fusion()
+    public function fusionar()
     {
         // $this->validate([
         //     'fusion.old_number' => 'required',
@@ -123,9 +123,8 @@ class Fusion extends Component
         }
 
         // session()->flash('message', 'Se han fusionado correctamente los inventarios.');
-        return redirect()->route('inventories.edit', ['inventory' => $inventory->id,
-                                                      'establishment' => auth()->user()->organizationalUnit->establishment->id])
-                                                      ->with('success', 'Se han fusionado correctamente los inventarios.');
+        //return redirect()->route('inventories.edit', ['inventory' => $inventory->id, 'establishment' => auth()->user()->organizationalUnit->establishment->id])->with('success', 'Se han fusionado correctamente los inventarios.');
+        return redirect()->route('inventories.edit', ['inventory' => $inventory->id, 'establishment' => $inventory->establishment_id])->with('success', 'Se han fusionado correctamente los inventarios.');
         // se actualiza información
         // $this->search();
     }
@@ -134,7 +133,7 @@ class Fusion extends Component
 
     public function render()
     {
-        if($this->fusion != null){
+        if(!empty($this->fusion)){
             if($this->fusion['id'][0] == "A"){
                 $letra = "A";
                 $item = $this->item_a;   

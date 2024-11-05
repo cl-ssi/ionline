@@ -128,7 +128,7 @@ class InventoryEdit extends Component
         }
     }
 
-    public function update()
+    public function inventoryUpdate()
     {
         /**
          * If oldItemInventory is set or Inventory fusion
@@ -172,7 +172,8 @@ class InventoryEdit extends Component
              * Show message
              */
             session()->flash('success', 'El item del inventario fue editado exitosamente.');
-            return;
+            // return;
+            return redirect()->route('inventories.edit', ['inventory' => $this->inventory->id, 'establishment' => $this->inventory->establishment_id]);
         }
     }
 
