@@ -66,11 +66,12 @@
                     wire:change="toggleFacturaElectronicaFields($event.target.value)"
                     >
                     <option></option>
-                    <option value ="guias_despacho">Guía de Despacho</option>
+                    <option value ="boleta_honorarios">Boleta Honorarios</option>
                     <option value ="factura_electronica">Factura Electronica Afecta</option>
                     <option value ="factura_exenta">Factura Electronica Exenta</option>
-                    <option value ="boleta_honorarios">Boleta Honorarios</option>
                     <option value ="boleta_electronica">Boleta Electrónica</option>
+                    <option value ="guias_despacho">Guía de Despacho</option>
+                    <option value ="orden_trabajo">Órden de Trabajo</option>
                 </select>
                 @error('reception.dte_type')
                     <span class="text-danger">{{ $message }}</span>
