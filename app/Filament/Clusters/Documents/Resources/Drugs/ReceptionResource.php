@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Filament\Clusters\Drugs\Resources;
+namespace App\Filament\Clusters\Documents\Resources\Drugs;
 
-use App\Filament\Clusters\Drugs;
-use App\Filament\Clusters\Drugs\Resources\ReceptionResource\Pages;
-use App\Filament\Clusters\Drugs\Resources\ReceptionResource\RelationManagers;
+use App\Filament\Clusters\Documents;
+use App\Filament\Clusters\Documents\Resources\Drugs\ReceptionResource\Pages;
+use App\Filament\Clusters\Documents\Resources\Drugs\ReceptionResource\RelationManagers;
 use App\Models\Drugs\Reception;
 use Filament\Actions\Action;
 use Filament\Forms;
@@ -21,9 +21,11 @@ class ReceptionResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
-    protected static ?string $cluster = Drugs::class;
+    protected static ?string $cluster = Documents::class;
 
     protected static ?string $modelLabel = 'Recepciones';
+
+    protected static ?string $navigationGroup = 'Drogas';
 
     public static function form(Form $form): Form
     {
