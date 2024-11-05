@@ -25,6 +25,10 @@ class MunicipalityResource extends Resource
 
     protected static ?string $navigationGroup = 'Convenios';
 
+    protected static ?string $modelLabel = 'municipalidad';
+
+    protected static ?string $pluralModelLabel = 'municipalidades';
+
     protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
 
     public static function form(Form $form): Form
@@ -63,9 +67,9 @@ class MunicipalityResource extends Resource
                 Tables\Columns\TextColumn::make('rut')
                     ->label('RUT')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('emails')
-                    ->label('Emails')
-                    ->badge()
+                Tables\Columns\TextColumn::make('alcaldes.name')
+                    ->label('Alcaldes')
+                    ->bulleted()
                     ->searchable(),
                 Tables\Columns\TextColumn::make('commune.name')
                     ->label('Comuna')

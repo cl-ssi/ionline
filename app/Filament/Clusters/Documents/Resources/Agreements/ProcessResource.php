@@ -26,6 +26,10 @@ class ProcessResource extends Resource
 
     protected static ?string $navigationGroup = 'Convenios';
 
+    protected static ?string $modelLabel = 'proceso';
+
+    protected static ?string $pluralModelLabel = 'procesos';
+
     protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
 
     public static function form(Form $form): Form

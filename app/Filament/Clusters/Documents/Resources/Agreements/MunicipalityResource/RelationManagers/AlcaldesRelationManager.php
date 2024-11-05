@@ -18,10 +18,25 @@ class AlcaldesRelationManager extends RelationManager
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('name')
+                Forms\Components\TextInput::make('appellative')
+                    ->label('Appellativo')
                     ->required()
                     ->maxLength(255),
-            ]);
+                Forms\Components\TextInput::make('name')
+                    ->label('Nombre')
+                    ->required()
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('run')
+                    ->label('RUN')
+                    ->required()
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('decree')
+
+                    ->required()
+                    ->maxLength(255)
+                    ->columnSpanFull(),
+            ])
+            ->columns(3);
     }
 
     public function table(Table $table): Table
@@ -29,7 +44,12 @@ class AlcaldesRelationManager extends RelationManager
         return $table
             ->recordTitleAttribute('name')
             ->columns([
-                Tables\Columns\TextColumn::make('name'),
+                Tables\Columns\TextColumn::make('appellative')
+                    ->label('Appellativo'),
+                Tables\Columns\TextColumn::make('name')
+                    ->label('Nombre'),
+                Tables\Columns\TextColumn::make('run')
+                    ->label('RUN'),
             ])
             ->filters([
                 //

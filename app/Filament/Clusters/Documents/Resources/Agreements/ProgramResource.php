@@ -23,6 +23,10 @@ class ProgramResource extends Resource
 
     protected static ?string $navigationGroup = 'Convenios';
 
+    protected static ?string $modelLabel = 'programa';
+
+    protected static ?string $pluralModelLabel = 'programas';
+
     protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
 
     public static function form(Form $form): Form
@@ -108,6 +112,7 @@ class ProgramResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('name')
+                    ->label('Nombre')
                     ->searchable(),
                 // Tables\Columns\TextColumn::make('alias')
                 //     ->searchable(),
@@ -125,6 +130,7 @@ class ProgramResource extends Resource
                 //     ->numeric()
                 //     ->sortable(),
                 Tables\Columns\TextColumn::make('period')
+                    ->label('Periodo')
                     ->numeric()
                     ->sortable(),
                 // Tables\Columns\TextColumn::make('start_date')

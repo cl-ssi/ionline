@@ -23,7 +23,11 @@ class ListPrograms extends ListRecords
     public function getTabs(): array
     {
         // Obtener todos los períodos distintos
-        $periods = Program::select('period')->distinct()->orderBy('period','desc')->pluck('period');
+        $periods = Program::select('period')
+            ->distinct()
+            ->where('period', '>', now()->year - 5)
+            ->orderBy('period','desc')
+            ->pluck('period');
 
         foreach ($periods as $period) {
             $tabs[$period] = Tab::make()
