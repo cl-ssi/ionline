@@ -31,7 +31,8 @@ class Process extends Model
         'municipality_rut',
         'number',
         'date',
-        'establishment_list'
+        'establishment_list',
+        'process_type_id',
     ];
 
     protected $casts = [

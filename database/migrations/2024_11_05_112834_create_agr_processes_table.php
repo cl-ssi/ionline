@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('agr_processes', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('process_type_id')->constrained('agr_process_types');
             $table->unsignedBigInteger('process_id')->nullable();
             $table->smallInteger('period');
             $table->foreignId('program_id')->constrained('cfg_programs')->nullable();

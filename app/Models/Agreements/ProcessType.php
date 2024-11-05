@@ -22,8 +22,8 @@ class ProcessType extends Model
         'has_resolution' => 'boolean',
     ];
 
-    // public function processes(): HasMany
-    // {
-    //     return $this->hasMany(Process::class);
-    // }
+    public function processes(): HasMany
+    {
+        return $this->hasMany(Process::class);
+    }
 }
