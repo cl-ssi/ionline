@@ -151,10 +151,11 @@
                         class="form-select @error('reception.dte_type') is-invalid @enderror"
                         wire:model.live="reception.dte_type">
                         <option></option>
-                        <option value ="guias_despacho">Guía de despacho</option>
+                        <option value ="boleta_honorarios">Boleta Honorarios</option>
                         <option value ="factura_electronica">Factura Electronica Afecta</option>
                         <option value ="factura_exenta">Factura Electronica Exenta</option>
-                        <option value ="boleta_honorarios">Boleta Honorarios</option>
+                        <option value ="guias_despacho">Guía de Despacho</option>
+                        <option value ="orden_trabajo">Órden de Trabajo</option>
                     </select>
                     @error('reception.dte_type')
                         <span class="text-danger">{{ $message }}</span>

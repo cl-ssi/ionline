@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Filament\Clusters\Drugs\Resources\ReceptionResource\Pages;
+namespace App\Filament\Clusters\Documents\Resources\Drugs\ReceptionResource\Pages;
 
-use App\Filament\Clusters\Drugs\Resources\ReceptionResource;
+use App\Filament\Clusters\Documents\Resources\Drugs\ReceptionResource;
 use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
 
