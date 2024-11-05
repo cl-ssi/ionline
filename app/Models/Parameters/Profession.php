@@ -4,6 +4,7 @@ namespace App\Models\Parameters;
 
 use App\Models\ProfAgenda\ProfessionMessage;
 use App\Models\ProfAgenda\Proposal;
+use App\Models\ProfAgenda\OpenHour;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -51,5 +52,10 @@ class Profession extends Model implements Auditable
     public function professionMessages(): HasMany
     {
         return $this->hasMany(ProfessionMessage::class);
+    }
+
+    public function openHours(): HasMany
+    {
+        return $this->hasMany(OpenHour::class);
     }
 }
