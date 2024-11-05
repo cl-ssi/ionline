@@ -2,10 +2,33 @@
 
 namespace App\Models\Parameters;
 
+use App\Models\ClCommune;
+use App\Models\Commune;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Municipality extends Model
 {
+    /** Cambio a nueva tabla pendiente */
+    // protected $table = 'cfg_municipalities';
+
+    // protected $fillable = [
+    //     'name',
+    //     'rut',
+    //     'address',
+    //     'emails',
+    //     'commune_id'
+    // ];
+
+    // protected $casts = [
+    //     'emails' => 'array'
+    // ];
+
+    // public function commune(): BelongsTo
+    // {
+    //     return $this->belongsTo(ClCommune::class);
+    // }
+
     protected $fillable = [
         'name',
         'name_municipality',
@@ -28,8 +51,8 @@ class Municipality extends Model
         'updated_at'
     ];
 
-    public function commune()
+    public function commune(): BelongsTo
     {
-        return $this->belongsTo('\App\Models\Commune');
+        return $this->belongsTo(Commune::class);
     }
 }
