@@ -3,9 +3,12 @@
 namespace App\Models\Parameters;
 
 use App\Models\Establishment;
+use App\Models\User;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use OwenIt\Auditing\Contracts\Auditable;
@@ -51,6 +54,14 @@ class Program extends Model implements Auditable
         'start_date' => 'date',
         'end_date' => 'date',
     ];
+
+    /**
+     * The referers that belong to the program.
+     */
+    public function referers(): BelongsToMany|Builder
+    {
+        return $this->belongsToMany(User::class, 'cfg_program_user')->withTrashed();
+    }
 
     /**
      * Get the establishment that owns the program.

@@ -9,6 +9,7 @@ use App\Filament\Clusters\Documents\Resources\DocumentResource\RelationManagers;
 use App\Models\Documents\Document;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Pages\SubNavigationPosition;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -26,6 +27,8 @@ class DocumentResource extends Resource
     protected static ?string $pluralModelLabel = 'Documentos';
 
     protected static ?string $cluster = Documents::class;
+
+    protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
 
     public static function form(Form $form): Form
     {

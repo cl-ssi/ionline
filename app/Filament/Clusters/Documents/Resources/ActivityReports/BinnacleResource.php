@@ -8,6 +8,7 @@ use App\Filament\Clusters\Documents\Resources\ActivityReports\BinnacleResource\R
 use App\Models\Documents\ActivityReports\Binnacle;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Pages\SubNavigationPosition;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -25,6 +26,8 @@ class BinnacleResource extends Resource
     protected static ?string $modelLabel = 'bitácora';
 
     protected static ?string $pluralModelLabel = 'bitácoras';
+
+    protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
 
     public static function form(Form $form): Form
     {
