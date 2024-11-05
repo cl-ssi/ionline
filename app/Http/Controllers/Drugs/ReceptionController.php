@@ -24,8 +24,6 @@ class ReceptionController extends Controller
 {
     /**
      * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
     {
@@ -47,8 +45,6 @@ class ReceptionController extends Controller
 
     /**
      * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
      */
     public function create()
     {
@@ -111,7 +107,6 @@ class ReceptionController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param  \App\Models\Drugs\Reception  $reception
-     * @return \Illuminate\Http\Response
      */
     public function edit(Reception $reception)
     {
@@ -290,7 +285,7 @@ class ReceptionController extends Controller
         return view('drugs.receptions.report', compact('items_sin_destruir','years'));
     }
 
-    public function alerts()
+    public function alerts(): View
     {
         /**
          * Obtiene todas las recepciones que contengan sustancias que ISP y Presumidas sea true y 
