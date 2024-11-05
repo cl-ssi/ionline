@@ -21,16 +21,19 @@ class SirsapReport extends Component
     // }
 
     public function search(){
-        $openHours = OpenHour::whereBetween('start_date',[$this->finicio,$this->ftermino])
-                            ->where('blocked','0')
+        $establishment_id = auth()->user()->establishment_id;
+
+        $openHours = OpenHour::whereBetween('start_date', [$this->finicio, $this->ftermino])
+                            ->where('blocked', '0')
+                            ->whereHas('profesional', function ($query) use ($establishment_id) {
+                                $query->where('establishment_id', $establishment_id);
+                            })
                             ->with('patient')
                             ->when(!auth()->user()->hasRole('Agenda Salud del Trabajdor: Administrador'), function ($q) {
-                                return $q->where('profesional_id',auth()->user()->id);
+                                return $q->where('profesional_id', auth()->user()->id);
                             })
                             ->get();
-                            
-                            // dd($openHours);
-                            // se deben agregar los tipos de actividad/género en el reporte
+
         $this->data = null;
         foreach($openHours as $openHour){
             if($openHour->patient){

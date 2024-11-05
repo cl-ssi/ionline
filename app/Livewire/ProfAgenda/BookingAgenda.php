@@ -29,7 +29,26 @@ class BookingAgenda extends Component
     public function mount()
     {
         $professions = explode(',', Parameter::where('parameter', 'profesiones_ust')->pluck('value')->toArray()[0]);
-        $this->professions = Profession::whereIn('id', $professions)->get();
+        
+        // Verificar si el establecimiento del usuario es 41 (HAH)
+        $hah_flag = auth()->user()->establishment_id == 41;
+
+        $this->professions = Profession::whereIn('id', $professions)
+            ->whereHas('openHours', function ($query) use ($hah_flag) {
+                $query->where('start_date', '>=', now())
+                    ->when($hah_flag, function ($q) {
+                        // Si el establecimiento es 41, filtrar openHours asignadas a profesionales de ese establecimiento
+                        return $q->whereHas('profesional', function ($subQuery) {
+                            $subQuery->where('establishment_id', 41);
+                        });
+                    }, function ($q) {
+                        // Si el establecimiento no es 41, mostrar openHours de otros establecimientos
+                        return $q->whereHas('profesional', function ($subQuery) {
+                            $subQuery->where('establishment_id', '!=', 41);
+                        });
+                    });
+            })
+            ->get();
     }
 
     public function goToStep2($professionId)

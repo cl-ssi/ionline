@@ -25,13 +25,27 @@ class ProposalController extends Controller
      */
     public function index()
     {
-        if(auth()->user()->can('Agenda UST: Administrador')){
-            $proposals = Proposal::orderBy('id','DESC')->get();
+        $establishment_id = auth()->user()->establishment_id;
+
+        if (auth()->user()->can('Agenda UST: Administrador')) {
+            $proposals = Proposal::whereHas('employee', function ($query) use ($establishment_id) {
+                    // Filtrar propuestas de empleados del mismo establecimiento que el usuario autenticado
+                    $query->where('establishment_id', $establishment_id);
+                })
+                ->orderBy('id', 'DESC')
+                ->get();
         }
-        if(auth()->user()->can('Agenda UST: Funcionario')){
-            $proposals = Proposal::where('user_id',auth()->id())->orderBy('id','DESC')->get();
+
+        if (auth()->user()->can('Agenda UST: Funcionario')) {
+            $proposals = Proposal::where('user_id', auth()->id())
+                ->whereHas('employee', function ($query) use ($establishment_id) {
+                    // Filtrar propuestas de empleados del mismo establecimiento que el usuario autenticado
+                    $query->where('establishment_id', $establishment_id);
+                })
+                ->orderBy('id', 'DESC')
+                ->get();
         }
-        
+
         return view('prof_agenda.proposals.index', compact('proposals'));
     }
 
@@ -237,16 +251,23 @@ class ProposalController extends Controller
 
         // se devuelve usuarios según rol asignado
         if(auth()->user()->can('Agenda UST: Administrador') || auth()->user()->can('Agenda UST: Secretaria')){
-            $users = User::whereHas('agendaProposals', function($q){
-                                        $q->whereIn('status',['Aperturado','Creado'])
-                                            ->where('end_date','>=',now()->format('Y-m-d'));
-                                    })->get();
+            $establishment_id = auth()->user()->establishment_id;
+
+            $users = User::whereHas('agendaProposals', function ($q) {
+                    $q->whereIn('status', ['Aperturado', 'Creado'])
+                        ->where('end_date', '>=', now()->format('Y-m-d'));
+                })
+                ->where('establishment_id', $establishment_id) // Filtrar usuarios del mismo establecimiento que el usuario autenticado
+                ->get();
+
                                 }
         if(auth()->user()->can('Agenda UST: Funcionario')){
             $users = User::whereHas('agendaProposals', function($q){
                                 $q->whereIn('status',['Aperturado','Creado'])
                                     ->where('end_date','>=',now()->format('Y-m-d'));
-                            })->where('id',auth()->id())->get();
+                            })
+                            ->where('id',auth()->id())
+                            ->get();
         }
 
         return view('prof_agenda.open_calendar',compact('users','request','block_dates'));

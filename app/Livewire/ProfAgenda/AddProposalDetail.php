@@ -20,7 +20,7 @@ class AddProposalDetail extends Component
     public $activity_type_id;
 
     public function mount(){
-        $this->activity_types = ActivityType::all();
+        $this->activity_types = ActivityType::where('establishment_id',auth()->user()->establishment_id)->get();
     }
 
     public function save(){
