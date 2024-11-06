@@ -2,6 +2,7 @@
 
 namespace App\Models\Parameters;
 
+use App\Models\Agreements\BudgetAvailability;
 use App\Models\Establishment;
 use App\Models\File;
 use App\Models\User;
@@ -75,6 +76,14 @@ class Program extends Model implements Auditable
     public function components(): HasMany
     {
         return $this->hasMany(ProgramComponent::class);
+    }
+
+    /**
+     * Get all of the budgetAvailabilities for the Program.
+     */
+    public function budgetAvailabilities(): HasMany
+    {
+        return $this->hasMany(BudgetAvailability::class);
     }
 
     /**

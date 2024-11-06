@@ -181,6 +181,7 @@ class ProgramResource extends Resource
         return [
             RelationManagers\ComponentsRelationManager::class,
             RelationManagers\ReferersRelationManager::class,
+            RelationManagers\BudgetAvailabilitiesRelationManager::class,
         ];
     }
 
