@@ -2,9 +2,11 @@
 
 namespace App\Models\Finance;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 use OwenIt\Auditing\Contracts\Auditable;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\Model;
@@ -200,6 +202,7 @@ class Dte extends Model implements Auditable
      * boleta_electronica
      */
     
+
     /**
      * Get the purchase order associated with the DTE.
      *
@@ -209,7 +212,7 @@ class Dte extends Model implements Auditable
     {
         return $this->belongsTo(PurchaseOrder::class, 'folio_oc', 'code');
     }
-    
+
     /**
      * Control (ingresos) de Warehouse.
      *
@@ -428,6 +431,28 @@ class Dte extends Model implements Auditable
         else{
             return $this->hasMany(Reception::class);
         }
+    }
+
+    /**
+     * Get the treasury model.
+     */
+    public function treasury(): MorphOne
+    {
+        return $this->morphOne(Treasury::class, 'treasureable');
+    }
+
+    protected function treasurySubject(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->folio,
+        );
+    }
+
+    protected function modelName(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => 'Documento tributario',
+        );
     }
 
     // public function getTipoDocumentoAttribute(){
