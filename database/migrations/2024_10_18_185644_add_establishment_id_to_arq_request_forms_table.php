@@ -27,10 +27,18 @@ return new class extends Migration
 
         // quitar nullable a establishment_id
         Schema::table('arq_request_forms', function (Blueprint $table) {
-            $table->foreignId('establishment_id')
-                ->nullable(false)
-                ->constrained('establishments')
-                ->change();
+            // Paso 1: Eliminar la restricción de clave externa
+            $table->dropForeign(['establishment_id']);
+        });
+
+        Schema::table('arq_request_forms', function (Blueprint $table) {
+            // Paso 2: Modificar la columna para que sea NOT NULL
+            $table->foreignId('establishment_id')->nullable(false)->change();
+        });
+
+        Schema::table('arq_request_forms', function (Blueprint $table) {
+            // Paso 3: Volver a agregar la restricción de clave externa
+            $table->foreign('establishment_id')->references('id')->on('establishments');
         });
     }
 
