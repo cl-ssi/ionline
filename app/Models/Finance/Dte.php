@@ -2,6 +2,8 @@
 
 namespace App\Models\Finance;
 
+use App\Observers\Finance\DteObserver;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -28,6 +30,7 @@ use App\Models\Rrhh\OrganizationalUnit;
 use App\Models\Sigfe\PdfBackup;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
+#[ObservedBy([DteObserver::class])]
 class Dte extends Model implements Auditable
 {
     use \OwenIt\Auditing\Auditable;
