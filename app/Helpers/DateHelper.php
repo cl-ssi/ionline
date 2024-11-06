@@ -51,7 +51,7 @@ class DateHelper
      *
      * @param  \Illuminate\Support\Carbon  $startDate
      * @param  \Illuminate\Support\Carbon  $endDate
-     * @param  \Illuminate\Support\Holiday  $endDate
+     * @param  \App\Models\Parameters\Holiday  $endDate
      * @return \Illuminate\Support\Collection
      */
     public static function getBusinessDaysByDateRangeHolidays($startDate, $endDate, $holidays)

@@ -145,6 +145,14 @@ Notificar al comprador, del FR
 Notificar a contabilidad que el acta fue modidicada y que contabilidad pueda notificar al creador un error en el acta.
 
 
+Finanzas:
+fin_extra_sistema
+(Compra extra sistema)
+Fondo a rendir
+Fondo fijo
+Reembolso
+Viáticos
+
 
 
 # Experto HETG 
@@ -262,7 +270,7 @@ Factor
 
 
 
-
+---
 # Convenios
 - Descargas en Word
 - Formato con el editor de documentos
@@ -295,7 +303,7 @@ Formatos:
 
 Reunión Lupa:
 - No aparece nuevo addendum si no está terminado la resolución del convenio
-- Ley 20919 es diferente en la cuotasç
+- Ley 20919 es diferente en la cuotas
 - Dejar de trabajar con word
 - Caso hoja horizontal
 - Municipalidad y sus subrogantes y alcaldes
@@ -308,26 +316,17 @@ La plataforma si permite hacer la 21 y 22.
 Se puede generar una resolución de los convenios en otra opción.
 (Natalia)
 
-Resolución y convenios en una misma pantalla.
+- Resolución y convenios en una misma pantalla.
+- Plataforma que sea interacción con las comunas.
+- Subir documentos, descargar documentos.
+- Trabajar en el visto bueno de la comuna. (como hacer para dos cambios al mismo tiempo, comuna y sst)
+- Seguimiento del proceso del convenio. (ej 3 meses)
+- No tanta pestaña
 
-Plataforma que sea interacción con las comunas.
-
-
-Subir documentos, descargar documentos.
-
-Trabajar en el visto bueno de la comuna.
-(como hacer para dos cambios al mismo tiempo, comuna y sst)
-
-
-Seguimiento del proceso del convenio. (ej 3 meses)
-
-Solo para convenios nuevos (todo lo que vaya a contraloría)
--CDP (Finanzas)
--Certificado de rendiciones (Finanzas)
--Certificado de no fraccionamiento (Finanzas)
-
-No tanta pestaña
-
+### Solo para convenios nuevos (todo lo que vaya a contraloría)
+- CDP (Finanzas)
+- Certificado de rendiciones (Finanzas)
+- Certificado de no fraccionamiento (Finanzas)
 
 ### Requerimientos:
 ====================================================
@@ -350,47 +349,37 @@ Convenios con comunas y sub 21 y 22.
 
 Resolución modificatoria
 
-Monto por componente
-Calculo automático de valor de las cuotas
-Previsualizar el convenio.
-Modificar y terminarlo y referente indicar que está listo para revisón de la comuna (marca de tiempo)
+- Monto por componente
+- Calculo automático de valor de las cuotas
+- Previsualizar el convenio.
+- Modificar y terminarlo y referente indicar que está listo para revisón de la comuna (marca de tiempo)
+- Comuna, debería ingresar y realizar el visto bueno u observaciones, rechazado, etc. Aquí viene un pinponeo entre ellos. 
+- Mandar a visar el convenio. (mostrar firmas)
+- Firma alcalde
+- Firma directora (doc digital)
 
-Comuna, debería ingresar y realizar el visto bueno u observaciones, rechazado, etc. Aquí viene un pinponeo entre 
+- Avanzar con la resolución.
+- Toda se gestiona a través de DocDigital.
 
-Mandar a visar el convenio. (mostrar firmas)
-Firma alcalde
-Firma directora (doc digital)
-
-Avanzar con la resolución.
-Toda se gestiona a través de DocDigital.
-
-Oficina de partes, numeración resolución.
-Resolución Final se va a la dipres. (ingresar fecha de carga a dipres)
-
-Un mismo programa tiene distribuido los montos por item, podría salir un convenio y resoluciones de 21 y 22
-en el seguimiento puede ser comuna o establecimiento.
-con eso se sabe si es sub 21 o 22 para el caso de establecimiento.
+- Oficina de partes, numeración resolución.
+- Resolución Final se va a la dipres. (ingresar fecha de carga a dipres)
+- Un mismo programa tiene distribuido los montos por item, podría salir un convenio y resoluciones de 21 y 22
+- en el seguimiento puede ser comuna o establecimiento, con eso se sabe si es sub 21 o 22 para el caso de establecimiento.
 
 
 ### Prorrogas
-(Resolución de prorroga) No lleva firma del alcalde
-
-Cargar los dos primeros hitos.
-Base en el ultimo convenio.
-
-¿Qué pasa cuando supera las 5.000 UTM para las prorrogas?
-
-Resolución modificatoria para resolución de prorroga
-Modificación de convenio, adendum.
-
-Adendum tiene el mismo flujo de un convenio
+- (Resolución de prorroga) No lleva firma del alcalde
+- Cargar los dos primeros hitos.
+- Base en el ultimo convenio.
 
 
-
-Descargar Excel de seguimiento.
-Informe de las platas (Ej, cuanto plata se le entregó a Pica por programa)
-
-Finanzas incorporar transferencias realizadas.
+- ¿Qué pasa cuando supera las 5.000 UTM para las prorrogas?
+- Resolución modificatoria para resolución de prorroga
+- Modificación de convenio, adendum.
+- Adendum tiene el mismo flujo de un convenio
+- Descargar Excel de seguimiento.
+- Informe de las platas (Ej, cuanto plata se le entregó a Pica por programa)
+- Finanzas incorporar transferencias realizadas.
 
 
 Enero 2025.
@@ -400,14 +389,6 @@ Word.
 Perfiles. (Comuna, Referente, Admin de convenios (eliminar))
 Alertas de que necesitan realizar una acción
 
-
-Finanzas:
-fin_extra_sistema
-(Compra extra sistema)
-Fondo a rendir
-Fondo fijo
-Reembolso
-Viáticos
 
 ---
 # Honorarios Firma digital

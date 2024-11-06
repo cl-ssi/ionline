@@ -6,6 +6,7 @@
 
 @include('allowances.partials.nav')
 
+<!-- titulo -->
 <h5><i class="fas fa-file"></i> Editar solicitud de Viático ID:{{ $allowance->id }}</h5>
 
 <br>

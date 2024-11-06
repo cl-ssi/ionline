@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Filament\Auth;
+use Filament\Facades\Filament;
 use Filament\Pages\Auth\Login;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Component;
@@ -58,6 +59,7 @@ class CustomLogin extends Login
 
     public function getHeading(): string | Htmlable
     {
-        return env('APP_SS') ?? 'Variable APP_SS no está definida';
+        $panelId = ucfirst(Filament::getCurrentPanel()->getId());
+        return $panelId . ' '. env('APP_SS') ?? 'Variable APP_SS no está definida';
     }
 }

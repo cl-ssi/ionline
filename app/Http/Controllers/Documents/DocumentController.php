@@ -510,12 +510,13 @@ class DocumentController extends Controller
             $agreement = Agreement::with('referrer')->where('document_id', $document->id)->first();
             if($agreement){
                 $visadores = collect([$agreement->referrer]); //referente tecnico
-                            // $visadores = collect([
-            //                 ['ou_id' => 61, 'user_id' => 6811637], // DEPTO. ASESORIA JURIDICA - CARMEN HENRIQUEZ
-            //                 ['ou_id' => 12, 'user_id' => 17289587] // DEPTO. APS - VALENTINA ORTEGA
-            //                 ['ou_id' => 2, 'user_id' => 14104369], // SDGA - CARLOS CALVO
-            //                 ['ou_id' => 31, 'user_id' => 17432199], // DEPTO.GESTION FINANCIERA (40) - ROMINA GARÍN
-                foreach(array(12834358, 17289587, 14104369, 17432199) as $user_id) //resto de visadores por cadena de responsabilidad
+                // $visadores = collect([
+                //     ['ou_id' => 61, 'user_id' => 6811637],  // DEPTO. ASESORIA JURIDICA - CARMEN HENRIQUEZ
+                //     ['ou_id' => 12, 'user_id' => 17289587]  // DEPTO. APS - VALENTINA ORTEGA
+                //     ['ou_id' => 2,  'user_id' => 14104369], // SDGA - CARLOS CALVO
+                //     ['ou_id' => 31, 'user_id' => 17432199], // DEPTO.GESTION FINANCIERA (40) - ROMINA GARÍN
+                // ]);
+                foreach(array(6811637, 17289587, 14104369, 17432199) as $user_id) //resto de visadores por cadena de responsabilidad
                     $visadores->add(User::find($user_id));
                 
                 foreach($visadores as $key => $visador){
@@ -537,12 +538,12 @@ class DocumentController extends Controller
         if($document->type_id == Type::where('name','Resolución Continuidad Convenio')->first()->id){
             $continuityResolution = ContinuityResolution::with('referrer')->where('document_id', $document->id)->first();
             $visadores = collect([$continuityResolution->referrer]); //referente tecnico
-                        // $visadores = collect([
-            //                 ['ou_id' => 61, 'user_id' => 6811637], // DEPTO. ASESORIA JURIDICA - CAREMN HENRIQUEZ
-            //                 ['ou_id' => 12, 'user_id' => 17289587] // DEPTO. APS - VALENTINA ORTEGA
-            //                 ['ou_id' => 2, 'user_id' => 14104369], // SDGA - CARLOS CALVO
-            //                 ['ou_id' => 31, 'user_id' => 9994426], // SDA - JAIME ABARZUA
-            //             ]);
+            // $visadores = collect([
+            //     ['ou_id' => 61, 'user_id' => 6811637], // DEPTO. ASESORIA JURIDICA - CAREMN HENRIQUEZ
+            //     ['ou_id' => 12, 'user_id' => 17289587] // DEPTO. APS - VALENTINA ORTEGA
+            //     ['ou_id' => 2, 'user_id' => 14104369], // SDGA - CARLOS CALVO
+            //     ['ou_id' => 31, 'user_id' => 9994426], // SDA - JAIME ABARZUA
+            // ]);
             foreach(array(6811637, 17289587, 14104369, 9994426) as $user_id) //resto de visadores por cadena de responsabilidad
                 $visadores->add(User::find($user_id));
             

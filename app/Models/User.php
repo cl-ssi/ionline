@@ -53,6 +53,7 @@ use Carbon\CarbonPeriod;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -148,8 +149,13 @@ class User extends Authenticatable implements Auditable, FilamentUser
 
     public function canAccessPanel(Panel $panel): bool
     {
-        return true;
-        // return $this->can('be god');
+        /**
+         * Si el $user->external es false puede entrar al panel "intranet"
+         * Si el $user->external es true puede entrar al panel "extranet" 
+         */
+        $panelId = $panel->getId();
+
+        return ($panelId == 'intranet' && !$this->external) || ($panelId == 'extranet' && $this->external);
     }
 
     /**
@@ -163,7 +169,7 @@ class User extends Authenticatable implements Auditable, FilamentUser
     /**
      * Get the organizational unit that owns the user.
      */
-    public function organizationalUnit(): BelongsTo|PowerJoinClause
+    public function organizationalUnit(): BelongsTo|Builder
     {
         return $this->belongsTo(OrganizationalUnit::class)->withTrashed();
     }
