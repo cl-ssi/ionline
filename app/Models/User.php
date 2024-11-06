@@ -144,8 +144,15 @@ class User extends Authenticatable implements Auditable, FilamentUser
 
     public function canAccessPanel(Panel $panel): bool
     {
+        // dd($panel->getId());
         return true;
-        // return $this->can('be god');
+
+        // if($panel->getId() == 'extranet' AND $this->external){
+        //     return true;
+        // }
+        // if($panel->getId() == 'intranet' AND !$this->external){
+        //     return true;
+        // }
     }
 
     /**
