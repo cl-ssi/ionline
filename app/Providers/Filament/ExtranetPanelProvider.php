@@ -26,11 +26,12 @@ class ExtranetPanelProvider extends PanelProvider
         return $panel
             ->id('extranet')
             ->path('extranet')
-            ->login()
-            // ->login(CustomLogin::class)
+            ->brandLogo(fn () => view('filament.logo'))
+            ->login(CustomLogin::class)
             ->colors([
                 'primary' => Color::Amber,
             ])
+            ->favicon(asset('favicon.ico'))
             ->discoverResources(in: app_path('Filament/Extranet/Resources'), for: 'App\\Filament\\Extranet\\Resources')
             ->discoverPages(in: app_path('Filament/Extranet/Pages'), for: 'App\\Filament\\Extranet\\Pages')
             ->pages([
