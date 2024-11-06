@@ -23,9 +23,9 @@ class MaintenanceDashboard extends Page
 
     protected static ?string $navigationLabel = 'Dasboard de mantenimiento';
 
-    public static function shouldRegisterNavigation(): bool
+    public static function canAccess(): bool
     {
-        return auth()->user()->can('Inventory'); // Reemplaza con el permiso adecuado
+        return auth()->user()->can('Inventory');
     }
 
     public function getHeaderWidgets(): array

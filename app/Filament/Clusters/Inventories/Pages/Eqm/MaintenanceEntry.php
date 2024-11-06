@@ -26,9 +26,9 @@ class MaintenanceEntry extends Page
 
     protected static ?string $title = 'Ingresar Mantenimiento';
 
-    public static function shouldRegisterNavigation(): bool
+    public static function canAccess(): bool
     {
-        return auth()->user()->can('Inventory'); // Reemplaza con el permiso adecuado
+        return auth()->user()->can('Inventory');
     }
 
     protected function getFormSchema(): array
