@@ -13,10 +13,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('arq_request_forms', function (Blueprint $table) {
-            $table->foreignId('establishment_id')
-                ->nullable()
-                ->after('contract_manager_ou_id')
-                ->constrained('establishments');
+            if (!Schema::hasColumn('arq_request_forms', 'establishment_id')) {
+                $table->foreignId('establishment_id')
+                    ->nullable()
+                    ->after('contract_manager_ou_id')
+                    ->constrained('establishments');
+            }
         });
 
         $requestForms = RequestForm::withTrashed()->get();
@@ -49,6 +51,7 @@ return new class extends Migration
     {
         Schema::table('arq_request_forms', function (Blueprint $table) {
             $table->dropConstrainedForeignId('establishment_id');
+            $table->dropColumn('establishment_id');
         });
     }
 };
