@@ -18,11 +18,10 @@ class CreateFrmEstablishmentsTable extends Migration
             $table->string('name')->unique();
             $table->text('email')->nullable();
             //se añade por defecto 1 para la relación con la bodega
-            $table->unsignedBigInteger('pharmacy_id')->default(1);
+            $table->foreignId('pharmacy_id')->nullable()->constrained('frm_pharmacies');
             $table->timestamps();
             $table->softDeletes();
 
-            $table->foreign('pharmacy_id')->references('id')->on('frm_pharmacies');
         });
     }
 
