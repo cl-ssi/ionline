@@ -17,23 +17,15 @@ class CreateFrmDispatchesTable extends Migration
 
           $table->id();
           $table->dateTime('date'); //fecha xfecha
-          $table->unsignedBigInteger('pharmacy_id'); //origen
-          $table->unsignedBigInteger('establishment_id')->nullable();
+          $table->foreignId('pharmacy_id')->nullable()->constrained('frm_pharmacies') //origen
+          $table->foreignId('establishment_id')->nullable()->constrained('frm_establishments');
           $table->longText('notes')->nullable(); //notas
-          $table->unsignedBigInteger('user_id');
+          $table->foreignId('user_id')->constrained('users');
+          $table->foreignId('receiver_id')->nullable()->constrained('users');
           $table->boolean('sendC19')->default(0);
 
           $table->timestamps();
           $table->softDeletes();
-
-          
-          $table->foreignId('pharmacy_id')->nullable()->constrained('frm_pharmacies')
-          
-          $table->foreignId('establishment_id')->nullable()->constrained('frm_establishments');
-
-          $table->foreignId('user_id')->nullable()->constrained('users');
-
-          $table->foreignId('receiver_id')->nullable()->constrained('users');
         });
     }
 

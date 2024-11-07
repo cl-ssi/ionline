@@ -31,20 +31,15 @@ class CreateFrmProductsTable extends Migration
             //$table->string('program')->nullable();
             //$table->integer('valued'); On the fly
 
-            $table->unsignedBigInteger('pharmacy_id');
-            $table->unsignedBigInteger('category_id');
-            $table->unsignedBigInteger('program_id');
-            $table->string('experto_id')->nullable();
-            $table->foreignId('unspsc_product_id')->nullable()->constrained('unspsc_products');
-            $table->timestamps();
-            $table->softDeletes();
-
-
             $table->foreignId('pharmacy_id')->nullable()->constrained('frm_pharmacies');
 
             $table->foreignId('category_id')->nullable()->constrained('frm_categories');
             
             $table->foreignId('program_id')->nullable()->constrained('frm_programs');
+            $table->string('experto_id')->nullable();
+            $table->foreignId('unspsc_product_id')->nullable()->constrained('unspsc_products');
+            $table->timestamps();
+            $table->softDeletes();
         });
     }
 
