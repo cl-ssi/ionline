@@ -11,9 +11,9 @@ class DteObserver
      */
     public function created(Dte $dte): void
     {
-        $dte->treasury()->create([
-            'name' => $dte->folio,
-        ]);
+        // $dte->treasury()->create([
+        //     'name' => $dte->folio,
+        // ]);
     }
 
     /**
@@ -29,7 +29,7 @@ class DteObserver
      */
     public function deleting(Dte $dte): void
     {
-        $dte->treasury()->delete();
+        // $dte->treasury()->delete();
     }
 
     /**
