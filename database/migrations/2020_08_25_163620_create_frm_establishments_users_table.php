@@ -33,8 +33,6 @@ class CreateFrmEstablishmentsUsersTable extends Migration
      */
     public function down()
     {
-        Schema::table('users', function (Blueprint $table) {
-            Schema::dropIfExists('frm_establishments_users');
-        });
+        Schema::dropIfExists('frm_establishments_users');
     }
 }
