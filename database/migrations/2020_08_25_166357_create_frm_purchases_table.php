@@ -14,16 +14,17 @@ class CreateFrmPurchasesTable extends Migration
     public function up()
     {
         Schema::create('frm_purchases', function (Blueprint $table) {
-
             $table->id();
             $table->dateTime('date');
-            $table->unsignedBigInteger('supplier_id');
+            $table->foreignId('supplier_id')->constrained('frm_suppliers');
             $table->longText('purchase_order'); //orden de compra
+            $table->string('order_number')->nullable();
             $table->longText('notes')->nullable();
             $table->bigInteger('invoice')->nullable(); //factura
             $table->bigInteger('despatch_guide')->nullable(); //guìa de despacho
             $table->dateTime('invoice_date')->nullable(); //fecha de factura
-            $table->unsignedBigInteger('pharmacy_id');
+            $table->text('commission')->nullable();
+            $table->foreignId('pharmacy_id')->constrained('frm_pharmacies');
             $table->longText('destination')->nullable(); //destino
             $table->longText('from')->nullable(); //fondo
             //$table->longText('acceptance_certificate'); //acta de recepción
@@ -32,14 +33,11 @@ class CreateFrmPurchasesTable extends Migration
             $table->decimal('purchase_order_amount', 12, 4)->nullable(); //monto orden de compra
             //$table->longText('content'); //contenido
             $table->decimal('invoice_amount', 12, 4)->nullable(); //monto factura
-            $table->unsignedBigInteger('user_id');
+            $table->foreignId('user_id')->constrained('users');
+            $table->foreignId('signed_record_id')->nullable()->constrained('doc_signatures_files');
 
             $table->timestamps();
             $table->softDeletes();
-
-            $table->foreign('supplier_id')->references('id')->on('frm_suppliers');
-            $table->foreign('pharmacy_id')->references('id')->on('frm_pharmacies');
-            $table->foreign('user_id')->references('id')->on('users');
         });
     }
 

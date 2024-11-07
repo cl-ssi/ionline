@@ -17,17 +17,14 @@ class CreateFrmReceivingsTable extends Migration
 
             $table->id();
             $table->dateTime('date'); //fecha xfecha
-            $table->unsignedBigInteger('establishment_id'); //origen
-            $table->unsignedBigInteger('pharmacy_id'); //destino
+            $table->foreignId('establishment_id')->nullable()->constrained('frm_establishments'); //origen
+            $table->foreignId('pharmacy_id')->nullable()->constrained('frm_pharmacies'); //destino
             $table->longText('notes')->nullable(); //notas
-            $table->unsignedBigInteger('user_id');
+            $table->text('order_number')->nullable();
+            $table->foreignId('user_id')->nullable()->constrained('users');
 
             $table->timestamps();
             $table->softDeletes();
-
-            $table->foreign('establishment_id')->references('id')->on('frm_establishments');
-            $table->foreign('pharmacy_id')->references('id')->on('frm_pharmacies');
-            $table->foreign('user_id')->references('id')->on('users');
         });
     }
 
