@@ -37,7 +37,7 @@ class CreateFrmPurchasesTable extends Migration
             $table->foreignId('signed_record_id')->nullable()->constrained('doc_signatures_files');
 
             $table->timestamps();
-            $table->softDeletes();                         
+            $table->softDeletes();
         });
     }
 
