@@ -19,10 +19,12 @@ class CreateFrmPurchasesTable extends Migration
             $table->dateTime('date');
             $table->unsignedBigInteger('supplier_id');
             $table->longText('purchase_order'); //orden de compra
+            $table->string('order_number')->nullable();
             $table->longText('notes')->nullable();
             $table->bigInteger('invoice')->nullable(); //factura
             $table->bigInteger('despatch_guide')->nullable(); //guìa de despacho
             $table->dateTime('invoice_date')->nullable(); //fecha de factura
+            $table->text('commission')->nullable();
             $table->unsignedBigInteger('pharmacy_id');
             $table->longText('destination')->nullable(); //destino
             $table->longText('from')->nullable(); //fondo
@@ -33,6 +35,7 @@ class CreateFrmPurchasesTable extends Migration
             //$table->longText('content'); //contenido
             $table->decimal('invoice_amount', 12, 4)->nullable(); //monto factura
             $table->unsignedBigInteger('user_id');
+            $table->foreignId('signed_record_id')->nullable()->constrained('doc_signatures_files');
 
             $table->timestamps();
             $table->softDeletes();

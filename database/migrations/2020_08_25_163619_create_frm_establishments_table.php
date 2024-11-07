@@ -16,6 +16,7 @@ class CreateFrmEstablishmentsTable extends Migration
         Schema::create('frm_establishments', function (Blueprint $table) {
             $table->id();
             $table->string('name')->unique();
+            $table->text('email')->nullable();
             //se añade por defecto 1 para la relación con la bodega
             $table->unsignedBigInteger('pharmacy_id')->default(1);
             $table->timestamps();

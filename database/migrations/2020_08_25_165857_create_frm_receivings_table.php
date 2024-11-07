@@ -20,6 +20,7 @@ class CreateFrmReceivingsTable extends Migration
             $table->unsignedBigInteger('establishment_id'); //origen
             $table->unsignedBigInteger('pharmacy_id'); //destino
             $table->longText('notes')->nullable(); //notas
+            $table->text('order_number')->nullable();
             $table->unsignedBigInteger('user_id');
 
             $table->timestamps();

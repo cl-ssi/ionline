@@ -17,6 +17,7 @@ class CreateFrmPharmaciesTable extends Migration
             $table->id();
             $table->string('name');
             $table->string('address');
+            $table->foreignId('establishment_id')->nullable()->constrained('establishments');
             $table->timestamps();
             $table->softDeletes();
         });
