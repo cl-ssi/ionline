@@ -14,8 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('sign_approvals', function (Blueprint $table) {
-            $table->string('approvable_type')->after('reject_observation')->nullable();
-            $table->unsignedBigInteger('approvable_id')->after('reject_observation')->nullable();
+            $table->morphs('approvable')->after('reject_observation')->nullable();
             $table->foreignId('previous_approval_id')->after('reject_observation')->nullable()->constrained('sign_approvals')->onDelete('cascade');;
             $table->boolean('active')->after('reject_observation')->default(true);
 
@@ -31,11 +30,11 @@ return new class extends Migration
     public function down()
     {
         Schema::table('sign_approvals', function (Blueprint $table) {
+            $table->dropIndex(['active']);
             $table->dropColumn('active');
             $table->dropForeign(['previous_approval_id']);
             $table->dropColumn('previous_approval_id');
-            $table->dropColumn('approvable_id');
-            $table->dropColumn('approvable_type');
+            $table->dropMorphs('approvable');
         });
     }
 };

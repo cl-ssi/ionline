@@ -11,8 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('logs', function (Blueprint $table) {
-            $table->foreignId('module_id')->after('message')->nullable()->constrained('cfg_modules');
+        Schema::create('fin_treasuries', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->morphs('treasureable');
+            $table->timestamps();
+            $table->softDeletes();
         });
     }
 
@@ -21,9 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('logs', function (Blueprint $table) {
-            $table->dropForeign(['module_id']);
-            $table->dropColumn('module_id');
-        });
+        Schema::dropIfExists('fin_treasuries');
     }
 };

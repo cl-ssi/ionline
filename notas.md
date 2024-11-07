@@ -310,11 +310,10 @@ Reunión Lupa:
 
 
 Articulado 
-Subtitulo 24 presupuesto de las municipalidades
+Subtitulo 24 presupuesto de las municipalidades (casi todo tiene el 24)
 
 La plataforma si permite hacer la 21 y 22. 
-Se puede generar una resolución de los convenios en otra opción.
-(Natalia)
+Se puede generar una resolución de los convenios en otra opción. (Natalia)
 
 - Resolución y convenios en una misma pantalla.
 - Plataforma que sea interacción con las comunas.
@@ -325,8 +324,8 @@ Se puede generar una resolución de los convenios en otra opción.
 
 ### Solo para convenios nuevos (todo lo que vaya a contraloría)
 - CDP (Finanzas)
-- Certificado de rendiciones (Finanzas)
-- Certificado de no fraccionamiento (Finanzas)
+- Certificado de rendiciones (Finanzas) Requiere ingreso de información
+- Certificado de no fraccionamiento (Finanzas) Tenemos los datos
 
 ### Requerimientos:
 ====================================================
@@ -335,10 +334,13 @@ Primer hito (adjuntar) con fecha de anexamiento
 - Resolución de distribución de recursos del programa
 
 Planear distribución local que es igual al CDP.
+
 (40 días corridos COMGES)
 
-Revisión de Natalia respecto de la revisión de la distribución.
-
+Distribución local
+---
+La distribución local debe ser ingresada en algún lugar, y que luego
+Revisión de Natalia respecto de la distribución.
 Justificación técnica si es monto de ejecución es menor.
 
 Convenios con comunas y sub 21 y 22.
@@ -372,7 +374,6 @@ Resolución modificatoria
 - Cargar los dos primeros hitos.
 - Base en el ultimo convenio.
 
-
 - ¿Qué pasa cuando supera las 5.000 UTM para las prorrogas?
 - Resolución modificatoria para resolución de prorroga
 - Modificación de convenio, adendum.
@@ -382,12 +383,14 @@ Resolución modificatoria
 - Finanzas incorporar transferencias realizadas.
 
 
-Enero 2025.
+- Fecha de partida: Enero 2025.
 
 Word.
 
 Perfiles. (Comuna, Referente, Admin de convenios (eliminar))
 Alertas de que necesitan realizar una acción
+
+
 
 
 ---

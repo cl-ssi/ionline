@@ -30,9 +30,9 @@ class ReceptionResource extends Resource
 
     protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
 
-    protected static ?string $modelLabel = 'Recepción';
+    protected static ?string $modelLabel = 'recepción';
 
-    protected static ?string $pluralModelLabel = 'Recepciones';
+    protected static ?string $pluralModelLabel = 'recepciones';
 
     public function mount() {}
 

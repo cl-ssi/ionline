@@ -31,6 +31,8 @@ class CreateDrgReceptionItemsTable extends Migration
             $table->integer('result_number')->nullable();
             $table->date('result_date')->nullable();
             $table->foreignId('result_substance_id')->nullable()->constrained('drg_substances');
+            $table->boolean('dispose_precursor')->nullable();
+            $table->integer('countersample_number');
             $table->timestamps();
             $table->softDeletes();
         });

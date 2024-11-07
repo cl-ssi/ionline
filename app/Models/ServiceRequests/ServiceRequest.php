@@ -4,14 +4,17 @@ namespace App\Models\ServiceRequests;
 
 use App\Models\Documents\SignaturesFile;
 use App\Models\Establishment;
+use App\Models\Finance\Treasury;
 use App\Models\Parameters\Bank;
 use App\Models\Parameters\Profession;
 use App\Models\Rrhh\OrganizationalUnit;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use OwenIt\Auditing\Contracts\Auditable;
 
@@ -205,6 +208,28 @@ class ServiceRequest extends Model implements Auditable
     public function signedBudgetAvailabilityCert(): BelongsTo
     {
         return $this->belongsTo(SignaturesFile::class, 'signed_budget_availability_cert_id');
+    }
+
+    /**
+     * Get the treasury model.
+     */
+    public function treasury(): MorphOne
+    {
+        return $this->morphOne(Treasury::class, 'treasureable');
+    }
+
+    protected function treasurySubject(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->programm_name,
+        );
+    }
+
+    protected function modelName(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => 'Honorario',
+        );
     }
 
     // Custom Methods
