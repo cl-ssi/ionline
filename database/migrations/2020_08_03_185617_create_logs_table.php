@@ -18,6 +18,8 @@ class CreateLogsTable extends Migration
             
             $table->foreignId('user_id')->nullable()->constrained('users');
             $table->longText('message');
+            $table->foreignId('module_id')->nullable()->constrained('cfg_modules');
+            $table->string('module')->nullable()->after('message');
             $table->string('uri')->nullable();
             $table->longText('formatted');
 
@@ -32,6 +34,7 @@ class CreateLogsTable extends Migration
             $table->string('user_agent')->nullable();
             $table->string('record_datetime');
             $table->dateTime('created_at')->nullable();
+            $table->datetime('updated_at')->nullable();
         });
     }
 
