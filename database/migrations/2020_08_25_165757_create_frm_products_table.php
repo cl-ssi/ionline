@@ -39,9 +39,12 @@ class CreateFrmProductsTable extends Migration
             $table->timestamps();
             $table->softDeletes();
 
-            $table->foreign('pharmacy_id')->references('id')->on('frm_pharmacies');
-            $table->foreign('category_id')->references('id')->on('frm_categories');
-            $table->foreign('program_id')->references('id')->on('frm_programs');
+
+            $table->foreignId('pharmacy_id')->nullable()->constrained('frm_pharmacies');
+
+            $table->foreignId('category_id')->nullable()->constrained('frm_categories');
+            
+            $table->foreignId('program_id')->nullable()->constrained('frm_programs');
         });
     }
 

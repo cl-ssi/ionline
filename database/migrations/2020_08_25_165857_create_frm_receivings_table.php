@@ -26,9 +26,12 @@ class CreateFrmReceivingsTable extends Migration
             $table->timestamps();
             $table->softDeletes();
 
-            $table->foreign('establishment_id')->references('id')->on('frm_establishments');
-            $table->foreign('pharmacy_id')->references('id')->on('frm_pharmacies');
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreignId('establishment_id')->nullable()->constrained('frm_establishments');
+           
+            $table->foreignId('pharmacy_id')->nullable()->constrained('frm_pharmacies');
+
+            $table->foreignId('user_id')->nullable()->constrained('users')
+
         });
     }
 

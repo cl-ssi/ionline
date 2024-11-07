@@ -21,7 +21,6 @@ class CreateFrmEstablishmentsTable extends Migration
             $table->foreignId('pharmacy_id')->nullable()->constrained('frm_pharmacies');
             $table->timestamps();
             $table->softDeletes();
-            
         });
     }
 
