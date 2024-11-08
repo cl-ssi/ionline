@@ -17,7 +17,7 @@ class CreateCfgLocationsTable extends Migration
             $table->id();
             $table->string('name');
             $table->string('address')->nullable()->default(NULL);
-            $table->foreignId('establishment_id')->nullable()->constrained('establishments');
+            $table->foreignId('establishment_id')->constrained('establishments');
             $table->timestamps();
             $table->softDeletes();
         });

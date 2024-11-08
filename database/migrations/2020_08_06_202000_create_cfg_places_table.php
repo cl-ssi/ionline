@@ -20,7 +20,7 @@ class CreateCfgPlacesTable extends Migration
             $table->string('architectural_design_code')->nullable();
             $table->integer('floor_number')->nullable();
             $table->foreignId('location_id')->constrained('cfg_locations')->onDelete('restrict');
-            $table->foreignId('establishment_id')->nullable()->constrained('establishments');
+            $table->foreignId('establishment_id')->constrained('establishments');
             $table->timestamps();
             $table->softDeletes();
         });
