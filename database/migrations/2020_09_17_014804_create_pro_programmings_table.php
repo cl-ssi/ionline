@@ -17,10 +17,12 @@ class CreateProProgrammingsTable extends Migration
             $table->id();
             $table->year('year');
             $table->string('description')->nullable();
-
             $table->foreignId('user_id')->constrainde('users');
             $table->foreignId('establishment_id')->constrained('establishments');
             $table->json('access')->nullable();
+            $table->string('file_a')->nullable();
+            $table->string('file_b')->nullable();
+            $table->enum('status',['active','inactive','finished'])->nullable()->default('active');
             $table->timestamps();
         });
     }

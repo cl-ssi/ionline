@@ -18,15 +18,14 @@ class CreateProProgrammingReviewsTable extends Migration
             $table->string('revisor')->nullable();
             $table->string('general_features')->nullable();
             $table->enum('answer',['SI','NO','REGULAR'])->nullable();
+            $table->tinyInteger('score')->nullable();
             $table->text('observation')->nullable();
             $table->enum('active',['SI','NO'])->nullable();
 
-            $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('updated_by')->nullable();
-            $table->bigInteger('commune_file_id')->unsigned();
-            
-            $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('commune_file_id')->references('id')->on('pro_commune_files');
+            $table->foreignId('user_id')->unsigned()->constrained('users');
+            $table->foreignId('commune_file_id')->unsigned()->constrained('pro_commune_files');
+
             $table->timestamps();
            
         });

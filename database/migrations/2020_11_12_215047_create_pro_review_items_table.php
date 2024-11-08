@@ -23,6 +23,7 @@ class CreateProReviewItemsTable extends Migration
 
             $table->unsignedBigInteger('user_id');
             $table->enum('rectified',['SI','NO'])->default('NO')->nullable();
+            $table->text('rect_comments')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();
             $table->bigInteger('programming_item_id')->unsigned();
             
