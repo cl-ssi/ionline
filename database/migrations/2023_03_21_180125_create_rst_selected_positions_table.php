@@ -17,6 +17,7 @@ class CreateRstSelectedPositionsTable extends Migration
             $table->id();
 
             $table->foreignId('position_id')->constrained('rst_positions');
+            $table->date('start_date')->nullable();
 
             $table->string('run')->nullable();
             $table->string('dv')->nullable();
