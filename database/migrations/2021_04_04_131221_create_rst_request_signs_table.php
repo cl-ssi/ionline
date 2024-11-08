@@ -21,7 +21,7 @@ class CreateRstRequestSignsTable extends Migration
             $table->string('ou_alias');
             $table->foreignId('organizational_unit_id');
             $table->foreignId('user_id')->nullable();
-            $table->enum('request_status',['pending', 'accepted', 'rejected', 'observations'])->nullable();
+            $table->string('request_status');
             $table->longText('observation')->nullable();
             $table->dateTime('date_sign')->nullable();
 
