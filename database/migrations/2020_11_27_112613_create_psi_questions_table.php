@@ -16,6 +16,7 @@ class CreatePsiQuestionsTable extends Migration
         Schema::create('psi_questions', function (Blueprint $table) {
             $table->id();
             $table->longText('question_text');
+            $table->foreignId('category_id')->constrained('psi_categories');
             $table->timestamps();
             $table->softDeletes();
         });
