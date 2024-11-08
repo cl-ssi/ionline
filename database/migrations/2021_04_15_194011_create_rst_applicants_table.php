@@ -22,12 +22,17 @@ class CreateRstApplicantsTable extends Migration
             $table->longText('observations')->nullable();
             //Exclusive Selected
             $table->boolean('selected')->nullable();
+            $table->boolean('desist')->nullable();
+            $table->longText('desist_observation')->nullable();
+            $table->string('reason')->nullable();
             $table->date('start_date')->nullable();
             $table->date('end_date')->nullable();
             $table->string('name_to_replace')->nullable();
             $table->string('replacement_reason')->nullable();
+            $table->date('sirh_contract')->nullable();
             $table->foreignId('ou_of_performance_id')->nullable();
             $table->foreignId('technical_evaluation_id');
+            $table->foreignId('approval_id')->nullable()->constrained('sign_approvals');
 
             $table->foreign('replacement_staff_id')->references('id')->on('rst_replacement_staff');
             $table->foreign('technical_evaluation_id')->references('id')->on('rst_technical_evaluations');
