@@ -23,6 +23,10 @@ class CreateResComputersTable extends Migration
           $table->string('domain')->nullable(); //new
           $table->ipAddress('ip')->nullable();
           $table->macAddress('mac_address')->nullable()->unique(); //new
+          $table->string('ip_group')->nullable();
+          $table->string('rack')->nullable();
+          $table->string('vlan')->nullable();
+          $table->string('network_segment')->nullable();
 
           $table->string('operating_system')->nullable(); //new
           $table->string('processor')->nullable(); //new
@@ -38,6 +42,8 @@ class CreateResComputersTable extends Migration
           $table->string('office_serial')->nullable(); //new
           $table->string('windows_serial')->nullable(); //new
           $table->foreignId('place_id')->nullable()->constrained('cfg_places');
+          $table->foreignId('inventory_id')->nullable()->constrained('inv_inventories');
+          $table->timestamp('fusion_at')->nullable();
 
           $table->timestamps();
           $table->softDeletes();
