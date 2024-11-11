@@ -14,7 +14,7 @@ class AgreementAmount extends Model
      *
      * @var string
      */
-    protected $table = 'agr_amounts';
+    protected $table = 'agr_amounts2';
 
     /**
      * The attributes that are mass assignable.

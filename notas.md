@@ -272,6 +272,27 @@ Factor
 
 ---
 # Convenios
+
+Tablas
+ - Mantener - signers
+ - NPI      - stages
+ - Evaluar  - progrmas
+ 
+ - budget_availability -> budget_availability2
+ - amounts -> amounts2
+ - quotas -> quotas2
+ 
+ - addendums -> process
+ - agreement -> process
+ - continuity_resolutions -> process 
+ - program_resolutions -> process
+
+ - Eliminar - accountabilities
+ - Eliminar - accountabiltiy_dtails
+ - Migrar y Eliminar - program_components
+
+
+
 - Descargas en Word
 - Formato con el editor de documentos
 - Dificultades en dos áreas

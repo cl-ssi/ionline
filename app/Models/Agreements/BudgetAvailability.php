@@ -13,7 +13,7 @@ class BudgetAvailability extends Model
 {
     use SoftDeletes;
 
-    protected $table = 'agr_budget_availability';
+    protected $table = 'agr_budget_availability2';
 
     /**
      * The attributes that are mass assignable.
