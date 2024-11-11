@@ -391,8 +391,9 @@ Word.
 Perfiles. (Comuna, Referente, Admin de convenios (eliminar))
 Alertas de que necesitan realizar una acción
 
-
-
+## Tareas al finalizar
+[ ] Eliminar tabla munipalities
+[ ] Eliminar tabla components de agreements
 
 ---
 # Honorarios Firma digital
