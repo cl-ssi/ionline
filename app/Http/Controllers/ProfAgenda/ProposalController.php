@@ -162,10 +162,10 @@ class ProposalController extends Controller
                 return redirect()->back()->withInput();
             }
             
-            if($start_date_param <= now()){
-                session()->flash('warning', 'No se puede aperturar. La fecha inicial que ingresó es igual o anterior a la actual.');
-                return redirect()->back()->withInput();
-            }
+            // if($start_date_param <= now()){
+            //     session()->flash('warning', 'No se puede aperturar. La fecha inicial que ingresó es igual o anterior a la actual.');
+            //     return redirect()->back()->withInput();
+            // }
             
         }
 
