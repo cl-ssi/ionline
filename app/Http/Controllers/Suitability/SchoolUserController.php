@@ -105,8 +105,15 @@ class SchoolUserController extends Controller
      */
     public function create()
     {
+        return view('suitability.users.create');        
+    }
+
+    public function createUserAdmin()
+    {
         //
-        return view('suitability.users.create');
+        $schools = School::orderBy('name')->get();
+        return view('suitability.users.create-admin', compact('schools'));
+        
     }
 
     /**
@@ -144,6 +151,18 @@ class SchoolUserController extends Controller
         //$user->external = 1;
         //$user->givePermissionTo('Suitability: admin');
         $user->save();
+
+        // Crea el registro en SchoolUser asociando al usuario y la escuela
+        $school_user = new SchoolUser([
+            'school_id' => $request->school_id, // Asegúrate de que venga este campo en el request
+            'user_external_id' => $user->id,
+            'admin' => 1 // Marca como administrador
+        ]);
+        $school_user->save();
+
+        // Asigna permiso de administrador al usuario creado
+        $user->givePermissionTo('Suitability: admin');
+
         session()->flash('success', 'Se Asigno al Usuario al colegio');
         }
         return redirect()->route('suitability.users.indexAdmin');

@@ -27,7 +27,8 @@ class SchoolUser extends Model
      */
     protected $fillable = [
         'school_id',
-        'user_external_id'
+        'user_external_id',
+        'admin'
     ];
 
     /**
