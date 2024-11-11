@@ -2656,6 +2656,7 @@ Route::prefix('suitability')->as('suitability.')->middleware(['auth', 'must.chan
         Route::get('/index-admin', [SchoolUserController::class, 'indexAdmin'])->name('indexAdmin');
         Route::get('/index-user', [SchoolUserController::class, 'indexUser'])->name('indexUser');
         Route::get('/create', [SchoolUserController::class, 'create'])->name('create');
+        Route::get('/create-user-admin', [SchoolUserController::class, 'createUserAdmin'])->name('createUserAdmin');
         Route::post('/store', [SchoolUserController::class, 'store'])->name('store');
         Route::delete('/{schooluser}/destroy', [SchoolUserController::class, 'destroy'])->name('destroy');
         Route::post('/store-user-admin', [SchoolUserController::class, 'storeUserAdmin'])->name('storeUserAdmin');
