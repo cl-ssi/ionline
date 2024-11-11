@@ -18,9 +18,9 @@ class CreateArqRequestFormsTable extends Migration
             $table->string('folio')->nullable()->after('id');
             $table->foreignId('purchase_plan_id')->nullable()->constrained('ppl_purchase_plans');
             $table->foreignId('request_form_id')->nullable()->constrained('arq_request_forms');
-            $table->foreignId('request_user_id');
-            $table->foreignId('request_user_ou_id');//u.o. del responsable
-            $table->foreignId('contract_manager_id');
+            $table->foreignId('request_user_id')->nullable()->constrained('users');
+            $table->foreignId('request_user_ou_id')->nullable()->constrained('organizational_units'); //u.o. del responsable
+            $table->foreignId('contract_manager_id')->nullable()->constrained('users');
             $table->foreignId('contract_manager_ou_id');//u.o. del responsable
             $table->longText('name');
             $table->float('estimated_expense', 15, 2);
@@ -37,17 +37,11 @@ class CreateArqRequestFormsTable extends Migration
 
             $table->string('status');
 
-            $table->bigInteger('purchase_mechanism_id')->unsigned();
-            $table->bigInteger('purchase_unit_id')->unsigned()->nullable();
-            $table->bigInteger('purchase_type_id')->unsigned()->nullable();
+            $table->foreignId('purchase_mechanism_id')->constrained('cfg_purchase_mechanisms');
+            $table->foreignId('purchase_unit_id')->nullable()->constrained('cfg_purchase_units');
+            $table->foreignId('purchase_type_id')->nullable()->constrained('cfg_purchase_types');
 
-            $table->foreign('purchase_mechanism_id')->references('id')->on('cfg_purchase_mechanisms');
-            $table->foreign('purchase_unit_id')->references('id')->on('cfg_purchase_units');
-            $table->foreign('purchase_type_id')->references('id')->on('cfg_purchase_types');
 
-            $table->foreign('request_user_id')->references('id')->on('users');
-            $table->foreign('contract_manager_id')->references('id')->on('users');
-            $table->foreign('request_user_ou_id')->references('id')->on('organizational_units');
 
             $table->foreignId('signatures_file_id')->nullable()->constrained('doc_signatures_files');
             $table->foreignId('old_signatures_file_id')->nullable()->constrained('doc_signatures_files');
