@@ -4,6 +4,7 @@ namespace App\Filament\Clusters\Documents\Resources\Drugs;
 
 use App\Filament\Clusters\Documents;
 use App\Filament\Clusters\Documents\Resources\Drugs\SubstancesResource\Pages;
+use App\Filament\Resources\Drugs\SubstancesResource\Pages\ReportOfConfiscated;
 use App\Filament\Clusters\Documents\Resources\Drugs\SubstancesResource\RelationManagers;
 use App\Models\Drugs\Substance;
 use Filament\Forms;
@@ -154,9 +155,10 @@ class SubstancesResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListSubstances::route('/'),
-            'create' => Pages\CreateSubstances::route('/create'),
-            'edit' => Pages\EditSubstances::route('/{record}/edit'),
+            'index'                 => Pages\ListSubstances::route('/'),
+            'create'                => Pages\CreateSubstances::route('/create'),
+            'edit'                  => Pages\EditSubstances::route('/{record}/edit'),
+            'report-confiscated'    => Pages\ReportConfiscated::route('/report-confiscated'),
         ];
     }
 }
