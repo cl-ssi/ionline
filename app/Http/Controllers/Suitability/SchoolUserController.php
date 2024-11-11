@@ -137,37 +137,31 @@ class SchoolUserController extends Controller
 
     public function storeUserAdmin(Request $request)
     {
-        //
-        //$user = new User($request->All());
-        $buscador = UserExternal::find($request->id);
-        if ($buscador)
-        {
-            session()->flash('danger', 'Usuario ya se encontraba ingresado como Usuario Externo');
+        
+        $user = UserExternal::updateOrCreate(
+            ['id' => $request->id],
+            $request->all()
+        );
+    
+        
+        if ($user->wasRecentlyCreated) {
+            session()->flash('success', 'Usuario asignado al colegio correctamente.');
+        } else {
+            session()->flash('info', 'Datos del usuario actualizado correctamente.');
         }
-        else
-        {
-        $user = new UserExternal($request->All());
-        //$user->email_personal = $request->email;
-        //$user->external = 1;
-        //$user->givePermissionTo('Suitability: admin');
-        $user->save();
-
-        // Crea el registro en SchoolUser asociando al usuario y la escuela
-        $school_user = new SchoolUser([
-            'school_id' => $request->school_id, // Asegúrate de que venga este campo en el request
-            'user_external_id' => $user->id,
-            'admin' => 1 // Marca como administrador
-        ]);
-        $school_user->save();
-
-        // Asigna permiso de administrador al usuario creado
+    
+        
+        SchoolUser::updateOrCreate(
+            ['user_external_id' => $user->id, 'school_id' => $request->school_id], // Condiciones de búsqueda
+            ['admin' => 1] 
+        );
+    
+        // Asigna el permiso de administrador al usuario
         $user->givePermissionTo('Suitability: admin');
-
-        session()->flash('success', 'Se Asigno al Usuario al colegio');
-        }
+    
         return redirect()->route('suitability.users.indexAdmin');
     }
-
+    
     /**
      * Display the specified resource.
      *
