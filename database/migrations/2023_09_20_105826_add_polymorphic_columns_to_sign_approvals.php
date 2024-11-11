@@ -14,11 +14,13 @@ return new class extends Migration
     public function up()
     {
         Schema::table('sign_approvals', function (Blueprint $table) {
-            $table->morphs('approvable')->after('reject_observation')->nullable();
-            $table->foreignId('previous_approval_id')->after('reject_observation')->nullable()->constrained('sign_approvals')->onDelete('cascade');;
-            $table->boolean('active')->after('reject_observation')->default(true);
+            //Comentadas para ejecutar el migrate:fresh, quitar comentario  luego
+            
+           /* $table->morphs('approvable')->nullable()->after('reject_observation');
+            $table->foreignId('previous_approval_id')->nullable()->constrained('sign_approvals')->onDelete('cascade')->after('reject_observation');
+            $table->boolean('active')->default(true)->after('reject_observation');
 
-            $table->index(['active']);
+            $table->index(['active']);*/
         });
     }
 

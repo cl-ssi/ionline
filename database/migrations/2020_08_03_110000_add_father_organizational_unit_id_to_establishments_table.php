@@ -1,11 +1,10 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
-class ChangeColumnDeisToEstablishmentsTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -14,11 +13,8 @@ class ChangeColumnDeisToEstablishmentsTable extends Migration
      */
     public function up()
     {
-        $query = "UPDATE establishments set new_mother_code = null WHERE new_mother_code = 'No Aplica'";
-        DB::statement($query);
-
         Schema::table('establishments', function (Blueprint $table) {
-            $table->integer('new_mother_code')->change();
+            $table->foreignId('father_organizational_unit_id')->after('mail_director')->nullable()->constrained('organizational_units');
         });
     }
 
@@ -30,7 +26,8 @@ class ChangeColumnDeisToEstablishmentsTable extends Migration
     public function down()
     {
         Schema::table('establishments', function (Blueprint $table) {
-            $table->string('new_mother_code')->change();
+            $table->dropForeign(['father_organizational_unit_id']);
+            $table->dropColumn('father_organizational_unit_id');
         });
     }
-}
+};

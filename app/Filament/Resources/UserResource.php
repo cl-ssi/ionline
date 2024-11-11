@@ -136,13 +136,13 @@ class UserResource extends Resource
                     ->copyMessage('Run copiado')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('full_name')
-                    ->formatStateUsing(fn (string $state) => ucwords(strtolower($state)))
+                    //->formatStateUsing(fn (string $state) => ucwords(strtolower($state)))
                     ->translateLabel()
                     ->searchable(),
-                // Tables\Columns\TextColumn::make('fathers_family')
-                //     ->searchable(),
-                // Tables\Columns\TextColumn::make('mothers_family')
-                //     ->searchable(),
+                Tables\Columns\TextColumn::make('fathers_family')
+                    ->searchable(),
+                 Tables\Columns\TextColumn::make('mothers_family')
+                     ->searchable(),
                 // Tables\Columns\TextColumn::make('gender')
                 //     ->searchable(),
                 // Tables\Columns\TextColumn::make('address')
