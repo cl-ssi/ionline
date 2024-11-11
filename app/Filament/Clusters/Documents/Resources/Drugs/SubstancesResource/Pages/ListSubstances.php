@@ -13,6 +13,10 @@ class ListSubstances extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
+            Actions\Action::make('report_confiscated')
+                ->label('Informe ISP')
+                ->icon('heroicon-o-chart-bar')
+                ->url(route('filament.intranet.documents.resources.drugs.substances.report-confiscated')),
         ];
     }
 }
