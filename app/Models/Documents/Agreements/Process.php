@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\Agreements;
+namespace App\Models\Documents\Agreements;
 
 use App\Models\ClCommune;
 use Illuminate\Database\Eloquent\Model;

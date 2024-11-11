@@ -34,10 +34,6 @@ return new class extends Migration
             $table->timestamps();
             $table->softDeletes();
         });
-
-        Schema::table('agr_processes', function (Blueprint $table) {
-            $table->foreign('process_id')->references('id')->on('agr_processes');
-        });
     }
 
     /**

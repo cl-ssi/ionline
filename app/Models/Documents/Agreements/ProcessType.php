@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\Agreements;
+namespace App\Models\Documents\Agreements;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;

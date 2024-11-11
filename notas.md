@@ -274,22 +274,35 @@ Factor
 # Convenios
 
 Tablas
- - Mantener - signers
- - NPI      - stages
- - Evaluar  - progrmas
- 
- - budget_availability -> budget_availability2
- - amounts -> amounts2
- - quotas -> quotas2
- 
- - addendums -> process
- - agreement -> process
- - continuity_resolutions -> process 
- - program_resolutions -> process
 
- - Eliminar - accountabilities
- - Eliminar - accountabiltiy_dtails
- - Migrar y Eliminar - program_components
+Dependencia:
+- cfg_programs
+- cfg_program_components
+- cfg_municipalities
+- cfg_alcaldes
+
+
+Modulo
+- agr_signers
+- agr_process_types
+- agr_process
+
+- Mantener - agr_signers
+- NPI      - agr_stages
+- Evaluar  - agr_programs
+
+- agr_budget_availability -> agr_budget_availability1
+- agr_amounts             -> agr_amounts1
+- agr_quotas2             -> agr_quotas2
+
+- agr_addendums              -> agr_processes
+- agr_agreements             -> agr_processes
+- agr_continuity_resolutions -> agr_processes 
+- agr_program_resolutions    -> agr_processes
+
+- Eliminar - accountabilities
+- Eliminar - accountabiltiy_dtails
+- Migrar y Eliminar - program_components
 
 
 
