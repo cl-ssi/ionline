@@ -13,7 +13,7 @@ class AgreementQuota extends Model
      *
      * @var string
      */
-    protected $table = 'agr_quotas';
+    protected $table = 'agr_quotas2';
 
     /**
      * The attributes that are mass assignable.
