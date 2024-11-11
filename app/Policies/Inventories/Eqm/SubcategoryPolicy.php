@@ -27,7 +27,7 @@ class SubcategoryPolicy
      */
     public function viewAny(User $user): bool
     {
-        return $user->can('Inventory');
+        return $user->can('Equipment Maintenance: administrador');
     }
 
     /**
@@ -35,7 +35,7 @@ class SubcategoryPolicy
      */
     public function view(User $user, Subcategory $subcategory): bool
     {
-        return $user->can('Inventory');
+        return $user->can('Equipment Maintenance: administrador');
     }
 
     /**
@@ -43,7 +43,7 @@ class SubcategoryPolicy
      */
     public function create(User $user): bool
     {
-        return $user->can('Inventory');
+        return $user->can('Equipment Maintenance: administrador');
     }
 
     /**
@@ -51,7 +51,7 @@ class SubcategoryPolicy
      */
     public function update(User $user, Subcategory $subcategory): bool
     {
-        return $user->can('Inventory');
+        return $user->can('Equipment Maintenance: administrador');
     }
 
     /**
@@ -59,7 +59,7 @@ class SubcategoryPolicy
      */
     public function delete(User $user, Subcategory $subcategory): bool
     {
-        return $user->can('Inventory');
+        return $user->can('Equipment Maintenance: administrador');
     }
 
     /**
@@ -67,7 +67,7 @@ class SubcategoryPolicy
      */
     public function restore(User $user, Subcategory $subcategory): bool
     {
-        return $user->can('Inventory');
+        return $user->can('Equipment Maintenance: administrador');
     }
 
     /**
@@ -75,6 +75,6 @@ class SubcategoryPolicy
      */
     public function forceDelete(User $user, Subcategory $subcategory): bool
     {
-        return $user->can('Inventory');
+        return $user->can('Equipment Maintenance: administrador');
     }
 }

@@ -15,6 +15,7 @@ class CreateAgrAgreementsTable extends Migration
     {
         Schema::create('agr_agreements', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('agreement_id')->nullable()->constrained('agr_agreements');
             $table->date('date');
             $table->smallInteger('period');
             $table->string('file')->nullable();
@@ -22,12 +23,19 @@ class CreateAgrAgreementsTable extends Migration
             $table->string('fileResEnd')->nullable();
             $table->foreignId('program_id')->constrained('agr_programs');
             $table->foreignId('commune_id')->constrained('communes');
+            $table->foreignId('authority_id')->nullable()->constrained('rrhh_authorities');
             $table->smallInteger('quotas');
-            $table->string('referente');
+            $table->integer('total_amount')->nullable();
+            $table->string('referente')->nullable();
+            $table->foreignId('referrer_id')->nullable()->cosntrained('users');
+            $table->foreignId('referrer2_id')->nullable()->constrained('users');
+            $table->foreignId('director_signer_id')->nullable()->constrained('agr_signers');
             
             // MUNICIPALIDAD
             $table->string('representative')->nullable();
             $table->string('representative_rut')->nullable();
+            $table->string('representative_appelative')->nullable();
+            $table->string('representative_decree')->nullable();
             $table->string('municipality_adress')->nullable();
             $table->string('municipality_rut')->nullable();
 
@@ -45,6 +53,10 @@ class CreateAgrAgreementsTable extends Migration
 
             // CONVENIOS ESTABLECIMIENTOS
             $table->json('establishment_list')->nullable();
+            $table->foreignId('file_to_endorse_id')->nullable()->constrained('doc_signatures_files');
+            $table->foreignId('file_to_sign_id')->nullable()->constrained('doc_signatures_files');
+            $table->foreignId('document_id')->nullable()->constrained('documents');
+            $table->foreignId('res_document_id')->nullable()->constrained('documents');
 
             $table->timestamps();
             $table->softDeletes();

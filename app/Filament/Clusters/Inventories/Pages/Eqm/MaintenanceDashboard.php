@@ -25,7 +25,7 @@ class MaintenanceDashboard extends Page
 
     public static function canAccess(): bool
     {
-        return auth()->user()->can('Inventory');
+        return auth()->user()->can('Equipment Maintenance: administrador');
     }
 
     public function getHeaderWidgets(): array
