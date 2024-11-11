@@ -14,6 +14,8 @@ return new class extends Migration
      */
     public function up()
     {
+        //Quitar comentario luego del migrate:refresh
+       /*
         DB::statement("ALTER TABLE sign_approvals MODIFY COLUMN reject_observation varchar(255) AFTER approver_id");
         DB::statement("ALTER TABLE sign_approvals MODIFY COLUMN status TINYINT(1) AFTER approver_at");
 
@@ -34,6 +36,7 @@ return new class extends Migration
         ]);
 
         //DB::statement("ALTER TABLE sign_approvals MODIFY COLUMN approver_ou_id BIGINT(20) AFTER approver_id");
+        */
     }
 
     /**

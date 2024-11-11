@@ -17,9 +17,11 @@ class PlaceSeeder extends Seeder
         //
         Place::create([ 'name' => 'Oficina 211',
                         'description' => 'Gloriosa Oficina de SIDRA',
-                        'location_id' => 2]);
+                        'location_id' => 2,
+                        'establishment_id' => 1]);
         Place::create([ 'name' => 'Oficina 220',
                         'description' => 'Oficina de SIDRA Clínicos',
-                        'location_id' => 2]);
+                        'location_id' => 2,
+                        'establishment_id' => 1]);
     }
 }
