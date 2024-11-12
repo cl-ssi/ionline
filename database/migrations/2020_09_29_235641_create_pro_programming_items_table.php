@@ -54,18 +54,12 @@ class CreateProProgrammingItemsTable extends Migration
             $table->string('observation')->nullable();
             $table->enum('workshop',['SI','NO'])->nullable();
             $table->enum('active',['SI','NO'])->nullable();
-            $table->unsignedBigInteger('user_id');
-
-            $table->bigInteger('programming_id')->unsigned();
- 
-            $table->foreign('programming_id')->references('id')->on('pro_programmings');
-            $table->foreign('user_id')->references('id')->on('users');
-            
+            $table->foreignId('user_id')->constrained('users');
+            $table->foreignId('programming_id')->unsigned()->constrained('pro_programmings');
             $table->timestamps();
             $table->softDeletes();
         });
     }
-
     /**
      * Reverse the migrations.
      *
