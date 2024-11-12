@@ -8,6 +8,7 @@ use App\Filament\Clusters\Documents\Resources\Drugs\CourtsResource\RelationManag
 use App\Models\Drugs\Court;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Pages\SubNavigationPosition;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -21,11 +22,14 @@ class CourtsResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-cog-6-tooth';
 
     protected static ?string $cluster = Documents::class;
-
+    
+    protected static ?string $modelLabel = 'juzgado';
+    
+    protected static ?string $pluralModelLabel = 'judgados';
+    
     protected static ?string $navigationGroup = 'Drogas';
 
-    protected static ?string $modelLabel = 'Juzgados';
-
+    protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
 
     public static function form(Form $form): Form
     {

@@ -9,6 +9,7 @@ use App\Models\Drugs\Reception;
 use Filament\Actions\Action;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Pages\SubNavigationPosition;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -19,13 +20,17 @@ class ReceptionResource extends Resource
 {
     protected static ?string $model = Reception::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'fas-cannabis';
 
     protected static ?string $cluster = Documents::class;
 
-    protected static ?string $modelLabel = 'Recepciones';
+    protected static ?string $modelLabel = 'recepción';
+
+    protected static ?string $pluralModelLabel = 'recepciones';
 
     protected static ?string $navigationGroup = 'Drogas';
+
+    protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
 
     public static function form(Form $form): Form
     {
