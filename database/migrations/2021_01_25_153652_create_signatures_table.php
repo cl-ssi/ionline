@@ -15,23 +15,22 @@ class CreateSignaturesTable extends Migration
     {
         Schema::create('doc_signatures', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('ou_id');
-            $table->foreignId('responsable_id');
+            $table->string('status')->nullable();
+            $table->foreignId('ou_id')->constrained('organizational_units');
+            $table->foreignId('responsable_id')->constrained('users');
             $table->datetime('request_date');
-            $table->string('document_type', 255)->nullable(); //carta, circular, convenios, etc.
+            $table->foreignId('type_id')->nullable()->constrained('doc_types');
             $table->boolean('reserved')->nullable();
             $table->string('subject', 255)->nullable(); //honorarios, covid19, etc.
             $table->string('description', 255)->nullable();
+            $table->string('url')->nullable();
             $table->string('endorse_type', 255)->nullable(); //tipo de visación
-            $table->string('recipients', 255)->nullable(); //destinatarios
-            $table->string('distribution', 255)->nullable(); //distribución
-            $table->unsignedBigInteger('user_id');
+            $table->text('recipients')->nullable(); //destinatarios
+            $table->text('distribution')->nullable();//distribución
+            $table->foreignId('user_id')->constrained->('users');
             $table->string('verification_code')->nullable(); /* ej: afo2f42o2f */
-
-            //fk
-            $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('responsable_id')->references('id')->on('users');
-            $table->foreign('ou_id')->references('id')->on('organizational_units');
+            $table->boolean('visatorAsSignature')->nullable();
+            $table->dateTime('rejected_at')->nullable();
 
             $table->timestamps();
             $table->softDeletes();
