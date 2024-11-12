@@ -15,11 +15,7 @@ class CourtPolicy
      */
     public function before(User $user): ?bool
     {
-        if ($user->can('be god')) {
-            return true;
-        }
-
-        return null;
+        return $u->can('be god') ? true : null;
     }
 
     /**
