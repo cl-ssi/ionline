@@ -24,9 +24,10 @@ class ListSubstances extends ListRecords
                 ->label('Vincular Resultados')
                 ->icon('heroicon-o-link')
                 ->action(function () {
-                    foreach(Protocol::all() as $protocol){
-                        if($protocol->result == 'Positivo' && $protocol->receptionItem->result_substance_id == null){
-                            $protocol->receptionItem->result_substance_id = $protocol->receptionItem->substance->result_id; // FIXME: Corregir en futuro
+                    $protocols = Protocol::whereNull('result_substance_id')->get();
+                    foreach($protocols as $protocol){
+                        if($protocol->result == 'Positivo'){
+                            $protocol->receptionItem->result_substance_id = $protocol->receptionItem->substance->result_id;
                             $protocol->receptionItem->save();
                         }
                     }
