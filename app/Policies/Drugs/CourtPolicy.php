@@ -9,11 +9,25 @@ use Illuminate\Auth\Access\Response;
 class CourtPolicy
 {
     /**
+     * Perform pre-authorization checks.
+     * For administrative purposes, the user with the 'be god' ability can do anything.
+     * If null is returned, the authorization check will fall through to the policy method
+     */
+    public function before(User $user): ?bool
+    {
+        if ($user->can('be god')) {
+            return true;
+        }
+
+        return null;
+    }
+
+    /**
      * Determine whether the user can view any models.
      */
     public function viewAny(User $user): bool
     {
-        return $user->canany(['be god']);
+        return $user->can('Drugs: manage parameters');
     }
 
     /**
@@ -21,7 +35,7 @@ class CourtPolicy
      */
     public function view(User $user, Court $Court): bool
     {
-        return false;
+        return $user->can('Drugs: manage parameters');
     }
 
     /**
@@ -29,7 +43,7 @@ class CourtPolicy
      */
     public function create(User $user): bool
     {
-        return false;
+        return $user->can('Drugs: manage parameters');
     }
 
     /**
@@ -37,7 +51,7 @@ class CourtPolicy
      */
     public function update(User $user, Court $Court): bool
     {
-        return false;
+        return $user->can('Drugs: manage parameters');
     }
 
     /**

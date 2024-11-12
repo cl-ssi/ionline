@@ -95,6 +95,11 @@ class SubstancesResource extends Resource
                         'ISP' => 'ISP',
                         default => '',
                     }),
+                Forms\Components\Select::make('result_id')
+                    ->label('Resultado')
+                    ->options(Substance::where('presumed', false)->pluck('name', 'id'))
+                    ->searchable(),
+                    
             ]);
     }
 
@@ -126,7 +131,10 @@ class SubstancesResource extends Resource
                 Tables\Columns\IconColumn::make('presumed')
                     ->boolean()
                     ->sortable()
-                    ->label('Presunta')
+                    ->label('Presunta'),
+                Tables\Columns\TextColumn::make('result.name')
+                    ->sortable()
+                    ->label('Resultado')
             ])
             ->filters([
                 Filter::make('Presunta')
