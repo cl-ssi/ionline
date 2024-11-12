@@ -8,7 +8,10 @@ use Illuminate\Auth\Access\Response;
 
 class TreasuryPolicy
 {
-    public function before(User $user): ?bool
+    /**
+     * Perform pre-authorization checks.
+     */
+    public function before(User $user, string $ability): bool|null
     {
         return $user->can('be god') ? true : null;
     }

@@ -8,14 +8,12 @@ use Illuminate\Auth\Access\Response;
 
 class ProductPolicy
 {
-
+    /**
+     * Perform pre-authorization checks.
+     */
     public function before(User $user, string $ability): bool|null
     {
-        if ($user->can('be god')) {
-            return true;
-        }
-
-        return null;
+        return $user->can('be god') ? true : null;
     }
 
     /**
