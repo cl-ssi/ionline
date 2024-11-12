@@ -14,7 +14,8 @@ class CreateUsersTable extends Migration
     public function up()
     {
         Schema::create('users', function (Blueprint $table) {
-            $table->unsignedBigInteger('id');
+            /** No se usa id() porque no es autoincremental */
+            $table->bigInteger('id')->unsigned()->unique();
             $table->char('dv',1);
             $table->string('run', 10)->virtualAs("UPPER(CONCAT(CAST(id AS CHAR), TRIM(dv)))");
             $table->string('name');
@@ -44,8 +45,6 @@ class CreateUsersTable extends Migration
             $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();
-
-            $table->index(['id']);
         });
     }
 
