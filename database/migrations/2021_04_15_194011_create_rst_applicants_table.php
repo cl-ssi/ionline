@@ -15,8 +15,7 @@ class CreateRstApplicantsTable extends Migration
     {
         Schema::create('rst_applicants', function (Blueprint $table) {
             $table->id();
-
-            $table->foreignId('replacement_staff_id');
+            $table->foreignId('replacement_staff_id')->constrained('rst_replacement_staff');
             $table->integer('psycholabor_evaluation_score')->nullable();
             $table->integer('technical_evaluation_score')->nullable();
             $table->longText('observations')->nullable();
@@ -30,13 +29,9 @@ class CreateRstApplicantsTable extends Migration
             $table->string('name_to_replace')->nullable();
             $table->string('replacement_reason')->nullable();
             $table->date('sirh_contract')->nullable();
-            $table->foreignId('ou_of_performance_id')->nullable();
-            $table->foreignId('technical_evaluation_id');
+            $table->foreignId('ou_of_performance_id')->nullable()->constrained('organizational_units');
+            $table->foreignId('technical_evaluation_id')->constrained('rst_technical_evaluations');
             $table->foreignId('approval_id')->nullable()->constrained('sign_approvals');
-
-            $table->foreign('replacement_staff_id')->references('id')->on('rst_replacement_staff');
-            $table->foreign('technical_evaluation_id')->references('id')->on('rst_technical_evaluations');
-            $table->foreign('ou_of_performance_id')->references('id')->on('organizational_units');
 
             $table->timestamps();
             $table->softDeletes();

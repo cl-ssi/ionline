@@ -18,14 +18,12 @@ class CreateRstPositionsTable extends Migration
             $table->foreignId('profile_manage_id')->constrained('rst_profile_manages');
             $table->string('law')->nullable();
             $table->integer('degree')->nullable();
-
             //LEGAL QUALITY
             $table->foreignId('legal_quality_manage_id')->constrained('rst_legal_quality_manages');
             $table->integer('salary')->nullable();
             $table->foreignId('fundament_manage_id')->constrained('rst_fundament_manages');
             $table->foreignId('fundament_detail_manage_id')->nullable()->constrained('rst_fundament_detail_manages');
             $table->string('other_fundament')->nullable();
-
             $table->string('work_day');
             $table->string('other_work_day')->nullable();
             $table->integer('charges_number');

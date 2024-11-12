@@ -34,7 +34,6 @@ class CreateRstReplacementStaffTable extends Migration
             $table->string('address');
             $table->text('observations')->nullable();
             $table->string('cv_file')->nullable();
-
             $table->string('status')->nullable();
 
             $table->timestamps();
