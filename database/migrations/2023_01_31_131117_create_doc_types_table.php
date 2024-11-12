@@ -45,9 +45,10 @@ class CreateDocTypesTable extends Migration
             $table->foreignId('type_id')->after('type')->nullable()->constrained('doc_types');
         });
 
-        Schema::table('doc_signatures', function (Blueprint $table) {
+        //Tabla copiada
+        /*Schema::table('doc_signatures', function (Blueprint $table) {
             $table->foreignId('type_id')->after('document_type')->nullable()->constrained('doc_types');
-        });
+        });*/
     }
 
     /**
