@@ -27,12 +27,13 @@ class CreateRstReplacementStaffTable extends Migration
             $table->string('email');
             $table->string('telephone')->nullable();
             $table->string('telephone2')->nullable();
+            $table->foreignId('region_id')->nullable()->constrained('cl_regions');
+            $table->foreignId('commune_id')->nullable()->constrained('cl_communes');
             //$table->string('job_title');
             $table->string('commune');
             $table->string('address');
             $table->text('observations')->nullable();
             $table->string('cv_file')->nullable();
-
             $table->string('status')->nullable();
 
             $table->timestamps();
