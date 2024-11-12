@@ -25,6 +25,8 @@ class CreateHbRoomsTable extends Migration
             $table->integer('max_days_avaliable');
             $table->integer('single_bed')->nullable();
             $table->integer('double_bed')->nullable();
+            $table->string('status')->default(1);
+            $table->integer('price')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

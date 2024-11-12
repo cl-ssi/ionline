@@ -105,8 +105,15 @@ class SchoolUserController extends Controller
      */
     public function create()
     {
+        return view('suitability.users.create');        
+    }
+
+    public function createUserAdmin()
+    {
         //
-        return view('suitability.users.create');
+        $schools = School::orderBy('name')->get();
+        return view('suitability.users.create-admin', compact('schools'));
+        
     }
 
     /**
@@ -130,25 +137,31 @@ class SchoolUserController extends Controller
 
     public function storeUserAdmin(Request $request)
     {
-        //
-        //$user = new User($request->All());
-        $buscador = UserExternal::find($request->id);
-        if ($buscador)
-        {
-            session()->flash('danger', 'Usuario ya se encontraba ingresado como Usuario Externo');
+        
+        $user = UserExternal::updateOrCreate(
+            ['id' => $request->id],
+            $request->all()
+        );
+    
+        
+        if ($user->wasRecentlyCreated) {
+            session()->flash('success', 'Usuario asignado al colegio correctamente.');
+        } else {
+            session()->flash('info', 'Datos del usuario actualizado correctamente.');
         }
-        else
-        {
-        $user = new UserExternal($request->All());
-        //$user->email_personal = $request->email;
-        //$user->external = 1;
-        //$user->givePermissionTo('Suitability: admin');
-        $user->save();
-        session()->flash('success', 'Se Asigno al Usuario al colegio');
-        }
+    
+        
+        SchoolUser::updateOrCreate(
+            ['user_external_id' => $user->id, 'school_id' => $request->school_id], // Condiciones de búsqueda
+            ['admin' => 1] 
+        );
+    
+        // Asigna el permiso de administrador al usuario
+        $user->givePermissionTo('Suitability: admin');
+    
         return redirect()->route('suitability.users.indexAdmin');
     }
-
+    
     /**
      * Display the specified resource.
      *
