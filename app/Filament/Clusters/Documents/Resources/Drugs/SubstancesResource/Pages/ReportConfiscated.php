@@ -51,10 +51,12 @@ class ReportConfiscated extends Page implements Tables\Contracts\HasTable
                 TextColumn::make('total_items')
                     ->label('Total de Items')
                     ->sortable()
-                    ->formatStateUsing(fn (string|float $state): string => number_format($state, 0, ',', '.')), // Formato con separación de miles y 2 decimales,,
+                    ->formatStateUsing(fn (string|float $state): string => number_format($state, 0, ',', '.')) // Formato con separación de miles y 2 decimales,
+                    ->alignEnd(),
                 TextColumn::make('total_net_weight')
                     ->label('Recibidos')
-                    ->formatStateUsing(fn (string|float $state): string => number_format($state, 2, ',', '.')), // Formato con separación de miles y 2 decimales,
+                    ->formatStateUsing(fn (string|float $state): string => number_format($state, 2, ',', '.')) // Formato con separación de miles y 2 decimales,
+                    ->alignEnd(),
             ])
             ->filters([
                 SelectFilter::make('substance_id')
