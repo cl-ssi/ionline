@@ -15,12 +15,10 @@ class CreateClRegionsTable extends Migration
     {
         Schema::create('cl_regions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('region_id')->nullable();
+            /* @mirandaljorge para que es esta relacion? */
+            $table->foreignId('region_id')->nullable()->constrained('cl_regions');
             $table->string('id_minsal')->nullable();
             $table->string('name')->nullable();
-
-            /* @mirandaljorge para que es esta relacion? */
-            $table->foreign('region_id')->references('id')->on('cl_regions');
 
             $table->timestamps();
             $table->softDeletes();

@@ -15,7 +15,6 @@ class CreateUnspscClassesTable extends Migration
     {
         Schema::create('unspsc_classes', function (Blueprint $table) {
             $table->id();
-
             $table->integer('code')->nullable();
             $table->string('name')->nullable();
             $table->timestamp('experies_at')->nullable();
