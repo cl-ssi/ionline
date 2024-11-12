@@ -8,7 +8,15 @@ use Illuminate\Auth\Access\Response;
 
 class PoliceUnitPolicy
 {
-        /**
+    /**
+     * Perform pre-authorization checks.
+     */
+    public function before(User $user, string $ability): bool|null
+    {
+        return $user->can('be god') ? true : null;
+    }
+
+    /**
      * Determine whether the user can view any models.
      */
     public function viewAny(User $user): bool
