@@ -33,7 +33,6 @@ class AddEstablishmentIdToProfAgendaActivityTypesTable extends Migration
 
             DB::table('prof_agenda_activity_types')->insert($newRecord);
         }
-        
     }
 
     /**
