@@ -29,12 +29,12 @@ class Amount extends Model
     ];
 
     /**
-     * Get the agreement.
+     * Get the process.
      */
-    // public function agreement(): BelongsTo
-    // {
-    //     return $this->belongsTo(Agreement::class);
-    // }
+    public function process(): BelongsTo
+    {
+        return $this->belongsTo(Process::class);
+    }
 
     /**
      * Get the program component.

@@ -291,8 +291,7 @@ Modulo
 - NPI      - agr_stages
 - Evaluar  - agr_programs
 
-- agr_budget_availability -> agr_budget_availability1
-- agr_amounts             -> agr_amounts1
+- agr_amounts             -> agr_amounts2
 - agr_quotas2             -> agr_quotas2
 
 - agr_addendums              -> agr_processes
@@ -300,9 +299,10 @@ Modulo
 - agr_continuity_resolutions -> agr_processes 
 - agr_program_resolutions    -> agr_processes
 
-- Eliminar - accountabilities
-- Eliminar - accountabiltiy_dtails
-- Migrar y Eliminar - program_components
+- Eliminar - agr_budget_availability
+- Eliminar - agr_accountabilities
+- Eliminar - agr_accountabiltiy_dtails
+- Migrar y Eliminar - agr_program_components
 
 
 

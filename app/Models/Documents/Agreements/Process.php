@@ -6,6 +6,7 @@ use App\Models\ClCommune;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use App\Models\Parameters\Program;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Process extends Model
@@ -59,7 +60,7 @@ class Process extends Model
         return $this->belongsTo(Process::class, 'process_id');
     }
 
-    public function processes()
+    public function processes(): HasMany
     {
         return $this->hasMany(Process::class, 'process_id');
     }
