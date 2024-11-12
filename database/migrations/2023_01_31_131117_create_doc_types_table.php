@@ -70,9 +70,9 @@ class CreateDocTypesTable extends Migration
             $table->dropConstrainedForeignId('type_id');
         });
 
-        Schema::table('doc_signatures', function (Blueprint $table) {
-            $table->dropConstrainedForeignId('type_id');
-        });
+        // Schema::table('doc_signatures', function (Blueprint $table) {
+        //     $table->dropConstrainedForeignId('type_id');
+        // });
 
         Schema::dropIfExists('doc_types');
 
