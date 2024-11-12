@@ -56,12 +56,6 @@ class ReportConfiscated extends Page implements Tables\Contracts\HasTable
                     ->alignEnd(),
             ])
             ->filters([
-                Tables\Filters\SelectFilter::make('substance_id')
-                    ->label('Filtrar por Sustancia')
-                    ->options($this->getSubstanceOptions())
-                    ->placeholder('Selecciona una Sustancia')
-                    ->searchable() // Agrega el campo de búsqueda
-                    ->multiple(),
                 Tables\Filters\SelectFilter::make('created_at')
                     ->label('Filtrar por Año')
                     ->options( $this->getYearsOptions())
@@ -73,6 +67,12 @@ class ReportConfiscated extends Page implements Tables\Contracts\HasTable
                         }
                     })
                     ->placeholder('Selecciona un Año'),
+                Tables\Filters\SelectFilter::make('substance_id')
+                    ->label('Filtrar por Sustancia')
+                    ->options($this->getSubstanceOptions())
+                    ->placeholder('Selecciona una Sustancia')
+                    ->searchable() // Agrega el campo de búsqueda
+                    ->multiple(),
             ], layout: Tables\Enums\FiltersLayout::AboveContent)
             ->actions([
                 // Define aquí tus acciones
@@ -108,7 +108,7 @@ class ReportConfiscated extends Page implements Tables\Contracts\HasTable
     private function getYearsOptions(): array
     {
         // Obtener todos los años que existan en la columna created_at de Reception
-        return Reception::selectRaw('YEAR(created_at) as year')
+        return Reception::selectRaw('YEAR(date) as year')
             ->distinct()
             ->orderBy('year', 'desc')
             ->pluck('year', 'year')
