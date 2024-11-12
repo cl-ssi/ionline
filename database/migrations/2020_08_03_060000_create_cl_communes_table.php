@@ -15,13 +15,10 @@ class CreateClCommunesTable extends Migration
     {
         Schema::create('cl_communes', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('commune_id')->nullable();
+            $table->foreignId('commune_id')->nullable()->constrained('cl_communes');
             $table->string('name')->nullable();
             $table->string('code_deis')->nullable();
-            $table->foreignId('region_id');
-
-            $table->foreign('region_id')->references('id')->on('cl_regions');
-            $table->foreign('commune_id')->references('id')->on('cl_communes');
+            $table->foreignId('region_id')->constrained('cl_regions');
 
             $table->timestamps();
             $table->softDeletes();

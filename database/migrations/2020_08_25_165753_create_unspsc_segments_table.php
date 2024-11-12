@@ -15,7 +15,6 @@ class CreateUnspscSegmentsTable extends Migration
     {
         Schema::create('unspsc_segments', function (Blueprint $table) {
             $table->id();
-
             $table->integer('code')->nullable();
             $table->string('name')->nullable();
             $table->timestamp('experies_at')->nullable();

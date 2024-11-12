@@ -14,8 +14,6 @@ class AddEstablishmentIdToProfAgendaActivityTypesTable extends Migration
      */
     public function up()
     {
-        //Quitar comentario luego del migrate:refresh
-        /*
         Schema::table('prof_agenda_activity_types', function (Blueprint $table) {
             $table->unsignedBigInteger('establishment_id')->nullable()->after('auto_reservable');
             
@@ -35,7 +33,7 @@ class AddEstablishmentIdToProfAgendaActivityTypesTable extends Migration
 
             DB::table('prof_agenda_activity_types')->insert($newRecord);
         }
-        */
+        
     }
 
     /**

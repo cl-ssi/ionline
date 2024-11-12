@@ -15,20 +15,17 @@ class CreateLogsTable extends Migration
     {
         Schema::create('logs', function (Blueprint $table) {
             $table->id();
-            
             $table->foreignId('user_id')->nullable()->constrained('users');
             $table->longText('message');
             $table->string('module')->nullable();
             $table->foreignId('module_id')->nullable()->constrained('cfg_modules');
             $table->string('uri')->nullable();
             $table->longText('formatted');
-
             $table->longText('context');
             $table->string('level')->index();
             $table->string('level_name');
             $table->string('channel')->index();
             $table->longText('extra');
-            
             // Additional custom fields I added 
             $table->string('remote_addr')->nullable();
             $table->string('user_agent')->nullable();
