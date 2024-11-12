@@ -12,6 +12,7 @@ use Filament\Forms\Form;
 use Filament\Pages\SubNavigationPosition;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Filters\Filter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
@@ -46,6 +47,7 @@ class SubstancesResource extends Resource
                             '1' => '1'
                         }
                     )
+                    ->live()
                     ->columnSpan([
                         'sm' => 2,
                         'xl' => 2,
@@ -102,8 +104,8 @@ class SubstancesResource extends Resource
                 Forms\Components\Select::make('result_id')
                     ->label('Resultado')
                     ->options(Substance::where('presumed', false)->pluck('name', 'id'))
-                    ->searchable(),
-                    
+                    ->searchable()
+                    ->visible(fn($get) => $get('presumed') == true),
             ]);
     }
 
@@ -139,6 +141,7 @@ class SubstancesResource extends Resource
                 Tables\Columns\TextColumn::make('result.name')
                     ->sortable()
                     ->label('Resultado')
+                    ->searchable(),
             ])
             ->filters([
                 Filter::make('Presunta')
@@ -146,8 +149,8 @@ class SubstancesResource extends Resource
                     ->label('Presunta'),
                 Filter::make('No Presunta')
                     ->query(fn(Builder $query): Builder => $query->where('presumed', '0'))
-                    ->label('No Presunta'),
-            ])
+                    ->label('Determinada'),
+            ], layout: FiltersLayout::AboveContent)
             ->actions([
                 Tables\Actions\EditAction::make(),
             ])
