@@ -8,6 +8,7 @@ use App\Filament\Clusters\Documents\Resources\Drugs\PoliceUnitResource\RelationM
 use App\Models\Drugs\PoliceUnit;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Pages\SubNavigationPosition;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Filters\SelectFilter;
@@ -24,7 +25,13 @@ class PoliceUnitResource extends Resource
 
     protected static ?string $cluster = Documents::class;
 
+    protected static ?string $modelLabel = 'unidad policial';
+
+    protected static ?string $pluralModelLabel = 'unidades policiales';
+
     protected static ?string $navigationGroup = 'Drogas';
+
+    protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
 
     public static function form(Form $form): Form
     {
