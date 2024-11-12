@@ -55,7 +55,7 @@ class CreateProProgrammingItemsTable extends Migration
             $table->enum('workshop',['SI','NO'])->nullable();
             $table->enum('active',['SI','NO'])->nullable();
             $table->foreignId('user_id')->constrained('users');
-            $table->foreignId('programming_id')->unsigned()->constrained('pro_programmings');
+            $table->foreignId('programming_id')->constrained('pro_programmings');
             $table->timestamps();
             $table->softDeletes();
         });
