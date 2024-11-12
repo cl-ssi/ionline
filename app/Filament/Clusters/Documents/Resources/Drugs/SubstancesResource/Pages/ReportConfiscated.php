@@ -3,23 +3,22 @@
 namespace App\Filament\Clusters\Documents\Resources\Drugs\SubstancesResource\Pages;
 
 use App\Filament\Clusters\Documents\Resources\Drugs\SubstancesResource;
+use App\Models\Drugs\Reception;
 use App\Models\Drugs\ReceptionItem;
 use App\Models\Drugs\Substance;
+use Carbon\Carbon;
 use Filament\Resources\Pages\Page;
 use Filament\Tables;
-use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Enums\FiltersLayout;
-use Filament\Tables\Filters\Filter;
-use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
-use Carbon\Carbon;
 
 class ReportConfiscated extends Page implements Tables\Contracts\HasTable
 {
     use Tables\Concerns\InteractsWithTable;
 
     protected static string $resource = SubstancesResource::class;
+
     protected static string $view = 'filament.clusters.documents.resources.drugs.substances-resource.pages.report-confiscated';
+
     protected static ?string $title = 'Reporte ISP';
 
     public function table(Tables\Table $table): Tables\Table
@@ -30,7 +29,7 @@ class ReportConfiscated extends Page implements Tables\Contracts\HasTable
                     ->select('substance_id')
                     ->selectRaw('COUNT(*) as total_items, SUM(net_weight) as total_net_weight')
                     ->groupBy('substance_id')
-                    ->with(['substance','resultSubstance']);
+                    ->with(['substance', 'resultSubstance']);
 
                 // // Aplica el filtro de sustancia si está seleccionado
                 // if ($substanceId = request('tableFilters')['substance_id'] ?? null) {
@@ -40,39 +39,32 @@ class ReportConfiscated extends Page implements Tables\Contracts\HasTable
                 return $query;
             })
             ->columns([
-                TextColumn::make('substance_id')
+                Tables\Columns\TextColumn::make('substance_id')
                     ->label('ID de Sustancia')
                     ->sortable(),
-                TextColumn::make('substance.name')
+                Tables\Columns\TextColumn::make('substance.name')
                     ->label('Nombre de Sustancia')
                     ->sortable(),
-                TextColumn::make('total_items')
+                Tables\Columns\TextColumn::make('total_items')
                     ->label('Total de Items')
                     ->sortable()
                     ->formatStateUsing(fn (string|float $state): string => number_format($state, 0, ',', '.')) // Formato con separación de miles y 2 decimales,
                     ->alignEnd(),
-                TextColumn::make('total_net_weight')
+                Tables\Columns\TextColumn::make('total_net_weight')
                     ->label('Recibidos')
                     ->formatStateUsing(fn (string|float $state): string => number_format($state, 2, ',', '.')) // Formato con separación de miles y 2 decimales,
                     ->alignEnd(),
             ])
             ->filters([
-                SelectFilter::make('substance_id')
+                Tables\Filters\SelectFilter::make('substance_id')
                     ->label('Filtrar por Sustancia')
                     ->options($this->getSubstanceOptions())
                     ->placeholder('Selecciona una Sustancia')
                     ->searchable() // Agrega el campo de búsqueda
                     ->multiple(),
-                SelectFilter::make('created_at')
+                Tables\Filters\SelectFilter::make('created_at')
                     ->label('Filtrar por Año')
-                    ->options(function () {
-                        $currentYear = now()->year;
-                        $years = [];
-                        for ($i = 0; $i < 10; $i++) {
-                            $years[$currentYear - $i] = $currentYear - $i;
-                        }
-                        return $years;
-                    })
+                    ->options( $this->getYearsOptions())
                     ->query(function ($query, $data) {
                         if ($data) {
                             $query->whereHas('reception', function ($query) use ($data) {
@@ -81,7 +73,7 @@ class ReportConfiscated extends Page implements Tables\Contracts\HasTable
                         }
                     })
                     ->placeholder('Selecciona un Año'),
-            ], layout: FiltersLayout::AboveContent)
+            ], layout: Tables\Enums\FiltersLayout::AboveContent)
             ->actions([
                 // Define aquí tus acciones
             ])
@@ -115,14 +107,11 @@ class ReportConfiscated extends Page implements Tables\Contracts\HasTable
      */
     private function getYearsOptions(): array
     {
-        $startYear = ReceptionItem::query()->oldest('created_at')->value('created_at')->year ?? Carbon::now()->year;
-        $currentYear = Carbon::now()->year;
-
-        $years = [];
-        for ($year = $startYear; $year <= $currentYear; $year++) {
-            $years[$year] = $year;
-        }
-
-        return $years;
+        // Obtener todos los años que existan en la columna created_at de Reception
+        return Reception::selectRaw('YEAR(created_at) as year')
+            ->distinct()
+            ->orderBy('year', 'desc')
+            ->pluck('year', 'year')
+            ->toArray();
     }
 }

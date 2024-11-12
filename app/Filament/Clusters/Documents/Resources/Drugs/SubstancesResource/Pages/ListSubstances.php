@@ -14,6 +14,7 @@ class ListSubstances extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
+            Actions\CreateAction::make(),
             Actions\Action::make('report_confiscated')
                 ->label('Informe ISP')
                 ->icon('heroicon-o-chart-bar')
