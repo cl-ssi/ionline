@@ -9,6 +9,7 @@ use App\Filament\Clusters\Documents\Resources\Drugs\SubstancesResource\RelationM
 use App\Models\Drugs\Substance;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Pages\SubNavigationPosition;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Filters\Filter;
@@ -24,10 +25,13 @@ class SubstancesResource extends Resource
 
     protected static ?string $cluster = Documents::class;
 
+    protected static ?string $modelLabel = 'sustancia';
+
+    protected static ?string $pluralModelLabel = 'sustancias';
+
     protected static ?string $navigationGroup = 'Drogas';
 
-    protected static ?string $modelLabel = 'Sustancias';
-
+    protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
 
     public static function form(Form $form): Form
     {
