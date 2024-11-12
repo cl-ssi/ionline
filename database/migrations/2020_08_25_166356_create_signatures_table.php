@@ -16,8 +16,8 @@ class CreateSignaturesTable extends Migration
         Schema::create('doc_signatures', function (Blueprint $table) {
             $table->id();
             $table->string('status')->nullable();
-            $table->foreignId('ou_id')->constrained->('organizational_units');
-            $table->foreignId('responsable_id')->constrained->('users');
+            $table->foreignId('ou_id')->constrained('organizational_units');
+            $table->foreignId('responsable_id')->constrained('users');
             $table->datetime('request_date');
             $table->foreignId('type_id')->nullable()->constrained('doc_types');
             $table->boolean('reserved')->nullable();
