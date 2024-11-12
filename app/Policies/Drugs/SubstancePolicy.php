@@ -15,7 +15,7 @@ class SubstancePolicy
      */
     public function before(User $user): ?bool
     {
-        return $u->can('be god') ? true : null;
+        return $user->can('be god') ? true : null;
     }
 
     /**
