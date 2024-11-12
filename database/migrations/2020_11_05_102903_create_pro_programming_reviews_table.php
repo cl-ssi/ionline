@@ -22,9 +22,9 @@ class CreateProProgrammingReviewsTable extends Migration
             $table->text('observation')->nullable();
             $table->enum('active',['SI','NO'])->nullable();
 
-            $table->foreignId('user_id')->unsigned()->constrained('users');
-            $table->unsignedBigInteger('updated_by')->nullable();
-            $table->foreignId('commune_file_id')->unsigned()->constrained('pro_commune_files');
+            $table->foreignId('user_id')->constrained('users');
+            $table->foreignId('updated_by')->nullable()->constrained('users');  
+            $table->foreignId('commune_file_id')->constrained('pro_commune_files');
 
             $table->timestamps();
         });

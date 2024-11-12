@@ -26,7 +26,7 @@ class CreateProActivityItemsTable extends Migration
             $table->text('cods')->nullable();
             $table->text('cols')->nullable();
 
-            $table->foreignId('activity_id')->unsigned()->constrained('pro_activity_programs');
+            $table->foreignId('activity_id')->constrained('pro_activity_programs');
             $table->foreignId('activity_item_id')->nullable()->constrained('pro_activity_items');
 
             $table->timestamps();
