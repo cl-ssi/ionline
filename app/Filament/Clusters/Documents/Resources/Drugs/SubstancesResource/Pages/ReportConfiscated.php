@@ -8,6 +8,7 @@ use App\Models\Drugs\Substance;
 use Filament\Resources\Pages\Page;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
@@ -31,13 +32,10 @@ class ReportConfiscated extends Page implements Tables\Contracts\HasTable
                     ->groupBy('substance_id')
                     ->with(['substance','resultSubstance']);
 
-                // Aplica el filtro de sustancia si está seleccionado
-                if ($substanceId = request('tableFilters')['substance_id'] ?? null) {
-                    $query->where('substance_id', $substanceId);
-                }
-
-                // Aplica el filtro de año de creación si hay un valor seleccionado
-                $query->whereYear('created_at', '2023');
+                // // Aplica el filtro de sustancia si está seleccionado
+                // if ($substanceId = request('tableFilters')['substance_id'] ?? null) {
+                //     $query->where('substance_id', $substanceId);
+                // }
 
                 return $query;
             })
@@ -65,8 +63,25 @@ class ReportConfiscated extends Page implements Tables\Contracts\HasTable
                     ->placeholder('Selecciona una Sustancia')
                     ->searchable() // Agrega el campo de búsqueda
                     ->multiple(),
-                    // ->default(['10', '59']), // VALORES PREDETERMINADOS POR ID?
-            ])
+                SelectFilter::make('created_at')
+                    ->label('Filtrar por Año')
+                    ->options(function () {
+                        $currentYear = now()->year;
+                        $years = [];
+                        for ($i = 0; $i < 10; $i++) {
+                            $years[$currentYear - $i] = $currentYear - $i;
+                        }
+                        return $years;
+                    })
+                    ->query(function ($query, $data) {
+                        if ($data) {
+                            $query->whereHas('reception', function ($query) use ($data) {
+                                $query->whereYear('created_at', $data);
+                            });
+                        }
+                    })
+                    ->placeholder('Selecciona un Año'),
+            ], layout: FiltersLayout::AboveContent)
             ->actions([
                 // Define aquí tus acciones
             ])
