@@ -23,7 +23,7 @@ class CreateRstRequestSignsTable extends Migration
             $table->string('request_status');
             $table->longText('observation')->nullable();
             $table->dateTime('date_sign')->nullable();
-            $table->foreignId('request_replacement_staff_id')->constrained('rst_request_replacement_staff');            
+            $table->foreignId('request_replacement_staff_id')->constrained('rst_request_replacement_staff');
 
             $table->timestamps();
             $table->softDeletes();
