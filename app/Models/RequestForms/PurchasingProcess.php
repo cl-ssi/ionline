@@ -77,6 +77,11 @@ class PurchasingProcess extends Model implements Auditable
         return $this->hasMany(PurchasingProcessDetail::class);
     }
 
+    public function currentPurchasingProcessDetails(): HasMany
+    {
+        return $this->hasMany(PurchasingProcessDetail::class)->whereNotIn('status', ['desert']);
+    }
+
     public function detailsPassenger(){
         return $this->belongsToMany(Passenger::class, 'arq_purchasing_process_detail', 'purchasing_process_id', 'passenger_request_form_id')->withPivot('id', 'internal_purchase_order_id', 'petty_cash_id', 'fund_to_be_settled_id', 'tender_id', 'direct_deal_id', 'immediate_purchase_id', 'user_id', 'quantity', 'unit_value', 'tax', 'expense', 'status', 'release_observation', 'supplier_run', 'supplier_name', 'supplier_specifications', 'charges', 'discounts')->whereNull('arq_purchasing_process_detail.deleted_at')->withTimestamps()->using(PurchasingProcessDetail::class);
     }

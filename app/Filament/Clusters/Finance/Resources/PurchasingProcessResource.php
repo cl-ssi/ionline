@@ -130,27 +130,27 @@ class PurchasingProcessResource extends Resource
                 Tables\Columns\TextColumn::make('status')
                     ->label('Estado de Compra')
                     ->bulleted(),
-                Tables\Columns\TextColumn::make('purchasingProcessDetails.immediatePurchase.po_id')
+                Tables\Columns\TextColumn::make('currentPurchasingProcessDetails.immediatePurchase.po_id')
                     ->label('OC')
                     ->bulleted(),
-                Tables\Columns\TextColumn::make('purchasingProcessDetails.immediatePurchase.po_supplier_name')
+                Tables\Columns\TextColumn::make('currentPurchasingProcessDetails.immediatePurchase.po_supplier_name')
                     ->label('Nombre Proveedor')
                     ->bulleted()
                     ->wrap(),
-                Tables\Columns\TextColumn::make('purchasingProcessDetails.immediatePurchase.po_supplier_office_run')
+                Tables\Columns\TextColumn::make('currentPurchasingProcessDetails.immediatePurchase.po_supplier_office_run')
                     ->label('RUT Proveedor')
                     ->bulleted()
                     ->wrap(),
-                Tables\Columns\TextColumn::make('purchasingProcessDetails.quantity')
+                Tables\Columns\TextColumn::make('currentPurchasingProcessDetails.quantity')
                     ->label('Cantidad')
                     ->bulleted(),
-                Tables\Columns\TextColumn::make('purchasingProcessDetails.unit_value')
+                Tables\Columns\TextColumn::make('currentPurchasingProcessDetails.unit_value')
                     ->label('Valor Unitario OC')
                     ->money('CLP')
                     ->prefix('$ ')
                     ->bulleted()
                     ->wrap(),
-                Tables\Columns\TextColumn::make('purchasingProcessDetails.expense')
+                Tables\Columns\TextColumn::make('currentPurchasingProcessDetails.expense')
                     ->label('Total Item')
                     ->money('CLP')
                     ->prefix('$ ')
@@ -164,7 +164,7 @@ class PurchasingProcessResource extends Resource
                     ->bulleted()
                     ->wrap()
                     ->getStateUsing(function ($record) {
-                        return $record->purchasingProcessDetails->sum('expense');
+                        return $record->getExpense();
                     }),
 
                 Tables\Columns\TextColumn::make('diferencia')
@@ -174,9 +174,7 @@ class PurchasingProcessResource extends Resource
                     ->bulleted()
                     ->wrap()
                     ->getStateUsing(function ($record) {
-                        $totalPoAmount = $record->purchasingProcessDetails->sum('expense');
-
-                        return $record->requestForm->estimated_expense - $totalPoAmount;
+                        return $record->requestForm->estimated_expense - $record->getExpense();
                     }),
             ])
             ->defaultSort('id', 'desc')
