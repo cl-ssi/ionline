@@ -29,6 +29,8 @@ class ProgramResource extends Resource
 
     protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
 
+    protected static ?int $navigationSort = 1;
+
     public static function form(Form $form): Form
     {
         return $form

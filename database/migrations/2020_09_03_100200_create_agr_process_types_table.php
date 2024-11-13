@@ -13,7 +13,13 @@ return new class extends Migration
     {
         Schema::create('agr_process_types', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
+            $table->string('description')->nullable();
+            $table->boolean('is_dependent')->default(false);
+            $table->boolean('has_resolution')->default(false);
+            $table->boolean('active')->default(true);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

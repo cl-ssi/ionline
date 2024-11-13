@@ -22,9 +22,9 @@ class DocumentResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-document';
 
-    protected static ?string $modelLabel = 'Documento';
+    protected static ?string $modelLabel = 'documento';
 
-    protected static ?string $pluralModelLabel = 'Documentos';
+    protected static ?string $pluralModelLabel = 'documentos';
 
     protected static ?string $navigationGroup = 'Documentos';
 

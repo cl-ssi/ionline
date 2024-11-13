@@ -24,6 +24,10 @@ class ManualResource extends Resource
 
     protected static ?string $cluster = Documents::class;
 
+    protected static ?string $modelLabel = 'manual';
+
+    protected static ?string $pluralModelLabel = 'manuales';
+
     protected static ?string $navigationGroup = 'Documentos';
 
     protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;

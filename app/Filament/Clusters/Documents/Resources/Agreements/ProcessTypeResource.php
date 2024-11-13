@@ -31,23 +31,47 @@ class ProcessTypeResource extends Resource
 
     protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
 
+    protected static ?int $navigationSort = 3;
+
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
                 Forms\Components\TextInput::make('name')
+                    ->label('Nombre del proceso')
                     ->required()
-                    ->maxLength(255),
+                    ->helperText('Ej: Convenio, Adendum v2, Resolución 2021, etc.')
+                    ->maxLength(255)
+                    ->columnSpan(2),
                 Forms\Components\TextInput::make('description')
+                    ->label('Descripción')
                     ->maxLength(255)
                     ->default(null),
-                Forms\Components\Textarea::make('template')
-                    ->columnSpanFull(),
                 Forms\Components\Toggle::make('is_dependent')
+                    ->label('Es Dependiente')
                     ->required(),
                 Forms\Components\Toggle::make('has_resolution')
+                    ->label('Tiene Resolución')
                     ->required(),
-            ]);
+                Forms\Components\Toggle::make('active')
+                    ->label('Activo')
+                    ->required(),
+    
+                Forms\Components\Section::make('Plantilla')
+                    ->relationship('template')
+                    ->schema([
+                        Forms\Components\TextInput::make('title')
+                            ->label('Título')
+                            ->maxLength(255)
+                            ->required(),
+                        Forms\Components\RichEditor::make('content')
+                            ->label('Contenido')
+                            ->required()
+                            ->columnSpanFull(),
+                    ])
+                    ->columnSpanFull(),
+            ])
+            ->columns(3);
     }
 
     public static function table(Table $table): Table
@@ -55,12 +79,17 @@ class ProcessTypeResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('name')
+                    ->label('Nombre')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('description')
-                    ->searchable(),
+                    ->label('Descripción')
+                    ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\IconColumn::make('is_dependent')
+                    ->label('Dependiente')
                     ->boolean(),
                 Tables\Columns\IconColumn::make('has_resolution')
+                    ->label('Resolución')
                     ->boolean(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
