@@ -30,9 +30,9 @@ class Municipality extends Model
         return $this->belongsTo(ClCommune::class);
     }
 
-    public function alcaldes(): HasMany
+    public function mayors(): HasMany
     {
-        return $this->hasMany(Alcalde::class);
+        return $this->hasMany(Mayor::class);
     }
 
     // protected $fillable = [

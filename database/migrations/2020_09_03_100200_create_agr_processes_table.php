@@ -13,24 +13,37 @@ return new class extends Migration
     {
         Schema::create('agr_processes', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('process_type_id')->constrained('agr_process_types');
-            $table->unsignedBigInteger('process_id')->nullable();
-            $table->smallInteger('period');
             $table->foreignId('program_id')->constrained('cfg_programs')->nullable();
+            $table->smallInteger('period');
+            $table->foreignId('process_type_id')->constrained('agr_process_types');
+
             $table->foreignId('commune_id')->constrained('cl_communes')->nullable();
-            $table->foreignId('establishment_id')->constrained('establishments')->nullable();
-            $table->smallInteger('quotas');
             $table->integer('total_amount')->nullable();
-            $table->foreignId('signer_id')->constrained('agr_signers');
-            $table->string('representative')->nullable();
-            $table->string('representative_rut')->nullable();
-            $table->string('representative_appelative')->nullable();
-            $table->string('representative_decree')->nullable();
-            $table->string('municipality_adress')->nullable();
-            $table->string('municipality_rut')->nullable();
             $table->integer('number')->nullable();
             $table->date('date')->nullable();
-            $table->longText('establishment_list')->nullable();
+            $table->longText('establishments')->nullable();
+
+            // $table->foreignId('establishment_id')->constrained('establishments')->nullable();
+            $table->unsignedSmallInteger('quotas')->nullable();
+    
+            $table->foreignId('signer_id')->constrained('agr_signers');
+            $table->string('signer_appellative'); // APELATIVO DIRECTOR, DIRECTOR (S)
+            $table->text('signer_decree'); // DECRETO DIRECTOR
+            $table->string('signer_name')->constrained('users'); // DIRECTOR NAME
+            
+            $table->foreignId('municipality_id')->constrained('cfg_municipalities');
+            $table->string('municipality_name')->nullable();
+            $table->string('municipality_rut')->nullable();
+            $table->string('municipality_adress')->nullable();
+            
+            $table->foreignId('mayor_id')->constrained('cfg_mayors');
+            $table->string('mayor_name')->nullable();
+            $table->string('mayor_run')->nullable();
+            $table->string('mayor_appelative')->nullable();
+            $table->string('mayor_decree')->nullable();
+
+            $table->unsignedBigInteger('process_id')->nullable();
+
             $table->timestamps();
             $table->softDeletes();
         });

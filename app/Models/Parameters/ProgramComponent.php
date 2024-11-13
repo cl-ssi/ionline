@@ -12,10 +12,16 @@ class ProgramComponent extends Model
     protected $fillable = [
         'name',
         'program_id',
+        'subtitle_id',
     ];
 
     public function program(): BelongsTo
     {
         return $this->belongsTo(Program::class);
+    }
+
+    public function subtitle(): BelongsTo
+    {
+        return $this->belongsTo(Subtitle::class);
     }
 }

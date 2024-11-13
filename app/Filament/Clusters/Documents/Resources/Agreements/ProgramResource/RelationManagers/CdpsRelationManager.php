@@ -14,6 +14,8 @@ class CdpsRelationManager extends RelationManager
 {
     protected static string $relationship = 'cdps';
 
+    protected static ?string $title = 'CDPs';
+
     public function form(Form $form): Form
     {
         return $form

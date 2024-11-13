@@ -54,20 +54,25 @@ class ProcessResource extends Resource
                         return $years;
                     }),
                 Forms\Components\Select::make('program_id')
+                    ->label('Programa')
                     ->relationship('program', 'name', fn (Builder $query, callable $get) => $query->where('period', $get('period')))
                     ->hiddenOn(ProcessesRelationManager::class)
                     ->required(),
                 Forms\Components\Select::make('process_type_id')
+                    ->label('Tipo de proceso')
                     ->relationship('processType', 'name')
                     ->required(),
                 Forms\Components\Select::make('commune_id')
+                    ->label('Comuna')
                     ->relationship('commune', 'name')
                     ->searchable()
                     ->required(),
                 Forms\Components\TextInput::make('quotas')
-                    ->required()
-                    ->numeric(),
+                    ->label('Cuotas')
+                    ->numeric()
+                    ->helperText('Solo para programa de anticipo de aporte estatal'),
                 Forms\Components\TextInput::make('total_amount')
+                    ->label('Monto total')
                     ->numeric()
                     ->default(null),
                 Forms\Components\Select::make('signer_id')

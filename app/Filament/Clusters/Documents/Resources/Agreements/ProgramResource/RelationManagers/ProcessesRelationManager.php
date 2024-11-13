@@ -15,6 +15,8 @@ class ProcessesRelationManager extends RelationManager
 {
     protected static string $relationship = 'processes';
 
+    protected static ?string $title = 'Procesos';
+
     public function form(Form $form): Form
     {
         return ProcessResource::form($form);

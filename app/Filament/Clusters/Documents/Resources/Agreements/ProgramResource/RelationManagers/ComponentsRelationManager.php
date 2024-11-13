@@ -21,8 +21,13 @@ class ComponentsRelationManager extends RelationManager
         return $form
             ->schema([
                 Forms\Components\TextInput::make('name')
+                    ->label('Nombre')
                     ->required()
                     ->maxLength(255),
+                Forms\Components\Select::make('subtitle_id')
+                    ->label('Subtitulo')
+                    ->required()
+                    ->relationship('subtitle', 'name'),
             ]);
     }
 
@@ -31,7 +36,10 @@ class ComponentsRelationManager extends RelationManager
         return $table
             ->recordTitleAttribute('name')
             ->columns([
-                Tables\Columns\TextColumn::make('name'),
+                Tables\Columns\TextColumn::make('name')
+                    ->label('Nombre'),
+                Tables\Columns\TextColumn::make('subtitle.name')
+                    ->label('Subtitulo'),
             ])
             ->filters([
                 //

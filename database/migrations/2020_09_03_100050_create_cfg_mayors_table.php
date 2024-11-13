@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('cfg_alcaldes', function (Blueprint $table) {
+        Schema::create('cfg_mayors', function (Blueprint $table) {
             $table->id();
             $table->string('appellative', 100)->nullable();
             $table->string('name')->nullable();
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('cfg_alcaldes');
+        Schema::dropIfExists('cfg_mayors');
     }
 };

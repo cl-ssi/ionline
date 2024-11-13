@@ -5,9 +5,9 @@ namespace App\Models\Parameters;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Alcalde extends Model
+class Mayor extends Model
 {
-    protected $table = 'cfg_alcaldes';
+    protected $table = 'cfg_mayors';
 
     protected $fillable = [
         'appellative',

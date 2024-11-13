@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('cfg_program_components', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->foreignId('subtitle_id')->constrained('cfg_subtitles');
             $table->foreignId('program_id')->constrained('cfg_programs');
             $table->timestamps();
             $table->softDeletes();

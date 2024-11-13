@@ -274,6 +274,7 @@ Factor
 # Convenios
 - ¿Los componentes de programas pueden tener subtitulso?
 - ¿la distribucion de presupuesto es una por cdp o una por program?
+- programa de anticipo de aporte estatal, cuotas? 20.919 id:1148
 
 Tablas
 

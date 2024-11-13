@@ -3,6 +3,8 @@
 namespace App\Models\Documents\Agreements;
 
 use App\Models\ClCommune;
+use App\Models\Parameters\Mayor;
+use App\Models\Parameters\Municipality;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use App\Models\Parameters\Program;
@@ -68,5 +70,15 @@ class Process extends Model
     public function processType(): BelongsTo
     {
         return $this->belongsTo(ProcessType::class, 'process_type_id');
+    }
+
+    public function municipality(): BelongsTo
+    {
+        return $this->belongsTo(Municipality::class, 'municipality_id');
+    }
+
+    public function mayor(): BelongsTo
+    {
+        return $this->belongsTo(Mayor::class, 'mayor_id');
     }
 }

@@ -67,7 +67,7 @@ class MunicipalityResource extends Resource
                 Tables\Columns\TextColumn::make('rut')
                     ->label('RUT')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('alcaldes.name')
+                Tables\Columns\TextColumn::make('mayors.name')
                     ->label('Alcaldes')
                     ->bulleted()
                     ->searchable(),
@@ -99,7 +99,7 @@ class MunicipalityResource extends Resource
     public static function getRelations(): array
     {
         return [
-            RelationManagers\AlcaldesRelationManager::class,
+            RelationManagers\MayorsRelationManager::class,
         ];
     }
 
