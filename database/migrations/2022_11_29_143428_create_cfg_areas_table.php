@@ -16,9 +16,7 @@ class CreateCfgAreasTable extends Migration
     {
         Schema::create('cfg_areas', function (Blueprint $table) {
             $table->id();
-
             $table->string('name');
-
             $table->timestamps();
             $table->softDeletes();
         });

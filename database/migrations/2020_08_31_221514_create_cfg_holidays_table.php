@@ -17,7 +17,7 @@ class CreateCfgHolidaysTable extends Migration
             $table->id();
             $table->date('date');
             $table->string('name');
-            $table->enum('region',['I','II','III','IV','V','VI','VII','VIII','IX','X','XI','XII','XIII','XIV','XV'])->nullable();
+            $table->foreignId('region_id')->nullable()->constrained('cl_regions');
             $table->timestamps();
         });
     }
