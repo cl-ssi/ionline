@@ -22,9 +22,9 @@ class CreateIndComplianceCalcTable extends Migration
             $table->string('result_text')->nullable();
             $table->decimal('compliance_value')->nullable();
             $table->string('compliance_text')->nullable();
+            $table->foreignId('action_id')->constrained('ind_actions');
+
             $table->timestamps();
-            $table->bigInteger('action_id')->unsigned();
-            $table->foreign('action_id')->references('id')->on('ind_actions');
         });
     }
 

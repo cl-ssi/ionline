@@ -16,14 +16,9 @@ class CreateIndComgesUsersTable extends Migration
         Schema::create('ind_comges_users', function (Blueprint $table) {
             $table->id();
             $table->tinyInteger('referrer_number');
-            $table->bigInteger('comges_id')->unsigned();
-            $table->bigInteger('user_id')->unsigned();
+            $table->foreignId('comges_id')->constrained('ind_comges');
+            $table->foreignId('user_id')->constrained('users');
             $table->timestamps();
-        });
-
-        Schema::table('ind_comges_users', function ($table){
-            $table->foreign('comges_id')->references('id')->on('ind_comges');
-            $table->foreign('user_id')->references('id')->on('users');
         });
     }
 

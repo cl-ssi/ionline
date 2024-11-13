@@ -19,14 +19,19 @@ class CreateIndActionsTable extends Migration
             $table->text('name');
             $table->text('verification_means');
             $table->enum('target_type',['de mantención','de disminución de la brecha'])->nullable();
+            $table->boolean('is_accum')->nullable();
             $table->string('numerator')->nullable();
             $table->string('numerator_source')->nullable();
+            $table->text('numerator_cods')->nullable();
+            $table->text('numerator_cols')->nullable();
             $table->string('denominator')->nullable();
             $table->string('denominator_source')->nullable();
+            $table->text('denominator_cods')->nullable();
+            $table->text('denominator_cols')->nullable();
             $table->decimal('weighting', 6, 3)->nullable(); // Ponderación al corte de la acción
+            $table->foreignId('section_id')->constrained('ind_sections');
+            
             $table->timestamps();
-            $table->bigInteger('section_id')->unsigned();
-            $table->foreign('section_id')->references('id')->on('ind_sections');
         });
     }
 
