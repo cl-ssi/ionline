@@ -133,6 +133,10 @@ class PurchasingProcessResource extends Resource
                 Tables\Columns\TextColumn::make('currentPurchasingProcessDetails.immediatePurchase.po_id')
                     ->label('OC')
                     ->bulleted(),
+                Tables\Columns\TextColumn::make('currentPurchasingProcessDetails.immediatePurchase.po_date')
+                    ->label('Fecha OC')
+                    ->dateTime('d-m-Y')
+                    ->bulleted(),
                 Tables\Columns\TextColumn::make('currentPurchasingProcessDetails.immediatePurchase.po_supplier_name')
                     ->label('Nombre Proveedor')
                     ->bulleted()

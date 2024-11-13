@@ -80,6 +80,8 @@ class PurchasingProcessesExporter extends Exporter
                 }),
             ExportColumn::make('currentPurchasingProcessDetails.immediatePurchase.po_id')
                 ->label('OC'),
+            ExportColumn::make('currentPurchasingProcessDetails.immediatePurchase.po_date')
+                ->label('Fecha OC'),
             ExportColumn::make('currentPurchasingProcessDetails.immediatePurchase.po_supplier_name')
                 ->label('Nombre Proveedor'),
             ExportColumn::make('currentPurchasingProcessDetails.immediatePurchase.po_supplier_office_run')
