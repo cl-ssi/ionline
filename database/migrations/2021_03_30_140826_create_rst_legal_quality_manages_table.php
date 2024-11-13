@@ -16,6 +16,8 @@ class CreateRstLegalQualityManagesTable extends Migration
         Schema::create('rst_legal_quality_manages', function (Blueprint $table) {
             $table->id();
             $table->string('name')->unique();
+            $table->boolean('replacement')->nullable();
+            $table->boolean('announcement')->nullable();
 
             $table->timestamps();
             $table->softDeletes();

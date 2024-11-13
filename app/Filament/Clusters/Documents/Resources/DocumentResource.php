@@ -26,6 +26,10 @@ class DocumentResource extends Resource
 
     protected static ?string $pluralModelLabel = 'Documentos';
 
+    protected static ?string $navigationGroup = 'Documentos';
+
+    protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
+
     protected static ?string $cluster = Documents::class;
 
     protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;

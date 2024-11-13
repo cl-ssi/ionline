@@ -27,6 +27,8 @@ class BinnacleResource extends Resource
 
     protected static ?string $pluralModelLabel = 'bitácoras';
 
+    protected static ?string $navigationGroup = 'Documentos';
+
     protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
 
     public static function form(Form $form): Form

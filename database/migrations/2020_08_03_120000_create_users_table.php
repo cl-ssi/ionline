@@ -14,14 +14,14 @@ class CreateUsersTable extends Migration
     public function up()
     {
         Schema::create('users', function (Blueprint $table) {
-            /** Es equivalente a $table->id() de laravel 8 */
+            /** No se usa id() porque no es autoincremental */
             $table->bigInteger('id')->unsigned()->unique();
             $table->char('dv',1);
-            $table->string('run', 10)->virtualAs("UPPER(CONCAT(CAST(id AS CHAR), TRIM(dv)))")->stored();
+            $table->string('run', 10)->virtualAs("UPPER(CONCAT(CAST(id AS CHAR), TRIM(dv)))");
             $table->string('name');
             $table->string('fathers_family');
             $table->string('mothers_family');
-            $table->string('full_name')->storedAs("CONCAT(name, ' ', fathers_family, ' ', mothers_family)");
+            $table->string('full_name')->virtualAs("CONCAT(name, ' ', fathers_family, ' ', mothers_family)");
             $table->string('gender')->nullable();
             $table->string('address')->nullable();
             $table->foreignId('commune_id')->nullable()->constrained('cl_communes');

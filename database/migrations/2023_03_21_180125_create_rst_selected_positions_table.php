@@ -15,9 +15,8 @@ class CreateRstSelectedPositionsTable extends Migration
     {
         Schema::create('rst_selected_positions', function (Blueprint $table) {
             $table->id();
-
             $table->foreignId('position_id')->constrained('rst_positions');
-
+            $table->date('start_date')->nullable();
             $table->string('run')->nullable();
             $table->string('dv')->nullable();
             $table->string('name')->nullable();

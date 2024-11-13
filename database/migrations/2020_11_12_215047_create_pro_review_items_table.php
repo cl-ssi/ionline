@@ -20,16 +20,13 @@ class CreateProReviewItemsTable extends Migration
             $table->text('observation')->nullable();
             $table->enum('answer',['SI','NO','REGULAR'])->nullable();
             $table->enum('active',['SI','NO'])->nullable();
-
-            $table->unsignedBigInteger('user_id');
+            $table->foreignId('user_id')->constrained('users');
             $table->enum('rectified',['SI','NO'])->default('NO')->nullable();
+            $table->text('rect_comments')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();
-            $table->bigInteger('programming_item_id')->unsigned();
+            $table->foreignId('programming_item_id')->unsigned()->constrained('pro_programming_items');
             
-            $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('programming_item_id')->references('id')->on('pro_programming_items');
             $table->timestamps();
-            
         });
     }
 

@@ -13,7 +13,7 @@ class ProtocolObserver
     public function created(Protocol $protocol): void
     {
         if($protocol->result == 'Positivo' && $protocol->receptionItem->result_substance_id == null){
-            $protocol->receptionItem->result_substance_id = $protocol->receptionItem->substance_id;
+            $protocol->receptionItem->result_substance_id = $protocol->receptionItem->substance->result_id;
             $protocol->receptionItem->save();
         }
     }

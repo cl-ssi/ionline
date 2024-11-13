@@ -15,13 +15,25 @@ class LocationSeeder extends Seeder
     public function run()
     {
         //
-        Location::create([  'name' => 'Casa Central',
-                            'address' => 'Anibal Pinto #815']);
-        Location::create([  'name' => 'Bodega',
-                            'address' => 'Obispo Labbé #962']);
-        Location::create([  'name' => 'SDGDP',
-                            'address' => 'Obispo Labbé']);
-        Location::create([  'name' => 'Recursos Fisicos',
-                            'address' => 'Obispo Labbé']);
+        Location::create([
+            'name' => 'Casa Central',
+            'address' => 'Anibal Pinto #815',
+            'establishment_id' => 38
+        ]);
+        Location::create([
+            'name' => 'Bodega',
+            'address' => 'Obispo Labbé #962',
+            'establishment_id' => 38
+        ]);
+        Location::create([
+            'name' => 'SDGDP',
+            'address' => 'Obispo Labbé',
+            'establishment_id' => 38
+        ]);
+        Location::create([
+            'name' => 'Recursos Fisicos',
+            'address' => 'Obispo Labbé',
+            'establishment_id' => 38
+        ]);
     }
 }

@@ -4,17 +4,14 @@ namespace App\Filament\Clusters\Documents\Resources\Drugs;
 
 use App\Filament\Clusters\Documents;
 use App\Filament\Clusters\Documents\Resources\Drugs\SubstancesResource\Pages;
-use App\Filament\Resources\Drugs\SubstancesResource\Pages\ReportOfConfiscated;
-use App\Filament\Clusters\Documents\Resources\Drugs\SubstancesResource\RelationManagers;
 use App\Models\Drugs\Substance;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Pages\SubNavigationPosition;
 use Filament\Resources\Resource;
 use Filament\Tables;
-use Filament\Tables\Filters\Filter;
+use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class SubstancesResource extends Resource
 {
@@ -24,88 +21,87 @@ class SubstancesResource extends Resource
 
     protected static ?string $cluster = Documents::class;
 
+    protected static ?string $modelLabel = 'sustancia';
+
+    protected static ?string $pluralModelLabel = 'sustancias';
+
     protected static ?string $navigationGroup = 'Drogas';
 
-    protected static ?string $modelLabel = 'Sustancias';
-
+    protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\Checkbox::make('presumed')
-                    ->label('Sustancia Presunta La sustancia presunta se utiliza en una recepción, de lo contrario es una sustancia determinada por el resultado de un laboratorio.')
-                    ->default(
-                        fn($state) =>
-                        match ($state) {
-                            '0' => '0',
-                            '1' => '1'
-                        }
-                    )
-                    ->columnSpan([
-                        'sm' => 2,
-                        'xl' => 2,
-                        '2xl' => 2,
-                    ]),
+                Forms\Components\Toggle::make('presumed')
+                    ->label('Sustancia Presunta')
+                    ->live()
+                    ->helperText('La sustancia presunta se utiliza en una recepción, de lo contrario es una sustancia determinada por el resultado de un laboratorio.')
+                    ->columnSpanFull(),
                 Forms\Components\TextInput::make('name')
                     ->label('Nombre')
                     ->required()
-                    ->inlineLabel(false),
+                    ->columnSpanFull(),
                 Forms\Components\Select::make('rama')
                     ->label('Rama')
                     ->options([
                         'Alucinógenos' => 'Alucinógenos',
                         'Estimulantes' => 'Estimulantes',
-                        'Depresores' => 'Depresores',
-                        'Precursores' => 'Precursores',
+                        'Depresores'   => 'Depresores',
+                        'Precursores'  => 'Precursores',
                     ])
-                    ->default(fn($state) =>
-                    match ($state) {
+                    ->default(fn ($state) => match ($state) {
                         'Alucinógenos' => 'Alucinógenos',
                         'Estimulantes' => 'Estimulantes',
-                        'Depresores' => 'Depresores',
-                        'Precursores' => 'Precursores',
-                        default => '',
+                        'Depresores'   => 'Depresores',
+                        'Precursores'  => 'Precursores',
+                        default        => '',
                     }),
                 Forms\Components\Select::make('unit')
-                    ->label('Rama')
+                    ->label('Unidad')
                     ->options([
-                        'Ampollas' => 'Ampollas',
-                        'Gramos' => 'Gramos',
+                        'Ampollas'   => 'Ampollas',
+                        'Gramos'     => 'Gramos',
                         'Mililitros' => 'Mililitros',
-                        'Unidades' => 'Unidades',
+                        'Unidades'   => 'Unidades',
                     ])
-                    ->default(fn($state) =>
-                    match ($state) {
-                        'Ampollas' => 'Ampollas',
-                        'Gramos' => 'Gramos',
+                    ->default(fn ($state) => match ($state) {
+                        'Ampollas'   => 'Ampollas',
+                        'Gramos'     => 'Gramos',
                         'Mililitros' => 'Mililitros',
-                        'Unidades' => 'Unidades',
-                        default => '',
+                        'Unidades'   => 'Unidades',
+                        default      => '',
                     }),
                 Forms\Components\Select::make('laboratory')
-                    ->label('Rama')
+                    ->label('Laboratorio')
                     ->options([
                         'SEREMI' => 'SEREMI',
-                        'ISP' => 'ISP',
+                        'ISP'    => 'ISP',
                     ])
-                    ->default(fn($state) =>
-                    match ($state) {
+                    ->default(fn ($state) => match ($state) {
                         'SEREMI' => 'SEREMI',
-                        'ISP' => 'ISP',
-                        default => '',
+                        'ISP'    => 'ISP',
+                        default  => '',
                     }),
-            ]);
+                Forms\Components\Select::make('result_id')
+                    ->label('Resultado')
+                    ->helperText('Selecciona el resultado de laboratorio que corresponde a esta sustancia presunta.')
+                    ->options(Substance::where('presumed', false)->pluck('name', 'id'))
+                    ->searchable()
+                    ->columnSpanFull()
+                    ->visible(fn ($get) => $get('presumed') == true),
+            ])
+            ->columns(3);
     }
 
     public static function table(Table $table): Table
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('id')
+                Tables\Columns\IconColumn::make('presumed')
+                    ->boolean()
                     ->sortable()
-                    ->label('ID')
-                    ->searchable(),
+                    ->label('Presunta'),
                 Tables\Columns\TextColumn::make('name')
                     ->sortable()
                     ->label('Nombre')
@@ -114,28 +110,27 @@ class SubstancesResource extends Resource
                 Tables\Columns\TextColumn::make('rama')
                     ->sortable()
                     ->label('Rama')
-                    ->searchable(),
+                    ->searchable()
+                    ->toggleable(),
                 Tables\Columns\TextColumn::make('unit')
                     ->sortable()
                     ->label('Unidad')
-                    ->searchable(),
+                    ->searchable()
+                    ->toggleable(),
                 Tables\Columns\TextColumn::make('laboratory')
                     ->sortable()
                     ->label('Laboratorio')
-                    ->searchable(),
-                Tables\Columns\IconColumn::make('presumed')
-                    ->boolean()
+                    ->searchable()
+                    ->toggleable(),
+                Tables\Columns\TextColumn::make('result.name')
                     ->sortable()
-                    ->label('Presunta')
+                    ->label('Resultado')
+                    ->searchable(),
             ])
             ->filters([
-                Filter::make('Presunta')
-                    ->query(fn(Builder $query): Builder => $query->where('presumed', '1'))
+                Tables\Filters\TernaryFilter::make('presumed')
                     ->label('Presunta'),
-                Filter::make('No Presunta')
-                    ->query(fn(Builder $query): Builder => $query->where('presumed', '0'))
-                    ->label('No Presunta'),
-            ])
+            ], layout: FiltersLayout::AboveContent)
             ->actions([
                 Tables\Actions\EditAction::make(),
             ])
@@ -143,7 +138,6 @@ class SubstancesResource extends Resource
                 Tables\Actions\BulkActionGroup::make([]),
             ]);
     }
-
 
     public static function getRelations(): array
     {
@@ -155,10 +149,10 @@ class SubstancesResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index'                 => Pages\ListSubstances::route('/'),
-            'create'                => Pages\CreateSubstances::route('/create'),
-            'edit'                  => Pages\EditSubstances::route('/{record}/edit'),
-            'report-confiscated'    => Pages\ReportConfiscated::route('/report-confiscated'),
+            'index'              => Pages\ListSubstances::route('/'),
+            'create'             => Pages\CreateSubstances::route('/create'),
+            'edit'               => Pages\EditSubstances::route('/{record}/edit'),
+            'report-confiscated' => Pages\ReportConfiscated::route('/report-confiscated'),
         ];
     }
 }

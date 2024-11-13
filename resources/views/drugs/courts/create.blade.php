@@ -11,8 +11,8 @@
 <form method="POST" class="form-horizontal" action="{{ route('drugs.courts.store') }}">
   {{ csrf_field() }} <!-- input hidden contra ataques CSRF -->
   <fieldset class="form-group">
-    <label for="forname">Nombre</label>
-    <input type="text" class="form-control" id="forname" placeholder="Ingrese el nombre del juzgado" name="name" required="">
+    <label for="forname">Nombre*</label>
+    <input type="text" class="form-control" id="forname" placeholder="Ingrese el nombre del juzgado" name="name" required>
   </fieldset>
 
   <fieldset class="form-group">
@@ -26,8 +26,8 @@
   </fieldset>
 
   <fieldset class="form-group">
-    <label for="forcommune">Comuna</label>
-    <input type="text" class="form-control" id="forcommune" placeholder="Ingrese la comuna" name="commune" required="">
+    <label for="forcommune">Comuna*</label>
+    <input type="text" class="form-control" id="forcommune" placeholder="Ingrese la comuna" name="commune" required>
   </fieldset>
 
   <!--<fieldset class="form-group">

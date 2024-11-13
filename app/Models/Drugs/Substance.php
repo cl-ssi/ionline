@@ -4,6 +4,7 @@ namespace App\Models\Drugs;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Substance extends Model
 {
@@ -26,6 +27,7 @@ class Substance extends Model
         'unit',
         'laboratory',
         'isp',
+        'result_id'
     ];
 
     //cast
@@ -43,4 +45,9 @@ class Substance extends Model
     }
 
     /* TODO: asociar result_substance en ReceptionItem a otro item. */
+    public function result(): BelongsTo
+    {
+        return $this->belongsTo(Substance::class);
+    }
+
 }

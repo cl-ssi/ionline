@@ -14,7 +14,8 @@ class AddSoftdeletesToIndHealthGoalsTable extends Migration
     public function up()
     {
         Schema::table('ind_health_goals', function (Blueprint $table) {
-            $table->softDeletes();
+            //$table->softDeletes();
+            if (!Schema::hasColumn('ind_health_goals', 'deleted_at')) { $table->softDeletes(); }
         });
     }
 

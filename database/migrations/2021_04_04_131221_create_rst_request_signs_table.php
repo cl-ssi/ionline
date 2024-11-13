@@ -15,23 +15,15 @@ class CreateRstRequestSignsTable extends Migration
     {
         Schema::create('rst_request_signs', function (Blueprint $table) {
             $table->id();
-
             //Firmas en filas
             $table->integer('position');
             $table->string('ou_alias');
-            $table->foreignId('organizational_unit_id');
-            $table->foreignId('user_id')->nullable();
-            $table->enum('request_status',['pending', 'accepted', 'rejected', 'observations'])->nullable();
+            $table->foreignId('organizational_unit_id')->constrained('organizational_units');
+            $table->foreignId('user_id')->nullable()->constrained('users');
+            $table->string('request_status');
             $table->longText('observation')->nullable();
             $table->dateTime('date_sign')->nullable();
-
-            $table->foreignId('request_replacement_staff_id');
-
-            $table->foreign('organizational_unit_id')->references('id')->on('organizational_units');
-            $table->foreign('user_id')->references('id')->on('users');
-
-
-            $table->foreign('request_replacement_staff_id')->references('id')->on('rst_request_replacement_staff');
+            $table->foreignId('request_replacement_staff_id')->constrained('rst_request_replacement_staff');
 
             $table->timestamps();
             $table->softDeletes();
