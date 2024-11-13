@@ -1,17 +1,14 @@
 <?php
 
-namespace App\Models\Agreements;
+namespace App\Models\Documents\Agreements;
 
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Signer extends Model
 {
-    use HasFactory;
-
     /**
      * The table associated with the model.
      *

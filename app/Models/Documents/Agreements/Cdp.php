@@ -1,19 +1,20 @@
 <?php
 
-namespace App\Models\Agreements;
+namespace App\Models\Documents\Agreements;
 
 use App\Models\Documents\Document;
+use App\Models\Parameters\Program;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class BudgetAvailability extends Model
+class Cdp extends Model
 {
     use SoftDeletes;
 
-    protected $table = 'agr_budget_availability';
+    protected $table = 'agr_cdps';
 
     /**
      * The attributes that are mass assignable.
@@ -22,11 +23,9 @@ class BudgetAvailability extends Model
      */
     protected $fillable = [
         'date',
-        'res_minsal_number',
-        'res_minsal_date',
         'program_id',
-        'referrer_id',
-        'document_id'
+        'creator_id',
+        'document_id',
     ];
 
     /**
@@ -36,7 +35,6 @@ class BudgetAvailability extends Model
      */
     protected $casts = [
         'date' => 'date',
-        'res_minsal_date' => 'date',
     ];
 
     /**
@@ -48,9 +46,9 @@ class BudgetAvailability extends Model
     }
 
     /**
-     * Get the referrer.
+     * Get the creator.
      */
-    public function referrer(): BelongsTo|Builder
+    public function creator(): BelongsTo|Builder
     {
         return $this->belongsTo(User::class)->withTrashed();
     }

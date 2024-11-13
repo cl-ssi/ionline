@@ -8,6 +8,7 @@ use App\Models\Inv\EstablishmentUser;
 use App\Models\Inv\InventoryUser;
 use App\Models\Lobby\Meeting;
 use App\Models\Parameters\AccessLog;
+use App\Models\Parameters\Program;
 use App\Models\Pharmacies\Destiny;
 use App\Models\Pharmacies\Dispatch;
 use App\Models\Pharmacies\Pharmacy;
@@ -16,6 +17,7 @@ use App\Models\Pharmacies\Receiving;
 use App\Models\ProfAgenda\OpenHour;
 use App\Models\ProfAgenda\Proposal;
 use App\Models\Profile\Subrogation;
+use App\Models\Rem\UserRem;
 use App\Models\ReplacementStaff\RequestReplacementStaff;
 use App\Models\RequestForms\EventRequestForm;
 use App\Models\RequestForms\RequestForm;
@@ -61,6 +63,7 @@ use Illuminate\Database\Eloquent\Relations\hasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Kirschbaum\PowerJoins\PowerJoinClause;
 use OwenIt\Auditing\Contracts\Auditable;
 use Spatie\Permission\Traits\HasRoles;
 
@@ -88,6 +91,7 @@ class User extends Authenticatable implements Auditable, FilamentUser
         'name',
         'fathers_family',
         'mothers_family',
+        'full_name',
         'gender',
         'address',
         'commune_id',
@@ -509,6 +513,14 @@ class User extends Authenticatable implements Auditable, FilamentUser
     }
 
     /**
+     * The programas that user is referer.
+     */
+    public function programs(): BelongsToMany
+    {
+        return $this->belongsToMany(Program::class,'cfg_program_user');
+    }
+
+    /**
      * Get the requests for the user.
      */
     public function requests(): HasMany
@@ -516,22 +528,22 @@ class User extends Authenticatable implements Auditable, FilamentUser
         return $this->hasMany(RequestReplacementStaff::class);
     }
 
-    public function remEstablishments()
+    public function remEstablishments(): HasMany
     {
-        return $this->hasMany('App\Models\Rem\UserRem');
+        return $this->hasMany(UserRem::class);
     }
 
-    public function lobbyMeetings()
+    public function lobbyMeetings(): BelongsToMany
     {
         return $this->belongsToMany(Meeting::class, 'lobby_meeting_user');
     }
 
-    public function noAttendanceRecords()
+    public function noAttendanceRecords(): HasMany
     {
         return $this->hasMany(NoAttendanceRecord::class);
     }
 
-    public function stores()
+    public function stores(): BelongsToMany
     {
         return $this->belongsToMany(Store::class, 'wre_store_user')
             ->using(StoreUser::class)
@@ -632,8 +644,8 @@ class User extends Authenticatable implements Auditable, FilamentUser
             $query->where(function ($q) use ($word) {
                 $q->where('name', 'LIKE', '%'.$word.'%')
                     ->orwhere('fathers_family', 'LIKE', '%'.$word.'%')
-                    ->orwhere('mothers_family', 'LIKE', '%'.$word.'%')
-                    ->orwhere('id', 'LIKE', '%'.$word.'%');
+                    ->orwhere('mothers_family', 'LIKE', '%'.$word.'%');
+                    // ->orwhere('id', 'LIKE', '%'.$word.'%');
             });
         }
 
@@ -647,6 +659,15 @@ class User extends Authenticatable implements Auditable, FilamentUser
                 ->orWhere('fathers_family', 'LIKE', '%'.$name.'%')
                 ->orWhere('mothers_family', 'LIKE', '%'.$name.'%');
         }
+    }
+
+    public function scopeFilterByName($query, $search)
+    {
+        $terms = explode(' ', $search);
+        foreach ($terms as $term) {
+            $query->where('full_name', 'like', '%' . $term . '%');
+        }
+        return $query;
     }
 
     public function scopeFilter($query, $column, $value)
