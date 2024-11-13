@@ -5,7 +5,7 @@ namespace App\Models\Agreements;
 use App\Models\Commune;
 use App\Models\Documents\Document;
 use App\Models\Documents\SignaturesFile;
-use App\Models\Parameters\Municipality;
+use App\Models\Municipality;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;

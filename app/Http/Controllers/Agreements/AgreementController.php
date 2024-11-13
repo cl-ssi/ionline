@@ -10,7 +10,7 @@ use App\Models\Agreements\AgreementAmount;
 use App\Models\Agreements\AgreementQuota;
 use App\Models\Agreements\Signer;
 use App\Models\Commune;
-use App\Models\Parameters\Municipality;
+use App\Models\Municipality;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;

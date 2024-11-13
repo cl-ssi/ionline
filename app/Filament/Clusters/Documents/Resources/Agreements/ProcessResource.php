@@ -57,6 +57,9 @@ class ProcessResource extends Resource
                     ->relationship('program', 'name', fn (Builder $query, callable $get) => $query->where('period', $get('period')))
                     ->hiddenOn(ProcessesRelationManager::class)
                     ->required(),
+                Forms\Components\Select::make('process_type_id')
+                    ->relationship('processType', 'name')
+                    ->required(),
                 Forms\Components\Select::make('commune_id')
                     ->relationship('commune', 'name')
                     ->searchable()

@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use App\Models\Agreements\Agreement;
-use App\Models\Parameters\Municipality;
+use App\Models\Municipality;
 use App\Models\Programmings\CommuneFile;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
