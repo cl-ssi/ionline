@@ -1,10 +1,10 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
-class CreatePharmacyUsersTable extends Migration
+class CreateFrmEstablishmentsUsersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,11 @@ class CreatePharmacyUsersTable extends Migration
      */
     public function up()
     {
-        Schema::create('frm_pharmacy_user', function (Blueprint $table) {
+        Schema::create('frm_destines_users', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('pharmacy_id')->constrained('frm_pharmacies');
+            $table->foreignId('destiny_id')->constrained('frm_destines');
             $table->foreignId('user_id')->constrained('users');
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 
@@ -29,6 +28,6 @@ class CreatePharmacyUsersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('frm_pharmacy_users');
+        Schema::dropIfExists('frm_destines_users');
     }
 }

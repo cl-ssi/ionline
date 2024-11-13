@@ -17,9 +17,10 @@ class CreateFrmReceivingsTable extends Migration
 
             $table->id();
             $table->dateTime('date'); //fecha xfecha
-            $table->foreignId('establishment_id')->nullable()->constrained('frm_establishments'); //origen
+            $table->foreignId('destiny_id')->nullable()->constrained('frm_destines'); //origen
             $table->foreignId('pharmacy_id')->nullable()->constrained('frm_pharmacies'); //destino
             $table->longText('notes')->nullable(); //notas
+            $table->foreignId('inventory_adjustment_id')->nullable()->constrained('frm_inventory_adjustments');
             $table->text('order_number')->nullable();
             $table->foreignId('user_id')->nullable()->constrained('users');
 

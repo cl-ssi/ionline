@@ -34,6 +34,7 @@ class CreateFrmPurchasesTable extends Migration
             //$table->longText('content'); //contenido
             $table->decimal('invoice_amount', 12, 4)->nullable(); //monto factura
             $table->foreignId('user_id')->constrained('users');
+            $table->foreignId('reception_id')->nullable()->constrained('fin_receptions')->onDelete('set null');
             $table->foreignId('signed_record_id')->nullable()->constrained('doc_signatures_files');
 
             $table->timestamps();

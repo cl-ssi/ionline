@@ -16,9 +16,9 @@ class CreateFrmPurchasesItemsTable extends Migration
         Schema::create('frm_purchases_items', function (Blueprint $table) {
 
           $table->id();
-          $table->bigInteger('barcode')->nullable();
-          $table->unsignedBigInteger('purchase_id');
-          $table->unsignedBigInteger('product_id');
+          $table->string('barcode')->nullable();
+          $table->foreignId('purchase_id')->constrained('frm_purchases')->onDelete('cascade');
+          $table->foreignId('product_id')->constrained('frm_products');
           $table->double('amount', 12, 4); //cantidad
           $table->string('unity');
           $table->decimal('unit_cost', 12, 4);
@@ -26,12 +26,11 @@ class CreateFrmPurchasesItemsTable extends Migration
           //$table->dateTime('date'); //fecha xfecha
           //$table->longText('serial_number'); //serie
           $table->longText('batch')->nullable(); //lote
+          $table->foreignId('reception_item_id')->nullable()->constrained('fin_reception_items')->onDelete('set null');
+          $table->foreignId('batch_id')->nullable()->constrained('frm_batchs');
 
           $table->timestamps();
           $table->softDeletes();
-
-          $table->foreign('purchase_id')->references('id')->on('frm_purchases')->onDelete('cascade');
-          $table->foreign('product_id')->references('id')->on('frm_products');
         });
     }
 

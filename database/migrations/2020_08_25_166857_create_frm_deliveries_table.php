@@ -15,7 +15,7 @@ class CreateFrmDeliveriesTable extends Migration
     {
         Schema::create('frm_deliveries', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('establishment_id');
+            $table->foreignId('destiny_id')->constrained('frm_destines');
             $table->string('invoice')->nullable();
             $table->date('request_date');
             $table->date('due_date')->nullable();
@@ -23,17 +23,14 @@ class CreateFrmDeliveriesTable extends Migration
             $table->string('patient_name');
             $table->tinyInteger('age');
             $table->string('request_type');
-            $table->unsignedBigInteger('product_id');
+            $table->foreign('product_id')->constrained('frm_products');
             $table->integer('quantity');
             $table->string('diagnosis');
             $table->string('doctor_name');
             $table->string('remarks')->nullable();
-            $table->timestamps();
-        });
+            $table->foreignId('document_id')->nullable()->constrained('documents');
 
-        Schema::table('frm_deliveries', function ($table){
-            $table->foreign('establishment_id')->references('id')->on('frm_establishments');
-            $table->foreign('product_id')->references('id')->on('frm_products');
+            $table->timestamps();
         });
     }
 

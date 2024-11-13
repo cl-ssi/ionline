@@ -15,7 +15,6 @@ class CreateFrmProductsTable extends Migration
     {
         Schema::create('frm_products', function (Blueprint $table) {
             $table->id();
-
             $table->string('barcode')->nullable();
             $table->string('name');
             $table->string('unit');
@@ -30,14 +29,12 @@ class CreateFrmProductsTable extends Migration
             //$table->string('category');
             //$table->string('program')->nullable();
             //$table->integer('valued'); On the fly
-
             $table->foreignId('pharmacy_id')->nullable()->constrained('frm_pharmacies');
-
             $table->foreignId('category_id')->nullable()->constrained('frm_categories');
-            
             $table->foreignId('program_id')->nullable()->constrained('frm_programs');
             $table->string('experto_id')->nullable();
             $table->foreignId('unspsc_product_id')->nullable()->constrained('unspsc_products');
+
             $table->timestamps();
             $table->softDeletes();
         });

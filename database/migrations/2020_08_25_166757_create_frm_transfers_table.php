@@ -15,20 +15,13 @@ class CreateFrmTransfersTable extends Migration
     {
         Schema::create('frm_transfers', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('from');
-            $table->unsignedBigInteger('to');
-            $table->unsignedBigInteger('product_id');
+            $table->foreignId('from')->cosntrained('frm_destines');
+            $table->foreignId('to')->cosntrained('frm_destines');
+            $table->foreignId('product_id')->cosntrained('frm_products');
             $table->integer('quantity');
             $table->string('remarks')->nullable();
-            $table->unsignedBigInteger('user_id');
+            $table->foreignId('user_id')->cosntrained('users');
             $table->timestamps();
-        });
-
-        Schema::table('frm_transfers', function ($table){
-            $table->foreign('from')->references('id')->on('frm_establishments');
-            $table->foreign('to')->references('id')->on('frm_establishments');
-            $table->foreign('product_id')->references('id')->on('frm_products');
-            $table->foreign('user_id')->references('id')->on('users');
         });
     }
 

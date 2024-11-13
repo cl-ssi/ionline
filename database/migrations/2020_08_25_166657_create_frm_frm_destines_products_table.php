@@ -13,19 +13,14 @@ class CreateFrmEstablishmentsProductsTable extends Migration
      */
     public function up()
     {
-        Schema::create('frm_establishments_products', function (Blueprint $table) {
+        Schema::create('frm_destines_products', function (Blueprint $table) {
             $table->id();
             $table->integer('stock');
             $table->integer('critic_stock')->nullable();
             $table->integer('max_stock')->nullable();
-            $table->unsignedBigInteger('establishment_id');
-            $table->unsignedBigInteger('product_id');
+            $table->foreignId('destiny_id')->constrained('frm_destines');
+            $table->foreignId('product_id')->constrained('frm_products');
             $table->timestamps();
-        });
-
-        Schema::table('frm_establishments_products', function ($table){
-            $table->foreign('establishment_id')->references('id')->on('frm_establishments');
-            $table->foreign('product_id')->references('id')->on('frm_products');
         });
     }
 
@@ -36,6 +31,6 @@ class CreateFrmEstablishmentsProductsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('frm_establishments_products');
+        Schema::dropIfExists('frm_destines_products');
     }
 }
