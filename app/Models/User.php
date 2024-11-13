@@ -898,7 +898,7 @@ class User extends Authenticatable implements Auditable, FilamentUser
         return number_format($this->id, 0, '.', '.').'-'.$this->dv;
     }
 
-   /* public function getFullNameAttribute()
+    public function getFullNameAttribute()
     {
         return mb_convert_case(mb_strtolower("{$this->name} {$this->fathers_family} {$this->mothers_family}"), MB_CASE_TITLE, 'UTF-8');
     }
@@ -907,7 +907,7 @@ class User extends Authenticatable implements Auditable, FilamentUser
     {
         return mb_convert_case(mb_strtoupper("{$this->name} {$this->fathers_family} {$this->mothers_family}"), MB_CASE_UPPER, 'UTF-8');
     }
-*/
+
     /* $user->shortName (PrimerNombre Apellido1 Apellido2), para las Marías contempla sus segundo nombre */
     public function getShortNameAttribute()
     {
