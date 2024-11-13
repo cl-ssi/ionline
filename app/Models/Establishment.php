@@ -41,6 +41,7 @@ class Establishment extends Model implements Auditable
         'new_deis',
         'sirh_code',
         'commune_id',
+        'cl_commune_id',
         'dependency',
         'health_service_id',
         'official_name',
@@ -82,6 +83,14 @@ class Establishment extends Model implements Auditable
     public function commune(): BelongsTo
     {
         return $this->belongsTo(Commune::class);
+    }
+
+    /**
+     * Get the commune that owns the establishment.
+     */
+    public function clCommune(): BelongsTo
+    {
+        return $this->belongsTo(ClCommune::class);
     }
 
     /**

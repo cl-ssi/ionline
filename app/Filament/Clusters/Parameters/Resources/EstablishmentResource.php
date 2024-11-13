@@ -61,6 +61,9 @@ class EstablishmentResource extends Resource
                 Forms\Components\Select::make('commune_id')
                     ->relationship('commune', 'name')
                     ->required(),
+                Forms\Components\Select::make('cl_commune_id')
+                    ->relationship('clCommune', 'name')
+                    ->required(),
                 Forms\Components\TextInput::make('dependency')
                     ->maxLength(255)
                     ->default(null),

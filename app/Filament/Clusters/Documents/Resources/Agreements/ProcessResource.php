@@ -8,14 +8,17 @@ use App\Filament\Clusters\Documents\Resources\Agreements\ProcessResource\Relatio
 use App\Filament\Clusters\Documents\Resources\Agreements\ProgramResource\RelationManagers\ProcessesRelationManager;
 use App\Models\Documents\Agreements\Signer;
 use App\Models\Documents\Agreements\Process;
+use App\Models\Establishment;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Forms\Get;
 use Filament\Pages\SubNavigationPosition;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Collection;
 
 class ProcessResource extends Resource
 {
@@ -24,6 +27,7 @@ class ProcessResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     protected static ?string $cluster = Documents::class;
+
     protected static ?string $navigationGroup = 'Convenios';
 
     protected static ?string $modelLabel = 'proceso';
@@ -37,6 +41,7 @@ class ProcessResource extends Resource
         return $form
             ->schema([
                 Forms\Components\Select::make('process_type_id')
+                    ->label('Tipo de proceso')
                     ->relationship('processType', 'name')
                     ->required()
                     ->columnSpanFull(),
@@ -60,12 +65,21 @@ class ProcessResource extends Resource
                     ->hiddenOn(ProcessesRelationManager::class)
                     ->required()
                     ->columnSpan(2),
+
                 Forms\Components\Select::make('commune_id')
+                    ->label('Comuna')
                     ->relationship('commune', 'name')
-                    ->required(),
+                    ->required()
+                    ->live(),
                 Forms\Components\Select::make('municipality_id')
-                    ->relationship('municipality', 'name')
-                    ->required(),
+                    ->label('Municipalidad')
+                    ->relationship(
+                        name: 'municipality', 
+                        titleAttribute: 'name', 
+                        modifyQueryUsing: fn (Builder $query, Get $get): Builder => $query->where('commune_id', $get('commune_id'))
+                    )
+                    ->required()
+                    ->live(),
                 // Forms\Components\TextInput::make('municipality_name')
                 //     ->maxLength(255)
                 //     ->default(null),
@@ -76,7 +90,12 @@ class ProcessResource extends Resource
                 //     ->maxLength(255)
                 //     ->default(null),
                 Forms\Components\Select::make('mayor_id')
-                    ->relationship('mayor', 'name')
+                    ->label('Alcalde')
+                    ->relationship(
+                        name: 'mayor', 
+                        titleAttribute: 'name',
+                        modifyQueryUsing: fn (Builder $query, Get $get): Builder => $query->where('municipality_id', $get('municipality_id'))
+                    )
                     ->required(),
                 // Forms\Components\TextInput::make('mayor_name')
                 //     ->maxLength(255)
@@ -97,9 +116,15 @@ class ProcessResource extends Resource
                     ->numeric()
                     ->default(null),
                 Forms\Components\DatePicker::make('date'),
-                Forms\Components\Textarea::make('establishments')
-                    ->columnSpanFull(),
+                Forms\Components\Select::make('establishments')
+                    ->label('Establecimientos')
+                    ->multiple()
+                    ->columnSpanFull()
+                    ->options(
+                        options: fn (Get $get): Collection  => Establishment::where('cl_commune_id', $get('commune_id'))->pluck('name', 'id')
+                    ),
                 Forms\Components\TextInput::make('quotas')
+                    ->label('Cuotas')
                     ->numeric()
                     ->default(null)
                     ->helperText('Solo para programa de anticipo de aporte estatal'),
