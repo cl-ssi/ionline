@@ -78,13 +78,13 @@ class PurchasingProcessesExporter extends Exporter
                 ->formatStateUsing(function ($record) {
                     return $record->status->getLabel(); // Llama al método getLabel() del Enum
                 }),
-            ExportColumn::make('purchasingProcessDetails.immediatePurchase.po_id')
+            ExportColumn::make('currentPurchasingProcessDetails.immediatePurchase.po_id')
                 ->label('OC'),
-            ExportColumn::make('purchasingProcessDetails.immediatePurchase.po_supplier_name')
+            ExportColumn::make('currentPurchasingProcessDetails.immediatePurchase.po_supplier_name')
                 ->label('Nombre Proveedor'),
-            ExportColumn::make('purchasingProcessDetails.immediatePurchase.po_supplier_office_run')
+            ExportColumn::make('currentPurchasingProcessDetails.immediatePurchase.po_supplier_office_run')
                 ->label('RUT Proveedor'),
-            ExportColumn::make('purchasingProcessDetails.quantity')
+            ExportColumn::make('currentPurchasingProcessDetails.quantity')
                 ->label('Cantidad'),
                 /*
                 ->formatStateUsing(function ($record) {
@@ -93,7 +93,7 @@ class PurchasingProcessesExporter extends Exporter
                     }
                 }),
                 */
-            ExportColumn::make('purchasingProcessDetails.unit_value')
+            ExportColumn::make('currentPurchasingProcessDetails.unit_value')
                 ->label('Valor Unitario OC'),
                 /*
                 ->formatStateUsing(function ($record) {
@@ -102,17 +102,17 @@ class PurchasingProcessesExporter extends Exporter
                     }
                 }),
                 */
-            ExportColumn::make('purchasingProcessDetails.expense')
+            ExportColumn::make('currentPurchasingProcessDetails.expense')
                 ->label('Total Item'),
             ExportColumn::make('total_oc')
                 ->label('Total OC')
                 ->formatStateUsing(function ($record) {
-                    return number_format($record->purchasingProcessDetails->sum('expense'), 0, ',', '.');
+                    return number_format($record->getExpense(), 0, ',', '.');
                 }),
             ExportColumn::make('diferencia')
                 ->label('Diferencia Presupuesto / OC')
                 ->formatStateUsing(function ($record) {
-                    $totalPoAmount = $record->purchasingProcessDetails->sum('expense');
+                    $totalPoAmount = $record->getExpense();
 
                     return number_format($record->requestForm->estimated_expense - $totalPoAmount, 0, ',', '.');
                 }),
