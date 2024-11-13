@@ -6,8 +6,8 @@ use App\Filament\Clusters\Documents;
 use App\Filament\Clusters\Documents\Resources\Agreements\ProcessResource\Pages;
 use App\Filament\Clusters\Documents\Resources\Agreements\ProcessResource\RelationManagers;
 use App\Filament\Clusters\Documents\Resources\Agreements\ProgramResource\RelationManagers\ProcessesRelationManager;
-use App\Models\Documents\Agreements\Process;
 use App\Models\Documents\Agreements\Signer;
+use App\Models\Documents\Agreements\Process;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Pages\SubNavigationPosition;
@@ -24,7 +24,6 @@ class ProcessResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     protected static ?string $cluster = Documents::class;
-
     protected static ?string $navigationGroup = 'Convenios';
 
     protected static ?string $modelLabel = 'proceso';
@@ -37,9 +36,10 @@ class ProcessResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Select::make('process_id')
-                    ->relationship('process', 'id')
-                    ->default(null),
+                Forms\Components\Select::make('process_type_id')
+                    ->relationship('processType', 'name')
+                    ->required()
+                    ->columnSpanFull(),
                 Forms\Components\Select::make('period')
                     ->label('Periodo')
                     ->required()
@@ -52,105 +52,138 @@ class ProcessResource extends Resource
                         }
 
                         return $years;
-                    }),
+                    })
+                    ->hiddenOn(ProcessesRelationManager::class),
                 Forms\Components\Select::make('program_id')
                     ->label('Programa')
                     ->relationship('program', 'name', fn (Builder $query, callable $get) => $query->where('period', $get('period')))
                     ->hiddenOn(ProcessesRelationManager::class)
-                    ->required(),
-                Forms\Components\Select::make('process_type_id')
-                    ->label('Tipo de proceso')
-                    ->relationship('processType', 'name')
-                    ->required(),
+                    ->required()
+                    ->columnSpan(2),
                 Forms\Components\Select::make('commune_id')
-                    ->label('Comuna')
                     ->relationship('commune', 'name')
-                    ->searchable()
                     ->required(),
-                Forms\Components\TextInput::make('quotas')
-                    ->label('Cuotas')
-                    ->numeric()
-                    ->helperText('Solo para programa de anticipo de aporte estatal'),
+                Forms\Components\Select::make('municipality_id')
+                    ->relationship('municipality', 'name')
+                    ->required(),
+                // Forms\Components\TextInput::make('municipality_name')
+                //     ->maxLength(255)
+                //     ->default(null),
+                // Forms\Components\TextInput::make('municipality_rut')
+                //     ->maxLength(255)
+                //     ->default(null),
+                // Forms\Components\TextInput::make('municipality_adress')
+                //     ->maxLength(255)
+                //     ->default(null),
+                Forms\Components\Select::make('mayor_id')
+                    ->relationship('mayor', 'name')
+                    ->required(),
+                // Forms\Components\TextInput::make('mayor_name')
+                //     ->maxLength(255)
+                //     ->default(null),
+                // Forms\Components\TextInput::make('mayor_run')
+                //     ->maxLength(255)
+                //     ->default(null),
+                // Forms\Components\TextInput::make('mayor_appelative')
+                //     ->maxLength(255)
+                //     ->default(null),
+                // Forms\Components\TextInput::make('mayor_decree')
+                //     ->maxLength(255)
+                //     ->default(null),
                 Forms\Components\TextInput::make('total_amount')
-                    ->label('Monto total')
                     ->numeric()
                     ->default(null),
+                Forms\Components\TextInput::make('number')
+                    ->numeric()
+                    ->default(null),
+                Forms\Components\DatePicker::make('date'),
+                Forms\Components\Textarea::make('establishments')
+                    ->columnSpanFull(),
+                Forms\Components\TextInput::make('quotas')
+                    ->numeric()
+                    ->default(null)
+                    ->helperText('Solo para programa de anticipo de aporte estatal'),
                 Forms\Components\Select::make('signer_id')
                     ->label('Firmante')
                     ->options(
                         Signer::with('user')->get()->pluck('user.full_name', 'id')
                     )
                     ->required(),
-                Forms\Components\TextInput::make('representative')
-                    ->maxLength(255)
+                // Forms\Components\TextInput::make('signer_appellative')
+                //     ->required()
+                //     ->maxLength(255),
+                // Forms\Components\Textarea::make('signer_decree')
+                //     ->required()
+                //     ->columnSpanFull(),
+                // Forms\Components\TextInput::make('signer_name')
+                //     ->required()
+                //     ->maxLength(255),
+
+
+                Forms\Components\Select::make('process_id')
+                    ->relationship('process', 'id')
                     ->default(null),
-                Forms\Components\TextInput::make('representative_rut')
-                    ->maxLength(255)
-                    ->default(null),
-                Forms\Components\TextInput::make('representative_appelative')
-                    ->maxLength(255)
-                    ->default(null),
-                Forms\Components\TextInput::make('representative_decree')
-                    ->maxLength(255)
-                    ->default(null),
-                Forms\Components\TextInput::make('municipality_adress')
-                    ->maxLength(255)
-                    ->default(null),
-                Forms\Components\TextInput::make('municipality_rut')
-                    ->maxLength(255)
-                    ->default(null),
-                Forms\Components\TextInput::make('number')
-                    ->numeric()
-                    ->default(null),
-                Forms\Components\DatePicker::make('date'),
-                Forms\Components\Textarea::make('establishment_list')
-                    ->columnSpanFull(),
-            ]);
+            ])
+            ->columns(3);
     }
 
     public static function table(Table $table): Table
     {
         return $table
             ->columns([
-                // Tables\Columns\TextColumn::make('process.id')
-                //     ->numeric()
-                //     ->sortable(),
+                Tables\Columns\TextColumn::make('program.name')
+                    ->numeric()
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('period')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('program.name')
+                Tables\Columns\TextColumn::make('processType.name')
                     ->numeric()
-                    ->sortable()
-                    ->hiddenOn(ProcessesRelationManager::class),
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('commune.name')
                     ->numeric()
                     ->sortable(),
-                // Tables\Columns\TextColumn::make('quotas')
-                //     ->numeric()
-                //     ->sortable(),
-                // Tables\Columns\TextColumn::make('total_amount')
-                //     ->numeric()
-                //     ->sortable(),
-                // Tables\Columns\TextColumn::make('signer.user.name')
-                //     ->numeric()
-                //     ->sortable(),
-                // Tables\Columns\TextColumn::make('representative')
-                //     ->searchable(),
-                // Tables\Columns\TextColumn::make('representative_rut')
-                //     ->searchable(),
-                // Tables\Columns\TextColumn::make('representative_appelative')
-                //     ->searchable(),
-                // Tables\Columns\TextColumn::make('representative_decree')
-                //     ->searchable(),
-                // Tables\Columns\TextColumn::make('municipality_adress')
-                //     ->searchable(),
-                // Tables\Columns\TextColumn::make('municipality_rut')
-                //     ->searchable(),
+                Tables\Columns\TextColumn::make('total_amount')
+                    ->numeric()
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('number')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('date')
                     ->date()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('quotas')
+                    ->numeric()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('signer.id')
+                    ->numeric()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('signer_appellative')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('signer_name')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('municipality.name')
+                    ->numeric()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('municipality_name')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('municipality_rut')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('municipality_adress')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('mayor.name')
+                    ->numeric()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('mayor_name')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('mayor_run')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('mayor_appelative')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('mayor_decree')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('process.id')
+                    ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
@@ -188,9 +221,9 @@ class ProcessResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index'  => Pages\ListProcesses::route('/'),
+            'index' => Pages\ListProcesses::route('/'),
             'create' => Pages\CreateProcess::route('/create'),
-            'edit'   => Pages\EditProcess::route('/{record}/edit'),
+            'edit' => Pages\EditProcess::route('/{record}/edit'),
         ];
     }
 }
