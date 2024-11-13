@@ -5,7 +5,7 @@ namespace App\Filament\Clusters\Documents\Resources\Agreements;
 use App\Filament\Clusters\Documents;
 use App\Filament\Clusters\Documents\Resources\Agreements\ProcessTypeResource\Pages;
 use App\Filament\Clusters\Documents\Resources\Agreements\ProcessTypeResource\RelationManagers;
-use App\Models\Agreements\ProcessType;
+use App\Models\Documents\Agreements\ProcessType;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Pages\SubNavigationPosition;

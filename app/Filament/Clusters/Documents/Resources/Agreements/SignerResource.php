@@ -5,7 +5,7 @@ namespace App\Filament\Clusters\Documents\Resources\Agreements;
 use App\Filament\Clusters\Documents;
 use App\Filament\Clusters\Documents\Resources\Agreements\SignerResource\Pages;
 use App\Filament\Clusters\Documents\Resources\Agreements\SignerResource\RelationManagers;
-use App\Models\Agreements\Signer;
+use App\Models\Documents\Agreements\Signer;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Pages\SubNavigationPosition;
