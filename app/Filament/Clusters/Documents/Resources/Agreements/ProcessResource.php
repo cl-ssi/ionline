@@ -5,6 +5,7 @@ namespace App\Filament\Clusters\Documents\Resources\Agreements;
 use App\Filament\Clusters\Documents;
 use App\Filament\Clusters\Documents\Resources\Agreements\ProcessResource\Pages;
 use App\Filament\Clusters\Documents\Resources\Agreements\ProcessResource\RelationManagers;
+use App\Filament\Clusters\Documents\Resources\Agreements\ProgramResource\RelationManagers\ProcessesRelationManager;
 use App\Models\Documents\Agreements\Process;
 use App\Models\Documents\Agreements\Signer;
 use Filament\Forms;
@@ -54,6 +55,7 @@ class ProcessResource extends Resource
                     }),
                 Forms\Components\Select::make('program_id')
                     ->relationship('program', 'name', fn (Builder $query, callable $get) => $query->where('period', $get('period')))
+                    ->hiddenOn(ProcessesRelationManager::class)
                     ->required(),
                 Forms\Components\Select::make('commune_id')
                     ->relationship('commune', 'name')
@@ -110,7 +112,8 @@ class ProcessResource extends Resource
                     ->sortable(),
                 Tables\Columns\TextColumn::make('program.name')
                     ->numeric()
-                    ->sortable(),
+                    ->sortable()
+                    ->hiddenOn(ProcessesRelationManager::class),
                 Tables\Columns\TextColumn::make('commune.name')
                     ->numeric()
                     ->sortable(),
@@ -177,9 +180,9 @@ class ProcessResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListProcesses::route('/'),
+            'index'  => Pages\ListProcesses::route('/'),
             'create' => Pages\CreateProcess::route('/create'),
-            'edit' => Pages\EditProcess::route('/{record}/edit'),
+            'edit'   => Pages\EditProcess::route('/{record}/edit'),
         ];
     }
 }

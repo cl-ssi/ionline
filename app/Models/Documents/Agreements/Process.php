@@ -65,4 +65,8 @@ class Process extends Model
         return $this->hasMany(Process::class, 'process_id');
     }
 
+    public function processType(): BelongsTo
+    {
+        return $this->belongsTo(ProcessType::class, 'process_type_id');
+    }
 }

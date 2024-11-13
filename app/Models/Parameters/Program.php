@@ -3,6 +3,8 @@
 namespace App\Models\Parameters;
 
 use App\Models\Agreements\BudgetAvailability;
+use App\Models\Documents\Agreements\Cdp;
+use App\Models\Documents\Agreements\Process;
 use App\Models\Establishment;
 use App\Models\File;
 use App\Models\User;
@@ -70,12 +72,22 @@ class Program extends Model implements Auditable
         return $this->belongsToMany(User::class, 'cfg_program_user')->withTrashed();
     }
 
+    public function cdps(): HasMany
+    {
+        return $this->hasMany(Cdp::class);
+    }
+
     /**
      * Get the components for the program.
      */
     public function components(): HasMany
     {
         return $this->hasMany(ProgramComponent::class);
+    }
+
+    public function processes(): HasMany
+    {
+        return $this->hasMany(Process::class);
     }
 
     /**

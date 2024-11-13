@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class ProgramComponent extends Model
 {
-    protected $table = 'agr_program_components';
+    protected $table = 'cfg_program_components';
 
     protected $fillable = [
         'name',

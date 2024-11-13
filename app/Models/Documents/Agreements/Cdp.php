@@ -5,11 +5,14 @@ namespace App\Models\Documents\Agreements;
 use App\Models\Documents\Document;
 use App\Models\Parameters\Program;
 use App\Models\User;
+use App\Observers\Documents\Agreements\CdpObserver;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+#[ObservedBy([CdpObserver::class])]
 class Cdp extends Model
 {
     use SoftDeletes;

@@ -272,6 +272,8 @@ Factor
 
 ---
 # Convenios
+- ¿Los componentes de programas pueden tener subtitulso?
+- ¿la distribucion de presupuesto es una por cdp o una por program?
 
 Tablas
 

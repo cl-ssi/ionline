@@ -37,7 +37,7 @@ class ProgramResource extends Resource
                     ->label('Nombre')
                     ->required()
                     ->maxLength(255)
-                    ->columnSpanFull(),
+                    ->columnSpan(3),
                 // Forms\Components\TextInput::make('alias')
                 //     ->maxLength(50)
                 //     ->default(null),
@@ -50,32 +50,32 @@ class ProgramResource extends Resource
                 // Forms\Components\TextInput::make('folio')
                 //     ->numeric()
                 //     ->default(null),
-                Forms\Components\Select::make('subtitle_id')
-                    ->label('Subtítulo')
-                    ->relationship('subtitle', 'name')
-                    ->required(),
+                // Forms\Components\Select::make('subtitle_id')
+                //     ->label('Subtítulo')
+                //     ->relationship('subtitle', 'name')
+                //     ->required(),
                 Forms\Components\TextInput::make('budget')
                     ->label('Presupuesto')
                     ->numeric()
                     ->default(null),
-                Forms\Components\Select::make('period')
-                    ->label('Periodo')
-                    ->required()
-                    ->options(function () {
-                        $currentYear = now()->year;
-                        $years       = [];
-                        for ($i = 0; $i < 10; $i++) {
-                            $years[$currentYear - $i] = $currentYear - $i;
-                        }
+                // Forms\Components\Select::make('period')
+                //     ->label('Periodo')
+                //     ->required()
+                //     ->options(function () {
+                //         $currentYear = now()->year;
+                //         $years       = [];
+                //         for ($i = 0; $i < 10; $i++) {
+                //             $years[$currentYear - $i] = $currentYear - $i;
+                //         }
 
-                        return $years;
-                    }),
+                //         return $years;
+                //     }),
                 // Forms\Components\DatePicker::make('start_date'),
                 // Forms\Components\DatePicker::make('end_date'),
-                Forms\Components\TextInput::make('financial_type')
-                    ->label('Tipo de Financiamiento')
-                    ->maxLength(255)
-                    ->default(null),
+                // Forms\Components\TextInput::make('financial_type')
+                //     ->label('Tipo de Financiamiento')
+                //     ->maxLength(255)
+                //     ->default(null),
                 // Forms\Components\Toggle::make('is_program'),
                 Forms\Components\Fieldset::make('Resolución Ministerial')
                     ->schema([
@@ -179,9 +179,10 @@ class ProgramResource extends Resource
     public static function getRelations(): array
     {
         return [
+            RelationManagers\ProcessesRelationManager::class,
+            RelationManagers\CdpsRelationManager::class,
             RelationManagers\ComponentsRelationManager::class,
             RelationManagers\ReferersRelationManager::class,
-            RelationManagers\BudgetAvailabilitiesRelationManager::class,
         ];
     }
 
