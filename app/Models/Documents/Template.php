@@ -4,6 +4,7 @@ namespace App\Models\Documents;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class Template extends Model
 {
@@ -24,6 +25,13 @@ class Template extends Model
     protected $fillable = [
         'key',
         'title',
-        'content'
+        'content',
+        'templateable_type',
+        'templateable_id',
     ];
+
+    public function templateable(): MorphTo
+    {
+        return $this->morphTo();
+    }
 }
