@@ -9,6 +9,7 @@ use App\Models\Drugs\Reception;
 use Filament\Actions\Action;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Pages\SubNavigationPosition;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -19,13 +20,17 @@ class ReceptionResource extends Resource
 {
     protected static ?string $model = Reception::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'fas-cannabis';
 
     protected static ?string $cluster = Documents::class;
 
-    protected static ?string $modelLabel = 'Recepciones';
+    protected static ?string $modelLabel = 'recepción';
+
+    protected static ?string $pluralModelLabel = 'recepciones';
 
     protected static ?string $navigationGroup = 'Drogas';
+
+    protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
 
     public static function form(Form $form): Form
     {
@@ -39,7 +44,8 @@ class ReceptionResource extends Resource
                         'Parte' => 'Parte',
                         'Oficio Reservado' => 'Oficio Reservado',
                         'RUC' => 'RUC',
-                    ]),
+                    ])
+                    ->columnSpanFull(),
                 Forms\Components\TextInput::make('parte')
                     ->label('Parte/Of.Res/RUC')
                     ->required()
@@ -48,11 +54,13 @@ class ReceptionResource extends Resource
                 Forms\Components\Select::make('parte_police_unit_id')
                     ->label('Origen')
                     ->relationship('partePoliceUnit', 'name')
-                    ->required(),
+                    ->required()
+                    ->columnSpan(2),
                 Forms\Components\Select::make('court_id')
                     ->label('Fiscalia')
                     ->relationship('court', 'name')
-                    ->required(),
+                    ->required()
+                    ->columnSpan(2),
                 Forms\Components\TextInput::make('document_number')
                     ->required()
                     ->label(label: 'Número Oficio')
@@ -61,14 +69,16 @@ class ReceptionResource extends Resource
                 Forms\Components\Select::make('document_police_unit_id')
                     ->label(label: 'Origen Oficio')
                     ->relationship('documentPoliceUnit', 'name')
-                    ->required(),
+                    ->required()
+                    ->columnSpan(2),
                 Forms\Components\DatePicker::make('document_date')
                     ->label(label: 'Fecha Oficio')
                     ->required(),
                 Forms\Components\TextInput::make('delivery')
                     ->maxLength(255)
                     ->label(label: 'Funcionario que Entrega')
-                    ->default(null),
+                    ->default(null)
+                    ->columnSpan(2),
                 Forms\Components\TextInput::make('delivery_run')
                     ->maxLength(255)
                     ->label('RUN Funcionario')
@@ -76,10 +86,12 @@ class ReceptionResource extends Resource
                 Forms\Components\TextInput::make('delivery_position')
                     ->maxLength(255)
                     ->label('Cargo de quien entrega')
-                    ->default(null),
+                    ->default(null)
+                    ->columnSpan(2),
                 Forms\Components\TextInput::make('inputed')
                     ->maxLength(255)
                     ->label('Nombre Imputado')
+                    ->columnSpan(2)
                     ->default(null),
                 Forms\Components\TextInput::make('imputed_run')
                     ->maxLength(255)
@@ -87,14 +99,11 @@ class ReceptionResource extends Resource
                     ->default(null),
                 Forms\Components\TextInput::make('observation')
                     ->label('Observación')
-                    ->columnSpan([
-                        'sm' => 2,
-                        'xl' => 2,
-                        '2xl' => 2,
-                    ]),
+                    ->columnSpanFull(),
 
                 Forms\Components\Hidden::make('user_id')->default(fn() => auth()->id()),
-            ]);
+            ])
+            ->columns(5);
     }
 
     public static function table(Table $table): Table
@@ -106,7 +115,7 @@ class ReceptionResource extends Resource
                     ->label('N.Acta')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('date')
-                    ->dateTime()
+                    ->date('d-m-Y')
                     ->label('Fecha Acta')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('document_number')
@@ -145,19 +154,25 @@ class ReceptionResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
                 Tables\Actions\Action::make('reception')
-                    ->label('Recep')
                     ->icon('heroicon-s-document-check')
+                    ->hiddenLabel()
                     ->color('success')
                     ->url(fn(Reception $record): string => route('drugs.receptions.record', $record))
-                    ->openUrlInNewTab(),
+                    ->openUrlInNewTab()
+                    ->visible(fn(Reception $record): bool => $record->items->isNotEmpty()),
                 Tables\Actions\Action::make('destruction')
-                    ->label('Destr')
                     ->icon('heroicon-s-document-minus')
+                    ->hiddenLabel()
                     ->color('danger')
                     ->url(fn(Reception $record): string => route('drugs.destructions.show', $record))
-                    ->openUrlInNewTab(),
+                    ->openUrlInNewTab()
+                    ->hidden(fn(Reception $record): bool => is_null($record->destruction) ),
+                Tables\Actions\Action::make('destruction')
+                    ->color('warning')
+                    ->label(fn(Reception $record): string => (int) $record->date->diffInDays(now()) - 15)
+                    ->visible(fn(Reception $record): bool => !$record->haveItemsForDestruction->isEmpty() AND is_null($record->destruction)),
+                Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([]),
@@ -167,7 +182,7 @@ class ReceptionResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            RelationManagers\ItemsRelationManager::class,
         ];
     }
 

@@ -25,6 +25,8 @@ class CreateHbHotelsTable extends Migration
             $table->string('description');
             $table->string('latitude')->nullable();
             $table->string('longitude')->nullable();
+            $table->string('manager_email')->nullable();
+            $table->string('manager_phone')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

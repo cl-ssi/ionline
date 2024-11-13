@@ -23,12 +23,14 @@ class CreateProActivityItemsTable extends Migration
             $table->string('def_target_population')->nullable();
             $table->string('verification_rem')->nullable();
             $table->string('professional')->nullable();
+            $table->text('cods')->nullable();
+            $table->text('cols')->nullable();
 
-            $table->bigInteger('activity_id')->unsigned();
- 
-            $table->foreign('activity_id')->references('id')->on('pro_activity_programs');
+            $table->foreignId('activity_id')->constrained('pro_activity_programs');
+            $table->foreignId('activity_item_id')->nullable()->constrained('pro_activity_items');
 
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

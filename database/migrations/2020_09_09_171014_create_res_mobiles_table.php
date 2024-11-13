@@ -15,10 +15,12 @@ class CreateResMobilesTable extends Migration
     {
       Schema::create('res_mobiles', function (Blueprint $table) {
           $table->id();
-          $table->string('brand');
-          $table->string('model');
+          $table->string('brand')->nullable();
+          $table->string('model')->nullable();
           $table->integer('number')->unique();
-          $table->foreignId('user_id')->constrained('users');
+          $table->foreignId('user_id')->nullable();
+          $table->boolean('owner')->default(false);
+          $table->boolean('directory')->default(false);
           $table->timestamps();
           $table->softDeletes();
       });
