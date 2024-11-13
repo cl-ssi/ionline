@@ -118,10 +118,12 @@ class UpdateTypeIdOnDocuments extends Migration
         Schema::table('partes', function (Blueprint $table) {
             $table->dropColumn('type');
         });
-
+        //Eliminacion realizada
+        /*
         Schema::table('doc_correlatives', function (Blueprint $table) {
             $table->dropColumn('type');
         });
+        */
         //Eliminacion realizada
         /*Schema::table('doc_signatures', function (Blueprint $table) {
             $table->dropColumn('document_type');

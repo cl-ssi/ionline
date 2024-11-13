@@ -17,8 +17,7 @@ class CreateDocFulfillmentsAttachments extends Migration
             $table->id();
             $table->string('name');
             $table->string('file');
-            $table->foreignId('fulfillment_id');
-            $table->foreign('fulfillment_id')->references('id')->on('doc_fulfillments');
+            $table->foreignId('fulfillment_id')->constrained('doc_fulfillments');
             $table->timestamps();
             $table->softDeletes();
         });

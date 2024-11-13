@@ -14,11 +14,8 @@ class Doc1121Fulfillments extends Migration
     public function up()
     {
         Schema::create('doc_1121_fulfillments', function (Blueprint $table) {
-          $table->foreignId('doc_1121_id')->unsigned();
-          $table->foreign('doc_1121_id')->references('id')->on('doc_denominations_1121')->onDelete('cascade');
-
-          $table->foreignId('doc_fulfillments_id')->unsigned();
-          $table->foreign('doc_fulfillments_id')->references('id')->on('doc_fulfillments')->onDelete('cascade');
+          $table->foreignId('doc_1121_id')->constrained('doc_denominations_1121')->onDelete('cascade');
+          $table->foreignId('doc_fulfillments_id')->constrained('doc_fulfillments')->onDelete('cascade');
           $table->softDeletes();
           $table->timestamps();
         });

@@ -44,9 +44,11 @@ class CreateSignaturesTable extends Migration
             $table->enum('file_type', ['documento', 'anexo'])->nullable();
             $table->binary('signed_file')->nullable();
             $table->string('md5_signed_file')->nullable();
+            $table->foreignId('signature_id')->nullable()->constrained('doc_signatures');
+            $table->foreignId('signer_id')->nullable()->constrained('users');
+            $table->string('verification_code')->nullable();
 
             //            $table->foreign('signature_id')->references('id')->on('doc_signatures');
-
             $table->timestamps();
             $table->softDeletes();
         });
@@ -56,19 +58,20 @@ class CreateSignaturesTable extends Migration
 
         Schema::create('doc_signatures_flows', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('signatures_file_id');
+            $table->foreignId('signatures_file_id')->constrained('doc_signatures_files');
             $table->enum('type', ['visador', 'firmante'])->nullable();
-            $table->foreignId('ou_id');
-            $table->foreignId('user_id');
+            $table->foreignId('ou_id')->constrained('organizational_units');;
+            $table->foreignId('user_id')->constrained('users');
+            $table->foreignId('real_signer_id')->nullable()->constrained('users');
             $table->tinyInteger('sign_position')->nullable(); //sólo para type Visador
 
             $table->boolean('status')->nullable(); // Signed 1 Unsigned 0
             $table->datetime('signature_date')->nullable();
             $table->longText('observation')->nullable();
-
-            $table->foreign('signatures_file_id')->references('id')->on('doc_signatures_files');
-            $table->foreign('ou_id')->references('id')->on('organizational_units');
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->integer('custom_x_axis')->nullable();
+            $table->integer('custom_y_axis')->nullable();
+            $table->enum('visator_type', ['elaborador', 'revisador', 'aprobador'])->nullable();
+            $table->integer('position_visator_type')->nullable();
 
             $table->timestamps();
             $table->softDeletes();
