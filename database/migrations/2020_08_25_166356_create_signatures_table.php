@@ -26,8 +26,8 @@ class CreateSignaturesTable extends Migration
             $table->string('url')->nullable();
             $table->string('endorse_type', 255)->nullable(); //tipo de visación
             $table->text('recipients')->nullable(); //destinatarios
-            $table->text('distribution')->nullable();//distribución
-            $table->foreignId('user_id')->constrained->('users');
+            $table->text('distribution')->nullable(); //distribución
+            $table->foreignId('user_id')->constrained('users');
             $table->string('verification_code')->nullable(); /* ej: afo2f42o2f */
             $table->boolean('visatorAsSignature')->nullable();
             $table->dateTime('rejected_at')->nullable();
@@ -38,14 +38,14 @@ class CreateSignaturesTable extends Migration
 
         Schema::create('doc_signatures_files', function (Blueprint $table) {
             $table->id();
-//            $table->foreignId('signature_id')->nullable();
+            //            $table->foreignId('signature_id')->nullable();
             $table->binary('file')->nullable();
             $table->string('md5_file')->nullable();
             $table->enum('file_type', ['documento', 'anexo'])->nullable();
             $table->binary('signed_file')->nullable();
             $table->string('md5_signed_file')->nullable();
 
-//            $table->foreign('signature_id')->references('id')->on('doc_signatures');
+            //            $table->foreign('signature_id')->references('id')->on('doc_signatures');
 
             $table->timestamps();
             $table->softDeletes();
@@ -73,7 +73,6 @@ class CreateSignaturesTable extends Migration
             $table->timestamps();
             $table->softDeletes();
         });
-
 
     }
 
