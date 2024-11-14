@@ -20,36 +20,30 @@ class CreateReqRequirementsTable extends Migration
             $table->enum('status',['creado','respondido','cerrado','derivado','reabierto']);
             //$table->boolean('archived')->default(0);
             $table->datetime('limit_at')->nullable();
-            $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('parte_id')->nullable();
+            $table->foreignId('user_id')->constrained('users');
+            $table->foreignId('parte_id')->nullable()->constrained('partes');
+            $table->integer('group_number')->nullable();
+            $table->boolean('to_authority')->nullable();
+            $table->foreignId('category_id')->nullable()->constrained('req_categories');
             $table->timestamps();
             $table->softDeletes();
 
             //$table->foreign('organizational_unit_id')->references('id')->on('organizational_units');
             //$table->foreign('to')->references('id')->on('users');
-            $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('parte_id')->references('id')->on('partes');
         });
 
-        Schema::create('req_requirements_categories', function (Blueprint $table) {
-            $table->bigInteger('requirement_id')->unsigned();
-            $table->bigInteger('category_id')->unsigned();
-
-            $table->foreign('requirement_id')->references('id')->on('req_requirements')->onDelete('cascade');
-            $table->foreign('category_id')->references('id')->on('req_categories')->onDelete('cascade');
-
+        Schema::create('req_labels_requirements', function (Blueprint $table) {
+            $table->foreignId('requirement_id')->constrained('req_requirements')->onDelete('cascade');
+            $table->foreignId('label_id')->nullable()->constrained('req_labels');
+            //$table->foreignId('category_id')->constrained('req_categories')->onDelete('cascade');
             $table->timestamps();
         });
 
         Schema::create('req_requirements_status', function (Blueprint $table) {
-            $table->bigInteger('requirement_id')->unsigned();
-            $table->bigInteger('user_id')->unsigned();
+            $table->foreignId('requirement_id')->constrained('req_requirements')->onDelete('cascade');
+            $table->foreignId('user_id')->constrained('users');
             $table->enum('status',['not viewed','viewed','archived']);
             //$table->integer('category_id')->unsigned();
-
-            $table->foreign('requirement_id')->references('id')->on('req_requirements')->onDelete('cascade');
-            $table->foreign('user_id')->references('id')->on('users');
-
             $table->timestamps();
         });
     }
@@ -61,7 +55,7 @@ class CreateReqRequirementsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('req_requirements_categories');
+        Schema::dropIfExists('req_labels_requirements');
         Schema::dropIfExists('req_requirements_status');
         Schema::dropIfExists('req_requirements');
     }

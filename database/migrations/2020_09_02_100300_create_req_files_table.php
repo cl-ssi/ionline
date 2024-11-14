@@ -17,13 +17,10 @@ class CreateReqFilesTable extends Migration
             $table->id();
             $table->string('file')->nullable();
             $table->string('name')->nullable();
-            $table->bigInteger('event_id')->unsigned();
-
-            $table->foreign('event_id')->references('id')->on('req_events')->onDelete('cascade');
+            $table->foreignId('event_id')->constrained('req_events')->onDelete('cascade');
             $table->timestamps();
         });
     }
-
     /**
      * Reverse the migrations.
      *
