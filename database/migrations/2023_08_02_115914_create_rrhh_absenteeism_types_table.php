@@ -25,7 +25,6 @@ return new class extends Migration
         });
         Schema::dropIfExists('well_ami_discount_conditions');
     }
-    }
 
     /**
      * Reverse the migrations.
