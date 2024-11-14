@@ -15,15 +15,8 @@ class CreateResComputerLabel extends Migration
     {
         Schema::create('res_computer_label', function (Blueprint $table) {
             $table->id();
-
-            $table->foreignId('computer_id')
-                ->nullable()
-                ->constrained('res_computers');
-
-            $table->foreignId('label_id')
-                ->nullable()
-                ->constrained('inv_labels');
-
+            $table->foreignId('computer_id')->nullable()->constrained('res_computers');
+            $table->foreignId('label_id')->nullable()->constrained('inv_labels');
             $table->timestamps();
         });
     }
