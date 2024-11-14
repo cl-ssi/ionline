@@ -16,13 +16,13 @@ class CreateProProgrammingsActivityItemsTable extends Migration
         Schema::create('pro_programming_activity_item', function (Blueprint $table) {
             $table->id();
             $table->foreignId('programming_id')->constrained('pro_programmings');
-            $table->foreignId('activity_item_id')->constrained('pro_activity_items');
+            $table->foreignId('activity_item_id')->nullable()->constrained('pro_activity_items');
             $table->foreignId('requested_by')->constrained('users');
+            $table->text('observation')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
     }
-
     /**
      * Reverse the migrations.
      *

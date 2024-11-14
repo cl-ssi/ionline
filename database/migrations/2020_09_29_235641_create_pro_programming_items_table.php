@@ -47,7 +47,7 @@ class CreateProProgrammingItemsTable extends Migration
             $table->decimal('activity_performance', 7, 1)->nullable();
             $table->double('hours_required_year',8,2)->nullable();
             $table->double('hours_required_day',8,2)->nullable();
-            $table->double('direct_work_year',8,2)->nullable(); // Jornadas Directas Año
+            $table->double('direct_work_year',15,8)->nullable(); // Jornadas Directas Año
             $table->double('direct_work_hour',15,8)->nullable(); // Jornadas Horas Directas Diarias double('column', 15, 8)
             $table->string('information_source')->nullable();
             $table->string('prap_financed')->nullable();

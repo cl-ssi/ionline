@@ -17,10 +17,11 @@ class CreateProProgrammingItemProHourTable extends Migration
             $table->id();
             $table->foreignId('programming_item_id')->constrained('pro_programming_items');
             $table->foreignId('professional_hour_id')->constrained('pro_professional_hours');
-            $table->decimal('activity_performance',5,1)->nullable();
-            $table->double('hours_required_year',5,2)->nullable();
-            $table->double('hours_required_day',5,2)->nullable();
-            $table->double('direct_work_year',5,2)->nullable(); // Jornadas Directas Año
+            $table->decimal('activity_performance', 7, 1)->nullable();
+            $table->decimal('designated_hours_weeks', 7, 1)->nullable();
+            $table->double('hours_required_year',8,2)->nullable();
+            $table->double('hours_required_day',8,2)->nullable();
+            $table->double('direct_work_year',15,8)->nullable(); // Jornadas Directas Año
             $table->double('direct_work_hour',15,8)->nullable(); // Jornadas Horas Directas Diarias double('column', 15, 8)
             $table->timestamps();
         });

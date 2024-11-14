@@ -25,9 +25,7 @@ class CreateProTrainingItemsTable extends Migration
             $table->integer('administrativo_salud')->nullable();
             $table->integer('auxiliares_salud')->nullable();
             $table->integer('total')->nullable();
-
             $table->string('num_hr_pedagodicas')->nullable();
-
             $table->string('item_cap')->nullable();
             $table->enum('fondo_muni',['SI','NO'])->nullable()->default('SI');
             $table->string('otro_fondo')->nullable();
@@ -35,14 +33,10 @@ class CreateProTrainingItemsTable extends Migration
             $table->string('org_ejecutor')->nullable();
             $table->string('coordinador')->nullable();
             $table->string('fecha_ejecucion')->nullable();
-
-            $table->bigInteger('programming_id')->unsigned();
- 
-            $table->foreign('programming_id')->references('id')->on('pro_programmings');
+            $table->foreignId('programming_id')->constrained('pro_programmings');
             $table->timestamps();
         });
     }
-
     /**
      * Reverse the migrations.
      *
