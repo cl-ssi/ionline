@@ -28,15 +28,10 @@ class CreateCfgPrograms extends Migration
             $table->string('description', 255)->nullable();
             $table->boolean('is_program')->nullable();
             $table->foreignId('establishment_id')->nullable()->constrained('establishments');
-
-            //Estas tablas no aparecen en el Heidi
-           /* 
             $table->unsignedInteger('ministerial_resolution_number')->nullable();
             $table->date('ministerial_resolution_date')->nullable();
             $table->unsignedInteger('resource_distribution_number')->nullable();
             $table->date('resource_distribution_date')->nullable();
-            */
-
             $table->timestamps();
             $table->softDeletes();
         });
