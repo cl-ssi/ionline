@@ -164,10 +164,10 @@ class OvertimeRefundResource extends Resource
                                 ->action(function (Get $get, Set $set) {
                                     $items         = $get('details') ?? [];
                                     $totalMinutesDay = array_reduce($items, function ($carry, $item) {
-                                        return $carry + ($item['hours_day'] ?? 0);
+                                        return $carry + (!empty($item['hours_day']) ? $item['hours_day'] : 0);
                                     }, 0);
                                     $totalMinutesNight = array_reduce($items, function ($carry, $item) {
-                                            return $carry + ($item['hours_night'] ?? 0);
+                                            return $carry + (!empty($item['hours_night']) ? $item['hours_night'] : 0);
                                     }, 0);
                     
                                     // Función para convertir minutos a horas y minutos
