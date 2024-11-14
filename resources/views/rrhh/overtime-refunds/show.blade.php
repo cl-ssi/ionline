@@ -112,6 +112,13 @@
 @endsection
 
 @section('approvals')
+    <!-- Aprobación no persistente del propio usuario -->
+    <div style="padding-left: 300px">
+        @include('sign.approvation', [
+            'approval' => $userApproval,
+        ])
+    </div>
+
     <!-- Sección de las aprobaciones -->
     <div class="signature-footer">
         @foreach($record->approvals as $approval)

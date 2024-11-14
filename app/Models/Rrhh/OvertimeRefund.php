@@ -74,6 +74,17 @@ class OvertimeRefund extends Model
         return $this->morphMany(Approval::class, 'approvable');
     }
 
+    public function userApproval(): Approval
+    {
+        return Approval::make([
+            'sent_to_user_id'      => $this->user->id,
+            'approver_ou_id'       => $this->user->organizational_unit_id,
+            'approver_id'          => $this->user->id,
+            'approver_at'          => $this->created_at,
+            'status'               => true,
+        ]);
+    }
+
     public function createApprovals(): void
     {
         $organizationalUnitsArray = $this->organizationalUnit->getHierarchicalUnits($this->user);

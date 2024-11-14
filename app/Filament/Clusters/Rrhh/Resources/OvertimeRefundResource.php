@@ -296,8 +296,11 @@ class OvertimeRefundResource extends Resource
                     ->icon('heroicon-o-document')
                     ->action(function (OvertimeRefund $record) {
                         return response()->streamDownload(function () use ($record) {
+                            // Generar un approval no persistente para mostrar el documento firmado por el usuario
+                            $userApproval = $record->userApproval();
                             echo Pdf::loadView('rrhh.overtime-refunds.show', [
-                                'record' => $record
+                                'record' => $record,
+                                'userApproval' => $userApproval,
                             ])->output();
                         }, 'descarga-ionline.pdf');
                     }),
