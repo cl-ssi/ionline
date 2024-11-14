@@ -151,7 +151,8 @@ class OvertimeRefundResource extends Resource
                                     ->label('Justificación')
                                     ->maxLength(255)
                                     ->columnSpan(3)
-                                    ->requiredIf(fn (Get $get) => $get('hours_day') > 0 || $get('hours_night') > 0, true),
+                                    ->requiredUnless('hours_day', 0)
+                                    ->requiredUnless('hours_night', 0),
                             ])
                             ->columns(12)
                             ->columnSpanFull()
@@ -289,7 +290,8 @@ class OvertimeRefundResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make()
+                    ->hidden(fn (OvertimeRefund $record) => $record->status === 'approved'),
                 Tables\Actions\Action::make('pdf') 
                     ->label('Ver')
                     ->color('success')
@@ -306,9 +308,9 @@ class OvertimeRefundResource extends Resource
                     }),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
+                // Tables\Actions\BulkActionGroup::make([
+                //     Tables\Actions\DeleteBulkAction::make(),
+                // ]),
             ]);
     }
 
