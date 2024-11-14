@@ -78,9 +78,9 @@ class OrganizationalUnit extends Model implements Auditable
         return $this->belongsTo(Establishment::class);
     }
 
-    public function requestForms(): HasMany
+    public function jobPositionProfiles(): HasMany
     {
-        return $this->hasMany(RequestForm::class, 'applicant_ou_id');
+        return $this->hasMany(JobPositionProfile::class, 'jpp_ou_id');
     }
 
     public function categories(): HasMany
@@ -91,6 +91,11 @@ class OrganizationalUnit extends Model implements Auditable
     public function serviceRequestLimit(): HasOne
     {
         return $this->hasOne(OrganizationalUnitLimit::class);
+    }
+
+    public function requestForms(): HasMany
+    {
+        return $this->hasMany(RequestForm::class, 'applicant_ou_id');
     }
 
     public function manager(): HasOneThrough
