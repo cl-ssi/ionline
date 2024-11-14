@@ -300,6 +300,7 @@ class OvertimeRefundResource extends Resource
                     ->label('Ver')
                     ->color('success')
                     ->icon('heroicon-o-document')
+                    // ->url(fn (OvertimeRefund $record) => route('rrhh.overtime-refunds.show', $record)),
                     ->action(function (OvertimeRefund $record) {
                         return response()->streamDownload(function () use ($record) {
                             // Generar un approval no persistente para mostrar el documento firmado por el usuario
