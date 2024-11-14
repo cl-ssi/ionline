@@ -16,7 +16,7 @@ class CreateReqCategoriesTable extends Migration
         Schema::create('req_categories', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->foreignId('organizational_unit_id')->nullable()->constrained('organizational_units');
+            $table->foreignId('organizational_unit_id')->constrained('organizational_units');
             $table->timestamps();
         });
     }
