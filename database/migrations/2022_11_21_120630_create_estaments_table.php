@@ -16,7 +16,6 @@ class CreateEstamentsTable extends Migration
     {
         Schema::create('cfg_estaments', function (Blueprint $table) {
             $table->id();
-            $table->string('category',1);
             $table->string('name');
             $table->timestamps();
             $table->softDeletes();

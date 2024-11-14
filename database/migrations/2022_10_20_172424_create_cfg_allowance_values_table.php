@@ -15,12 +15,10 @@ class CreateCfgAllowanceValuesTable extends Migration
     {
         Schema::create('cfg_allowance_values', function (Blueprint $table) {
             $table->id();
-
             $table->string('name');
             $table->string('description')->nullable();
             $table->unsignedInteger('value');
             $table->year('year');
-
             $table->timestamps();
             $table->softDeletes();
         });

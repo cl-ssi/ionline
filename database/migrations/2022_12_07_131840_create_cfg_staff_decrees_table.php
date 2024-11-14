@@ -16,10 +16,8 @@ class CreateCfgStaffDecreesTable extends Migration
     {
         Schema::create('cfg_staff_decrees', function (Blueprint $table) {
             $table->id();
-
             $table->string('name')->nullable();
             $table->year('year')->nullable();
-
             $table->timestamps();
             $table->softDeletes();
         });

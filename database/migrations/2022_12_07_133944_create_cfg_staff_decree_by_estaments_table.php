@@ -16,7 +16,6 @@ class CreateCfgStaffDecreeByEstamentsTable extends Migration
     {
         Schema::create('cfg_staff_decree_by_estaments', function (Blueprint $table) {
             $table->id();
-
             $table->foreignId('estament_id')->nullable()->constrained('cfg_estaments');
             $table->integer('start_degree')->nullable();
             $table->integer('end_degree')->nullable();

@@ -17,8 +17,8 @@ class CreateCfgUnitOfMeasurementsTable extends Migration
             $table->id();
             $table->string('name');
             $table->string('prefix')->nullable()->default(NULL);
-            $table->softDeletes();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
