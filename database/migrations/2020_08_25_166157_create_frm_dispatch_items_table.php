@@ -17,7 +17,7 @@ class CreateFrmDispatchItemsTable extends Migration
 
           $table->id();
           $table->string('barcode')->nullable();
-          $table->foreignId('dispatch_id')->constrained('frm_dispatches')->onDelete('frm_dispatches')
+          $table->foreignId('dispatch_id')->constrained('frm_dispatches')->onDelete('frm_dispatches');
           $table->foreignId('product_id')->constrained('frm_products');
           $table->double('amount', 8, 2); //cantidad
           $table->string('unity');
