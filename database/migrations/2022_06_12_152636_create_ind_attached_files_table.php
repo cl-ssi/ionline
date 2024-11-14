@@ -19,6 +19,7 @@ class CreateIndAttachedFilesTable extends Migration
             $table->string('document_name')->nullable();
             $table->string('commune')->nullable();
             $table->string('establishment')->nullable();
+            $table->unsignedTinyInteger('section')->nullable();
             $table->morphs('attachable');
             $table->timestamps();
             $table->softDeletes();

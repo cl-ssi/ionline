@@ -17,9 +17,8 @@ class CreateIndSectionsTable extends Migration
             $table->id();
             $table->tinyInteger('number');
             $table->decimal('weighting', 6, 3)->nullable(); // % de la evaluación anual
+            $table->foreignId('indicator_id')->constrained('indicators');
             $table->timestamps();
-            $table->bigInteger('indicator_id')->unsigned();
-            $table->foreign('indicator_id')->references('id')->on('indicators');
         });
     }
 
