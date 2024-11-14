@@ -17,7 +17,8 @@ class CreateReqLabelsTable extends Migration
         Schema::create('req_labels', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->foreignId('ou_id')->constrained('organizational_units');
+            $table->string('color');
+            $table->foreignId('user_id')->constrained('users');
             $table->timestamps();
         });
     }

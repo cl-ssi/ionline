@@ -14,14 +14,12 @@ class CreateReqEventsStatusTable extends Migration
     public function up()
     {
         Schema::create('req_events_status', function (Blueprint $table) {
-            $table->unsignedBigInteger('event_id');
-            $table->unsignedBigInteger('user_id');
+            $table->id();
+            $table->foreignId('event_id')->constrained('req_events')->onDelete('cascade');
+            $table->foreignId('requirement_id')->nullable()->constrained('req_requirements');
+            $table->foreignId('user_id')->constrained('users');
             $table->enum('status',['not viewed','viewed']);
             //$table->integer('category_id')->unsigned();
-
-            $table->foreign('event_id')->references('id')->on('req_events')->onDelete('cascade');
-            $table->foreign('user_id')->references('id')->on('users');
-
             $table->timestamps();
         });
     }
