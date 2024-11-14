@@ -815,6 +815,10 @@
                             <i class="fas fa-fw fa-clock"></i> {{ __('Justificar asistencia') }}
                         </a>
 
+                        <a class="dropdown-item" href="{{ route('filament.intranet.rrhh.resources.overtime-refunds.index') }}">
+                            <i class="fas fa-fw fa-clock"></i> {{ __('Devolución de horas') }}
+                        </a>
+
                         @canany(['Attendance records: user','Attendance records: admin','be god'])
                         <a class="dropdown-item" href="{{ route('filament.intranet.rrhh.resources.attendance-records.index') }}">
                             <i class="fas fa-fw fa-clock"></i> {{ __('Registrar asistencia') }}

@@ -9,4 +9,9 @@ use Filament\Resources\Pages\CreateRecord;
 class CreateOvertimeRefund extends CreateRecord
 {
     protected static string $resource = OvertimeRefundResource::class;
+
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
+    }
 }
