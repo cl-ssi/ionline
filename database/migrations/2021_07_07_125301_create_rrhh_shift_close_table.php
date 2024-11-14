@@ -28,20 +28,14 @@ class CreateRrhhShiftCloseTable extends Migration
             
             $table->integer('date_of_closing_id')->nullable();
             
-            $table->unsignedBigInteger('first_confirmation_user_id')->nullable();
-            $table->unsignedBigInteger('close_user_id')->nullable();
-            $table->unsignedBigInteger('owner_of_the_days_id')->nullable();
+            $table->foreignId('first_confirmation_user_id')->nullable()->constrained('users');
+            $table->foreignId('close_user_id')->nullable()->constrained('users');
+            $table->foreignId('owner_of_the_days_id')->nullable()->constrained('users');
             // $table->unsignedBigInteger('shift_user_id');
-            
-            $table->foreign('first_confirmation_user_id')->references('id')->on('users');
-            $table->foreign('close_user_id')->references('id')->on('users');
-            $table->foreign('owner_of_the_days_id')->references('id')->on('users');
             // $table->foreign('shift_user_day_id')->references('id')->on('rrhh_shift_user_days');
 
             $table->timestamps();
-            $table->softDeletes();
-
-            
+            $table->softDeletes();            
         });
     }
 

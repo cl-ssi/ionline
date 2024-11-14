@@ -17,16 +17,13 @@ class CreateRrhhShiftUsersTable extends Migration
             $table->id();
             $table->date('date_from');
             $table->date('date_up');
-            $table->unsignedBigInteger('asigned_by');
-            $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('shift_types_id');
-            $table->unsignedBigInteger('organizational_units_id');
-            
-
-            $table->foreign('shift_types_id')->references('id')->on('rrhh_shift_types');
-            $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('asigned_by')->references('id')->on('users');
-            $table->foreign('organizational_units_id')->references('id')->on('organizational_units');
+            $table->foreignId('asigned_by')->constrained('users');
+            $table->foreignId('user_id')->constrained('users');
+            $table->foreignId('shift_types_id')->constrained('rrhh_shift_types');
+            $table->foreignId('organizational_units_id')->constrained('organizational_units');
+            $table->string('groupname')->nullable();
+            $table->text('commentary')->nullable();
+            $table->integer('position')->nullable();
             $table->timestamps();
         });
     }

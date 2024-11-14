@@ -21,14 +21,11 @@ class CreateRrhhShiftDayHitoryOfChangesTable extends Migration
             $table->string('current_value');
             $table->date('day');
             $table->integer('modified_by');
+            $table->integer('change_type');
             $table->longText('commentary');
-
-            $table->unsignedBigInteger('shift_user_day_id');
-            $table->foreign('shift_user_day_id')->references('id')->on('rrhh_shift_user_days');
-            
+            $table->foreignId('shift_user_day_id')->constrained('rrhh_shift_user_days');
+        
             $table->timestamps();
-            
-
         });
     }
 

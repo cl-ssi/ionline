@@ -16,13 +16,16 @@ class CreateRrhhAuthoritiesTable extends Migration
         Schema::create('rrhh_authorities', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users');
-            $table->date('from');
-            $table->date('to')->nullable();
+            $table->foreignId('organizational_unit_id')->constrained('organizational_units');
             $table->string('position');
             $table->enum('type', ['manager', 'delegate','secretary'])->default('manager');
-            $table->foreignId('organizational_unit_id')->constrained('organizational_units');
+            $table->string('decree')->nullable();
+            $table->date('from');
+            $table->date('to')->nullable();
+            $table->foreignId('representation_id')->nullable()->constrained('users');
             $table->foreignId('creator_id')->constrained('users');
             $table->timestamps();
+            $table->unique(['date','organizational_unit_id','type']); 
         });
     }
 
