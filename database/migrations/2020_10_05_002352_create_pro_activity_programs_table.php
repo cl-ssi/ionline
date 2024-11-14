@@ -17,11 +17,8 @@ class CreateProActivityProgramsTable extends Migration
             $table->id();
             $table->year('year');
             $table->string('description')->nullable();
-
-            $table->unsignedBigInteger('user_id');
+            $table->foreignId('user_id')->constrained('users');
             $table->timestamps();
-
-            $table->foreign('user_id')->references('id')->on('users');
         });
     }
 
