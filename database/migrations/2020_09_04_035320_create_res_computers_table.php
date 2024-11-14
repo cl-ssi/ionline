@@ -50,12 +50,8 @@ class CreateResComputersTable extends Migration
       });
 
       Schema::create('res_computer_user', function (Blueprint $table) {
-          $table->foreignId('computer_id')->unsigned();
-          $table->foreign('computer_id')->references('id')->on('res_computers')->onDelete('cascade');
-
-          $table->foreignId('user_id')->unsigned();
-          $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-
+          $table->foreignId('computer_id')->constrained('res_computers')->onDelete('cascade');
+          $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
           $table->timestamps();
       });
 
