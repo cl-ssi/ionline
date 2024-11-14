@@ -269,6 +269,10 @@ class OvertimeRefundResource extends Resource
                     ->numeric()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\ToggleColumn::make('rrhh_ok')
+                    ->label('RRHH Ok')
+                    ->sortable()
+                    ->visible(fn () => auth()->user()->can('Users: overtime refund admin')),
                 Tables\Columns\TextColumn::make('establishment.alias')
                     ->label('Establecimiento')
                     ->sortable()
