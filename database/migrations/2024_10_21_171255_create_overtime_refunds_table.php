@@ -26,6 +26,7 @@ return new class extends Migration
             $table->unsignedInteger('total_minutes_night')->nullable();
             $table->enum('status',['pending','approved','rejected'])->default('pending');
             $table->foreignId('establishment_id')->constrained();
+            $table->boolean('rrhh_ok')->default(false);
             $table->timestamps();
             $table->softDeletes();
         });

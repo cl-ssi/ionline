@@ -37,6 +37,7 @@ class OvertimeRefund extends Model
         'total_minutes_night',
         'status',
         'establishment_id',
+        'rrhh_ok',
     ];
 
     protected $casts = [
@@ -44,6 +45,7 @@ class OvertimeRefund extends Model
         'details' => 'array',
         'type'    => Type::class,
         'status'  => Status::class,
+        'rrhh_ok' => 'boolean',
     ];
 
     public function user(): BelongsTo
