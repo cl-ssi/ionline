@@ -19,7 +19,7 @@ class SignerResource extends Resource
 {
     protected static ?string $model = Signer::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-wrench';
 
     protected static ?string $cluster = Documents::class;
 

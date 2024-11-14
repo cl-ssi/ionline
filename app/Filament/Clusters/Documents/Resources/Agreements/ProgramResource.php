@@ -17,7 +17,7 @@ class ProgramResource extends Resource
 {
     protected static ?string $model = Program::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-sparkles';
 
     protected static ?string $cluster = Documents::class;
 
@@ -40,6 +40,11 @@ class ProgramResource extends Resource
                     ->required()
                     ->maxLength(255)
                     ->columnSpan(3),
+                Forms\Components\Toggle::make('is_program')
+                    ->label('Es un programa')
+                    ->default(true)
+                    ->required()
+                    ->hidden(),
                 // Forms\Components\TextInput::make('alias')
                 //     ->maxLength(50)
                 //     ->default(null),
@@ -175,7 +180,10 @@ class ProgramResource extends Resource
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
-            ]);
+            ])
+            ->modifyQueryUsing(function ($query) {
+                $query->where('is_program', true);
+            });
     }
 
     public static function getRelations(): array

@@ -24,7 +24,7 @@ class ProcessResource extends Resource
 {
     protected static ?string $model = Process::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-queue-list';
 
     protected static ?string $cluster = Documents::class;
 
@@ -52,14 +52,15 @@ class ProcessResource extends Resource
                     ->required()
                     ->live()
                     ->options(function () {
-                        $currentYear = now()->year;
+                        $currentYear = now()->addYear()->year;
                         $years       = [];
-                        for ($i = 0; $i < 10; $i++) {
+                        for ($i = 0; $i < 6; $i++) {
                             $years[$currentYear - $i] = $currentYear - $i;
                         }
 
                         return $years;
                     })
+                    ->default(now()->year)
                     ->hiddenOn(ProcessesRelationManager::class),
                 Forms\Components\Select::make('program_id')
                     ->label('Programa')
@@ -72,6 +73,7 @@ class ProcessResource extends Resource
                     ->label('Comuna')
                     ->relationship('commune', 'name')
                     ->required()
+                    ->searchable()
                     ->live(),
                 Forms\Components\Select::make('municipality_id')
                     ->label('Municipalidad')
@@ -112,12 +114,15 @@ class ProcessResource extends Resource
                 //     ->maxLength(255)
                 //     ->default(null),
                 Forms\Components\TextInput::make('total_amount')
+                    ->label('Monto total')
                     ->numeric()
                     ->default(null),
                 Forms\Components\TextInput::make('number')
+                    ->label('Número')
                     ->numeric()
                     ->default(null),
-                Forms\Components\DatePicker::make('date'),
+                Forms\Components\DatePicker::make('date')
+                    ->label('Fecha'),
                 Forms\Components\Select::make('establishments')
                     ->label('Establecimientos')
                     ->multiple()
@@ -158,60 +163,68 @@ class ProcessResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('program.name')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('period')
-                    ->numeric()
-                    ->sortable(),
                 Tables\Columns\TextColumn::make('processType.name')
-                    ->numeric()
+                    ->label('Tipo de proceso')
+                    ->searchable()
                     ->sortable(),
+                Tables\Columns\TextColumn::make('program.name')
+                    ->label('Programa')
+                    ->wrap()
+                    ->sortable()
+                    ->searchable()
+                    ->hiddenOn(ProcessesRelationManager::class),
+                Tables\Columns\TextColumn::make('period')
+                    ->label('Periodo')
+                    ->numeric()
+                    ->sortable()
+                    ->searchable()
+                    ->hiddenOn(ProcessesRelationManager::class),
                 Tables\Columns\TextColumn::make('commune.name')
-                    ->numeric()
+                    ->label('Comuna')
+                    ->searchable()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('total_amount')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('number')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('date')
-                    ->date()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('quotas')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('signer.id')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('signer_appellative')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('signer_name')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('municipality.name')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('municipality_name')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('municipality_rut')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('municipality_adress')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('mayor.name')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('mayor_name')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('mayor_run')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('mayor_appelative')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('mayor_decree')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('process.id')
-                    ->numeric()
-                    ->sortable(),
+                // Tables\Columns\TextColumn::make('total_amount')
+                //     ->numeric()
+                //     ->sortable(),
+                // Tables\Columns\TextColumn::make('number')
+                //     ->numeric()
+                //     ->sortable(),
+                // Tables\Columns\TextColumn::make('date')
+                //     ->date()
+                //     ->sortable(),
+                // Tables\Columns\TextColumn::make('quotas')
+                //     ->numeric()
+                //     ->sortable(),
+                // Tables\Columns\TextColumn::make('signer.id')
+                //     ->numeric()
+                //     ->sortable(),
+                // Tables\Columns\TextColumn::make('signer_appellative')
+                //     ->searchable(),
+                // Tables\Columns\TextColumn::make('signer_name')
+                //     ->searchable(),
+                // Tables\Columns\TextColumn::make('municipality.name')
+                //     ->numeric()
+                //     ->sortable(),
+                // Tables\Columns\TextColumn::make('municipality_name')
+                //     ->searchable(),
+                // Tables\Columns\TextColumn::make('municipality_rut')
+                //     ->searchable(),
+                // Tables\Columns\TextColumn::make('municipality_adress')
+                //     ->searchable(),
+                // Tables\Columns\TextColumn::make('mayor.name')
+                //     ->numeric()
+                //     ->sortable(),
+                // Tables\Columns\TextColumn::make('mayor_name')
+                //     ->searchable(),
+                // Tables\Columns\TextColumn::make('mayor_run')
+                //     ->searchable(),
+                // Tables\Columns\TextColumn::make('mayor_appelative')
+                //     ->searchable(),
+                // Tables\Columns\TextColumn::make('mayor_decree')
+                //     ->searchable(),
+                // Tables\Columns\TextColumn::make('process.id')
+                //     ->numeric()
+                //     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -226,7 +239,21 @@ class ProcessResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
+                Tables\Filters\SelectFilter::make('Tipo de proceso')
+                    ->relationship('processType', 'name'),
+                // Tables\Filters\SelectFilter::make('programa')
+                //     ->relationship(
+                //         name: 'program', 
+                //         titleAttribute: 'name',
+                //         modifyQueryUsing: fn (Builder $query): 
+                //             Builder => $query->where('period', 2024)
+                //     ),
+                Tables\Filters\SelectFilter::make('comuna')
+                    ->relationship(
+                        name: 'commune', 
+                        titleAttribute: 'name',
+                    )
+                    ->searchable(),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

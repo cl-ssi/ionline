@@ -31,7 +31,7 @@ class ListPrograms extends ListRecords
 
         foreach ($periods as $period) {
             $tabs[$period] = Tab::make()
-                ->label("Periodo $period")
+                ->label($period)
                 ->modifyQueryUsing(fn (Builder $query) => $query->where('period', $period));
         }
 

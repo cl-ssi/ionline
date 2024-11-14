@@ -23,6 +23,8 @@ class ProcessObserver
         $process->mayor_run = $process->mayor->run;
         $process->mayor_appelative = $process->mayor->appelative;
         $process->mayor_decree = $process->mayor->decree;
+
+        $process->period = $process->program->period;
     }
 
     /**
