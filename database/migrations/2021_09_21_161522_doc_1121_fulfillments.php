@@ -14,10 +14,10 @@ class Doc1121Fulfillments extends Migration
     public function up()
     {
         Schema::create('doc_1121_fulfillments', function (Blueprint $table) {
-          $table->foreignId('doc_1121_id')->constrained('doc_denominations_1121')->onDelete('cascade');
-          $table->foreignId('doc_fulfillments_id')->constrained('doc_fulfillments')->onDelete('cascade');
-          $table->softDeletes();
-          $table->timestamps();
+            $table->foreignId('doc_1121_id')->constrained('doc_denominations_1121')->onDelete('cascade');
+            $table->foreignId('doc_fulfillments_id')->constrained('doc_fulfillments')->onDelete('cascade');
+            $table->softDeletes();
+            $table->timestamps();
         });
     }
 
