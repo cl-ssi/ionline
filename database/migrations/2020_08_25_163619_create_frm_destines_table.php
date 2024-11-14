@@ -1,10 +1,10 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
-class CreateFrmEstablishmentsTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateFrmEstablishmentsTable extends Migration
      */
     public function up()
     {
-        Schema::create('frm_establishments', function (Blueprint $table) {
+        Schema::create('frm_destines', function (Blueprint $table) {
             $table->id();
             $table->string('name')->unique();
             $table->text('email')->nullable();
@@ -21,6 +21,7 @@ class CreateFrmEstablishmentsTable extends Migration
             $table->foreignId('pharmacy_id')->nullable()->constrained('frm_pharmacies');
             $table->timestamps();
             $table->softDeletes();
+            $table->unique(['name','pharmacy_id'],'frm_destines_name_unique');
         });
     }
 
@@ -31,6 +32,6 @@ class CreateFrmEstablishmentsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('frm_establishments');
+        Schema::dropIfExists('frm_destines');
     }
-}
+};

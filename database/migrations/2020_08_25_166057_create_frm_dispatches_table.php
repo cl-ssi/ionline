@@ -18,8 +18,9 @@ class CreateFrmDispatchesTable extends Migration
           $table->id();
           $table->dateTime('date'); //fecha xfecha
           $table->foreignId('pharmacy_id')->nullable()->constrained('frm_pharmacies'); //origen
-          $table->foreignId('establishment_id')->nullable()->constrained('frm_establishments');
+          $table->foreignId('destiny_id')->nullable()->constrained('frm_destines');
           $table->longText('notes')->nullable(); //notas
+          $table->foreignId('inventory_adjustment_id')->nullable()->constrained('frm_inventory_adjustments');
           $table->foreignId('user_id')->constrained('users');
           $table->foreignId('receiver_id')->nullable()->constrained('users');
           $table->boolean('sendC19')->default(0);

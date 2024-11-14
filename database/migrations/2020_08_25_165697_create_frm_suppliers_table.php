@@ -22,12 +22,9 @@ class CreateFrmSuppliersTable extends Migration
             $table->string('telephone')->nullable();
             $table->string('fax')->nullable();
             $table->string('contact')->nullable();
-
-            $table->unsignedBigInteger('pharmacy_id')->default(1);
+            $table->foreignId('pharmacy_id')->constrained('frm_pharmacies')->default(1);
             $table->timestamps();
             $table->softDeletes();
-
-            $table->foreign('pharmacy_id')->references('id')->on('frm_pharmacies');
         });
     }
 

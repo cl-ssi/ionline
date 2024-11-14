@@ -15,34 +15,14 @@ class CreatePharmacyBatchTable extends Migration
     {
         Schema::create('frm_batchs', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('product_id');
+            $table->foreignId('product_id')->constrained('frm_products');
             $table->dateTime('due_date'); //fecha vencimiento
             $table->string('batch');
             $table->integer('count');
-
             $table->timestamps();
             $table->softDeletes();
-
-            $table->foreign('product_id')->references('id')->on('frm_products');
         });
 
-        Schema::table('frm_purchases_items', function (Blueprint $table) {
-          // $table->unsignedBigInteger('batch_id')->after('batch')->nullable();
-          $table->foreignId('batch_id')->after('batch')->nullable();
-          $table->foreign('batch_id')->references('id')->on('frm_batchs');
-        });
-
-        Schema::table('frm_receiving_items', function (Blueprint $table) {
-          // $table->unsignedBigInteger('batch_id')->after('batch')->nullable();
-          $table->foreignId('batch_id')->after('batch')->nullable();
-          $table->foreign('batch_id')->references('id')->on('frm_batchs');
-        });
-
-        Schema::table('frm_dispatch_items', function (Blueprint $table) {
-          // $table->unsignedBigInteger('batch_id')->after('batch')->nullable();
-          $table->foreignId('batch_id')->after('batch')->nullable();
-          $table->foreign('batch_id')->references('id')->on('frm_batchs');
-        });
     }
 
     /**
@@ -51,22 +31,7 @@ class CreatePharmacyBatchTable extends Migration
      * @return void
      */
     public function down()
-    {
-        Schema::table('frm_purchases_items', function (Blueprint $table){
-            $table->dropForeign(['batch_id']);
-            $table->dropColumn('batch_id');
-        });
-
-        Schema::table('frm_receiving_items', function (Blueprint $table){
-            $table->dropForeign(['batch_id']);
-            $table->dropColumn('batch_id');
-        });
-
-        Schema::table('frm_dispatch_items', function (Blueprint $table){
-            $table->dropForeign(['batch_id']);
-            $table->dropColumn('batch_id');
-        });
-
+    {   
         Schema::dropIfExists('frm_batchs');
     }
 }

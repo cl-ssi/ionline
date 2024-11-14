@@ -16,21 +16,19 @@ class CreateFrmReceivingItemsTable extends Migration
         Schema::create('frm_receiving_items', function (Blueprint $table) {
 
           $table->id();
-          $table->bigInteger('barcode')->nullable();
-          $table->unsignedBigInteger('receiving_id');
-          $table->unsignedBigInteger('product_id');
+          $table->string('barcode')->nullable();
+          $table->foreignId('receiving_id')->constrained('frm_receivings')->onDelete('cascade');
+          $table->foreignId('product_id')->constrained('frm_products');;
           $table->double('amount', 8, 2); //cantidad
           $table->string('unity');
           $table->dateTime('due_date')->nullable(); //fecha vencimiento
           //$table->dateTime('date'); //fecha xfecha
           //$table->longText('serial_number'); //serie
           $table->longText('batch'); //lote
+          $table->foreignId('batch_id')->nullable()->constrained('frm_batchs');
 
           $table->timestamps();
           $table->softDeletes();
-
-          $table->foreign('receiving_id')->references('id')->on('frm_receivings')->onDelete('cascade');
-          $table->foreign('product_id')->references('id')->on('frm_products');
         });
     }
 
