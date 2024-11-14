@@ -16,10 +16,8 @@ class CreateRrhhUserShifttypeMonthsTable extends Migration
         Schema::create('rrhh_user_shifttype_months', function (Blueprint $table) {
             $table->id();
             $table->integer("month")->nullable();
-            $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('shift_type_id');
-            $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('shift_type_id')->references('id')->on('rrhh_shift_types');
+            $table->foreignId('user_id')->constrained('users');;
+            $table->foreignId('shift_type_id')->constrained('rrhh_shift_types');
             $table->timestamps();
         });
     }

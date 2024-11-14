@@ -17,12 +17,13 @@ class CreateRrhhShiftUserDaysTable extends Migration
             $table->id();
             $table->date('day');
             $table->string('commentary');
-            $table->integer('status')->comment('they can be 1:assigned;2:completed,3:extra shift,4:shift change5: medical license,6: union jurisdiction,7: legal holiday,8: exceptional permit or did not belong to the service.');
-            
-            $table->unsignedBigInteger('shift_user_id');
+            $table->integer('status')->comment('they can be 1:assigned;2:completed,3:extra shift,4:shift change5: medical license,6: union jurisdiction,7: legal holiday,8: exceptional permit or did not belong to the service.');            
+  
+            $table->foreign('shift_user_id')->constrained('rrhh_shift_users');
+            $table->foreignId('shift_close_id')->nullable()->constrained('rrhh_shift_close');
+            $table->string('working_day');
+            $table->integer('derived_from')->nullable();
 
-
-            $table->foreign('shift_user_id')->references('id')->on('rrhh_shift_users');
             $table->timestamps();
         });
     }

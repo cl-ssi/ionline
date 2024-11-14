@@ -17,14 +17,9 @@ class CreateRrhhUserRequestOfDaysTable extends Migration
             $table->id();
             $table->string('status');
             $table->string('commentary')->nullable();
-            $table->unsignedBigInteger('shift_user_day_id');
-            $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('status_change_by');
-
-
-            $table->foreign('status_change_by')->references('id')->on('users');
-            $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('shift_user_day_id')->references('id')->on('rrhh_shift_user_days');
+            $table->foreignId('shift_user_day_id')->constrained('rrhh_shift_user_days');
+            $table->foreignId('user_id')->constrained('users');
+            $table->foreignId('status_change_by')->constrained('users');
             $table->timestamps();
         });
     }

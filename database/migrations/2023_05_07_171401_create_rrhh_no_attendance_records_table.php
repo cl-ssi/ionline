@@ -16,19 +16,23 @@ class CreateRrhhNoAttendanceRecordsTable extends Migration
         Schema::create('rrhh_no_attendance_records', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users');
+            $table->boolean('type')->nullable();
             $table->datetime('date');
-            $table->string('observation');
+            $table->foreignId('reason_id')->default(1)->constrained('rrhh_no_attendance_reasons');
+            $table->string('observation')->nullable();
             $table->foreignId('authority_id')->constrained('users');
             $table->string('authority_observation')->nullable();
             $table->datetime('authority_at')->nullable();
             $table->boolean('status')->nullable()->default(null);
             $table->foreignId('rrhh_user_id')->nullable()->constrained('users');
             $table->timestamp('rrhh_at')->nullable();
+            $table->string('rrhh_observation')->nullable();
+            $table->boolean('rrhh_status')->nullable();
+            $table->foreignId('establishment_id')->default(38)->constrained('establishments');
             $table->timestamps();
             $table->softDeletes();
         });
     }
-
     /**
      * Reverse the migrations.
      *

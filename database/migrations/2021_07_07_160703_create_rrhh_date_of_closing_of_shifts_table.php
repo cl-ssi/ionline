@@ -15,13 +15,10 @@ class CreateRrhhDateOfClosingOfShiftsTable extends Migration
     {
         Schema::create('rrhh_date_of_closing_of_shifts', function (Blueprint $table) {
             $table->id();
-
-            $table->unsignedBigInteger('user_id');
+            $table->foreignId('user_id')->constrained('users');
             $table->string('commentary')->nullable();
             $table->date('init_date');
             $table->date('close_date');
-
-            $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();
         });
     }

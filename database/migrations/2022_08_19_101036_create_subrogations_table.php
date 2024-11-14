@@ -18,8 +18,11 @@ class CreateSubrogationsTable extends Migration
             $table->foreignId('user_id')->constrained('users');
             $table->foreignId('subrogant_id')->constrained('users');
             $table->tinyinteger('level')->unsigned();
-            $table->foreignId('organizational_unit_id')->constrainded('organizational_units')->nullable();
+            $table->foreignId('organizational_unit_id')->constrainded('organizational_units')->nullable()->onDelete('set null');
+            $table->string('type')->nullable();
+            $table->boolean('active')->default(0);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
