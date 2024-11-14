@@ -14,11 +14,8 @@ class DocForumulaFulfillments extends Migration
     public function up()
     {
         Schema::create('doc_formula_fulfillments', function (Blueprint $table) {
-          $table->foreignId('doc_formula_id')->unsigned();
-          $table->foreign('doc_formula_id')->references('id')->on('doc_denominations_formula')->onDelete('cascade');
-
-          $table->foreignId('doc_fulfillments_id')->unsigned();
-          $table->foreign('doc_fulfillments_id')->references('id')->on('doc_fulfillments')->onDelete('cascade');
+          $table->foreignId('doc_formula_id')->constrained('doc_denominations_formula')->onDelete('cascade');
+          $table->foreignId('doc_fulfillments_id')->constrained('doc_fulfillments')->onDelete('cascade');
           $table->softDeletes();
           $table->timestamps();
         });

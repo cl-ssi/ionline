@@ -40,11 +40,12 @@ class CreateDocTypesTable extends Migration
         Schema::table('partes', function (Blueprint $table) {
             $table->foreignId('type_id')->after('type')->nullable()->constrained('doc_types');
         });
-
+        //Tabla copiada
+        /*
         Schema::table('doc_correlatives', function (Blueprint $table) {
             $table->foreignId('type_id')->after('type')->nullable()->constrained('doc_types');
         });
-
+        */
         //Tabla copiada
         /*Schema::table('doc_signatures', function (Blueprint $table) {
             $table->foreignId('type_id')->after('document_type')->nullable()->constrained('doc_types');
@@ -65,11 +66,11 @@ class CreateDocTypesTable extends Migration
         Schema::table('partes', function (Blueprint $table) {
             $table->dropConstrainedForeignId('type_id');
         });
-
+        /*
         Schema::table('doc_correlatives', function (Blueprint $table) {
             $table->dropConstrainedForeignId('type_id');
         });
-
+        */
         // Schema::table('doc_signatures', function (Blueprint $table) {
         //     $table->dropConstrainedForeignId('type_id');
         // });
