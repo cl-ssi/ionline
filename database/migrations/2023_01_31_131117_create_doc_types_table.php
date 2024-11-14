@@ -23,33 +23,6 @@ class CreateDocTypesTable extends Migration
             $table->timestamps();
             $table->softDeletes();
         });
-
-
-        // Call seeder table
-        Artisan::call('db:seed', [
-            '--class' => 'TypeSeeder',
-            '--force' => true
-        ]);
-
-        Type::where('name','Ordinario')->first()->delete();
-
-        Schema::table('documents', function (Blueprint $table) {
-            $table->foreignId('type_id')->after('type')->nullable()->constrained('doc_types');
-        });
-
-        Schema::table('partes', function (Blueprint $table) {
-            $table->foreignId('type_id')->after('type')->nullable()->constrained('doc_types');
-        });
-        //Tabla copiada
-        /*
-        Schema::table('doc_correlatives', function (Blueprint $table) {
-            $table->foreignId('type_id')->after('type')->nullable()->constrained('doc_types');
-        });
-        */
-        //Tabla copiada
-        /*Schema::table('doc_signatures', function (Blueprint $table) {
-            $table->foreignId('type_id')->after('document_type')->nullable()->constrained('doc_types');
-        });*/
     }
 
     /**
@@ -58,24 +31,7 @@ class CreateDocTypesTable extends Migration
      * @return void
      */
     public function down()
-    {
-        Schema::table('documents', function (Blueprint $table) {
-            $table->dropConstrainedForeignId('type_id');
-        });
-
-        Schema::table('partes', function (Blueprint $table) {
-            $table->dropConstrainedForeignId('type_id');
-        });
-        /*
-        Schema::table('doc_correlatives', function (Blueprint $table) {
-            $table->dropConstrainedForeignId('type_id');
-        });
-        */
-        // Schema::table('doc_signatures', function (Blueprint $table) {
-        //     $table->dropConstrainedForeignId('type_id');
-        // });
-
+    {   
         Schema::dropIfExists('doc_types');
-
     }
 }
