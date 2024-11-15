@@ -40,11 +40,18 @@ class ProgramResource extends Resource
                     ->required()
                     ->maxLength(255)
                     ->columnSpan(3),
-                Forms\Components\Toggle::make('is_program')
-                    ->label('Es un programa')
-                    ->default(true)
+                Forms\Components\Select::make('period')
+                    ->label('Periodo')
                     ->required()
-                    ->hidden(),
+                    ->options(function () {
+                        $currentYear = now()->year;
+                        $years       = [];
+                        for ($i = 0; $i < 10; $i++) {
+                            $years[$currentYear - $i] = $currentYear - $i;
+                        }
+
+                        return $years;
+                    }),
                 // Forms\Components\TextInput::make('alias')
                 //     ->maxLength(50)
                 //     ->default(null),
@@ -57,26 +64,7 @@ class ProgramResource extends Resource
                 // Forms\Components\TextInput::make('folio')
                 //     ->numeric()
                 //     ->default(null),
-                // Forms\Components\Select::make('subtitle_id')
-                //     ->label('Subtítulo')
-                //     ->relationship('subtitle', 'name')
-                //     ->required(),
-                Forms\Components\TextInput::make('budget')
-                    ->label('Presupuesto')
-                    ->numeric()
-                    ->default(null),
-                // Forms\Components\Select::make('period')
-                //     ->label('Periodo')
-                //     ->required()
-                //     ->options(function () {
-                //         $currentYear = now()->year;
-                //         $years       = [];
-                //         for ($i = 0; $i < 10; $i++) {
-                //             $years[$currentYear - $i] = $currentYear - $i;
-                //         }
 
-                //         return $years;
-                //     }),
                 // Forms\Components\DatePicker::make('start_date'),
                 // Forms\Components\DatePicker::make('end_date'),
                 // Forms\Components\TextInput::make('financial_type')
@@ -110,6 +98,14 @@ class ProgramResource extends Resource
                 // Forms\Components\Select::make('establishment_id')
                 //     ->relationship('establishment', 'name')
                 //     ->default(null),
+                Forms\Components\Select::make('subtitle_id')
+                    ->label('Subtítulo')
+                    ->relationship('subtitle', 'name')
+                    ->required(),
+                Forms\Components\TextInput::make('budget')
+                    ->label('Presupuesto')
+                    ->numeric()
+                    ->default(null),
             ])
             ->columns(4);
     }

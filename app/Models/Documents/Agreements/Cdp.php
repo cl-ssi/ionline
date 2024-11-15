@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Observers\Documents\Agreements\CdpObserver;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -27,6 +28,7 @@ class Cdp extends Model
     protected $fillable = [
         'date',
         'program_id',
+        'distribution',
         'creator_id',
         'document_id',
     ];
@@ -38,6 +40,7 @@ class Cdp extends Model
      */
     protected $casts = [
         'date' => 'date',
+        'distribution' => 'array',
     ];
 
     /**
@@ -62,5 +65,21 @@ class Cdp extends Model
     public function document(): BelongsTo
     {
         return $this->belongsTo(Document::class);
+    }
+
+    /**
+     * Get the distribution commune names.
+     */
+    public function distributionCommunes(): Attribute
+    {
+        return Attribute::make(
+            get: fn (): array =>array_column($this->distribution, 'commune_name'),
+        );
+    }
+    public function distributionAmounts(): Attribute
+    {
+        return Attribute::make(
+            get: fn (): array =>array_column($this->distribution, 'amount'),
+        );
     }
 }

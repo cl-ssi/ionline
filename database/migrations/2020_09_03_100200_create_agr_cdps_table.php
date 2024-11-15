@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->date('date');
             $table->foreignId('program_id')->constrained('cfg_programs');
+            $table->json('distribution')->nullable();
             $table->foreignId('creator_id')->constrained('users');
             $table->foreignId('document_id')->nullable()->constrained('documents');
             $table->timestamps();

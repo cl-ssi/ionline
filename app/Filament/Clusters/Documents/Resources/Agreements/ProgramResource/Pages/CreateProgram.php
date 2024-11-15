@@ -9,4 +9,11 @@ use Filament\Resources\Pages\CreateRecord;
 class CreateProgram extends CreateRecord
 {
     protected static string $resource = ProgramResource::class;
+
+    protected function mutateFormDataBeforeCreate(array $data): array
+    {
+        $data['is_program'] = true;
+    
+        return $data;
+    }
 }
