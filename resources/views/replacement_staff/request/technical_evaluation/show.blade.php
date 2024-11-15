@@ -271,7 +271,7 @@
 </div>
 
 <h6 class="mt-3"><i class="fas fa-user"></i> Selección de RR.HH.</h6>
-@if($requestReplacementStaff->technicalEvaluation->technical_evaluation_status == 'complete' || $requestReplacementStaff->technicalEvaluation->technical_evaluation_status == 'rejected')
+@if($requestReplacementStaff->technicalEvaluation && ($requestReplacementStaff->technicalEvaluation->technical_evaluation_status == 'complete' || $requestReplacementStaff->technicalEvaluation->technical_evaluation_status == 'rejected'))
     <div class="table-responsive">
         <table class="table table-sm table-striped table-bordered">
             <thead class="text-center small">

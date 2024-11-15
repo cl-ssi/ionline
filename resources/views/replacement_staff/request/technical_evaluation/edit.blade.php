@@ -780,7 +780,7 @@
 </div>
 
 <!-- CUADRO DE ESTADO DE SOLICITUD -->
-@if($requestReplacementStaff->technicalEvaluation->technical_evaluation_status == 'complete' || $requestReplacementStaff->technicalEvaluation->technical_evaluation_status == 'rejected')
+@if($requestReplacementStaff->technicalEvaluation && ($requestReplacementStaff->technicalEvaluation->technical_evaluation_status == 'complete' || $requestReplacementStaff->technicalEvaluation->technical_evaluation_status == 'rejected'))
     <br>
     <div class="table-responsive">
         <table class="table table-sm table-bordered small">

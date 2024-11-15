@@ -489,10 +489,9 @@
                                     @endif
                                 <!-- PERMITE MOSTRAR EL BOTÓN PARA ASIGNAR SOLICITUD -->
                                 @elseif(($requestReplacementStaff->requestSign->last()->request_status == "accepted" ||
-                                    $requestReplacementStaff->signaturesFile && $requestReplacementStaff->signaturesFile->signaturesFlows->first()-> status == 1) &&
+                                    $requestReplacementStaff->signaturesFile && $requestReplacementStaff->signaturesFile->signaturesFlows->first()->status == 1) &&
                                         !$requestReplacementStaff->technicalEvaluation &&
                                             auth()->user()->hasPermissionTo('Replacement Staff: assign request'))
-
                                     <div class="form-check">
                                         <input class="form-check-input" 
                                             type="checkbox"
