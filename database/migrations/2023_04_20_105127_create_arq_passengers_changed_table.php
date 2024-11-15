@@ -16,7 +16,7 @@ class CreateArqPassengersChangedTable extends Migration
         Schema::create('arq_passengers_changed', function (Blueprint $table) {
             $table->id();
             $table->string('passenger_type')->nullable();
-            $table->foreignId('user_id')->nullable();
+            $table->foreignId('user_id')->nullable()->constrained('users');
             $table->string('run')->nullable();
             $table->char('dv',1)->nullable();
             $table->string('name')->nullable();
@@ -33,12 +33,8 @@ class CreateArqPassengersChangedTable extends Migration
             $table->string('baggage')->nullable();
             $table->float('unit_value', 15, 2)->nullable();
             $table->string('status');
-            $table->foreignId('passenger_id')->nullable();
-            $table->foreignId('budget_item_id')->nullable();
-
-            $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('passenger_id')->references('id')->on('arq_passengers');
-            $table->foreign('budget_item_id')->references('id')->on('cfg_budget_items');
+            $table->foreignId('passenger_id')->nullable()->constrained('arq_passengers');
+            $table->foreignId('budget_item_id')->nullable()->constrained('cfg_budget_items');
             $table->timestamps();
             $table->softDeletes();
         });

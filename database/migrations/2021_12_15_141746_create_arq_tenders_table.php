@@ -15,19 +15,39 @@ class CreateArqTendersTable extends Migration
     {
         Schema::create('arq_tenders', function (Blueprint $table) {
             $table->id();
-            $table->string('tender_type');
+            $table->foreignId('purchase_type_id')->default(13)->constrained('cfg_purchase_types');
+            $table->string('currency')->nullable();
             $table->string('tender_number')->nullable();
             $table->string('description');
-            $table->string('resol_administrative_bases');
+            $table->text('full_description')->nullable();
+            $table->boolean('is_lower_amount')->nullable();
+            $table->string('resol_administrative_bases')->nullable();
             $table->string('resol_adjudication')->nullable();
             $table->string('resol_deserted')->nullable();
             $table->string('resol_contract')->nullable();
             $table->string('guarantee_ticket')->nullable();
+            $table->date('guarantee_ticket_exp_date')->nullable();
+            $table->string('memo_number')->nullable();
             $table->boolean('has_taking_of_reason')->nullable();
+            $table->date('taking_of_reason_date')->nullable();
             $table->string('status');
             // $table->string('type_of_purchase');
 
             $table->foreignId('supplier_id')->nullable()->constrained('cfg_suppliers');
+            $table->dateTime('creation_date')->nullable();
+            $table->dateTime('closing_date')->nullable();
+            $table->dateTime('initial_date')->nullable();
+            $table->dateTime('final_date')->nullable();
+            $table->dateTime('pub_answers_date')->nullable();
+            $table->dateTime('opening_act_date')->nullable();
+            $table->dateTime('pub_date')->nullable(); 
+            $table->dateTime('grant_date')->nullable(); 
+            $table->dateTime('estimated_grant_date')->nullable(); 
+            $table->dateTime('field_visit_date')->nullable(); 
+            $table->integer('n_suppliers')->nullable(); 
+            $table->date('start_date')->nullable();
+            $table->integer('duration')->nullable();
+            $table->text('justification')->nullable();
 
             $table->timestamps();
             $table->SoftDeletes();
