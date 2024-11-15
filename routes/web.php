@@ -2236,9 +2236,9 @@ Route::prefix('pharmacies')->as('pharmacies.')->middleware(['auth', 'must.change
         Route::get('informe_movimientos', [App\Http\Controllers\Pharmacies\ProductController::class, 'repInformeMovimientos'])->name('informe_movimientos');
         Route::get('product_last_prices', [App\Http\Controllers\Pharmacies\ProductController::class, 'repProductLastPrices'])->name('product_last_prices');
         Route::get('consume_history', [App\Http\Controllers\Pharmacies\ProductController::class, 'repConsumeHistory'])->name('consume_history');
-
         Route::get('productsbybatch', [App\Http\Controllers\Pharmacies\ProductController::class, 'repProductByBatch'])->name('productsbybatch');
         Route::get('products', [App\Http\Controllers\Pharmacies\ProductController::class, 'repProduct'])->name('products');
+        Route::get('download_purchase_report', [App\Http\Controllers\Pharmacies\ProductController::class, 'downloadPurchaseReport'])->name('download_purchase_report');
     });
 });
 

@@ -16,6 +16,10 @@ use App\Models\Pharmacies\PurchaseItem;
 use App\Models\Pharmacies\Purchase;
 use Illuminate\Support\Facades\DB;
 
+use App\Exports\Pharmacies\PurchasesExport;
+use Maatwebsite\Excel\Facades\Excel;
+
+
 class ProductController extends Controller
 {
     /**
@@ -133,40 +137,54 @@ class ProductController extends Controller
         return view('pharmacies.reports.bincard', compact('matrix','request','products'));
     }
 
-    public function repPurchases(Request $request){
-      $fecha_inicio = $request->get('dateFrom');
-      $fecha_termino = $request->get('dateTo');
-      $supplier_id = $request->get('supplier_id');
-      $invoice = $request->get('invoice');
-      $acceptance_certificate = $request->get('acceptance_certificate');
-      $program = $request->get('program');
-      /*$purchaseItems= PurchaseItem::whereHas('purchase', function ($query) use ($supplier_id, $fecha_inicio,$fecha_termino,$invoice,$acceptance_certificate) {
-                                                    $query->whereBetween('date', [$fecha_inicio,$fecha_termino])
-                                                          ->when($supplier_id, function ($q, $supplier_id) {
-                                                               return $q->where('supplier_id', $supplier_id);
-                                                            })
-                                                          ->where('invoice', 'LIKE',"%$invoice%")
-                                                          ->where('acceptance_certificate', 'LIKE',"%$acceptance_certificate%");
-                                               })->paginate(15);*/
-      $purchases = Purchase::where('pharmacy_id',session('pharmacy_id'))
-                          ->whereBetween('date', [$fecha_inicio,$fecha_termino])
-                          ->when($supplier_id, function ($q, $supplier_id) {
-                               return $q->where('supplier_id', $supplier_id);
-                            })
-                          ->where('invoice', 'LIKE',"%$invoice%")
-                          ->where('id', 'LIKE',"%$acceptance_certificate%")
-                          ->whereHas('purchaseItems', function ($query) use ($program) {
-                             return $query->whereHas('product', function ($query) use ($program) {
-                                              return $query->whereHas('program', function ($query) use ($program) {
-                                                               return $query->where('name','LIKE',"%$program%");
-                                                             });
-                                            });
-                            })
-                          ->orderBy('id','DESC')->paginate(15);
+    public function repPurchases(Request $request)
+    {
+        $filters = [
+            'dateFrom' => $request->get('dateFrom', now()->startOfMonth()->format('Y-m-d')),
+            'dateTo' => $request->get('dateTo', now()->endOfMonth()->format('Y-m-d')),
+            'supplier_id' => $request->get('supplier_id', null),
+            'invoice' => $request->get('invoice', ''),
+            'acceptance_certificate' => $request->get('acceptance_certificate', ''),
+            'program' => $request->get('program', '')
+        ];
 
-      $suppliers = Supplier::where('pharmacy_id',session('pharmacy_id'))
-                           ->orderBy('name','ASC')->get();
-      return view('pharmacies.reports.purchase_report', compact('request','purchases','suppliers'));
+        $purchases = Purchase::query()
+            ->where('pharmacy_id', session('pharmacy_id'))
+            ->whereBetween('date', [$filters['dateFrom'], $filters['dateTo']])
+            ->when($filters['supplier_id'], function ($query, $supplier_id) {
+                return $query->where('supplier_id', $supplier_id);
+            })
+            ->where('invoice', 'LIKE', '%' . $filters['invoice'] . '%')
+            ->where('id', 'LIKE', '%' . $filters['acceptance_certificate'] . '%')
+            ->whereHas('purchaseItems', function ($query) use ($filters) {
+                $query->whereHas('product', function ($query) use ($filters) {
+                    $query->whereHas('program', function ($query) use ($filters) {
+                        $query->where('name', 'LIKE', '%' . $filters['program'] . '%');
+                    });
+                });
+            })
+            ->orderBy('id', 'DESC')
+            ->paginate(15);
+
+        $suppliers = Supplier::where('pharmacy_id', session('pharmacy_id'))
+                            ->orderBy('name', 'ASC')
+                            ->get();
+
+        return view('pharmacies.reports.purchase_report', compact('purchases', 'suppliers', 'filters'));
+    }
+
+    public function downloadPurchaseReport(Request $request)
+    {
+        $filters = [
+            'dateFrom' => $request->get('dateFrom', now()->startOfMonth()->format('Y-m-d')),
+            'dateTo' => $request->get('dateTo', now()->endOfMonth()->format('Y-m-d')),
+            'supplier_id' => $request->get('supplier_id', null),
+            'invoice' => $request->get('invoice', ''),
+            'acceptance_certificate' => $request->get('acceptance_certificate', ''),
+            'program' => $request->get('program', '')
+        ];
+
+        return Excel::download(new PurchasesExport($filters), 'informe_compras.xlsx');
     }
 
     public function repInformeMovimientos(Request $request){
