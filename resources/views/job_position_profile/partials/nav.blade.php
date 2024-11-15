@@ -30,7 +30,7 @@
     @can(['Job Position Profile: report'])
     <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
-            <i class="fas fa-id-badge fa-fw"></i> Reportes
+            <i class="fas fa-chart-bar fa-fw"></i> Reportes
         </a>
 
         <div class="dropdown-menu">
