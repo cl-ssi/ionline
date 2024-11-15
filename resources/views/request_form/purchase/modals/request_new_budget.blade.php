@@ -155,7 +155,8 @@
                                         <td>{{ $passenger->return_date ? $passenger->return_date->format('d-m-Y H:i') : '' }}</td>
                                         <td>{{ $passenger->baggageName }}</td>
                                         <td align="right">
-                                            <input type="number" class="form-control form-control-sm text-right" step="0.01" min="1" id="for_new_item_total" name="new_item_total[]" value="{{ old('new_item_total.'.$key, $passenger->unit_value) }}">
+                                            <!-- <input type="number" class="form-control form-control-sm text-right" step="0.01" min="1" id="for_new_item_total" name="new_item_total[]" value="{{ old('new_item_total.'.$key, $passenger->unit_value) }}"> -->
+                                            <input type="number" class="form-control form-control-sm text-right new-item-total" step="0.01" min="1" name="new_item_total[]" value="{{ old('new_item_total.'.$key, $passenger->unit_value) }}">
                                         </td>
                                     </tr>
                                     @endforeach

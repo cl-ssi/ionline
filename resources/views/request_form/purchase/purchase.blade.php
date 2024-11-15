@@ -1593,10 +1593,29 @@
         calculateNewAmount()
     });
 
-    //NEW BUDGET EVENTS FOR PASSENGERS
+    /*NEW BUDGET EVENTS FOR PASSENGERS
     $('#for_new_item_total').on('change keyup', function() {
         calculateNewAmount()
     });
+    */
+
+    // NEW BUDGET EVENTS FOR PASSENGERS
+    $(document).on('change keyup', '.new-item-total', function() {
+        calculateNewAmount();
+    });
+
+    // Function to calculate the total new amount
+    function calculateNewAmount() {
+        let totalAmount = 0;
+
+        // Iterate over all inputs with the class 'new-item-total'
+        $('.new-item-total').each(function() {
+            totalAmount += parseFloat($(this).val()) || 0;
+        });
+
+        // Update the total amount field
+        $('#total_new_amount').val(totalAmount.toFixed(2));
+    }
 
 </script>
 
