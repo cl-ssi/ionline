@@ -95,6 +95,7 @@ class RoleAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'Job Position Profile: create', 'description' => 'Permite crear la creación de perfiles de cargo']);
         Permission::create(['name' => 'Job Position Profile: edit', 'description' => 'Permite editar cualquier perfil de cargo']);
         Permission::create(['name' => 'Job Position Profile: review', 'description' => 'Permite realizar la revisión del perfil de cargo para aprobación']);
+        Permission::create(['name' => 'Job Position Profile: report', 'description' => 'Permite ingresar a los reportes del modulo']);
         Permission::create(['name' => 'LE Extra Plan: Carga', 'description' => '']);
         Permission::create(['name' => 'LE Extra Plan: Monitoreo', 'description' => '']);
         Permission::create(['name' => 'Mammography: admin', 'description' => 'Permite acceder a los resultados del booking de Mammography']);

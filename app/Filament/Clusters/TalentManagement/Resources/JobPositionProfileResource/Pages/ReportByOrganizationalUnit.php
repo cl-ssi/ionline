@@ -18,29 +18,30 @@ class ReportByOrganizationalUnit extends Page implements Tables\Contracts\HasTab
 
     protected static string $view = 'filament.clusters.talent-management.resources.job-position-profile-resource.pages.report-by-organizational-unit';
 
-    // public function getOrganizationalUnitsProfiles(){
-    //     return  OrganizationalUnit::whereHas('jobPositionProfiles')->get();
-    // }
+    protected static ?string $title = 'Reporte de perfiles de cargo por unidad organizacional';
+
 
     public function table(Tables\Table $table): Tables\Table
     {
         return $table
             ->query(function (Builder $query) {
-                $query = OrganizationalUnit::where('establishment_id', Parameter::get('establishment', 'SSTarapaca'));
-
-
-                return $query;
+                return OrganizationalUnit::query()
+                    ->withCount('jobPositionProfiles') // Cuenta los perfiles asociados
+                    // ->having('job_position_profiles_count', '>', 0)   // Incluye solo las unidades con al menos un perfil
+                    ->where('establishment_id', Parameter::get('establishment', 'SSTarapaca'));
             })
-            // ->query(fn() =>$this->getOrganizationalUnitsProfiles())
             ->columns([
-                Tables\Columns\TextColumn::make('id')
-                    ->label('ID ')
-                    ->sortable(),
                 Tables\Columns\TextColumn::make('name')
-                    ->label('Nombre ')
+                    ->label('Unidad Organizacional')
+                    ->formatStateUsing(function ($state, $record) {
+                        // Agrega guiones según el nivel de la unidad organizacional
+                        return str_repeat('-', $record->level) . ' ' . $state;
+                    }),
+                Tables\Columns\TextColumn::make('job_position_profiles_count')
+                    ->label('Cantidad de Perfiles de Cargo')
                     ->sortable(),
             ])
-
+            ->paginated(false)
             ->actions([
                 // Define aquí tus acciones
             ])
@@ -48,5 +49,4 @@ class ReportByOrganizationalUnit extends Page implements Tables\Contracts\HasTab
                 // Define aquí tus acciones en bloque
             ]);
     }
-
 }
