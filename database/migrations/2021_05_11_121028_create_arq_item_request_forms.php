@@ -20,9 +20,10 @@ class CreateArqItemRequestForms extends Migration
     {
         Schema::create('arq_item_request_forms', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('request_form_id');
-            $table->foreignId('budget_item_id')->nullable();
-            $table->string('article');
+            $table->foreignId('request_form_id')->constrained('arq_request_forms');
+            $table->foreignId('budget_item_id')->nullable()->constrained('cfg_budget_items');
+            $table->foreignId('product_id')->nullable()->constrained('unspsc_products');
+            $table->string('article', 255)->nullable();
             $table->string('unit_of_measurement');
             $table->float('quantity');
             $table->string('article_file')->nullable();
@@ -33,9 +34,6 @@ class CreateArqItemRequestForms extends Migration
             $table->enum('status', ['in_progress', 'total', 'partial', 'desert',  'timed_out', 'not_available']);
             $table->softDeletes();
             $table->timestamps();
-
-            $table->foreign('request_form_id')->references('id')->on('arq_request_forms');
-            $table->foreign('budget_item_id')->references('id')->on('cfg_budget_items');
         });
     }
     /**

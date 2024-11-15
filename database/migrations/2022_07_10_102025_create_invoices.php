@@ -15,13 +15,11 @@ class CreateInvoices extends Migration
     {
         Schema::create('arq_invoices', function (Blueprint $table) {
             $table->id();
-
             $table->string('number', 255)->unique()->nullable();
             $table->date('date')->nullable();
+            $table->decimal('amount')->nullable();
             $table->text('url')->nullable();
-
             $table->foreignId('control_id')->nullable()->constrained('wre_controls');
-
             $table->timestamps();
             $table->softDeletes();
         });

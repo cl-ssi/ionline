@@ -18,7 +18,8 @@ class CreateArqAttachedFilesTable extends Migration
             $table->string('file');
             $table->string('document_type')->nullable();
             $table->foreignId('tender_id')->nullable()->constrained('arq_tenders');
-
+            $table->foreignId('immediate_purchase_id')->nullable()->constrained('arq_immediate_purchases');
+            $table->foreignId('direct_deal_id')->nullable()->constrained('arq_direct_deals');
             $table->timestamps();
             $table->softDeletes();
         });

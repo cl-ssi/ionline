@@ -15,11 +15,9 @@ class CreateArqPurchaseOrders extends Migration
     {
         Schema::create('arq_purchase_orders', function (Blueprint $table) {
             $table->id();
-
             $table->string('code', 255)->nullable();
             $table->timestamp('date')->nullable();
             $table->json('data')->nullable();
-
             $table->timestamps();
             $table->softDeletes();
         });

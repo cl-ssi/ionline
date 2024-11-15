@@ -15,9 +15,9 @@ class CreateArqEventRequestForms extends Migration
     {
         Schema::create('arq_event_request_forms', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('request_form_id');
-            $table->foreignId('signer_user_id')->nullable();
-            $table->foreignId('ou_signer_user')->nullable();
+            $table->foreignId('request_form_id')->constrained('arq_request_forms');
+            $table->foreignId('signer_user_id')->nullable()->constrained('users');
+            $table->foreignId('ou_signer_user')->nullable()->constrained('organizational_units');
             $table->string('position_signer_user')->nullable();
             $table->unsignedInteger('cardinal_number')->nullable();
             $table->enum('status', ['approved', 'rejected', 'pending']);
@@ -25,10 +25,8 @@ class CreateArqEventRequestForms extends Migration
             $table->longText('comment')->nullable();
             $table->foreignId('purchaser_id')->nullable()->constrained('users');
             $table->float('purchaser_amount', 15, 2)->nullable();
+            $table->text('purchaser_observation')->nullable();
             $table->dateTime('signature_date', $precision = 0)->nullable();
-            $table->foreign('signer_user_id')->references('id')->on('users');
-            $table->foreign('ou_signer_user')->references('id')->on('organizational_units');
-            $table->foreign('request_form_id')->references('id')->on('arq_request_forms');
             $table->timestamps();
             $table->softDeletes();
         });
