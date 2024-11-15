@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Filament\Clusters\TalentManagement\Resources\Clusters;
+namespace App\Filament\Clusters\TalentManagement\Resources;
 
 use App\Filament\Clusters\TalentManagement;
-use App\Filament\Clusters\TalentManagement\Resources\Clusters\TalentManagementResource\Pages;
-use App\Filament\Clusters\TalentManagement\Resources\Clusters\TalentManagementResource\RelationManagers;
+use App\Filament\Clusters\TalentManagement\Resources\JobPositionProfileResource\Pages;
+use App\Filament\Clusters\TalentManagement\Resources\JobPositionProfileResource\RelationManagers;
 use App\Models\JobPositionProfiles\JobPositionProfile;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -14,7 +14,7 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class TalentManagementResource extends Resource
+class JobPositionProfileResource extends Resource
 {
     protected static ?string $model = JobPositionProfile::class;
 
@@ -38,7 +38,6 @@ class TalentManagementResource extends Resource
                     ->label('ID')
                     ->sortable()
                     ->searchable(),
-
                 Tables\Columns\BadgeColumn::make('status')
                     ->label('Estado')
                     ->getStateUsing(function ($record) {
@@ -146,9 +145,10 @@ class TalentManagementResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListTalentManagement::route('/'),
-            'create' => Pages\CreateTalentManagement::route('/create'),
-            'edit' => Pages\EditTalentManagement::route('/{record}/edit'),
+            'index' => Pages\ListJobPositionProfiles::route('/'),
+            'create' => Pages\CreateJobPositionProfile::route('/create'),
+            'edit' => Pages\EditJobPositionProfile::route('/{record}/edit'),
+            'report-by-organizational-unit' => Pages\ReportByOrganizationalUnit::route('/report-by-organizational-unit'),
         ];
     }
 }
