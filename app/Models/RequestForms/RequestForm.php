@@ -4,10 +4,12 @@ namespace App\Models\RequestForms;
 
 use App\Models\Finance\Cdp;
 use App\Observers\RequestForms\RequestFormObserver;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 use OwenIt\Auditing\Contracts\Auditable;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
@@ -360,6 +362,36 @@ class RequestForm extends Model implements Auditable
     {
         return $this->hasOne(Cdp::class);
     }
+
+    /**
+     * Get the treasury model.
+     */
+    public function treasury(): MorphOne
+    {
+        return $this->morphOne(Treasury::class, 'treasureable');
+    }
+
+    protected function treasuryId(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->id,
+        );
+    }
+
+    protected function treasurySubject(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->type_form,
+        );
+    }
+
+    protected function modelName(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => 'Formulario de Requerimiento',
+        );
+    }
+
 
     // FIXME: corregir este código
     public function isBlocked()

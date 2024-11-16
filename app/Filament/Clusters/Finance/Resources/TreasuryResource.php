@@ -13,8 +13,14 @@ use Filament\Pages\SubNavigationPosition;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Filament\Forms\Get;
+use Filament\Forms\Set;
+use Illuminate\Support\HtmlString;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+
 
 class TreasuryResource extends Resource
 {
@@ -34,76 +40,98 @@ class TreasuryResource extends Resource
     {
         return $form
             ->schema([
+                Forms\Components\Fieldset::make('DTE')
+                    ->relationship('treasureable')
+                    ->schema([
+                        Forms\Components\Placeholder::make('Dte Id')
+                            ->content(fn(Get $get): string => $get('id') ?? ''),
+                        Forms\Components\Placeholder::make('Tipo de Documento')
+                            ->content(fn(Get $get): string => $get('tipo_documento') ?? ''),
+                        Forms\Components\Placeholder::make('Razon Social')
+                            ->content(fn(Get $get, Set $set): string => $get('razon_social_emisor') ?? ''),
+                        // Forms\Components\Placeholder::make('Emisor')
+                        //     ->content(fn(Model $record): string => ($record->) ?? ''),
+                        Forms\Components\Placeholder::make('Orden de Compra')
+                            ->content(fn(Model $record): string => $record->folio_oc?(!$record->purchaseOrder?$record->folio_oc:$record->folio_oc . ' ('. $record->purchaseOrder->json->Listado[0]->Estado . ')'):''  ),
+                        Forms\Components\Placeholder::make('Folio Compromiso Sigfe')
+                            ->content(fn(Get $get): string => $get('folio_compromiso_sigfe') ?? ''),
+                        Forms\Components\Placeholder::make('Archivo Compromiso Sigfe')                        
+                            ->content(fn(Model $record) => ($record->archivo_compromiso_sigfe)?(new HtmlString('<a href="' . Storage::disk()->url($record->archivo_compromiso_sigfe) . '"   target="_blank">Descargar</a>')):''),
+                        Forms\Components\Placeholder::make('Folio Devengo Sigfe')
+                            ->content(fn(Get $get): string => $get('folio_devengo_sigfe') ?? ''),
+                        Forms\Components\Placeholder::make('Archivo Devengo Sigfe')                        
+                            ->content(fn(Model $record) => ($record->archivo_devengo_sigfe)?(new HtmlString('<a href="' . Storage::disk()->url($record->archivo_devengo_sigfe) . '"   target="_blank">Descargar</a>')):''),
+                        
+                    ])
+                    ->columns(4)
+                    ->visible(fn (Model $record) => $record->treasureable_type == 'App\Models\Finance\Dte'),
+                Forms\Components\Fieldset::make('Abastecimiento')
+                    ->relationship('treasureable')
+                    ->schema([
+                        Forms\Components\Placeholder::make('Dte Id')
+                            ->content(fn(Get $get): string => $get('id') ?? ''),
+                        Forms\Components\Placeholder::make('Tipo de Documento')
+                            ->content(fn(Get $get): string => $get('tipo_documento') ?? ''),
+                        Forms\Components\Placeholder::make('Razon Social')
+                            ->content(fn(Get $get): string => $get('razon_social_emisor') ?? ''),
+                        // Forms\Components\Placeholder::make('Emisor')
+                        //     ->content(fn(Model $record): string => ($record->) ?? ''),
+                        Forms\Components\Placeholder::make('Orden de Compra')
+                            ->content(fn(Model $record): string => $record->folio_oc?(!$record->purchaseOrder?$record->folio_oc:$record->folio_oc . ' ('. $record->purchaseOrder->json->Listado[0]->Estado . ')'):''  ),
+                        Forms\Components\Placeholder::make('Folio Compromiso Sigfe')
+                            ->content(fn(Get $get): string => $get('folio_compromiso_sigfe') ?? ''),
+                        Forms\Components\Placeholder::make('Archivo Compromiso Sigfe')                        
+                            ->content(fn(Model $record) => ($record->archivo_compromiso_sigfe)?(new HtmlString('<a href="' . Storage::disk()->url($record->archivo_compromiso_sigfe) . '"   target="_blank">Descargar</a>')):''),
+                        Forms\Components\Placeholder::make('Folio Devengo Sigfe')
+                            ->content(fn(Get $get): string => $get('folio_devengo_sigfe') ?? ''),
+                        Forms\Components\Placeholder::make('Archivo Devengo Sigfe')                        
+                            ->content(fn(Model $record) => ($record->archivo_devengo_sigfe)?(new HtmlString('<a href="' . Storage::disk()->url($record->archivo_devengo_sigfe) . '"   target="_blank">Descargar</a>')):''),
+                        
+                    ])
+                    ->columns(4)
+                    ->visible(fn (Model $record) => false),
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('description')
-                    ->required()
+                    ->hidden()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('treasureable_type')
                     ->required()
+                    ->hidden()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('treasureable_id')
                     ->required()
+                    ->hidden()
                     ->numeric(),
-                Forms\Components\TextInput::make('resolution_folio')
-                    ->label('Folio Resolucion')
-                    ->maxLength(255),
-                Forms\Components\DatePicker ::make('resolution_date')
-                    ->label('Fecha Resolucion'),
-                // Forms\Components\TextInput::make('resolution_file')
-                //     ->label('Archivo Resolucion')
-                //     ->maxLength(255),
-                Forms\Components\TextInput::make('commitment_folio_sigfe')
-                    ->label('Folio Compromiso Sigfe')
-                    ->maxLength(255),
-                Forms\Components\DatePicker::make('commitment_date_sigfe')
-                    ->label('Fecha Compromiso Sigfe'),
-                // Forms\Components\TextInput::make('commitment_file_sigfe')
-                //     ->label('Archivo Compromiso Sigfe')
-                //     ->maxLength(255),
-                Forms\Components\TextInput::make('accrual_folio_sigfe')
-                    ->label('Folio Devengo Sigfe')
-                    ->maxLength(255),
-                Forms\Components\DatePicker::make('accrual_date_sigfe')
-                    ->label('Fecha Devengo Sigfe'),
-                // Forms\Components\TextInput::make('accrual_file_sigfe')
-                //     ->label('Archivo Devengo Sigfe')
-                //     ->maxLength(255),
+               
                 Forms\Components\DatePicker::make('bank_receipt_date')
                     ->label('Fecha Comprobante Bancario'),
-                // Forms\Components\TextInput::make('bank_receipt_file')
-                //     ->label('Archivo Comprobante Bancario')
-                //     ->maxLength(255),
-                Forms\Components\Repeater::make('SupportFile')
-                    ->relationship('supportFile')
-                    ->label('Archivo')
-                    ->schema([
-                        Forms\Components\Select::make('type')
-                            ->label('Tipo')
-                            ->options([
-                                'resolution_file' => 'Resolución',
-                                'commitment_file_sigfe' => 'Compromiso Sigfe',
-                                'accrual_file_sigfe' => 'Devengo Sigfe',
-                                'bank_receipt_file' => 'Comprobante Bancario',
-                            ])
-                            ->required(),
-                        Forms\Components\FileUpload::make('storage_path')
-                            ->label('Archivo')
-                            ->directory('ionline/finances/treasuries/support_documents')
-                            ->storeFileNamesIn('name')
-                            ->acceptedFileTypes(['application/pdf'])
-                            ->afterStateUpdated(function ($state, $set) {
-                                if ($state) {
-                                    $set('supportFile.type', $state);
-                                }
-                            })
-                            ->required(),
-                    ])
-                    ->defaultItems(0)
-                    ->columns(2)
-                    ->maxItems(4)
-                    ->columnSpanFull(),
+                Forms\Components\Placeholder::make('bank_receipt_file')
+                    ->hidden(fn(Model $record)=>is_null($record->bankReceiptFile?->storage_path))
+                    ->content(fn(Model $record, Get $get) => ($record->bankReceiptFile?->storage_path)?(new HtmlString('<a href="' . Storage::disk()->url($record->bankReceiptFile?->storage_path) . '"   target="_blank">' . $get('bank_receipt_file') . '</a>')):''),
+                Forms\Components\FileUpload::make('bankReceiptFile')
+                    ->visible(fn(Model $record)=>is_null($record->bankReceiptFile?->storage_path))
+                    ->label('Comprobante Bancario')
+                    ->directory('ionline/finances/treasuries/support_documents')
+                    ->storeFileNamesIn('bank_receipt_file')
+                    ->acceptedFileTypes(['application/pdf']),
+                // Forms\Components\Placeholder::make('third_parties_file')
+                //     ->hidden(fn(Model $record)=>is_null($record->thirdPartiesFile?->storage_path))
+                //     ->content(function(Model $record, Get $get){
+                //         if($record->thirdPartiesFile?->storage_path){
+                //             return new HtmlString('<a href="' . Storage::disk()->url($record->thirdPartiesFile->storage_path) . '"   target="_blank" class="btn btn-primary btn-sm">' . ($get('third_parties_file') . '</a>'));
+                //         }
+                //         else{
+                //             return new HtmlString('<i> Sin archivo </i>');
+                //         }
+                //     }),
+                // Forms\Components\FileUpload::make('thirdPartiesFile')
+                //     ->visible(fn(Model $record)=>is_null($record->thirdPartiesFile?->storage_path))
+                //     ->label('Pago a Terceros')
+                //     ->directory('ionline/finances/treasuries/support_documents')
+                //     ->storeFileNamesIn('third_parties_file')
+                //     ->acceptedFileTypes(['application/pdf']),
             ]);
     }
 
@@ -111,59 +139,16 @@ class TreasuryResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('name')
-                    ->label('Nombre')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('description')
-                    ->label('Descripcion')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('treasureable.treasurySubject')
+                Tables\Columns\TextColumn::make('treasureable.modelName')
                     ->label('Asunto')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('treasureable.modelName')
+                Tables\Columns\TextColumn::make('treasureable.treasuryId')
+                    ->label('ID')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('treasureable.treasurySubject')
                     ->label('Tipo')
                     ->searchable(),
-                
-                // Tables\Columns\TextColumn::make('treasuryable_id')
-                //     ->numeric()
-                //     ->sortable(),
-                Tables\Columns\TextColumn::make('resolution_folio')
-                    ->label('Folio Resolucion')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('resolution_date')
-                    ->label('Fecha Resolucion')
-                    ->dateTime()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('resolution_file')
-                    ->label('Archivo Resolucion')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('commitment_folio_sigfe')
-                    ->label('Folio Compromiso Sigfe')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('commitment_date_sigfe')
-                    ->label('Fecha Compromiso Sigfe')
-                    ->dateTime()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('commitment_file_sigfe')
-                    ->label('Archivo Compromiso Sigfe')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('accrual_folio_sigfe')
-                    ->label('Folio Devengo Sigfe')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('accrual_date_sigfe')
-                    ->label('Fecha Devengo Sigfe')
-                    ->dateTime()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('accrual_file_sigfe')
-                    ->label('Archivo Devengo Sigfe')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('bank_receipt_date')
-                    ->label('Fecha Comprobante Bancario')
-                    ->dateTime()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('bank_receipt_file')
-                    ->label('Archivo Comprobante Bancario')
-                    ->searchable(),
+
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
