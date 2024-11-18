@@ -8,16 +8,13 @@ use Illuminate\Auth\Access\Response;
 
 class JobPositionProfilePolicy
 {
-    /*
+    /**
      * Perform pre-authorization checks.
-     * For administrative purposes, the user with the 'be god' ability can do anything.
-     * If null is returned, the authorization check will fall through to the policy method
-     
-    public function before(User $user): ?bool
+     */
+    public function before(User $user, string $ability): bool|null
     {
         return $user->can('be god') ? true : null;
     }
-    */
 
     /**
      * Determine whether the user can view any models.

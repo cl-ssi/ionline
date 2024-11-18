@@ -17,19 +17,12 @@ use Filament\Tables;
 class ReportByOrganizationalUnit extends Page implements Tables\Contracts\HasTable
 {
     use Tables\Concerns\InteractsWithTable;
+
     protected static string $resource = JobPositionProfileResource::class;
 
     protected static string $view = 'filament.clusters.talent-management.resources.job-position-profile-resource.pages.report-by-organizational-unit';
 
     protected static ?string $title = 'Reporte de perfiles de cargo por unidad organizacional';
-
-    public function getTabs(): array
-    {
-        return [
-            'all' => Tab::make(),
-
-        ];
-    }
 
     public function table(Tables\Table $table): Tables\Table
     {
@@ -53,17 +46,14 @@ class ReportByOrganizationalUnit extends Page implements Tables\Contracts\HasTab
             ])
             ->paginated(false)
             ->filters(filters: [
-                Tables\Filters\SelectFilter::make('ouCreator')
-                ->relationship(name: 'creator', titleAttribute: 'name')
-                    // ->options(
-                    //     ApprovalStep::whereRelation('approvalFlow', 'class', 'App\Models\JobPositionProfiles\JobPositionProfile')
-                    //         ->orderBy('order')
-                    //         ->with('organizationalUnit')
-                    //         ->get()
-                    //         ->pluck('organizationalUnit.name', 'id')
-                    // )
-                    // ->query(fn(Builder $query): Builder => $query->where('is_featured', true))
-                // Define aquí tus acciones
+                Tables\Filters\SelectFilter::make('id')
+                    ->options(
+                        ApprovalStep::whereRelation('approvalFlow', 'class', 'App\Models\JobPositionProfiles\JobPositionProfile')
+                            ->orderBy('order')
+                            ->with('organizationalUnit')
+                            ->get()
+                            ->pluck('organizationalUnit.name', 'organizationalUnit.id')
+                    )
             ], layout: FiltersLayout::AboveContent)
             ->actions([
                 // Define aquí tus acciones
