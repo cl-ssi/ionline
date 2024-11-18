@@ -37,8 +37,16 @@ class Treasury extends Model
     /**
      * Get support file, archivo de respaldo.
      */
-    public function supportFile(): MorphOne
+    public function thirdPartiesFile(): MorphOne
     {
-        return $this->morphOne(File::class, 'fileable')->where('type', 'support_file');
+        return $this->morphOne(File::class, 'fileable')->where('type', 'third_parties_file');
+    }
+ 
+    /**
+     * Get support file, archivo de respaldo.
+     */
+    public function bankReceiptFile(): MorphOne
+    {
+        return $this->morphOne(File::class, 'fileable')->where('type', 'bank_receipt_file');
     }
 }

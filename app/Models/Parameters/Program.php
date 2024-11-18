@@ -62,6 +62,9 @@ class Program extends Model implements Auditable
     protected $casts = [
         'start_date' => 'date',
         'end_date' => 'date',
+        'ministerial_resolution_date' => 'date',
+        'resource_distribution_date' => 'date',
+        'is_program' => 'boolean',
     ];
 
     /**

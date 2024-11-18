@@ -4,7 +4,7 @@
 
 @section('content')
 
- @include('trainings.partials.nav')
+@include('trainings.partials.nav')
 
 <div class="row">
     <div class="col-sm-5">

@@ -2,6 +2,7 @@
 
 namespace App\Filament\Clusters\Documents\Resources\Agreements\ProgramResource\RelationManagers;
 
+use App\Models\ClCommune;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
@@ -22,6 +23,18 @@ class CdpsRelationManager extends RelationManager
             ->schema([
                 Forms\Components\DatePicker::make('date')
                     ->required(),
+                Forms\Components\Repeater::make('distribution')
+                    ->schema([
+                        Forms\Components\Select::make('commune_name')
+                            ->options(ClCommune::pluck('name', 'name')->toArray())
+                            ->searchable()
+                            ->required(),
+                        Forms\Components\TextInput::make('amount')
+                            ->required(),
+                    ])
+                    ->columnSpanFull()
+                    ->reorderable(false)
+                    ->columns(2)
             ]);
     }
 
@@ -32,7 +45,12 @@ class CdpsRelationManager extends RelationManager
             ->columns([
                 Tables\Columns\TextColumn::make('date')
                     ->date('Y-m-d'),
-                Tables\Columns\TextColumn::make('creator.shortName'),
+                Tables\Columns\TextColumn::make('distributionCommunes')
+                    ->label('Distribución Comunas')
+                    ->bulleted(),
+                Tables\Columns\TextColumn::make('distributionAmounts')
+                    ->label('Montos')
+                    ->bulleted(),
             ])
             ->filters([
                 //
