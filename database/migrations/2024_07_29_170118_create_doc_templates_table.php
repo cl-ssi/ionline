@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('doc_templates', function (Blueprint $table) {
             $table->id();
-            $table->string('key');
+            $table->string('key')->nullable();
             $table->string('title');
             $table->text('content');
             $table->nullableMorphs('templateable');
