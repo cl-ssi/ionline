@@ -76,6 +76,7 @@ class Cdp extends Model
             get: fn (): array =>array_column($this->distribution, 'commune_name'),
         );
     }
+
     public function distributionAmounts(): Attribute
     {
         return Attribute::make(
