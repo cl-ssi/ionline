@@ -5,6 +5,8 @@ use App\Filament\Clusters\TalentManagement;
 use App\Filament\Clusters\TalentManagement\Resources\JobPositionProfileResource;
 use App\Filament\Clusters\TalentManagement\Resources\TalentManagementResource;
 use App\Models\Parameters\Parameter;
+use Filament\Resources\Components\Tab;
+use Filament\Tables\Enums\FiltersLayout;
 use App\Models\Rrhh\OrganizationalUnit;
 use Filament\Resources\Pages\Page;
 use Illuminate\Database\Eloquent\Builder;
@@ -20,6 +22,13 @@ class ReportByOrganizationalUnit extends Page implements Tables\Contracts\HasTab
 
     protected static ?string $title = 'Reporte de perfiles de cargo por unidad organizacional';
 
+    public function getTabs(): array
+    {
+        return [
+            'all' => Tab::make(),
+
+        ];
+    }
 
     public function table(Tables\Table $table): Tables\Table
     {
@@ -42,6 +51,15 @@ class ReportByOrganizationalUnit extends Page implements Tables\Contracts\HasTab
                     ->sortable(),
             ])
             ->paginated(false)
+            ->filters(filters: [
+                Tables\Filters\SelectFilter::make('status')
+                    ->options([
+                        'draft' => 'Draft',
+                        'reviewing' => 'Reviewing',
+                        'published' => 'Published',
+                    ])
+                // Define aquí tus acciones
+            ], layout: FiltersLayout::AboveContent)
             ->actions([
                 // Define aquí tus acciones
             ])
