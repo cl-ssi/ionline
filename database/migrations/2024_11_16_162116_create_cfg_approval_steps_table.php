@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('cfg_approval_steps', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('approval_flow_id')->constrained();
+            $table->foreignId('approval_flow_id')->constrained('cfg_approval_flows');
             $table->unsignedSmallInteger('order');
             $table->foreignId('organizational_unit_id')->constrained();
             $table->timestamps();
