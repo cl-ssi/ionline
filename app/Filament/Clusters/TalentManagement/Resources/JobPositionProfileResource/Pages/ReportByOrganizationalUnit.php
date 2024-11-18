@@ -5,6 +5,7 @@ use App\Filament\Clusters\TalentManagement;
 use App\Filament\Clusters\TalentManagement\Resources\JobPositionProfileResource;
 use App\Filament\Clusters\TalentManagement\Resources\TalentManagementResource;
 use App\Models\Parameters\Parameter;
+use App\Models\Parameters\ApprovalStep;
 use Filament\Resources\Components\Tab;
 use Filament\Tables\Enums\FiltersLayout;
 use App\Models\Rrhh\OrganizationalUnit;
@@ -52,12 +53,16 @@ class ReportByOrganizationalUnit extends Page implements Tables\Contracts\HasTab
             ])
             ->paginated(false)
             ->filters(filters: [
-                Tables\Filters\SelectFilter::make('status')
-                    ->options([
-                        'draft' => 'Draft',
-                        'reviewing' => 'Reviewing',
-                        'published' => 'Published',
-                    ])
+                Tables\Filters\SelectFilter::make('ouCreator')
+                ->relationship(name: 'creator', titleAttribute: 'name')
+                    // ->options(
+                    //     ApprovalStep::whereRelation('approvalFlow', 'class', 'App\Models\JobPositionProfiles\JobPositionProfile')
+                    //         ->orderBy('order')
+                    //         ->with('organizationalUnit')
+                    //         ->get()
+                    //         ->pluck('organizationalUnit.name', 'id')
+                    // )
+                    // ->query(fn(Builder $query): Builder => $query->where('is_featured', true))
                 // Define aquí tus acciones
             ], layout: FiltersLayout::AboveContent)
             ->actions([
