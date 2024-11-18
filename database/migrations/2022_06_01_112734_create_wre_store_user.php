@@ -15,12 +15,11 @@ class CreateWreStoreUser extends Migration
     {
         Schema::create('wre_store_user', function (Blueprint $table) {
             $table->id();
-
             $table->foreignId('store_id')->nullable()->constrained('wre_stores');
             $table->foreignId('user_id')->nullable()->constrained('users');
             $table->foreignId('role_id')->nullable()->constrained('roles');
             $table->boolean('status')->nullable();
-
+            $table->boolean('is_visator')->after('status')->default(0);
             $table->timestamps();
         });
     }

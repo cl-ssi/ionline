@@ -15,18 +15,16 @@ class CreateWreControlItems extends Migration
     {
         Schema::create('wre_control_items', function (Blueprint $table) {
             $table->id();
-
             $table->integer('quantity')->nullable();
             $table->integer('balance')->nullable();
             $table->boolean('confirm')->nullable();
             $table->integer('correlative_po')->nullable();
-            $table->float('unit_price')->nullable();
-
+            $table->boolean('inventory')->nullable();
+            $table->decimal('unit_price', 16, 2);
             $table->foreignId('control_id')->nullable()->constrained('wre_controls');
             $table->foreignId('program_id')->nullable()->constrained('cfg_programs');
             $table->foreignId('product_id')->nullable()->constrained('wre_products');
             $table->foreignId('unit_id')->nullable()->constrained('wre_units');
-
             $table->timestamps();
             $table->softDeletes();
         });
