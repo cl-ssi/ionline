@@ -15,19 +15,9 @@ class CreateInvEstablishmentUser extends Migration
     {
         Schema::create('inv_establishment_user', function (Blueprint $table) {
             $table->id();
-
-            $table->foreignId('establishment_id')
-                ->nullable()
-                ->constrained('establishments');
-
-            $table->foreignId('user_id')
-                ->nullable()
-                ->constrained('users');
-
-            $table->foreignId('role_id')
-                ->nullable()
-                ->constrained('roles');
-
+            $table->foreignId('establishment_id')->nullable()->constrained('establishments');
+            table->foreignId('user_id')->nullable()->constrained('users');
+            $table->foreignId('role_id')->nullable()->constrained('roles');
             $table->timestamps();
         });
     }
