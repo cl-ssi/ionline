@@ -31,25 +31,42 @@ class AttendanceRecordResource extends Resource
     {
         return $form
             ->schema([
-                // Este campo no se almacena, solo informativo, en el AttendanceRecordObserver se asigna el valor
-                Forms\Components\DateTimePicker::make('current_time')
-                    ->label('Fecha y hora')
-                    ->default(now())
-                    ->disabled(),
-                Forms\Components\Select::make('type')
-                    ->label('Tipo')
-                    ->options([
-                        1 => 'Entrada',
-                        0 => 'Salida',
-                    ])
-                    ->required(),
-                Forms\Components\TextInput::make('observation')
-                    ->label('Observación')
-                    ->maxLength(255)
-                    ->default(null)
-                    ->columnSpan(2),
-            ])
-            ->columns(4);
+                Forms\Components\Grid::make(4)
+                    ->schema([
+                        // Este campo no se almacena, solo informativo, en el AttendanceRecordObserver se asigna el valor
+                        Forms\Components\DateTimePicker::make('current_time')
+                            ->label('Fecha y hora')
+                            ->default(now())
+                            ->disabled(),
+                        Forms\Components\Select::make('verification')
+                            ->label('Medio de verificación')
+                            ->options([
+                                'iOnline'  => 'iOnline',
+                                'Finger'   => 'Huella',
+                                'Password' => 'Contraseña',
+                            ])
+                            ->default('iOnline')
+                            ->required()
+                            ->disabled()
+                            ->dehydrated(),
+                    ]),
+                Forms\Components\Grid::make(4)
+                    ->schema([
+                        Forms\Components\Select::make('type')
+                            ->label('Tipo')
+                            ->options([
+                                1 => 'Entrada',
+                                0 => 'Salida',
+                            ])
+                            ->required(),
+                        Forms\Components\TextInput::make('observation')
+                            ->label('Observación')
+                            ->maxLength(255)
+                            ->default(null)
+                            ->columnSpan(3),
+                    ]),
+
+            ]);
     }
 
     public static function table(Table $table): Table
@@ -63,6 +80,7 @@ class AttendanceRecordResource extends Resource
                 Tables\Columns\TextColumn::make('record_at')
                     ->label('Fecha y hora')
                     ->dateTime('Y-m-d H:i')
+                    ->wrap()
                     ->sortable(),
                 Tables\Columns\IconColumn::make('type')
                     ->label('Tipo')
@@ -71,6 +89,11 @@ class AttendanceRecordResource extends Resource
                     ->boolean(),
                 Tables\Columns\TextColumn::make('observation')
                     ->label('Observación')
+                    ->wrap()
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('verification')
+                    ->label('Medio')
+                    ->badge()
                     ->searchable(),
                 Tables\Columns\TextColumn::make('sirh_at')
                     ->date('Y-m-d H:i')
@@ -98,6 +121,16 @@ class AttendanceRecordResource extends Resource
                 Tables\Filters\TernaryFilter::make('sirh_at')
                     ->label('Sirh OK')
                     ->nullable()
+                    ->visible(fn () => auth()->user()->canAny(['be god', 'Attendance records: admin'])),
+                Tables\Filters\SelectFilter::make('verification')
+                    ->label('Medio de verificación')
+                    ->options(
+                        [
+                            'iOnline'  => 'iOnline',
+                            'Finger'   => 'Huella',
+                            'Password' => 'Contraseña',
+                        ]
+                    )
                     ->visible(fn () => auth()->user()->canAny(['be god', 'Attendance records: admin'])),
             ])
             ->actions([
