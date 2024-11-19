@@ -4,7 +4,7 @@
 
 <h3 class="mb-3">Nueva Solicitud de Evaluación de Idoneidad Psicológica para {{ $school->name ?? ''}}</h3>
 <h6 class="mb-3"><strong>Recordar revisar el Historico de Solicitudes en "Mis Solitudes" antes de generar una nueva</strong></h6>
-<h6 class="mb-3"><strong>Para personas que ingresaron a trabajar antes del 01-03-2009 NO se le debe generar solicitud de idoneidad</strong></h6>
+<h6 class="mb-3"><strong>Para personas que ingresaron a trabajar antes del 01-03-2014 NO se le debe generar solicitud de idoneidad</strong></h6>
 
 
 
@@ -67,7 +67,7 @@
 
         <fieldset class="form-group col-6">
             <label for="for_start_date">Fecha de Ingreso*</label>
-            <input type="date" class="form-control" id="for_start_date" placeholder="" name="start_date" min="2009-03-01" max="{{Carbon\Carbon::now()->toDateString()}}" required="">
+            <input type="date" class="form-control" id="for_start_date" placeholder="" name="start_date" min="2014-03-01" max="{{Carbon\Carbon::now()->toDateString()}}" required="">
         </fieldset>
     </div>
 
