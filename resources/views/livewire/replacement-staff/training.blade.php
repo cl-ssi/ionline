@@ -10,7 +10,7 @@
         @csrf
         @method('POST')
         @foreach($inputs as $key => $value)
-            <div class="form-row">
+            <div class="form-row" wire:key="input-{{ $key }}">
                 <fieldset class="form-group col-md-5">
                     <label for="for_training_name">Nombre Capacitación</label>
                     <input type="text" class="form-control" name="training_name[]" placeholder="" required>
@@ -23,8 +23,8 @@
 
                 <fieldset class="form-group col mt">
                     <div class="mb-3">
-                      <label for="forFile" class="form-label">Certificado de Capacitación</label>
-                      <input class="form-control" type="file" name="file[]" accept="application/pdf" required>
+                    <label for="forFile" class="form-label">Certificado de Capacitación</label>
+                    <input class="form-control" type="file" name="file[]" accept="application/pdf" required>
                     </div>
                 </fieldset>
 
@@ -35,10 +35,7 @@
             </div>
             <hr>
         @endforeach
-
-        @if($count>0)
-        <button type="submit" class="btn btn-primary float-right">Guardar</button>
-        @endif
-
-    </div>
+        
+        <button type="submit" class="btn btn-primary float-right" @if($count > 0) enabled @else disabled @endif>Guardar</button>
+    </form>
 </div>
