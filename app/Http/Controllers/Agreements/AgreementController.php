@@ -10,7 +10,7 @@ use App\Models\Agreements\AgreementAmount;
 use App\Models\Agreements\AgreementQuota;
 use App\Models\Agreements\Signer;
 use App\Models\Commune;
-use App\Models\Parameters\Municipality;
+use App\Models\Municipality;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -398,7 +398,7 @@ class AgreementController extends Controller
             //visadores por cadena de responsabilidad en orden parte primero por el referente tecnico
             // $visadores = collect([
             //                 ['ou_id' => 12, 'user_id' => 15005047] // DEPTO. ATENCION PRIMARIA DE SALUD - ANA MARIA MUJICA
-            //                 ['ou_id' => 61, 'user_id' => 12834358], // DEPTO.ASESORIA JURIDICA  - LUIS MUENA BUGEÑO
+            //                 ['ou_id' => 61, 'user_id' => 12834358], // DEPTO.ASESORIA JURIDICA - LUIS MUENA BUGEÑO - 6811637 CARMEN HENRÍQUEZ
             //                 ['ou_id' => 31, 'user_id' => 17432199], // DEPTO.GESTION FINANCIERA (40) - ROMINA GARÍN
             //                 ['ou_id' => 2, 'user_id' => 14104369], // SUBDIRECCION GESTION ASISTENCIAL - CARLOS CALVO
             //             ]);

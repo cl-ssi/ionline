@@ -24,15 +24,13 @@ class CreateResPrintersTable extends Migration
           $table->enum('active_type',['leased','own','user']); //new
           $table->string('comment')->nullable();
           $table->enum('status',['active','inactive']); //new
-          $table->foreignId('place_id')->nullable();
+          $table->foreignId('place_id')->nullable()->constrained('cfg_places')->onDelete('restrict');
           $table->timestamps();
           $table->softDeletes();
-          $table->foreign('place_id')->references('id')->on('cfg_places')->onDelete('restrict');
       });
 
       Schema::create('res_printer_user', function (Blueprint $table) {
-          $table->foreignId('printer_id')->unsigned();
-          $table->foreign('printer_id')->references('id')->on('res_printers')->onDelete('cascade');
+          $table->foreignId('printer_id')->constrained('res_printers')->onDelete('cascade');
           $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
           $table->timestamps();
       });

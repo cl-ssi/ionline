@@ -16,7 +16,12 @@ class CreateOrganizationalUnitsTable extends Migration
         Schema::create('organizational_units', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->tinyInteger('level')->nullable();
             $table->foreignId('organizational_unit_id')->nullable()->constrained('organizational_units');
+            $table->foreignId('establishment_id')->constrained('establishments');
+            $table->string('sirh_function')->nullable();
+            $table->string('sirh_ou_id')->nullable();
+            $table->string('sirh_cost_center')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

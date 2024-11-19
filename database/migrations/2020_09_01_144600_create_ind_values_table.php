@@ -15,16 +15,19 @@ class CreateIndValuesTable extends Migration
     {
         Schema::create('ind_values', function (Blueprint $table) {
             $table->id();
+            $table->text('activity_name')->nullable();
             $table->integer('month');
             $table->enum('factor',['numerador','denominador']);
+            $table->string('commune')->nullable();
+            $table->string('establishment')->nullable();
             $table->integer('value')->default(0);
+
+            $table->morphs('valueable');
+            $table->foreignId('created_by')->constrained('users');
+            $table->foreignId('updated_by')->constrained('users');
+
             $table->timestamps();
-            $table->bigInteger('action_id')->unsigned();
-            $table->foreign('action_id')->references('id')->on('ind_actions');
-            $table->bigInteger('created_by')->unsigned();
-            $table->foreign('created_by')->references('id')->on('users');
-            $table->bigInteger('updated_by')->unsigned();
-            $table->foreign('updated_by')->references('id')->on('users');
+            $table->softDeletes();
         });
     }
 

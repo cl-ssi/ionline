@@ -333,7 +333,7 @@ class RequestFormCreate extends Component
                                 'purchase_mechanism_id' =>  $this->purchaseMechanism,
                                 'program'               =>  $this->program_id == 'other' ? $this->program : null,
                                 'program_id'            =>  $this->program_id != 'other' ? $this->program_id : null,
-                                'status'                =>  $this->editRF ? $this->requestForm->status : 'saved',
+                                'status'                =>  $this->editRF ? $this->requestForm->status->value : 'saved',
                                 'purchase_plan_id'      => $this->purchasePlan ? $this->purchasePlan->id : null
                         ]);
                 }
@@ -392,7 +392,7 @@ class RequestFormCreate extends Component
                 if($this->editRF){
                     // Editar formulario que ya tenga aprobaciones hechas
                     if($this->form_status == 'save' && $this->requestForm && $this->requestForm->hasEventRequestForms()){
-                        if(in_array($this->requestForm->status, ['pending', 'rejected'])){
+                        if(in_array($this->requestForm->status->value, ['pending', 'rejected'])){
                             $this->requestForm->eventRequestForms()->delete();
                             $this->requestForm->update(['status' => 'pending']);
                             if($this->technicalReviewOuId){
@@ -436,7 +436,7 @@ class RequestFormCreate extends Component
                             }
                         }
 
-                        if($this->requestForm->status == 'approved'){
+                        if($this->requestForm->status->value == 'approved'){
                             $idsToDelete =$this->requestForm->eventRequestForms->whereIn('event_type', ['pre_finance_event', 'finance_event', 'supply_event'])->pluck('id');
                             EventRequestForm::destroy($idsToDelete);
                             //Se vuelve a generar solicitudes de firma para refrendacion en adelante

@@ -5,8 +5,9 @@ namespace App\Models\Pharmacies;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Pharmacies\Unit;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use OwenIt\Auditing\Contracts\Auditable;
 
-class Product extends Model
+class Product extends Model implements Auditable
 {
     /**
      * The attributes that are mass assignable.
@@ -24,6 +25,7 @@ class Product extends Model
     protected $table = 'frm_products';
 
     use SoftDeletes;
+    use \OwenIt\Auditing\Auditable;
 
     //relaciones
     public function pharmacy()

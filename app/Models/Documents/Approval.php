@@ -2,6 +2,8 @@
 
 namespace App\Models\Documents;
 
+use App\Observers\Documents\ApprovalObserver;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -9,11 +11,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Models\User;
 use App\Models\Rrhh\OrganizationalUnit;
-use App\Notifications\Documents\NewApproval;
 use App\Models\Finance\Dte; // Sólo para el ejemplo, no tiene uso
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Storage;
 
+#[ObservedBy([ApprovalObserver::class])]
 class Approval extends Model
 {
     use HasFactory;
@@ -116,7 +118,23 @@ class Approval extends Model
             /* (Opcional) Se puede enviar directo a una persona (es el user_id), pero hay que evitarlo */
             //"sent_to_user_id" => 15287582,
 
-            /* (Opcional) Metodo que se ejecutará al realizar la aprobación o rechazo */
+            /**
+             * (Opcional) Nueva forma de llamar al callback.
+             * Si es true ejecutará: $approval->approvable->approvalCallback()
+             * 
+             * Deberás crear en tu modelo un método approvalCallback()
+             * Ejemplo:
+             *     public function approvalCallback(): void
+             *     {
+             *         $this->update(['boss_position' => 'Aprobado']);
+             *     }
+             **/
+            // 'approvable_callback' => true, // true or false
+
+
+            /* (Opcional) (legacy) preferencia al el callback anterior
+             * Metodo de un controller que se ejecutará al realizar la aprobación o rechazo 
+             **/
             //"callback_controller_method" => "App\Http\Controllers\Rrhh\NoAttendanceRecordController@approvalCallback",
 
             /* (Opcional) Parámetros que se le pasarán al método callback */
@@ -230,6 +248,7 @@ class Approval extends Model
         'approver_at',          // Datetime, asignar en caso de aprobación/rechazo
         'status',               // True or False, asignar en caso de aprobación/rechazo
         
+        'approvable_callback',    // Nueva forma para llamar al callback, true or false ejecutará $approval->approvable->approvalCallback()
         'callback_controller_method',
         'callback_controller_params',
         'callback_feedback_inputs',
@@ -365,8 +384,8 @@ class Approval extends Model
         $this->status = null;
 
         if($this->filename) {
-            if(Storage::disk('gcs')->exists($this->filename)) {
-                Storage::disk('gcs')->delete($this->filename);
+            if(Storage::exists($this->filename)) {
+                Storage::delete($this->filename);
             }
         }
 
@@ -378,9 +397,9 @@ class Approval extends Model
     {
         $link = null;
 
-        if(Storage::disk('gcs')->exists($this->filename))
+        if(Storage::exists($this->filename))
         {
-            $link = Storage::disk('gcs')->url($this->filename);
+            $link = Storage::url($this->filename);
         }
 
         return $link;
@@ -388,54 +407,8 @@ class Approval extends Model
 
     public function getFilenameBase64Attribute()
     {
-        $documentBase64Pdf = base64_encode(Storage::disk('gcs')->get($this->filename));
+        $documentBase64Pdf = base64_encode(Storage::get($this->filename));
 
         return $documentBase64Pdf;
-    }
-
-    protected static function boot()
-    {
-        parent::boot();
-
-        static::created(function ($approval) {
-            /** Enviar notificación al jefe de la unidad  */
-            if($approval->sent_to_ou_id) {
-                $approval->sentToOu->currentManager?->user?->notify(new NewApproval($approval));
-            }
-
-            /** Si tiene un aprobador en particular envia la notificación al usuario específico */
-            if($approval->sent_to_user_id) {
-                $approval->sentToUser->notify(new NewApproval($approval));
-            }
-
-            /** Agregar el approval_id al comienzo de los parámetros del callback */
-            /** Solo si tiene un callback controller method */
-            if($approval->callback_controller_method) {
-                $params = json_decode($approval->callback_controller_params,true) ?? [];
-                $approval->callback_controller_params = json_encode(array_merge(array('approval_id' => $approval->id), $params));
-                $approval->save();
-            }
-        });
-
-        static::updated(function ($approval) {
-            /** Preguntar si el estado cambio de null a true (los falsos no continuan la cadena) */
-            if ( $approval->status === true ) {
-                /* Preguntar si tiene un NextApproval (es en cadena) */
-                if ($approval->nextApproval) {
-                    /** Activar el NextApproval */
-                    $approval->nextApproval->update(['active' => true]);
-
-                    /** Notificar al jefe de unidad o persona */
-                    /** Enviar notificación al jefe de la unidad  */
-                    if($approval->nextApproval->sent_to_ou_id) {
-                        $approval->nextApproval->sentToOu->currentManager?->user?->notify(new NewApproval($approval->nextApproval));
-                    }
-                    /** Si tiene un aprobador en particular envia la notificación al usuario específico */
-                    if($approval->nextApproval->sent_to_user_id) {
-                        $approval->nextApproval->sentToUser->notify(new NewApproval($approval->nextApproval));
-                    }
-                }
-            }
-        });
     }
 }

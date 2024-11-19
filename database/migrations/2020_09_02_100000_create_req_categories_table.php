@@ -16,14 +16,10 @@ class CreateReqCategoriesTable extends Migration
         Schema::create('req_categories', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('color');
-            $table->unsignedBigInteger('user_id');
-
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreignId('organizational_unit_id')->constrained('organizational_units');
             $table->timestamps();
         });
     }
-
     /**
      * Reverse the migrations.
      *

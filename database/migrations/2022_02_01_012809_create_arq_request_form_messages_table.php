@@ -18,7 +18,8 @@ class CreateArqRequestFormMessagesTable extends Migration
             $table->foreignId('user_id')->constrained('users');
             $table->foreignId('request_form_id')->constrained('arq_request_forms');
             $table->longText('message');
-
+            $table->string('file')->nullable();
+            $table->string('file_name')->nullable();
             $table->timestamps();
             $table->SoftDeletes();
         });

@@ -554,13 +554,13 @@
         <div class="col text-end">
             <button
                 class="btn btn-primary"
-                wire:click="update"
-                wire:target="update"
+                wire:click="inventoryUpdate"
+                wire:target="inventoryUpdate"
                 wire:loading.attr="disabled"
             >
                 <span
                     wire:loading.remove
-                    wire:target="update"
+                    wire:target="inventoryUpdate"
                 >
                     <i class="fas fa-save"></i>
                 </span>
@@ -569,7 +569,7 @@
                     class="spinner-border spinner-border-sm"
                     role="status"
                     wire:loading
-                    wire:target="update"
+                    wire:target="inventoryUpdate"
                     aria-hidden="true"
                 >
                 </span>

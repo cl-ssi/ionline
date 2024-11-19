@@ -20,10 +20,8 @@ class CreateAgrQuotasTable extends Migration
             $table->integer('amount')->nullable();
             $table->date('transfer_at')->nullable();
             $table->integer('voucher_number')->nullable();
-            $table->bigInteger('agreement_id')->unsigned();
+            $table->foreignId('proess_id')->constrained('agr_processes');
             $table->timestamps();
-
-            $table->foreign('agreement_id')->references('id')->on('agr_agreements');
         });
     }
 

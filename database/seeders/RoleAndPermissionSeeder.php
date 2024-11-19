@@ -95,6 +95,7 @@ class RoleAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'Job Position Profile: create', 'description' => 'Permite crear la creación de perfiles de cargo']);
         Permission::create(['name' => 'Job Position Profile: edit', 'description' => 'Permite editar cualquier perfil de cargo']);
         Permission::create(['name' => 'Job Position Profile: review', 'description' => 'Permite realizar la revisión del perfil de cargo para aprobación']);
+        Permission::create(['name' => 'Job Position Profile: report', 'description' => 'Permite ingresar a los reportes del modulo']);
         Permission::create(['name' => 'LE Extra Plan: Carga', 'description' => '']);
         Permission::create(['name' => 'LE Extra Plan: Monitoreo', 'description' => '']);
         Permission::create(['name' => 'Mammography: admin', 'description' => 'Permite acceder a los resultados del booking de Mammography']);
@@ -273,6 +274,7 @@ class RoleAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'Users: show access logs', 'description' => 'Permite ver el registro de accesos al sistema de los usuarios']);
         Permission::create(['name' => 'Users: absenteeism user', 'description' => 'Permite hacer solicitudes de ausentismo']);
         Permission::create(['name' => 'Users: absenteeism admin', 'description' => 'Administrador de solicitudes de ausentismo']);
+        Permission::create(['name' => 'Users: overtime refund admin', 'description' => 'Administrador de devoluciones de horas extras']);
         Permission::create(['name' => 'welfare: amipass', 'description' => 'Permiso para acceder a la opción gestor de amipass en bienestar']);
         Permission::create(['name' => 'welfare: balance', 'description' => 'Para acceder a la opción balance de bienestar']);
         Permission::create(['name' => 'welfare: benefits', 'description' => 'Para acceder a las opciones de administración de beneficios']);

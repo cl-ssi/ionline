@@ -25,6 +25,8 @@ class AbsenteeismTypeResource extends Resource
 
     protected static ?string $cluster = Parameters::class;
 
+    protected static ?string $navigationGroup = 'Servicio';
+
     protected static ?string $modelLabel = 'tipos de ausentismos';
 
     public static function form(Form $form): Form

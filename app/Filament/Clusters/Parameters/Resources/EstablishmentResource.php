@@ -24,6 +24,8 @@ class EstablishmentResource extends Resource
 
     protected static ?string $modelLabel = 'establecimiento';
 
+    protected static ?string $navigationGroup = 'Establecimientos';
+
     protected static ?string $pluralModelLabel = 'establecimientos';
 
     public static function form(Form $form): Form
@@ -58,6 +60,9 @@ class EstablishmentResource extends Resource
                     ->default(null),
                 Forms\Components\Select::make('commune_id')
                     ->relationship('commune', 'name')
+                    ->required(),
+                Forms\Components\Select::make('cl_commune_id')
+                    ->relationship('clCommune', 'name')
                     ->required(),
                 Forms\Components\TextInput::make('dependency')
                     ->maxLength(255)

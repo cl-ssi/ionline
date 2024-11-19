@@ -9,8 +9,12 @@ use App\Models\Parameters\PurchaseType;
 use App\Models\Parameters\PurchaseUnit;
 use App\Models\Parameters\PurchaseMechanism;
 use CreateArqPurchasingProcessDetailTable;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use OwenIt\Auditing\Contracts\Auditable;
+use App\Enums\RequestForms\PurchasingProcess\Status;
+
 
 /*
  * Diferentes estados del Proceso de Compra
@@ -60,7 +64,22 @@ class PurchasingProcess extends Model implements Auditable
     }
 
     public function details(){
-        return $this->belongsToMany(ItemRequestForm::class, 'arq_purchasing_process_detail')->withPivot('id', 'internal_purchase_order_id', 'petty_cash_id', 'fund_to_be_settled_id', 'tender_id', 'direct_deal_id', 'immediate_purchase_id', 'user_id', 'quantity', 'unit_value', 'tax', 'expense', 'status', 'release_observation', 'supplier_run', 'supplier_name', 'supplier_specifications', 'charges', 'discounts')->whereNull('arq_purchasing_process_detail.deleted_at')->withTimestamps()->using(PurchasingProcessDetail::class)->with('budgetItem', 'product');
+        return $this->belongsToMany(ItemRequestForm::class, 'arq_purchasing_process_detail')
+            ->withPivot('id', 'internal_purchase_order_id', 'petty_cash_id', 'fund_to_be_settled_id', 'tender_id', 'direct_deal_id', 'immediate_purchase_id', 'user_id', 'quantity', 'unit_value', 'tax', 'expense', 'status', 'release_observation', 'supplier_run', 'supplier_name', 'supplier_specifications', 'charges', 'discounts')
+            ->whereNull('arq_purchasing_process_detail.deleted_at')
+            ->withTimestamps()
+            ->using(PurchasingProcessDetail::class)
+            ->with('budgetItem', 'product');
+    }
+
+    public function purchasingProcessDetails(): HasMany
+    {
+        return $this->hasMany(PurchasingProcessDetail::class);
+    }
+
+    public function currentPurchasingProcessDetails(): HasMany
+    {
+        return $this->hasMany(PurchasingProcessDetail::class)->whereNotIn('status', ['desert']);
     }
 
     public function detailsPassenger(){
@@ -91,6 +110,7 @@ class PurchasingProcess extends Model implements Auditable
     //   return $this->belongsTo(ItemRequestForm::class, 'item_request_form_id');
     // }
 
+    /*
     public function getStatus(){
         switch ($this->status) {
             case "in_process":
@@ -107,9 +127,10 @@ class PurchasingProcess extends Model implements Auditable
                 break;
         }
     }
+    */
 
     public function getColor(){
-        switch ($this->status) {
+        switch ($this->status->value) {
             case "in_process":
                 return 'warning';
                 break;
@@ -124,6 +145,10 @@ class PurchasingProcess extends Model implements Auditable
                 break;
         }
     }
+
+    protected $casts = [
+        'status'        => Status::class,
+    ];
 
     /**
     * The table associated with the model.

@@ -83,19 +83,38 @@ class ControlsTextTemplate extends Component
     public function save() 
     {
         $this->validate();
-        $this->textTemplate->module = $this->module;
-        $this->textTemplate->input = $this->input;
-        $this->textTemplate->user_id = auth()->id();
-        $this->textTemplate->title = $this->textTemplateTitle;
-        $this->textTemplate->template = $this->textTemplateTemplate;
-        $this->textTemplate->save();
+
+        TextTemplate::updateOrCreate(
+            [
+                'id' => $this->textTemplate ? $this->textTemplate->id : null
+            ],
+            [
+                'module'    => $this->module,
+                'input'     => $this->input,
+                'user_id'   => auth()->id(),
+                'title'     => $this->textTemplateTitle,
+                'template'  => $this->textTemplateTemplate
+            ]
+        );
 
         $this->textTemplate = new TextTemplate();
+        $this->cleanForm();
         $this->resetErrorBag();
     }
 
     public function form(TextTemplate $textTemplate) {
-        $this->textTemplate = TextTemplate::firstOrNew(['id' => $textTemplate->id]);
+        $this->textTemplate = $textTemplate;
+        $this->textTemplateTitle     = $textTemplate->title;
+        $this->textTemplateTemplate  = $textTemplate->template;
+
+        $this->resetErrorBag();
+    }
+
+    public function cleanForm() {
+        $this->textTemplate         = null;
+        $this->textTemplateTitle    = null;
+        $this->textTemplateTemplate = null;
+
         $this->resetErrorBag();
     }
 

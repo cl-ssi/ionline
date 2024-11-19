@@ -58,7 +58,7 @@
     <hr />
     @if ($emergencies)
         <h6><i class="fas fa-info-circle"></i> Auditoría Interna</h6>
-
+        
         <div class="accordion" id="accordionExample">
             <div class="card">
                 <div class="card-header" id="headingOne">
@@ -73,7 +73,9 @@
                 <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
                     data-parent="#accordionExample">
                     <div class="card-body">
-                        @include('partials.audit', ['audits' => $emergencies->audits()])
+                        @foreach($emergencies as $emergency)
+                            @include('partials.audit', ['audits' => $emergency->audits()])
+                        @endforeach
                     </div>
                 </div>
             </div>

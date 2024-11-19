@@ -37,12 +37,18 @@ return new class extends Migration
             $table->integer('ausentismo_en_el_periodo')->nullable();
             $table->bigInteger('costo_de_licencia')->nullable();
             $table->string('tipo_de_ausentismo')->nullable();
+            $table->foreignId('absenteeism_type_id')->nullable()->constrained('rrhh_absenteeism_types');
             $table->integer('codigo_de_establecimiento')->nullable();
             $table->string('nombre_de_establecimiento')->nullable();
             $table->integer('saldo_dias_no_reemplazados')->nullable();
             $table->string('tipo_de_contrato')->nullable();
+            $table->string('jornada',2)->nullable();
+            $table->string('observacion')->nullable();
+            $table->dateTime('sirh_at')->nullable();
+
             $table->timestamps();
             $table->softDeletes();
+            $table->unique(['rut','finicio','ftermino','absenteeism_type_id'],'UNIQUE');
         });
     }
 

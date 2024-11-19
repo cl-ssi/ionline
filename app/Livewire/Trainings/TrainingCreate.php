@@ -385,8 +385,8 @@ class TrainingCreate extends Component
     }
 
     #[On('searchedUser')]
-    public function searchedUser(User $userId){
-        $this->searchedUser = $userId;
+    public function searchedUser(User $user){
+        $this->searchedUser = $user;
         
         $this->run = $this->searchedUser->id;
         $this->dv = $this->searchedUser->dv;

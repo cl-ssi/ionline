@@ -17,9 +17,7 @@ class CreateFrmFilesTable extends Migration
             $table->id();
             $table->string('file')->nullable();
             $table->string('name')->nullable();
-            $table->bigInteger('dispatch_id')->unsigned();
-
-            $table->foreign('dispatch_id')->references('id')->on('frm_dispatches')->onDelete('cascade');
+            $table->foreignId('dispatch_id')->constrained('frm_dispatches')->onDelete('cascade');
             $table->timestamps();
         });
     }

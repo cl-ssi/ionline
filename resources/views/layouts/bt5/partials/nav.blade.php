@@ -245,13 +245,10 @@
                             </a>
                         @endcanany
 
-
-
-
-                        @can('Inventory')
+                        @canany(['Equipment Maintenance: administrador', 'Inventory'])
                             <div class="dropdown-divider"></div>
                             <h6 class="dropdown-header">Inventario</h6>
-                        @endcan
+                        @endcanany
 
                         @can('Inventory')
                             @foreach(auth()->user()->establishmentInventories as $establishmentItem)
@@ -265,6 +262,12 @@
                         @can('Inventory: manager')
                             <a class="dropdown-item" href="{{ route('inventories.manager') }}">
                                 <i class="fas fa-fw fa-cog"></i> Administrar Inventarios
+                            </a>
+                        @endcan
+
+                        @can('Equipment Maintenance: administrador')
+                            <a class="dropdown-item" href="{{ route('filament.intranet.inventories') }}">
+                                <i class="fas fa-fw fa-cog"></i> Mantención de equipos
                             </a>
                         @endcan
 
@@ -814,9 +817,13 @@
                             <i class="bi bi-clock"></i> {{ __('Justificar asistencia') }}
                         </a>
 
+                        <a class="dropdown-item" href="{{ route('filament.intranet.rrhh.resources.overtime-refunds.index') }}">
+                            <i class="bi bi-clock"></i> {{ __('Devolución de horas') }}
+                        </a>
+
                         @canany(['Attendance records: user','Attendance records: admin','be god'])
                         <a class="dropdown-item" href="{{ route('filament.intranet.rrhh.resources.attendance-records.index') }}">
-                            <i class="bi bi-clock"></i> {{ __('Registros de asistencia') }}
+                            <i class="bi bi-clock"></i> {{ __('Registrar asistencia') }}
                         </a>
                         @endcanany
 

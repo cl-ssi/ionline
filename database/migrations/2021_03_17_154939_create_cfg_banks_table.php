@@ -17,6 +17,7 @@ class CreateCfgBanksTable extends Migration
             $table->id();
             $table->string('name');
             $table->string('code');
+            $table->boolean('active_agreement')->default(false);
             $table->timestamps();
             $table->softDeletes();
         });

@@ -17,7 +17,6 @@ class CreateProgramBudgetsTable extends Migration
             $table->id();
             $table->foreignId('program_id')->constrained('cfg_programs');
             $table->integer('ammount');
-            $table->date('period');
             $table->string('observation')->nullable();
             $table->foreignId('establishment_id')->constrained('establishments');
             $table->timestamps();

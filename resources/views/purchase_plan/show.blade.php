@@ -414,31 +414,31 @@
                     </thead>
                     <tbody>
                     @forelse($purchasePlan->requestForms as $key => $child)
-                        <tr @if($child->status != 'approved') class="text-muted" @endif>
+                        <tr @if($child->status->value != 'approved') class="text-muted" @endif>
                             <td>{{ $key+1 }}</td>
                             <td>{{ $child->id }}<br>
-                                @switch($child->getStatus())
+                                @switch($child->status->getLabel())
                                     @case('Pendiente')
                                     <i class="fas fa-clock"></i>
                                     @break
 
                                     @case('Aprobado')
                                     <span style="color: green;">
-            <i class="fas fa-check-circle" title="{{ $child->getStatus() }}"></i>
+            <i class="fas fa-check-circle" title="{{ $child->status->getLabel() }}"></i>
             </span>
                                     @break
 
                                     @case('Rechazado')
                                     <a href="">
             <span style="color: Tomato;">
-                <i class="fas fa-times-circle" title="{{ $child->getStatus() }}"></i>
+                <i class="fas fa-times-circle" title="{{ $child->status->getLabel() }}"></i>
             </span>
                                     </a>
                                     @break
 
                                 @endswitch
                             </td>
-                            <td>@if($child->status == 'approved')
+                            <td>@if($child->status->value == 'approved')
                                     <a href="{{ route('request_forms.show', $child) }}">{{ $child->folio }}</a>
                                 @else
                                     {{ $child->folio }}

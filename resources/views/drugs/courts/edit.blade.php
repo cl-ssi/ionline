@@ -13,8 +13,8 @@
     @csrf
 
     <fieldset class="form-group">
-      <label for="forname">Nombre</label>
-      <input type="text" class="form-control" id="forname" placeholder="Ingrese el nombre del juzgado" name="name" value="{{ $court->name }}" required="">
+      <label for="forname">Nombre*</label>
+      <input type="text" class="form-control" id="forname" placeholder="Ingrese el nombre del juzgado" name="name" value="{{ $court->name }}" required>
     </fieldset>
     
     <fieldset class="form-group">
@@ -28,8 +28,8 @@
     </fieldset>
 
     <fieldset class="form-group">
-      <label for="forcommune">Comuna</label>
-      <input type="text" class="form-control" id="forcommune" placeholder="Ingrese la comuna" name="commune" value="{{ $court->commune }}"  required="">
+      <label for="forcommune">Comuna*</label>
+      <input type="text" class="form-control" id="forcommune" placeholder="Ingrese la comuna" name="commune" value="{{ $court->commune }}"  required>
     </fieldset>
 
     <div class="float-right">

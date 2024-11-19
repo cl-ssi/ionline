@@ -1,3 +1,4 @@
+<div>
     @if($serviceRequest->signed_budget_availability_cert_id)
         <a class="btn btn-info"
            title="Ver Certificado de Disponibilidad Presupuestaria firmado"
@@ -19,3 +20,4 @@
                 data-target="#signPdfModal{{$idModelModal}}" title="Firmar">Firmar CDP <i
                 class="fas fa-signature"></i></button>
     @endif
+</div>

@@ -94,14 +94,14 @@
                             <input type="hidden" name="md5_file"
                                 value="{{ $signature->signaturesFileDocument->md5_file }}">
                         @else
-                            <label for="for_document">Documento a distribuir (pdf)</label>
+                            <label for="for_document">Documento a distribuir (pdf) (3 MB Máximo)</label>
                             <input type="file" class="form-control" id="for_document" name="document"
                                 accept="application/pdf" required>
                         @endif
                     </fieldset>
 
                     <fieldset class="form-group col-12 col-md-6">
-                        <label for="for_annexed">Anexos</label>
+                        <label for="for_annexed">Anexos (3 MB Máximo)</label>
                         <input type="file" class="form-control" id="for_annexed" name="annexed[]" multiple>
                     </fieldset>
                 </div>

@@ -52,7 +52,7 @@
                 <td class="text-right">{{ number_format($requestForm->estimated_expense,$requestForm->precision_currency,",","") }}</td>
                 <td nowrap>
                     @if($requestForm->purchasingProcess)
-                        {{ $requestForm->purchasingProcess->getStatus() }}
+                        {{ $requestForm->purchasingProcess->status->getLabel() }}
                     @else
                         En proceso
                     @endif

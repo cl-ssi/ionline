@@ -5,13 +5,13 @@
 @include('suitability.nav')
 <div style="margin-bottom: 10px;" class="row">
     <div class="col-lg-12">
-        <a class="btn btn-success" href="{{ route('suitability.users.create') }}">
-            Agregar Usuario Externo
+        <a class="btn btn-success" href="{{ route('suitability.users.createUserAdmin') }}">
+            Agregar Usuario Administrador Externo
         </a>
     </div>
 </div>
 
-
+{{-- 
 <h3 class="mb-3">Asignar Usuario Administrador a Colegio</h3>
 
 
@@ -45,9 +45,11 @@
     <button type="submit" class="btn btn-primary">Guardar</button>
 
 </form>
+ 
 
 <hr>
 <hr>
+--}}
 
 <form method="GET" class="form-horizontal" action="{{ route('suitability.users.indexAdmin') }}">    
     <div class="form-row">

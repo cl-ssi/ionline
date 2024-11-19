@@ -43,6 +43,7 @@ class ServiceRequestPolicy
             'Honorarios: Encargado del área',
             'Honorarios: Finanzas',
             'Honorarios: RRHH',
+            'Honorarios: Tesorería',
         ];
 
         // Verificar si el usuario tiene uno de los roles permitidos

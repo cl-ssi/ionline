@@ -41,6 +41,7 @@ class SelectedPositionController extends Controller
         foreach($request->position_id as $key => $selectedPosition) {
             $newSelectedPosition = new SelectedPosition();
             $newSelectedPosition->position_id   = $request->position_id[$key];
+            $newSelectedPosition->start_date    = $request->start_date[$key];
             $newSelectedPosition->run           = $request->run[$key];
             $newSelectedPosition->dv            = $request->dv[$key];
             $newSelectedPosition->name          = $request->name[$key];

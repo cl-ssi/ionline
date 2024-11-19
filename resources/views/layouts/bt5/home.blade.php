@@ -325,7 +325,9 @@
                             {{ $notification->created_at }} -
                             {!! $notification->data['icon'] ?? null !!}
                             <b>{{ $notification->data['module'] ?? '' }}</b>
+                            @if( array_key_exists('subject',$notification->data) )
                             {!! $notification->data['subject'] !!}
+                            @endif
                         </a>
                     @endforeach
                 </ul>

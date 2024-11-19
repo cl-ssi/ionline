@@ -14,13 +14,13 @@
                     @if ($requestForm->getStatus() == 'Aprobado')
                         @if($requestForm->purchasingProcess)
                             <span
-                                class="badge badge-{{$requestForm->purchasingProcess->getColor()}}">{{$requestForm->purchasingProcess->getStatus()}}</span>
+                                class="badge badge-{{$requestForm->purchasingProcess->getColor()}}">{{$requestForm->purchasingProcess->status->getLabel()}}</span>
                         @else
                             <span class="badge badge-warning">En proceso</span>
                         @endif
                     @endif
 
-                    @if(auth()->user()->hasPermissionTo('Request Forms: all') && Str::contains($requestForm->subtype, 'tiempo') && !$requestForm->isBlocked() && $requestForm->status == 'approved')
+                    @if(auth()->user()->hasPermissionTo('Request Forms: all') && Str::contains($requestForm->subtype, 'tiempo') && !$requestForm->isBlocked() && $requestForm->status->value == 'approved')
                     <a onclick="return confirm('¿Está seguro/a de crear nuevo formulario de ejecución inmediata?') || event.stopImmediatePropagation()" data-toggle="modal" data-target="#processClosure-{{$requestForm->id}}" class="btn btn-link btn-sm float-right font-weight-bold align-top" title="Nuevo formulario de ejecución inmediata"><i class="fas fa-plus"></i> Crear suministro
                     </a>
                     @include('request_form.partials.modals.create_provision_period_select')
@@ -504,10 +504,10 @@
                         </thead>
                         <tbody>
                         @forelse($requestForm->children as $key => $child)
-                            <tr @if($child->status != 'approved') class="text-muted" @endif>
+                            <tr @if($child->status->value != 'approved') class="text-muted" @endif>
                                 <td>{{ $key+1 }}</td>
                                 <td>{{ $child->id }}<br>
-                                    @switch($child->getStatus())
+                                    @switch($child->status->getLabel())
                                         @case('Pendiente')
                                         <i class="fas fa-clock"></i>
                                         @break
@@ -528,7 +528,7 @@
 
                                     @endswitch
                                 </td>
-                                <td>@if($child->status == 'approved')
+                                <td>@if($child->status->value == 'approved')
                                         <a href="{{ route('request_forms.show', $child) }}">{{ $child->folio }}</a>
                                     @else
                                         {{ $child->folio }}

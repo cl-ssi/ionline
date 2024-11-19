@@ -25,6 +25,8 @@ class SegmentResource extends Resource
 
     protected static ?string $cluster = Parameters::class;
 
+    protected static ?string $navigationGroup = 'UNSPSC';
+
     protected static ?string $modelLabel = 'Segmento';
 
     protected static ?string $pluralModelLabel = 'Segmentos';

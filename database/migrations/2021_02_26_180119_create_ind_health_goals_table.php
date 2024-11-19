@@ -18,7 +18,10 @@ class CreateIndHealthGoalsTable extends Migration
             $table->string('law')->nullable();
             $table->string('name');
             $table->integer('year');
+            $table->enum('status',['development', 'review', 'verified'])->default('development');
+            $table->tinyInteger('number');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

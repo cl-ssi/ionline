@@ -22,6 +22,8 @@ class EstablishmentTypeResource extends Resource
 
     protected static ?string $cluster = Parameters::class;
 
+    protected static ?string $navigationGroup = 'Establecimientos';
+
     protected static ?string $modelLabel = 'tipo de establecimiento';
 
     public static function form(Form $form): Form

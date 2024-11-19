@@ -52,22 +52,30 @@ class ClinicalRecordReport extends Component
     }
 
     #[On('get_user')]
-    public function get_user($userId)
+    public function get_user(User $user)
     {
-        $this->patient = User::find($userId);
+        $this->patient = $user;
     }
 
     public function search()
     {
-        $this->passedOpenHours = OpenHour::where('patient_id',$this->patient->id)
-                                    ->where('start_date','<=',now())
-                                    ->orderBy('start_date','DESC')
+        $establishment_id = auth()->user()->establishment_id;
+
+        $this->passedOpenHours = OpenHour::where('patient_id', $this->patient->id)
+                                    ->where('start_date', '<=', now())
+                                    ->whereHas('profesional', function ($query) use ($establishment_id) {
+                                        $query->where('establishment_id', $establishment_id);
+                                    })
+                                    ->orderBy('start_date', 'DESC')
                                     ->take(10)
                                     ->get();
 
-        $this->nextOpenHours = OpenHour::where('patient_id',$this->patient->id)
-                                    ->where('start_date','>',now())
-                                    ->orderBy('start_date','DESC')
+        $this->nextOpenHours = OpenHour::where('patient_id', $this->patient->id)
+                                    ->where('start_date', '>', now())
+                                    ->whereHas('profesional', function ($query) use ($establishment_id) {
+                                        $query->where('establishment_id', $establishment_id);
+                                    })
+                                    ->orderBy('start_date', 'DESC')
                                     ->take(10)
                                     ->get();
     }

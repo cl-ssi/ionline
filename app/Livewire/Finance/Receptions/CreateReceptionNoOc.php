@@ -38,6 +38,7 @@ class CreateReceptionNoOc extends Component
     public $showFacturaExentaFields = false;
     public $readonly = true;
     public $showAllFields = false;
+    public $no_oc_header_notes;
 
     public $receptionItems = [];
     public $exento = false;
@@ -179,7 +180,7 @@ class CreateReceptionNoOc extends Component
             'dte_type' => $this->reception['dte_type'],
             'dte_number' => $this->folio,
             'dte_date' => $this->reception['dte_date'],
-            'header_notes' => $this->reception['header_notes'] ?? null,
+            'header_notes' => isset($this->no_oc_header_notes) ? $this->no_oc_header_notes : null,
             'neto' => isset($this->montoNeto) ? $this->montoNeto : null,
             'subtotal' => isset($this->montoNeto) ? $this->montoNeto : null,
             'iva' => isset($this->montoIva) ? $this->montoIva : null,
@@ -386,9 +387,16 @@ class CreateReceptionNoOc extends Component
 
     public function calculateTotalAmount()
     {
+        // Validador montoNeto si es null o esta vacio
         $neto = $this->montoNeto ?? 0;
+        $neto = ($neto != '') ? $neto :0;
+        // Validador montoExento si es null o esta vacio
         $exento = $this->montoExento ?? 0;
+        $exento = ($exento != '') ? $exento :0;
+        // Validador montoIva si es null o esta vacio y 0 si no es factura electronica afecta
         $iva = $this->showFacturaElectronicaFields ? ($this->montoIva ?? 0) : 0;
+        $iva = ($iva != '') ? $iva : 0;
+        // Suma para generar montoTotal
         $this->montoTotal = $neto + $iva + $exento;
     }
 

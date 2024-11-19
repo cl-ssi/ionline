@@ -16,24 +16,27 @@ class CreateDocumentsTable extends Migration
         Schema::create('documents', function (Blueprint $table) {
             $table->id();
             $table->string('number',50)->nullable();
+            $table->integer('internal_number')->nullable();
             $table->date('date')->nullable();
-            $table->enum('type',['Memo','Ordinario','Reservado','Circular','Acta de recepción','Otros','Oficio','Resolución','Acta de Recepción Obras Menores']);
+            $table->foreignId('type_id')->nullable()->constrained('doc_types');
+            $table->boolean('reserved')->nullable();
             $table->text('antecedent')->nullable();
             $table->text('responsible')->nullable();
-            $table->text('subject');
+            $table->string('subject')->nullable();
             $table->string('from')->nullable();
             $table->string('for')->nullable();
             $table->enum('greater_hierarchy',['from','for']);
             $table->text('distribution')->nullable();
             $table->longtext('content');
             $table->string('file')->nullable();
-            $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('organizational_unit_id');
+            $table->foreignId('user_id')->constrained('users');
+            $table->foreignId('organizational_unit_id')->constrained('organizational_units');
+            $table->foreignId('file_to_sign_id')->nullable()->constrained('doc_signatures_files');
+            $table->foreignId('establishment_id')->nullable()->constrained('establishments');
+            $table->foreignId('signature_id')->nullable()->constrained('sign_signatures');
+           
             $table->timestamps();
             $table->softDeletes();
-
-            $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('organizational_unit_id')->references('id')->on('organizational_units');
         });
     }
 

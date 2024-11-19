@@ -30,9 +30,9 @@ class CreateComplaintsTable extends Migration
         Schema::create('complaints', function (Blueprint $table) {
             $table->id();
             $table->enum('type',['Consulta','Denuncia','Riesgo ético']);
-            $table->unsignedBigInteger('complaint_values_id')->unsigned();
+            $table->foreignId('complaint_values_id')->constrained('complaint_values');
             $table->string('other_value')->nullable();
-            $table->unsignedBigInteger('complaint_principles_id')->unsigned();
+            $table->foreignId('complaint_principles_id')->constrained('complaint_principles');
             $table->longtext('content');
             $table->string('file')->nullable();
             $table->string('email');
@@ -42,9 +42,6 @@ class CreateComplaintsTable extends Migration
             $table->foreignId('user_id')->nullable()->constrained('users');
             $table->timestamps();
             $table->softDeletes();
-
-            $table->foreign('complaint_values_id')->references('id')->on('complaint_values');
-            $table->foreign('complaint_principles_id')->references('id')->on('complaint_principles');
         });
     }
 

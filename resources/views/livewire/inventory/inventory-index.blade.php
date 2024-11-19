@@ -140,7 +140,7 @@
                 @foreach($responsibles as $itemResponsible)
                     <option value="{{ $itemResponsible->id }}">
                         @if($itemResponsible->trashed())
-                            <span class="text-danger">{{ $itemResponsible->tinny_name }} (Eliminado)</span>
+                            {{ $itemResponsible->tinny_name }} (Eliminado)
                         @else
                             {{ $itemResponsible->tinny_name }}
                         @endif
@@ -161,7 +161,7 @@
                 @foreach($users as $itemUser)
                 <option value="{{ $itemUser->id }}">
                     @if($itemUser->trashed())
-                        <span class="text-danger">{{ $itemUser->tinny_name }} (Eliminado)</span>
+                        {{ $itemUser->tinny_name }} (Eliminado)
                     @else
                         {{ $itemUser->tinny_name }}
                     @endif
@@ -495,7 +495,7 @@
                         @endif                        
                     </td>
                     <td>
-                        @livewire('inventory.toggle-print',['inventory' => $inventory],key($inventory->id))
+                        @livewire('inventory.toggle-print',['inventory' => $inventory], key($loop->index))
                     </td>
                     <td class="text-center d-print-none">
                         <a

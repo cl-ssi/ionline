@@ -3,6 +3,7 @@
 use App\Http\Controllers\Rrhh\AbsenteeismController;
 use App\Livewire\Rrhh\CreateAbsenteeism;
 use App\Livewire\Rrhh\ListAbsenteeisms;
+use App\Models\Rrhh\OvertimeRefund;
 use Illuminate\Http\Request;
 use App\Livewire\TicResources;
 use App\Models\Pharmacies\Purchase;
@@ -352,6 +353,7 @@ use App\Http\Controllers\Parameters\ProgramController as ParametersProgramContro
 use App\Http\Controllers\Warehouse\CategoryController as WarehouseCategoryController;
 use App\Http\Controllers\Documents\Sign\SignatureController as SignSignatureController;
 use App\Http\Controllers\Finance\Receptions\ReceptionController as FinReceptionController;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 /*
 |--------------------------------------------------------------------------
@@ -893,11 +895,14 @@ Route::prefix('integrity')->as('integrity.')->group(function () {
 });
 
 Route::prefix('rrhh')->as('rrhh.')->group(function () {
+    Route::get('overtime-refunds/{record}', function (OvertimeRefund $record) {
+        return Pdf::loadView('rrhh.overtime-refunds.show',['record' => $record, 'userApproval' => $record->userApproval()])->stream();
+    })->name('overtime-refunds.show');
+
     Route::prefix('sirh')->as('sirh.')->group(function () {
         Route::get('/unidades', \App\Livewire\Sirh\UnidadesIndex::class)->name('unidades');
     });
 
-    
     Route::prefix('performance-report')->name('performance-report.')->middleware('auth')->group(function () {
         Route::get('/period', Period::class)->name('period');
         Route::get('/received-report', ReceivedReport::class)->name('received_report');
@@ -2231,9 +2236,9 @@ Route::prefix('pharmacies')->as('pharmacies.')->middleware(['auth', 'must.change
         Route::get('informe_movimientos', [App\Http\Controllers\Pharmacies\ProductController::class, 'repInformeMovimientos'])->name('informe_movimientos');
         Route::get('product_last_prices', [App\Http\Controllers\Pharmacies\ProductController::class, 'repProductLastPrices'])->name('product_last_prices');
         Route::get('consume_history', [App\Http\Controllers\Pharmacies\ProductController::class, 'repConsumeHistory'])->name('consume_history');
-
         Route::get('productsbybatch', [App\Http\Controllers\Pharmacies\ProductController::class, 'repProductByBatch'])->name('productsbybatch');
         Route::get('products', [App\Http\Controllers\Pharmacies\ProductController::class, 'repProduct'])->name('products');
+        Route::get('download_purchase_report', [App\Http\Controllers\Pharmacies\ProductController::class, 'downloadPurchaseReport'])->name('download_purchase_report');
     });
 });
 
@@ -2654,6 +2659,7 @@ Route::prefix('suitability')->as('suitability.')->middleware(['auth', 'must.chan
         Route::get('/index-admin', [SchoolUserController::class, 'indexAdmin'])->name('indexAdmin');
         Route::get('/index-user', [SchoolUserController::class, 'indexUser'])->name('indexUser');
         Route::get('/create', [SchoolUserController::class, 'create'])->name('create');
+        Route::get('/create-user-admin', [SchoolUserController::class, 'createUserAdmin'])->name('createUserAdmin');
         Route::post('/store', [SchoolUserController::class, 'store'])->name('store');
         Route::delete('/{schooluser}/destroy', [SchoolUserController::class, 'destroy'])->name('destroy');
         Route::post('/store-user-admin', [SchoolUserController::class, 'storeUserAdmin'])->name('storeUserAdmin');

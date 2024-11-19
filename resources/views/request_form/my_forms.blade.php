@@ -48,125 +48,125 @@
 
 @if(count($my_pending_requests) > 0)
 </div>
-<div class="col">
-  <h6><i class="fas fa-inbox"></i> Mis formularios pendientes de aprobación</h6>
-  <div class="table-responsive">
-    <table class="table table-sm table-hover table-bordered small">
-      <thead>
-        <tr class="text-center">
-          <th>ID</th>
-          <th>Folio</th>
-          <th style="width: 7%">Fecha Creación</th>
-          <th>Tipo / Mecanismo de Compra</th>
-          <th>Descripción</th>
-          <th>Usuario Gestor</th>
-          <th>Items</th>
-          <th>Presupuesto</th>
-          <th>Etapas de aprobación</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
-        @foreach($my_pending_requests as $requestForm)
-        <tr>
-          <td>{{ $requestForm->id }} <br>
-            @switch($requestForm->getStatus())
-            @case('Pendiente')
-            <i class="fas fa-clock"></i>
-            @break
+    <div class="col">
+    <h6><i class="fas fa-inbox"></i> Mis formularios pendientes de aprobación</h6>
+    <div class="table-responsive">
+      <table class="table table-sm table-hover table-bordered small">
+        <thead>
+          <tr class="text-center">
+            <th>ID</th>
+            <th>Folio</th>
+            <th style="width: 7%">Fecha Creación</th>
+            <th>Tipo / Mecanismo de Compra</th>
+            <th>Descripción</th>
+            <th>Usuario Gestor</th>
+            <th>Items</th>
+            <th>Presupuesto</th>
+            <th>Etapas de aprobación</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          @foreach($my_pending_requests as $requestForm)
+          <tr>
+            <td>{{ $requestForm->id }} <br>
+              @switch($requestForm->status->getLabel())
+              @case('Pendiente')
+              <i class="fas fa-clock"></i>
+              @break
 
-            {{--@case('complete')
-                                            <span style="color: green;">
-                                              <i class="fas fa-check-circle"></i>
-                                            </span>
-                                            @break --}}
+              {{--@case('complete')
+                                              <span style="color: green;">
+                                                <i class="fas fa-check-circle"></i>
+                                              </span>
+                                              @break --}}
 
-            @endswitch
-          </td>
-          <td>
-            <a href="{{ route('request_forms.show', $requestForm->id) }}">{{ $requestForm->folio }}</a>
-            @if($requestForm->father)
-            <br>(<a href="{{ route('request_forms.show', $requestForm->father->id) }}">{{ $requestForm->father->folio }}</a>)
-            @endif
-          </td>
-          <td>
-              {{ $requestForm->created_at->format('d-m-Y H:i') }}<br>
-              {{ $requestForm->created_at->diffForHumans() }}
-          </td>
-          <td>{{ ($requestForm->purchaseMechanism) ? $requestForm->purchaseMechanism->PurchaseMechanismValue : '' }}<br>
-            {{ $requestForm->SubtypeValue }}
-          </td>
-          <td>{{ $requestForm->name }}</td>
-          <td>{{ $requestForm->user->FullName }}<br>
-            {{ $requestForm->userOrganizationalUnit->name ?? '' }}
-          </td>          
-          <td align="center">{{ $requestForm->quantityOfItems() }}</td>
-          <td class="text-right">{{$requestForm->symbol_currency}}{{ number_format($requestForm->estimated_expense,$requestForm->precision_currency,",",".") }}</td>
-          <td class="text-center">
-            @if($requestForm->eventRequestForms->count() > 0)
-                @foreach($requestForm->eventRequestForms as $sign)
-                    @if($sign->status == 'pending')
-                    <span class="d-inline-block" tabindex="0" data-toggle="tooltip"
-                        @if($sign->event_type != 'pre_finance_event') title="{{ $sign->signerOrganizationalUnit->name }}" @else title="Refrendación Presupuestaria" @endif>
-                        <i class="fas fa-clock fa-2x"></i>
-                    </span>
-                    @endif
-                    @if($sign->status == 'approved')
-                    <span style="color: green;" class="d-inline-block" tabindex="0" data-toggle="tooltip"
-                        @if($sign->event_type != 'pre_finance_event') title="{{ $sign->signerOrganizationalUnit->name }}" @else title="Refrendación Presupuestaria" @endif>
-                        <i class="fas fa-check-circle fa-2x"></i>
-                    </span>
-                    @endif
-                    @if($sign->status == 'rejected')
-                    <span style="color: Tomato;" class="d-inline-block" tabindex="0" data-toggle="tooltip"
-                        @if($sign->event_type != 'pre_finance_event') title="{{ $sign->signerOrganizationalUnit->name }}" @else title="Refrendación Presupuestaria" @endif>
-                        <i class="fas fa-times-circle fa-2x"></i>
-                    </span>
-                    @endif
-                    @if($sign->status == 'does_not_apply')
-                    <span class="d-inline-block" tabindex="0" data-toggle="tooltip"
-                        @if($sign->event_type != 'pre_finance_event') title="{{ $sign->signerOrganizationalUnit->name }}" @else title="Refrendación Presupuestaria" @endif>
-                        <i class="fas fa-ban fa-2x"></i>
-                    </span>
-                    @endif
-                @endforeach
-            @else
-                <i class="fas fa-save fa-2x"></i>
-            @endif
-          </td>
-          <td>
-            @if($requestForm->canEdit())
-            <a href="{{ route('request_forms.edit', $requestForm->id) }}" class="btn btn-outline-secondary btn-sm" title="Selección"><i class="fas fa-edit"></i></a>
-            @else
-            <a href="{{ route('request_forms.show', $requestForm->id) }}" class="btn btn-outline-secondary btn-sm" title="Selección"><i class="fas fa-eye"></i></a>
-            @endif
-            @if($requestForm->canDelete())
-            <a href="#" data-href="{{ route('request_forms.destroy', $requestForm->id) }}" data-id="{{ $requestForm->id }}" class="btn btn-outline-secondary btn-sm text-danger" title="Eliminar" data-toggle="modal" data-target="#confirm" role="button">
-              <i class="fas fa-trash"></i></a>
-            @endif
-            @if($requestForm->hasFinanceEventPending() && App\Models\Parameters\Parameter::get('app', 'legacyModeESign'))
-            <a href="{{ route('request_forms.create_view_document', [$requestForm->id, 11]) }}" class="btn btn-outline-secondary btn-sm" title="Selección" target="_blank"><i class="fas fa-file"></i></a> 
-            <form method="POST" action="{{ route('request_forms.upload_form_document', $requestForm->id)}}" enctype="multipart/form-data">
-                @csrf
-                <div class="input-group">
-                  <div class="custom-file">
-                    <input type="file" name="docSigned" id="docSigned" accept=".pdf" style="width: 250px" required>
+              @endswitch
+            </td>
+            <td>
+              <a href="{{ route('request_forms.show', $requestForm->id) }}">{{ $requestForm->folio }}</a>
+              @if($requestForm->father)
+              <br>(<a href="{{ route('request_forms.show', $requestForm->father->id) }}">{{ $requestForm->father->folio }}</a>)
+              @endif
+            </td>
+            <td>
+                {{ $requestForm->created_at->format('d-m-Y H:i') }}<br>
+                {{ $requestForm->created_at->diffForHumans() }}
+            </td>
+            <td>{{ ($requestForm->purchaseMechanism) ? $requestForm->purchaseMechanism->PurchaseMechanismValue : '' }}<br>
+              {{ $requestForm->SubtypeValue }}
+            </td>
+            <td>{{ $requestForm->name }}</td>
+            <td>{{ $requestForm->user->FullName }}<br>
+              {{ $requestForm->userOrganizationalUnit->name ?? '' }}
+            </td>          
+            <td align="center">{{ $requestForm->quantityOfItems() }}</td>
+            <td class="text-right">{{$requestForm->symbol_currency}}{{ number_format($requestForm->estimated_expense,$requestForm->precision_currency,",",".") }}</td>
+            <td class="text-center">
+              @if($requestForm->eventRequestForms->count() > 0)
+                  @foreach($requestForm->eventRequestForms as $sign)
+                      @if($sign->status == 'pending')
+                      <span class="d-inline-block" tabindex="0" data-toggle="tooltip"
+                          @if($sign->event_type != 'pre_finance_event') title="{{ $sign->signerOrganizationalUnit->name }}" @else title="Refrendación Presupuestaria" @endif>
+                          <i class="fas fa-clock fa-2x"></i>
+                      </span>
+                      @endif
+                      @if($sign->status == 'approved')
+                      <span style="color: green;" class="d-inline-block" tabindex="0" data-toggle="tooltip"
+                          @if($sign->event_type != 'pre_finance_event') title="{{ $sign->signerOrganizationalUnit->name }}" @else title="Refrendación Presupuestaria" @endif>
+                          <i class="fas fa-check-circle fa-2x"></i>
+                      </span>
+                      @endif
+                      @if($sign->status == 'rejected')
+                      <span style="color: Tomato;" class="d-inline-block" tabindex="0" data-toggle="tooltip"
+                          @if($sign->event_type != 'pre_finance_event') title="{{ $sign->signerOrganizationalUnit->name }}" @else title="Refrendación Presupuestaria" @endif>
+                          <i class="fas fa-times-circle fa-2x"></i>
+                      </span>
+                      @endif
+                      @if($sign->status == 'does_not_apply')
+                      <span class="d-inline-block" tabindex="0" data-toggle="tooltip"
+                          @if($sign->event_type != 'pre_finance_event') title="{{ $sign->signerOrganizationalUnit->name }}" @else title="Refrendación Presupuestaria" @endif>
+                          <i class="fas fa-ban fa-2x"></i>
+                      </span>
+                      @endif
+                  @endforeach
+              @else
+                  <i class="fas fa-save fa-2x"></i>
+              @endif
+            </td>
+            <td>
+              @if($requestForm->canEdit())
+              <a href="{{ route('request_forms.edit', $requestForm->id) }}" class="btn btn-outline-secondary btn-sm" title="Selección"><i class="fas fa-edit"></i></a>
+              @else
+              <a href="{{ route('request_forms.show', $requestForm->id) }}" class="btn btn-outline-secondary btn-sm" title="Selección"><i class="fas fa-eye"></i></a>
+              @endif
+              @if($requestForm->canDelete())
+              <a href="#" data-href="{{ route('request_forms.destroy', $requestForm->id) }}" data-id="{{ $requestForm->id }}" class="btn btn-outline-secondary btn-sm text-danger" title="Eliminar" data-toggle="modal" data-target="#confirm" role="button">
+                <i class="fas fa-trash"></i></a>
+              @endif
+              @if($requestForm->hasFinanceEventPending() && App\Models\Parameters\Parameter::get('app', 'legacyModeESign'))
+              <a href="{{ route('request_forms.create_view_document', [$requestForm->id, 11]) }}" class="btn btn-outline-secondary btn-sm" title="Selección" target="_blank"><i class="fas fa-file"></i></a> 
+              <form method="POST" action="{{ route('request_forms.upload_form_document', $requestForm->id)}}" enctype="multipart/form-data">
+                  @csrf
+                  <div class="input-group">
+                    <div class="custom-file">
+                      <input type="file" name="docSigned" id="docSigned" accept=".pdf" style="width: 250px" required>
+                    </div>
+                    <div class="input-group-append">
+                      <button name="id" value="{{ $requestForm->id }}" class="btn btn-sm btn-outline-secondary">
+                          <i class="fas fa-fw fa-upload"></i>
+                      </button>
+                    </div>
                   </div>
-                  <div class="input-group-append">
-                    <button name="id" value="{{ $requestForm->id }}" class="btn btn-sm btn-outline-secondary">
-                        <i class="fas fa-fw fa-upload"></i>
-                    </button>
-                  </div>
-                </div>
-            </form>
-            @endif
-          </td>
-        </tr>
-        @endforeach
-      </tbody>
-    </table>
-  </div>
-</div>
+              </form>
+              @endif
+            </td>
+          </tr>
+          @endforeach
+        </tbody>
+      </table>
+    </div>
+    </div>
 @else
 </div>
 <div class="col">
@@ -204,17 +204,17 @@
         @foreach($my_requests as $requestForm)
         <tr>
           <th>{{ $requestForm->id }} <br>
-            @switch($requestForm->getStatus())
+            @switch($requestForm->status->getLabel())
             @case('Pendiente')
             <i class="fas fa-clock"></i>
             @break
 
             @case('Aprobado')
             <span style="color: green;">
-              <i class="fas fa-check-circle" title="{{ $requestForm->getStatus() }}"></i>
+              <i class="fas fa-check-circle" title="{{ $requestForm->status->getLabel() }}"></i>
             </span>
             @if($requestForm->purchasingProcess)
-            <span class="badge badge-{{$requestForm->purchasingProcess->getColor()}}">{{$requestForm->purchasingProcess->getStatus()}}</span>
+            <span class="badge badge-{{$requestForm->purchasingProcess->getColor()}}">{{$requestForm->purchasingProcess->status->getLabel()}}</span>
             @else
             <span class="badge badge-warning">En proceso</span>
             @endif
@@ -304,7 +304,7 @@
             @include('request_form.partials.modals.old_signed_request_forms')
             @endif
 
-            @if(Str::contains($requestForm->subtype, 'tiempo') && !$requestForm->isBlocked() && $requestForm->status == 'approved')
+            @if(Str::contains($requestForm->subtype, 'tiempo') && !$requestForm->isBlocked() && $requestForm->status->value == 'approved')
             <a onclick="return confirm('¿Está seguro/a de crear nuevo formulario de ejecución inmediata?') || event.stopImmediatePropagation()" data-toggle="modal" data-target="#processClosure-{{$requestForm->id}}" class="btn btn-outline-secondary btn-sm" title="Nuevo formulario de ejecución inmediata"><i class="fas fa-plus"></i>
             </a>
             @include('request_form.partials.modals.create_provision_period_select')
@@ -354,17 +354,17 @@
         @foreach($my_ou as $requestForm)
         <tr>
           <th>{{ $requestForm->id }} <br>
-            @switch($requestForm->getStatus())
+            @switch($requestForm->status->getLabel())
             @case('Pendiente')
             <i class="fas fa-clock"></i>
             @break
 
             @case('Aprobado')
             <span style="color: green;">
-              <i class="fas fa-check-circle" title="{{ $requestForm->getStatus() }}"></i>
+              <i class="fas fa-check-circle" title="{{ $requestForm->status->getLabel() }}"></i>
             </span>
             @if($requestForm->purchasingProcess)
-            <span class="badge badge-{{$requestForm->purchasingProcess->getColor()}}">{{$requestForm->purchasingProcess->getStatus()}}</span>
+            <span class="badge badge-{{$requestForm->purchasingProcess->getColor()}}">{{$requestForm->purchasingProcess->status->getLabel()}}</span>
             @else
             <span class="badge badge-warning">En proceso</span>
             @endif

@@ -343,7 +343,7 @@ class ServiceRequestController extends Controller
         ->when($establishment_id != 38, function ($q) use ($establishment_id) {
             return $q->where('establishment_id',$establishment_id);
         })
-        ->orderBy('id', 'asc')
+        ->orderBy('id', 'desc')
         ->paginate(100);
     // ->get();
     
@@ -925,9 +925,6 @@ class ServiceRequestController extends Controller
 
   public function consolidated_data(Request $request)
   {
-    // set_time_limit(7200);
-    // ini_set('memory_limit', '2048M');
-    
     $establishment_id = auth()->user()->organizationalUnit->establishment_id;
     $year = $request->year;
     $semester = $request->semester;
@@ -936,9 +933,9 @@ class ServiceRequestController extends Controller
     $serviceRequests = ServiceRequest::whereDoesntHave("SignatureFlows", function ($subQuery) {
         $subQuery->where('status', 0);
     })
-    ->when($establishment_id == 38, function ($q) {
-        return $q->whereNotIn('establishment_id', [1, 41]);
-    })
+    // ->when($establishment_id == 38, function ($q) {
+    //     return $q->whereNotIn('establishment_id', [1, 41]);
+    // })
     ->when($establishment_id != 38, function ($q) use ($establishment_id) {
         return $q->where('establishment_id',$establishment_id);
     })
@@ -952,9 +949,9 @@ class ServiceRequestController extends Controller
     $serviceRequestsRejected = ServiceRequest::whereHas("SignatureFlows", function ($subQuery) {
         $subQuery->where('status', 0);
     })
-    ->when($establishment_id == 38, function ($q) {
-        return $q->whereNotIn('establishment_id', [1, 41]);
-    })
+    // ->when($establishment_id == 38, function ($q) {
+    //     return $q->whereNotIn('establishment_id', [1, 41]);
+    // })
     ->when($establishment_id != 38, function ($q) use ($establishment_id) {
         return $q->where('establishment_id',$establishment_id);
     })
@@ -968,9 +965,7 @@ class ServiceRequestController extends Controller
 
   public function program_consolidated_report(Request $request)
   {
-
-    // set_time_limit(7200);
-    // ini_set('memory_limit', '2048M');
+    $establishment_id = auth()->user()->organizationalUnit->establishment_id;
 
     $year = $request->year;
     $semester = $request->semester;
@@ -982,7 +977,9 @@ class ServiceRequestController extends Controller
     $serviceRequests = ServiceRequest::whereDoesntHave("SignatureFlows", function ($subQuery) {
       $subQuery->where('status', 0);
     })
-    ->where('establishment_id', 1)
+    ->when($establishment_id != 38, function ($q) use ($establishment_id) {
+        return $q->where('establishment_id',$establishment_id);
+    })
     ->whereYear('start_date',$year)
     ->when($semester == 1, function ($q) use ($semester) {
         return $q->where(function($query) {

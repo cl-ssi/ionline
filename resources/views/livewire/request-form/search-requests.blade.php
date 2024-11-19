@@ -216,22 +216,22 @@
                     @foreach($request_forms as $requestForm)
                     <tr>
                         <th>{{ $requestForm->id }} <br>
-                            @switch($requestForm->getStatus())
-                                @case('Pendiente')
+                            @switch($requestForm->status->value)
+                                @case('pending')
                                     <i class="fas fa-clock"></i>
                                 @break
 
-                                @case('Aprobado')
+                                @case('approved')
                                     <span style="color: green;">
-                                    <i class="fas fa-check-circle" title="{{ $requestForm->getStatus() }}"></i>
+                                        <i class="fas fa-check-circle" title="{{ $requestForm->getStatus() }}"></i>
                                     </span>
                                     @if($requestForm->purchasingProcess)
-                                        <span class="badge badge-{{$requestForm->purchasingProcess->getColor()}}">{{$requestForm->purchasingProcess->getStatus()}}</span>
+                                        <span class="badge badge-{{$requestForm->purchasingProcess->getColor()}}">{{ $requestForm->purchasingProcess->status->getLabel() }}</span>
                                     @else
                                         <span class="badge badge-warning">En proceso</span>
                                     @endif
                                 @break$
-                                @case('Rechazado')
+                                @case('rejected')
                                     <a href="">
                                         <span style="color: Tomato;">
                                             <i class="fas fa-times-circle" title="{{ $requestForm->getStatus() }}"></i>
@@ -313,7 +313,7 @@
                                 <i class="fas fa-trash"></i></a>
                                 @endif
 
-                                @if($requestForm->status == 'approved')
+                                @if($requestForm->status->value == 'approved')
                                 <!-- Button trigger modal -->            
                                 <button type="button" class="btn btn-outline-secondary btn-sm" data-toggle="modal" data-target="#exampleModal-{{ $requestForm->id }}" title="Reasignar">
                                 <i class="fas fa-redo"></i>
@@ -341,7 +341,7 @@
                             @include('request_form.partials.modals.old_signed_request_forms')
                             @endif
 
-                            @if((auth()->user()->hasPermissionTo('Request Forms: all') || auth()->user()->id == $requestForm->request_user_id || auth()->user()->id == $requestForm->contract_manager_id)&& Str::contains($requestForm->subtype, 'tiempo') && !$requestForm->isBlocked() && $requestForm->status == 'approved')
+                            @if((auth()->user()->hasPermissionTo('Request Forms: all') || auth()->user()->id == $requestForm->request_user_id || auth()->user()->id == $requestForm->contract_manager_id)&& Str::contains($requestForm->subtype, 'tiempo') && !$requestForm->isBlocked() && $requestForm->status->value == 'approved')
                             <a onclick="return confirm('¿Está seguro/a de crear nuevo formulario de ejecución inmediata?') || event.stopImmediatePropagation()" data-toggle="modal" data-target="#processClosure-{{$requestForm->id}}" class="btn btn-outline-secondary btn-sm" title="Nuevo formulario de ejecución inmediata"><i class="fas fa-plus"></i>
                             </a>
                             @include('request_form.partials.modals.create_provision_period_select')
@@ -392,7 +392,7 @@
                     <tr>
                         <td>{{ $requestForm->id }} <br>
                             @if($requestForm->purchasingProcess)
-                            <span class="badge badge-{{$requestForm->purchasingProcess->getColor()}}">{{$requestForm->purchasingProcess->getStatus()}}</span>
+                            <span class="badge badge-{{$requestForm->purchasingProcess->getColor()}}">{{$requestForm->purchasingProcess->status->getLabel()}}</span>
                             @else
                             <span class="badge badge-warning">En proceso</span>
                             @endif
@@ -584,9 +584,10 @@
                                         @endif
                                     </td>
                                     <td nowrap>
+                                        aquí
                                         @if($loop->first)
                                             @if($requestForm->purchasingProcess)
-                                                {{ $requestForm->purchasingProcess->getStatus() }}
+                                                {{ $requestForm->purchasingProcess->status->getlabel() }}
                                             @else
                                                 En proceso
                                             @endif
@@ -689,7 +690,7 @@
                                     <td nowrap>
                                         @if($loop->first)
                                             @if($requestForm->purchasingProcess)
-                                                {{ $requestForm->purchasingProcess->getStatus() }}
+                                                {{ $requestForm->purchasingProcess->status->getLabel() }}
                                             @else
                                                 {{ $requestForm->getStatus() }}
                                             @endif
@@ -775,7 +776,7 @@
                                     <td nowrap>
                                         @if($loop->first)
                                             @if($requestForm->purchasingProcess)
-                                                {{ $requestForm->purchasingProcess->getStatus() }}
+                                                {{ $requestForm->purchasingProcess->status->getLabel() }}
                                             @else
                                                 En proceso
                                             @endif
@@ -878,7 +879,7 @@
                                     <td nowrap>
                                         @if($loop->first)
                                             @if($requestForm->purchasingProcess)
-                                                {{ $requestForm->purchasingProcess->getStatus() }}
+                                                {{ $requestForm->purchasingProcess->status->getLabel() }}
                                             @else
                                                 {{ $requestForm->getStatus() }}
                                             @endif

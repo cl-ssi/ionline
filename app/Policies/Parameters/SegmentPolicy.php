@@ -10,16 +10,10 @@ class SegmentPolicy
 {
     /**
      * Perform pre-authorization checks.
-     * For administrative purposes, the user with the 'be god' ability can do anything.
-     * If null is returned, the authorization check will fall through to the policy method
      */
-    public function before(User $user): ?bool
+    public function before(User $user, string $ability): bool|null
     {
-        if ($user->can('be god')) {
-            return true;
-        }
-
-        return null;
+        return $user->can('be god') ? true : null;
     }
 
     /**

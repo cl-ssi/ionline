@@ -25,6 +25,8 @@ class PlaceResource extends Resource
 
     protected static ?string $pluralModelLabel = 'Lugares';
 
+    protected static ?string $navigationGroup = 'Establecimientos';
+
     protected static ?string $cluster = Parameters::class;
 
     public static function form(Form $form): Form

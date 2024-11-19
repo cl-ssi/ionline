@@ -8,6 +8,7 @@ use App\Filament\Clusters\Documents\Resources\ManualResource\RelationManagers;
 use App\Models\Documents\Manual;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Pages\SubNavigationPosition;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -22,6 +23,14 @@ class ManualResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     protected static ?string $cluster = Documents::class;
+
+    protected static ?string $modelLabel = 'manual';
+
+    protected static ?string $pluralModelLabel = 'manuales';
+
+    protected static ?string $navigationGroup = 'Documentos';
+
+    protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
 
     public static function form(Form $form): Form
     {

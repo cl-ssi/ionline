@@ -24,8 +24,6 @@ class ReceptionController extends Controller
 {
     /**
      * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
     {
@@ -47,8 +45,6 @@ class ReceptionController extends Controller
 
     /**
      * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
      */
     public function create()
     {
@@ -83,7 +79,6 @@ class ReceptionController extends Controller
      * Display the specified resource.
      *
      * @param  \App\Models\Drugs\Reception  $reception
-     * @return \Illuminate\Http\Response
      */
     public function show(Reception $reception)
     {
@@ -100,7 +95,6 @@ class ReceptionController extends Controller
      * Display the specified resource.
      *
      * @param  \App\Models\Drugs\Reception  $reception
-     * @return \Illuminate\Http\Response
      */
     public function history(Reception $reception): View
     {
@@ -111,7 +105,6 @@ class ReceptionController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param  \App\Models\Drugs\Reception  $reception
-     * @return \Illuminate\Http\Response
      */
     public function edit(Reception $reception)
     {
@@ -290,7 +283,7 @@ class ReceptionController extends Controller
         return view('drugs.receptions.report', compact('items_sin_destruir','years'));
     }
 
-    public function alerts()
+    public function alerts(): View
     {
         /**
          * Obtiene todas las recepciones que contengan sustancias que ISP y Presumidas sea true y 
@@ -303,8 +296,9 @@ class ReceptionController extends Controller
                                 ->where('presumed', true);
                 });
             })
-        ->doesntHave('sampleToIsp')  // Aquí se filtran las recepciones sin relación con sampleToIsp
-        ->get();
+            ->doesntHave('sampleToIsp')  // Aquí se filtran las recepciones sin relación con sampleToIsp
+            ->whereDate('created_at', '>', now()->startOfYear()->subYears(3))  // ultimos 3 años
+            ->get();
 
         /**
          * Obtiene todas las recepciones que tengan relación con destrucción y que no se les ha creado recordToCourt
@@ -316,6 +310,7 @@ class ReceptionController extends Controller
             })
             ->has('destruction')
             ->doesntHave('recordToCourt')
+            ->whereDate('created_at', '>', now()->startOfYear()->subYears(3))  // ultimos 3 años
             ->get();
 
         /**
@@ -324,7 +319,8 @@ class ReceptionController extends Controller
          */
         $receptionsWithoutRecordToCourtOlderThan30Days = Reception::with('items','items.substance','destruction')
             ->doesntHave('recordToCourt')
-            ->where('created_at', '<=', now()->subDays(30)) // Filtra las recepciones creadas hace más de 30 días
+            ->whereDate('created_at', '<=', now()->subDays(30)) // Filtra las recepciones creadas hace más de 30 días
+            ->whereDate('created_at', '>', now()->startOfYear()->subYears(3))  // ultimos 3 años
             ->get();
 
         return view('drugs.receptions.alerts', compact(

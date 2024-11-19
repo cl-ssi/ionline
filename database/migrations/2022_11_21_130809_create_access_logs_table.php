@@ -18,6 +18,7 @@ class CreateAccessLogsTable extends Migration
             $table->foreignId('user_id')->constrained('users');
             $table->string('type')->nullable();
             $table->foreignId('switch_id')->nullable()->constrained('users');
+            $table->string('enviroment')->nullable();
             $table->timestamps();
         });
     }

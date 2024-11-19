@@ -15,14 +15,10 @@ class CreatePharmacyUsersTable extends Migration
     {
         Schema::create('frm_pharmacy_user', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('pharmacy_id');
-            $table->unsignedBigInteger('user_id');
-
+            $table->foreignId('pharmacy_id')->constrained('frm_pharmacies');
+            $table->foreignId('user_id')->constrained('users');
             $table->timestamps();
             $table->softDeletes();
-
-            $table->foreign('pharmacy_id')->references('id')->on('frm_pharmacies');
-            $table->foreign('user_id')->references('id')->on('users');
         });
     }
 

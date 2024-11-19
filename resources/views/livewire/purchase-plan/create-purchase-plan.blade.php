@@ -30,19 +30,32 @@
     </div>
 
     <div class="row g-3 mb-3">
-        <fieldset class="form-group col-6">
+        <fieldset class="form-group col-4">
             <label for="for_user_allowance_id">Unidad Organizacional</label>
             <input class="form-control" type="text" autocomplete="off" wire:model="organizationalUnit" {{ $readonly }} {{$disabled}} >
+        </fieldset>
+
+        <fieldset class="form-group col-sm-2">
+            <label for="year">Año</label>
+            <select class="form-select" id="for_year" name="year" wire:model.live="period">
+                <option value="">Selección...</option>
+                <option value="2025">2025</option>
+                <option value="2024">2024</option>
+                <option value="2023">2023</option>
+                <option value="2022">2022</option>
+            </select>
+            @error('selectedYear') <span class="text-danger error small">{{ $message }}</span> @enderror
         </fieldset>
 
         <fieldset class="form-group col-6">
             <label for="for_program">Programa</label>
             @livewire('search-select-program',[
-                    'emit_name' => 'searchedProgram',
+                'emit_name' => 'searchedProgram',
                     'program'   => $purchasePlanToEdit->programName ?? null,
                     'disabled'  => $disabled,
-                    'year'      => '2024'
+                    'year'      => $period ?? null
             ])
+            @error('selectedProgram') <span class="text-danger error small">{{ $message }}</span> @enderror
         </fieldset>
     </div>
 
@@ -50,14 +63,6 @@
         <fieldset class="form-group col-6">
             <label for="for_user_allowance_id">Asunto</label>
             <input class="form-control" type="text" autocomplete="off" wire:model="subject" {{$disabled}}>
-        </fieldset>
-        <fieldset class="form-group col-3">
-            <label for="for_period">Periodo</label>
-            <select class="form-select" wire:model="period" {{$disabled}}>
-                <option value="0">Seleccione</option>
-                <option value="2023" disabled>2023</option>
-                <option value="2024">2024</option>
-            </select>
         </fieldset>
     </div>
 

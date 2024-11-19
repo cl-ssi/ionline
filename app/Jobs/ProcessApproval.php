@@ -38,7 +38,23 @@ class ProcessApproval implements ShouldQueue
      */
     public function handle()
     {
-        app()->call($this->approval->callback_controller_method, 
+        /**
+         * Nueva forma de ejecutar callbacks
+         * Llamando a un metodo de un modelo que se llama approvalCallback()
+         */
+        if($this->approval->approvable_callback) {
+            if (method_exists($this->approval->approvable, 'approvalCallback')) {
+                $this->approval->approvable->approvalCallback();
+            }
+        }
+
+        /**
+         * Forma antigua de ejecutar callback llamando a un metodo de un controller
+         */
+        if($this->approval->callback_controller_method) {
+            app()->call($this->approval->callback_controller_method, 
             json_decode($this->approval->callback_controller_params,true));
+        } 
+
     }
 }

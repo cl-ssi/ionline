@@ -22,6 +22,8 @@ class ProfessionResource extends Resource
 
     protected static ?string $modelLabel = 'Profesiones';
 
+    protected static ?string $navigationGroup = 'Servicio';
+
     protected static ?string $cluster = Parameters::class;
 
     public static function form(Form $form): Form

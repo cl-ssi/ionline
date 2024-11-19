@@ -3,9 +3,13 @@
 namespace App\Models\RequestForms;
 
 use App\Models\Finance\Cdp;
+use App\Observers\RequestForms\RequestFormObserver;
+use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 use OwenIt\Auditing\Contracts\Auditable;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
@@ -28,7 +32,9 @@ use App\Models\Parameters\Program;
 use App\Models\Documents\SignaturesFile;
 use App\Models\PurchasePlan\PurchasePlan;
 use App\Models\Warehouse\Control;
+use App\Enums\RequestForms\Status;
 
+#[ObservedBy([RequestFormObserver::class])]
 class RequestForm extends Model implements Auditable
 {
     use \OwenIt\Auditing\Auditable;
@@ -81,7 +87,8 @@ class RequestForm extends Model implements Auditable
      * @var array
      */
     protected $casts = [
-        'approved_at' => 'datetime',
+        'approved_at'   => 'datetime',
+        'status'        => Status::class,
     ];
 
     /**
@@ -356,6 +363,36 @@ class RequestForm extends Model implements Auditable
         return $this->hasOne(Cdp::class);
     }
 
+    /**
+     * Get the treasury model.
+     */
+    public function treasury(): MorphOne
+    {
+        return $this->morphOne(Treasury::class, 'treasureable');
+    }
+
+    protected function treasuryId(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->id,
+        );
+    }
+
+    protected function treasurySubject(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->type_form,
+        );
+    }
+
+    protected function modelName(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => 'Formulario de Requerimiento',
+        );
+    }
+
+
     // FIXME: corregir este código
     public function isBlocked()
     {
@@ -390,7 +427,7 @@ class RequestForm extends Model implements Auditable
     {
         $total = 0;
         foreach ($this->children as $child) {
-            if ($child->status == 'approved')
+            if ($child->status->value == 'approved')
                 $total += $child->estimated_expense;
         }
         return $total;
@@ -453,7 +490,7 @@ class RequestForm extends Model implements Auditable
 
     public function isPurchaseInProcess()
     {
-        return $this->purchasingProcess == null || ($this->purchasingProcess && $this->purchasingProcess->status == 'in_process');
+        return $this->purchasingProcess == null || ($this->purchasingProcess && $this->purchasingProcess->status->value == 'in_process');
     }
 
     public function getSubtypeValueAttribute()
@@ -963,12 +1000,13 @@ class RequestForm extends Model implements Auditable
     public function canEdit()
     {
         $hasBudgetEvents = $this->eventRequestForms->where('event_type', 'budget_event')->count() > 0;
-        return in_array($this->status, ['saved', 'pending', 'rejected']) || ($this->status == 'approved' && !$this->purchasingProcess && !$hasBudgetEvents);
+
+        return in_array($this->status->value, ['saved', 'pending', 'rejected']) || ($this->status->value == 'approved' && !$this->purchasingProcess && !$hasBudgetEvents);
     }
 
     public function canDelete()
     {
-        return $this->status == 'saved' || !$this->hasFirstEventRequestFormSigned();
+        return $this->status->value == 'saved' || !$this->hasFirstEventRequestFormSigned();
     }
 
     public function hasEventRequestForms(){

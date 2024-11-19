@@ -10,6 +10,7 @@ class AccountingUpdate extends Component
 {
     public $oc;
     public $establishment;
+    public $inventories = [];
     public $allAccountingCodes;
     public $usefulLife = [];
     public $poPrice = [];
@@ -43,6 +44,7 @@ class AccountingUpdate extends Component
                     'product',
                     'place',
                     'place.location',
+                    'control',
                     'responsible',
                     'using',
                     'unspscProduct',
@@ -60,15 +62,10 @@ class AccountingUpdate extends Component
             $this->total = $inventories->sum('po_price');
             
             foreach ($inventories as $inventory) {
-                foreach ($inventories as $inventory) {
-                    $this->usefulLife[$inventory->id] = $inventory->useful_life;
-                    $this->poPrice[$inventory->id] = $inventory->po_price;
-                    $this->accountingCodes[$inventory->id] = $inventory->accounting_code_id;
-                    
-                }
-                
+                $this->usefulLife[$inventory->id] = $inventory->useful_life;
+                $this->poPrice[$inventory->id] = $inventory->po_price;
+                $this->accountingCodes[$inventory->id] = $inventory->accounting_code_id;
             }
-    
             // Devolver los inventarios con los valores asignados
             return $inventories;
         } else {

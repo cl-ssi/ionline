@@ -115,7 +115,7 @@
                                     <td nowrap>
                                         @if($loop->first)
                                             @if($requestForm->purchasingProcess)
-                                                {{ $requestForm->purchasingProcess->getStatus() }}
+                                                {{ $requestForm->purchasingProcess->status->getLabel() }}
                                             @else
                                                 En proceso
                                             @endif
@@ -223,7 +223,7 @@
                                     <td nowrap>
                                         @if($loop->first)
                                             @if($requestForm->purchasingProcess)
-                                                {{ $requestForm->purchasingProcess->getStatus() }}
+                                                {{ $requestForm->purchasingProcess->status->getLabel() }}
                                             @else
                                                 {{ $requestForm->getStatus() }}
                                             @endif
@@ -314,7 +314,7 @@
                                     <td nowrap>
                                         @if($loop->first)
                                             @if($requestForm->purchasingProcess)
-                                                {{ $requestForm->purchasingProcess->getStatus() }}
+                                                {{ $requestForm->purchasingProcess->status->getLabel() }}
                                             @else
                                                 En proceso
                                             @endif
@@ -422,7 +422,7 @@
                                     <td nowrap>
                                         @if($loop->first)
                                             @if($requestForm->purchasingProcess)
-                                                {{ $requestForm->purchasingProcess->getStatus() }}
+                                                {{ $requestForm->purchasingProcess->status->getLabel() }}
                                             @else
                                                 {{ $requestForm->getStatus() }}
                                             @endif

@@ -11,7 +11,7 @@ use App\Models\Documents\SignaturesFile;
 use App\Models\Documents\SignaturesFlow;
 use App\Models\Documents\Template;
 use App\Models\Documents\Type;
-use App\Models\Parameters\Municipality;
+use App\Models\Municipality;
 use App\Models\Rrhh\OrganizationalUnit;
 use App\Models\User;
 use Illuminate\Http\Request;

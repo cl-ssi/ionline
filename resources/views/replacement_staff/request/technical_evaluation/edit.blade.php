@@ -780,7 +780,7 @@
 </div>
 
 <!-- CUADRO DE ESTADO DE SOLICITUD -->
-@if($requestReplacementStaff->technicalEvaluation->technical_evaluation_status == 'complete' || $requestReplacementStaff->technicalEvaluation->technical_evaluation_status == 'rejected')
+@if($requestReplacementStaff->technicalEvaluation && ($requestReplacementStaff->technicalEvaluation->technical_evaluation_status == 'complete' || $requestReplacementStaff->technicalEvaluation->technical_evaluation_status == 'rejected'))
     <br>
     <div class="table-responsive">
         <table class="table table-sm table-bordered small">
@@ -1173,12 +1173,10 @@
                     <thead class="text-center small">
                         <tr>
                             <th width="3%">#</th>
-                            <th width="10%">Estamento</th>
-                            <th width="10%">Grado / Renta</th>
-                            <th width="15%">Calidad Jurídica / Fundamento</th>
-                            <th width="10%">Jornada</th>
-                            <th colspan="2">Datos del Seleccionado</th>
-                            <th></th>
+                            <th width="20%">Detalle Convocatoria</th>
+                            <th width="10%">Fecha Ingreso</th>
+                            <th colspan="2" width="40%">Datos del Seleccionado</th>
+                            <th width="3%"></th>
                         <tr>
                     </thead>
                     <tbody class="small">
@@ -1191,20 +1189,27 @@
                                 <th class="text-center">
                                     {{ $contador + 1 }}
                                 </th>
-                                <td class="text-center">{{ $position->profile_manage->name ?? '' }}</td>
-                                <td class="text-center">
+                                <td class="text-left">
+                                    <b>Estamento</b>: {{ $position->profile_manage->name ?? '' }}<br>
+
                                     @if($position->degree)
-                                        {{ $position->degree }}
+                                        <b>Grado</b>: {{ $position->degree }}
                                     @else
-                                        ${{ number_format($position->salary, 0, ",", ".") }}
+                                        <b>Renta</b>: ${{ number_format($position->salary, 0, ",", ".") }}
+                                    @endif
+                                    <br>
+                                    <b>Calidad Contractual</b>: {{ $position->legalQualityManage->NameValue ?? '' }} <br>
+                                    <b>Fundamento</b>: {{ $position->fundamentManage->NameValue ?? '' }} <br>
+                                    <b>Detalle</b>: {{ $position->fundamentDetailManage->NameValue ?? '' }} <br>
+                                    <b>Jornada</b>: {{ $position->WorkDayValue ?? '' }}
+                                </td>
+                                <td class="text-center">
+                                    {{ $selectedPosition->start_date ? $selectedPosition->start_date->format('d-m-Y') : '' }}
+                                    @if($selectedPosition->start_date != NULL)
+                                        <span class="badge badge-warning mt-3">3 meses: {{ $selectedPosition->start_date ? $selectedPosition->start_date->addMonths(3)->format('d-m-Y') : '' }}</span> 
+                                        <span class="badge badge-danger">6 meses: {{ $selectedPosition->start_date ? $selectedPosition->start_date->addMonths(6)->format('d-m-Y') : '' }}</span> 
                                     @endif
                                 </td>
-                                <td class="text-center">
-                                    {{ $position->legalQualityManage->NameValue ?? '' }} <br>
-                                    {{ $position->fundamentManage->NameValue ?? '' }} <br>
-                                    {{ $position->fundamentDetailManage->NameValue ?? '' }} <br>
-                                </td>
-                                <td class="text-center">{{ $position->WorkDayValue ?? '' }}</td>
                                 @if($selectedPosition->run != null)
                                 <td width="20%" class="text-center">
                                     {{ $selectedPosition->run }}-{{ $selectedPosition->dv }}
@@ -1245,14 +1250,18 @@
                 <table class="table table-sm table-striped table-bordered">
                     <thead class="text-center small">
                         <tr>
-                            <th width="3%" hidden>#</th>
+                            <th hidden>#</th>
                             <th width="3%">#</th>
+                            <th width="15%">Detalle Convocatoria</th>
+                            {{--
                             <th width="10%">Estamento</th>
                             <th width="10%">Grado / Renta</th>
                             <th width="15%">Calidad Jurídica / Fundamento</th>
                             <th width="10%">Jornada</th>
-                            <th colspan="2">Datos del Seleccionado</th>
-                            <th></th>
+                            --}}
+                            <th width="5%">Fecha Ingreso</th>
+                            <th colspan="2" width="40%">Datos del Seleccionado</th>
+                            <th width="3%"></th>
                         <tr>
                     </thead>
                     <tbody class="small">
@@ -1267,21 +1276,26 @@
                                     <th class="text-center">
                                         {{ $loop->iteration }}
                                     </th>
-                                    <td class="text-center">{{ $position->profile_manage->name ?? '' }}</td>
-                                    <td class="text-center">
+                                    <td class="text-left">
+                                        <b>Estamento</b>: {{ $position->profile_manage->name ?? '' }}<br>
+
                                         @if($position->degree)
-                                            {{ $position->degree }}
+                                            <b>Grado</b>: {{ $position->degree }}
                                         @else
-                                            ${{ number_format($position->salary, 0, ",", ".") }}
+                                            <b>Renta</b>: ${{ number_format($position->salary, 0, ",", ".") }}
                                         @endif
+                                        <br>
+                                        <b>Calidad Contractual</b>: {{ $position->legalQualityManage->NameValue ?? '' }} <br>
+                                        <b>Fundamento</b>: {{ $position->fundamentManage->NameValue ?? '' }} <br>
+                                        <b>Detalle</b>: {{ $position->fundamentDetailManage->NameValue ?? '' }} <br>
+                                        <b>Jornada</b>: {{ $position->WorkDayValue ?? '' }}
                                     </td>
-                                    <td class="text-center">
-                                        {{ $position->legalQualityManage->NameValue ?? '' }} <br>
-                                        {{ $position->fundamentManage->NameValue ?? '' }} <br>
-                                        {{ $position->fundamentDetailManage->NameValue ?? '' }} <br>
+                                    <td>
+                                        <fieldset class="form-group col-12">
+                                            <input type="date" class="form-control" name="start_date[]" id="for_start_date" required>
+                                        </fieldset>
                                     </td>
-                                    <td class="text-center">{{ $position->WorkDayValue ?? '' }}</td>
-                                    <td width="20%">
+                                    <td>
                                         <div class="input-group">
                                         <input type="text" class="form-control" name="run[]" autocomplete="off" placeholder="run" id="for_run" required>
                                           <div class="input-group-append col-12 col-md-5">
@@ -1289,7 +1303,7 @@
                                           </div>
                                         </div>
                                     </td>
-                                    <td>
+                                    <td width="25%">
                                         <fieldset class="form-group col-12 col-md-12">
                                             <input type="text" class="form-control" name="name[]" autocomplete="off" placeholder="Nombre Completo" id="for_name" required>
                                         </fieldset>
@@ -1529,6 +1543,7 @@
     
     $('input[name="selected_position[]"]').change(function() {
         var tr = $(this).closest('tr')
+        tr.find('input[name="start_date[]"]').prop('readonly', this.checked);
         tr.find('input[name="run[]"]').prop('readonly', this.checked);
         tr.find('input[name="dv[]"]').prop('readonly', this.checked);
         tr.find('input[name="name[]"]').prop('readonly', this.checked);

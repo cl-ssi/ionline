@@ -15,17 +15,12 @@ class CreateFrmDispatchVerificationMailingsTable extends Migration
     {
         Schema::create('frm_dispatch_verification_mailings', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('dispatch_id');
+            $table->foreignId('dispatch_id')->constrained('frm_dispatches')->onDelete('cascade');
             $table->string('status'); //pendiente, recibido conforme, recibido no conforme
-            
             $table->string('sender_observation')->nullable(); //pendiente, recibido conforme, recibido no conforme
             $table->dateTime('delivery_date'); //fecha de envío
-            
             $table->string('receiver_observation')->nullable();
             $table->dateTime('confirmation_date')->nullable(); //fecha vencimiento
-            
-
-            $table->foreign('dispatch_id')->references('id')->on('frm_dispatches')->onDelete('cascade');
             $table->timestamps();
             $table->softDeletes();
         });

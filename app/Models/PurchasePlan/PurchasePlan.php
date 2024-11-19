@@ -75,7 +75,7 @@ class PurchasePlan extends Model implements Auditable
     {
         $total = 0;
         foreach ($this->requestForms as $requestForm) {
-            if ($requestForm->status == 'approved')
+            if ($requestForm->status->value == 'approved')
                 $total += $requestForm->estimated_expense;
         }
         return $total;

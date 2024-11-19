@@ -66,11 +66,12 @@
                     wire:change="toggleFacturaElectronicaFields($event.target.value)"
                     >
                     <option></option>
-                    <option value ="guias_despacho">Guía de Despacho</option>
+                    <option value ="boleta_honorarios">Boleta Honorarios</option>
                     <option value ="factura_electronica">Factura Electronica Afecta</option>
                     <option value ="factura_exenta">Factura Electronica Exenta</option>
-                    <option value ="boleta_honorarios">Boleta Honorarios</option>
                     <option value ="boleta_electronica">Boleta Electrónica</option>
+                    <option value ="guias_despacho">Guía de Despacho</option>
+                    <option value ="orden_trabajo">Órden de Trabajo</option>
                 </select>
                 @error('reception.dte_type')
                     <span class="text-danger">{{ $message }}</span>
@@ -257,14 +258,14 @@
                     id="for-header_notes"
                     rows="6"
                     class="form-control"
-                    wire:model="reception.header_notes"></textarea>
+                    wire:model="no_oc_header_notes"></textarea>
 
                 <div>
                     @livewire(
                         'text-templates.controls-text-template',
                         [
                             'module' => 'Receptions',
-                            'input' => 'reception.header_notes',
+                            'input' => 'no_oc_header_notes',
                         ],
                         key('head_notes')
                     )
@@ -578,7 +579,7 @@
 
         <h3 class="text-center mb-3">Acta de recepción conforme</h3>
 
-        <p style="white-space: pre-wrap;">{{ $reception['header_notes'] ?? '' }}</p>
+        <p style="white-space: pre-wrap;">{{ $no_oc_header_notes ?? '' }}</p>
 
         <table class="table table-sm table-bordered">
             <tr>

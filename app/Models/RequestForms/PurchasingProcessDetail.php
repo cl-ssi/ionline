@@ -5,6 +5,7 @@ namespace App\Models\RequestForms;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 use OwenIt\Auditing\Contracts\Auditable;
 
@@ -106,6 +107,32 @@ class PurchasingProcessDetail extends Pivot implements Auditable
         elseif($this->immediatePurchase) return $this->itemRequestForm && $this->itemRequestForm->requestForm->request_form_id ? 'Orden de compra' : $this->immediatePurchase->purchaseType->name;
         else return '';
         // return $this->internalPurchaseOrder ? 'OC interna' : ($this->pettyCash ? 'Fondo menor' : ($this->fundToBeSettled ? 'Fondo a rendir' : ($this->tender ? $this->tender->purchaseType->name : '')));
+    }
+
+    protected function purchasingTypeName(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->determinePurchasingTypeName(),
+        );
+    }
+
+    protected function determinePurchasingTypeName(): string
+    {
+        if ($this->internalPurchaseOrder) {
+            return 'OC interna';
+        } elseif ($this->pettyCash) {
+            return 'Fondo menor';
+        } elseif ($this->fundToBeSettled) {
+            return 'Fondo a rendir';
+        } elseif ($this->tender) {
+            return $this->tender->purchaseType->name ?? '';
+        } elseif ($this->directDeal) {
+            return $this->directDeal->purchaseType->name ?? '';
+        } elseif ($this->immediatePurchase) {
+            return $this->itemRequestForm && $this->itemRequestForm->requestForm->request_form_id ? 'Orden de compra' : $this->immediatePurchase->purchaseType->name;
+        } else {
+            return '';
+        }
     }
 
     public function getPurchasingType(){

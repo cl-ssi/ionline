@@ -44,21 +44,21 @@
                   @foreach($contract_manager_forms as $requestForm)
                         <tr>
                             <th>{{ $requestForm->id }} <br>
-                                @switch($requestForm->getStatus())
+                                @switch($requestForm->status->getLabel())
                                     @case('Pendiente')
                                         <i class="fas fa-clock"></i>
                                         @break
 
                                     @case('Aprobado')
                                         <span style="color: green;">
-                                          <i class="fas fa-check-circle" title="{{ $requestForm->getStatus() }}"></i>
+                                          <i class="fas fa-check-circle" title="{{ $requestForm->status->getLabel() }}"></i>
                                         </span>
                                         @break
 
                                     @case('Rechazado')
                                         <a href="">
                                             <span style="color: Tomato;">
-                                                <i class="fas fa-times-circle" title="{{ $requestForm->getStatus() }}"></i>
+                                                <i class="fas fa-times-circle" title="{{ $requestForm->status->getLabel() }}"></i>
                                             </span>
                                         </a>
                                         @break
@@ -126,7 +126,7 @@
                                 @include('request_form.partials.modals.old_signed_request_forms')
                                 @endif
 
-                              @if(Str::contains($requestForm->subtype, 'tiempo') && !$requestForm->isBlocked() && $requestForm->status == 'approved')
+                              @if(Str::contains($requestForm->subtype, 'tiempo') && !$requestForm->isBlocked() && $requestForm->status->value == 'approved')
                               <a onclick="return confirm('¿Está seguro/a de crear nuevo formulario de ejecución inmediata?') || event.stopImmediatePropagation()" data-toggle="modal" data-target="#processClosure-{{$requestForm->id}}" class="btn btn-outline-secondary btn-sm" title="Nuevo formulario de ejecución inmediata"><i class="fas fa-plus"></i>
                               </a>
                               @include('request_form.partials.modals.create_provision_period_select')

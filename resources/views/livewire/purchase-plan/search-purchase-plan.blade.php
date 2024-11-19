@@ -151,8 +151,8 @@
                                             wire:click="delete({{ $purchasePlan }})"><i class="fas fa-trash fa-fw"></i>
                                         </button>
                                     @endif
-                                    {{--
-                                    @if($purchasePlan->canAddPurchasePlanId())
+
+                                    @if($purchasePlan->canAddPurchasePlanId() && $index == 'my_assigned_plans')
                                         <!-- Button trigger modal: Ingresar datos de Portal "Plan de Compras" -->
                                         <button type="button" class="btn btn-outline-primary btn-sm mb-1" data-bs-toggle="modal" data-bs-target="#modal-{{$purchasePlan->id }}">
                                             <i class="fas fa-upload fa-fw"></i>
@@ -162,7 +162,7 @@
                                             'purchasePlan' =>   $purchasePlan 
                                         ])
                                     @endif
-                                    --}}
+
                                     @if($index == 'pending')
                                         @livewire('documents.approval-button', [
                                             'approval' => $purchasePlan->getApprovalPending(), 

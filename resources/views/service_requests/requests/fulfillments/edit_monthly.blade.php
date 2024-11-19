@@ -360,12 +360,9 @@
 
                 <!-- información adicional finanzas -->
                 @canany(['Service Request: fulfillments finance'])
-                <form method="POST" action="{{ route('rrhh.service-request.fulfillment.update',$fulfillment) }}" enctype="multipart/form-data">
-                    @csrf
-                    @method('PUT')
                     <div class="card border-info mb-3">
                         <div class="card-header bg-info text-white">
-                            Datos adicionales - Finanzas
+                            Datos adicionales - Finanzas/Contabilidad
                         </div>
                         <div class="card-body">
                             <div class="form-row">
@@ -385,70 +382,105 @@
                                     <label for="for_total_paid">Total a pagar</label>
                                     <input type="text" class="form-control" name="total_to_pay" disabled value="{{$fulfillment->total_to_pay}}">
                                 </fieldset>
-                            </div>
-                            <div class="form-row">
-                                <fieldset class="form-group col-6 col-md-2">
-                                    <label for="for_bill_number">N° Boleta</label>
-                                    <input type="text" class="form-control" name="bill_number" value="{{$fulfillment->bill_number}}">
-                                </fieldset>
-                                <fieldset class="form-group col-6 col-md-2">
-                                    <label for="for_total_hours_paid">Tot. hrs pagadas per.</label>
-                                    <input type="text" class="form-control" name="total_hours_paid" value="{{$fulfillment->total_hours_paid}}">
-                                </fieldset>
-                                <fieldset class="form-group col-6 col-md-2">
-                                    <label for="for_total_paid">Total pagado</label>
-                                    <input type="text" class="form-control" name="total_paid" value="{{$fulfillment->total_paid}}">
-                                </fieldset>
-                                <fieldset class="form-group col-6 col-md-2">
-                                    <label for="for_payment_date">Fecha pago</label>
-                                    <input type="date" class="form-control" name="payment_date" required @if($fulfillment->payment_date) value="{{$fulfillment->payment_date->format('Y-m-d')}}" @endif>
-                                </fieldset>
-                                <fieldset class="form-group col-6 col-md-3">
-                                    <label for="for_contable_month">Mes contable pago</label>
-                                    <select name="contable_month" class="form-control" required>
-                                        <option value=""></option>
-                                        <option value="1" @if($fulfillment->contable_month == 1) selected @endif>Enero</option>
-                                        <option value="2" @if($fulfillment->contable_month == 2) selected @endif>Febrero</option>
-                                        <option value="3" @if($fulfillment->contable_month == 3) selected @endif>Marzo</option>
-                                        <option value="4" @if($fulfillment->contable_month == 4) selected @endif>Abril</option>
-                                        <option value="5" @if($fulfillment->contable_month == 5) selected @endif>Mayo</option>
-                                        <option value="6" @if($fulfillment->contable_month == 6) selected @endif>Junio</option>
-                                        <option value="7" @if($fulfillment->contable_month == 7) selected @endif>Julio</option>
-                                        <option value="8" @if($fulfillment->contable_month == 8) selected @endif>Agosto</option>
-                                        <option value="9" @if($fulfillment->contable_month == 9) selected @endif>Septiembre</option>
-                                        <option value="10" @if($fulfillment->contable_month == 10) selected @endif>Octubre</option>
-                                        <option value="11" @if($fulfillment->contable_month == 11) selected @endif>Noviembre</option>
-                                        <option value="12" @if($fulfillment->contable_month == 12) selected @endif>Diciembre</option>
-                                    </select>
-                                </fieldset>
-                            </div>
-                            <div class="form-row">
-                                <div class="col col-md-2">
-                                    <button type="submit" class="btn btn-primary">Guardar</button>
-                                </div>
-                                <div class="col-12 col-md-7">
-
-                                </div>
-                                <div class="col-12 col-md-3 text-right">
+                                <fieldset class="form-group col col-md-2">
+                                    <label for=""><br></label>
                                     @can('Service Request: fulfillments finance')
-                                    @if($fulfillment->finances_approver_id == NULL)
-                                    <a type="button" class="btn btn-danger" @disabled(auth()->user()->godMode) onclick="return confirm('Una vez confirmado, no podrá modificar la información. ¿Está seguro de rechazar?');" href="{{ route('rrhh.service-request.fulfillment.refuse-Fulfillment',$fulfillment) }}">
-                                        Rechazar
-                                    </a>
-                                    <a type="button" class="btn btn-success" @disabled(auth()->user()->godMode) onclick="return confirm('Una vez confirmado, no podrá modificar la información. ¿Está seguro de confirmar?');" href="{{ route('rrhh.service-request.fulfillment.confirm-Fulfillment',$fulfillment) }}">
-                                        Confirmar
-                                    </a>
-                                    @else
-                                    <button type="submit" class="btn btn-danger" disabled>Rechazar</button>
-                                    <button type="submit" class="btn btn-success" disabled>Confirmar</button>
-                                    @endif
+                                        @if($fulfillment->finances_approver_id == NULL)
+                                            <a type="button" class="btn btn-danger form-control" @disabled(auth()->user()->godMode) onclick="return confirm('Una vez confirmado, no podrá modificar la información. ¿Está seguro de rechazar?');" href="{{ route('rrhh.service-request.fulfillment.refuse-Fulfillment',$fulfillment) }}">
+                                                Rechazar
+                                            </a>
+                                        @else
+                                            <button type="submit" class="btn btn-danger form-control" disabled>Rechazar</button>
+                                        @endif
                                     @endcan
-                                </div>
+                                </fieldset>
+                                <fieldset class="form-group col col-md-2">
+                                    <label for=""><br></label>
+                                    @can('Service Request: fulfillments finance')
+                                        @if($fulfillment->finances_approver_id == NULL)
+                                            <a type="button" class="btn btn-success form-control" @disabled(auth()->user()->godMode) onclick="return confirm('Una vez confirmado, no podrá modificar la información. ¿Está seguro de confirmar?');" href="{{ route('rrhh.service-request.fulfillment.confirm-Fulfillment',$fulfillment) }}">
+                                                Confirmar
+                                            </a>
+                                        @else
+                                            <button type="submit" class="btn btn-success form-control" disabled>Confirmar</button>
+                                        @endif
+                                    @endcan
+                                </fieldset>
                             </div>
-
                         </div>
                     </div>
-                </form>
+                @endcan
+
+                @canany(['Service Request: fulfillments finance', 'Service Request: fulfillments treasury'])
+                    <form method="POST" action="{{ route('rrhh.service-request.fulfillment.update',$fulfillment) }}" enctype="multipart/form-data">
+                        @csrf
+                        @method('PUT')
+                        <div class="card border-info mb-3">
+                            <div class="card-header bg-info text-white">
+                                Datos adicionales - Finanzas/Tesorería
+                            </div>
+                            <div class="card-body">
+                                <div class="form-row">
+                                    <fieldset class="form-group col-5 col-md-2">
+                                        <label for="for_resolution_number">N° Resolución</label>
+                                        <input type="text" class="form-control" disabled name="resolution_number" value="{{$serviceRequest->resolution_number}}">
+                                    </fieldset>
+                                    <fieldset class="form-group col-7 col-md-2">
+                                        <label for="for_resolution_date">Fecha Resolución</label>
+                                        <input type="date" class="form-control" disabled name="resolution_date" @if($serviceRequest->resolution_date) value="{{$serviceRequest->resolution_date->format('Y-m-d')}}" @endif>
+                                    </fieldset>
+                                    <fieldset class="form-group col col-md-2">
+                                        <label for="for_total_hours_paid">Total hrs. a pagar per.</label>
+                                        <input type="text" class="form-control" name="total_hours_to_pay" disabled value="{{$fulfillment->total_hours_to_pay}}">
+                                    </fieldset>
+                                    <fieldset class="form-group col col-md-2">
+                                        <label for="for_total_paid">Total a pagar</label>
+                                        <input type="text" class="form-control" name="total_to_pay" disabled value="{{$fulfillment->total_to_pay}}">
+                                    </fieldset>
+                                </div>
+                                <div class="form-row">
+                                    <fieldset class="form-group col-6 col-md-2">
+                                        <label for="for_bill_number">N° Boleta</label>
+                                        <input type="text" class="form-control" name="bill_number" value="{{$fulfillment->bill_number}}">
+                                    </fieldset>
+                                    <fieldset class="form-group col-6 col-md-2">
+                                        <label for="for_total_hours_paid">Tot. hrs pagadas per.</label>
+                                        <input type="text" class="form-control" name="total_hours_paid" value="{{$fulfillment->total_hours_paid}}">
+                                    </fieldset>
+                                    <fieldset class="form-group col-6 col-md-2">
+                                        <label for="for_total_paid">Total pagado</label>
+                                        <input type="text" class="form-control" name="total_paid" value="{{$fulfillment->total_paid}}">
+                                    </fieldset>
+                                    <fieldset class="form-group col-6 col-md-2">
+                                        <label for="for_payment_date">Fecha pago</label>
+                                        <input type="date" class="form-control" name="payment_date" required @if($fulfillment->payment_date) value="{{$fulfillment->payment_date->format('Y-m-d')}}" @endif>
+                                    </fieldset>
+                                    <fieldset class="form-group col-6 col-md-2">
+                                        <label for="for_contable_month">Mes contable pago</label>
+                                        <select name="contable_month" class="form-control" required>
+                                            <option value=""></option>
+                                            <option value="1" @if($fulfillment->contable_month == 1) selected @endif>Enero</option>
+                                            <option value="2" @if($fulfillment->contable_month == 2) selected @endif>Febrero</option>
+                                            <option value="3" @if($fulfillment->contable_month == 3) selected @endif>Marzo</option>
+                                            <option value="4" @if($fulfillment->contable_month == 4) selected @endif>Abril</option>
+                                            <option value="5" @if($fulfillment->contable_month == 5) selected @endif>Mayo</option>
+                                            <option value="6" @if($fulfillment->contable_month == 6) selected @endif>Junio</option>
+                                            <option value="7" @if($fulfillment->contable_month == 7) selected @endif>Julio</option>
+                                            <option value="8" @if($fulfillment->contable_month == 8) selected @endif>Agosto</option>
+                                            <option value="9" @if($fulfillment->contable_month == 9) selected @endif>Septiembre</option>
+                                            <option value="10" @if($fulfillment->contable_month == 10) selected @endif>Octubre</option>
+                                            <option value="11" @if($fulfillment->contable_month == 11) selected @endif>Noviembre</option>
+                                            <option value="12" @if($fulfillment->contable_month == 12) selected @endif>Diciembre</option>
+                                        </select>
+                                    </fieldset>
+                                    <fieldset class="form-group col-6 col-md-2">
+                                        <label for="for_payment_date"><br></label>
+                                        <button type="submit" class="btn btn-primary form-control">Guardar</button>
+                                    </fieldset>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
                 @endcan
 
 
@@ -583,12 +615,9 @@
 
                 <!-- información adicional finanzas -->
                 @canany(['Service Request: fulfillments finance'])
-                <form method="POST" action="{{ route('rrhh.service-request.fulfillment.update',$fulfillment) }}" enctype="multipart/form-data">
-                    @csrf
-                    @method('PUT')
-                    <div class="card border-info mb-3">
+                    <div class="card border-dark mb-3">
                         <div class="card-header bg-info text-white">
-                            Datos adicionales - Finanzas
+                            Datos adicionales - Finanzas/Contabilidad
                         </div>
                         <div class="card-body">
                             <div class="form-row">
@@ -596,70 +625,96 @@
                                     <label for="for_total_paid">Total a pagar</label>
                                     <input type="text" class="form-control" name="total_to_pay" disabled value="{{$fulfillment->total_to_pay}}">
                                 </fieldset>
-                            </div>
-                            <div class="form-row">
-                                <fieldset class="form-group col-6 col-md-2">
-                                    <label for="for_bill_number">N° Boleta</label>
-                                    <input type="text" class="form-control" name="bill_number" value="{{$fulfillment->bill_number}}">
+                                <fieldset class="form-group col col-md-6">
+                                    
                                 </fieldset>
-                                <!-- <fieldset class="form-group col-6 col-md-2">
-                                    <label for="for_total_hours_paid">Tot. hrs pagadas per.</label>
-                                    <input type="text" class="form-control" name="total_hours_paid" value="{{$fulfillment->total_hours_paid}}">
-                                </fieldset> -->
-                                <fieldset class="form-group col-6 col-md-2">
-                                    <label for="for_total_paid">Total pagado</label>
-                                    <input type="text" class="form-control" name="total_paid" value="{{$fulfillment->total_paid}}">
-                                </fieldset>
-                                <fieldset class="form-group col-6 col-md-2">
-                                    <label for="for_payment_date">Fecha pago</label>
-                                    <input type="date" class="form-control" name="payment_date" required @if($fulfillment->payment_date) value="{{$fulfillment->payment_date->format('Y-m-d')}}" @endif>
-                                </fieldset>
-                                <fieldset class="form-group col-6 col-md-3">
-                                    <label for="for_contable_month">Mes contable pago</label>
-                                    <select name="contable_month" class="form-control" required>
-                                        <option value=""></option>
-                                        <option value="1" @if($fulfillment->contable_month == 1) selected @endif>Enero</option>
-                                        <option value="2" @if($fulfillment->contable_month == 2) selected @endif>Febrero</option>
-                                        <option value="3" @if($fulfillment->contable_month == 3) selected @endif>Marzo</option>
-                                        <option value="4" @if($fulfillment->contable_month == 4) selected @endif>Abril</option>
-                                        <option value="5" @if($fulfillment->contable_month == 5) selected @endif>Mayo</option>
-                                        <option value="6" @if($fulfillment->contable_month == 6) selected @endif>Junio</option>
-                                        <option value="7" @if($fulfillment->contable_month == 7) selected @endif>Julio</option>
-                                        <option value="8" @if($fulfillment->contable_month == 8) selected @endif>Agosto</option>
-                                        <option value="9" @if($fulfillment->contable_month == 9) selected @endif>Septiembre</option>
-                                        <option value="10" @if($fulfillment->contable_month == 10) selected @endif>Octubre</option>
-                                        <option value="11" @if($fulfillment->contable_month == 11) selected @endif>Noviembre</option>
-                                        <option value="12" @if($fulfillment->contable_month == 12) selected @endif>Diciembre</option>
-                                    </select>
-                                </fieldset>
-                            </div>
-                            <div class="form-row">
-                                <div class="col col-md-2">
-                                    <button type="submit" class="btn btn-primary">Guardar</button>
-                                </div>
-                                <div class="col-12 col-md-7">
-
-                                </div>
-                                <div class="col-12 col-md-3 text-right">
+                                <fieldset class="form-group col col-md-2">
+                                    <label for="for_total_paid"><br></label>
                                     @can('Service Request: fulfillments finance')
-                                    @if($fulfillment->finances_approver_id == NULL)
-                                    <a type="button" class="btn btn-danger" @disabled(auth()->user()->godMode) onclick="return confirm('Una vez confirmado, no podrá modificar la información. ¿Está seguro de rechazar?');" href="{{ route('rrhh.service-request.fulfillment.refuse-Fulfillment',$fulfillment) }}">
-                                        Rechazar
-                                    </a>
-                                    <a type="button" class="btn btn-success" @disabled(auth()->user()->godMode) onclick="return confirm('Una vez confirmado, no podrá modificar la información. ¿Está seguro de confirmar?');" href="{{ route('rrhh.service-request.fulfillment.confirm-Fulfillment',$fulfillment) }}">
-                                        Confirmar
-                                    </a>
-                                    @else
-                                    <button type="submit" class="btn btn-danger" disabled>Rechazar</button>
-                                    <button type="submit" class="btn btn-success" disabled>Confirmar</button>
-                                    @endif
+                                        @if($fulfillment->finances_approver_id == NULL)
+                                            <a type="button" class="btn btn-danger form-control" @disabled(auth()->user()->godMode) onclick="return confirm('Una vez confirmado, no podrá modificar la información. ¿Está seguro de rechazar?');" href="{{ route('rrhh.service-request.fulfillment.refuse-Fulfillment',$fulfillment) }}">
+                                                Rechazar
+                                            </a>
+                                        @else
+                                            <button type="submit" class="btn btn-danger form-control" disabled>Rechazar</button>
+                                        @endif
                                     @endcan
-                                </div>
+                                </fieldset>
+                                <fieldset class="form-group col col-md-2">
+                                    <label for="for_total_paid"><br></label>
+                                    @can('Service Request: fulfillments finance')
+                                        @if($fulfillment->finances_approver_id == NULL)
+                                            <a type="button" class="btn btn-success form-control" @disabled(auth()->user()->godMode) onclick="return confirm('Una vez confirmado, no podrá modificar la información. ¿Está seguro de confirmar?');" href="{{ route('rrhh.service-request.fulfillment.confirm-Fulfillment',$fulfillment) }}">
+                                                Confirmar
+                                            </a>
+                                        @else
+                                            <button type="submit" class="btn btn-success form-control" disabled>Confirmar</button>
+                                        @endif
+                                    @endcan
+                                </fieldset>
                             </div>
-
                         </div>
                     </div>
-                </form>
+                @endcan
+
+                @canany(['Service Request: fulfillments finance', 'Service Request: fulfillments treasury'])
+                    <form method="POST" action="{{ route('rrhh.service-request.fulfillment.update',$fulfillment) }}" enctype="multipart/form-data">
+                        @csrf
+                        @method('PUT')
+                        <div class="card border-dark mb-3">
+                            <div class="card-header bg-info text-white">
+                                Datos adicionales - Finanzas/Tesorería
+                            </div>
+                            <div class="card-body">
+                                <div class="form-row">
+                                    <fieldset class="form-group col col-md-2">
+                                        <label for="for_total_paid">Total a pagar</label>
+                                        <input type="text" class="form-control" name="total_to_pay" disabled value="{{$fulfillment->total_to_pay}}">
+                                    </fieldset>
+                                </div>
+                                <div class="form-row">
+                                    <fieldset class="form-group col-6 col-md-2">
+                                        <label for="for_bill_number">N° Boleta</label>
+                                        <input type="text" class="form-control" name="bill_number" value="{{$fulfillment->bill_number}}">
+                                    </fieldset>
+                                    <!-- <fieldset class="form-group col-6 col-md-2">
+                                        <label for="for_total_hours_paid">Tot. hrs pagadas per.</label>
+                                        <input type="text" class="form-control" name="total_hours_paid" value="{{$fulfillment->total_hours_paid}}">
+                                    </fieldset> -->
+                                    <fieldset class="form-group col-6 col-md-2">
+                                        <label for="for_total_paid">Total pagado</label>
+                                        <input type="text" class="form-control" name="total_paid" value="{{$fulfillment->total_paid}}">
+                                    </fieldset>
+                                    <fieldset class="form-group col-6 col-md-2">
+                                        <label for="for_payment_date">Fecha pago</label>
+                                        <input type="date" class="form-control" name="payment_date" required @if($fulfillment->payment_date) value="{{$fulfillment->payment_date->format('Y-m-d')}}" @endif>
+                                    </fieldset>
+                                    <fieldset class="form-group col-6 col-md-3">
+                                        <label for="for_contable_month">Mes contable pago</label>
+                                        <select name="contable_month" class="form-control" required>
+                                            <option value=""></option>
+                                            <option value="1" @if($fulfillment->contable_month == 1) selected @endif>Enero</option>
+                                            <option value="2" @if($fulfillment->contable_month == 2) selected @endif>Febrero</option>
+                                            <option value="3" @if($fulfillment->contable_month == 3) selected @endif>Marzo</option>
+                                            <option value="4" @if($fulfillment->contable_month == 4) selected @endif>Abril</option>
+                                            <option value="5" @if($fulfillment->contable_month == 5) selected @endif>Mayo</option>
+                                            <option value="6" @if($fulfillment->contable_month == 6) selected @endif>Junio</option>
+                                            <option value="7" @if($fulfillment->contable_month == 7) selected @endif>Julio</option>
+                                            <option value="8" @if($fulfillment->contable_month == 8) selected @endif>Agosto</option>
+                                            <option value="9" @if($fulfillment->contable_month == 9) selected @endif>Septiembre</option>
+                                            <option value="10" @if($fulfillment->contable_month == 10) selected @endif>Octubre</option>
+                                            <option value="11" @if($fulfillment->contable_month == 11) selected @endif>Noviembre</option>
+                                            <option value="12" @if($fulfillment->contable_month == 12) selected @endif>Diciembre</option>
+                                        </select>
+                                    </fieldset>
+                                    <fieldset class="form-group col-6 col-md-2">
+                                        <label for=""><br></label>
+                                        <button type="submit" class="btn btn-primary form-control">Guardar</button>
+                                    </fieldset>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
                 @endcan
 
 

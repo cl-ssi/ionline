@@ -632,7 +632,7 @@ class RequestFormController extends Controller {
 
         $requestForm->load('purchasingProcess.details', 'children.purchasingProcess.details');
         // Validar que el formulario req padre esté finalizado.
-        if(!$requestForm->purchasingProcess || $requestForm->purchasingProcess->status != 'finalized'){
+        if(!$requestForm->purchasingProcess || $requestForm->purchasingProcess->status->value != 'finalized'){
             session()->flash('danger', 'No se puede generar un nuevo suministro, el formulario de requerimiento N° '.$requestForm->folio.' no ha finalizado su proceso de compra.');
             return redirect()->back();
         }
@@ -792,7 +792,7 @@ class RequestFormController extends Controller {
 
     public function rollback(RequestForm $requestForm)
     {
-        if($requestForm->status != 'approved'){
+        if($requestForm->status->value != 'approved'){
             session()->flash('danger', 'No se puede revertir firmas para el formulario de requerimiento N° '.$requestForm->folio.'.');
             return redirect()->back();
         }
@@ -811,7 +811,7 @@ class RequestFormController extends Controller {
         }else{
             // $requestForm->purchasers()->detach();
             $requestForm->signatures_file_id = null;
-            $requestForm->status = 'pending';
+            $requestForm->status->value = 'pending';
             $requestForm->approved_at = null;
         }
 

@@ -43,6 +43,8 @@
                 wire:click="search"
                 class="btn btn-primary">Buscar</button>
         </div>
+        <div wire:loading wire:target="search"><i class="fas fa-spinner fa-spin"></i> Cargando...</div>
+
 
 
     </div>
@@ -906,10 +908,12 @@
 
         <button type="submit"
             class="btn btn-primary"
-            wire:click="fusion">
+            wire:click="fusionar">
             <i class="bi bi-fusion"></i>
             Fusionar
         </button>
+        <div wire:loading wire:target="fusionar"><i class="fas fa-spinner fa-spin"></i></div>
+
     @endif
 
     @include('layouts.bt5.partials.errors')

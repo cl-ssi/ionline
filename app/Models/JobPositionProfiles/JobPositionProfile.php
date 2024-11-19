@@ -91,6 +91,11 @@ class JobPositionProfile extends Model implements Auditable
         return $this->belongsTo(OrganizationalUnit::class, 'ou_creator_id')->withTrashed();
     }
 
+    public function ouCreator(): BelongsTo
+    {
+        return $this->belongsTo(OrganizationalUnit::class, 'ou_creator_id')->withTrashed();
+    }
+
     /**
      * Get the organizational unit that owns the job position profile.
      *

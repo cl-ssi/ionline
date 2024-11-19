@@ -2,9 +2,13 @@
 
 namespace App\Models\Finance;
 
+use App\Observers\Finance\DteObserver;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 use OwenIt\Auditing\Contracts\Auditable;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\Model;
@@ -26,6 +30,7 @@ use App\Models\Rrhh\OrganizationalUnit;
 use App\Models\Sigfe\PdfBackup;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
+#[ObservedBy([DteObserver::class])]
 class Dte extends Model implements Auditable
 {
     use \OwenIt\Auditing\Auditable;
@@ -200,6 +205,7 @@ class Dte extends Model implements Auditable
      * boleta_electronica
      */
     
+
     /**
      * Get the purchase order associated with the DTE.
      *
@@ -209,7 +215,7 @@ class Dte extends Model implements Auditable
     {
         return $this->belongsTo(PurchaseOrder::class, 'folio_oc', 'code');
     }
-    
+
     /**
      * Control (ingresos) de Warehouse.
      *
@@ -429,6 +435,39 @@ class Dte extends Model implements Auditable
             return $this->hasMany(Reception::class);
         }
     }
+
+    /**
+     * Get the treasury model.
+     */
+    public function treasury(): MorphOne
+    {
+        return $this->morphOne(Treasury::class, 'treasureable');
+    }
+
+    protected function treasuryId(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->id,
+        );
+    }
+
+    protected function treasurySubject(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->tipo_documento,
+        );
+    }
+
+    protected function modelName(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => 'Documento tributario',
+        );
+    }
+
+    // public function getTipoDocumentoAttribute(){
+    //     return strtoupper(str_replace('_',' ',$this->tipo_documento));
+    // }
 
     /** Compras Inmediatas */
     // public function immediatePurchases()

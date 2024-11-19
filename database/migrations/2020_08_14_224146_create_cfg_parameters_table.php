@@ -19,6 +19,7 @@ class CreateCfgParametersTable extends Migration
             $table->string('parameter');
             $table->string('value');
             $table->string('description')->nullable();
+            $table->foreignId('establishment_id')->nullable()->constrained('establishments');
             $table->timestamps();
         });
     }

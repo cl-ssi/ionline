@@ -15,14 +15,11 @@ class CreateSchoolUsersTable extends Migration
     {
         Schema::create('school_users_external', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('school_id');
-            $table->foreignId('user_external_id');
+            $table->foreignId('school_id')->constrained('schools');
+            $table->foreignId('user_external_id')->constrained('users_external');
             $table->boolean('admin')->nullable();
             $table->timestamps();
             $table->softDeletes();
-
-            $table->foreign('school_id')->references('id')->on('schools');
-            $table->foreign('user_external_id')->references('id')->on('users_external');
         });
     }
 

@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use App\Observers\FileObserver;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+#[ObservedBy([FileObserver::class])]
 class File extends Model
 {
     use SoftDeletes;
@@ -36,8 +39,9 @@ class File extends Model
     //     'required' => false, // (Opcional)
     //     'valid_types' => json_encode(["pdf", "xls"]), (Opcional)
     //     'max_file_size' => 10, (Opcional)
-    //     'stored_by_id' => 15287582,
     // ]);
+    // 
+    //'stored_by_id' => 15287582 lo hace el observer
 
     /**
      * The attributes that are mass assignable.

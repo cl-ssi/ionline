@@ -15,8 +15,7 @@ class CreateFrmProductsTable extends Migration
     {
         Schema::create('frm_products', function (Blueprint $table) {
             $table->id();
-
-            $table->bigInteger('barcode')->nullable();
+            $table->string('barcode')->nullable();
             $table->string('name');
             $table->string('unit');
             $table->date('expiration')->nullable();
@@ -24,20 +23,20 @@ class CreateFrmProductsTable extends Migration
             $table->integer('price')->nullable();
             $table->integer('stock');
             $table->integer('critic_stock')->nullable();
+            $table->string('min_stock')->nullable();
+            $table->string('max_stock')->nullable();
             $table->longText('storage_conditions')->nullable(); 
             //$table->string('category');
             //$table->string('program')->nullable();
             //$table->integer('valued'); On the fly
+            $table->foreignId('pharmacy_id')->nullable()->constrained('frm_pharmacies');
+            $table->foreignId('category_id')->nullable()->constrained('frm_categories');
+            $table->foreignId('program_id')->nullable()->constrained('frm_programs');
+            $table->string('experto_id')->nullable();
+            $table->foreignId('unspsc_product_id')->nullable()->constrained('unspsc_products');
 
-            $table->unsignedBigInteger('pharmacy_id');
-            $table->unsignedBigInteger('category_id');
-            $table->unsignedBigInteger('program_id');
             $table->timestamps();
             $table->softDeletes();
-
-            $table->foreign('pharmacy_id')->references('id')->on('frm_pharmacies');
-            $table->foreign('category_id')->references('id')->on('frm_categories');
-            $table->foreign('program_id')->references('id')->on('frm_programs');
         });
     }
 

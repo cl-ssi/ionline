@@ -24,9 +24,7 @@
 			</select>
 		</div> -->
         <div class="form-group col">
-            
 			<label>Año Inicio de Contrato</label>
-            {{now()->subYear()->format('Y')}}
 			<select class="form-control" data-live-search="true" name="year" data-size="5">
                 <option value="{{now()->addYear(-3)->format('Y')}}" @selected($request->year == now()->addYear(-3)->format('Y'))> {{now()->addYear(-3)->format('Y')}}</option>
                 <option value="{{now()->addYear(-2)->format('Y')}}" @selected($request->year == now()->addYear(-2)->format('Y'))> {{now()->addYear(-2)->format('Y')}}</option>
@@ -73,13 +71,13 @@
     Descargar en excel
 </a> -->
 
+@if($request->semester)
 <a class="btn btn-outline-success btn-sm mb-3" 
-    @if($request->establishment_id)
-    href="{{ route('rrhh.service-request.report.consolidated_data_excel_download',[$request->establishment_id,$request->year, $request->semester]) }}"
-    @endif
+    href="{{ route('rrhh.service-request.report.consolidated_data_excel_download',[auth()->user()->organizationalUnit->establishment_id,$request->year, $request->semester]) }}"
     >
     Descargar en excel
 </a>
+@endif
 
 <iframe id="txtArea1" style="display:none"></iframe>
 <table class="table table-sm table-bordered table-responsive small" id="table_id">

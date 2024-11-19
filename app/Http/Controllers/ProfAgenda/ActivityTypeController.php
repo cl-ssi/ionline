@@ -16,7 +16,7 @@ class ActivityTypeController extends Controller
      */
     public function index()
     {
-        $activityTypes = ActivityType::all();
+        $activityTypes = ActivityType::where('establishment_id',auth()->user()->establishment_id)->get();
         return view('prof_agenda.activity_types.index',compact('activityTypes'));
     }
 
@@ -39,6 +39,7 @@ class ActivityTypeController extends Controller
     public function store(Request $request)
     {
       $activityType = new ActivityType($request->All());
+      $activityType->establishment_id = auth()->user()->establishment_id;
       $activityType->save();
 
       session()->flash('info', 'El tipo de actividad ha sido registrada.');
@@ -66,6 +67,7 @@ class ActivityTypeController extends Controller
     public function update(Request $request, ActivityType $activityType)
     {
         $activityType->fill($request->all());
+        $activityType->establishment_id = auth()->user()->establishment_id;
         $activityType->save();
 
         session()->flash('info', 'El tipo de actividad ha sido actualizada.');
