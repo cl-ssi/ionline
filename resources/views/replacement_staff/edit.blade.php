@@ -183,8 +183,11 @@
         </table>
         @endif
 
-        @livewire('replacement-staff.profile', ['replacementStaff' => $replacementStaff])
-
+        @livewire('replacement-staff.profile', [
+                'replacementStaff' => $replacementStaff
+            ],
+            key('profile')
+        )
     </div>
 </div>
 
@@ -238,7 +241,11 @@
         </table>
         @endif
 
-        @livewire('replacement-staff.training', ['replacementStaff' => $replacementStaff])
+        @livewire('replacement-staff.training', [
+                'replacementStaff' => $replacementStaff
+            ],
+            key('training')
+        )
     </div>
 
     <br>
