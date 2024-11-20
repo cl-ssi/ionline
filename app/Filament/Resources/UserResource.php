@@ -135,14 +135,10 @@ class UserResource extends Resource
                     ->copyable()
                     ->copyMessage('Run copiado')
                     ->sortable(),
-                Tables\Columns\TextColumn::make('full_name')
-                    //->formatStateUsing(fn (string $state) => ucwords(strtolower($state)))
-                    ->translateLabel()
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('fathers_family')
-                    ->searchable(),
-                 Tables\Columns\TextColumn::make('mothers_family')
-                     ->searchable(),
+                Tables\Columns\TextColumn::make('shortName')
+                    ->label('Usuario')
+                    ->sortable()
+                    ->searchable(['full_name']),
                 // Tables\Columns\TextColumn::make('gender')
                 //     ->searchable(),
                 // Tables\Columns\TextColumn::make('address')
@@ -162,9 +158,6 @@ class UserResource extends Resource
                 // Tables\Columns\TextColumn::make('email_verified_at')
                 //     ->dateTime()
                 //     ->sortable(),
-                Tables\Columns\TextColumn::make('position')
-                    ->translateLabel()
-                    ->searchable(),
                 // Tables\Columns\TextColumn::make('birthday')
                 //     ->date()
                 //     ->sortable(),
@@ -176,6 +169,9 @@ class UserResource extends Resource
                     ->translateLabel()
                     ->sortable()
                     ->limit(30),
+                Tables\Columns\TextColumn::make('position')
+                    ->translateLabel()
+                    ->searchable(),
                 Tables\Columns\IconColumn::make('active')
                     ->translateLabel()
                     ->boolean(),
