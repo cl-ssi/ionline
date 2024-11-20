@@ -63,7 +63,7 @@ class AttendanceRecordController extends Controller
                                     'clock_ip' => $clockIp,              // Agregar IP del reloj
                                     'clock_serial' => $clockSerial,      // Agregar número de serie del reloj
                                     'establishment_id' => $user->establishment_id,
-                                    'observation' => 'Registrado automáticamente'
+                                    // 'observation' => 'Registrado automáticamente'
                                 ]
                             );
                         });
