@@ -4,6 +4,7 @@ namespace App\Filament\Clusters\Parameters\Pages;
 
 use App\Filament\Clusters\Parameters;
 use Filament\Pages\Page;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Queue;
@@ -20,6 +21,11 @@ class TestUtilities extends Page
     protected static string $view = 'filament.clusters.parameters.pages.test-utilities';
 
     protected static ?string $cluster = Parameters::class;
+
+    public static function canAccess(): bool
+    {
+        return auth()->user()->can('be god');
+    }
 
     public function sendTestEmail(): void
     {
