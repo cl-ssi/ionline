@@ -253,10 +253,14 @@ class OvertimeRefundResource extends Resource
                     ->label('Unidad organizativa')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\BadgeColumn::make('type')
+                Tables\Columns\TextColumn::make('type')
                     ->label('Tipo')
                     ->sortable(),
-                Tables\Columns\BadgeColumn::make('status')
+                Tables\Columns\ImageColumn::make('approvals.avatar')
+                    ->label('Aprobaciones')
+                    ->circular()
+                    ->stacked(),
+                Tables\Columns\TextColumn::make('status')
                     ->label('Estado')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('total_hours_day')
