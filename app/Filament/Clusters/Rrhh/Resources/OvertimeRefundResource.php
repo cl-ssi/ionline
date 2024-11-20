@@ -309,8 +309,7 @@ class OvertimeRefundResource extends Resource
                     ->label('Estado'),
             ])
             ->actions([
-                Tables\Actions\DeleteAction::make()
-                    ->hidden(fn (OvertimeRefund $record) => $record->status === 'approved'),
+                Tables\Actions\DeleteAction::make(),
                 Tables\Actions\Action::make('pdf') 
                     ->label('Ver')
                     ->color('success')
