@@ -22,6 +22,8 @@ class LogResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-bug-ant';
 
+    protected static ?string $navigationGroup = 'Administración';
+
     public static function form(Form $form): Form
     {
         return $form
