@@ -4,6 +4,7 @@ namespace App\Models\Documents;
 
 use App\Observers\Documents\ApprovalObserver;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -242,6 +243,8 @@ class Approval extends Model
         'sent_to_ou_id',        // Enviado a una autoridad de una OU
         'sent_to_user_id',      // Enviado a un usuario en particular
 
+        'initials',             // Iniciales del destinatario (ou o user)
+
         'approver_ou_id',       // ou_id, asignar en caso de aprobación/rechazo
         'approver_id',          // user_id, asignar en caso de aprobación/rechazo
         'approver_observation', // varchar, observación de aprobación/rechazo
@@ -263,6 +266,9 @@ class Approval extends Model
         'start_y',
         'filename',
     ];
+
+    //append avatar
+    protected $appends = ['avatar'];
 
     /**
     * The attributes that should be cast.
@@ -322,6 +328,28 @@ class Approval extends Model
     public function approvable(): MorphTo
     {
         return $this->morphTo();
+    }
+
+    protected function avatar(): Attribute
+    {
+        $background = match ($this->status) {
+            true => '10B981',  // Verde (Aprobado)
+            false => 'EF4444', // Rojo (Rechazado)
+            default => '6B7280', // Gris (Pendiente o indefinido)
+        };
+    
+        $url = 'https://ui-avatars.com/api/';
+        $params = [
+            'name' => $this->initials,
+            'background' => $background,
+            'color' => 'fff',
+            'length' => 4,
+            'font-size' => 0.33,
+        ];
+    
+        return Attribute::make(
+            get: fn () => $url . '?' . http_build_query($params)
+        );
     }
 
     // Definir la relación 'attachments'

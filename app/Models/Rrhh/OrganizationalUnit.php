@@ -174,30 +174,66 @@ class OrganizationalUnit extends Model implements Auditable
         }
     }
 
-    public function getInitialsAttribute()
+    protected function initials(): Attribute
     {
-        $words    = explode(' ', preg_replace('/\s+/', ' ', $this->name));
-        $initials = '';
-        foreach ($words as $word) {
-            if (
-                $word != 'de' && $word != 'y' && $word != 'la' && $word != 'e' && $word != 'las' && $word != 'del'
-                && $word != 'al' && $word != 'en' && $word != 'el'
-            ) {
-                if ($word === 'Subdirección') {
-                    $initials .= 'SD';
-                } elseif (
-                    $word === 'S.A.M.U.' || $word === 'P.E.S.P.I.' || $word === 'P.R.A.I.S.' || $word === 'O.I.R.S.' ||
-                    $word === 'GES/PPV'
-                ) {
-                    $initials .= $word;
-                } else {
-                    $initials .= $word[0];
-                }
-            }
-        }
+        /**
+         * NOTA: cree esta nueva funcion de iniciales,
+         * No se que consecuencias pueda tener en el sistema, si es necesario
+         * se puede comentar y descomentar la funcion getInitialsAttribute
+         */
+        return Attribute::make(
+            get: function (): string {
+                $excludedWords = ['de', 'y', 'la', 'e', 'las', 'del', 'al', 'en', 'el'];
 
-        return $initials;
+                $specialWords = [
+                    'S.A.M.U.' => 'SAMU', 
+                    'P.E.S.P.I.' => 'PESPI', 
+                    'P.R.A.I.S.' => 'PRAIS', 
+                    'O.I.R.S.' => 'OIRS', 
+                    'GES/PPV' => 'GESPPV',
+                    'IAAS' => 'IAAS',
+                ];
+
+                // Dividir el nombre en palabras, manejando múltiples espacios
+                $words = preg_split('/\s+/', $this->name, -1, PREG_SPLIT_NO_EMPTY);
+                $initials = array_map(function ($word) use ($excludedWords, $specialWords) {
+                    $wordLower = strtolower($word);
+                    if (isset($specialWords[$word])) {
+                        return $specialWords[$word];
+                    }
+                    return !in_array($wordLower, $excludedWords) ? strtoupper($word[0]) : '';
+                }, $words);
+
+                // Unir las iniciales y eliminar cualquier paréntesis al final
+                return rtrim(implode('', array_filter($initials)), '()');
+            }
+        );
     }
+
+    // public function getInitialsAttribute()
+    // {
+    //     $words    = explode(' ', preg_replace('/\s+/', ' ', $this->name));
+    //     $initials = '';
+    //     foreach ($words as $word) {
+    //         if (
+    //             $word != 'de' && $word != 'y' && $word != 'la' && $word != 'e' && $word != 'las' && $word != 'del'
+    //             && $word != 'al' && $word != 'en' && $word != 'el'
+    //         ) {
+    //             if ($word === 'Subdirección') {
+    //                 $initials .= 'SD';
+    //             } elseif (
+    //                 $word === 'S.A.M.U.' || $word === 'P.E.S.P.I.' || $word === 'P.R.A.I.S.' || $word === 'O.I.R.S.' ||
+    //                 $word === 'GES/PPV'
+    //             ) {
+    //                 $initials .= $word;
+    //             } else {
+    //                 $initials .= $word[0];
+    //             }
+    //         }
+    //     }
+
+    //     return $initials;
+    // }
 
     /**
      * Retorna un array de las OrganizationalUnits ascendentes, incluyendo la unidad inicial,
