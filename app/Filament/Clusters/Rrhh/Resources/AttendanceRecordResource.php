@@ -166,7 +166,7 @@ class AttendanceRecordResource extends Resource
                     ->requiresConfirmation()
                     ->visible(fn () => auth()->user()->canAny(['be god', 'Attendance records: admin'])),
             ])
-            ->defaultSort('created_at', 'desc')
+            ->defaultSort('record_at', 'desc')
             ->checkIfRecordIsSelectableUsing(callback: fn (AttendanceRecord $record): bool => $record->sirh_at === null);
     }
 
