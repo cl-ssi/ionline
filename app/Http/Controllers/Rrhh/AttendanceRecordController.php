@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Rrhh;
 
+use Exception;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -81,4 +82,60 @@ class AttendanceRecordController extends Controller
             return response()->json(['error' => 'Error al guardar los registros: ' . $e->getMessage()], 500);
         }
     }
+    
+    public function logPythonError(Request $request): \Illuminate\Http\JsonResponse
+    {
+        try {
+            // Validar que el tipo, mensaje y la IP sean proporcionados correctamente en la solicitud
+            $request->validate([
+                'ip' => 'required',
+                'type' => 'required|in:error,info', // Solo acepta 'error' o 'info'
+                'message' => 'required|string',
+                'timestamp' => 'nullable|date'
+            ]);
+
+            // Obtener los datos del request
+            $ip = $request->input('ip');
+            $type = $request->input('type');
+            $message = $request->input('message');
+            $timestamp = $request->input('timestamp', now()->toISOString()); // Usar el timestamp actual si no se proporciona
+
+            // Registrar el log según el tipo
+            if ($type === 'error') {
+                Log::error('Error reportado desde Python:', [
+                    'ip' => $ip,
+                    'error_message' => $message,
+                    'timestamp' => $timestamp,
+                ]);
+            } elseif ($type === 'info') {
+                Log::info('Información reportada desde Python:', [
+                    'ip' => $ip,
+                    'info_message' => $message,
+                    'timestamp' => $timestamp,
+                ]);
+            }
+
+            // Respuesta exitosa
+            return response()->json([
+                'message' => 'Log registrado exitosamente.',
+                'type' => $type,
+                'ip' => $ip,
+                'timestamp' => $timestamp,
+            ], 200);
+
+        } catch (\Exception $e) {
+            // Manejar errores al registrar el log
+            Log::error('Error al registrar el log desde Python:', [
+                'exception' => $e->getMessage(),
+                'request_data' => $request->all(),
+            ]);
+
+            return response()->json([
+                'error' => 'Error al registrar el log.',
+                'details' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+
 }
