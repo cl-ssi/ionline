@@ -55,8 +55,8 @@ config = load_configuration()
 ip_list = config.get("ips", "").split(",")
 user = config.get("user")
 password = config.get("password")
-api_url = f"http://{config.get('api_url')}/api/rrhh/save-attendance-records"
-log_error_api_url = f"http://{config.get('log_error_api_url')}/api/rrhh/log-error"
+api_url = f"https://{config.get('api_url')}/api/rrhh/save-attendance-records"
+log_error_api_url = f"https://{config.get('log_error_api_url')}/api/rrhh/log-error"
 
 # Datos de inicio de sesión
 login_payload = {
