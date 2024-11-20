@@ -40,8 +40,9 @@ Route::prefix('pharmacies')->name('pharmacies.')->middleware('client')->group(fu
 });
 
 Route::prefix('rrhh')->name('rrhh.')->middleware('auth.basic')->group(function (){
-   // Ruta para guardar los registros de asistencia
+    // Ruta para guardar los registros de asistencia
     Route::post('/save-attendance-records', [AttendanceRecordController::class, 'store']);
+    Route::post('/log-error', [AttendanceRecordController::class, 'logPythonError']);
 });
 
 // Route::post('/post-request-inputs',[TestController::class,'storeRequestInputs']);
