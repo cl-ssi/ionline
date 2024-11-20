@@ -66,8 +66,6 @@ class AttendanceRecordController extends Controller
                                 ]
                             );
                         });
-                    } else {
-                        Log::warning("Usuario no encontrado: {$record['id_number']}");
                     }
                 }
 
@@ -75,11 +73,11 @@ class AttendanceRecordController extends Controller
                 return response()->json(['message' => 'Registros de asistencia guardados exitosamente.']);
             } catch (\Exception $e) {
                 DB::rollBack();
-                Log::error('Error al guardar registros de asistencia:', ['exception' => $e]);
+                Log::error('Attendance record script (Error al guardar registros de asistencia):', ['exception' => $e]);
                 return response()->json(['error' => 'Error al guardar los registros: ' . $e->getMessage()], 500);
             }
         } catch (\Exception $e) {
-            Log::error('Error al guardar registros de asistencia:', ['exception' => $e]);
+            Log::error('Attendance record script (Error al guardar registros de asistencia):', ['exception' => $e]);
             return response()->json(['error' => 'Error al guardar los registros: ' . $e->getMessage()], 500);
         }
     }
