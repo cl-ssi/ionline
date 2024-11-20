@@ -59,7 +59,7 @@ class OvertimeRefundPolicy
      */
     public function delete(User $user, OvertimeRefund $overtimeRefund): bool
     {
-        return true;
+        return $overtimeRefund->status === 'pending' OR $user->canAny(['be god']);
     }
 
     /**
