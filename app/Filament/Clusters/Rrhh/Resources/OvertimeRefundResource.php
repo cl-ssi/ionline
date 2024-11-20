@@ -310,21 +310,24 @@ class OvertimeRefundResource extends Resource
             ])
             ->actions([
                 Tables\Actions\DeleteAction::make(),
-                Tables\Actions\Action::make('pdf') 
-                    ->label('Ver')
-                    ->color('success')
-                    ->icon('heroicon-o-document')
-                    ->url(fn (OvertimeRefund $record) => route('rrhh.overtime-refunds.show', $record)),
-                    // ->action(function (OvertimeRefund $record) {
-                    //     return response()->streamDownload(function () use ($record) {
-                    //         // Generar un approval no persistente para mostrar el documento firmado por el usuario
-                    //         $userApproval = $record->userApproval();
-                    //         echo Pdf::loadView('rrhh.overtime-refunds.show', [
-                    //             'record' => $record,
-                    //             'userApproval' => $userApproval,
-                    //         ])->output();
-                    //     }, 'descarga-ionline.pdf');
-                    // }),
+                Tables\Actions\ViewAction::make()
+                    ->url(fn (OvertimeRefund $record) => route('rrhh.overtime-refunds.show', $record))
+                    ->openUrlInNewTab(),
+                // Tables\Actions\Action::make('pdf') 
+                //     ->label('Ver')
+                //     ->color('success')
+                //     ->icon('heroicon-o-eye')
+                //     ->url(fn (OvertimeRefund $record) => route('rrhh.overtime-refunds.show', $record)),
+                //     // ->action(function (OvertimeRefund $record) {
+                //     //     return response()->streamDownload(function () use ($record) {
+                //     //         // Generar un approval no persistente para mostrar el documento firmado por el usuario
+                //     //         $userApproval = $record->userApproval();
+                //     //         echo Pdf::loadView('rrhh.overtime-refunds.show', [
+                //     //             'record' => $record,
+                //     //             'userApproval' => $userApproval,
+                //     //         ])->output();
+                //     //     }, 'descarga-ionline.pdf');
+                //     // }),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
