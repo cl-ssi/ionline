@@ -4,6 +4,7 @@ namespace App\Filament\Clusters\Rrhh\Resources;
 
 use App\Filament\Clusters\Rrhh;
 use App\Filament\Clusters\Rrhh\Resources\OvertimeRefundResource\Pages;
+use App\Filament\Exports\Rrhh\OvertimeRefundExporter;
 use App\Models\Rrhh\Attendance;
 use App\Models\Rrhh\OvertimeRefund;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -244,25 +245,29 @@ class OvertimeRefundResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('user.shortName')
                     ->label('Usuario')
-                    ->sortable(),
+                    ->sortable()
+                    ->searchable(['full_name']),
                 Tables\Columns\TextColumn::make('date')
                     ->label('Fecha')
                     ->date('Y-m')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('organizationalUnit.name')
-                    ->label('Unidad organizativa')
-                    ->numeric()
-                    ->sortable(),
+                    ->label('Unidad organizacional')
+                    ->wrap()
+                    ->sortable()
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('type')
                     ->label('Tipo')
-                    ->sortable(),
+                    ->sortable()
+                    ->searchable(),
                 Tables\Columns\ImageColumn::make('approvals.avatar')
                     ->label('Aprobaciones')
                     ->circular()
                     ->stacked(),
                 Tables\Columns\TextColumn::make('status')
                     ->label('Estado')
-                    ->sortable(),
+                    ->sortable()
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('total_hours_day')
                     ->label('Horas diurnas')
                     ->numeric()
@@ -295,7 +300,13 @@ class OvertimeRefundResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
+                Tables\Filters\SelectFilter::make('status')
+                    ->options([
+                        'pending'  => 'Pendiente',
+                        'approved' => 'Aprobado',
+                        'rejected' => 'Rechazado',
+                    ])
+                    ->label('Estado'),
             ])
             ->actions([
                 Tables\Actions\DeleteAction::make()
@@ -317,9 +328,12 @@ class OvertimeRefundResource extends Resource
                     }),
             ])
             ->bulkActions([
-                // Tables\Actions\BulkActionGroup::make([
-                //     Tables\Actions\DeleteBulkAction::make(),
-                // ]),
+                Tables\Actions\BulkActionGroup::make([
+                    // Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\ExportBulkAction::make()
+                        ->exporter(OvertimeRefundExporter::class)
+                        ->columnMapping(false)
+                ]),
             ]);
     }
 
