@@ -7,11 +7,11 @@
         </fieldset>
     </div>
 
-    <form method="POST" class="form-horizontal" action="{{ route('replacement_staff.profile.store', $replacementStaff) }}" enctype="multipart/form-data"/>
+    <form method="POST" class="form-horizontal" action="{{ route('replacement_staff.profile.store', $replacementStaff) }}" enctype="multipart/form-data">
         @csrf
         @method('POST')
         @foreach($inputs as $key => $value)
-            <div class="form-row">
+            <div class="form-row" wire:key="input-{{ $key }}">
                 <fieldset class="form-group col mt">
                     <label for="for_profile">Estamento</label>
                     <select name="profile" class="form-control" wire:model.live="profileSelected" required>
@@ -53,7 +53,7 @@
                 </fieldset>
             </div>
 
-            <div class="form-row">
+            <div class="form-row" wire:key="input-{{ $key }}">
                 <fieldset class="form-group col-sm-3">
                     <label for="for_degree_date">Fecha de Titulación</label>
                     <input type="date" class="form-control" min="1900-01-01" max="{{Carbon\Carbon::now()->toDateString()}}"
@@ -74,8 +74,9 @@
                 </fieldset>
 
             </div>
-        <hr>
+            <hr>
         @endforeach
+        
         @if($count>0)
             <button type="submit" class="btn btn-primary float-right">Guardar</button>
         @endif

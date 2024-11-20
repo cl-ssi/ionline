@@ -10,6 +10,7 @@ use App\Http\Controllers\Pharmacies\ReceivingController;
 use App\Http\Controllers\Pharmacies\DispatchController;
 use App\Http\Controllers\WebserviceController;
 use App\Http\Controllers\Rrhh\UserController;
+use App\Http\Controllers\Rrhh\AttendanceRecordController;
 
 /*
 |--------------------------------------------------------------------------
@@ -36,6 +37,12 @@ Route::prefix('service_request')->name('service_request.')->middleware('client')
 Route::prefix('pharmacies')->name('pharmacies.')->middleware('client')->group(function (){
     Route::post('/receivingProductsWs', [ReceivingController::class, 'receivingProductsWs']);
     Route::post('/dispatchingProductsWs', [DispatchController::class, 'dispatchingProductsWs']);
+});
+
+Route::prefix('rrhh')->name('rrhh.')->middleware('auth.basic')->group(function (){
+    // Ruta para guardar los registros de asistencia
+    Route::post('/save-attendance-records', [AttendanceRecordController::class, 'store']);
+    Route::post('/log-error', [AttendanceRecordController::class, 'logPythonError']);
 });
 
 // Route::post('/post-request-inputs',[TestController::class,'storeRequestInputs']);

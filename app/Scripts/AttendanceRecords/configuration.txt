@@ -1,0 +1,14 @@
+# Lista de IPs (separadas por comas)
+ips=10.8.119.20,10.66.75.30
+
+# Credenciales para autenticación
+user=usuario@redsalud.gob.cl
+password=clave
+
+# Endpoint de las APIs (solo el dominio, sin http o https)
+api_url=i.saludtarapaca.gob.cl
+log_error_api_url=i.saludtarapaca.gob.cl
+
+# Datos de inicio de sesión
+username=77500240
+userpwd=password_equipos

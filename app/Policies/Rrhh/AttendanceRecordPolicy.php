@@ -21,7 +21,8 @@ class AttendanceRecordPolicy
      */
     public function viewAny(User $user): bool
     {
-        return $user->canAny(['Attendance records: user','Attendance records: admin']);
+        // return $user->canAny(['Attendance records: user','Attendance records: admin']);
+        return true;
     }
 
     /**
@@ -45,7 +46,10 @@ class AttendanceRecordPolicy
      */
     public function update(User $user, AttendanceRecord $attendanceRecord): bool
     {
-        return $user->id === $attendanceRecord->user_id;
+        // si el registro es mayor a 24 horas no se puede editar
+        return $attendanceRecord->record_at->diffInHours(now()) > 24 AND 
+            $user->id === $attendanceRecord->user_id AND
+            $attendanceRecord->verification === 'iOnline';
     }
 
     /**
@@ -54,11 +58,9 @@ class AttendanceRecordPolicy
     public function delete(User $user, AttendanceRecord $attendanceRecord): bool
     {
         // si el registro es mayor a 48 horas no se puede eliminar
-        if ($attendanceRecord->record_at->diffInHours(now()) > 48) {
-            return false;
-        }
-
-        return $user->id === $attendanceRecord->user_id;
+        return $attendanceRecord->record_at->diffInHours(now()) > 24 AND 
+            $user->id === $attendanceRecord->user_id AND
+            $attendanceRecord->verification === 'iOnline';
     }
 
     /**

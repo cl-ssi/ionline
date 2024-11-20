@@ -897,7 +897,7 @@ Route::prefix('integrity')->as('integrity.')->group(function () {
 Route::prefix('rrhh')->as('rrhh.')->group(function () {
     Route::get('overtime-refunds/{record}', function (OvertimeRefund $record) {
         return Pdf::loadView('rrhh.overtime-refunds.show',['record' => $record, 'userApproval' => $record->userApproval()])->stream();
-    })->name('overtime-refunds.show');
+    })->name('overtime-refunds.show')->middleware('can:view,record');
 
     Route::prefix('sirh')->as('sirh.')->group(function () {
         Route::get('/unidades', \App\Livewire\Sirh\UnidadesIndex::class)->name('unidades');

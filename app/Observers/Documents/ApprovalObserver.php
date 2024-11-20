@@ -8,6 +8,21 @@ use App\Notifications\Documents\NewApproval;
 class ApprovalObserver
 {
     /**
+     * Handle the Approval "creating" event.
+     */
+    public function creating(Approval $approval): void
+    {
+        /**
+         * Obtener las iniciales para cada sent_to_ou_id o sent_to_user_id
+         */
+        if ($approval->sentToOu) {
+            $approval->initials = $approval->sentToOu->initials;
+        } elseif ($approval->sentToUser) {
+            $approval->initials = $approval->sentToUser->initials;
+        }
+    }
+
+    /**
      * Handle the Approval "created" event.
      */
     public function created(Approval $approval): void
@@ -29,6 +44,7 @@ class ApprovalObserver
             $approval->callback_controller_params = json_encode(array_merge(array('approval_id' => $approval->id), $params));
             $approval->save();
         }
+
     }
 
     /**

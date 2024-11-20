@@ -15,16 +15,10 @@ class CreateAlwAllowanceFilesTable extends Migration
     {
         Schema::create('alw_allowance_files', function (Blueprint $table) {
             $table->id();
-
             $table->string('name');
             $table->string('file');
-
-            $table->foreignId('allowance_id');
-            $table->foreignId('user_id');
-
-            $table->foreign('allowance_id')->references('id')->on('alw_allowances');
-            $table->foreign('user_id')->references('id')->on('users');
-
+            $table->foreignId('allowance_id')->constrained('alw_allowances');
+            $table->foreignId('user_id')->constrained('users');
             $table->timestamps();
             $table->softDeletes();
         });
