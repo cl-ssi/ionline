@@ -17,6 +17,10 @@ return new class extends Migration
         });
 
         // Obtener las iniciales para cada sent_to_ou_id y sent_to_user_id
+        /**
+         * Es para actualizar los registros existentes en la tabla sign_approvals
+         * para una migración de datos, no es necesaria, eliminar a futuro
+         */
         $ouInitials = [];
         $userInitials = [];
 
