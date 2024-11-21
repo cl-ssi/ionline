@@ -7,6 +7,7 @@ use App\Filament\Clusters\Parameters\Resources\AccessLogResource\Pages;
 use App\Filament\Clusters\Parameters\Resources\AccessLogResource\RelationManagers;
 use App\Filament\Resources\UserResource\Pages\EditUser;
 use App\Models\Parameters\AccessLog;
+use App\Models\User;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -55,8 +56,7 @@ class AccessLogResource extends Resource
                     ->label('Usuario')
                     ->icon(fn($record) => !$record->user->active ? 'heroicon-o-no-symbol' : '')
                     ->iconPosition(IconPosition::After)
-                    ->searchable(['name', 'fathers_family'])
-                    ->sortable(),
+                    ->searchable(['full_name']),
                 Tables\Columns\TextColumn::make('created_at')
                     ->label('Fecha')
                     ->dateTime()
@@ -68,19 +68,27 @@ class AccessLogResource extends Resource
                 Tables\Columns\TextColumn::make('switchUser.tinnyName')
                     ->label('Usuario Switch')
                     ->numeric()
-                    ->sortable(),
+                    ->searchable(['full_name']),
             ])
             ->defaultSort('created_at')
             ->filters([
-                Filter::make('local')
+                Tables\Filters\SelectFilter::make('user')
+                    ->options(fn(): array => User::pluck('full_name', 'id')->toArray())
+                    ->label('Usuario')
+                    ->relationship('user', 'name',)
+                    ->searchable(),
+                Tables\Filters\SelectFilter::make('switchUser')
+                    ->options(fn(): array => User::pluck('full_name', 'id')->toArray())
+                    ->label('Swicher')
+                    ->relationship('switchUser', 'name',)
+                    ->searchable(),
+                Tables\Filters\Filter::make('local')
                     ->query(fn(Builder $query): Builder => $query->where('type', 'local'))
                     ->label('Local'),
-
-                Filter::make('switch')
+                Tables\Filters\Filter::make('switch')
                     ->query(fn(Builder $query): Builder => $query->where('type', 'switch'))
                     ->label('Switch'),
-
-                Filter::make('clave_unica')
+                Tables\Filters\Filter::make('clave_unica')
                     ->query(fn(Builder $query): Builder => $query->where('type', 'Clave Unica'))
                     ->label('Clave Unica'),
             ])
