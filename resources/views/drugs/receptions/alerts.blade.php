@@ -121,7 +121,39 @@
                 </div>
             </div>
         </div>
-
+        <div class="col">
+            <!-- Recepciones con contramuestras mayores a 2 años -->
+            <h4 class="mt-3">Recepciones con contra muestras con más de 2 años</h4>
+            <div class="row">
+                <div class="col-12">
+                    <table class="table table-sm table-bordered small">
+                        <thead>
+                            <tr>
+                                <th>Nº Acta</th>
+                                <th>Fecha</th>
+                                <th>Días transcurridos</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($itemsGreatherThanTwoYears as $reception)
+                                <tr>
+                                    <td>{{ $reception->id }}</td>
+                                    <td nowrap>{{ $reception->date?->format('Y-m-d') }}</td>
+                                    <td>
+                                        {{ $reception->date->diffForHumans() }}
+                                    </td>
+                                    <td class="text-right">
+                                        <a href="{{ route('drugs.receptions.show', $reception->id) }}"> <i
+                                                class="fas fa-edit"></i></a>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
     </div>
 
 @endsection

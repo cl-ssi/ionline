@@ -323,10 +323,25 @@ class ReceptionController extends Controller
             ->whereDate('created_at', '>', now()->startOfYear()->subYears(3))  // ultimos 3 años
             ->get();
 
+        /**
+         * Obtiene todas las recepciones que tengan items y que el item tenga una contra muestra
+         * y tenga más de 2 años de antiguedad, utiliozando Reception
+         */
+        $itemsGreatherThanTwoYears = Reception::with('items')
+            ->whereHas('items', function ($query) {
+                $query->where('countersample', '>', 0);
+            })
+            ->whereBetween('created_at', [
+                now()->subYears(2)->subMonth(),
+                now()->subYears(2), 
+            ])
+            ->get();
+
         return view('drugs.receptions.alerts', compact(
             'receptionsNotSentToIsp', 
             'receptionsWithDestructionNotSendedToCourt',
-            'receptionsWithoutRecordToCourtOlderThan30Days'
+            'receptionsWithoutRecordToCourtOlderThan30Days',
+            'itemsGreatherThanTwoYears'
         ));
     }
 
