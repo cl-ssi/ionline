@@ -42,6 +42,24 @@ class AccessLogResource extends Resource
     {
         return $table
             ->columns([
+                Tables\Columns\TextColumn::make('created_at')
+                    ->label('Fecha')
+                    ->dateTime('Y-m-d H:i:s')
+                    ->sortable(),
+                Tables\Columns\TextColumn::make(name: 'user.tinnyName')
+                    ->numeric()
+                    ->label('Usuario')
+                    ->icon(fn($record) => !$record->user->active ? 'heroicon-o-no-symbol' : '')
+                    ->iconPosition(IconPosition::After)
+                    ->searchable(['full_name']),
+                Tables\Columns\TextColumn::make('type')
+                    ->label('Tipo')
+                    ->sortable()
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('switchUser.tinnyName')
+                    ->label('Usuario Switch')
+                    ->numeric()
+                    ->searchable(['full_name']),
                 Tables\Columns\TextColumn::make('enviroment')
                     ->colors([
                         'success' => 'Cloud Run',
@@ -51,26 +69,8 @@ class AccessLogResource extends Resource
                     ])
                     ->label('Ambiente')
                     ->searchable(),
-                Tables\Columns\TextColumn::make(name: 'user.tinnyName')
-                    ->numeric()
-                    ->label('Usuario')
-                    ->icon(fn($record) => !$record->user->active ? 'heroicon-o-no-symbol' : '')
-                    ->iconPosition(IconPosition::After)
-                    ->searchable(['full_name']),
-                Tables\Columns\TextColumn::make('created_at')
-                    ->label('Fecha')
-                    ->dateTime()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('type')
-                    ->label('Tipo')
-                    ->sortable()
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('switchUser.tinnyName')
-                    ->label('Usuario Switch')
-                    ->numeric()
-                    ->searchable(['full_name']),
             ])
-            ->defaultSort('created_at')
+            ->defaultSort('created_at','desc')
             ->filters([
                 Tables\Filters\SelectFilter::make('user')
                     ->options(fn(): array => User::pluck('full_name', 'id')->toArray())
