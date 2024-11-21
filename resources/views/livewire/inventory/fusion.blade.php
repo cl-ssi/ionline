@@ -872,7 +872,7 @@
                                     {{ $movement->id }}<br>
                                     <b>Fecha:</b> {{ $movement->reception_date }}<br>
                                     @if($movement->responsibleUser) <b>Responsable:</b> {{ $movement->responsibleUser->shortName }}<br> @endif
-                                    <!-- @if($movement->usingUser) <b>Usuario:</b> {{ $movement->usingUser->shortName }}<br> @endif -->
+                                    @if($movement->usingUser) <b>Usuario:</b> {{ $movement->usingUser->shortName }}<br> @endif
                                     <b>Lugar:</b> {{ $movement->place->name }}
                                 </label>
                             </div>

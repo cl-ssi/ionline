@@ -51,8 +51,9 @@
                     </button>
                 @endif
             @endcan
-
-            @livewire('inventory.toggle-print', ['inventory' => $inventory], key('print-'.$inventory->id))
+            <div>
+                @livewire('inventory.toggle-print', ['inventory' => $inventory], key('print-'.$inventory->id))
+            </div>
 
             <a
                 href="{{ route('inventories.pending-inventory', [
@@ -175,7 +176,7 @@
                     Generar
                 </button>
 
-                <!-- @can('Inventory: manager')
+                @can('Inventory: manager')
                     <button
                         class="btn btn-sm btn-info"
                         wire:click="searchFusion"
@@ -183,7 +184,7 @@
                         <i class="fas fa-compress-alt"></i>
                         Fusionar
                     </button>
-                @endcan -->
+                @endcan 
 
                 @error('number_inventory')
                     <span class="invalid-feedback" role="alert">
