@@ -94,7 +94,6 @@
                     </div>
                     <div class="card-body">
 
-                        @if(!env('OLD_SERVER'))
                         <h6 class="mb-3 text-center">Utilizando tu Clave Única</h6>
 
                         <!-- Código para visualizar botón oficial iniciar sesión con ClaveÚnica-->
@@ -106,7 +105,6 @@
                             <span class="cl-claveunica"></span>
                             <span class="texto">Iniciar sesión</span>
                         </a>
-                        @endif
                         <!--./ fin botón-->
 
                     <hr>

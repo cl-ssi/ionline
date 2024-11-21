@@ -53,22 +53,8 @@ class LoginController extends Controller
 
             return $this->sendLockoutResponse($request);
         }
-        
-        
-        /** No permitir login si tiene permiso "Nuevo iOnline" */
-        if(env('OLD_SERVER'))
-        {
-            $user = User::find($request->input('id'));
-            
-            if($user AND $user->can('Nuevo iOnline'))
-            {
-                session()->flash('info', 
-                    'Estimado usuario.<br> Deberá ingresar a iOnline a través de la siguiente dirección: 
-                    <b>https://i.saludtarapaca.gob.cl</b> <br>Muchas gracias.');
-                return redirect()->route('welcome');
-            }
-        }
-        
+
+
         if ($this->attemptLogin($request)) {
             /** Authentication passed...*/
             if ($request->hasSession()) {
@@ -78,7 +64,6 @@ class LoginController extends Controller
             /** Log access */
             auth()->user()->accessLogs()->create([
                 'type' => 'local',
-                'enviroment' => env('OLD_SERVER') ? 'Servidor':'Cloud Run'
             ]);
 
             /** Check if user have a gravatar */

@@ -324,7 +324,6 @@ class UserController extends Controller
             auth()->user()->accessLogs()->create([
                 'type' => 'switch',
                 'switch_id' => session()->get('god'),
-                'enviroment' => env('OLD_SERVER') ? 'Servidor':'Cloud Run'
             ]);
         }
 
