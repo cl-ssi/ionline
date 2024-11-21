@@ -77,6 +77,7 @@ class Kernel extends HttpKernel
         'ensure.origin' => \App\Http\Middleware\Warehouse\EnsureOrigin::class,
         'ensure.inventory' => \App\Http\Middleware\Inventory\EnsureInventory::class,
         'ensure.movement' => \App\Http\Middleware\Inventory\EnsureMovement::class,
+        'use.plus.version' => \App\Http\Middleware\UsePlusVersion::class,
     ];
 
 }

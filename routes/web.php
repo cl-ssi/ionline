@@ -1193,7 +1193,7 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
         Route::post('/store', [SubrogationController::class, 'store'])->name('store');
     });
 
-    Route::prefix('organizational-units')->name('organizational-units.')->middleware(['auth', 'must.change.password'])->group(function () {
+    Route::prefix('organizational-units')->name('organizational-units.')->middleware(['auth', 'must.change.password','use.plus.version:filament.intranet.rrhh.resources.organizational-units.index'])->group(function () {
         Route::get('/', [OrganizationalUnitController::class, 'index'])->name('index')->middleware('auth');
         Route::get('/create', [OrganizationalUnitController::class, 'create'])->name('create')->middleware('auth');
         Route::post('/store', [OrganizationalUnitController::class, 'store'])->name('store')->middleware('auth');

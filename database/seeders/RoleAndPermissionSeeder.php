@@ -279,6 +279,7 @@ class RoleAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'welfare: balance', 'description' => 'Para acceder a la opción balance de bienestar']);
         Permission::create(['name' => 'welfare: benefits', 'description' => 'Para acceder a las opciones de administración de beneficios']);
         Permission::create(['name' => 'welfare: hotel booking administrator', 'description' => 'Administrador del modulo de reserva de cabañas']);
+        Permission::create(['name' => 'Use plus version only', 'description' => 'Obliga a utilizar los modulos del iOnline Plus']);
         
         $role = Role::create(['name' => 'Agenda Salud del Trabajdor: Administrador', 'description' => '']);
         $role->givePermissionTo('Agenda UST: Administrador');
