@@ -99,7 +99,8 @@
                                         </select>
                                         </td>
                                         <td align="right">
-                                        <input type="number" class="form-control form-control-sm text-right" step="0.01" min="1" id="for_new_item_total" name="new_item_total[]" value="{{ old('new_item_total.'.$key, $item->expense) }}" readonly>
+                                        <!-- <input type="number" class="form-control form-control-sm text-right" step="0.01" min="1" id="for_new_item_total" name="new_item_total[]" value="{{ old('new_item_total.'.$key, $item->expense) }}" readonly> -->
+                                        <input type="number" class="form-control form-control-sm text-right new-item-total" step="0.01" min="1" name="new_item_total[]" value="{{ old('new_item_total.'.$key, $item->expense) }}">
                                         </td>
                                     </tr>
                                     @endforeach
