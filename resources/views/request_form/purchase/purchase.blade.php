@@ -1582,7 +1582,8 @@
     });
 
     //NEW BUDGET EVENTS FOR ITEMS
-    $('#for_new_quantity,#for_new_unit_value,#for_new_tax').on('change keyup', function() {
+    // $('#for_new_quantity,#for_new_unit_value,#for_new_tax').on('change keyup', function() {
+    $(document).on('change keyup', '.new-item', function() {
         var tr = $(this).closest('tr')
         var qty = tr.find('input[name="new_quantity[]"]')
         var price = tr.find('input[name="new_unit_value[]"]')
