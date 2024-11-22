@@ -2,7 +2,7 @@
 
 namespace App\Filament\Clusters\Rrhh\Resources\OrganizationalUnitResource\RelationManagers;
 
-use App\Filament\Resources\UserResource;
+use App\Filament\Clusters\Rrhh\Resources\UserResource;
 use CodeWithDennis\FilamentSelectTree\SelectTree;
 use Filament\Forms;
 use Filament\Forms\Form;

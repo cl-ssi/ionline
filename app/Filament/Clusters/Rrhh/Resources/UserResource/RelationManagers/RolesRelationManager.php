@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Resources\UserResource\RelationManagers;
+namespace App\Filament\Clusters\Rrhh\Resources\UserResource\RelationManagers;
 
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -10,15 +10,18 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class PermissionsRelationManager extends RelationManager
+class RolesRelationManager extends RelationManager
 {
-    protected static string $relationship = 'permissions';
+    protected static string $relationship = 'roles';
 
     public function form(Form $form): Form
     {
         return $form
             ->schema([
                 Forms\Components\TextInput::make('name')
+                    ->required()
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('description')
                     ->required()
                     ->maxLength(255),
             ]);
@@ -36,11 +39,10 @@ class PermissionsRelationManager extends RelationManager
             ])
             ->headerActions([
                 // Tables\Actions\CreateAction::make(),
-                Tables\Actions\AttachAction::make()
-                    ->preloadRecordSelect(),
+                Tables\Actions\AttachAction::make()->preloadRecordSelect(),
             ])
             ->actions([
-                // Tables\Actions\EditAction::make(),
+                Tables\Actions\EditAction::make(),
                 Tables\Actions\DetachAction::make(),
                 // Tables\Actions\DeleteAction::make(),
             ])
@@ -49,7 +51,6 @@ class PermissionsRelationManager extends RelationManager
                     Tables\Actions\DetachBulkAction::make(),
                     // Tables\Actions\DeleteBulkAction::make(),
                 ]),
-            ])
-            ->defaultSort('name');
+            ]);
     }
 }
