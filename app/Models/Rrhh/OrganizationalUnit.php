@@ -179,17 +179,15 @@ class OrganizationalUnit extends Model implements Auditable
      */
     public static function reorderUnits(int $establishmentId): void
     {
-        $roots = self::with('childs')
+        $root = self::with('childs')
             ->whereNull('organizational_unit_id')
             ->where('establishment_id', $establishmentId)
             ->orderBy('name')
-            ->get();
+            ->first();
 
         $order = 1;
 
-        foreach ($roots as $root) {
-            $order = self::updateOrder($root, $order);
-        }
+        $order = self::updateOrder($root, $order);
     }
 
     /**
