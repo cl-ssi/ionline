@@ -25,19 +25,17 @@
     </div>
 
     <div class="row">
-    <fieldset class="form-group col-8 col-sm-8 col-md-8 col-lg-8">
-            <label for="for_holder">Dirección*</label>
-            <input type="text" class="form-control" id="for_address" name="address" autocomplete="off" required>
+        <fieldset class="form-group col-8 col-sm-8 col-md-8 col-lg-8">
+            <label for="for_holder">Dirección</label>
+            <input type="text" class="form-control" id="for_address" name="address" autocomplete="off">
         </fieldset>
     </div>
 
     <div class="row">
-
-    <fieldset class="form-group col-8 col-sm-8 col-md-8 col-lg-8">
-            <label for="for_holder">Nombre Sostenedor*</label>
-            <input type="text" class="form-control" id="for_holder" name="holder" autocomplete="off" required>
+        <fieldset class="form-group col-8 col-sm-8 col-md-8 col-lg-8">
+            <label for="for_holder">Nombre Sostenedor</label>
+            <input type="text" class="form-control" id="for_holder" name="holder" autocomplete="off">
         </fieldset>
-
     </div>
 
 
@@ -54,19 +52,20 @@
         </fieldset>
 
         <fieldset class="form-group col-4">
-            <label>Situación Legal*</label>
+            <label>Situación Legal</label>
             <select class="form-control" name="legal" required>
-            <option value="">Seleccionar Situación</option>
-            <option value="PARTICULAR SUBVENCIONADO">PARTICULAR SUBVENCIONADO</option>
-            <option value="PARTICULAR NO SUBVENCIONADO">PARTICULAR NO SUBVENCIONADO</option>
-            <option value="MUNICIPAL DAEM">MUNICIPAL DAEM</option>
-            <option value="MUNICIPAL CORPORACION">MUNICIPAL CORPORACION</option>
-            <option value="ADMINISTRACION DELEGADA">ADMINISTRACION DELEGADA</option>
+                <option value="">Seleccionar Situación</option>
+                <option value="PARTICULAR SUBVENCIONADO">PARTICULAR SUBVENCIONADO</option>
+                <option value="PARTICULAR NO SUBVENCIONADO">PARTICULAR NO SUBVENCIONADO</option>
+                <option value="MUNICIPAL DAEM">MUNICIPAL DAEM</option>
+                <option value="MUNICIPAL CORPORACION">MUNICIPAL CORPORACION</option>
+                <option value="ADMINISTRACION DELEGADA">ADMINISTRACION DELEGADA</option>
+                <option value="SLEP">SLEP</option>
             </select>
         </fieldset>
     </div>
 
-        <label for="forBrand">Municipal*</label>
+        <label for="forBrand">Municipal</label>
         <fieldset class="form-group col-4">
             <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" name="municipality" id="RadioType1" value="1" required>
@@ -78,7 +77,7 @@
             </div>
         </fieldset>
 
-        <label for="forBrand">Gratuito*</label>
+        <label for="forBrand">Gratuito</label>
         <fieldset class="form-group col-4">
             <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" name="free" id="RadioType1" value="1" required>
@@ -89,9 +88,6 @@
                 <label class="form-check-label" for="inlineRadio2">No</label>
             </div>
         </fieldset>
-    
-
-
     <button type="submit" class="btn btn-primary">Guardar</button>
 
 </form>
