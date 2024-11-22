@@ -102,6 +102,7 @@ class OrganizationalUnitResource extends Resource
     {
         return $table
             ->columns([
+                // Tables\Columns\TextInputColumn::make('order'),
                 Tables\Columns\TextColumn::make('name')
                     ->prefix(fn (OrganizationalUnit $record): string => str_repeat('- ', $record->level))
                     ->searchable()
@@ -134,7 +135,9 @@ class OrganizationalUnitResource extends Resource
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ])
-            ->paginated(false);
+            ->paginated(false)
+            ->defaultSort('order')
+            ->reorderable('order');
     }
 
     public static function getRecordSubNavigation(\Filament\Pages\Page $page): array
