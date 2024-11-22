@@ -47,7 +47,7 @@ class TestNotification extends Notification implements ShouldQueue
      */
     public function via($notifiable)
     {
-        return ['mail'];
+        return ['database'];
     }
 
     /**
@@ -83,4 +83,15 @@ class TestNotification extends Notification implements ShouldQueue
             'action' => route('resources.computer.edit',[$this->param], false),
         ];
     }
+
+    /**
+     * $user = User::find(15287582)
+     * 
+     * LARAVEL
+     * $user->notify(new TestNotification('parametro'))
+     * 
+     * FILAMENT
+     * use Filament\Notifications\Notification;
+     * Filament\Notifications\Notification::make()->title('Notificacion de filament')->sendToDatabase($user);
+     */
 }
