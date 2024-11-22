@@ -8,5 +8,5 @@ class Rrhh extends Cluster
 {
     protected static ?string $navigationIcon = 'heroicon-o-users';
 
-    protected static ?string $navigationLabel = 'Rrhh';
+    protected static ?string $navigationLabel = 'SGDP';
 }

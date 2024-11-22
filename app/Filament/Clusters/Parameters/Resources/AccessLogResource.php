@@ -5,7 +5,7 @@ namespace App\Filament\Clusters\Parameters\Resources;
 use App\Filament\Clusters\Parameters;
 use App\Filament\Clusters\Parameters\Resources\AccessLogResource\Pages;
 use App\Filament\Clusters\Parameters\Resources\AccessLogResource\RelationManagers;
-use App\Filament\Resources\UserResource\Pages\EditUser;
+use App\Filament\Clusters\Rrhh\Resources\UserResource\Pages\EditUser;
 use App\Models\Parameters\AccessLog;
 use App\Models\User;
 use Filament\Forms;
