@@ -2,6 +2,7 @@
 
 namespace App\Filament\Clusters\Rrhh\Resources\OrganizationalUnitResource\RelationManagers;
 
+use App\Enums\Rrhh\AuthorityType;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
@@ -23,25 +24,28 @@ class SubrogationsRelationManager extends RelationManager
             ->schema([
                 Forms\Components\Select::make('user_id')
                     ->relationship('user', 'full_name')
+                    ->label('Usuario')
                     ->searchable()
                     ->required()
                     ->columnSpan(6),
                 // Forms\Components\Select::make('subrogant_id')
                 //     ->relationship('subrogant', 'name')
                 //     ->required(),
-                Forms\Components\TextInput::make('level')
+                Forms\Components\Select::make('level')
                     ->required()
-                    ->numeric()
+                    ->label('Nivel de jeraquía')
+                    ->options(
+                        collect(range(1, 10))
+                            ->mapWithKeys(fn ($level) => [$level => $level])
+                            ->toArray()
+                    )
                     ->columnSpan(2),
                 // Forms\Components\Select::make('organizational_unit_id')
                 //     ->relationship('organizationalUnit', 'name')
                 //     ->default(null),
                 Forms\Components\Select::make('type')
-                    ->options([
-                        'manager' => 'Jefatura',
-                        'delegate' => 'Delegado/a',
-                        'secretary' => 'Secretaio/a',
-                    ])
+                    ->label('Tipo')
+                    ->options(AuthorityType::class)
                     ->required()
                     ->columnSpan(4),
                 // Forms\Components\Toggle::make('active')
@@ -56,12 +60,15 @@ class SubrogationsRelationManager extends RelationManager
             ->recordTitleAttribute('full_name')
             ->columns([
                 Tables\Columns\TextColumn::make('level')
+                    ->label('Nivel de jeraquía')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('user.shortName')
+                    ->label('Usuario')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('type')
+                    ->label('Tipo')
                     ->searchable(),
                 // Tables\Columns\IconColumn::make('deactivated')
                 //     ->boolean(),
@@ -80,11 +87,9 @@ class SubrogationsRelationManager extends RelationManager
             ])
             ->filters([
                 Tables\Filters\SelectFilter::make('type')
-                    ->options([
-                        'manager' => 'Jefatura',
-                        'secretary' => 'Secretaría',
-                        'delegate' => 'Delegado',
-                    ])
+                    ->label(label: 'Tipo')
+                    ->options(AuthorityType::class)
+                    ->default('manager'),
             ], layout: FiltersLayout::AboveContent)
             ->headerActions([
                 Tables\Actions\CreateAction::make(),
@@ -100,6 +105,7 @@ class SubrogationsRelationManager extends RelationManager
             ])
             ->defaultSort('type', 'asc')
             ->defaultSort('level', 'asc')
-            ->reorderable('level');
+            ->reorderable('level')
+            ->defaultGroup('type');
     }
 }
