@@ -168,6 +168,7 @@ class UserResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->modifyQueryUsing(fn (Builder $query) => $query->withoutGlobalScope(SoftDeletingScope::class))
             ->columns([
                 Tables\Columns\TextColumn::make('run')
                     ->searchable()
@@ -229,6 +230,14 @@ class UserResource extends Resource
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
+                // Tables\Columns\IconColumn::make('deleted_at')
+                //     ->label('Estado')
+                //     ->boolean()
+                //     ->trueIcon('heroicon-o-trash')
+                //     ->falseIcon('heroicon-o-check-circle')
+                //     ->trueColor('danger')
+                //     ->falseColor('success')
+                //     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('deleted_at')
                     ->dateTime()
                     ->sortable()
@@ -303,16 +312,6 @@ class UserResource extends Resource
             'create' => Pages\CreateUser::route('/create'),
             'edit'   => Pages\EditUser::route('/{record}/edit'),
         ];
-    }
-
-    public static function getLabel(): string
-    {
-        return 'Usuario';
-    }
-
-    public static function getPluralLabel(): string
-    {
-        return 'Usuarios';
     }
 
 }
