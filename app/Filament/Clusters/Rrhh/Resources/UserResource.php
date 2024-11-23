@@ -75,6 +75,11 @@ class UserResource extends Resource
                         ->label('F.Nacimiento')
                         ->columnSpan(2),
                 ]),
+                Forms\Components\TextInput::make('password')
+                    ->password()
+                    ->maxLength(255)
+                    ->default(null)
+                    ->hiddenOn('edit'),
                 Forms\Components\Grid::make(3)
                     ->schema([
                         Forms\Components\Select::make('establishment_id')
@@ -140,11 +145,6 @@ class UserResource extends Resource
                         ->default(null)
                         ->columnSpan(2),
                 ]),
-                // Forms\Components\TextInput::make('password')
-                //     ->password()
-                //     ->maxLength(255)
-                //     ->default(null)
-                //     ->hiddenOn('edit'),
 
                 Forms\Components\Grid::make(6)->schema([
                     Forms\Components\Toggle::make('active')
@@ -157,6 +157,12 @@ class UserResource extends Resource
                         ->label('Externo')
                         ->required(),
                 ]),
+                // Forms\Components\Repeater::make('roles')
+                //     ->simple(
+                //         Forms\Components\TextInput::make('email')
+                //             ->email()
+                //             ->required(),
+                //     ),
                 Forms\Components\Select::make('roles')
                     ->multiple()
                     ->relationship('roles', 'name')
