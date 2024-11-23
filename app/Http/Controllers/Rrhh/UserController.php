@@ -36,7 +36,9 @@ class UserController extends Controller
                 'organizationalUnit',
                 'permissions',
                 'roles',
-            ])->orderBy('name', 'Asc')->paginate(100);
+            ])
+            ->orderBy('full_name', 'asc')
+            ->paginate(100);
 
         $permissions = Permission::orderBy('name')->pluck('name');
         $roles = Role::orderBy('name')->pluck('name');
