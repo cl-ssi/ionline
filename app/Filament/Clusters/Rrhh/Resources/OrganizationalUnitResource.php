@@ -28,7 +28,9 @@ class OrganizationalUnitResource extends Resource
 
     protected static ?string $cluster = Rrhh::class;
 
-    // protected static ?string $navigationGroup = 'SDGP';
+    protected static ?string $modelLabel = 'unidad organizacional';
+
+    protected static ?string $pluralModelLabel = 'unidades organizacionales';
 
     protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
 
@@ -127,26 +129,25 @@ class OrganizationalUnitResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
+                // Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
+                // Tables\Actions\BulkActionGroup::make([
+                //     Tables\Actions\DeleteBulkAction::make(),
+                // ]),
             ])
             ->paginated(false)
-            ->defaultSort('order')
-            ->reorderable('order');
+            ->defaultSort('order');
     }
 
-    public static function getRecordSubNavigation(\Filament\Pages\Page $page): array
-    {
-        return $page->generateNavigationItems([
-            Pages\ViewOrganizationalUnit::class,
-            Pages\EditOrganizationalUnit::class,
-        ]);
-    }
+    // public static function getRecordSubNavigation(\Filament\Pages\Page $page): array
+    // {
+    //     return $page->generateNavigationItems([
+    //         // Pages\ViewOrganizationalUnit::class,
+    //         Pages\EditOrganizationalUnit::class,
+    //     ]);
+    // }
 
     public static function getRelations(): array
     {
@@ -163,7 +164,7 @@ class OrganizationalUnitResource extends Resource
             'index' => Pages\ListOrganizationalUnits::route('/'),
             'create' => Pages\CreateOrganizationalUnit::route('/create'),
             'edit' => Pages\EditOrganizationalUnit::route('/{record}/edit'),
-            'view' => Pages\ViewOrganizationalUnit::route('/{record}'),
+            // 'view' => Pages\ViewOrganizationalUnit::route('/{record}'),
         ];
     }
 
@@ -176,13 +177,4 @@ class OrganizationalUnitResource extends Resource
             ]);
     }
 
-    public static function getLabel(): string
-    {
-        return 'Unidad Organizacional';
-    }
-
-    public static function getPluralLabel(): string
-    {
-        return 'Unidades Organizacionales';
-    }
 }
