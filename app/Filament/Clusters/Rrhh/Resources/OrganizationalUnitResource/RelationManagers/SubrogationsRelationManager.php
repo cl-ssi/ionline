@@ -6,6 +6,7 @@ use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
+use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -54,14 +55,14 @@ class SubrogationsRelationManager extends RelationManager
         return $table
             ->recordTitleAttribute('full_name')
             ->columns([
+                Tables\Columns\TextColumn::make('level')
+                    ->numeric()
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('user.shortName')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('type')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('level')
-                    ->numeric()
-                    ->sortable(),
                 // Tables\Columns\IconColumn::make('deactivated')
                 //     ->boolean(),
                 Tables\Columns\TextColumn::make('created_at')
@@ -78,8 +79,13 @@ class SubrogationsRelationManager extends RelationManager
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
-            ])
+                Tables\Filters\SelectFilter::make('type')
+                    ->options([
+                        'manager' => 'Jefatura',
+                        'secretary' => 'Secretaría',
+                        'delegate' => 'Delegado',
+                    ])
+            ], layout: FiltersLayout::AboveContent)
             ->headerActions([
                 Tables\Actions\CreateAction::make(),
             ])
@@ -91,6 +97,9 @@ class SubrogationsRelationManager extends RelationManager
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
-            ]);
+            ])
+            ->defaultSort('type', 'asc')
+            ->defaultSort('level', 'asc')
+            ->reorderable('level');
     }
 }

@@ -281,6 +281,7 @@ class UserResource extends Resource
                 //     ->columnSpan(2)
                 //     ,
             ], layout: FiltersLayout::AboveContent)
+            ->filtersFormColumns(4)
             ->actions([
                 Tables\Actions\EditAction::make(),
                 Impersonate::make()

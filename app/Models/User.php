@@ -158,6 +158,11 @@ class User extends Authenticatable implements Auditable, FilamentUser
         return ($panelId == 'intranet' && !$this->external) || ($panelId == 'extranet' && $this->external);
     }
 
+    public function canImpersonate(): bool
+    {
+        return auth()->user()->can('dev');
+    }
+
     /**
      * Get the establishment that owns the user.
      */
