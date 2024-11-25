@@ -21,6 +21,7 @@ class CreateJppJobPositionProfilesTable extends Migration
             $table->string('name')->nullable();
             $table->foreignId('user_creator_id')->nullable()->constrained('users');
             $table->foreignId('ou_creator_id')->nullable()->constrained('organizational_units');
+            $table->foreignId('jpp_ou_id')->nullable()->constrained('organizational_units');
             $table->integer('charges_number')->nullable();
             $table->foreignId('estament_id')->nullable()->constrained('cfg_estaments');
             $table->foreignId('area_id')->nullable()->constrained('cfg_areas');
@@ -36,6 +37,7 @@ class CreateJppJobPositionProfilesTable extends Migration
             
             //II. REQUISITOS FORMALES
             $table->foreignId('staff_decree_by_estament_id')->nullable()->constrained('cfg_staff_decree_by_estaments');
+            $table->longText('general_requirement')->nullable();
             $table->longText('specific_requirement')->nullable();
             $table->longText('training')->nullable();
             $table->longText('experience')->nullable();

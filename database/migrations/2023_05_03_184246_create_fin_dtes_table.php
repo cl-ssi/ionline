@@ -33,6 +33,7 @@ class CreateFinDtesTable extends Migration
             $table->string('estado_intercambio')->nullable();
             $table->string('informacion_intercambio')->nullable();
             $table->string('uri')->nullable();
+
             $table->text('referencias')->nullable();
             $table->datetime('fecha_nar')->nullable();
             $table->string('estado_nar')->nullable();
@@ -62,7 +63,61 @@ class CreateFinDtesTable extends Migration
             $table->datetime('fecha_ingreso')->nullable();
             $table->datetime('fecha_aceptacion')->nullable();
             $table->datetime('fecha')->nullable();
+            $table->foreignId('contract_manager_id')->nullable()->constrained('users');
+            $table->boolean('confirmation_status')->nullable()->default(null);
+            $table->foreignId('confirmation_sender_id')->nullable()->constrained('users');
+            $table->datetime('confirmation_send_at')->nullable()->default(null);
+            $table->boolean('all_receptions')->nullable()->default(false);
+            $table->foreignId('all_receptions_user_id')->nullable()->constrained('users');
+            $table->foreignId('all_receptions_ou_id')->nullable()->constrained('organizational_units');
+            $table->datetime('all_receptions_at')->nullable();
+            
+            $table->string('confirmation_signature_file')->nullable();
+            $table->boolean('payment_ready');
+            $table->datetime('fin_payed_at')->nullable();
+            $table->string('fin_folio_devengo')->nullable();
+            $table->string('fin_folio_tesoreria')->nullable();
+            $table->foreignId('sender_id')->nullable()->constrained('users');
+            $table->foreignId('sender_ou')->nullable()->constrained('organizational_units');
+            $table->datetime('sender_at')->nullable();
+            $table->foreignId('payer_id')->nullable()->constrained('users');
+            $table->foreignId('payer_ou')->nullable()->constrained('organizational_units');
+            $table->datetime('payer_at')->nullable();
+            $table->foreignId('establishment_id')->nullable()->constrained('establishments');
+            
+            $table->string('cenabast_reception_file')->nullable();
+            $table->string('cenabast_signed_pharmacist')->default(0);
+            $table->string('cenabast_signed_boss')->default(0);
+            $table->boolean('block_signature')->default(0);
+            $table->string('folio_compromiso_sigfe')->nullable();
+            $table->string('archivo_compromiso_sigfe')->nullable();
+            $table->string('folio_devengo_sigfe')->nullable();
+            $table->string('archivo_devengo_sigfe')->nullable();
+            $table->string('comprobante_liquidacion_fondo')->nullable();
+            $table->string('archivo_carga_manual')->nullable();
+            $table->boolean('devuelto')->nullable();
+            $table->boolean('rejected')->nullable();
+            $table->text('reason_rejection')->nullable();
+            $table->foreignId('rejected_user_id')->nullable()->constrained('users');
+            $table->datetime('rejected_at')->nullable();
+            $table->boolean('excel_proveedor')->nullable();
+            $table->boolean('excel_cartera')->nullable();
+            $table->boolean('excel_requerimiento')->nullable();
+            $table->text('observation')->nullable();
+            $table->boolean('paid')->nullable();
+            $table->integer('paid_folio')->nullable();
+            $table->date('paid_at')->nullable();
+            $table->integer('paid_effective_amount')->nullable();
+            $table->boolean('paid_automatic')->nullable();
+            $table->boolean('paid_manual')->nullable();
+            $table->boolean('check_tesoreria')->default(false);
+
             $table->timestamps();
+
+            $table->index(['folio']);
+            $table->index(['folio_oc']);
+            $table->index(['emisor']);
+            $table->index(['razon_social_emisor']); 
         });
     }
 

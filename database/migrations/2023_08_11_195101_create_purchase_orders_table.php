@@ -15,11 +15,11 @@ return new class extends Migration
     {
         Schema::create('fin_purchase_orders', function (Blueprint $table) {
             $table->id();
-
             $table->string('code', 255)->nullable();
             $table->timestamp('date')->nullable();
             $table->json('data')->nullable();
-
+            $table->boolean('completed');
+            $table->boolean('cenabast');
             $table->timestamps();
             $table->softDeletes();
         });
