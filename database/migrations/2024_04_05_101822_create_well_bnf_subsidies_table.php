@@ -17,7 +17,7 @@ return new class extends Migration
     {
         Schema::create('well_bnf_subsidies', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('benefit_id')->constrained('well_bnf_benefits');
+            $table->foreignId('benefit_id')->constrained('well_bnf_benefits')->onDelete('cascade');
             $table->text('name');
             $table->text('description')->nullable();
             $table->integer('annual_cap')->nullable();
