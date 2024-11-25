@@ -2,22 +2,23 @@
 
 namespace App\Filament\Clusters\Documents\Resources\Agreements;
 
+use App\Enums\Documents\Agreements\Status;
 use App\Filament\Clusters\Documents;
 use App\Filament\Clusters\Documents\Resources\Agreements\ProcessResource\Pages;
-use App\Filament\Clusters\Documents\Resources\Agreements\ProcessResource\RelationManagers;
 use App\Filament\Clusters\Documents\Resources\Agreements\ProgramResource\RelationManagers\ProcessesRelationManager;
-use App\Models\Documents\Agreements\Signer;
 use App\Models\Documents\Agreements\Process;
+use App\Models\Documents\Agreements\Signer;
+use App\Models\Documents\Document;
 use App\Models\Establishment;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
+use Filament\Notifications;
 use Filament\Pages\SubNavigationPosition;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Collection;
 
 class ProcessResource extends Resource
@@ -78,8 +79,8 @@ class ProcessResource extends Resource
                 Forms\Components\Select::make('municipality_id')
                     ->label('Municipalidad')
                     ->relationship(
-                        name: 'municipality', 
-                        titleAttribute: 'name', 
+                        name: 'municipality',
+                        titleAttribute: 'name',
                         modifyQueryUsing: fn (Builder $query, Get $get): Builder => $query->where('commune_id', $get('commune_id'))
                     )
                     ->required()
@@ -96,7 +97,7 @@ class ProcessResource extends Resource
                 Forms\Components\Select::make('mayor_id')
                     ->label('Alcalde')
                     ->relationship(
-                        name: 'mayor', 
+                        name: 'mayor',
                         titleAttribute: 'name',
                         modifyQueryUsing: fn (Builder $query, Get $get): Builder => $query->where('municipality_id', $get('municipality_id'))
                     )
@@ -128,7 +129,7 @@ class ProcessResource extends Resource
                     ->multiple()
                     ->columnSpanFull()
                     ->options(
-                        options: fn (Get $get): Collection  => Establishment::where('cl_commune_id', $get('commune_id'))->pluck('name', 'id')
+                        options: fn (Get $get): Collection => Establishment::where('cl_commune_id', $get('commune_id'))->pluck('name', 'id')
                     ),
                 Forms\Components\TextInput::make('quotas')
                     ->label('Cuotas')
@@ -151,10 +152,77 @@ class ProcessResource extends Resource
                 //     ->required()
                 //     ->maxLength(255),
 
-
-                Forms\Components\Select::make('process_id')
-                    ->relationship('process', 'id')
+                Forms\Components\Select::make('next_process_id')
+                    ->label('Siguiente proceso')
+                    ->relationship('nextProcess', 'id')
                     ->default(null),
+
+                Forms\Components\ToggleButtons::make('status')
+                    ->inline()
+                    ->options(Status::class)
+                    ->columnSpanFull(),
+
+                Forms\Components\Actions::make([
+                    Forms\Components\Actions\Action::make('CrearDocumento')
+                        ->label('Crear documento del proceso')
+                        ->icon('heroicon-m-document')
+                        // ->color('danger')
+                        ->requiresConfirmation()
+                        ->action(function (Process $record) {
+                            $record->createOrUpdateDocument();
+                            Notifications\Notification::make()
+                                ->title('Documento creado')
+                                ->success()
+                                ->actions([
+                                    Notifications\Actions\Action::make('Ver')
+                                        ->button()
+                                        ->url(route('documents.show', $record->document_id), shouldOpenInNewTab: true),
+                                    Notifications\Actions\Action::make('Editar')
+                                        ->button()
+                                        ->url(route('documents.edit', $record->document_id), shouldOpenInNewTab: true),
+                                ])
+                                ->send();
+                        })
+                        ->hidden(fn (Process $record) => $record->document_id == null),
+                    Forms\Components\Actions\Action::make('EliminarDocumento')
+                        ->label('Eliminar documento del proceso')
+                        ->icon('heroicon-m-trash')
+                        ->color('danger')
+                        ->requiresConfirmation()
+                        ->action(function (Process $record) {
+                            if ($record->document_id) {
+                                $document = Document::find($record->document_id);
+                                if ($document) {
+                                    $document->delete();
+                                    $record->document_id = null;
+                                    $record->save();
+                                    Notifications\Notification::make()
+                                        ->title('Documento eliminado')
+                                        ->success()
+                                        ->send();
+                                }
+                            }
+                        })
+                        ->hidden(fn (Process $record) => $record->document_id === null),
+                    Forms\Components\Actions\Action::make('SolicitarVisado')
+                        ->icon('heroicon-m-trash')
+                        ->color('primary')
+                        ->requiresConfirmation()
+                        ->form([
+                            Forms\Components\Select::make('referer_id')
+                                ->label('Referente')
+                                ->options(fn (Process $record) => $record->program->referers->pluck('full_name', 'id'))
+                                ->required(),
+                        ])
+                        ->action(function (Process $record, array $data): void {
+                            $record->createApprovals($data['referer_id']);
+                            Notifications\Notification::make()
+                                ->title('Visado solicitado')
+                                ->success()
+                                ->send();
+                        }),
+                ])
+                ->columnSpanFull(),
             ])
             ->columns(3);
     }
@@ -183,6 +251,10 @@ class ProcessResource extends Resource
                     ->label('Comuna')
                     ->searchable()
                     ->sortable(),
+                Tables\Columns\ImageColumn::make('approvals.avatar')
+                    ->label('Aprobaciones')
+                    ->circular()
+                    ->stacked(),
                 // Tables\Columns\TextColumn::make('total_amount')
                 //     ->numeric()
                 //     ->sortable(),
@@ -243,14 +315,14 @@ class ProcessResource extends Resource
                     ->relationship('processType', 'name'),
                 // Tables\Filters\SelectFilter::make('programa')
                 //     ->relationship(
-                //         name: 'program', 
+                //         name: 'program',
                 //         titleAttribute: 'name',
-                //         modifyQueryUsing: fn (Builder $query): 
+                //         modifyQueryUsing: fn (Builder $query):
                 //             Builder => $query->where('period', 2024)
                 //     ),
                 Tables\Filters\SelectFilter::make('comuna')
                     ->relationship(
-                        name: 'commune', 
+                        name: 'commune',
                         titleAttribute: 'name',
                     )
                     ->searchable(),
@@ -275,9 +347,9 @@ class ProcessResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListProcesses::route('/'),
+            'index'  => Pages\ListProcesses::route('/'),
             'create' => Pages\CreateProcess::route('/create'),
-            'edit' => Pages\EditProcess::route('/{record}/edit'),
+            'edit'   => Pages\EditProcess::route('/{record}/edit'),
         ];
     }
 }

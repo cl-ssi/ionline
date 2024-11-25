@@ -5,6 +5,7 @@ namespace App\Models\Documents\Agreements;
 use App\Models\Documents\Template;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 
 class ProcessType extends Model
 {
@@ -29,7 +30,7 @@ class ProcessType extends Model
         return $this->hasMany(Process::class);
     }
 
-    public function template()
+    public function template(): MorphOne
     {
         return $this->morphOne(Template::class, 'templateable');
     }

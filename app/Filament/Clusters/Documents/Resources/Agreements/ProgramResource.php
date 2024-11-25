@@ -116,6 +116,7 @@ class ProgramResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('name')
                     ->label('Nombre')
+                    ->wrap()
                     ->searchable(),
                 // Tables\Columns\TextColumn::make('alias')
                 //     ->searchable(),
@@ -151,7 +152,9 @@ class ProgramResource extends Resource
                 //     ->sortable(),
                 Tables\Columns\TextColumn::make('referers.full_name')
                     ->label('Referentes')
+                    ->wrap()
                     ->bulleted()
+                ->searchable(['full_name'])
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()

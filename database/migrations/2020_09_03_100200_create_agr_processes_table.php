@@ -42,7 +42,11 @@ return new class extends Migration
             $table->string('mayor_appelative')->nullable();
             $table->string('mayor_decree')->nullable();
 
-            $table->unsignedBigInteger('process_id')->nullable();
+            $table->enum('status', ['draft', 'approved', 'rejected', 'finished'])->default('draft');
+
+            $table->foreignId('document_id')->nullable()->constrained('documents');
+
+            $table->foreignId('next_process_id')->nullable()->constrained('agr_processes')->nullOnDelete();
 
             $table->timestamps();
             $table->softDeletes();
