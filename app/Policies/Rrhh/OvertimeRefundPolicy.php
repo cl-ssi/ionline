@@ -67,7 +67,7 @@ class OvertimeRefundPolicy
      */
     public function delete(User $user, OvertimeRefund $overtimeRefund): bool
     {
-        return $overtimeRefund->user_id == $user->id AND $overtimeRefund->status === 'pending';
+        return $overtimeRefund->user_id == $user->id AND $overtimeRefund->status->value === 'pending';
     }
 
     /**
