@@ -41,30 +41,33 @@ class TreasuryResource extends Resource
         return $form
             ->schema([
                 Forms\Components\Fieldset::make('DTE')
-                    ->relationship('treasureable')
-                    ->schema([
-                        Forms\Components\Placeholder::make('Dte Id')
-                            ->content(fn(Get $get): string => $get('id') ?? ''),
-                        Forms\Components\Placeholder::make('Tipo de Documento')
-                            ->content(fn(Get $get): string => $get('tipo_documento') ?? ''),
-                        Forms\Components\Placeholder::make('Razon Social')
-                            ->content(fn(Get $get, Set $set): string => $get('razon_social_emisor') ?? ''),
-                        // Forms\Components\Placeholder::make('Emisor')
-                        //     ->content(fn(Model $record): string => ($record->) ?? ''),
-                        Forms\Components\Placeholder::make('Orden de Compra')
-                            ->content(fn(Model $record): string => $record->folio_oc?(!$record->purchaseOrder?$record->folio_oc:$record->folio_oc . ' ('. $record->purchaseOrder->json->Listado[0]->Estado . ')'):''  ),
-                        Forms\Components\Placeholder::make('Folio Compromiso Sigfe')
-                            ->content(fn(Get $get): string => $get('folio_compromiso_sigfe') ?? ''),
-                        Forms\Components\Placeholder::make('Archivo Compromiso Sigfe')                        
-                            ->content(fn(Model $record) => ($record->archivo_compromiso_sigfe)?(new HtmlString('<a href="' . Storage::disk()->url($record->archivo_compromiso_sigfe) . '"   target="_blank">Descargar</a>')):''),
-                        Forms\Components\Placeholder::make('Folio Devengo Sigfe')
-                            ->content(fn(Get $get): string => $get('folio_devengo_sigfe') ?? ''),
-                        Forms\Components\Placeholder::make('Archivo Devengo Sigfe')                        
-                            ->content(fn(Model $record) => ($record->archivo_devengo_sigfe)?(new HtmlString('<a href="' . Storage::disk()->url($record->archivo_devengo_sigfe) . '"   target="_blank">Descargar</a>')):''),
-                        
-                    ])
-                    ->columns(4)
-                    ->visible(fn (Model $record) => $record->treasureable_type == 'App\Models\Finance\Dte'),
+                ->relationship('accountable')
+                ->schema([
+                    Forms\Components\Placeholder::make('Dte Id')
+                        ->content(fn(Get $get): string => $get('id') ?? ''),
+                    Forms\Components\Placeholder::make('Documento')
+                        ->content(function(Get $get){
+                            $tipo_documento = $get('tipo_documento')?implode('  ', array_map('ucfirst', explode('_', $get('tipo_documento')))):'';                                
+                            return new HtmlString('<div>' . $tipo_documento . '<br><small>' . $get('folio') . '</small></div>');
+                        }),
+                    Forms\Components\Placeholder::make('Emisor')
+                        ->content(fn(Get $get) => new HtmlString('<div>' . $get('emisor') . '<br><small>' . $get('razon_social_emisor') . '</small></div>')),
+                    Forms\Components\Placeholder::make('Orden de Compra')
+                        ->content(function(Model $record) {
+                            $out = '';
+                            if($record->folio_oc && !$record->purchaseOrder){
+                                $out = $record->folio_oc;
+                            } else if($record->folio_oc && $record->purchaseOrder){
+                                $status = $record->purchaseOrder->json->Listado[0]->Estado;
+                                $url = route('finance.purchase-orders.show', $record->purchaseOrder);
+                                $out = new HtmlString('<div><a target="_blank" href="' . $url . '">' . $record->folio_oc . '</a><br><small>' . $status . '</small></div>');
+                                // $out = new HtmlString('<div>' . $record->folio_oc . '<br><small>' . $status . '</small></div>');
+                            }
+                            return $out;
+                        }),
+                ])
+                ->columns(4)
+                ->visible(fn (Model $record) => $record->accountable_type == 'App\Models\Finance\Dte'),
                 Forms\Components\Fieldset::make('Abastecimiento')
                     ->relationship('treasureable')
                     ->schema([
