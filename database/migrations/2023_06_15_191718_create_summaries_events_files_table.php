@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSummariesEventsFilesTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateSummariesEventsFilesTable extends Migration
      */
     public function up()
     {
-        Schema::create('sum_summaries_events_files', function (Blueprint $table) {
+        Schema::create('sum_summary_event_files', function (Blueprint $table) {
             $table->id();
             $table->string('name')->nullable();
             $table->string('file')->nullable();
@@ -31,6 +31,6 @@ class CreateSummariesEventsFilesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('sum_summaries_events_files');
+        Schema::dropIfExists('sum_summary_event_files');
     }
 }

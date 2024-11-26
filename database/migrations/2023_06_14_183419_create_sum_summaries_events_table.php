@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSumSummariesEventsTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,16 @@ class CreateSumSummariesEventsTable extends Migration
      */
     public function up()
     {
-        Schema::create('sum_summaries_events', function (Blueprint $table) {
+        Schema::create('sum_summary_events', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('event_id')->nullable()->constrained('sum_events');
+            $table->foreignId('event_type_id')->nullable()->constrained('sum_events');
             $table->text('body')->nullable();
             $table->timestamp('start_date')->nullable();
             $table->timestamp('end_date')->nullable();
+            $table->foreignId('user_id')->nullable()->constrained('users');
             $table->foreignId('summary_id')->nullable()->constrained('sum_summaries');
+            $table->foreignId('creator_id')->nullable()->constrained('users');
+            $table->foreignId('father_event_id')->nullable()->constrained('sum_summary_events');
             $table->timestamps();
             $table->softDeletes();
         });
@@ -32,6 +35,6 @@ class CreateSumSummariesEventsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('sum_summaries_events');
+        Schema::dropIfExists('sum_summary_events');
     }
 }
