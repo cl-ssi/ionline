@@ -25,6 +25,7 @@ class ProcessObserver
         $process->mayor_decree = $process->mayor->decree;
 
         $process->period = $process->program->period;
+        $process->establishment_id = auth()->user()->establishment_id;
     }
 
     /**
@@ -52,6 +53,7 @@ class ProcessObserver
         $process->mayor_run = $process->mayor->run;
         $process->mayor_appelative = $process->mayor->appelative;
         $process->mayor_decree = $process->mayor->decree;
+        $process->establishment_id = auth()->user()->establishment_id;
     }
 
     /**

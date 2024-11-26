@@ -6,6 +6,7 @@ use App\Enums\Documents\Agreements\Status;
 use App\Models\ClCommune;
 use App\Models\Documents\Approval;
 use App\Models\Documents\Document;
+use App\Models\Establishment;
 use App\Models\Parameters\ApprovalFlow;
 use App\Models\Parameters\Mayor;
 use App\Models\Parameters\Municipality;
@@ -51,6 +52,7 @@ class Process extends Model
         'status',
         'document_id',
         'next_process_id',
+        'establishment_id',
     ];
 
     protected $casts = [
@@ -104,6 +106,11 @@ class Process extends Model
         return $this->hasMany(Process::class, 'process_id');
     }
 
+    public function establishment(): BelongsTo
+    {
+        return $this->belongsTo(Establishment::class, 'establishment_id');
+    }
+
     /**
      * Get all of the approvations of a model.
      */
@@ -141,7 +148,7 @@ class Process extends Model
             "subject" => "Visar convenio",
             "document_route_name" => "documents.show",
             "document_route_params" => json_encode([
-                "document_id" => $this->document_id
+                "document" => $this->document_id
             ]),
             "sent_to_user_id" => $referer_id,
         ]);
@@ -155,7 +162,7 @@ class Process extends Model
                 "subject" => "Visar convenio",
                 "document_route_name" => "documents.show",
                 "document_route_params" => json_encode([
-                    "document_id" => $this->document_id
+                    "document" => $this->document_id
                 ]),
                 "sent_to_ou_id" => $step->organizational_unit_id,
             ]);

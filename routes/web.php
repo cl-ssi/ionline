@@ -734,6 +734,12 @@ Route::prefix('resources')->name('resources.')->middleware(['auth', 'must.change
 
 /** Inicio Agreements */
 Route::prefix('agreements')->as('agreements.')->middleware(['auth', 'must.change.password'])->group(function () {
+
+    // Show nuevo
+    Route::get('show/{record}', function (App\Models\Documents\Agreements\Process $record) {
+        return Pdf::loadView('documents.agreements.show',['record' => $record])->stream();
+    })->name('show');//->middleware('can:view,record');
+
     Route::get('/{agreement}/accountability/create', [AccountabilityController::class, 'create'])->name('accountability.create');
     Route::post('/{agreement}/accountability', [AccountabilityController::class, 'store'])->name('accountability.store');
     Route::get('/{agreement}/accountability', [AccountabilityController::class, 'index'])->name('accountability.index');

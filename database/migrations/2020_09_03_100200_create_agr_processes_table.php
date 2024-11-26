@@ -48,6 +48,8 @@ return new class extends Migration
 
             $table->foreignId('next_process_id')->nullable()->constrained('agr_processes')->nullOnDelete();
 
+            $table->foreignId('establishment_id')->constrained('establishments')->nullable();
+
             $table->timestamps();
             $table->softDeletes();
         });

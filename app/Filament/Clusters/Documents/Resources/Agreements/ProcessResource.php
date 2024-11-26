@@ -11,6 +11,7 @@ use App\Models\Documents\Agreements\Signer;
 use App\Models\Documents\Document;
 use App\Models\Establishment;
 use Filament\Forms;
+use Filament\Forms\Components\Hidden;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
 use Filament\Notifications;
@@ -182,8 +183,8 @@ class ProcessResource extends Resource
                                         ->url(route('documents.edit', $record->document_id), shouldOpenInNewTab: true),
                                 ])
                                 ->send();
-                        })
-                        ->hidden(fn (Process $record) => $record->document_id == null),
+                        }),
+                        // ->hidden(fn (Process $record) => $record->document_id == null),
                     Forms\Components\Actions\Action::make('EliminarDocumento')
                         ->label('Eliminar documento del proceso')
                         ->icon('heroicon-m-trash')
@@ -202,10 +203,10 @@ class ProcessResource extends Resource
                                         ->send();
                                 }
                             }
-                        })
-                        ->hidden(fn (Process $record) => $record->document_id === null),
+                        }),
+                        // ->hidden(fn (Process $record) => $record->document_id === null),
                     Forms\Components\Actions\Action::make('SolicitarVisado')
-                        ->icon('heroicon-m-trash')
+                        ->icon('heroicon-m-check-circle')
                         ->color('primary')
                         ->requiresConfirmation()
                         ->form([
@@ -222,7 +223,8 @@ class ProcessResource extends Resource
                                 ->send();
                         }),
                 ])
-                ->columnSpanFull(),
+                ->columnSpanFull()
+                ->fullWidth(),
             ])
             ->columns(3);
     }
