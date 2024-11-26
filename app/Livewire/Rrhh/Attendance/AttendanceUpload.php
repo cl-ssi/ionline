@@ -95,6 +95,7 @@ class AttendanceUpload extends Component
                     'date' => $date,
                     'report_date' => $report_date,
                     'records' => $line,
+                    'establishment_id' => auth()->user()->establishment_id,
                 ];
 
             } elseif ( array_key_exists($ct_records,$records) ) {
