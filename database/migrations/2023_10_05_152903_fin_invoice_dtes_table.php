@@ -41,11 +41,6 @@ return new class extends Migration
         foreach($dtes as $dte) {
             $dte->invoices()->attach($dte->dte_id);
         }
-
-        Schema::table('fin_dtes', function (Blueprint $table) {
-            $table->dropForeign(['dte_id']);
-            $table->dropColumn('dte_id');
-        });
     }
 
     /**
