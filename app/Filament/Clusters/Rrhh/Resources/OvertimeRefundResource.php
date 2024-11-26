@@ -5,7 +5,7 @@ namespace App\Filament\Clusters\Rrhh\Resources;
 use App\Filament\Clusters\Rrhh;
 use App\Filament\Clusters\Rrhh\Resources\OvertimeRefundResource\Pages;
 use App\Filament\Exports\Rrhh\OvertimeRefundExporter;
-use App\Models\Rrhh\Attendance;
+use App\Models\Rrhh\MonthlyAttendance;
 use App\Models\Rrhh\OvertimeRefund;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Filament\Forms;
@@ -32,7 +32,7 @@ class OvertimeRefundResource extends Resource
 
     protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
 
-    protected static ?int $navigationSort = 4;
+    protected static ?int $navigationSort = 5;
 
     public static function form(Form $form): Form
     {
@@ -54,7 +54,7 @@ class OvertimeRefundResource extends Resource
                             ->hiddenLabel()
                             ->live()
                             ->required()
-                            ->options(fn () => Attendance::where('user_id', auth()->id())
+                            ->options(fn () => MonthlyAttendance::where('user_id', auth()->id())
                                 ->orderBy('date', 'desc')
                                 ->pluck('date', 'date')
                                 ->map(fn ($date) => $date->format('Y-m'))
@@ -69,7 +69,7 @@ class OvertimeRefundResource extends Resource
                         Forms\Components\Actions::make([
                             Forms\Components\Actions\Action::make('Buscar')
                                 ->action(function (Get $get, Set $set) {
-                                    $attendance = Attendance::where('user_id', auth()->id())
+                                    $attendance = MonthlyAttendance::where('user_id', auth()->id())
                                         ->whereDate('date', $get('date'))
                                         ->first();
 
@@ -338,7 +338,9 @@ class OvertimeRefundResource extends Resource
                         ->exporter(OvertimeRefundExporter::class)
                         ->columnMapping(false)
                 ]),
-            ]);
+            ])
+            ->defaultSort('id', 'desc')
+            ->paginationPageOptions([5,10,25,50]);
     }
 
     public static function getRelations(): array

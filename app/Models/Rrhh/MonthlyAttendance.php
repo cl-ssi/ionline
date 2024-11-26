@@ -2,6 +2,7 @@
 
 namespace App\Models\Rrhh;
 
+use App\Models\Establishment;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -10,17 +11,18 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Attendance extends Model
+class MonthlyAttendance extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $table = 'rrhh_attendances';
+    protected $table = 'rrhh_monthly_attendances';
 
     protected $fillable = [
         'user_id',
         'date',
         'records',
         'report_date',
+        'establishment_id',
     ];
 
     protected $casts = [
@@ -28,11 +30,13 @@ class Attendance extends Model
         'report_date' => 'date',
     ];
 
-    // Relacion con user
-
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+    public function establishment(): BelongsTo
+    {
+        return $this->belongsTo(Establishment::class);
     }
 
     /**

@@ -29,6 +29,8 @@ class AttendanceRecordResource extends Resource
 
     protected static ?int $navigationSort = 3;
 
+    protected static ?string $navigationGroup = 'Asistencia';
+
     public static function form(Form $form): Form
     {
         return $form
