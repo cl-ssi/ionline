@@ -330,6 +330,9 @@ class ProcessResource extends Resource
                     ->searchable(),
             ])
             ->actions([
+                Tables\Actions\ViewAction::make()
+                    ->url(fn (Process $record) => route('documents.agreements.processes.view', [$record]))
+                    ->openUrlInNewTab(),
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
