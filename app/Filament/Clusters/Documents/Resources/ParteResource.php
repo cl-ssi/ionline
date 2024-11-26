@@ -1,28 +1,35 @@
 <?php
 
-namespace App\Filament\Clusters\Documents\Resources\Documents;
+namespace App\Filament\Clusters\Documents\Resources;
 
 use App\Filament\Clusters\Documents;
-use App\Filament\Clusters\Documents\Resources\Documents\ParteResource\Pages;
-use App\Filament\Clusters\Documents\Resources\Documents\ParteResource\RelationManagers;
+use App\Filament\Clusters\Documents\Resources\ParteResource\Pages;
 use App\Models\Documents\Parte;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\pages\SubNavigationPosition;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Filament\pages\SubNavigationPosition;
 
 class ParteResource extends Resource
 {
     protected static ?string $model = Parte::class;
+
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+
     protected static ?string $cluster = Documents::class;
+
     protected static ?string $modelLabel = 'parte';
+
     protected static ?string $pluralModelLabel = 'partes';
+
     protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
+
+    protected static ?string $navigationGroup = 'Documentos';
+
+    protected static ?int $navigationSort = 5;
 
     public static function form(Form $form): Form
     {
@@ -33,12 +40,12 @@ class ParteResource extends Resource
                     ->required()
                     ->default(now()),
                 Forms\Components\Select::make('type_id')
-                ->label('Tipo')
+                    ->label('Tipo')
                     ->required()
                     ->relationship('type', 'name'),
                 Forms\Components\Toggle::make('reserved')
                     ->label('Reservado')
-                     ->inline(false),
+                    ->inline(false),
                 Forms\Components\DatePicker::make('date')
                     ->label('Fecha')
                     ->required(),
@@ -59,7 +66,7 @@ class ParteResource extends Resource
                     ->label('Archivo')
                     ->relationship()
                     ->schema([
-                        Forms\Components\FileUpload::make('file')
+                        Forms\Components\FileUpload::make('file'),
                     ])
                     ->columnSpanFull(),
             ])
@@ -91,11 +98,11 @@ class ParteResource extends Resource
                     ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('origin')
-                ->label('Origen')
+                    ->label('Origen')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('subject')
-                ->searchable()
-                ->label('Asunto'),
+                    ->searchable()
+                    ->label('Asunto'),
                 Tables\Columns\TextColumn::make('created_at')
                     ->label('Fecha de Creación')
                     ->dateTime()
@@ -114,12 +121,12 @@ class ParteResource extends Resource
             ])
             ->filters([
                 Tables\Filters\Filter::make('important')
-                 ->query(fn (Builder $query): Builder => $query->where('important', true))
-                 ->label('Marcados como urgentes'),
+                    ->query(fn (Builder $query): Builder => $query->where('important', true))
+                    ->label('Marcados como urgentes'),
 
                 Tables\Filters\Filter::make('without_sgr')
-                 ->query(fn (Builder $query): Builder => $query->filter('without_sgr', true))
-                 ->label(' Solo aquellos sin derivación')
+                    ->query(fn (Builder $query): Builder => $query->filter('without_sgr', true))
+                    ->label(' Solo aquellos sin derivación'),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
@@ -142,9 +149,9 @@ class ParteResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListPartes::route('/'),
+            'index'  => Pages\ListPartes::route('/'),
             'create' => Pages\CreateParte::route('/create'),
-            'edit' => Pages\EditParte::route('/{record}/edit'),
+            'edit'   => Pages\EditParte::route('/{record}/edit'),
         ];
     }
 }

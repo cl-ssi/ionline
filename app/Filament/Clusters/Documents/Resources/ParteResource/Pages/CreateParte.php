@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Filament\Clusters\Documents\Resources\Documents\ParteResource\Pages;
+namespace App\Filament\Clusters\Documents\Resources\ParteResource\Pages;
 
-use App\Filament\Clusters\Documents\Resources\Documents\ParteResource;
+use App\Filament\Clusters\Documents\Resources\ParteResource;
 use Filament\Actions;
 use Filament\Resources\Pages\CreateRecord;
 
