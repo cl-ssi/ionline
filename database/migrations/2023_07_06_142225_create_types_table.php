@@ -17,6 +17,7 @@ return new class extends Migration
         Schema::create('sum_types', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->foreignId('establishment_id')->nullable()->constrained('establishments');
             $table->timestamps();
         });
 
