@@ -19,7 +19,7 @@ return new class extends Migration
             $table->date('date');
             $table->text('records');
             $table->date('report_date');
-            $table->foreignId('establishment_id')->nullable()->constrained('establishments');
+            $table->foreignId('establishment_id')->constrained('establishments');
             $table->timestamps();
             $table->softDeletes();
             $table->unique(['user_id','date'],'UNIQUE');
