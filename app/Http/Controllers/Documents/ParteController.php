@@ -83,12 +83,12 @@ class ParteController extends Controller
         //$request->entered_at = date("Y-m-d H:i:s",strtotime($request->entered_at));
         //dd($request);
         $parte = new Parte($request->All());
-        $parte->establishment()->associate(auth()->user()->organizationalUnit->establishment);
+        //$parte->establishment()->associate(auth()->user()->organizationalUnit->establishment);
         $parte->important = $request->input('important') == 'on' ? 1 : null;
         $parte->reserved = $request->input('reserved') == 'on' ? 1 : null;
-        $parte->user()->associate(auth()->user());
-        $parte->organizationalUnit()->associate(auth()->user()->organizationalUnit);
-        $parte->setCorrelative();
+        //$parte->user()->associate(auth()->user());
+        //$parte->organizationalUnit()->associate(auth()->user()->organizationalUnit);
+        //$parte->setCorrelative();
         $parte->save();
 
         if($request->hasFile('forfile')){

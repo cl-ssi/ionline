@@ -17,7 +17,7 @@ class CreatePartesTable extends Migration
             $table->id();
             $table->unsignedInteger('correlative')->default(0);
             $table->datetime('entered_at');
-            $table->foreignId('type_id')->nullable()->constrained('doc_types');
+            $table->foreignId('type_id')->constrained('doc_types');
             $table->boolean('reserved')->nullable();
             $table->date('date');
             $table->integer('number')->unsigned()->nullable();
