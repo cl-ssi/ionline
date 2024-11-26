@@ -18,8 +18,10 @@ class CreateValuesTable extends Migration
             $table->string('contract_type');
             $table->string('type');
             $table->string('work_type');
-            $table->integer('amount');
+            $table->enum('estate', ['Médico 44', 'Médico 28', 'Médico 22', 'Profesional', 'Técnico', 'Administrativo', 'Farmaceutico', 'Odontólogo', 'Bioquímico', 'Auxiliar', 'Otro (justificar)'])->nullable();
+            $table->float('amount', 8,2);
             $table->date('validity_from');
+            $table->foreignId('establishment_id')->nullable()->constrained('establishments');
             $table->timestamps();
             $table->softDeletes();
         });

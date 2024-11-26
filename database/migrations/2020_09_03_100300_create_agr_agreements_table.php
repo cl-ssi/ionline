@@ -21,9 +21,9 @@ class CreateAgrAgreementsTable extends Migration
             $table->string('file')->nullable();
             $table->string('fileAgreeEnd')->nullable();
             $table->string('fileResEnd')->nullable();
-            $table->foreignId('program_id')->constrained('agr_programs');
+            $table->foreignId('program_id')->nullable()->cosntrained('agr_programs');
             $table->foreignId('commune_id')->constrained('communes');
-            $table->foreignId('authority_id')->nullable()->constrained('rrhh_authorities');
+            
             $table->smallInteger('quotas');
             $table->integer('total_amount')->nullable();
             $table->string('referente')->nullable();
