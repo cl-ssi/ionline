@@ -162,6 +162,24 @@ class ProcessResource extends Resource
                     ->inline()
                     ->options(Status::class)
                     ->columnSpanFull(),
+                Forms\Components\Repeater::make('comments')
+                    ->relationship()
+                    ->simple(
+                        Forms\Components\TextInput::make('body')
+                            ->required(),
+                    ),
+                Forms\Components\Repeater::make('quotas')
+                    ->relationship()
+                    ->schema([
+                        Forms\Components\TextInput::make('name')->required(),
+                        Forms\Components\Select::make('role')
+                            ->options([
+                                'member' => 'Member',
+                                'administrator' => 'Administrator',
+                                'owner' => 'Owner',
+                            ])
+                            ->required(),
+                        ]),
 
                 Forms\Components\Actions::make([
                     Forms\Components\Actions\Action::make('CrearDocumento')

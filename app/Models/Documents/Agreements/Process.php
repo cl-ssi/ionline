@@ -4,6 +4,7 @@ namespace App\Models\Documents\Agreements;
 
 use App\Enums\Documents\Agreements\Status;
 use App\Models\ClCommune;
+use App\Models\Comment;
 use App\Models\Documents\Approval;
 use App\Models\Documents\Document;
 use App\Models\Establishment;
@@ -109,6 +110,19 @@ class Process extends Model
     public function establishment(): BelongsTo
     {
         return $this->belongsTo(Establishment::class, 'establishment_id');
+    }
+
+    public function quotas(): HasMany
+    {
+        return $this->hasMany(Quota::class);
+    }
+
+    /**
+     * Get all of the comments of a model.
+     */
+    public function comments(): MorphMany
+    {
+        return $this->morphMany(Comment::class, 'commentable');
     }
 
     /**
