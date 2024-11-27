@@ -6,6 +6,7 @@ use App\Filament\Clusters\Finance;
 use App\Filament\Clusters\Finance\Resources\AccountancyResource\Pages;
 use App\Filament\Clusters\Finance\Resources\AccountancyResource\RelationManagers;
 use App\Models\Finance\Accountancy;
+use Filament\Pages\SubNavigationPosition;
 use Filament\Resources\Resource;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -25,6 +26,10 @@ class AccountancyResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     protected static ?string $cluster = Finance::class;
+
+    protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
+
+    protected static ?int $navigationSort = 5;
 
     public static function form(Form $form): Form
     {
