@@ -33,4 +33,4 @@ return new class extends Migration
     {
         Schema::dropIfExists('sum_summary_event_files');
     }
-}
+};
