@@ -177,7 +177,7 @@
                                 <span class="badge bg-danger">Rechazada</span>
                             @else
                                 @foreach ($reception->approvals as $approval)
-                                    <img src="{{ $approval->avatar }}" alt="">
+                                    {{-- <img src="{{ $approval->avatar }}" alt=""> --}}
                                     <span style="width=50px;"
                                         @class([
                                             'd-inline-bloc',
