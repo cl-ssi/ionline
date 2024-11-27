@@ -64,7 +64,10 @@ class IntranetPanelProvider extends PanelProvider
             ->navigationItems([
                 NavigationItem::make('iOnline Clásico')
                     ->url(fn(): string => route('home'))
-                    ->icon('heroicon-o-link')
+                    ->icon('heroicon-o-link'),
+                NavigationItem::make('Calendario')
+                    ->url(fn(): string => route('calendars'))
+                    ->icon('heroicon-o-calendar')
             ])
             ->defaultAvatarProvider(GravatarProvider::class)
             ->plugins([
