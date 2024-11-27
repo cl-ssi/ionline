@@ -5,6 +5,7 @@
 @section('linea1', 'ID: ' . $record->id)
 
 @section('content')
+    <div style="height: 150px;"></div>
     {!! $record->document->contentHtml !!}
 @endsection
 

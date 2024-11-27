@@ -272,6 +272,12 @@ Factor
 
 ---
 # Convenios
+
+- Previsualizar plantilla
+- Mostrar el CDP
+- CDP por establecimiento y subtitulo
+
+
 - ¿Los componentes de programas tienen los subtitulos?
 - ¿la distribucion de presupuesto es una por cdp o una por programa?
 - programa de anticipo de aporte estatal, cuotas diferentes a los demás? 20.919 id:1148

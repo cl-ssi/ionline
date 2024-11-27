@@ -44,142 +44,129 @@ class ProcessResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Select::make('process_type_id')
-                    ->label('Tipo de proceso')
-                    ->relationship('processType', 'name')
-                    ->required()
-                    ->columnSpanFull(),
-                Forms\Components\Select::make('period')
-                    ->label('Periodo')
-                    ->required()
-                    ->live()
-                    ->options(function () {
-                        $currentYear = now()->addYear()->year;
-                        $years       = [];
-                        for ($i = 0; $i < 6; $i++) {
-                            $years[$currentYear - $i] = $currentYear - $i;
-                        }
-
-                        return $years;
-                    })
-                    ->default(now()->year)
-                    ->hiddenOn(ProcessesRelationManager::class),
-                Forms\Components\Select::make('program_id')
-                    ->label('Programa')
-                    ->relationship('program', 'name', fn (Builder $query, callable $get) => $query->where('period', $get('period')))
-                    ->hiddenOn(ProcessesRelationManager::class)
-                    ->required()
-                    ->columnSpan(2),
-
-                Forms\Components\Select::make('commune_id')
-                    ->label('Comuna')
-                    ->relationship('commune', 'name')
-                    ->required()
-                    ->searchable()
-                    ->live(),
-                Forms\Components\Select::make('municipality_id')
-                    ->label('Municipalidad')
-                    ->relationship(
-                        name: 'municipality',
-                        titleAttribute: 'name',
-                        modifyQueryUsing: fn (Builder $query, Get $get): Builder => $query->where('commune_id', $get('commune_id'))
-                    )
-                    ->required()
-                    ->live(),
-                // Forms\Components\TextInput::make('municipality_name')
-                //     ->maxLength(255)
-                //     ->default(null),
-                // Forms\Components\TextInput::make('municipality_rut')
-                //     ->maxLength(255)
-                //     ->default(null),
-                // Forms\Components\TextInput::make('municipality_adress')
-                //     ->maxLength(255)
-                //     ->default(null),
-                Forms\Components\Select::make('mayor_id')
-                    ->label('Alcalde')
-                    ->relationship(
-                        name: 'mayor',
-                        titleAttribute: 'name',
-                        modifyQueryUsing: fn (Builder $query, Get $get): Builder => $query->where('municipality_id', $get('municipality_id'))
-                    )
-                    ->required(),
-                // Forms\Components\TextInput::make('mayor_name')
-                //     ->maxLength(255)
-                //     ->default(null),
-                // Forms\Components\TextInput::make('mayor_run')
-                //     ->maxLength(255)
-                //     ->default(null),
-                // Forms\Components\TextInput::make('mayor_appelative')
-                //     ->maxLength(255)
-                //     ->default(null),
-                // Forms\Components\TextInput::make('mayor_decree')
-                //     ->maxLength(255)
-                //     ->default(null),
-                Forms\Components\TextInput::make('total_amount')
-                    ->label('Monto total')
-                    ->numeric()
-                    ->default(null),
-                Forms\Components\TextInput::make('number')
-                    ->label('Número')
-                    ->numeric()
-                    ->default(null),
-                Forms\Components\DatePicker::make('date')
-                    ->label('Fecha'),
-                Forms\Components\Select::make('establishments')
-                    ->label('Establecimientos')
-                    ->multiple()
-                    ->columnSpanFull()
-                    ->options(
-                        options: fn (Get $get): Collection => Establishment::where('cl_commune_id', $get('commune_id'))->pluck('name', 'id')
-                    ),
-                Forms\Components\TextInput::make('quotas')
-                    ->label('Cuotas')
-                    ->numeric()
-                    ->default(null)
-                    ->helperText('Solo para programa de anticipo de aporte estatal'),
-                Forms\Components\Select::make('signer_id')
-                    ->label('Firmante')
-                    ->options(
-                        Signer::with('user')->get()->pluck('user.full_name', 'id')
-                    )
-                    ->required(),
-                // Forms\Components\TextInput::make('signer_appellative')
-                //     ->required()
-                //     ->maxLength(255),
-                // Forms\Components\Textarea::make('signer_decree')
-                //     ->required()
-                //     ->columnSpanFull(),
-                // Forms\Components\TextInput::make('signer_name')
-                //     ->required()
-                //     ->maxLength(255),
-
-                Forms\Components\Select::make('next_process_id')
-                    ->label('Siguiente proceso')
-                    ->relationship('nextProcess', 'id')
-                    ->default(null),
-
-                Forms\Components\ToggleButtons::make('status')
-                    ->inline()
-                    ->options(Status::class)
-                    ->columnSpanFull(),
-                Forms\Components\Repeater::make('comments')
-                    ->relationship()
-                    ->simple(
-                        Forms\Components\TextInput::make('body')
-                            ->required(),
-                    ),
-                Forms\Components\Repeater::make('quotas')
-                    ->relationship()
+                Forms\Components\Section::make()
                     ->schema([
-                        Forms\Components\TextInput::make('name')->required(),
-                        Forms\Components\Select::make('role')
-                            ->options([
-                                'member' => 'Member',
-                                'administrator' => 'Administrator',
-                                'owner' => 'Owner',
-                            ])
+                        Forms\Components\Select::make('process_type_id')
+                            ->label('Tipo de proceso')
+                            ->relationship('processType', 'name')
+                            ->required()
+                            ->columnSpanFull(),
+                        Forms\Components\Select::make('period')
+                            ->label('Periodo')
+                            ->required()
+                            ->live()
+                            ->options(function () {
+                                $currentYear = now()->addYear()->year;
+                                $years       = [];
+                                for ($i = 0; $i < 6; $i++) {
+                                    $years[$currentYear - $i] = $currentYear - $i;
+                                }
+
+                                return $years;
+                            })
+                            ->default(now()->year)
+                            ->hiddenOn(ProcessesRelationManager::class),
+                        Forms\Components\Select::make('program_id')
+                            ->label('Programa')
+                            ->relationship('program', 'name', fn (Builder $query, callable $get) => $query->where('period', $get('period')))
+                            ->hiddenOn(ProcessesRelationManager::class)
+                            ->required()
+                            ->columnSpan(2),
+
+                        Forms\Components\Select::make('commune_id')
+                            ->label('Comuna')
+                            ->relationship('commune', 'name')
+                            ->required()
+                            ->searchable()
+                            ->live(),
+                        Forms\Components\Select::make('municipality_id')
+                            ->label('Municipalidad')
+                            ->relationship(
+                                name: 'municipality',
+                                titleAttribute: 'name',
+                                modifyQueryUsing: fn (Builder $query, Get $get): Builder => $query->where('commune_id', $get('commune_id'))
+                            )
+                            ->required()
+                            ->live(),
+                        Forms\Components\Select::make('mayor_id')
+                            ->label('Alcalde')
+                            ->relationship(
+                                name: 'mayor',
+                                titleAttribute: 'name',
+                                modifyQueryUsing: fn (Builder $query, Get $get): Builder => $query->where('municipality_id', $get('municipality_id'))
+                            )
                             ->required(),
-                        ]),
+                        Forms\Components\TextInput::make('total_amount')
+                            ->label('Monto total')
+                            ->numeric()
+                            ->default(null),
+                        Forms\Components\TextInput::make('number')
+                            ->label('Número')
+                            ->numeric()
+                            ->default(null),
+                        Forms\Components\DatePicker::make('date')
+                            ->label('Fecha'),
+                        Forms\Components\Select::make('establishments')
+                            ->label('Establecimientos')
+                            ->multiple()
+                            ->columnSpanFull()
+                            ->options(
+                                options: fn (Get $get): Collection => Establishment::where('cl_commune_id', $get('commune_id'))->pluck('name', 'id')
+                            ),
+                        Forms\Components\TextInput::make('quotas_qty')
+                            ->label('Cuotas')
+                            ->numeric()
+                            ->default(null)
+                            ->helperText('Solo para programa de anticipo de aporte estatal'),
+                        Forms\Components\Select::make('signer_id')
+                            ->label('Firmante')
+                            ->options(
+                                Signer::with('user')->get()->pluck('user.full_name', 'id')
+                            )
+                            ->required(),
+                        Forms\Components\Select::make('next_process_id')
+                            ->label('Siguiente proceso')
+                            ->relationship('nextProcess', 'id')
+                            ->default(null),
+
+                        Forms\Components\ToggleButtons::make('status')
+                            ->label('Estado')
+                            ->inline()
+                            ->options(Status::class)
+                            ->columnSpanFull(),
+                        Forms\Components\Repeater::make('quotas')
+                            ->label('Cuotas')
+                            ->relationship()
+                            ->schema([
+                                Forms\Components\TextInput::make('description')
+                                    ->label('Descripción')
+                                    ->required(),
+                                Forms\Components\TextInput::make('percentage')
+                                    ->label('Porcentaje')
+                                    ->required(),
+                                Forms\Components\TextInput::make('amount')
+                                    ->label('Monto')
+                                    ->required(),
+                            ])
+                            ->columns(3)
+                            ->columnSpanFull(),
+
+                    ])
+                    ->columns(3)
+                    ->columnSpan(3),
+
+                Forms\Components\Section::make()
+                    ->schema([
+                        Forms\Components\Repeater::make('comments')
+                            ->label('Comentarios')
+                            ->relationship()
+                            ->simple(
+                                Forms\Components\TextInput::make('body')
+                                    ->required(),
+                            ),
+                    ])
+                    ->columnSpan(['lg' => 1])
+                    ->hidden(fn (?Process $record) => $record === null),
 
                 Forms\Components\Actions::make([
                     Forms\Components\Actions\Action::make('CrearDocumento')
@@ -202,7 +189,7 @@ class ProcessResource extends Resource
                                 ])
                                 ->send();
                         }),
-                        // ->hidden(fn (Process $record) => $record->document_id == null),
+                    // ->hidden(fn (Process $record) => $record->document_id == null),
                     Forms\Components\Actions\Action::make('EliminarDocumento')
                         ->label('Eliminar documento del proceso')
                         ->icon('heroicon-m-trash')
@@ -222,7 +209,7 @@ class ProcessResource extends Resource
                                 }
                             }
                         }),
-                        // ->hidden(fn (Process $record) => $record->document_id === null),
+                    // ->hidden(fn (Process $record) => $record->document_id === null),
                     Forms\Components\Actions\Action::make('SolicitarVisado')
                         ->icon('heroicon-m-check-circle')
                         ->color('primary')
@@ -241,10 +228,10 @@ class ProcessResource extends Resource
                                 ->send();
                         }),
                 ])
-                ->columnSpanFull()
-                ->fullWidth(),
+                    ->columnSpanFull()
+                    ->fullWidth(),
             ])
-            ->columns(3);
+            ->columns(4);
     }
 
     public static function table(Table $table): Table

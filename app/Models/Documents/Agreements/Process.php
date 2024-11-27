@@ -36,7 +36,7 @@ class Process extends Model
         'number',
         'date',
         'establishments',
-        'quotas',
+        'quotas_qty',
         'signer_id',
         'signer_appellative',
         'signer_decree',
@@ -114,7 +114,7 @@ class Process extends Model
 
     public function quotas(): HasMany
     {
-        return $this->hasMany(Quota::class);
+        return $this->hasMany(Quota::class, 'process_id');
     }
 
     /**
