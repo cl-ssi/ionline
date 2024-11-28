@@ -7,22 +7,47 @@
 @include('welfare.nav')
 
     <div class="row">
-        <div class="col-12 col-md-12">
-            <h3 class="mb-3">¡Bienvenidos al Módulo de Bienestar!</h3><br>
+        <div class="col-12">
+            <h3 class="mb-4 text-primary">¡Bienvenidos al Módulo de Bienestar!</h3>
 
-            <div class="alert alert-warning" role="alert" style="font-size: 22px; color: #856404; background-color: #fff3cd; border-color: #ffeeba;">
-                <strong>Módulo de reserva de cabañas</strong><br>
-                El módulo de reserva de cabañas se encuentra en mantención temporalmente. Lo anterior, con el fin de mejorar el servicio a nuestros socios y socias.<br><br>
-                Desde hoy toda reserva se realizará de forma presencial en Oficina de Bienestar Hospital o al teléfono Anexo
-                Minsal <b>576143</b> o otro <b>572-536143</b>.
-            </div><br>
+            <div class="alert alert-warning rounded-lg shadow-sm border-0" role="alert" style="font-size: 1.1rem; background-color: #fff8e1;">
+                <h4 class="alert-heading text-warning">Módulo de reserva de cabañas</h4>
+                <p>
+                    El módulo de reserva de cabañas se encuentra en mantención temporalmente. Lo anterior, con el fin de mejorar el servicio a nuestros socios y socias.
+                </p>
+                <hr>
+                <p class="mb-0">
+                    Desde hoy toda reserva se realizará de forma presencial en Oficina de Bienestar Hospital o al teléfono Anexo Minsal 
+                    <b>576143</b> o al número <b>572-536143</b>.
+                </p>
+            </div>
 
-            <li>Este módulo de iOnline permite visualizar el estado financiero en el tiempo del Servicio de Bienestar</li>
-            <li>Este módulo de iOnline permite hacer gestión sobre amipass.</li>
-            <li>Este módulo de iOnline permite solicitar beneficios a asociados.</li>
+            <div class="alert alert-warning rounded-lg shadow-sm border-0 mt-4" role="alert" style="font-size: 1.1rem; background-color: #fff8e1;">
+                <h4 class="alert-heading text-warning">Módulo solicitud de beneficios</h4>
+                <p>
+                    Estimada(o) afiliada(o), se informa que la plataforma de beneficios será cerrada a las 12:00 PM del 19 de diciembre, según lo indicado en Circular N°101.
+                </p>
+                <hr>
+                <p class="mb-0">
+                    La apertura para beneficios médicos y subsidios se retomará vía IOnline y presencial en enero del año 2025.
+                    <br>Atentamente, Servicio de Bienestar.
+                </p>
+            </div>
 
+            <ul class="list-group mt-4">
+                <li class="list-group-item border-0 bg-light">
+                    Este módulo de iOnline permite visualizar el estado financiero en el tiempo del Servicio de Bienestar.
+                </li>
+                <li class="list-group-item border-0 bg-light">
+                    Este módulo de iOnline permite hacer gestión sobre Amipass.
+                </li>
+                <li class="list-group-item border-0 bg-light">
+                    Este módulo de iOnline permite solicitar beneficios a asociados.
+                </li>
+            </ul>
         </div>
     </div>
+
 
     <!-- Se restringe la visualización a usuarios de bienestar y administradores -->
     @if(auth()->user()->welfare || auth()->user()->can('be god') || auth()->user()->can('welfare: amipass') || auth()->user()->can('welfare: balance')

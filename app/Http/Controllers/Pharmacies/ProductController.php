@@ -391,4 +391,23 @@ class ProductController extends Controller
 
         return view('pharmacies.reports.products', compact('request','products','products_data'));
     }
+
+    public function endorsementReport(Request $request)
+    {
+        $year = $request->get('year', now()->year);
+        $month = $request->get('month', now()->month);
+
+        $purchases = Purchase::with([
+                'supplier',
+                'purchaseItems.product',
+                'pharmacy',
+                // 'program'
+            ])
+            ->whereYear('purchase_order_date', $year)
+            ->whereMonth('purchase_order_date', $month)
+            ->get();
+
+        return view('pharmacies.reports.endorsement_report', compact('purchases', 'year', 'month'));
+    }
+
 }

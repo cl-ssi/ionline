@@ -2245,6 +2245,7 @@ Route::prefix('pharmacies')->as('pharmacies.')->middleware(['auth', 'must.change
         Route::get('informe_movimientos', [App\Http\Controllers\Pharmacies\ProductController::class, 'repInformeMovimientos'])->name('informe_movimientos');
         Route::get('product_last_prices', [App\Http\Controllers\Pharmacies\ProductController::class, 'repProductLastPrices'])->name('product_last_prices');
         Route::get('consume_history', [App\Http\Controllers\Pharmacies\ProductController::class, 'repConsumeHistory'])->name('consume_history');
+        Route::get('endorsementReport', [App\Http\Controllers\Pharmacies\ProductController::class, 'endorsementReport'])->name('endorsementReport');
         Route::get('productsbybatch', [App\Http\Controllers\Pharmacies\ProductController::class, 'repProductByBatch'])->name('productsbybatch');
         Route::get('products', [App\Http\Controllers\Pharmacies\ProductController::class, 'repProduct'])->name('products');
         Route::get('download_purchase_report', [App\Http\Controllers\Pharmacies\ProductController::class, 'downloadPurchaseReport'])->name('download_purchase_report');
@@ -2801,8 +2802,9 @@ Route::prefix('welfare')->as('welfare.')->middleware(['auth', 'must.change.passw
     Route::prefix('benefits')->as('benefits.')->group(function () {
         Route::get('/benefits', BenefitLw::class)->name('benefits');
         Route::get('/subsidies', Subsidies::class)->name('subsidies');
-        Route::get('/requests', Requests::class)->name('requests');
-        Route::get('/requests-admin', RequestsAdmin::class)->name('requests-admin');
+        // se agregan policies para bloquea acceso a modulo de beneficios entre el 19 de diciembre 2024 y 02 de enero 2025
+        Route::get('/requests', Requests::class)->name('requests')->middleware('can:viewAny,App\Models\Welfare\Benefits\Benefit');
+        Route::get('/requests-admin', RequestsAdmin::class)->name('requests-admin')->middleware('can:viewAny,App\Models\Welfare\Benefits\Benefit');
     }); 
     
 });
