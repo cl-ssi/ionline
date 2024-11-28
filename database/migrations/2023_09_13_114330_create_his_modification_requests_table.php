@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('subject');
             $table->text('body')->nullable();
             $table->foreignId('creator_id')->constrained('users');
-            $table->string('approvals')->nullable();
+            $table->string('observation')->nullable();
             $table->boolean('status')->default(null)->nullable();
             $table->timestamps();
             $table->softDeletes();
