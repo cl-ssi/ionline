@@ -3097,3 +3097,11 @@ Route::get('/maquetas/calificaciones', function () {
 Route::get('/maquetas/capacitaciones', function () {
     return view('maquetas.capacitaciones');
 });
+
+Route::get('/avatar', function () {
+    $initials = request('initials', 'ATF');
+    $bgColor = request('bgColor', '#000000');
+    $size = request('size', 256);
+
+    return App\Models\Avatar::getAvatar($initials, $bgColor, $size);
+});
