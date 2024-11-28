@@ -33,12 +33,12 @@ class Avatar extends Model
         }
 
         // Calcular el tamaño del texto y su posición centrada
-        $fontSize = 0.4 * $size;
+        $fontSize = 0.3 * $size;
         $bbox = imagettfbbox($fontSize, 0, $fontFile, $initials);
         $textWidth = $bbox[2] - $bbox[0];
         $textHeight = $bbox[7] - $bbox[1];
         $x = ($size - $textWidth) / 2;
-        $y = ($size - $textHeight) / 2 - $bbox[7];
+        $y = ($size - $textHeight) / 2 - $bbox[6];
 
         // Agregar el texto a la imagen
         imagettftext($image, $fontSize, 0, $x, $y, $textColor, $fontFile, $initials);

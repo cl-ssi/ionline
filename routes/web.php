@@ -3099,8 +3099,8 @@ Route::get('/maquetas/capacitaciones', function () {
 });
 
 Route::get('/avatar', function () {
-    $initials = request('initials', 'ATF');
-    $bgColor = request('bgColor', '#000000');
+    $initials = request('initials', 'ARTF');
+    $bgColor = request('bgColor', '#CCCCCC');
     $size = request('size', 256);
 
     return App\Models\Avatar::getAvatar($initials, $bgColor, $size);
