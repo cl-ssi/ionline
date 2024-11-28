@@ -67,7 +67,10 @@ class IntranetPanelProvider extends PanelProvider
                     ->icon('heroicon-o-link'),
                 NavigationItem::make('Calendario')
                     ->url(fn(): string => route('calendars'))
-                    ->icon('heroicon-o-calendar')
+                    ->icon('heroicon-o-calendar'),
+                NavigationItem::make('sgr')
+                    ->url(fn(): string => route('requirements.inbox'))
+                    ->icon('heroicon-o-link')
             ])
             ->defaultAvatarProvider(GravatarProvider::class)
             ->plugins([
