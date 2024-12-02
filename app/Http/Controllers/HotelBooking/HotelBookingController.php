@@ -68,22 +68,22 @@ class HotelBookingController extends Controller
                 session()->flash('warning', 'Has excedido el límite de reservas para este año.');
                 return redirect()->back();
             }
+
+            // Calcular el rango máximo permitido para las fechas
+            $maxDate = $today->day >= 15
+                ? $today->copy()->endOfMonth()->addMonth()->endOfMonth()
+                : $today->copy()->endOfMonth();
+
+            if ($start_date->greaterThan($maxDate) || $end_date->greaterThan($maxDate)) {
+                session()->flash('warning', 'La fecha seleccionada no puede exceder el límite permitido: ' . $maxDate->format('d-m-Y'));
+                return redirect()->route('hotel_booking.index');
+            }
         }
 
         $hotels = Hotel::all();
         $communes = ClCommune::all();
         $count = 0;
         $found_rooms = [];
-
-        // Calcular el rango máximo permitido para las fechas
-        $maxDate = $today->day >= 15
-            ? $today->copy()->endOfMonth()->addMonth()->endOfMonth()
-            : $today->copy()->endOfMonth();
-
-        if ($start_date->greaterThan($maxDate) || $end_date->greaterThan($maxDate)) {
-            session()->flash('warning', 'La fecha seleccionada no puede exceder el límite permitido: ' . $maxDate->format('d-m-Y'));
-            return redirect()->route('hotel_booking.index');
-        }
 
         //validación rango de fecha de búsqueda
         if($start_date->format('Y-m-d') < now()->format('Y-m-d')){
