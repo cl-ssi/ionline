@@ -18,14 +18,39 @@
     <form method="GET" class="form-horizontal" action="{{ route('hotel_booking.search_booking') }}">
         <div class="form-row">
 
+            @php
+                $today = \Carbon\Carbon::now();
+                // Si es el día 15 o posterior, permite hasta el final del próximo mes
+                $maxDate = $today->day >= 15 
+                    ? $today->copy()->endOfMonth()->addMonth()->endOfMonth()->toDateString() 
+                    : $today->copy()->endOfMonth()->toDateString();
+            @endphp
+
+
             <fieldset class="form-group col-3">
                 <label for="for_hotel_id">Entrando el</label>
-                <input type="date" class="form-control" required name="start_date" @if($request->start_date) value="{{$request->start_date}}" @endif>
+                <input type="date" class="form-control" required name="start_date" 
+                @if($request->start_date) 
+                    value="{{$request->start_date}}" 
+                @endif
+                min={{$today}}
+                max="{{ $maxDate }}"
+            >
             </fieldset>
 
             <fieldset class="form-group col-3">
                 <label for="for_hotel_id">Saliendo el</label>
-                <input type="date" class="form-control" required name="end_date" @if($request->end_date) value="{{$request->end_date}}" @endif>
+                <input 
+                    type="date" 
+                    class="form-control" 
+                    required 
+                    name="end_date" 
+                    @if($request->end_date) 
+                        value="{{ $request->end_date }}" 
+                    @endif
+                    min={{$today}}
+                    max="{{ $maxDate }}"
+                >
             </fieldset>
 
             <fieldset class="form-group col-1">
