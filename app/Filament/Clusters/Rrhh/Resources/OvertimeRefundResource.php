@@ -268,6 +268,7 @@ class OvertimeRefundResource extends Resource
                     ->stacked(),
                 Tables\Columns\TextColumn::make('status')
                     ->label('Estado')
+                    // ->description(fn (OvertimeRefund $record): string => $record->lastApproval->approver_observation ?? '')
                     ->sortable()
                     ->searchable(),
                 Tables\Columns\TextColumn::make('total_hours_day')
