@@ -1089,11 +1089,13 @@
                                     </button>
                             </form>
                             @elseif($applicant->selected == 1 && $applicant->desist == NULL)
-                            <button type="button" class="btn btn-outline-danger btn-sm" data-toggle="modal"
-                              data-target="#exampleModal-to-change-selected-applicant-{{ $applicant->id }}">
-                                <i class="fas fa-window-close"></i>
-                            </button>
-                            @include('replacement_staff.modals.modal_to_change_selected_applicant')
+                                {{--
+                                <button type="button" class="btn btn-outline-danger btn-sm" data-toggle="modal"
+                                data-target="#exampleModal-to-change-selected-applicant-{{ $applicant->id }}">
+                                    <i class="fas fa-window-close"></i>
+                                </button>
+                                --}}
+                                @include('replacement_staff.modals.modal_to_change_selected_applicant')
                             @endif
                         </td>
                         <td style="width: 4%">
