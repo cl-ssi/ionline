@@ -51,7 +51,7 @@ class OvertimeRefundPolicy
      */
     public function create(User $user): bool
     {
-        return true;
+        return false;
     }
 
     /**
@@ -59,7 +59,7 @@ class OvertimeRefundPolicy
      */
     public function update(User $user, OvertimeRefund $overtimeRefund): bool
     {
-        return true;
+        return false;
     }
 
     /**
@@ -67,7 +67,8 @@ class OvertimeRefundPolicy
      */
     public function delete(User $user, OvertimeRefund $overtimeRefund): bool
     {
-        return $overtimeRefund->user_id == $user->id AND $overtimeRefund->status->value === 'pending';
+        // return $overtimeRefund->user_id == $user->id AND $overtimeRefund->status->value === 'pending';
+        return false;
     }
 
     /**
@@ -75,7 +76,7 @@ class OvertimeRefundPolicy
      */
     public function restore(User $user, OvertimeRefund $overtimeRefund): bool
     {
-        return true;
+        return false;
     }
 
     /**
@@ -83,6 +84,6 @@ class OvertimeRefundPolicy
      */
     public function forceDelete(User $user, OvertimeRefund $overtimeRefund): bool
     {
-        return true;
+        return false;
     }
 }
