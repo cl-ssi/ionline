@@ -402,6 +402,42 @@ class User extends Authenticatable implements Auditable, FilamentUser
             ->where('date', today());
     }
 
+        /**
+     * Organizational Units where the user is manager.
+     */
+    public function isManagerOf(): BelongsToMany
+    {
+        return $this->belongsToMany(OrganizationalUnit::class,'rrhh_authorities','user_id','organizational_unit_id')
+            ->as('authority')
+            ->withPivot('position','type','decree','representation_id')
+            ->wherePivot('type', Authority::TYPE_MANAGER)
+            ->wherePivot('date', now()->toDateString());
+    }
+
+    /**
+     * Organizational Units where the user is secretary.
+     */
+    public function isSecretaryOf(): BelongsToMany
+    {
+        return $this->belongsToMany(OrganizationalUnit::class,'rrhh_authorities','user_id','organizational_unit_id')
+            ->as('authority')
+            ->withPivot('position','type','decree','representation_id')
+            ->wherePivot('type', Authority::TYPE_SECRETARY)
+            ->wherePivot('date', now()->startOfDay());
+    }
+
+    /**
+     * Organizational Units where the user is delegate.
+     */
+    public function isDelegateOf(): BelongsToMany
+    {
+        return $this->belongsToMany(OrganizationalUnit::class,'rrhh_authorities','user_id','organizational_unit_id')
+            ->as('authority')
+            ->withPivot('position','type','decree','representation_id')
+            ->wherePivot('type', Authority::TYPE_DELEGATE)
+            ->wherePivot('date', now()->startOfDay());
+    }
+
     /**
      * Get the service requests for the user.
      */
