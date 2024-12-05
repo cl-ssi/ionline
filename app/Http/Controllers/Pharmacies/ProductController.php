@@ -391,4 +391,51 @@ class ProductController extends Controller
 
         return view('pharmacies.reports.products', compact('request','products','products_data'));
     }
+
+    public function endorsementReport(Request $request)
+    {
+        $year = $request->input('year', now()->year); // Año actual como predeterminado
+        $month = $request->input('month', now()->month); // Mes actual como predeterminado
+        $pharmacyId = session('pharmacy_id'); // Obtener el ID de farmacia desde la sesión
+
+        if (!$pharmacyId) {
+            abort(403, 'No tiene acceso a esta farmacia'); // Asegurarse de que el usuario tiene acceso
+        }
+
+        $items = PurchaseItem::query()
+            ->whereHas('purchase', function ($query) use ($year, $month, $pharmacyId) {
+                $query->where('pharmacy_id', $pharmacyId)
+                    ->whereYear('invoice_date', $year)
+                    ->whereMonth('invoice_date', $month);
+            })
+            ->with(['purchase.supplier', 'product.program'])
+            ->get()
+            ->map(function ($item) {
+                return [
+                    'validacion' => $item->purchase->supplier ? 'Registro cumple con criterios de calidad' : '- Proveedor no existe -',
+                    'servicio_de_salud' => 'Iquique', // Ajusta según tu modelo
+                    'año' => optional($item->purchase->invoice_date)->format('Y'),
+                    'mes' => optional($item->purchase->invoice_date)->translatedFormat('F'),
+                    'programa' => optional($item->product->program)->name . ' - ' . $item->product->name ?? '- Programa o producto no existe -',
+                    'cantidad_mensual_programada' => $item->amount, // Cantidad del item
+                    'cantidad_recepcion' => $item->amount, // Ajusta si es diferente
+                    'fecha_recepcion' => optional($item->purchase->invoice_date)->format('d-m-Y'),
+                    'proveedor' => optional($item->purchase->supplier)->name,
+                    'orden_compra' => $item->purchase->order_number,
+                    'n_factura' => $item->purchase->invoice,
+                    'fecha_emision_factura' => optional($item->purchase->purchase_order_date)->format('d-m-Y'),
+                    'fecha_vencimiento_factura' => optional($item->purchase->invoice_date)->addMonth()->format('d-m-Y'),
+                    'valor_producto' => number_format($item->unit_cost, 2, ',', '.'), // Precio unitario del producto
+                    'comision_intermediacion' => $item->purchase->commission ?? 0,
+                    'cantidad_despachada' => $item->amount, // Ajusta si es diferente
+                    'modalidad_compra' => '', // Ejemplo
+                    'observaciones' => $item->purchase->notes, // Ajusta si es necesario
+                ];
+            });
+
+        return view('pharmacies.reports.endorsement', compact('items', 'year', 'month'));
+    }
+
+
+
 }
