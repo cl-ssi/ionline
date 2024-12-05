@@ -4,22 +4,35 @@
     <h4>Administrador de solicitudes</h4>
 
     <br>
+
+    <!-- Filtros -->
     <div>
         <label>
-            <input type="checkbox" wire:model.live="statusFilters" value="En revisión"> En revisión
+            <input type="checkbox" wire:model="statusFilters" value="En revisión"> En revisión
         </label>
         <label>
-            <input type="checkbox" wire:model.live="statusFilters" value="Aceptado"> Aceptado
+            <input type="checkbox" wire:model="statusFilters" value="Aceptado"> Aceptado
         </label>
         <label>
-            <input type="checkbox" wire:model.live="statusFilters" value="Rechazado"> Rechazado
+            <input type="checkbox" wire:model="statusFilters" value="Rechazado"> Rechazado
         </label>
         <label>
-            <input type="checkbox" wire:model.live="statusFilters" value="Pagado"> Pagado
+            <input type="checkbox" wire:model="statusFilters" value="Pagado"> Pagado
         </label>
+        <div class="d-inline-block position-relative">
+            <!-- Botón de búsqueda -->
+            <button class="btn btn-primary" wire:click="applyFilters" wire:loading.attr="disabled">
+                Buscar
+            </button>
+            <!-- Ícono de carga -->
+            <div wire:loading wire:target="applyFilters" class="position-absolute top-50 start-100 translate-middle-y">
+                <i class="fas fa-spinner fa-spin text-primary"></i> <!-- Ícono de carga -->
+            </div>
+        </div>
     </div>
     <br>
 
+    <!-- Mensajes -->
     <div>
         @if (session()->has('message'))
             <div class="alert alert-info">
@@ -214,4 +227,9 @@
             @endforeach
         </tbody>
     </table>
+
+    <!-- Paginación -->
+    <div class="d-flex justify-content-center">
+        {{ $requests->links() }}
+    </div>
 </div>
