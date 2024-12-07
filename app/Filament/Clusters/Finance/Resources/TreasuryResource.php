@@ -41,34 +41,34 @@ class TreasuryResource extends Resource
         return $form
             ->schema([
                 Forms\Components\Fieldset::make('DTE')
-                ->relationship('accountable')
-                ->schema([
-                    Forms\Components\Placeholder::make('Dte Id')
-                        ->content(fn(Get $get): string => $get('id') ?? ''),
-                    Forms\Components\Placeholder::make('Documento')
-                        ->content(function(Get $get){
-                            $tipo_documento = $get('tipo_documento')?implode('  ', array_map('ucfirst', explode('_', $get('tipo_documento')))):'';                                
-                            return new HtmlString('<div>' . $tipo_documento . '<br><small>' . $get('folio') . '</small></div>');
-                        }),
-                    Forms\Components\Placeholder::make('Emisor')
-                        ->content(fn(Get $get) => new HtmlString('<div>' . $get('emisor') . '<br><small>' . $get('razon_social_emisor') . '</small></div>')),
-                    Forms\Components\Placeholder::make('Orden de Compra')
-                        ->content(function(Model $record) {
-                            $out = '';
-                            if($record->folio_oc && !$record->purchaseOrder){
-                                $out = $record->folio_oc;
-                            } else if($record->folio_oc && $record->purchaseOrder){
-                                $status = $record->purchaseOrder->json->Listado[0]->Estado;
-                                $url = route('finance.purchase-orders.show', $record->purchaseOrder);
-                                $out = new HtmlString('<div><a target="_blank" href="' . $url . '">' . $record->folio_oc . '</a><br><small>' . $status . '</small></div>');
-                                // $out = new HtmlString('<div>' . $record->folio_oc . '<br><small>' . $status . '</small></div>');
-                            }
-                            return $out;
-                        }),
-                ])
-                ->columns(4)
-                ->visible(fn (Model $record) => $record->accountable_type == 'App\Models\Finance\Dte'),
-                Forms\Components\Fieldset::make('Abastecimiento')
+                    ->relationship('treasureable')
+                    ->schema([
+                        Forms\Components\Placeholder::make('Dte Id')
+                            ->content(fn(Get $get): string => $get('id') ?? ''),
+                        Forms\Components\Placeholder::make('Documento')
+                            ->content(function(Get $get){
+                                $tipo_documento = $get('tipo_documento')?implode('  ', array_map('ucfirst', explode('_', $get('tipo_documento')))):'';                                
+                                return new HtmlString('<div>' . $tipo_documento . '<br><small>' . $get('folio') . '</small></div>');
+                            }),
+                        Forms\Components\Placeholder::make('Emisor')
+                            ->content(fn(Get $get) => new HtmlString('<div>' . $get('emisor') . '<br><small>' . $get('razon_social_emisor') . '</small></div>')),
+                        Forms\Components\Placeholder::make('Orden de Compra')
+                            ->content(function(Model $record) {
+                                $out = '';
+                                if($record->folio_oc && !$record->purchaseOrder){
+                                    $out = $record->folio_oc;
+                                } else if($record->folio_oc && $record->purchaseOrder){
+                                    $status = $record->purchaseOrder->json->Listado[0]->Estado;
+                                    $url = route('finance.purchase-orders.show', $record->purchaseOrder);
+                                    $out = new HtmlString('<div><a target="_blank" href="' . $url . '">' . $record->folio_oc . '</a><br><small>' . $status . '</small></div>');
+                                    // $out = new HtmlString('<div>' . $record->folio_oc . '<br><small>' . $status . '</small></div>');
+                                }
+                                return $out;
+                            }),
+                    ])
+                    ->columns(4)
+                    ->visible(fn (Model $record) => $record->accountable_type == 'App\Models\Finance\Dte'),
+                Forms\Components\Fieldset::make('Viaticos')
                     ->relationship('treasureable')
                     ->schema([
                         Forms\Components\Placeholder::make('Dte Id')
@@ -88,17 +88,10 @@ class TreasuryResource extends Resource
                         Forms\Components\Placeholder::make('Folio Devengo Sigfe')
                             ->content(fn(Get $get): string => $get('folio_devengo_sigfe') ?? ''),
                         Forms\Components\Placeholder::make('Archivo Devengo Sigfe')                        
-                            ->content(fn(Model $record) => ($record->archivo_devengo_sigfe)?(new HtmlString('<a href="' . Storage::disk()->url($record->archivo_devengo_sigfe) . '"   target="_blank">Descargar</a>')):''),
-                        
+                            ->content(fn(Model $record) => ($record->archivo_devengo_sigfe)?(new HtmlString('<a href="' . Storage::disk()->url($record->archivo_devengo_sigfe) . '"   target="_blank">Descargar</a>')):''),  
                     ])
                     ->columns(4)
                     ->visible(fn (Model $record) => false),
-                Forms\Components\TextInput::make('name')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('description')
-                    ->hidden()
-                    ->maxLength(255),
                 Forms\Components\TextInput::make('treasureable_type')
                     ->required()
                     ->hidden()
@@ -107,7 +100,6 @@ class TreasuryResource extends Resource
                     ->required()
                     ->hidden()
                     ->numeric(),
-               
                 Forms\Components\DatePicker::make('bank_receipt_date')
                     ->label('Fecha Comprobante Bancario'),
                 Forms\Components\Placeholder::make('bank_receipt_file')
@@ -119,22 +111,17 @@ class TreasuryResource extends Resource
                     ->directory('ionline/finances/treasuries/support_documents')
                     ->storeFileNamesIn('bank_receipt_file')
                     ->acceptedFileTypes(['application/pdf']),
-                // Forms\Components\Placeholder::make('third_parties_file')
-                //     ->hidden(fn(Model $record)=>is_null($record->thirdPartiesFile?->storage_path))
-                //     ->content(function(Model $record, Get $get){
-                //         if($record->thirdPartiesFile?->storage_path){
-                //             return new HtmlString('<a href="' . Storage::disk()->url($record->thirdPartiesFile->storage_path) . '"   target="_blank" class="btn btn-primary btn-sm">' . ($get('third_parties_file') . '</a>'));
-                //         }
-                //         else{
-                //             return new HtmlString('<i> Sin archivo </i>');
-                //         }
-                //     }),
-                // Forms\Components\FileUpload::make('thirdPartiesFile')
-                //     ->visible(fn(Model $record)=>is_null($record->thirdPartiesFile?->storage_path))
-                //     ->label('Pago a Terceros')
-                //     ->directory('ionline/finances/treasuries/support_documents')
-                //     ->storeFileNamesIn('third_parties_file')
-                //     ->acceptedFileTypes(['application/pdf']),
+                Forms\Components\DatePicker::make('third_parties_date')
+                    ->label('Fecha Terceras Partes'),
+                Forms\Components\Placeholder::make('third_parties_file')
+                    ->hidden(fn(Model $record)=>is_null($record->thirdPartiesFile?->storage_path))
+                    ->content(fn(Model $record, Get $get) => ($record->thirdPartiesFile?->storage_path)?(new HtmlString('<a href="' . Storage::disk()->url($record->thirdPartiesFile?->storage_path) . '"   target="_blank">' . $get('third_parties_file') . '</a>')):''),
+                Forms\Components\FileUpload::make('thirdPartiesFile')
+                    ->visible(fn(Model $record)=>is_null($record->thirdPartiesFile?->storage_path))
+                    ->label('Archivo de Terceras Partes')
+                    ->directory('ionline/finances/treasuries/support_documents')
+                    ->storeFileNamesIn('third_parties_file')
+                    ->acceptedFileTypes(['application/pdf']),
             ]);
     }
 
