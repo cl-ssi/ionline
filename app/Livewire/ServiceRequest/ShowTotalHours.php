@@ -28,6 +28,13 @@ class ShowTotalHours extends Component
     public $totalHoursNightString;
     //public $flag = null;
 
+    public function formatHours($decimalHours)
+    {
+        $hours = floor($decimalHours); // Parte entera de las horas
+        $minutes = round(($decimalHours - $hours) * 60); // Convertir la parte decimal a minutos
+        return "{$hours} hrs y {$minutes} minutos";
+    }
+
     public function render()
     {
         /* TODO: HORA MÉDICA ya no obtiene el valor hora de value */

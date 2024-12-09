@@ -58,17 +58,19 @@
             <tbody>
               @foreach($fulfillment->shiftControls->sortBy('start_date') as $key => $shiftControl)
                 <tr>
-
                   <td>{{$shiftControl->start_date->format('Y-m-d H:i')}}
                     @if($shiftControl->start_date->diffInHours($shiftControl->start_date->addDay()) != 24.0)
                       <span class="badge badge-danger">(Cambio de hora)</span>
                     @endif
                   </td>
                   <td>@if($shiftControl->end_date){{$shiftControl->end_date->format('Y-m-d H:i')}}@endif</td>
-                  <td>@if($shiftControl->end_date){{$shiftControl->start_date->diffInMinutes($shiftControl->end_date)/60}}@endif</td>
+                  <td>
+                    @if($shiftControl->end_date)
+                      {{ $this->formatHours($shiftControl->start_date->diffInMinutes($shiftControl->end_date)) }}
+                    @endif
+                  </td>
                   <td>{{$shiftControl->observation}}</td>
                   <td>
-
                     @can('Service Request: fulfillments rrhh')
                     <button type="submit" class="btn btn-outline-secondary btn-sm" onclick="return confirm('¿Está seguro de eliminar la información?');" wire:click="delete({{$shiftControl}})">
                     <span class="fas fa-trash-alt" aria-hidden="true"></span>
