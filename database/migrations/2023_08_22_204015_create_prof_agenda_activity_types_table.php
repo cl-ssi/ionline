@@ -19,6 +19,11 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->boolean('reservable')->default(1);
+            $table->longText('description')->nullable();
+            $table->boolean('allow_consecutive_days')->default(false);
+            $table->integer('maximum_allowed_per_week')->nullable();
+            $table->boolean('auto_reservable')->default(0);
+            $table->foreignId('establishment_id')->nullable()->constrained('establishments')->onDelete('cascade');
             $table->timestamps();
             $table->softDeletes();
         });
