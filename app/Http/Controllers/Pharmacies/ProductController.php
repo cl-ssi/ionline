@@ -405,8 +405,8 @@ class ProductController extends Controller
         $items = PurchaseItem::query()
             ->whereHas('purchase', function ($query) use ($year, $month, $pharmacyId) {
                 $query->where('pharmacy_id', $pharmacyId)
-                    ->whereYear('invoice_date', $year)
-                    ->whereMonth('invoice_date', $month);
+                    ->whereYear('date', $year)
+                    ->whereMonth('date', $month);
             })
             ->with(['purchase.supplier', 'product.program'])
             ->get()
@@ -414,27 +414,28 @@ class ProductController extends Controller
                 return [
                     'validacion' => $item->purchase->supplier ? 'Registro cumple con criterios de calidad' : '- Proveedor no existe -',
                     'servicio_de_salud' => 'Iquique', // Ajusta según tu modelo
-                    'año' => optional($item->purchase->invoice_date)->format('Y'),
-                    'mes' => optional($item->purchase->invoice_date)->translatedFormat('F'),
-                    'programa' => optional($item->product->program)->name . ' - ' . $item->product->name ?? '- Programa o producto no existe -',
+                    'año' => optional($item->purchase->date)->format('Y') ?? '- No disponible -',
+                    'mes' => optional($item->purchase->date)->translatedFormat('F') ?? '- No disponible -',
+                    'programa' => optional($item->product->program)->name . ' - ' . optional($item->product)->name ?? '- Programa o producto no existe -',
                     'cantidad_mensual_programada' => $item->amount, // Cantidad del item
                     'cantidad_recepcion' => $item->amount, // Ajusta si es diferente
-                    'fecha_recepcion' => optional($item->purchase->invoice_date)->format('d-m-Y'),
-                    'proveedor' => optional($item->purchase->supplier)->name,
-                    'orden_compra' => $item->purchase->order_number,
-                    'n_factura' => $item->purchase->invoice,
-                    'fecha_emision_factura' => optional($item->purchase->purchase_order_date)->format('d-m-Y'),
-                    'fecha_vencimiento_factura' => optional($item->purchase->invoice_date)->addMonth()->format('d-m-Y'),
-                    'valor_producto' => number_format($item->unit_cost, 2, ',', '.'), // Precio unitario del producto
+                    'fecha_recepcion' => optional($item->purchase->date)->format('d-m-Y') ?? '- No disponible -',
+                    'proveedor' => optional($item->purchase->supplier)->name ?? '- Proveedor no disponible -',
+                    'orden_compra' => $item->purchase->order_number ?? '- No disponible -',
+                    'n_factura' => $item->purchase->invoice ?? '- No disponible -',
+                    'fecha_emision_factura' => optional($item->purchase->purchase_order_date)->format('d-m-Y') ?? '- No disponible -',
+                    'fecha_vencimiento_factura' => $item->purchase->invoice_date ? optional($item->purchase->invoice_date)->addMonth()->format('d-m-Y') : '- No disponible -',
+                    'valor_producto' => number_format($item->unit_cost, 2, ',', '.'),
                     'comision_intermediacion' => $item->purchase->commission ?? 0,
                     'cantidad_despachada' => $item->amount, // Ajusta si es diferente
                     'modalidad_compra' => '', // Ejemplo
-                    'observaciones' => $item->purchase->notes, // Ajusta si es necesario
+                    'observaciones' => $item->purchase->notes ?? '- No hay observaciones -',
                 ];
             });
 
         return view('pharmacies.reports.endorsement', compact('items', 'year', 'month'));
     }
+
 
 
 
