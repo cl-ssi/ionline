@@ -198,7 +198,16 @@
                                 dia
                             @endif
                         @else
-                            
+                            @foreach($requestReplacementStaff->positions as $position)
+                                @foreach($position->selectedPositions as $key => $selectedPosition)
+                                    {{ $selectedPosition->start_date ? $selectedPosition->start_date->format('d-m-Y') : '' }}
+                                    @if($selectedPosition->start_date != NULL)
+                                        <span class="badge badge-warning">3 meses: {{ $selectedPosition->start_date ? $selectedPosition->start_date->addMonths(3)->format('d-m-Y') : '' }}</span> 
+                                        <span class="badge badge-danger">6 meses: {{ $selectedPosition->start_date ? $selectedPosition->start_date->addMonths(6)->format('d-m-Y') : '' }}</span> 
+                                        <hr>
+                                    @endif
+                                @endforeach
+                            @endforeach
                         @endif
                     </td>
                     <td>
