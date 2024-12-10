@@ -100,47 +100,50 @@
                             @if($request->status == "En proceso de pago")
                                 {{$request->status}}
                             @endif
-                            @if($request->status == "En revisión")
+                            @if ($request->status == "En revisión")
                                 <div wire:loading wire:target="accept">
                                     <i class="fas fa-spinner fa-spin"></i> Espere...
                                 </div>
                                 <div wire:loading.remove wire:target="accept">
-                                    <button class="btn btn-outline-success" wire:click="accept({{$request->id}})" type="button">
-                                        <i class="fa fa-check" aria-hidden="true"></i>
+                                    <button wire:click="accept" class="btn btn-outline-success btn-sm">
+                                        <i class="fa fa-check" aria-hidden="true"></i> Aceptar
                                     </button>
                                 </div>
                                 <div wire:loading wire:target="reject">
                                     <i class="fas fa-spinner fa-spin"></i> Espere...
                                 </div>
                                 <div wire:loading.remove wire:target="reject">
-                                    <button class="btn btn-outline-danger" wire:click="reject({{$request->id}})" type="button">
-                                        <i class="fa fa-times" aria-hidden="true"></i>
+                                    <button wire:click="reject" class="btn btn-outline-danger btn-sm">
+                                        <i class="fa fa-times" aria-hidden="true"></i> Rechazar
                                     </button>
                                 </div>
-                                
-                            @endif
-                            @if($request->status == "Aceptado")
-                                <button class="btn btn-success" type="button"><i class="fa fa-check" aria-hidden="true"></i></button>
+                            @elseif ($request->status == "Aceptado")
+                                <button class="btn btn-success btn-sm" type="button">
+                                    <i class="fa fa-check" aria-hidden="true"></i> Aceptado
+                                </button>
                                 <div wire:loading wire:target="reject">
                                     <i class="fas fa-spinner fa-spin"></i> Espere...
                                 </div>
                                 <div wire:loading.remove wire:target="reject">
-                                    <button class="btn btn-outline-danger" wire:click="reject({{$request->id}})" type="button">
-                                        <i class="fa fa-times" aria-hidden="true"></i>
+                                    <button wire:click="reject" class="btn btn-outline-danger btn-sm">
+                                        <i class="fa fa-times" aria-hidden="true"></i> Rechazar
                                     </button>
                                 </div>
-                            @endif
-                            @if($request->status == "Rechazado")
+                            @elseif ($request->status == "Rechazado")
                                 <div wire:loading wire:target="accept">
                                     <i class="fas fa-spinner fa-spin"></i> Espere...
                                 </div>
                                 <div wire:loading.remove wire:target="accept">
-                                    <button class="btn btn-outline-success" wire:click="accept({{$request->id}})" type="button">
-                                        <i class="fa fa-check" aria-hidden="true"></i>
+                                    <button wire:click="accept" class="btn btn-outline-success btn-sm">
+                                        <i class="fa fa-check" aria-hidden="true"></i> Aceptar
                                     </button>
                                 </div>
-                                <button class="btn btn-danger" type="button">
-                                    <i class="fa fa-times" aria-hidden="true"></i>
+                                <button class="btn btn-danger btn-sm" type="button" disabled>
+                                    <i class="fa fa-times" aria-hidden="true"></i> Rechazado
+                                </button>
+                            @elseif ($request->status == "Pagado")
+                                <button class="btn btn-info btn-sm" type="button" disabled>
+                                    <i class="bi bi-cash-coin"></i> Pagado
                                 </button>
                             @endif
                         </div>
