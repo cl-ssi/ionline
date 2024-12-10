@@ -29,7 +29,7 @@ class RequestAdminController extends Controller
                 });
         }
 
-        $requests = $query->orderByDesc('id')->paginate(10);
+        $requests = $query->orderByDesc('id')->paginate(10)->withQueryString(); // Esto preserva los filtros en los enlaces de paginación
 
         return view('welfare.benefits.request_admin', [
             'requests' => $requests,
