@@ -30,9 +30,14 @@ class ShowTotalHours extends Component
 
     public function formatHours($decimalHours)
     {
-        $hours = floor($decimalHours); // Parte entera de las horas
-        $minutes = round(($decimalHours - $hours) * 60); // Convertir la parte decimal a minutos
-        return "{$hours} hrs y {$minutes} minutos";
+        if (is_numeric($decimalHours)) {
+            $hours = floor($decimalHours); // Parte entera de las horas
+            $minutes = round(($decimalHours - $hours) * 60); // Convertir la parte decimal a minutos
+            return "{$hours} hrs y {$minutes} minutos";
+        }
+
+        // Si no es un número entero o decimal, devolver el valor tal como está
+        return $decimalHours;
     }
 
     public function render()
