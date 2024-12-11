@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id('id');
             $table->integer('number')->nullable();
             $table->date('document_date')->nullable();
-            $table->float('envelope_weight', 8, 2);
+            $table->decimal('envelope_weight', 8, 2);
             $table->text('observation')->nullable();
             $table->foreignId('reception_id')->constrained('drg_receptions');
             $table->foreignId('user_id')->constrained('users');
