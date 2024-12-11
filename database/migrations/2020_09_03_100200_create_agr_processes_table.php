@@ -24,7 +24,7 @@ return new class extends Migration
             $table->longText('establishments')->nullable();
 
             // $table->foreignId('establishment_id')->constrained('establishments')->nullable();
-            $table->unsignedSmallInteger('quotas')->nullable();
+            $table->unsignedSmallInteger('quotas_qty')->nullable();
 
             $table->foreignId('signer_id')->constrained('agr_signers');
             $table->string('signer_appellative'); // APELATIVO DIRECTOR, DIRECTOR (S)
@@ -48,7 +48,7 @@ return new class extends Migration
 
             $table->foreignId('next_process_id')->nullable()->constrained('agr_processes')->nullOnDelete();
 
-            $table->foreignId('establishment_id')->constrained('establishments')->nullable();
+            $table->foreignId('establishment_id')->constrained('establishments');
 
             $table->timestamps();
             $table->softDeletes();
