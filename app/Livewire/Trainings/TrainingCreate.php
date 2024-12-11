@@ -150,6 +150,8 @@ class TrainingCreate extends Component
     public function save(){
         $this->validateMessage = 'training';
 
+        $this->totalHours = (float) $this->totalHours;
+
         $validatedData = $this->validate([
             'searchedUser'                                                                  => 'required',
             'selectedEstament'                                                              => 'required',
@@ -179,7 +181,11 @@ class TrainingCreate extends Component
             'workingDay'                                                                    => 'required',
             'technicalReasons'                                                              => 'required',
             'permissionFile'                                                                => ($this->training == null) ? 'required' : '',
-            'rejoinderFile'                                                                 => ($this->training == null) ? 'required' : '',
+            'rejoinderFile'                                                                 => ($this->training == null && 
+                                                                                                    ($this->activityType == 'estadia pasantia' || $this->activityType == 'perfeccionamiento diplomado') && 
+                                                                                                    $this->schuduled == 'no planificada' &&
+                                                                                                    $this->totalHours > (float) 120)
+                                                                                                    ? 'required|numeric' : '',
             'programFile'                                                                   => ($this->training == null) ? 'required' : '',
             'municipalProfile'                                                              => (auth()->guard('external')->check() == true) ? 'required' : ''
             // 'trainingCosts'                                                              => 'required'

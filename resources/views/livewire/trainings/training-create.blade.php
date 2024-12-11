@@ -243,7 +243,7 @@
                     <option value="curso">Curso</option>
                     <option value="taller">Taller</option>
                     <option value="jornada">Jornada</option>
-                    <option value="estadía pasantía">Estadía Pasantía</option>
+                    <option value="estadia pasantia">Estadía Pasantía</option>
                     <option value="perfeccionamiento diplomado">Perfeccionamiento Diplomado</option>
                     <option value="otro">Otro</option>				
                 </select>
@@ -373,10 +373,10 @@
             <input type="date" class="form-control" wire:model="activityDateEndAt">
             @error('activityDateEndAt') <span class="text-danger error small">{{ $message }}</span> @enderror
         </fieldset>
-
+        
         <fieldset class="form-group col-12 col-md-4">
             <label for="for_total_hours">Total Horas Pedagógicas</label>
-            <input class="form-control" type="text" autocomplete="off" wire:model="totalHours">
+            <input class="form-control" type="number" min="1" autocomplete="off" wire:model="totalHours">
             @error('totalHours') <span class="text-danger error small">{{ $message }}</span> @enderror
         </fieldset>
     </div>	

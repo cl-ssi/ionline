@@ -164,7 +164,7 @@ class Training extends Model implements Auditable
                 return 'Jornada';
                 break;
             
-            case 'estadía pasantía':
+            case 'estadia pasantia':
                 return 'Estadía Pasantía';
                 break;
             
