@@ -20,6 +20,7 @@ use App\Models\Documents\Approval;
 use App\Models\Parameters\Parameter;
 use App\Models\Establishment;
 use App\Models\ClCommune;
+use App\Models\Trainings\ImpactObjectives;
 
 class TrainingCreate extends Component
 {
@@ -29,7 +30,7 @@ class TrainingCreate extends Component
     $selectedEstament, $selectedContractualCondition, $selectedLaw, $degree, $degreeStateInput = 'disabled', $workHours, $workHoursStateInput = 'disabled',
     $organizationalUnitUser, $establishmentUser, 
     $email, $telephone,
-    $selectedStrategicAxis,
+    $selectedStrategicAxis, $selectedImpactObjective, $impactObjectives,
     $objective,
     $activityName,
     $activityType, $otherActivityType, $disabledInputOtherActivityType = 'disabled',
@@ -141,6 +142,8 @@ class TrainingCreate extends Component
             if($this->activityIn == 'national'){
                 $this->hiddenSearchedCommuneInput = null;
             }
+
+            $this->updatedselectedStrategicAxis($this->selectedStrategicAxis);
         }
     }
 
@@ -209,6 +212,7 @@ class TrainingCreate extends Component
                     'email'                     => $this->email,
                     'telephone'                 => $this->telephone,
                     'strategic_axes_id'         => $this->selectedStrategicAxis,
+                    'impact_objective_id'       => $this->selectedImpactObjective,
                     'objective'                 => $this->objective,
                     'activity_name'             => $this->activityName,
                     'activity_type'             => $this->activityType, 
@@ -263,7 +267,7 @@ class TrainingCreate extends Component
 
             $training->files()->updateOrCreate(
                 [
-                    'id' => ($rejoinder->isNotEmpty()) ? $rejoinder->id : null,
+                    'id' => ($rejoinder->isEmpty()) ? null : $rejoinder->id,
                 ],
                 [
                     'storage_path'  => '/ionline/trainings/attachments/rejoinder/'.$now.'_rejoinder_'.$training->id.'.'.$this->rejoinderFile->extension(),
@@ -283,7 +287,7 @@ class TrainingCreate extends Component
 
             $training->files()->updateOrCreate(
                 [
-                    'id' => ($program->isNotEmpty()) ? $program->id : null,
+                    'id' => ($program->isEmpty()) ? null : $program->id,
                 ],
                 [
                     'storage_path'  => '/ionline/trainings/attachments/program/'.$now.'_program_'.$training->id.'.'.$this->programFile->extension(),
@@ -317,12 +321,13 @@ class TrainingCreate extends Component
             $this->degree                       = $this->training->degree;
             $this->workHours                    = $this->training->work_hours;
             $this->selectedContractualCondition = $this->training->contractual_condition_id;
-            $this->selectedContractualCondition = $this->training->contractual_condition_id;
+            // $this->selectedContractualCondition = $this->training->contractual_condition_id;
             $this->organizationalUnitUser       = ($this->searchedUser->organizationalUnit) ? $this->searchedUser->organizationalUnit->name : null;
             $this->establishmentUser            = ($this->searchedUser->organizationalUnit) ? $this->searchedUser->organizationalUnit->establishment->name : null;
             $this->email                        = $this->training->email;
             $this->telephone                    = $this->training->telephone;
             $this->selectedStrategicAxis        = $this->training->strategic_axes_id;
+            $this->selectedImpactObjective      = $this->training->impact_objective_id;
             $this->objective                    = $this->training->objective;
             $this->activityName                 = $this->training->activity_name;
             $this->activityType                 = $this->training->activity_type;
@@ -558,5 +563,9 @@ class TrainingCreate extends Component
     public function searchedCommune(ClCommune $commune)
     {
         $this->searchedCommune = $commune;
+    }
+
+    public function updatedselectedStrategicAxis($value){
+        $this->impactObjectives = ImpactObjectives::where('strategic_axis_id', $value)->get();
     }
 }

@@ -149,7 +149,7 @@
             5.
         </fieldset>
 
-        <fieldset class="form-group col-12 col-md-10">
+        <fieldset class="form-group col-12 col-md-5">
             <label for="for_subject">Eje estratégico asociados a la Actividad</label>
             @if($bootstrap == 'v4')
                 <select name="contractual_condition_id" id="for_contractual_condition_id" class="form-control" wire:model="selectedStrategicAxis">
@@ -160,6 +160,23 @@
                     @foreach($strategicAxes as $strategicAxis)
                         <option value="{{ $strategicAxis->id }}" >{{ $strategicAxis->name }}</option>
                     @endforeach
+                </select>
+            @error('selectedStrategicAxis') <span class="text-danger error small">{{ $message }}</span> @enderror
+        </fieldset>
+
+        <fieldset class="form-group col-12 col-md-5">
+            <label for="for_subject">Objetivo de Impacto</label>
+            @if($bootstrap == 'v4')
+                <select name="contractual_condition_id" id="for_contractual_condition_id" class="form-control" wire:model="selectedImpactObjective">
+            @else
+                <select name="contractual_condition_id" id="for_contractual_condition_id" class="form-select" wire:model.live.debounce.500ms="selectedImpactObjective">
+            @endif        
+                    <option value="">Seleccione...</option>
+                    @if(!is_null($impactObjectives))
+                    @foreach($impactObjectives as $impactObjective)
+                        <option value="{{ $impactObjective->id }}" >{{ $impactObjective->description }}</option>
+                    @endforeach
+                    @endif
                 </select>
             @error('selectedStrategicAxis') <span class="text-danger error small">{{ $message }}</span> @enderror
         </fieldset>
