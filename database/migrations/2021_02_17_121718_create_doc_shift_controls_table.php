@@ -13,7 +13,6 @@ return new class extends Migration
      */
     public function up()
     {
-
         Schema::create('doc_shift_controls', function (Blueprint $table) {
             $table->id();
             $table->foreignId('service_request_id')->nullable()->constrained('doc_service_requests');
@@ -21,11 +20,9 @@ return new class extends Migration
             $table->datetime('start_date')->nullable();
             $table->datetime('end_date')->nullable();
             $table->string('observation', 100)->nullable();
-
             $table->timestamps();
             $table->softDeletes();
         });
-
     }
 
     /**
