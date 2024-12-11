@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateWreControls extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -38,7 +38,7 @@ class CreateWreControls extends Migration
             $table->foreignId('po_id')->nullable()->constrained('arq_purchase_orders');
             $table->foreignId('request_form_id')->nullable()->constrained('arq_request_forms');
             $table->foreignId('organizational_unit_id')->nullable()->constrained('organizational_units');
-            $table->foreignId('reception_visator_id')->nullable() ->constrained('users');
+            $table->foreignId('reception_visator_id')->nullable()->constrained('users');
             $table->foreignId('technical_signature_id')->nullable()->constrained('doc_signatures');
             $table->foreignId('technical_signer_id')->nullable()->constrained('users');
             $table->boolean('require_contract_manager_visation')->nullable();
@@ -53,7 +53,7 @@ class CreateWreControls extends Migration
             $table->datetime('visation_warehouse_manager_at')->nullable();
             $table->boolean('visation_warehouse_manager_status')->nullable();
             $table->foreignId('reception_id')->nullable()->constrained('fin_receptions');
-            
+
             $table->timestamps();
             $table->softDeletes();
         });
@@ -68,4 +68,4 @@ class CreateWreControls extends Migration
     {
         Schema::dropIfExists('wre_controls');
     }
-}
+};

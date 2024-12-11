@@ -1,12 +1,11 @@
 <?php
 
+use App\Models\HotelBooking\Room;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-use App\Models\HotelBooking\Room;
-
-class CreateHbRoomsTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -20,7 +19,7 @@ class CreateHbRoomsTable extends Migration
 
             $table->foreignId('hotel_id')->nullable()->constrained('hb_hotels');
             $table->foreignId('room_type_id')->nullable()->constrained('hb_room_types');
-            $table->string('identifier'); //cabaña 1, habitación 101, cama 01. 
+            $table->string('identifier'); //cabaña 1, habitación 101, cama 01.
             $table->string('description');
             $table->integer('max_days_avaliable');
             $table->integer('single_bed')->nullable();
@@ -70,4 +69,4 @@ class CreateHbRoomsTable extends Migration
     {
         Schema::dropIfExists('hb_rooms');
     }
-}
+};

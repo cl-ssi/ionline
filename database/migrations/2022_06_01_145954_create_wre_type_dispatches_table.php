@@ -5,7 +5,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateWreTypeDispatchesTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -26,22 +26,21 @@ class CreateWreTypeDispatchesTable extends Migration
 
         $dispatches = [
             [
-                'name' => 'Egreso Normal',
+                'name'   => 'Egreso Normal',
                 'active' => true,
             ],
             [
-                'name' => 'Ajuste de Inventario',
+                'name'   => 'Ajuste de Inventario',
                 'active' => true,
             ],
 
             [
-                'name' => 'Enviar a Bodega',
+                'name'   => 'Enviar a Bodega',
                 'active' => true,
-            ]
+            ],
         ];
 
-        foreach($dispatches as $dispatch)
-        {
+        foreach ($dispatches as $dispatch) {
             TypeDispatch::create($dispatch);
         }
 
@@ -56,4 +55,4 @@ class CreateWreTypeDispatchesTable extends Migration
     {
         Schema::dropIfExists('wre_type_dispatches');
     }
-}
+};

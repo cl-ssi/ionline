@@ -1,10 +1,10 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
-class CreateDrgPoliceUnitsTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -17,7 +17,7 @@ class CreateDrgPoliceUnitsTable extends Migration
             $table->id('id');
             $table->string('code', 8)->nullable();
             $table->string('name');
-            $table->boolean('status')->nullable();;
+            $table->boolean('status')->nullable();
             $table->timestamps();
         });
     }
@@ -31,4 +31,4 @@ class CreateDrgPoliceUnitsTable extends Migration
     {
         Schema::dropIfExists('drg_police_units');
     }
-}
+};

@@ -36,18 +36,18 @@ return new class extends Migration
             $table->string('activity_in')->nullable();
             $table->foreignId('commune_id')->nullable()->constrained('cl_communes');
             $table->boolean('allowance')->nullable();
-            $table->string('mechanism')->nullable(); 
+            $table->string('mechanism')->nullable();
             $table->string('online_type')->nullable();
             $table->string('schuduled')->nullable();
-            $table->date('activity_date_start_at')->nullable(); 
-            $table->date('activity_date_end_at')->nullable(); 
+            $table->date('activity_date_start_at')->nullable();
+            $table->date('activity_date_end_at')->nullable();
             $table->decimal('total_hours', 4, 1)->nullable();
             $table->date('permission_date_start_at')->nullable();
             $table->date('permission_date_end_at')->nullable();
             $table->string('place')->nullable();
             $table->string('working_day')->nullable();
             $table->text('technical_reasons')->nullable();
-            $table->string('feedback_type')->nullable(); 
+            $table->string('feedback_type')->nullable();
             $table->string('municipal_profile')->nullable();
             $table->foreignId('user_creator_id')->nullable()->constrained('users');
 

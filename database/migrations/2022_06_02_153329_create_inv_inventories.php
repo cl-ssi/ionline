@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateInvInventories extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -31,7 +31,7 @@ class CreateInvInventories extends Migration
             $table->timestamp('discharge_date')->nullable();
             $table->string('act_number', 255)->nullable();
             $table->string('depreciation', 255)->nullable();
-            
+
             // delivered at
             $table->timestamp('deliver_date')->nullable();
             $table->string('description', 255)->nullable();
@@ -76,4 +76,4 @@ class CreateInvInventories extends Migration
     {
         Schema::dropIfExists('inv_inventories');
     }
-}
+};

@@ -37,7 +37,6 @@ return new class extends Migration
             $table->date('efectivo_fecha')->nullable();
             $table->integer('efectivo_monto')->nullable();
 
-
             $table->foreignId('dte_id')->nullable()->constrained('fin_dtes');
 
             $table->timestamps();

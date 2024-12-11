@@ -17,14 +17,14 @@ return new class extends Migration
     }
 
     /**
-    * 1.- Colchane = 1
-    * 2.- Huara = 2
-    * 3.- Camiña = 3
-    * 4.- Pozo Almonte = 4
-    * 5.- Pica = 5
-    * 6.- Iquique = 6
-    * 7.- Alto Hospicio = 7
-    **/
+     * 1.- Colchane = 1
+     * 2.- Huara = 2
+     * 3.- Camiña = 3
+     * 4.- Pozo Almonte = 4
+     * 5.- Pica = 5
+     * 6.- Iquique = 6
+     * 7.- Alto Hospicio = 7
+     **/
 
     /**
      * Reverse the migrations.

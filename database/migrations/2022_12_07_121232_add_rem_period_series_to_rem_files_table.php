@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddRemPeriodSeriesToRemFilesTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -29,4 +29,4 @@ class AddRemPeriodSeriesToRemFilesTable extends Migration
             $table->dropForeign('rem_files_rem_period_series_id_foreign');
         });
     }
-}
+};

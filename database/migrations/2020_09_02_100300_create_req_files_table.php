@@ -1,10 +1,10 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
-class CreateReqFilesTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -21,6 +21,7 @@ class CreateReqFilesTable extends Migration
             $table->timestamps();
         });
     }
+
     /**
      * Reverse the migrations.
      *
@@ -30,4 +31,4 @@ class CreateReqFilesTable extends Migration
     {
         Schema::dropIfExists('req_files');
     }
-}
+};

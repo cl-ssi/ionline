@@ -1,10 +1,10 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
-class CreateIndComplianceCalcTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -16,9 +16,9 @@ class CreateIndComplianceCalcTable extends Migration
         Schema::create('ind_compliance_calc', function (Blueprint $table) {
             $table->id();
             $table->decimal('left_result_value', 6, 3)->nullable(); //ponderación por corte
-            $table->enum('left_result_operator',['<','<=','>','>='])->nullable();
+            $table->enum('left_result_operator', ['<', '<=', '>', '>='])->nullable();
             $table->decimal('right_result_value', 6, 3)->nullable(); //ponderación por corte
-            $table->enum('right_result_operator',['<','<=', '>', '>=', '='])->nullable();
+            $table->enum('right_result_operator', ['<', '<=', '>', '>=', '='])->nullable();
             $table->string('result_text')->nullable();
             $table->decimal('compliance_value')->nullable();
             $table->string('compliance_text')->nullable();
@@ -37,4 +37,4 @@ class CreateIndComplianceCalcTable extends Migration
     {
         Schema::dropIfExists('ind_compliance_calc');
     }
-}
+};

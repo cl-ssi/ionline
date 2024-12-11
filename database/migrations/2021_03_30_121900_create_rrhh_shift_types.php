@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateRrhhShiftTypes extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -18,7 +18,7 @@ class CreateRrhhShiftTypes extends Migration
             $table->string('name');
             $table->string('shortname');
             $table->string('day_series')->comment('they can be D:day;N:night;L:long;F:free;7 spaces separated by comma ');
-            $table->boolean('status')->default(TRUE);
+            $table->boolean('status')->default(true);
             $table->timestamps();
         });
     }
@@ -32,4 +32,4 @@ class CreateRrhhShiftTypes extends Migration
     {
         Schema::dropIfExists('rrhh_shift_types');
     }
-}
+};

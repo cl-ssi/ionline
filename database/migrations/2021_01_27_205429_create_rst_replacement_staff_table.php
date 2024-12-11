@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateRstReplacementStaffTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -17,13 +17,13 @@ class CreateRstReplacementStaffTable extends Migration
             $table->id();
             //Form
             $table->unsignedInteger('run')->unique();
-            $table->char('dv',1);
+            $table->char('dv', 1);
             //$table->string('other_identification')->nullable();
             $table->date('birthday')->nullable();
             $table->string('name');
             $table->string('fathers_family');
             $table->string('mothers_family');
-            $table->enum('gender',['male', 'female', 'other', 'unknown']);
+            $table->enum('gender', ['male', 'female', 'other', 'unknown']);
             $table->string('email');
             $table->string('telephone')->nullable();
             $table->string('telephone2')->nullable();
@@ -50,4 +50,4 @@ class CreateRstReplacementStaffTable extends Migration
     {
         Schema::dropIfExists('rst_replacement_staff');
     }
-}
+};

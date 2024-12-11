@@ -34,7 +34,7 @@ return new class extends Migration
             $table->datetime('payed_date')->nullable();
             $table->foreignId('payed_responsable_id')->nullable()->constrained('users');
             $table->float('payed_amount', 14, 2)->nullable();
-            
+
             $table->timestamps();
             $table->softDeletes();
         });

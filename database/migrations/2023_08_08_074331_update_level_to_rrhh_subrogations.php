@@ -26,19 +26,16 @@ return new class extends Migration
 
         $idSubrogations = $subrogationsAuthority->unique('organizational_unit_id')->values()->pluck('organizational_unit_id');
 
-        foreach($idSubrogations as $idSubrogation)
-        {
-            foreach($types as $type)
-            {
+        foreach ($idSubrogations as $idSubrogation) {
+            foreach ($types as $type) {
                 $subrogationsByOU = Subrogation::query()
                     ->whereOrganizationalUnitId($idSubrogation)
                     ->whereType($type)
                     ->get();
 
-                foreach($subrogationsByOU as $index => $subrogationByOU)
-                {
+                foreach ($subrogationsByOU as $index => $subrogationByOU) {
                     $subrogationByOU->update([
-                        'level' => $index + 1
+                        'level' => $index + 1,
                     ]);
                 }
             }
@@ -53,17 +50,15 @@ return new class extends Migration
 
         $subrogationsUser = $subrogations->unique('user_id')->values()->pluck('user_id');
 
-        foreach($subrogationsUser as $subrogationUser)
-        {
+        foreach ($subrogationsUser as $subrogationUser) {
             $subrogations = Subrogation::query()
                 ->whereNull('organizational_unit_id')
                 ->whereUserId($subrogationUser)
                 ->get();
 
-            foreach($subrogations as $index => $subrogation)
-            {
+            foreach ($subrogations as $index => $subrogation) {
                 $subrogation->update([
-                    'level' => $index + 1
+                    'level' => $index + 1,
                 ]);
             }
         }

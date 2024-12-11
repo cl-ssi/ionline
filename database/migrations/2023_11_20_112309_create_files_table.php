@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('storage_path'); // Full path "ionline/reception/123.pdf"
             $table->boolean('stored')->default(false); // Si el archivo se subio o no
-            
+
             $table->string('name')->nullable(); // "Acta de recepción.pdf"
             $table->string('type')->nullable(); // "Tipo opcional para los moduelos ej: documento, anexos, etc."
 

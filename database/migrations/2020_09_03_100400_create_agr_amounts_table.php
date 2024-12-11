@@ -1,10 +1,10 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
-class CreateAgrAmountsTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -16,7 +16,7 @@ class CreateAgrAmountsTable extends Migration
         Schema::create('agr_amounts', function (Blueprint $table) {
             $table->id();
             $table->integer('amount')->unsigned()->nullable();
-            $table->enum('subtitle',['21','22','24', '29'])->nullable();
+            $table->enum('subtitle', ['21', '22', '24', '29'])->nullable();
             $table->bigInteger('agreement_id')->unsigned()->nullable();
             $table->foreignId('program_resolution_id')->nullable()->constrained('agr_program_resolutions');
             $table->bigInteger('program_component_id')->unsigned();
@@ -37,4 +37,4 @@ class CreateAgrAmountsTable extends Migration
     {
         Schema::dropIfExists('agr_amounts');
     }
-}
+};

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class DocForumulaFulfillments extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -14,10 +14,10 @@ class DocForumulaFulfillments extends Migration
     public function up()
     {
         Schema::create('doc_formula_fulfillments', function (Blueprint $table) {
-          $table->foreignId('doc_formula_id')->constrained('doc_denominations_formula')->onDelete('cascade');
-          $table->foreignId('doc_fulfillments_id')->constrained('doc_fulfillments')->onDelete('cascade');
-          $table->softDeletes();
-          $table->timestamps();
+            $table->foreignId('doc_formula_id')->constrained('doc_denominations_formula')->onDelete('cascade');
+            $table->foreignId('doc_fulfillments_id')->constrained('doc_fulfillments')->onDelete('cascade');
+            $table->softDeletes();
+            $table->timestamps();
         });
     }
 
@@ -30,4 +30,4 @@ class DocForumulaFulfillments extends Migration
     {
         Schema::dropIfExists('doc_denominations_formula_fulfillments');
     }
-}
+};

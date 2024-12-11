@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateDocDenominationsFormulaTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -55,4 +55,4 @@ class CreateDocDenominationsFormulaTable extends Migration
     {
         Schema::dropIfExists('doc_denominations_formula');
     }
-}
+};

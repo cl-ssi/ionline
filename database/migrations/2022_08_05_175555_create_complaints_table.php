@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateComplaintsTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -29,7 +29,7 @@ class CreateComplaintsTable extends Migration
 
         Schema::create('complaints', function (Blueprint $table) {
             $table->id();
-            $table->enum('type',['Consulta','Denuncia','Riesgo ético']);
+            $table->enum('type', ['Consulta', 'Denuncia', 'Riesgo ético']);
             $table->foreignId('complaint_values_id')->constrained('complaint_values');
             $table->string('other_value')->nullable();
             $table->foreignId('complaint_principles_id')->constrained('complaint_principles');
@@ -56,4 +56,4 @@ class CreateComplaintsTable extends Migration
         Schema::dropIfExists('complaint_values');
         Schema::dropIfExists('complaint_principles');
     }
-}
+};

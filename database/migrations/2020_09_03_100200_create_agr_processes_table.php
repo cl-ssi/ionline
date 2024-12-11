@@ -25,17 +25,17 @@ return new class extends Migration
 
             // $table->foreignId('establishment_id')->constrained('establishments')->nullable();
             $table->unsignedSmallInteger('quotas')->nullable();
-    
+
             $table->foreignId('signer_id')->constrained('agr_signers');
             $table->string('signer_appellative'); // APELATIVO DIRECTOR, DIRECTOR (S)
             $table->text('signer_decree'); // DECRETO DIRECTOR
             $table->string('signer_name')->constrained('users'); // DIRECTOR NAME
-            
+
             $table->foreignId('municipality_id')->constrained('cfg_municipalities');
             $table->string('municipality_name')->nullable();
             $table->string('municipality_rut')->nullable();
             $table->string('municipality_adress')->nullable();
-            
+
             $table->foreignId('mayor_id')->constrained('cfg_mayors');
             $table->string('mayor_name')->nullable();
             $table->string('mayor_run')->nullable();

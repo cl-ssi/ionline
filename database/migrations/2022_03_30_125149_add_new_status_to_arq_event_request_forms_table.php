@@ -1,11 +1,9 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Schema;
 
-class AddNewStatusToArqEventRequestFormsTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -26,4 +24,4 @@ class AddNewStatusToArqEventRequestFormsTable extends Migration
     {
         DB::statement("ALTER TABLE arq_event_request_forms MODIFY status ENUM('approved', 'rejected', 'pending') NOT NULL");
     }
-}
+};

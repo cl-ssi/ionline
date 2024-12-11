@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateProReviewItemsTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -18,14 +18,14 @@ class CreateProReviewItemsTable extends Migration
             $table->unsignedBigInteger('review_id');
             $table->string('review')->nullable();
             $table->text('observation')->nullable();
-            $table->enum('answer',['SI','NO','REGULAR'])->nullable();
-            $table->enum('active',['SI','NO'])->nullable();
+            $table->enum('answer', ['SI', 'NO', 'REGULAR'])->nullable();
+            $table->enum('active', ['SI', 'NO'])->nullable();
             $table->foreignId('user_id')->constrained('users');
-            $table->enum('rectified',['SI','NO'])->default('NO')->nullable();
+            $table->enum('rectified', ['SI', 'NO'])->default('NO')->nullable();
             $table->text('rect_comments')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();
             $table->foreignId('programming_item_id')->unsigned()->constrained('pro_programming_items');
-            
+
             $table->timestamps();
         });
     }
@@ -39,4 +39,4 @@ class CreateProReviewItemsTable extends Migration
     {
         Schema::dropIfExists('pro_review_items');
     }
-}
+};

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateUsersExternal extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -21,7 +21,7 @@ class CreateUsersExternal extends Migration
             // $table->boolean('is_super')->default(false);
             // $table->rememberToken();
             // $table->timestamps();
-            $table->char('dv',1)->nullable();
+            $table->char('dv', 1)->nullable();
             $table->string('name')->nullable();
             $table->string('fathers_family')->nullable();
             $table->string('mothers_family')->nullable();
@@ -53,4 +53,4 @@ class CreateUsersExternal extends Migration
         //$table->dropForeign(['school_id']);
         Schema::dropIfExists('users_external');
     }
-}
+};

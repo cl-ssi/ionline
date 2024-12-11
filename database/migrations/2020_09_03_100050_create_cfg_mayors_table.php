@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('name')->nullable();
             $table->string('run')->nullable();
             $table->string('decree')->nullable();
-            $table->foreignId('municipality_id')->constrained()->nullable();
+            $table->foreignId('municipality_id')->constrained('cfg_municipalities')->nullable();
             $table->timestamps();
         });
     }

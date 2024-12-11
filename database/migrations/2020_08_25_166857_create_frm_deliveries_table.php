@@ -1,10 +1,10 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
-class CreateFrmDeliveriesTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -23,7 +23,7 @@ class CreateFrmDeliveriesTable extends Migration
             $table->string('patient_name');
             $table->tinyInteger('age');
             $table->string('request_type');
-            $table->foreign('product_id')->constrained('frm_products');
+            $table->foreignId('product_id')->constrained('frm_products');
             $table->integer('quantity');
             $table->string('diagnosis');
             $table->string('doctor_name');
@@ -43,4 +43,4 @@ class CreateFrmDeliveriesTable extends Migration
     {
         Schema::dropIfExists('frm_deliveries');
     }
-}
+};

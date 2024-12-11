@@ -20,11 +20,11 @@ return new class extends Migration
             $table->string('boss_position')->nullable();
             $table->string('grado')->nullable();
             $table->string('planta')->nullable();
-            $table->enum('type',['pay','return']);
+            $table->enum('type', ['pay', 'return']);
             $table->text('details')->nullable();
             $table->unsignedInteger('total_minutes_day')->nullable();
             $table->unsignedInteger('total_minutes_night')->nullable();
-            $table->enum('status',['pending','approved','rejected'])->default('pending');
+            $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending');
             $table->foreignId('establishment_id')->constrained();
             $table->boolean('rrhh_ok')->default(false);
             $table->timestamps();

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateRstLegalQualityManagesTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -33,4 +33,4 @@ class CreateRstLegalQualityManagesTable extends Migration
     {
         Schema::dropIfExists('rst_legal_quality_manages');
     }
-}
+};

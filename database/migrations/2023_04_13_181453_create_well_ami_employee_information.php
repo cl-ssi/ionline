@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateWellAmiEmployeeInformation extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -103,4 +103,4 @@ class CreateWellAmiEmployeeInformation extends Migration
     {
         Schema::dropIfExists('well_ami_employee_information');
     }
-}
+};

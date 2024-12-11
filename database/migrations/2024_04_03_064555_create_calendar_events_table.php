@@ -25,7 +25,7 @@ return new class extends Migration
             $table->string('car_id')->nullable();
             $table->string('passenger_number')->default(1)->nullable();
             $table->string('type');
-            $table->unsignedBigInteger('recipient_id');
+            $table->unsignedBigInteger('recipient_id')->const;
             $table->foreign('recipient_id')->references('id')->on('users');
             $table->unsignedBigInteger('driver_id');
             $table->foreign('driver_id')->references('id')->on('users');

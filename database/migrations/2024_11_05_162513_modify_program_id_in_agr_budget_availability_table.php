@@ -40,9 +40,8 @@ return new class extends Migration
             // drop index
             $table->dropIndex('agr_budget_availability_program_id_foreign');
             $table->dropIndex('agr_budget_availability_old_program_id_foreign');
-            
-            $table->dropColumn('program_id');
 
+            $table->dropColumn('program_id');
 
             // Renombrar la columna old_program_id a program_id
             $table->renameColumn('old_program_id', 'program_id');

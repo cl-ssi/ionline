@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::table('rrhh_compensatory_days', function (Blueprint $table) {
             $table->dropForeign(['user_id']);
-            $table->unique(['user_id','request_date','start_date','end_date'],'UNIQUE');
+            $table->unique(['user_id', 'request_date', 'start_date', 'end_date'], 'UNIQUE');
         });
     }
 

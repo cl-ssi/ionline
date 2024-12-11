@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateServiceRequestsTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -93,26 +93,14 @@ class CreateServiceRequestsTable extends Migration
             $table->boolean('signature_page_break')->nullable()->default(0);
             $table->foreignId('bank_id')->nullable()->constrained('cfg_banks');
             $table->string('account_number')->nullable();
-            $table->string('pay_method')->nullable();  
+            $table->string('pay_method')->nullable();
 
             $table->string('verification_code', 100)->nullable();
             $table->foreignId('user_id')->constrained('users');
             $table->foreignId('signed_budget_availability_cert_id')->nullable()->constrained('doc_signatures_files');
 
             $table->string('observation')->nullable();
-            $table->foreign('creator_id')->nullable()->constrained('users');
-
-            $table->timestamps();
-            $table->softDeletes();
-        });
-
-        Schema::create('doc_shift_controls', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('service_request_id')->nullable()->constrained('doc_service_requests');
-            $table->foreignId('fulfillment_id')->nullable()->constrained('doc_fulfillments');
-            $table->datetime('start_date')->nullable();
-            $table->datetime('end_date')->nullable();
-            $table->string('observation', 100)->nullable();
+            $table->foreignId('creator_id')->nullable()->constrained('users');
 
             $table->timestamps();
             $table->softDeletes();
@@ -164,9 +152,8 @@ class CreateServiceRequestsTable extends Migration
     {
         Schema::dropIfExists('doc_signature_flow');
         Schema::dropIfExists('doc_resolutions');
-        Schema::dropIfExists('doc_shift_controls');
         Schema::dropIfExists('doc_service_requests');
         // Schema::dropIfExists('doc_subdirections');
         // Schema::dropIfExists('doc_responsability_centers');
     }
-}
+};

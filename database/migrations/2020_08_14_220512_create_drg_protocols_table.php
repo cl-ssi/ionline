@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateDrgProtocolsTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -16,7 +16,7 @@ class CreateDrgProtocolsTable extends Migration
         Schema::create('drg_protocols', function (Blueprint $table) {
             $table->id('id');
             $table->smallInteger('sample');
-            $table->enum('result',['Positivo','Negativo']);
+            $table->enum('result', ['Positivo', 'Negativo']);
             $table->foreignId('user_id')->constrained('users');
             $table->foreignId('reception_item_id')->constrained('drg_reception_items');
             $table->timestamps();
@@ -33,4 +33,4 @@ class CreateDrgProtocolsTable extends Migration
     {
         Schema::dropIfExists('drg_protocols');
     }
-}
+};

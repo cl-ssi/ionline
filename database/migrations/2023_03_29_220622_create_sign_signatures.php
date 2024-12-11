@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSignSignatures extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -62,4 +62,4 @@ class CreateSignSignatures extends Migration
     {
         Schema::dropIfExists('sign_signatures');
     }
-}
+};

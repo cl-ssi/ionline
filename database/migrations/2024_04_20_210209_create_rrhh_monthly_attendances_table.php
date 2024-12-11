@@ -22,7 +22,7 @@ return new class extends Migration
             $table->foreignId('establishment_id')->constrained('establishments');
             $table->timestamps();
             $table->softDeletes();
-            $table->unique(['user_id','date'],'UNIQUE');
+            $table->unique(['user_id', 'date'], 'UNIQUE');
         });
     }
 

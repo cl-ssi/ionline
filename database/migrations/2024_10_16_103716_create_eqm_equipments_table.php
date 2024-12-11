@@ -34,14 +34,14 @@ return new class extends Migration
             $table->string('assurance')->nullable(); // garantia si o no
             $table->string('warranty_expiry_year')->nullable(); // AÑO VENCIMIENTO GARANTÍA
             $table->string('under_maintenance_plan')->nullable(); // BAJO PLAN DE MANTENIMIENTO (SI / NO)
-            $table->integer('year_entered_maintenance_plan')->nullable(); // AÑO INGRESO A PLAN DE MANTENIMIENTO (2023 / 2024 / 2025 / 2026)	
+            $table->integer('year_entered_maintenance_plan')->nullable(); // AÑO INGRESO A PLAN DE MANTENIMIENTO (2023 / 2024 / 2025 / 2026)
 
             $table->string('type_of_maintenance')->nullable(); // mantenimiento interno, mantenimiento externo, contrato
             $table->foreignId('supplier_id')->nullable()->constrained('eqm_suppliers'); //proveedor
             $table->string('maintenance_reference')->nullable(); // id convenio de mantenimiento, id de referencia, cotización de referencia.
             $table->integer('annual_cost')->nullable();
             $table->integer('annual_maintenance_frequency')->nullable();
-            
+
             $table->timestamps();
             $table->softDeletes();
         });

@@ -1,11 +1,11 @@
 <?php
 
+use App\Models\Parameters\StaffDecreeByEstament;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use App\Models\Parameters\StaffDecreeByEstament;
 
-class CreateCfgStaffDecreeByEstamentsTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -35,7 +35,7 @@ class CreateCfgStaffDecreeByEstamentsTable extends Migration
         //                                             laboral en el área administrativa o en labores equivalentes no inferior
         //                                             a cinco años en el sector público';
         // $StaffDecreeByEstament->staff_decree_id = 1;
-        // $StaffDecreeByEstament->save();                               
+        // $StaffDecreeByEstament->save();
 
         // $StaffDecreeByEstament = new StaffDecreeByEstament();
         // $StaffDecreeByEstament->estament_id     = 1;
@@ -45,7 +45,7 @@ class CreateCfgStaffDecreeByEstamentsTable extends Migration
         //                                             laboral en el área administrativa o en labores equivalentes no inferior
         //                                             a cinco años en el sector público o privado';
         // $StaffDecreeByEstament->staff_decree_id = 1;
-        // $StaffDecreeByEstament->save(); 
+        // $StaffDecreeByEstament->save();
 
         // $StaffDecreeByEstament = new StaffDecreeByEstament();
         // $StaffDecreeByEstament->estament_id     = 1;
@@ -53,7 +53,7 @@ class CreateCfgStaffDecreeByEstamentsTable extends Migration
         // $StaffDecreeByEstament->end_degree      = '22';
         // $StaffDecreeByEstament->description     = 'Licencia de Enseñanza Media o equivalente';
         // $StaffDecreeByEstament->staff_decree_id = 1;
-        // $StaffDecreeByEstament->save(); 
+        // $StaffDecreeByEstament->save();
         //-------------------------------------------------------------------------------------------------------------------
     }
 
@@ -66,4 +66,4 @@ class CreateCfgStaffDecreeByEstamentsTable extends Migration
     {
         Schema::dropIfExists('cfg_staff_decree_by_estaments');
     }
-}
+};

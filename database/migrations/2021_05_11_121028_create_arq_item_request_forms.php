@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateArqItemRequestForms extends Migration
+return new class extends Migration
 {
     /**
      * not_available:  no disponible por parte del oferente
@@ -36,6 +36,7 @@ class CreateArqItemRequestForms extends Migration
             $table->timestamps();
         });
     }
+
     /**
      * Reverse the migrations.
      *
@@ -45,4 +46,4 @@ class CreateArqItemRequestForms extends Migration
     {
         Schema::dropIfExists('arq_item_request_forms');
     }
-}
+};

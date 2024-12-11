@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateJppJobPositionProfilesTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -34,7 +34,7 @@ class CreateJppJobPositionProfilesTable extends Migration
             $table->boolean('dfl29')->nullable();
             $table->boolean('other_legal_framework')->nullable();
             $table->string('working_day')->nullable();
-            
+
             //II. REQUISITOS FORMALES
             $table->foreignId('staff_decree_by_estament_id')->nullable()->constrained('cfg_staff_decree_by_estaments');
             $table->longText('general_requirement')->nullable();
@@ -46,7 +46,7 @@ class CreateJppJobPositionProfilesTable extends Migration
             //III. PROPÓSITOS DEL CARGO
             $table->longText('objective')->nullable();
 
-            //IV. ORGANIZACIÓN Y CONTEXTO DEL CARGO 
+            //IV. ORGANIZACIÓN Y CONTEXTO DEL CARGO
             $table->longText('working_team')->nullable();
 
             $table->timestamps();
@@ -63,4 +63,4 @@ class CreateJppJobPositionProfilesTable extends Migration
     {
         Schema::dropIfExists('jpp_job_position_profiles');
     }
-}
+};

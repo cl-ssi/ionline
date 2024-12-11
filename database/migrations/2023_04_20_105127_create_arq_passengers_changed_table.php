@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateArqPassengersChangedTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -18,7 +18,7 @@ class CreateArqPassengersChangedTable extends Migration
             $table->string('passenger_type')->nullable();
             $table->foreignId('user_id')->nullable()->constrained('users');
             $table->string('run')->nullable();
-            $table->char('dv',1)->nullable();
+            $table->char('dv', 1)->nullable();
             $table->string('name')->nullable();
             $table->string('fathers_family')->nullable();
             $table->string('mothers_family')->nullable();
@@ -49,4 +49,4 @@ class CreateArqPassengersChangedTable extends Migration
     {
         Schema::dropIfExists('arq_passengers_changed');
     }
-}
+};

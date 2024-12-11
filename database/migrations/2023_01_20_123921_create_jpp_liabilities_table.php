@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateJppLiabilitiesTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -44,4 +44,4 @@ class CreateJppLiabilitiesTable extends Migration
         Schema::dropIfExists('jpp_liabilities');
         Schema::dropIfExists('jpp_profile_liabilities');
     }
-}
+};

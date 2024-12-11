@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateResWinglesTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,15 @@ class CreateResWinglesTable extends Migration
      */
     public function up()
     {
-      Schema::create('res_wingles', function (Blueprint $table) {
-          $table->id();
-          $table->string('brand');
-          $table->string('model');
-          $table->string('company');
-          $table->string('imei');
-          $table->string('password');
-          $table->timestamps();
-      });
+        Schema::create('res_wingles', function (Blueprint $table) {
+            $table->id();
+            $table->string('brand');
+            $table->string('model');
+            $table->string('company');
+            $table->string('imei');
+            $table->string('password');
+            $table->timestamps();
+        });
     }
 
     /**
@@ -33,4 +33,4 @@ class CreateResWinglesTable extends Migration
     {
         Schema::dropIfExists('res_wingles');
     }
-}
+};

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateAssignmentsTables extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateAssignmentsTables extends Migration
      */
     public function up()
     {
-      //assignation simulator
+        //assignation simulator
         Schema::create('as_assignments', function (Blueprint $table) {
             $table->id();
             $table->string('process')->nullable();
@@ -42,22 +42,22 @@ class CreateAssignmentsTables extends Migration
             $table->string('porc_est_resid_hosp')->nullable();
             $table->string('porc_prof_espe_art_16')->nullable();
 
-            $table->decimal('assets_total',16,4)->nullable()->default('0');
-            $table->decimal('base_salary',16,4)->nullable()->default('0');
-            $table->decimal('antiquity',16,4)->nullable()->default('0');
-            $table->decimal('experience',16,4)->nullable()->default('0');
-            $table->decimal('responsibility',16,4)->nullable()->default('0');
+            $table->decimal('assets_total', 16, 4)->nullable()->default('0');
+            $table->decimal('base_salary', 16, 4)->nullable()->default('0');
+            $table->decimal('antiquity', 16, 4)->nullable()->default('0');
+            $table->decimal('experience', 16, 4)->nullable()->default('0');
+            $table->decimal('responsibility', 16, 4)->nullable()->default('0');
 
-            $table->decimal('est_jorn_prior',16,4)->nullable()->default('0');
-            $table->decimal('est_compet_prof',16,4)->nullable()->default('0');
-            $table->decimal('est_condic_lugar',16,4)->nullable()->default('0');
-            $table->decimal('zone_asignation',16,4)->nullable()->default('0');
-            $table->decimal('est_cond_especial',16,4)->nullable()->default('0');
-            $table->decimal('est_resid_hosp',16,4)->nullable()->default('0');
-            $table->decimal('est_prog_especiali',16,4)->nullable()->default('0');
-            $table->decimal('est_riesgo',16,4)->nullable()->default('0');
-            $table->decimal('est_lugar_aislado',16,4)->nullable()->default('0');
-            $table->decimal('asig_permanencia',16,4)->nullable()->default('0');
+            $table->decimal('est_jorn_prior', 16, 4)->nullable()->default('0');
+            $table->decimal('est_compet_prof', 16, 4)->nullable()->default('0');
+            $table->decimal('est_condic_lugar', 16, 4)->nullable()->default('0');
+            $table->decimal('zone_asignation', 16, 4)->nullable()->default('0');
+            $table->decimal('est_cond_especial', 16, 4)->nullable()->default('0');
+            $table->decimal('est_resid_hosp', 16, 4)->nullable()->default('0');
+            $table->decimal('est_prog_especiali', 16, 4)->nullable()->default('0');
+            $table->decimal('est_riesgo', 16, 4)->nullable()->default('0');
+            $table->decimal('est_lugar_aislado', 16, 4)->nullable()->default('0');
+            $table->decimal('asig_permanencia', 16, 4)->nullable()->default('0');
 
             $table->timestamps();
         });
@@ -72,4 +72,4 @@ class CreateAssignmentsTables extends Migration
     {
         Schema::dropIfExists('as_assignments');
     }
-}
+};

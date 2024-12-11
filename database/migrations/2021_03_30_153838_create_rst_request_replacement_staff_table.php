@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateRstRequestReplacementStaffTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -29,9 +29,9 @@ class CreateRstRequestReplacementStaffTable extends Migration
             $table->foreignId('fundament_detail_manage_id')->nullable()->cosntrained('rst_fundament_detail_manages');
             $table->string('name_to_replace')->nullable();
             $table->unsignedInteger('run')->nullable();
-            $table->char('dv',1)->nullable();
+            $table->char('dv', 1)->nullable();
             $table->string('other_fundament')->nullable();
-            $table->enum('work_day',['diurnal', 'third shift', 'fourth shift', 'other']);
+            $table->enum('work_day', ['diurnal', 'third shift', 'fourth shift', 'other']);
             $table->string('other_work_day')->nullable();
             $table->integer('charges_number')->nullable();
             $table->string('job_profile_file')->nullable();
@@ -39,7 +39,7 @@ class CreateRstRequestReplacementStaffTable extends Migration
             $table->foreignId('ou_of_performance_id')->constrained('organizational_units');
             $table->foreignId('replacement_staff_id')->nullable()->constrained('rst_replacement_staff');
             $table->string('request_status');
-            $table->boolean('sirh_contract')->nullable()->after('request_status');
+            $table->boolean('sirh_contract')->nullable();
             $table->foreignId('user_id')->constrained('users');
             $table->foreignId('organizational_unit_id')->constrained('organizational_units');
             $table->foreignId('establishment_id')->constrained('establishments');
@@ -63,4 +63,4 @@ class CreateRstRequestReplacementStaffTable extends Migration
     {
         Schema::dropIfExists('rst_request_replacement_staff');
     }
-}
+};

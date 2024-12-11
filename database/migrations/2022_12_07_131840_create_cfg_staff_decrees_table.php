@@ -1,11 +1,11 @@
 <?php
 
+use App\Models\Parameters\StaffDecree;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use App\Models\Parameters\StaffDecree;
 
-class CreateCfgStaffDecreesTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -24,7 +24,7 @@ class CreateCfgStaffDecreesTable extends Migration
 
         StaffDecree::create([
             'name' => 'DFL 3',
-            'year' => '2017'
+            'year' => '2017',
         ]);
     }
 
@@ -37,4 +37,4 @@ class CreateCfgStaffDecreesTable extends Migration
     {
         Schema::dropIfExists('cfg_staff_decrees');
     }
-}
+};

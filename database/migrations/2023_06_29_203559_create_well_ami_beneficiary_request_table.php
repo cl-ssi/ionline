@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateWellAmiBeneficiaryRequestTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -26,7 +26,7 @@ class CreateWellAmiBeneficiaryRequestTable extends Migration
             $table->string('donde_cumplira_funciones')->nullable();
             $table->string('correo_personal')->nullable();
             $table->string('celular')->nullable();
-            $table->date('fecha_inicio_contrato'); 
+            $table->date('fecha_inicio_contrato');
             $table->string('fecha_termino_contrato');
             $table->string('jornada_laboral')->nullable();
             $table->string('residencia')->nullable();
@@ -51,4 +51,4 @@ class CreateWellAmiBeneficiaryRequestTable extends Migration
     {
         Schema::dropIfExists('well_ami_beneficiary_requests');
     }
-}
+};

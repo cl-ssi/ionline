@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreignId('inventory_id')->nullable()->constrained('inv_inventories');
             $table->foreignId('user_id')->nullable()->constrained('users');
             $table->timestamps();
-             $table->softDeletes();
+            $table->softDeletes();
         });
     }
 

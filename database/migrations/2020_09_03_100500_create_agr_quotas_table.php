@@ -1,10 +1,10 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
-class CreateAgrQuotasTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -15,7 +15,7 @@ class CreateAgrQuotasTable extends Migration
     {
         Schema::create('agr_quotas', function (Blueprint $table) {
             $table->id();
-            $table->string('description',32)->nullable();
+            $table->string('description', 32)->nullable();
             $table->integer('percentage')->nullable();
             $table->integer('amount')->nullable();
             $table->date('transfer_at')->nullable();
@@ -34,4 +34,4 @@ class CreateAgrQuotasTable extends Migration
     {
         Schema::dropIfExists('agr_quotas');
     }
-}
+};

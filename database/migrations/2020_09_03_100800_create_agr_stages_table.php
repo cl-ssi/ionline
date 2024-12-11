@@ -1,10 +1,10 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
-class CreateAgrStagesTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -16,10 +16,10 @@ class CreateAgrStagesTable extends Migration
         Schema::create('agr_stages', function (Blueprint $table) {
             $table->id();
             $table->enum('type',
-                ['Enc. Convenio','Jefe APS','Jurídico','Finanzas','Envío Comuna','Devuelto Comuna','RTP','DAJ','DAP','DGF','SDGA','Comuna','OfParte']);
+                ['Enc. Convenio', 'Jefe APS', 'Jurídico', 'Finanzas', 'Envío Comuna', 'Devuelto Comuna', 'RTP', 'DAJ', 'DAP', 'DGF', 'SDGA', 'Comuna', 'OfParte']);
             $table->enum('group',
-                ['CON','RES']);
-            $table->date('date'); 
+                ['CON', 'RES']);
+            $table->date('date');
             $table->date('dateEnd')->nullable();
 
             //ADENDUM DATE
@@ -45,4 +45,4 @@ class CreateAgrStagesTable extends Migration
     {
         Schema::dropIfExists('agr_stages');
     }
-}
+};

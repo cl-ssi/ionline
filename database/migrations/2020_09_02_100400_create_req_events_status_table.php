@@ -1,10 +1,10 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
-class CreateReqEventsStatusTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -18,7 +18,7 @@ class CreateReqEventsStatusTable extends Migration
             $table->foreignId('event_id')->constrained('req_events')->onDelete('cascade');
             $table->foreignId('requirement_id')->nullable()->constrained('req_requirements');
             $table->foreignId('user_id')->constrained('users');
-            $table->enum('status',['not viewed','viewed']);
+            $table->enum('status', ['not viewed', 'viewed']);
             //$table->integer('category_id')->unsigned();
             $table->timestamps();
         });
@@ -33,4 +33,4 @@ class CreateReqEventsStatusTable extends Migration
     {
         Schema::dropIfExists('req_events_status');
     }
-}
+};

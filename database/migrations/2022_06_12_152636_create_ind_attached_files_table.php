@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateIndAttachedFilesTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -36,7 +36,6 @@ class CreateIndAttachedFilesTable extends Migration
     public function down()
     {
         Schema::dropIfExists('ind_attached_files');
-
         Schema::create('ind_values_attached_files', function (Blueprint $table) {
             $table->id();
             $table->string('file');
@@ -46,4 +45,4 @@ class CreateIndAttachedFilesTable extends Migration
             $table->softDeletes();
         });
     }
-}
+};

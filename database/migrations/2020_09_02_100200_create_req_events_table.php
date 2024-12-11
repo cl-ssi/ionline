@@ -1,10 +1,10 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
-class CreateReqEventsTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -16,7 +16,7 @@ class CreateReqEventsTable extends Migration
         Schema::create('req_events', function (Blueprint $table) {
             $table->id();
             $table->text('body');
-            $table->enum('status',['creado','respondido','cerrado','derivado','reabierto','en copia']);
+            $table->enum('status', ['creado', 'respondido', 'cerrado', 'derivado', 'reabierto', 'en copia']);
             $table->datetime('limit_at')->nullable();
             $table->foreignId('from_user_id')->constrained('users');
             $table->foreignId('from_ou_id')->constrained('organizational_units')->default(69);
@@ -56,4 +56,4 @@ class CreateReqEventsTable extends Migration
         Schema::dropIfExists('req_documents_events');
         Schema::dropIfExists('req_events');
     }
-}
+};

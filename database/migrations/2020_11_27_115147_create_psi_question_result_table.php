@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePsiQuestionResultTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreatePsiQuestionResultTable extends Migration
      */
     public function up()
     {
-        Schema::create('psi_question_result', function (Blueprint $table) {            
+        Schema::create('psi_question_result', function (Blueprint $table) {
             $table->foreignId('result_id');
             $table->foreign('result_id')->references('id')->on('psi_results')->onDelete('cascade');
             $table->foreignId('question_id');
@@ -36,4 +36,4 @@ class CreatePsiQuestionResultTable extends Migration
     {
         Schema::dropIfExists('psi_question_result');
     }
-}
+};

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateProActivityItemsTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -17,7 +17,7 @@ class CreateProActivityItemsTable extends Migration
             $table->id();
             $table->string('int_code')->nullable();
             $table->string('vital_cycle')->nullable();
-            $table->enum('tracer',['SI','NO'])->nullable()->default('NO');
+            $table->enum('tracer', ['SI', 'NO'])->nullable()->default('NO');
             $table->string('action_type')->nullable();
             $table->string('activity_name')->nullable();
             $table->string('def_target_population')->nullable();
@@ -43,4 +43,4 @@ class CreateProActivityItemsTable extends Migration
     {
         Schema::dropIfExists('pro_activity_items');
     }
-}
+};

@@ -1,12 +1,11 @@
 <?php
 
+use App\Models\HotelBooking\Hotel;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-use App\Models\HotelBooking\Hotel;
-
-class CreateHbHotelsTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -17,7 +16,7 @@ class CreateHbHotelsTable extends Migration
     {
         Schema::create('hb_hotels', function (Blueprint $table) {
             $table->id();
-            
+
             $table->foreignId('region_id')->nullable()->constrained('cl_regions');
             $table->foreignId('commune_id')->nullable()->constrained('cl_regions');
             $table->string('name');
@@ -61,4 +60,4 @@ class CreateHbHotelsTable extends Migration
     {
         Schema::dropIfExists('hb_hotels');
     }
-}
+};

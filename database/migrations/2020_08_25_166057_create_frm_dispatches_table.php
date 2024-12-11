@@ -1,10 +1,10 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
-class CreateFrmDispatchesTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -15,18 +15,18 @@ class CreateFrmDispatchesTable extends Migration
     {
         Schema::create('frm_dispatches', function (Blueprint $table) {
 
-          $table->id();
-          $table->dateTime('date'); //fecha xfecha
-          $table->foreignId('pharmacy_id')->nullable()->constrained('frm_pharmacies'); //origen
-          $table->foreignId('destiny_id')->nullable()->constrained('frm_destines');
-          $table->longText('notes')->nullable(); //notas
-          $table->foreignId('inventory_adjustment_id')->nullable()->constrained('frm_inventory_adjustments');
-          $table->foreignId('user_id')->constrained('users');
-          $table->foreignId('receiver_id')->nullable()->constrained('users');
-          $table->boolean('sendC19')->default(0);
+            $table->id();
+            $table->dateTime('date'); //fecha xfecha
+            $table->foreignId('pharmacy_id')->nullable()->constrained('frm_pharmacies'); //origen
+            $table->foreignId('destiny_id')->nullable()->constrained('frm_destines');
+            $table->longText('notes')->nullable(); //notas
+            $table->foreignId('inventory_adjustment_id')->nullable()->constrained('frm_inventory_adjustments');
+            $table->foreignId('user_id')->constrained('users');
+            $table->foreignId('receiver_id')->nullable()->constrained('users');
+            $table->boolean('sendC19')->default(0);
 
-          $table->timestamps();
-          $table->softDeletes();
+            $table->timestamps();
+            $table->softDeletes();
         });
     }
 
@@ -39,4 +39,4 @@ class CreateFrmDispatchesTable extends Migration
     {
         Schema::dropIfExists('frm_dispatches');
     }
-}
+};

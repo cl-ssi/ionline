@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePsiOptionsTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -16,7 +16,7 @@ class CreatePsiOptionsTable extends Migration
         Schema::create('psi_options', function (Blueprint $table) {
             $table->id();
             $table->longText('option_text');
-            $table->char('alternative',1);
+            $table->char('alternative', 1);
             $table->integer('points')->nullable();
             $table->foreignId('question_id')->constrained('psi_questions');
             $table->timestamps();
@@ -33,4 +33,4 @@ class CreatePsiOptionsTable extends Migration
     {
         Schema::dropIfExists('psi_options');
     }
-}
+};

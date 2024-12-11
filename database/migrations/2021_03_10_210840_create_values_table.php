@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateValuesTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -19,7 +19,7 @@ class CreateValuesTable extends Migration
             $table->string('type');
             $table->string('work_type');
             $table->enum('estate', ['Médico 44', 'Médico 28', 'Médico 22', 'Profesional', 'Técnico', 'Administrativo', 'Farmaceutico', 'Odontólogo', 'Bioquímico', 'Auxiliar', 'Otro (justificar)'])->nullable();
-            $table->float('amount', 8,2);
+            $table->float('amount', 8, 2);
             $table->date('validity_from');
             $table->foreignId('establishment_id')->nullable()->constrained('establishments');
             $table->timestamps();
@@ -36,4 +36,4 @@ class CreateValuesTable extends Migration
     {
         Schema::dropIfExists('sr_values');
     }
-}
+};

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateAlwAllowancesTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -38,7 +38,7 @@ class CreateAlwAllowancesTable extends Migration
             $table->foreignId('destination_commune_id')->nullable()->constrained('cl_communes');
             $table->string('round_trip')->nullable();
             $table->date('from')->nullable();
-            $table->date('to')->nullable();  
+            $table->date('to')->nullable();
             $table->decimal('total_days', 5, 2);
             $table->decimal('total_half_days', 5, 2);
             $table->decimal('fifty_percent_total_days', 5, 2);
@@ -53,7 +53,7 @@ class CreateAlwAllowancesTable extends Migration
             $table->foreignId('creator_ou_id')->constrained('organizational_units');
             $table->date('document_date')->nullable();
             $table->foreignId('signature_id')->nullable()->constrained('doc_signatures');
-            
+
             $table->timestamps();
             $table->softDeletes();
         });
@@ -68,4 +68,4 @@ class CreateAlwAllowancesTable extends Migration
     {
         Schema::dropIfExists('alw_allowances');
     }
-}
+};

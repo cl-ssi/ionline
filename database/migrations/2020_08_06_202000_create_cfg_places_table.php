@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCfgPlacesTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -16,7 +16,7 @@ class CreateCfgPlacesTable extends Migration
         Schema::create('cfg_places', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('description')->nullable()->default(NULL);
+            $table->string('description')->nullable()->default(null);
             $table->string('architectural_design_code')->nullable();
             $table->integer('floor_number')->nullable();
             $table->foreignId('location_id')->constrained('cfg_locations')->onDelete('restrict');
@@ -35,4 +35,4 @@ class CreateCfgPlacesTable extends Migration
     {
         Schema::dropIfExists('cfg_places');
     }
-}
+};
