@@ -21,7 +21,7 @@ class ProcessTypePolicy
      */
     public function viewAny(User $user): bool
     {
-        return false;
+        return $user->can('Agreement: manage municipalities and signers');
     }
 
     /**
@@ -37,7 +37,7 @@ class ProcessTypePolicy
      */
     public function create(User $user): bool
     {
-        return false;
+        return $user->can('Agreement: manage municipalities and signers');
     }
 
     /**
@@ -45,7 +45,7 @@ class ProcessTypePolicy
      */
     public function update(User $user, ProcessType $processType): bool
     {
-        return false;
+        return $user->can('Agreement: manage municipalities and signers');
     }
 
     /**

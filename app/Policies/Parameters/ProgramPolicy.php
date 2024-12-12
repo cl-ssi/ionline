@@ -21,7 +21,7 @@ class ProgramPolicy
      */
     public function viewAny(User $user): bool
     {
-        return false;
+        return $user->can('Agreement: manage municipalities and signers');
     }
 
     /**
@@ -29,7 +29,7 @@ class ProgramPolicy
      */
     public function view(User $user, Program $Program): bool
     {
-        return false;
+        return $user->can('Agreement: manage municipalities and signers');
     }
 
     /**
@@ -37,7 +37,7 @@ class ProgramPolicy
      */
     public function create(User $user): bool
     {
-        return false;
+        return $user->can('Agreement: manage municipalities and signers');
     }
 
     /**
@@ -45,7 +45,7 @@ class ProgramPolicy
      */
     public function update(User $user, Program $Program): bool
     {
-        return false;
+        return $user->can('Agreement: manage municipalities and signers');
     }
 
     /**
