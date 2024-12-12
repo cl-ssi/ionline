@@ -45,6 +45,7 @@ return new class extends Migration
             $table->enum('status', ['draft', 'approved', 'rejected', 'finished'])->default('draft');
 
             $table->foreignId('document_id')->nullable()->constrained('documents');
+            $table->text('document_content')->nullable();
 
             $table->foreignId('next_process_id')->nullable()->constrained('agr_processes')->nullOnDelete();
 

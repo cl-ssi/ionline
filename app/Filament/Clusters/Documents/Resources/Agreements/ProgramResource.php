@@ -12,6 +12,7 @@ use Filament\Pages\SubNavigationPosition;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 
 class ProgramResource extends Resource
 {
@@ -39,7 +40,7 @@ class ProgramResource extends Resource
                     ->label('Nombre')
                     ->required()
                     ->maxLength(255)
-                    ->columnSpan(3),
+                    ->columnSpan(2),
                 Forms\Components\Select::make('period')
                     ->label('Periodo')
                     ->required()
@@ -52,6 +53,10 @@ class ProgramResource extends Resource
 
                         return $years;
                     }),
+                Forms\Components\TextInput::make('budget')
+                    ->label('Presupuesto')
+                    ->numeric()
+                    ->default(null),
                 // Forms\Components\TextInput::make('alias')
                 //     ->maxLength(50)
                 //     ->default(null),
@@ -98,14 +103,12 @@ class ProgramResource extends Resource
                 // Forms\Components\Select::make('establishment_id')
                 //     ->relationship('establishment', 'name')
                 //     ->default(null),
-                Forms\Components\Select::make('subtitle_id')
-                    ->label('Subtítulo')
-                    ->relationship('subtitle', 'name')
-                    ->required(),
-                Forms\Components\TextInput::make('budget')
-                    ->label('Presupuesto')
-                    ->numeric()
-                    ->default(null),
+                // Forms\Components\Select::make('subtitle_id')
+                //     ->label('Subtítulo')
+                //     ->relationship('subtitle', 'name')
+                //     ->required(),
+                Forms\Components\Toggle::make('is_program')
+                    ->label('Es Programa APS'),
             ])
             ->columns(4);
     }
@@ -137,16 +140,20 @@ class ProgramResource extends Resource
                     ->label('Periodo')
                     ->numeric()
                     ->sortable(),
-                // Tables\Columns\TextColumn::make('start_date')
-                //     ->date()
-                //     ->sortable(),
-                // Tables\Columns\TextColumn::make('end_date')
-                //     ->date()
-                //     ->sortable(),
-                // Tables\Columns\TextColumn::make('description')
-                //     ->searchable(),
-                // Tables\Columns\IconColumn::make('is_program')
-                //     ->boolean(),
+                Tables\Columns\TextColumn::make('ministerial_resolution_number')
+                    ->label('Reso Minsal')
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('ministerial_resolution_date')
+                    ->label('Fecha Reso Minsal')
+                    ->date()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('resource_distribution_number')
+                    ->label('Reso Distribución')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('resource_distribution_date')
+                    ->label('Fecha Reso Distribución')
+                    ->date()
+                    ->sortable(),
                 // Tables\Columns\TextColumn::make('establishment.name')
                 //     ->numeric()
                 //     ->sortable(),
@@ -154,8 +161,9 @@ class ProgramResource extends Resource
                     ->label('Referentes')
                     ->wrap()
                     ->bulleted()
-                ->searchable(['full_name'])
-                    ->sortable(),
+                    ->searchable(['full_name'])
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -170,19 +178,22 @@ class ProgramResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
+                Tables\Filters\Filter::make('is_program')
+                    ->query(fn (Builder $query): Builder => $query->where('is_program', true))
+                    ->label('Es Programa APS')
+                    ->default(true),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                    // Tables\Actions\DeleteBulkAction::make(),
                 ]),
-            ])
-            ->modifyQueryUsing(function ($query) {
-                $query->where('is_program', true);
-            });
+            ]);
+            // ->modifyQueryUsing(function ($query) {
+            //     $query->where('is_program', true);
+            // });
     }
 
     public static function getRelations(): array

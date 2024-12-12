@@ -5,19 +5,19 @@ namespace App\Enums\Documents\Agreements;
 use Filament\Support\Contracts\HasColor;
 use Filament\Support\Contracts\HasLabel;
 
-enum Status: string implements HasLabel, HasColor
+enum Status: string implements HasColor, HasLabel
 {
-    case Draft = 'draft';
-    case Approved = 'approved';
-    case Rejected = 'rejected';
+    case Draft    = 'draft';
+    case Endorsed = 'endorsed';
+    case Signed   = 'signed';
     case Finished = 'finished';
 
     public function getLabel(): ?string
     {
         return match ($this) {
             self::Draft    => 'Borrador',
-            self::Approved => 'Aprobado',
-            self::Rejected => 'Rechazado',
+            self::Endorsed => 'Visado',
+            self::Signed   => 'Firmado',
             self::Finished => 'Finalizado',
         };
     }
@@ -25,10 +25,10 @@ enum Status: string implements HasLabel, HasColor
     public function getColor(): ?string
     {
         return match ($this) {
-            self::Draft    => 'secondary',
-            self::Approved => 'success',
-            self::Rejected => 'danger',
-            self::Finished => 'primary',
+            self::Draft    => 'gray',
+            self::Endorsed => 'primary',
+            self::Signed   => 'primary',
+            self::Finished => 'success',
         };
     }
 }

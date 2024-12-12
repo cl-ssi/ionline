@@ -274,35 +274,46 @@ Factor
 # Convenios
 
 TODO:
-[ ] Poblar convenios 2025
-[ ] Desbloquear listado de programas, filtrado por boolean is_program
-[ ] En crear proceso filtrar por los que se puede empezar
-[ ] En crear proceso filtrar por los programas del periodo seleccionado en el campo anterior
+
+[+] Poblar approval flow
+[X] Desbloquear listado de programas, filtrado por boolean is_program
 [X] Poblar tabla alcaldes (mayors)
-[ ] Correr la migracion de process
+[-] Crear Proceso - Comentarios dejar fijos los que ya se ingresaron
+[X] En crear proceso filtrar por los que se puede empezar
+[X] En crear proceso filtrar por los programas del periodo seleccionado en el campo anterior
+[X] Correr la migracion de process
+[X] Estado, desabilitar los botones, buscar otro lugar para poner el estado
+[ ] Mostrar section con datos del programa y sus componentes
 [ ] Crear Proceso - Auto calcular las cuotas
-[ ] Crear Proceso - Crear documento del proceso en la misma ventana
-[ ] Crear Proceso - Solicitar visado
-[ ] Crear Proceso - Eliminar visado
-[ ] Crear Proceso - Comentarios dejar fijos los que ya se ingresaron
-[ ] Poblar approval flow
-[ ] Estado, desabilitar los botones, buscar otro lugar para poner el estado
-[ ] Acctión crear siguiente proceso
+[X] Crear Proceso - Crear documento del proceso en la misma ventana
+[X] Crear Proceso - Solicitar visado
+[X] Crear Proceso - Eliminar visado
+[ ] Action crear siguiente proceso
 [ ] Mostrar vinculo al siguiente proceso
-[ ] Approvals permitir poner vizaciones
-[ ] Mostrar bajo los comentarios, los componentes?
-[ ] Mostrar las aprobaciones (etapa en la que va)
+[X] Mostrar las aprobaciones (etapa en la que va)
 [ ] Parametrizar abogado
-[ ] Fixear busqueda por nombre en asociar un referente
 [ ] Permitir edición abogado
 [ ] Una vez estado es "enviado a visación bloquear los campos o mostrar un view"
 [ ] Traducir boton en relation manager de crear componentes
+[-] Agregar archivo adjunto, resolución firmada por alcalde
+[ ] Agregar archivo adjunto
+[ ] Eliminar document_id
+[X] Crear vista del process para poder mostrar el documento y para las aprobaciones
+[ ] Approvals permitir poner vizaciones
+
+
+[ ] Fixear busqueda por nombre en asociar un referente
+[ ] Poblar convenios 2025
+
 
 
 [ ] Pendiente formato CDP
 [ ] Pendiente formato Certificado de rendiciones
 [ ] Pendiente certificado de no fraccionamiento
 
+## Tareas al finalizar
+[ ] Eliminar tabla munipalities
+[ ] Eliminar tabla components de agreements
 
 
 - Previsualizar plantilla
@@ -465,9 +476,7 @@ Word.
 Perfiles. (Comuna, Referente, Admin de convenios (eliminar))
 Alertas de que necesitan realizar una acción
 
-## Tareas al finalizar
-[ ] Eliminar tabla munipalities
-[ ] Eliminar tabla components de agreements
+
 
 
 

@@ -3,6 +3,7 @@
 namespace App\Filament\Clusters\Documents\Resources\Agreements\ProcessResource\Pages;
 
 use App\Filament\Clusters\Documents\Resources\Agreements\ProcessResource;
+use App\Filament\Clusters\Documents\Resources\Agreements\ProcessResource\Widgets;
 use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
 
@@ -14,6 +15,13 @@ class EditProcess extends EditRecord
     {
         return [
             Actions\DeleteAction::make(),
+        ];
+    }
+
+    protected function getHeaderWidgets(): array
+    {
+        return [
+            Widgets\StepsChart::class,
         ];
     }
 }

@@ -6,7 +6,7 @@
 
 @section('content')
     <div style="height: 150px;"></div>
-    {!! $record->document->contentHtml !!}
+    {!! $record->document_content !!}
 @endsection
 
 @section('approvals')

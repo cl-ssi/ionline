@@ -52,6 +52,7 @@ class Process extends Model
         'mayor_decree',
         'status',
         'document_id',
+        'document_content',
         'next_process_id',
         'establishment_id',
     ];
@@ -135,22 +136,24 @@ class Process extends Model
 
     public function createOrUpdateDocument(): void
     {
-        $documentData = [
-            'type_id'                => 6,
-            'subject'                => $this->program->name.' - '.$this->period.' - '.$this->commune->name,
-            'content'                => $this->processType->template->parseTemplate($this),
-            'user_id'                => auth()->id(),
-            'organizational_unit_id' => auth()->user()->organizational_unit_id,
-            'establishment_id'       => auth()->user()->establishment_id,
-            'greater_hierarchy'      => 'from',
-        ];
+        $this->document_content = $this->processType->template->parseTemplate($this);
+        $this->save();
+        // $documentData = [
+        //     'type_id'                => 6,
+        //     'subject'                => $this->program->name.' - '.$this->period.' - '.$this->commune->name,
+        //     'content'                => $this->processType->template->parseTemplate($this),
+        //     'user_id'                => auth()->id(),
+        //     'organizational_unit_id' => auth()->user()->organizational_unit_id,
+        //     'establishment_id'       => auth()->user()->establishment_id,
+        //     'greater_hierarchy'      => 'from',
+        // ];
 
-        if ($this->document_id) {
-            $this->document->update($documentData);
-        } else {
-            $this->document()->associate(Document::create($documentData));
-            $this->save();
-        }
+        // if ($this->document_id) {
+        //     $this->document->update($documentData);
+        // } else {
+        //     $this->document()->associate(Document::create($documentData));
+        //     $this->save();
+        // }
     }
 
     public function createApprovals($referer_id): void
@@ -158,11 +161,11 @@ class Process extends Model
         // Referente
         $this->approvals()->create([
             "module" => "Convenios",
-            "module_icon" => "fas fa-document",
+            "module_icon" => "fas fa-handshake",
             "subject" => "Visar convenio",
-            "document_route_name" => "documents.show",
+            "document_route_name" => "documents.agreements.processes.view",
             "document_route_params" => json_encode([
-                "document" => $this->document_id
+                "record" => $this->id
             ]),
             "sent_to_user_id" => $referer_id,
         ]);
@@ -172,11 +175,11 @@ class Process extends Model
         foreach($steps as $step) {
             $this->approvals()->create([
                 "module" => "Convenios",
-                "module_icon" => "fas fa-document",
+                "module_icon" => "fas fa-handshake",
                 "subject" => "Visar convenio",
-                "document_route_name" => "documents.show",
+                "document_route_name" => "documents.agreements.processes.view",
                 "document_route_params" => json_encode([
-                    "document" => $this->document_id
+                    "record" => $this->id
                 ]),
                 "sent_to_ou_id" => $step->organizational_unit_id,
             ]);
