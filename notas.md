@@ -274,7 +274,7 @@ Factor
 # Convenios
 
 TODO:
-[ ] Notificar cuando referente terminó de hacer el convenio
+[+] Notificar cuando referente terminó de hacer el convenio
 [ ] Cuando se fue a la comuna, ya no se puede editar
 [ ] Mostrar si se reinició el proceso de firma, en comentario
 [ ] Revisión comuna y revisión jurídica -> Visaciones -> Comuna firma -> Firma director

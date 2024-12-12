@@ -24,27 +24,27 @@ class StepsChart extends ChartWidget
             'datasets' => [
                 [
                     'label' => 'Confección',
-                    'data' => [10],
+                    'data' => [8],
                     'backgroundColor' => 'rgba(54, 162, 235)',
                 ],
                 [
                     'label' => 'Visaciones',
-                    'data' => [20],
+                    'data' => [8],
                     'backgroundColor' => 'rgba(54, 162, 235)',
                 ],
                 [
                     'label' => 'Envío a comuna',
-                    'data' => [10],
+                    'data' => [8],
                     'backgroundColor' => 'rgba(54, 162, 235)',
                 ],
                 [
                     'label' => 'Devuelto de comuna',
-                    'data' => [10],
+                    'data' => [8],
                     'backgroundColor' => 'rgba(54, 162, 235)',
                 ],
                 [
                     'label' => 'Firmado',
-                    'data' => [10],
+                    'data' => [8],
                     // 'backgroundColor' => 'rgba(54, 162, 235, 0.5)',
                 ],
             ],
