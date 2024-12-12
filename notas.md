@@ -274,6 +274,22 @@ Factor
 # Convenios
 
 TODO:
+[ ] Notificar cuando referente terminó de hacer el convenio
+[ ] Cuando se fue a la comuna, ya no se puede editar
+[ ] Mostrar si se reinició el proceso de firma, en comentario
+[ ] Revisión comuna y revisión jurídica -> Visaciones -> Comuna firma -> Firma director
+[ ] Aprobación o indicación de aceptación o rechazo de cambio solicitado por comuna.
+[ ] Botón siguiente proceso en el index
+[ ] Firma de directora con su propio circulo en el index
+[ ] Indentificar que procesos van a la comuna para firma, para mostrar o no el cuadro
+[ ] Poder cargar documento numerado de OF Partes, donde corresponda
+[ ] Distribución queda al final (solo para reso)
+[ ] Visaciones debajo de la distribución
+[ ] En programa: Adjuntar archivos para ambas reso (Aprobatoria y Distribución de recursos)
+[ ] En aprobaciones que se vean los adjuntos
+[ ] Auto aprobar la visacion del referente
+[ ] Certificado De no fraccionamiento y de rendiciones, se crea por convenio
+[ ] Escoger no enviar a la comuna (caso observaciones de contraloría, ya que visto bueno de comuna es técnico y no jurídico)
 
 [+] Poblar approval flow
 [X] Desbloquear listado de programas, filtrado por boolean is_program

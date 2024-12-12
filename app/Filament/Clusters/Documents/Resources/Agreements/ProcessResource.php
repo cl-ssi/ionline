@@ -218,7 +218,8 @@ class ProcessResource extends Resource
                     ->schema([
                         Forms\Components\RichEditor::make('document_content')
                             ->hiddenLabel(),
-                    ]),
+                    ])
+                    ->hiddenOn('create'),
                 // ->hidden(fn (?Process $record) => $record->document_content === null)
 
                 Forms\Components\Split::make([
@@ -276,6 +277,7 @@ class ProcessResource extends Resource
                                 ]),
                         ]),
                 ])
+                ->hiddenOn('create')
                 ->columnSpanFull(),
 
                 
