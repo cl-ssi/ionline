@@ -438,7 +438,6 @@
         </fieldset>
     </div>
 
-    {{-- @if(auth()->guard('external')->check() == true) --}}
     <div class="row g-3 mb-3">
         <fieldset class="form-group col-12 col-md-1 mt-5">
             14.
@@ -450,25 +449,32 @@
             <div wire:loading wire:target="permissionFile">Cargando archivo...</div>
             @error('permissionFile') <span class="text-danger error small">{{ $message }}</span> @enderror
         </fieldset>
-        
-        @if(Route::is('trainings.edit'))
+
+        @if($currentPermissionFile && Auth::guard('web')->check() == true)
             <fieldset class="form-group col-12 col-md-2">
-                <label for="for_rejoinder_file" class="form-label">&nbsp</label><br>
+                <label for="for_permission_file" class="form-label">&nbsp</label><br>
                 <a href="{{ route('trainings.show_file', ['training' => $training, 'type' => 'permission_file']) }}" target="_blank" class="btn btn-primary">
                     <i class="fas fa-paperclip fa-fw"></i> Ver adjunto
                 </a>
             </fieldset>
         @endif
-        @if(Route::is('external_trainings.external_edit'))
+        @if($currentPermissionFile && Auth::guard('external')->check() == true)
             <fieldset class="form-group col-12 col-md-2">
-                <label for="for_rejoinder_file" class="form-label">&nbsp</label><br>
+                <label for="for_permission_file" class="form-label">&nbsp</label><br>
                 <a href="{{ route('external_trainings.show_file', ['training' => $training, 'type' => 'permission_file']) }}" target="_blank" class="btn btn-primary">
                     <i class="fas fa-paperclip fa-fw"></i> Ver adjunto
                 </a>
             </fieldset>
         @endif
+
+        @if($currentPermissionFile)
+            <fieldset class="form-group col-12 col-md-1">
+                <label for="for_permission_file" class="form-label">&nbsp</label><br>
+                <button type="button" class="btn btn-danger" wire:click="deleteFile('permission_file')"><i class="fas fa-trash-alt"></i></button>
+            </fieldset>
+        @endif
             
-        <fieldset class="form-group col-12 col-md-4">
+        <fieldset class="form-group col-12 col-md-3">
             <label for="for_municipal_profile">Perfil de Funcionario</label>
             <select id="for_municipal_profile" class='form-control @if(auth()->guard("external")->check() == false) mt-2 @endif' wire:model="municipalProfile">
                 <option value="">Seleccionar</option>
@@ -477,7 +483,6 @@
             @error('municipalProfile') <span class="text-danger error small">{{ $message }}</span> @enderror
         </fieldset>
     </div>
-    {{-- @endif --}}
 
     <div class="row g-3 mb-3">
         <fieldset class="form-group col-12 col-md-1 mt-5">
@@ -491,22 +496,20 @@
             @error('rejoinderFile') <span class="text-danger error small">{{ $message }}</span> @enderror
         </fieldset>
         
-        @if(Route::is('trainings.edit'))
-            <fieldset class="form-group col-12 col-md-2">
+        <fieldset class="form-group col-12 col-md-2">
+            @if($currentRejoinderFile && Auth::guard('web')->check() == true)
                 <label for="for_rejoinder_file" class="form-label">&nbsp</label><br>
                 <a href="{{ route('trainings.show_file', ['training' => $training, 'type' => 'rejoinder_file']) }}" target="_blank" class="btn btn-primary">
                     <i class="fas fa-paperclip fa-fw"></i> Ver adjunto
                 </a>
-            </fieldset>
-        @endif
-        @if(Route::is('external_trainings.external_edit'))
-            <fieldset class="form-group col-12 col-md-2">
+            @endif
+            @if($currentRejoinderFile && Auth::guard('external')->check() == true)
                 <label for="for_rejoinder_file" class="form-label">&nbsp</label><br>
                 <a href="{{ route('external_trainings.show_file', ['training' => $training, 'type' => 'rejoinder_file']) }}" target="_blank" class="btn btn-primary">
                     <i class="fas fa-paperclip fa-fw"></i> Ver adjunto
                 </a>
-            </fieldset>
-        @endif
+            @endif
+        </fieldset>
     </div>
 
     <div class="row g-3 mb-3">
@@ -523,19 +526,26 @@
         
         
         <fieldset class="form-group col-12 col-md-2">
-            @if(Route::is('trainings.edit'))
-                <label for="for_rejoinder_file" class="form-label">&nbsp</label><br>
+            @if($currentProgramFile && Auth::guard('web')->check() == true)
+                <label for="for_program_file" class="form-label">&nbsp</label><br>
                 <a class="btn btn-primary" href="{{ route('trainings.show_file', ['training' => $training, 'type' => 'program_file']) }}" target="_blank">
                     <i class="fas fa-paperclip fa-fw"></i> Ver adjunto
                 </a>
             @endif
-            @if(Route::is('external_trainings.external_edit'))
-                <label for="for_rejoinder_file" class="form-label">&nbsp</label><br>
+            @if($currentProgramFile && Auth::guard('external')->check() == true)
+                <label for="for_program_file" class="form-label">&nbsp</label><br>
                 <a class="btn btn-primary" href="{{ route('external_trainings.show_file', ['training' => $training, 'type' => 'program_file']) }}" target="_blank">
                     <i class="fas fa-paperclip fa-fw"></i> Ver adjunto
                 </a>
             @endif
         </fieldset>
+
+        @if($currentProgramFile)
+            <fieldset class="form-group col-12 col-md-1">
+                <label for="for_permission_file" class="form-label">&nbsp</label><br>
+                <button type="button" class="btn btn-danger" wire:click="deleteFile('program_file')"><i class="fas fa-trash-alt"></i></button>
+            </fieldset>
+        @endif
     </div>
 
     <div class="row g-3 mb-5">
