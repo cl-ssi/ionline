@@ -302,6 +302,7 @@ class ProcessResource extends Resource
                     ->schema([
                         Forms\Components\Repeater::make('approvals')
                             ->relationship()
+                            ->addActionLabel('Agregar visación')
                             ->hiddenLabel()
                             // ->addable(false)
                             ->simple(
@@ -415,7 +416,7 @@ class ProcessResource extends Resource
                     ])
                     ->schema([
                         Forms\Components\Placeholder::make('childProcessType.name')
-                            ->content(fn(?Process $record) => $record->processType->childProcessType->name)
+                            ->content(fn(?Process $record) => $record->processType->childProcessType?->name)
                             ->label('Nombre del proceso'),
 
                     ])
