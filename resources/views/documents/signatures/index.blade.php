@@ -71,14 +71,13 @@
                     <th scope="col">Descripción</th>
                     <th scope="col">Creador</th>
                     <th scope="col">Firmar</th>
-                    <th scope="col">Rech.</th>
-                    <th scope="col" width="10%">Firmas</th>
+                    <th scope="col">Rech.</th>                    
                     <th scope="col">Ver</th>
                     <th scope="col">Anexos
                         <div class="mx-4"></div>
                     </th>
-
                     <th scope="col">Link</th>
+                    <th scope="col" width="10%">Firmas</th>
                 </tr>
             </thead>
             <tbody>
@@ -128,6 +127,31 @@
                         </button>
                         @endcan
                     </td>
+                    <td>
+                        <a href="{{ route('documents.signatures.showPdf',[$pendingSignaturesFlow->signaturesFile->id, time()])}}"
+                           class="btn btn-sm btn-outline-secondary" target="_blank"
+                           title="Ver documento">
+                            <span class="fas fa-fw fa-file" aria-hidden="true"></span>
+                        </a>
+
+                        {{--                        <a href="https://storage.googleapis.com/{{env('app_env') === 'production' ? 'saludiquique-storage' : 'saludiquique-dev'}}/{{ $pendingsignaturesflow->signaturesfile->signed_file ?? $pendingsignaturesflow->signaturesfile->file }}"--}}
+                        {{--                           class="btn btn-sm btn-outline-secondary" target="_blank" title="ver documento">--}}
+                        {{--                            <span class="fas fa-file" aria-hidden="true"></span>--}}
+                        {{--                        </a>--}}
+
+                    </td>
+                    <td>
+                        @foreach($pendingSignaturesFlow->signature->signaturesFiles->where('file_type', 'anexo') as $anexo)
+                        <a href="{{route('documents.signatures.showPdfAnexo', $anexo)}}" target="_blank"><i
+                                class="fas fa-paperclip" title="anexo"></i>&nbsp
+                        </a>
+                        @endforeach
+                    </td>
+                    <td>
+                        @if($pendingSignaturesFlow->signature->url)
+                            <a href="{{$pendingSignaturesFlow->signature->url}}" target="_blank"> <i class="fa fa-link"></i> </a>
+                        @endif
+                    </td>
                     <td class="text-center" nowrap>
                         {{--
                         <button id="btnFlowsModal" type="button" class="btn btn-sm btn-outline-primary"
@@ -175,31 +199,6 @@
                             @endif
 
                         @endforeach
-                    </td>
-                    <td>
-                        <a href="{{ route('documents.signatures.showPdf',[$pendingSignaturesFlow->signaturesFile->id, time()])}}"
-                           class="btn btn-sm btn-outline-secondary" target="_blank"
-                           title="Ver documento">
-                            <span class="fas fa-fw fa-file" aria-hidden="true"></span>
-                        </a>
-
-                        {{--                        <a href="https://storage.googleapis.com/{{env('app_env') === 'production' ? 'saludiquique-storage' : 'saludiquique-dev'}}/{{ $pendingsignaturesflow->signaturesfile->signed_file ?? $pendingsignaturesflow->signaturesfile->file }}"--}}
-                        {{--                           class="btn btn-sm btn-outline-secondary" target="_blank" title="ver documento">--}}
-                        {{--                            <span class="fas fa-file" aria-hidden="true"></span>--}}
-                        {{--                        </a>--}}
-
-                    </td>
-                    <td>
-                        @foreach($pendingSignaturesFlow->signature->signaturesFiles->where('file_type', 'anexo') as $anexo)
-                        <a href="{{route('documents.signatures.showPdfAnexo', $anexo)}}" target="_blank"><i
-                                class="fas fa-paperclip" title="anexo"></i>&nbsp
-                        </a>
-                        @endforeach
-                    </td>
-                    <td>
-                        @if($pendingSignaturesFlow->signature->url)
-                            <a href="{{$pendingSignaturesFlow->signature->url}}" target="_blank"> <i class="fa fa-link"></i> </a>
-                        @endif
                     </td>
                 </tr>
                 {{--Modal rechazo--}}
@@ -259,14 +258,13 @@
                     <th scope="col">Materia de Resolución</th>
                     <th scope="col">Descripción</th>
                     <th scope="col">Creador</th>
-                    <th scope="col">Estado Solicitud</th>
-                    <th scope="col">Firmas</th>
+                    <th scope="col">Estado Solicitud</th>                    
                     <th scope="col">Ver</th>
                     <th scope="col">Anexos
                         <div class="mx-4"></div>
                     </th>
-
                     <th scope="col">Link</th>
+                    <th scope="col">Firmas</th>
                 </tr>
             </thead>
             <tbody>
@@ -294,6 +292,27 @@
                         <span class="small text-danger">{{ $signedSignaturesFlow->observation }}</span>
                         @else 
                             Pendiente 
+                        @endif
+                    </td>
+                    <td>
+                        <a href="{{ route('documents.signatures.showPdf',[$signedSignaturesFlow->signaturesFile->id, time()])}}"
+                           class="btn btn-sm btn-outline-secondary" target="_blank"
+                           title="Ver documento">
+                            <span class="fas fa-fw fa-file" aria-hidden="true"></span>
+                        </a>
+                    </td>
+                    <td>
+                        @if($signedSignaturesFlow->signature)
+                            @foreach($signedSignaturesFlow->signature->signaturesFiles->where('file_type', 'anexo') as $anexo)
+                            <a href="{{route('documents.signatures.showPdfAnexo', $anexo)}}" target="_blank"><i
+                                    class="fas fa-paperclip" title="anexo"></i>&nbsp
+                            </a>
+                            @endforeach
+                        @endif
+                    </td>
+                    <td>
+                        @if($signedSignaturesFlow->signature && $signedSignaturesFlow->signature->url)
+                            <a href="{{$signedSignaturesFlow->signature->url}}" target="_blank"> <i class="fa fa-link"></i> </a>
                         @endif
                     </td>
                     <td class="text-center" nowrap>
@@ -347,27 +366,6 @@
                             @endif
 
                         @endforeach
-                    </td>
-                    <td>
-                        <a href="{{ route('documents.signatures.showPdf',[$signedSignaturesFlow->signaturesFile->id, time()])}}"
-                           class="btn btn-sm btn-outline-secondary" target="_blank"
-                           title="Ver documento">
-                            <span class="fas fa-fw fa-file" aria-hidden="true"></span>
-                        </a>
-                    </td>
-                    <td>
-                        @if($signedSignaturesFlow->signature)
-                            @foreach($signedSignaturesFlow->signature->signaturesFiles->where('file_type', 'anexo') as $anexo)
-                            <a href="{{route('documents.signatures.showPdfAnexo', $anexo)}}" target="_blank"><i
-                                    class="fas fa-paperclip" title="anexo"></i>&nbsp
-                            </a>
-                            @endforeach
-                        @endif
-                    </td>
-                    <td>
-                        @if($signedSignaturesFlow->signature && $signedSignaturesFlow->signature->url)
-                            <a href="{{$signedSignaturesFlow->signature->url}}" target="_blank"> <i class="fa fa-link"></i> </a>
-                        @endif
                     </td>
                 </tr>
                 @endforeach
