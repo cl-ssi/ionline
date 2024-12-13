@@ -394,8 +394,8 @@ class ProcessResource extends Resource
                                     'municipality_id' => $record->municipality_id,
                                     'mayor_id'        => $record->mayor_id,
                                     'total_amount'    => $record->total_amount,
-                                    // 'quotas_qty'      => $record->quotas_qty,
-                                    // 'establishments'  => $record->establishments,
+                                    'quotas_qty'      => $record->quotas_qty,
+                                    'establishments'  => $record->establishments,
                                     'signer_id'       => $record->signer_id,
                                     // 'quotas'          => $record->quotas,
                                 ]);
