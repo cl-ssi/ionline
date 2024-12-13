@@ -43,7 +43,7 @@ class FulfillmentController extends Controller
         $name = $request->name;
         $id = $request->id;
 
-        $authorities = Authority::getAmIAuthorityFromOu(now(),['manager','secretary'],$user->id);
+        $authorities = Authority::getAmIAuthorityFromOu(now(),['manager','secretary','delegate'],$user->id);
         $array = array();
         foreach ($authorities as $key => $authority) {
           $array[] = $authority->organizational_unit_id;
