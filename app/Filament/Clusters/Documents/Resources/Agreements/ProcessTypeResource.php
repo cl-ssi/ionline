@@ -46,15 +46,27 @@ class ProcessTypeResource extends Resource
                 Forms\Components\TextInput::make('description')
                     ->label('Descripción')
                     ->maxLength(255)
+                    ->columnSpan(2)
                     ->default(null),
-                Forms\Components\Toggle::make('is_dependent')
-                    ->label('Es Dependiente')
-                    ->required(),
                 Forms\Components\Toggle::make('has_resolution')
                     ->label('Tiene Resolución')
+                    ->inline(false)
                     ->required(),
+                Forms\Components\Fieldset::make('Esto es para las resoluciones')
+                    ->schema([
+                        Forms\Components\Toggle::make('is_dependent')
+                            ->label('Es Dependiente')
+                            ->inline(false)
+                            ->required(),
+                        Forms\Components\Select::make('father_process_type_id')
+                            ->relationship('fatherProcessType', 'name')
+                            ->label('Tipo de Proceso Padre')
+                            ->required(),
+                    ])
+                    ->columnSpan(2),
                 Forms\Components\Toggle::make('active')
                     ->label('Activo')
+                    ->inline(false)
                     ->required(),
     
                 Forms\Components\Section::make('Plantilla')
@@ -71,7 +83,7 @@ class ProcessTypeResource extends Resource
                     ])
                     ->columnSpanFull(),
             ])
-            ->columns(3);
+            ->columns(4);
     }
 
     public static function table(Table $table): Table
@@ -91,6 +103,9 @@ class ProcessTypeResource extends Resource
                 Tables\Columns\IconColumn::make('has_resolution')
                     ->label('Resolución')
                     ->boolean(),
+                Tables\Columns\TextColumn::make('childProcessType.name')
+                    ->label('Sigiente Proceso')
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

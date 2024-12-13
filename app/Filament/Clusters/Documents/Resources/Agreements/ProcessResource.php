@@ -62,7 +62,8 @@ class ProcessResource extends Resource
                             ->label('Tipo de proceso')
                             ->relationship('processType', 'name', fn (Builder $query) => $query->where('is_dependent', false))
                             ->required()
-                            ->columnSpanFull(),
+                            ->columnSpanFull()
+                            ->disabledOn('edit'),
                         Forms\Components\Select::make('period')
                             ->label('Periodo')
                             ->required()
@@ -208,21 +209,31 @@ class ProcessResource extends Resource
                             ->requiresConfirmation()
                             ->action(function (Process $record, Set $set) {
                                 $set('document_content', $record->processType->template->parseTemplate($record));
-                            }),
+                            })
+                            ->disabled(fn(?Process $record) => $record->status === Status::Finished),
                     ])
                     ->footerActions([
                         Forms\Components\Actions\Action::make('Finalizar')
-                            // ->label('Crear documento del proceso')
                             ->icon('heroicon-m-check')
                             ->requiresConfirmation()
-                            ->action(function (Process $record, Set $set) {
-                                $set('document_content', $record->processType->template->parseTemplate($record));
-                            }),
+                            ->action(function (Process $record) {
+                               $record->update(['status' => Status::Finished]);
+                            })
+                            ->hidden(fn (?Process $record) => $record->status === Status::Finished),
+                        Forms\Components\Actions\Action::make('Volver a editar')
+                            ->icon('heroicon-m-pencil-square')
+                            ->requiresConfirmation()
+                            ->modalDescription('Se eliminará todo el circuito de visado, deverá enviar a visar nuevamente')
+                            ->action(function (Process $record) {
+                               $record->update(['status' => Status::Draft]);
+                            })
+                            ->hidden(fn (?Process $record) => $record->status === Status::Draft),
                     ])
                     ->footerActionsAlignment(Alignment::End)
                     ->schema([
                         Forms\Components\RichEditor::make('document_content')
-                            ->hiddenLabel(),
+                            ->hiddenLabel()
+                            ->disabled(fn(?Process $record) => $record->status === Status::Finished),
                         Forms\Components\Textarea::make('distribution')
                             ->label('Distribución')
                             ->required(),
@@ -245,21 +256,21 @@ class ProcessResource extends Resource
                             }),
                     ])
                     ->schema([
-                        Forms\Components\Fieldset::make('Jurídico')	
+                        Forms\Components\Fieldset::make('Jurídico')
                             ->schema([
                                 Forms\Components\DatePicker::make('date')
                                     ->label('Fecha de revisión'),
                                 Forms\Components\Placeholder::make('Estado')
-                                    ->content('Pendiente')
+                                    ->content('Pendiente'),
                             ])
                             ->columnSpan(1)
                             ->columns(1),
-                        Forms\Components\Fieldset::make('Comuna')	
+                        Forms\Components\Fieldset::make('Comuna')
                             ->schema([
                                 Forms\Components\DatePicker::make('date')
                                     ->label('Fecha de revisión'),
                                 Forms\Components\Placeholder::make('Estado')
-                                    ->content('Pendiente')
+                                    ->content('Pendiente'),
                             ])
                             ->columnSpan(1)
                             ->columns(1),
@@ -268,63 +279,67 @@ class ProcessResource extends Resource
                     ->columns(2)
                     ->hiddenOn('create'),
 
-                Forms\Components\Split::make([
-                    Forms\Components\Section::make('Visaciones')
-                        ->headerActions([
-                            Forms\Components\Actions\Action::make('SolicitarVisado')
-                                ->label('Solicitar visado')
-                                ->icon('heroicon-m-check-circle')
-                                ->requiresConfirmation()
-                                ->form([
-                                    Forms\Components\Select::make('referer_id')
-                                        ->label('Referente')
-                                        ->options(fn (Process $record) => $record->program->referers->pluck('full_name', 'id'))
-                                        ->required(),
-                                ])
-                                ->action(function (Process $record, array $data): void {
-                                    $record->createApprovals($data['referer_id']);
-                                    Notifications\Notification::make()
-                                        ->title('Visado solicitado')
-                                        ->success()
-                                        ->send();
-                                }),
-                        ])
-                        ->schema([
-                            Forms\Components\Repeater::make('approvals')
-                                ->relationship()
-                                ->hiddenLabel()
-                                ->addable(false)
-                                ->simple(
-                                    Forms\Components\TextInput::make('initials')
-                                        ->label('Nombre')
-                                        ->required()
-                                        ->suffixIcon('heroicon-m-check-circle')
-                                        ->suffixIconColor(fn ($record) => match ($record['status']) {
-                                            true    => 'success',
-                                            false   => 'danger',
-                                            default => 'gray',
-                                        }),
-                                )
-                                ->columns(3)
-                                ->columnSpanFull(),
-                        ]),
-                    Forms\Components\Section::make('Comuna')
-                        ->schema([
-                            Forms\Components\DateTimePicker::make('sended_at')
-                                ->label('Fecha de envío a la comuna'),
-                            Forms\Components\Fieldset::make('Devolución de la comuna')
-                                ->schema([
-                                    Forms\Components\DateTimePicker::make('received_at')
-                                        ->label('Fecha de devolución')
-                                        ->columnSpanFull(),
-                                    Forms\Components\FileUpload::make('attachment')
-                                        ->label('Proceso firmado')
-                                        ->columnSpanFull(),
-                                ]),
-                        ]),
-                ])
-                ->hiddenOn('create')
-                ->columnSpanFull(),
+                Forms\Components\Section::make('Visaciones')
+                    ->headerActions([
+                        Forms\Components\Actions\Action::make('SolicitarVisado')
+                            ->label('Solicitar visado')
+                            ->icon('heroicon-m-check-circle')
+                            ->requiresConfirmation()
+                            ->form([
+                                Forms\Components\Select::make('referer_id')
+                                    ->label('Referente')
+                                    ->options(fn (Process $record) => $record->program->referers->pluck('full_name', 'id'))
+                                    ->required(),
+                            ])
+                            ->action(function (Process $record, array $data): void {
+                                $record->createApprovals($data['referer_id']);
+                                Notifications\Notification::make()
+                                    ->title('Visado solicitado')
+                                    ->success()
+                                    ->send();
+                            }),
+                    ])
+                    ->schema([
+                        Forms\Components\Repeater::make('approvals')
+                            ->relationship()
+                            ->hiddenLabel()
+                            // ->addable(false)
+                            ->simple(
+                                Forms\Components\TextInput::make('initials')
+                                    ->label('Nombre')
+                                    ->required()
+                                    ->suffixIcon('heroicon-m-check-circle')
+                                    ->suffixIconColor(fn ($record) => match ($record['status'] ?? null) {
+                                        true    => 'success',
+                                        false   => 'danger',
+                                        default => 'gray',
+                                    }),
+                            )
+                            ->columnSpanFull()
+                            ->grid(7),
+
+                    ])
+                    ->hiddenOn('create')
+                    ->columnSpanFull(),
+
+                Forms\Components\Section::make('Comuna')
+                    ->schema([
+                        Forms\Components\DateTimePicker::make('sended_at')
+                            ->label('Fecha de envío a la comuna'),
+                        Forms\Components\Fieldset::make('Devolución de la comuna')
+                            ->schema([
+                                Forms\Components\DateTimePicker::make('received_at')
+                                    ->label('Fecha de devolución')
+                                    ->columnSpanFull(),
+                                Forms\Components\FileUpload::make('attachment')
+                                    ->label('Archivo firmado por comuna')
+                                    ->columnSpanFull(),
+                            ])
+                            ->columnSpan(1),
+                    ])
+                    ->columns(2)
+                    ->hiddenOn('create')
+                    ->columnSpanFull(),
 
                 Forms\Components\Section::make('Firma Director')
                     ->headerActions([
@@ -355,12 +370,60 @@ class ProcessResource extends Resource
                             ->numeric()
                             ->default(null),
                         Forms\Components\DatePicker::make('date')
-                            ->label('Fecha del proceso'),
+                            ->label('Fecha del proceso')
+                            ->columnSpan(2),
                         Forms\Components\FileUpload::make('attachment')
-                            ->label('Proceso firmado'),
+                            ->label('Proceso firmado')
+                            ->columnSpan(3),
                     ])
-                    ->columns(3)
+                    ->columns(7)
                     ->hiddenOn('create'),
+
+                Forms\Components\Section::make('Siguiente Proceso')
+                    ->headerActions([
+                        Forms\Components\Actions\Action::make('Crear proceso dependiente')
+                            ->icon('heroicon-m-plus-circle')
+                            ->requiresConfirmation()
+                            ->action(function (Process $record): void {
+                                $nextProcess = $record->nextProcess()->create([
+                                    'process_type_id' => $record->processType->childProcessType->id,
+                                    'period'          => $record->period,
+                                    'program_id'      => $record->program_id,
+                                    'commune_id'      => $record->commune_id,
+                                    'municipality_id' => $record->municipality_id,
+                                    'mayor_id'        => $record->mayor_id,
+                                    'total_amount'    => $record->total_amount,
+                                    // 'quotas_qty'      => $record->quotas_qty,
+                                    // 'establishments'  => $record->establishments,
+                                    'signer_id'       => $record->signer_id,
+                                    // 'quotas'          => $record->quotas,
+                                ]);
+
+                                $record->update(['next_process_id' => $nextProcess->id]);
+
+                                Notifications\Notification::make()
+                                    ->title('Proceso dependiente creado')
+                                    ->success()
+                                    ->send();
+                            })
+                            ->hidden(fn(?Process $record): bool => (bool) $record->next_process_id),
+                        Forms\Components\Actions\Action::make('Ir al siguiente proceso')
+                            ->label('Ir al proceso')
+                            ->icon('heroicon-m-arrow-right')
+                            ->url(fn(?Process $record) => ProcessResource::getUrl('edit', ['record' => $record->next_process_id]))
+                            ->hidden(fn(?Process $record): bool => !(bool) $record->next_process_id),
+                    ])
+                    ->schema([
+                        Forms\Components\Placeholder::make('childProcessType.name')
+                            ->content(fn(?Process $record) => $record->processType->childProcessType->name)
+                            ->label('Nombre del proceso'),
+
+                    ])
+                    ->columns(2)
+                    ->visible(fn (?Process $record) => $record->processType->has_resolution)
+                    ->hiddenOn('create')
+                    ->columnSpanFull(),
+
                 // Forms\Components\Select::make('status')
                 //     ->label('Estado')
                 //     ->options(Status::class),
@@ -396,9 +459,10 @@ class ProcessResource extends Resource
                     ->label('Aprobaciones')
                     ->circular()
                     ->stacked(),
-                // Tables\Columns\TextColumn::make('total_amount')
-                //     ->numeric()
-                //     ->sortable(),
+                Tables\Columns\ImageColumn::make('approvalSigner.avatar')
+                    ->label('Firma Director')
+                    ->circular()
+                    ->sortable(),
                 // Tables\Columns\TextColumn::make('number')
                 //     ->numeric()
                 //     ->sortable(),

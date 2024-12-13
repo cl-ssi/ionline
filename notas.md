@@ -280,7 +280,7 @@ TODO:
 [ ] Revisión comuna y revisión jurídica -> Visaciones -> Comuna firma -> Firma director
 [ ] Aprobación o indicación de aceptación o rechazo de cambio solicitado por comuna.
 [ ] Botón siguiente proceso en el index
-[ ] Firma de directora con su propio circulo en el index
+[X] Firma de directora con su propio circulo en el index
 [ ] Indentificar que procesos van a la comuna para firma, para mostrar o no el cuadro
 [ ] Poder cargar documento numerado de OF Partes, donde corresponda
 [ ] Distribución queda al final (solo para reso)
@@ -304,15 +304,15 @@ TODO:
 [X] Crear Proceso - Crear documento del proceso en la misma ventana
 [X] Crear Proceso - Solicitar visado
 [X] Crear Proceso - Eliminar visado
-[ ] Action crear siguiente proceso
-[ ] Mostrar vinculo al siguiente proceso
+[X] Action crear siguiente proceso
+[+] Mostrar vinculo al siguiente proceso
 [X] Mostrar las aprobaciones (etapa en la que va)
 [ ] Parametrizar abogado
 [ ] Permitir edición abogado
-[ ] Una vez estado es "enviado a visación bloquear los campos o mostrar un view"
-[ ] Traducir boton en relation manager de crear componentes
+[X] Una vez estado es "enviado a visación bloquear los campos o mostrar un view"
+[X] Traducir boton en relation manager de crear componentes
 [-] Agregar archivo adjunto, resolución firmada por alcalde
-[ ] Agregar archivo adjunto
+[ ] Agregar otros archivos adjunto
 [ ] Eliminar document_id
 [X] Crear vista del process para poder mostrar el documento y para las aprobaciones
 [ ] Approvals permitir poner vizaciones
@@ -320,7 +320,6 @@ TODO:
 
 [ ] Fixear busqueda por nombre en asociar un referente
 [ ] Poblar convenios 2025
-
 
 
 [ ] Pendiente formato CDP
