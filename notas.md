@@ -274,10 +274,9 @@ Factor
 # Convenios
 
 TODO:
-[+] Notificar cuando referente terminó de hacer el convenio
-[ ] Cuando se fue a la comuna, ya no se puede editar
+[-] Notificar cuando referente terminó de hacer el convenio
+[X] Cuando se fue a la comuna, ya no se puede editar
 [ ] Mostrar si se reinició el proceso de firma, en comentario
-[ ] Revisión comuna y revisión jurídica -> Visaciones -> Comuna firma -> Firma director
 [ ] Aprobación o indicación de aceptación o rechazo de cambio solicitado por comuna.
 [ ] Botón siguiente proceso en el index
 [X] Firma de directora con su propio circulo en el index
@@ -291,30 +290,30 @@ TODO:
 [ ] Certificado De no fraccionamiento y de rendiciones, se crea por convenio
 [ ] Escoger no enviar a la comuna (caso observaciones de contraloría, ya que visto bueno de comuna es técnico y no jurídico)
 
-[+] Poblar approval flow
 [X] Desbloquear listado de programas, filtrado por boolean is_program
 [X] Poblar tabla alcaldes (mayors)
-[-] Crear Proceso - Comentarios dejar fijos los que ya se ingresaron
 [X] En crear proceso filtrar por los que se puede empezar
 [X] En crear proceso filtrar por los programas del periodo seleccionado en el campo anterior
 [X] Correr la migracion de process
 [X] Estado, desabilitar los botones, buscar otro lugar para poner el estado
-[ ] Mostrar section con datos del programa y sus componentes
-[ ] Crear Proceso - Auto calcular las cuotas
 [X] Crear Proceso - Crear documento del proceso en la misma ventana
 [X] Crear Proceso - Solicitar visado
 [X] Crear Proceso - Eliminar visado
 [X] Action crear siguiente proceso
-[+] Mostrar vinculo al siguiente proceso
 [X] Mostrar las aprobaciones (etapa en la que va)
-[ ] Parametrizar abogado
-[ ] Permitir edición abogado
 [X] Una vez estado es "enviado a visación bloquear los campos o mostrar un view"
 [X] Traducir boton en relation manager de crear componentes
+[X] Crear vista del process para poder mostrar el documento y para las aprobaciones
+[-] Crear Proceso - Comentarios dejar fijos los que ya se ingresaron
+[-] Mostrar vinculo al siguiente proceso
+[-] Poblar approval flow
 [-] Agregar archivo adjunto, resolución firmada por alcalde
+[ ] Mostrar section con datos del programa y sus componentes
+[ ] Crear Proceso - Auto calcular las cuotas
+[ ] Parametrizar abogado
+[ ] Permitir edición abogado
 [ ] Agregar otros archivos adjunto
 [ ] Eliminar document_id
-[X] Crear vista del process para poder mostrar el documento y para las aprobaciones
 [ ] Approvals permitir poner vizaciones
 
 
