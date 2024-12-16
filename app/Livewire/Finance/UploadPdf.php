@@ -22,6 +22,7 @@ class UploadPdf extends Component
     public $pdfBackup;
     public $pdfPath;
     public $small = false;
+    public $approval = true;
 
     protected $rules = [
         'pdf' => 'required|mimes:pdf|max:10240'
@@ -37,7 +38,7 @@ class UploadPdf extends Component
     public function loadPdfBackup()
     {
         $this->pdfBackup = PdfBackup::where('dte_id', $this->dteId)->where('type', $this->type)->first();
-        $this->pdfPath = $this->pdfBackup ? Storage::disk('gcs')->url($this->pdfBackup->approval->document_pdf_path) : null;
+        $this->pdfPath = $this->pdfBackup ? Storage::disk()->url($this->pdfBackup->approval->document_pdf_path) : null;
     }
 
     public function updatedPdf()

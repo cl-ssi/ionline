@@ -4,7 +4,7 @@
         {{ session('message') }}
     </div>
     @endif
-    @if($small == false)
+    @if($approval == true)
         @if ($pdfPath)
             <div class="card" style="width: 18rem;">
                 <div class="card-body text-center">
@@ -31,6 +31,7 @@
             </form>
         @endif
     @else
+        @if($small)
         <form wire:submit="savePdfNoApproval">
             <div class="form-group form-inline text-center">
                 <input class="form-control d-none"
@@ -62,5 +63,32 @@
                 </button>
             </div>
         </form>
+        @else
+            @if ($pdfPath)
+                <div class="card" style="width: 18rem;">
+                    <div class="card-body text-center">
+                        <a href="{{ $pdfPath }}" target="_blank" class="btn btn-primary btn-sm">
+                            <i class="fas fa-file-pdf"></i> Ver PDF
+                        </a>
+                        @if($pdfBackup->approval->status == 0)
+                            <button wire:click="delete" class="btn btn-danger btn-sm">
+                                <i class="fas fa-trash-alt"></i> Borrar PDF
+                            </button>
+                        @endif
+                    </div>
+                </div>
+            @else
+                <form wire:submit="savePdfNoApproval">
+                    <div class="input-group">
+                        <input class="form-control" type="file" wire:model.live="pdf" accept="application/pdf" wire:loading.attr="disabled">
+                        @error('pdf') <span class="error">{{ $message }}</span> @enderror
+                        <button type="submit" class="btn btn-outline-primary" wire:loading.attr="disabled">
+                            <i class="bi bi-upload"></i>
+                        </button>
+                        <div wire:loading wire:target="pdf"><i class="fas fa-spinner fa-spin"></i> <b>Cargando...</b></div>
+                    </div>
+                </form>
+            @endif
+        @endif
     @endif
 </div>

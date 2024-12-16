@@ -101,7 +101,7 @@
                             @endforeach
                         </div>
                         <div wire:key="attachment-upload-pdf-{{$dte->id}}">
-                            @livewire('finance.upload-pdf', ['dteId' => $dte->id, 'type' => 'adjunto', 'small' => 'true'], key('attachment-upload-pdf-' . $dte->id))
+                            @livewire('finance.upload-pdf', ['dteId' => $dte->id, 'type' => 'adjunto', 'approval' => 'false', 'small' => 'true'], key('attachment-upload-pdf-' . $dte->id))
                         </div>
                     </td>
                     <td class="small">
