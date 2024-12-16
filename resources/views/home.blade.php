@@ -157,7 +157,16 @@
                     {{ $notification->created_at }} -
                     {!! $notification->data['icon'] ?? null !!}
                     <b>{{ $notification->data['module'] ?? '' }}</b>
+                    @if(array_key_exists('subject', $notification->data))
+                    {{-- Para notificaciones estándar --}}
                     {!! $notification->data['subject'] !!}
+                    @elseif(array_key_exists('title', $notification->data) && array_key_exists('body', $notification->data))
+                        {{-- Para notificaciones estilo Filament --}}
+                        <b>{{ $notification->data['title'] }}</b>: {!! $notification->data['body'] !!}
+                    @else
+                        {{-- Si no se encuentra ninguno de los formatos esperados --}}
+                        <i>Notificación sin formato reconocido</i>
+                    @endif
                 </a>
                 @endforeach
             </ul>

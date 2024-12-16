@@ -311,8 +311,13 @@
                             {{ $notification->created_at }} -
                             {!! $notification->data['icon'] ?? null !!}
                             <b>{{ $notification->data['module'] ?? '' }}</b>
-                            @if( array_key_exists('subject',$notification->data) )
-                            {!! $notification->data['subject'] !!}
+                            {{-- Manejo flexible para mostrar 'subject' o 'body' --}}
+                            @if(array_key_exists('subject', $notification->data))
+                                {!! $notification->data['subject'] !!}
+                            @elseif(array_key_exists('body', $notification->data))
+                                {!! $notification->data['body'] !!}
+                            @else
+                                Sin detalles disponibles
                             @endif
                         </a>
                     @endforeach
@@ -341,8 +346,13 @@
                             {{ $notification->created_at }} -
                             {!! $notification->data['icon'] ?? null !!}
                             <b>{{ $notification->data['module'] ?? '' }}</b>
-                            @if( array_key_exists('subject',$notification->data) )
-                            {!! $notification->data['subject'] !!}
+                            {{-- Manejo flexible para mostrar 'subject' o 'body' --}}
+                            @if(array_key_exists('subject', $notification->data))
+                                {!! $notification->data['subject'] !!}
+                            @elseif(array_key_exists('body', $notification->data))
+                                {!! $notification->data['body'] !!}
+                            @else
+                                Sin detalles disponibles
                             @endif
                         </a>
                     @endforeach

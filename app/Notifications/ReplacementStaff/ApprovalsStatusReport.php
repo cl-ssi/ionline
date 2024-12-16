@@ -54,11 +54,34 @@ class ApprovalsStatusReport extends Notification
      */
     public function toArray($notifiable)
     {
+        // return [
+        //     'module'  => 'Solicitudes de Contratatación', // Opcional
+        //     'icon'    => '<i class="far fa-id-card"></i>',
+        //     'subject' => 'Estimado Usuario, favor dirigirse al módulo Solicitudes de Aprobación <br>'.$this->pendingsCount.' solicitudes en espera',
+        //     'action'  => route('documents.approvals', [], false)
+        // ];
+
         return [
-            'module'  => 'Solicitudes de Contratatación', // Opcional
-            'icon'    => '<i class="far fa-id-card"></i>',
-            'subject' => 'Estimado Usuario, favor dirigirse al módulo Solicitudes de Aprobación <br>'.$this->pendingsCount.' solicitudes en espera',
-            'action'  => route('documents.approvals', [], false)
+            "actions" => [
+                [
+                    "name" => "go_to_approvals",
+                    "label" => "Ver Solicitudes Pendientes", 
+                    "url" => route('documents.approvals', [], false), 
+                    "color" => "primary", 
+                    "icon" => "heroicon-o-paper-clip", 
+                    "shouldOpenInNewTab" => false, 
+                ],
+            ],
+            "body" => 'Estimado Usuario, favor dirigirse al módulo Solicitudes de Aprobación. <br>' . $this->pendingsCount . ' solicitudes en espera.',
+            "color" => "info",
+            "duration" => "persistent",
+            "icon" => "heroicon-o-identification",
+            "iconColor" => "blue",
+            "status" => "info",
+            "title" => 'Solicitudes de Aprobación Pendientes',
+            "view" => "filament-notifications::notification",
+            "format" => "filament",
         ];
+        
     }
 }

@@ -56,11 +56,34 @@ class Sign extends Notification
      */
     public function toArray($notifiable)
     {
+        // return [
+        //     'module'  => 'Perfil de Cargos', // Opcional
+        //     'icon'    => '<i class="fas fa-id-badge fa-fw"></i>',
+        //     'subject' => 'Nuevo Perfil de Cargo para Aprobación, ID: '.$this->jobPositionProfile->id,
+        //     'action'  => route('job_position_profile.to_sign', [$this->jobPositionProfile], false),
+        // ];
+
         return [
-            'module'  => 'Perfil de Cargos', // Opcional
-            'icon'    => '<i class="fas fa-id-badge fa-fw"></i>',
-            'subject' => 'Nuevo Perfil de Cargo para Aprobación, ID: '.$this->jobPositionProfile->id,
-            'action'  => route('job_position_profile.to_sign', [$this->jobPositionProfile], false),
+            "actions" => [
+                [
+                    "name" => "approve_job_position_profile",
+                    "label" => "Aprobar Perfil de Cargo", 
+                    "url" => route('job_position_profile.to_sign', [$this->jobPositionProfile], false), 
+                    "color" => "primary", 
+                    "icon" => "heroicon-o-check", 
+                    "shouldOpenInNewTab" => true, 
+                ],
+            ],
+            "body" => 'Se ha creado un nuevo perfil de cargo para aprobación. Revisa los detalles y realiza las acciones correspondientes.', 
+            "color" => "info", 
+            "duration" => "persistent", 
+            "icon" => "heroicon-o-user-circle",
+            "iconColor" => "blue", 
+            "status" => "info", 
+            "title" => 'Nuevo Perfil de Cargo para Aprobación', 
+            "view" => "filament-notifications::notification", 
+            "format" => "filament", 
         ];
+        
     }
 }

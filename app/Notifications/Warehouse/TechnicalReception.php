@@ -41,9 +41,9 @@ class TechnicalReception extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->line('The introduction to the notification.')
-                    ->action('Notification Action', url('/'))
-                    ->line('Thank you for using our application!');
+            ->line('The introduction to the notification.')
+            ->action('Notification Action', url('/'))
+            ->line('Thank you for using our application!');
     }
 
     /**
@@ -54,10 +54,32 @@ class TechnicalReception extends Notification
      */
     public function toArray($notifiable)
     {
+        // return [
+        //     'icon'    => '<i class="fas fa-fw fa-box-open"></i>',
+        //     'subject' => 'Firma pendiente de '. $this->subject,
+        //     'action' => route('documents.signatures.index',['pendientes'], false),
+        // ];
+
         return [
-            'icon'    => '<i class="fas fa-fw fa-box-open"></i>',
-            'subject' => 'Firma pendiente de '. $this->subject,
-            'action' => route('documents.signatures.index',['pendientes'], false),
+            "actions" => [
+                [
+                    "name" => "sign_document",
+                    "label" => "Firmar Documento",
+                    "url" => route('documents.signatures.index', ['pendientes']),   
+                    "color" => "primary",
+                    "icon" => "heroicon-o-pencil",
+                    "shouldOpenInNewTab" => false,
+                ],
+            ],
+            "body" => 'Firma pendiente de ' . $this->subject,
+            "color" => "warning",
+            "duration" => "persistent",
+            "icon" => "heroicon-o-inbox",
+            "iconColor" => "blue",
+            "status" => "info",
+            "title" => 'Firma Pendiente',
+            "view" => "filament-notifications::notification",
+            "format" => "filament",
         ];
     }
 }

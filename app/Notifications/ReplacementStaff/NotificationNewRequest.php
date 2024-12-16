@@ -57,18 +57,41 @@ class NotificationNewRequest extends Notification
      */
     public function toArray($notifiable)
     {
-        if($this->to == 'reclutamiento'){
-            $action = 'replacement_staff.request.index';
-        }
-        else{
-            $action = 'replacement_staff.request.own_index';
-        }
+        // if($this->to == 'reclutamiento'){
+        //     $action = 'replacement_staff.request.index';
+        // }
+        // else{
+        //     $action = 'replacement_staff.request.own_index';
+        // }
+
+        // return [
+        //     'module'  => 'Solicitudes de Contratación', // Opcional
+        //     'icon'    => '<i class="far fa-id-card"></i>',
+        //     'subject' => 'Se ha creado una nueva solicitud ID: '.$this->requestReplacementStaff->id,
+        //     'action'  => route($action, [], false)
+        // ];
 
         return [
-            'module'  => 'Solicitudes de Contratación', // Opcional
-            'icon'    => '<i class="far fa-id-card"></i>',
-            'subject' => 'Se ha creado una nueva solicitud ID: '.$this->requestReplacementStaff->id,
-            'action'  => route($action, [], false)
+            "actions" => [
+                [
+                    "name" => "view_request",
+                    "label" => "Ver Solicitud",
+                    "url" => route($this->to == 'reclutamiento' ? 'replacement_staff.request.index' : 'replacement_staff.request.own_index', [], false),
+                    "color" => "primary",
+                    "icon" => "heroicon-o-eye",
+                    "shouldOpenInNewTab" => false,
+                ],
+            ],
+            "body" => "Se ha creado una nueva solicitud ID: {$this->requestReplacementStaff->id}.",
+            "color" => "info",
+            "duration" => "persistent",
+            "icon" => "heroicon-o-identification",
+            "iconColor" => "blue",
+            "status" => "info",
+            "title" => "Nueva Solicitud de Contratación",
+            "view" => "filament-notifications::notification",
+            "format" => "filament",
         ];
+        
     }
 }

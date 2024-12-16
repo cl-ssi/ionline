@@ -56,12 +56,35 @@ class VisationContractManager extends Notification
     public function toArray($notifiable)
     {
 
+        // return [
+        //     //
+        //     'module'  => 'Visaciones Pendiente', // Opcional
+        //     'icon'    => '<i class="fas fa-question-circle"></i>', // Opcional
+        //     'subject' => 'Tiene una nueva solicitud de visacion por parte de boedega  para su formulario de requerimiento, por favor acceda ',
+        //     'action' => route('warehouse.visation_contract_manager.index'),
+        // ];
+
         return [
-            //
-            'module'  => 'Visaciones Pendiente', // Opcional
-            'icon'    => '<i class="fas fa-question-circle"></i>', // Opcional
-            'subject' => 'Tiene una nueva solicitud de visacion por parte de boedega  para su formulario de requerimiento, por favor acceda ',
-            'action' => route('warehouse.visation_contract_manager.index'),
+            "actions" => [
+                [
+                    "name" => "view_pending_visations",
+                    "label" => "Ver Visaciones Pendientes", 
+                    "url" => route('warehouse.visation_contract_manager.index'),
+                    "color" => "primary", 
+                    "icon" => "heroicon-o-eye", 
+                    "shouldOpenInNewTab" => false, 
+                ],
+            ],
+            "body" => 'Tiene una nueva solicitud de visación por parte de bodega para su formulario de requerimiento. Por favor acceda .', 
+            "color" => "info", 
+            "duration" => "persistent", 
+            "icon" => "heroicon-o-question-mark-circle", 
+            "iconColor" => "blue", 
+            "status" => "info", 
+            "title" => 'Visaciones Pendientes', 
+            "view" => "filament-notifications::notification", 
+            "format" => "filament", 
         ];
+        
     }
 }
