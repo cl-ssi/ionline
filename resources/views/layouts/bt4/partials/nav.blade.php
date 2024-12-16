@@ -728,18 +728,29 @@
                         <div class="dropdown-divider"></div>
 
                         @if(count(auth()->user()->unreadNotifications))
-                        @foreach(auth()->user()->unreadNotifications->where('type', '!=', 'Filament\Notifications\DatabaseNotification')->take(5) as $notification)
-                        <a class="dropdown-item small" href="{{ route('openNotification', $notification) }}">
-                            {!! $notification->data['icon'] ?? null !!}
-                            <b>{{ $notification->data['module'] ?? '' }}</b>
-                            {!! $notification->data['subject'] !!}
-                        </a>
+                        @foreach(auth()->user()->unreadNotifications->take(5) as $notification)
+                            <a class="dropdown-item small" href="{{ route('openNotification', $notification) }}">
+                                {{-- Mostrar el icono --}}
+                                {!! $notification->data['icon'] ?? ($notification->data['actions'][0]['icon'] ?? '') !!}
+
+                                {{-- Mostrar el título o módulo --}}
+                                <b>{{ $notification->data['title'] ?? ($notification->data['module'] ?? 'Notificación') }}</b>
+
+                                {{-- Mostrar el cuerpo o sujeto --}}
+                                @if(isset($notification->data['subject']))
+                                    {!! $notification->data['subject'] !!}
+                                @elseif(isset($notification->data['body']))
+                                    {!! $notification->data['body'] !!}
+                                @else
+                                    Sin detalles disponibles
+                                @endif
+                            </a>
                         @endforeach
-                        @else
-                        <div class="dropdown-item small">
-                            <i class="fas fa-exclamation"></i> Sin Notificaciones Nuevas
-                        </div>
-                        @endif
+        @else
+            <div class="dropdown-item small">
+                <i class="fas fa-exclamation"></i> Sin Notificaciones Nuevas
+            </div>
+        @endif
                     </div>
                 </li>
 

@@ -43,9 +43,9 @@ class PendingSign extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->line('The introduction to the notification.')
-                    ->action('Notification Action', url('/'))
-                    ->line('Thank you for using our application!');
+            ->line('The introduction to the notification.')
+            ->action('Notification Action', url('/'))
+            ->line('Thank you for using our application!');
     }
 
     /**
@@ -56,12 +56,35 @@ class PendingSign extends Notification
      */
     public function toArray($notifiable)
     {
+        // return [
+        //     // 'module'  => 'Prueba', // Opcional
+        //     'module'  => 'Firma',
+        //     'icon'    => '<i class="fas fa-bell"></i>', // Opcional
+        //     'subject' => 'El Usuario '.auth()->user()->tinny_name.' le recuerda Firmar/Visar la Solicitud de Firma '.$this->signature->id, 
+        //     'action' => route('documents.signatures.index',['pendientes'], false),
+        // ];
+
         return [
-            // 'module'  => 'Prueba', // Opcional
-            'module'  => 'Firma',
-            'icon'    => '<i class="fas fa-bell"></i>', // Opcional
-            'subject' => 'El Usuario '.auth()->user()->tinny_name.' le recuerda Firmar/Visar la Solicitud de Firma '.$this->signature->id, 
-            'action' => route('documents.signatures.index',['pendientes'], false),
+            "actions" => [
+                [
+                    "name" => "view_pending_signatures",
+                    "label" => "Firmar/Visar Solicitud",
+                    "url" => route('documents.signatures.index', ['pendientes'], false), 
+                    "color" => "primary",
+                    "icon" => "heroicon-o-pencil",
+                    "shouldOpenInNewTab" => false,
+                ],
+            ],
+            "body" => 'El Usuario ' . auth()->user()->tinny_name . ' le recuerda Firmar/Visar la Solicitud de Firma ' . $this->signature->id,
+            "color" => "info",
+            "duration" => "persistent",
+            "icon" => "heroicon-o-bell",
+            "iconColor" => "blue",
+            "status" => "info",
+            "title" => 'Recordatorio de Firma',
+            "view" => "filament-notifications::notification",
+            "format" => "filament",
         ];
+
     }
 }

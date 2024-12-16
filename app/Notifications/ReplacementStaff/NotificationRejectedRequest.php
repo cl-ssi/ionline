@@ -57,18 +57,42 @@ class NotificationRejectedRequest extends Notification
      */
     public function toArray($notifiable)
     {
-        if($this->to == 'reclutamiento'){
-            $action = 'replacement_staff.request.technical_evaluation.show';
-        }
-        else{
-            $action = 'replacement_staff.request.technical_evaluation.show';
-        }
+        // if($this->to == 'reclutamiento'){
+        //     $action = 'replacement_staff.request.technical_evaluation.show';
+        // }
+        // else{
+        //     $action = 'replacement_staff.request.technical_evaluation.show';
+        // }
 
+        // return [
+        //     'module'  => 'Solicitudes de Contratación',
+        //     'icon'    => '<i class="far fa-id-card"></i>',
+        //     'subject' => 'Se ha rechazado la solicitud ID: '.$this->requestReplacementStaff->id.' click más información',
+        //     'action'  => route($action, $this->requestReplacementStaff->id, false)
+        // ];
+
+        
         return [
-            'module'  => 'Solicitudes de Contratación',
-            'icon'    => '<i class="far fa-id-card"></i>',
-            'subject' => 'Se ha rechazado la solicitud ID: '.$this->requestReplacementStaff->id.' click más información',
-            'action'  => route($action, $this->requestReplacementStaff->id, false)
+            "actions" => [
+                [
+                    "name" => "view_request",
+                    "label" => "Ver Solicitud", 
+                    "url" => route('replacement_staff.request.technical_evaluation.show', $this->requestReplacementStaff->id, false),
+                    "color" => "primary", 
+                    "icon" => "heroicon-o-eye", 
+                    "shouldOpenInNewTab" => false, 
+                ],
+            ],
+            "body" => "Se ha rechazado la solicitud ID: {$this->requestReplacementStaff->id}. Haz clic en el botón para más información.", 
+            "color" => "danger", 
+            "duration" => "persistent", 
+            "icon" => "heroicon-o-x-circle",
+            "iconColor" => "red", 
+            "status" => "error", 
+            "title" => "Solicitud Rechazada", 
+            "view" => "filament-notifications::notification", 
+            "format" => "filament", 
         ];
+        
     }
 }

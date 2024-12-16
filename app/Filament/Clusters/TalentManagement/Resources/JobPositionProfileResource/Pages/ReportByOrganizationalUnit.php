@@ -27,7 +27,7 @@ class ReportByOrganizationalUnit extends Page implements Tables\Contracts\HasTab
 
     protected static ?string $title = 'Reporte de perfiles de cargo por unidad organizacional';
 
-    public $activeTab = 'general'; // Tab inicial por defecto
+    public $activeTab = 'general';
 
 
 
@@ -38,7 +38,6 @@ class ReportByOrganizationalUnit extends Page implements Tables\Contracts\HasTab
                 ->withCount('jobPositionProfiles')
                 ->where('establishment_id', Parameter::get('establishment', 'SSTarapaca'));
         }
-        //Cambiar para utilizar Parametros en vez de las ID's directas de las subdirecciones
         if (in_array($this->activeTab, ['subdir_gestion_asistencial', 'subdir_desarrollo_personas', 'subdir_recursos_fisicos'])) {
             $unitIdMap = [
                 'subdir_gestion_asistencial' => Parameter::get('ou', 'SubSDGA', Auth::user()->establishment_id),

@@ -56,11 +56,34 @@ class NewAllowance extends Notification
      */
     public function toArray($notifiable)
     {
+        // return [
+        //     'module'  => 'Víaticos', // Opcional
+        //     'icon'    => '<i class="fas fa-wallet"></i>',
+        //     'subject' => 'Se ha creado una nueva solicitud de viático ID: '.$this->allowance->id,
+        //     'action'  => route('allowances.show', $this->allowance->id, false)
+        // ];
+
         return [
-            'module'  => 'Víaticos', // Opcional
-            'icon'    => '<i class="fas fa-wallet"></i>',
-            'subject' => 'Se ha creado una nueva solicitud de viático ID: '.$this->allowance->id,
-            'action'  => route('allowances.show', $this->allowance->id, false)
+            "actions" => [
+                [
+                    "name" => "view_allowance",
+                    "label" => "Ver Solicitud de Viático",
+                    "url" => route('allowances.show', $this->allowance->id, false),
+                    "color" => "primary",
+                    "icon" => "heroicon-o-eye",
+                    "shouldOpenInNewTab" => true,
+                ],
+            ],
+            "body" => 'Se ha creado una nueva solicitud de viático con el ID: '.$this->allowance->id,
+            "color" => "info",
+            "duration" => "persistent",
+            "icon" => "heroicon-o-wallet",
+            "iconColor" => "blue",
+            "status" => "info",
+            "title" => 'Nueva Solicitud de Viático',
+            "view" => "filament-notifications::notification",
+            "format" => "filament",
         ];
+        
     }
 }

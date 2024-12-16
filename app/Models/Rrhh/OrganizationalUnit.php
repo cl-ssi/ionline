@@ -241,6 +241,32 @@ class OrganizationalUnit extends Model implements Auditable
      *
      * @return array
      */
+
+     public function getDescendantUnitsArray(): array
+     {
+         $units = [];
+     
+         foreach ($this->childs as $child) {
+             $descendants = $child->getDescendantUnitsArray();
+             $units = array_merge($units, $descendants);
+         }
+     
+         $units[] = [
+             'id' => $this->id,
+             'name' => $this->name,
+             'manager_id' => $this->organizational_unit_id,
+             'level' => $this->level
+         ];
+     
+         // Ordenar por nivel de menor a mayor
+         usort($units, function ($a, $b) {
+             return $a['level'] <=> $b['level'];
+         });
+     
+         return $units;
+     }
+
+
     public function getAncestorUnitsArray(): array
     {
         $units = [];

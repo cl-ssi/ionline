@@ -7,6 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
+use App\Filament\Clusters\Rrhh\Resources\Rrhh\AbsenteeismResource\Pages\CreateAbsenteeism;
 class TestNotification extends Notification implements ShouldQueue
 {
     use Queueable;
@@ -47,7 +48,7 @@ class TestNotification extends Notification implements ShouldQueue
      */
     public function via($notifiable)
     {
-        return ['mail'];
+        return ['database'];
     }
 
     /**
@@ -61,8 +62,8 @@ class TestNotification extends Notification implements ShouldQueue
         return (new MailMessage)
             ->level('info')
             ->subject('Nueva notificación de prueba')
-            ->line('Hola '.$notifiable->shortName)
-            ->line('Notificación de prueba, parametro: '.$this->param)
+            ->line('Hola ' . $notifiable->shortName)
+            ->line('Notificación de prueba, parametro: ' . $this->param)
             ->action('Notification Action', url('/'))
             ->line('Utilizando Colas')
             ->salutation('Saludos cordiales.');
@@ -76,11 +77,33 @@ class TestNotification extends Notification implements ShouldQueue
      */
     public function toArray($notifiable)
     {
+        // return [
+        //     'module'  => 'Prueba', // Opcional
+        //     'icon'    => '<i class="fas fa-fw fa-bomb"></i>', // Opcional
+        //     'subject' => 'Nueva notificación de prueba, parametro: '.$this->param,
+        //     'action' => route('resources.computer.edit',[$this->param], false),
+        // ];
+
         return [
-            'module'  => 'Prueba', // Opcional
-            'icon'    => '<i class="fas fa-fw fa-bomb"></i>', // Opcional
-            'subject' => 'Nueva notificación de prueba, parametro: '.$this->param,
-            'action' => route('resources.computer.edit',[$this->param], false),
+            "actions" => [
+                [
+                    "name" => "create_absenteeism",
+                    "label" => "Crear Ausentismo",
+                    "url" => CreateAbsenteeism::getUrl(),
+                    "color" => "primary",
+                    "icon" => "heroicon-o-plus",
+                    "shouldOpenInNewTab" => true,
+                ],
+            ],
+            "body" => 'Haz clic en el botón para crear un nuevo ausentismo.',
+            "color" => "info",
+            "duration" => "persistent",
+            "icon" => '<i class="fas fa-fw fa-plus-circle"></i>',
+            "iconColor" => "blue",
+            "status" => "info",
+            "title" => 'Crear Ausentismo',
+            "view" => "filament-notifications::notification",
+            "format" => "filament",
         ];
     }
 }

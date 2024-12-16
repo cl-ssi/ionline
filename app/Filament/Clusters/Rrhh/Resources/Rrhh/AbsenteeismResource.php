@@ -12,6 +12,7 @@ use Filament\Resources\Resource;
 use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Filament\Tables\Enums\FiltersLayout;
 use Filament\Pages\SubNavigationPosition;
 use App\Models\AbsenteeismType;
 use Illuminate\Database\Eloquent\Builder;
@@ -36,7 +37,7 @@ class AbsenteeismResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Select::make('tipo_de_ausentismo')
+                Forms\Components\Select::make('absenteeism_type_id')
                     ->label('Tipo de Ausentismo')
                     ->options(function () {
                         return \App\Models\Rrhh\AbsenteeismType::pluck('name', 'id');
@@ -70,6 +71,7 @@ class AbsenteeismResource extends Resource
                     ->placeholder('Escriba el fundamento aquí...')
                     ->maxLength(255)
                     ->columnSpanFull()
+                    ->required(),
             ])
             ->columns(4);
     }
@@ -99,16 +101,9 @@ class AbsenteeismResource extends Resource
                 Tables\Columns\ImageColumn::make('approval.avatar')
                     ->label('Aprobación')
                     ->circular()
-                    // ->getStateUsing(function ($record) {
-                    //     // Realiza la consulta personalizada
-                    //     $approvals = \DB::table('sign_approvals')
-                    //         ->whereIn('approvable_id', [$record->id]) // IDs dinámicos
-                    //         ->where('approvable_type', 'App\\Models\\Rrhh\\Absenteeism')
-                    //         ->whereNull('deleted_at')
-                    //         ->get();
-                    //     // Devuelve el estado de aprobación basado en los resultados
-                    //     return $approvals->isNotEmpty() ? 'Aprobado' : 'Pendiente';
-                    // })
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('approval.statusInWords')
+                    ->label('Estado')
                     ->sortable(),
                 ToggleColumn::make('sirh_at')
                     ->label('Sirh')
@@ -120,17 +115,81 @@ class AbsenteeismResource extends Resource
                         $record->update([
                             'sirh_at' => $state ? now() : null,
                         ]);
-                        
+
                     })
                     ->sortable(),
             ])
             ->defaultSort('id', 'desc')
             ->paginated(false)
-            ->filters([
 
-            ])
+            ->filters(
+                [
+                    Tables\Filters\SelectFilter::make('tipo_de_ausentismo')
+                        ->label('Tipo de Ausentismo')
+                        ->options(
+                            fn() => \App\Models\Rrhh\AbsenteeismType::query()
+                                ->pluck('name', 'name')
+                                ->toArray()
+                        ),
+                    Tables\Filters\TernaryFilter::make('aprobaciones')
+                        ->label('Aprobaciones')
+                        ->placeholder('Todas')
+                        ->trueLabel('Con aprobacion')
+                        ->falseLabel('Sin  aprobacion')
+                        ->queries(
+                            true: fn(Builder $query) => $query->whereHas('approval'),
+                            false: fn(Builder $query) => $query->whereDoesntHave('approval'),
+                            blank: fn(Builder $query) => $query,
+                        ),
+
+                    // Tables\Filters\SelectFilter::make('estado_aprobacion')
+                    //     ->label('Estado de Aprobación')
+                    //     ->options([
+                    //         'pendiente' => 'Pendiente',
+                    //         'aprobado' => 'Aprobado',
+                    //         'rechazado' => 'Rechazado',
+                    //     ])
+                    //     ->query(function (Builder $query, $state) {
+                    //         return $query->whereHas('approval', function ($query) use ($state) {
+                    //             $query->where('approvable_type', 'App\\Models\\Rrhh\\Absenteeism')
+                    //                 ->whereNull('sign_approvals.deleted_at'); // Aseguramos que la aprobación no esté eliminada
+                
+                    //             if ($state === 'pendiente') {
+                    //                 $query->whereNull('approval.status'); // Estado pendiente
+                    //             } elseif ($state === 'aprobado') {
+                    //                 $query->where('approval.status', 1); // Estado aprobado
+                    //             } elseif ($state === 'rechazado') {
+                    //                 $query->where('approval.status', 0); // Estado rechazado
+                    //             }
+                    //         });
+                    //     }),
+
+
+                    // Verificar el Funcionamiento del Filtro
+
+
+                    // Tables\Filters\TernaryFilter::make('estado_aprobacion')
+                    //     ->label('Estado de aprobaciones')
+                    //     ->placeholder('Pendiente')
+                    //     ->trueLabel('Aprobada')
+                    //     ->falseLabel('Rechazada')
+                    //     ->queries(
+                    //         true: fn(Builder $query) => $query->whereRelation('approval' , 'status', true),
+                    //         false: fn(Builder $query) => $query->whereRelation('approval' , 'status', false),
+                    //         blank: fn(Builder $query) => $query->whereRelation('approval' , 'status', '=', null),
+                    //     ),
+
+                ],
+
+                layout: FiltersLayout::AboveContent
+            )
+
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\ViewAction::make()
+                    ->url(fn(Absenteeism $record) => route('rrhh.absenteeisms.show', $record))
+                    ->openUrlInNewTab()
+                    ->visible(fn(Absenteeism $record) => $record->approval && $record->approval->status == 1),
+
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

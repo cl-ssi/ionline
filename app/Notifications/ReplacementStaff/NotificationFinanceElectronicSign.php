@@ -56,11 +56,35 @@ class NotificationFinanceElectronicSign extends Notification
      */
     public function toArray($notifiable)
     {
+        // return [
+        //     'module'  => 'Solicitudes de Contratación', // Opcional
+        //     'icon'    => '<i class="far fa-id-card"></i>',
+        //     'subject' => 'Nueva solicitud de firma electrónica para reemplazo ID: '.$this->requestReplacementStaff->id,
+        //     'action'  => route('documents.signatures.index', 'pendientes', false)
+        // ];
+
         return [
-            'module'  => 'Solicitudes de Contratación', // Opcional
-            'icon'    => '<i class="far fa-id-card"></i>',
-            'subject' => 'Nueva solicitud de firma electrónica para reemplazo ID: '.$this->requestReplacementStaff->id,
-            'action'  => route('documents.signatures.index', 'pendientes', false)
+            "actions" => [
+                [
+                    "name" => "view_request",
+                    "label" => "Ver Solicitud", 
+                    "url" => route('documents.signatures.index', 'pendientes', false),
+                    "color" => "primary",
+                    "icon" => "heroicon-o-document", 
+                    "shouldOpenInNewTab" => true, 
+                ],
+            ],
+            "body" => 'Se ha creado una nueva solicitud de firma electrónica para el reemplazo ID: '.$this->requestReplacementStaff->id,
+            "color" => "info", 
+            "duration" => "persistent", 
+            "icon" => "heroicon-o-identification", 
+            "iconColor" => "blue", 
+            "status" => "info", 
+            "title" => 'Firma Electrónica para Solicitud de Reemplazo', 
+            "view" => "filament-notifications::notification", 
+            "format" => "filament", 
         ];
+        
+        
     }
 }

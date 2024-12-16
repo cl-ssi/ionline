@@ -12,6 +12,13 @@ class ResponseDoubt extends Notification
     use Queueable;
 
     /**
+     * El parámetro de la consulta.
+     *
+     * @var mixed
+     */
+    private $param;
+
+    /**
      * Create a new notification instance.
      *
      * @return void
@@ -57,12 +64,34 @@ class ResponseDoubt extends Notification
      
     public function toArray($notifiable)
     {
+        // return [
+        //     'module'  => 'Amipass Consulta', // Opcional
+        //     'icon'    => '<i class="fas fa-question-circle"></i>', // Opcional
+        //     'subject' => 'Han Respondido su Consulta/Sugerencia Amipass Nº: '.$this->param,
+        //     'action' => route('welfare.amipass.question-show',[$this->param], false),
+        // ];
+
         return [
-            //
-            'module'  => 'Amipass Consulta', // Opcional
-            'icon'    => '<i class="fas fa-question-circle"></i>', // Opcional
-            'subject' => 'Han Respondido su Consulta/Sugerencia Amipass Nº: '.$this->param,
-            'action' => route('welfare.amipass.question-show',[$this->param], false),
+            "actions" => [
+                [
+                    "name" => "view_amipass_question",
+                    "label" => "Ver Consulta Amipass", 
+                    "url" => route('welfare.amipass.question-show', [$this->param]),  
+                    "color" => "primary", 
+                    "icon" => "heroicon-o-eye", 
+                    "shouldOpenInNewTab" => true, 
+                ],
+            ],
+            "body" => 'Han Respondido su Consulta/Sugerencia Amipass Nº: '.$this->param,
+            "color" => "info", 
+            "duration" => "persistent", 
+            "icon" => '<i class="fas fa-fw fa-question-circle"></i>', 
+            "iconColor" => "blue", 
+            "status" => "info", 
+            "title" => 'Respuesta a Consulta Amipass', 
+            "view" => "filament-notifications::notification", 
+            "format" => "filament", 
         ];
+        
     }
 }

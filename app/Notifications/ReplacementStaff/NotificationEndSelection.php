@@ -64,11 +64,34 @@ class NotificationEndSelection extends Notification
             $action = 'replacement_staff.request.technical_evaluation.show';
         }
 
+        // return [
+        //     'module'  => 'Solicitudes de Contratación', // Opcional
+        //     'icon'    => '<i class="far fa-id-card"></i>',
+        //     'subject' => 'Fin proceso de selección solicitud ID: '.$this->requestReplacementStaff->id,
+        //     'action'  => route($action, $this->requestReplacementStaff->id, false)
+        // ];
+
         return [
-            'module'  => 'Solicitudes de Contratación', // Opcional
-            'icon'    => '<i class="far fa-id-card"></i>',
-            'subject' => 'Fin proceso de selección solicitud ID: '.$this->requestReplacementStaff->id,
-            'action'  => route($action, $this->requestReplacementStaff->id, false)
+            "actions" => [
+                [
+                    "name" => "view_request",
+                    "label" => "Ver solicitud", 
+                    "url" => route($action, $this->requestReplacementStaff->id, false), 
+                    "color" => "primary", 
+                    "icon" => "heroicon-o-document",
+                    "shouldOpenInNewTab" => false, 
+                ],
+            ],
+            "body" => 'Se ha finalizado el proceso de selección para la solicitud ID: ' . $this->requestReplacementStaff->id,
+            "color" => "success", 
+            "duration" => "persistent", 
+            "icon" => "heroicon-o-identification",
+            "iconColor" => "green", 
+            "status" => "success", 
+            "title" => 'Proceso de selección finalizado',
+            "view" => "filament-notifications::notification", 
+            "format" => "filament", 
         ];
+        
     }
 }
