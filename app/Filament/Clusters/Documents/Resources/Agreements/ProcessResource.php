@@ -216,9 +216,11 @@ class ProcessResource extends Resource
                         Forms\Components\Actions\Action::make('Volver a editar')
                             ->icon('heroicon-m-pencil-square')
                             ->requiresConfirmation()
-                            ->modalDescription('Se eliminará todo el circuito de visado, deverá enviar a visar nuevamente')
+                            ->modalDescription('Atención, si el documento ya está visado, deberá volver a visarse.')
                             ->action(function (Process $record) {
                                $record->update(['status' => Status::Draft]);
+                               $record->resetEndorsesStatus();
+                               $record->createComment('El proceso ha vuelto a estado de borrador, si existían visaciones, fueron reseteadas.');
                             })
                             ->hidden(fn (?Process $record) => $record->status === Status::Draft),
                     ])
@@ -532,10 +534,10 @@ class ProcessResource extends Resource
                     ->searchable(),
             ])
             ->actions([
+                Tables\Actions\EditAction::make(),
                 Tables\Actions\ViewAction::make()
                     ->url(fn (Process $record) => route('documents.agreements.processes.view', [$record]))
                     ->openUrlInNewTab(),
-                Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

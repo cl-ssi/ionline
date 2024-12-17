@@ -276,7 +276,7 @@ Factor
 TODO:
 [-] Notificar cuando referente terminó de hacer el convenio
 [X] Cuando se fue a la comuna, ya no se puede editar
-[ ] Mostrar si se reinició el proceso de firma, en comentario
+[X] Mostrar si se reinició el proceso de firma, en comentario
 [ ] Aprobación o indicación de aceptación o rechazo de cambio solicitado por comuna.
 [X] Botón siguiente proceso en el index
 [X] Firma de directora con su propio circulo en el index

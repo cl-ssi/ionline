@@ -45,25 +45,36 @@ class CommentsRelationManager extends RelationManager
                     ->label('Autor')
                     ->searchable()
                     ->sortable(),
+                Tables\Columns\IconColumn::make('is_from_system')
+                    ->label('Sistema')
+                    ->boolean()
+                    ->sortable()
+                    ->falseIcon(''),
                 Tables\Columns\TextColumn::make('body')
                     ->label('Comentario')
                     ->searchable()
                     ->sortable(),
             ])
             ->filters([
-                //
+                Tables\Filters\TernaryFilter::make('is_from_system')
+                    ->label('Es del Sistema')
+                    ->options([
+                        'true' => 'Sí',
+                        'false' => 'No',
+                    ]),
             ])
             ->headerActions([
                 Tables\Actions\CreateAction::make(),
             ])
             ->actions([
-                // Tables\Actions\EditAction::make(),
-                // Tables\Actions\DeleteAction::make(),
+                Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     // Tables\Actions\DeleteBulkAction::make(),
                 ]),
-            ]);
+            ])
+            ->defaultSort('created_at', 'desc');
     }
 }

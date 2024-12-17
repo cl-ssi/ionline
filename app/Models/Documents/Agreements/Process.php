@@ -219,6 +219,13 @@ class Process extends Model
         }
     }
 
+    public function resetEndorsesStatus(): void
+    {
+        foreach($this->endorses as $endorse) {
+            $endorse->resetStatus();
+        }
+    }
+
     public function createApproval(): void
     {
         // Solicitud de firma del director
@@ -232,6 +239,13 @@ class Process extends Model
             ]),
             "digital_signature" => true,
             "sent_to_ou_id" => $this->signer->user->organizational_unit_id,
+        ]);
+    }
+
+    public function createComment($comment): void
+    {
+        $this->comments()->create([
+            'body' => $comment,
         ]);
     }
 }
