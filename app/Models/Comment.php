@@ -15,13 +15,25 @@ class Comment extends Model
 {
     use SoftDeletes;
 
+    /**
+     * Ejemplo de uso (organizationalUnit y establishment se llenan automáticamente):
+     */
+    // $comment = Comment::create([
+    //    'body' => 'Comentario de prueba'
+    // ]);
+
     protected $fillable = [
         'body',
+        'is_from_system',
         'author_id',
         'organizational_unit_id',
         'establishment_id',
         'commentable_id',
         'commentable_type',
+    ];
+
+    protected $casts = [
+        'is_from_system' => 'boolean',
     ];
 
     public function commentable(): MorphTo
