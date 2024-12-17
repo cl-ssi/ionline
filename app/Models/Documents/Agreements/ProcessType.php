@@ -16,6 +16,7 @@ class ProcessType extends Model
     protected $fillable = [
         'name',
         'description',
+        'bilateral',
         'is_dependent',
         'father_process_type_id',
         'has_resolution',
@@ -23,6 +24,7 @@ class ProcessType extends Model
     ];
 
     protected $casts = [
+        'bilateral'      => 'boolean',
         'is_dependent'   => 'boolean',
         'has_resolution' => 'boolean',
         'active'         => 'boolean',

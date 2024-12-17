@@ -17,6 +17,7 @@ use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -104,9 +105,9 @@ class Process extends Model
         return $this->belongsTo(Process::class, 'next_process_id');
     }
 
-    public function processes(): HasMany
+    public function previousProcess(): HasOne
     {
-        return $this->hasMany(Process::class, 'process_id');
+        return $this->hasOne(Process::class, 'next_process_id', 'id');
     }
 
     public function establishment(): BelongsTo

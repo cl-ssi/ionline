@@ -229,7 +229,8 @@ class ProcessResource extends Resource
                             ->profile('ionline')
                             ->disabled(fn(?Process $record) => $record->status === Status::Finished),
                         Forms\Components\Textarea::make('distribution')
-                            ->label('Distribución'),
+                            ->label('Distribución')
+                            ->helperText('Sólo para resoluciones'),
                     ])
                     ->hiddenOn('create'),
                 // ->hidden(fn (?Process $record) => $record->document_content === null)
@@ -266,7 +267,8 @@ class ProcessResource extends Resource
                                     ->content('Pendiente'),
                             ])
                             ->columnSpan(1)
-                            ->columns(1),
+                            ->columns(1)
+                            ->visible(fn (?Process $record) => $record->processType->bilateral),
 
                     ])
                     ->columns(2)
@@ -333,7 +335,8 @@ class ProcessResource extends Resource
                     ])
                     ->columns(2)
                     ->hiddenOn('create')
-                    ->columnSpanFull(),
+                    ->columnSpanFull()
+                    ->visible(fn (?Process $record) => $record->processType->bilateral),
 
                 Forms\Components\Section::make('Firma Director')
                     ->headerActions([

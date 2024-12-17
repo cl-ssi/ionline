@@ -278,9 +278,9 @@ TODO:
 [X] Cuando se fue a la comuna, ya no se puede editar
 [ ] Mostrar si se reinició el proceso de firma, en comentario
 [ ] Aprobación o indicación de aceptación o rechazo de cambio solicitado por comuna.
-[ ] Botón siguiente proceso en el index
+[X] Botón siguiente proceso en el index
 [X] Firma de directora con su propio circulo en el index
-[ ] Indentificar que procesos van a la comuna para firma, para mostrar o no el cuadro
+[X] Indentificar que procesos van a la comuna para firma, para mostrar o no el cuadro
 [ ] Poder cargar documento numerado de OF Partes, donde corresponda
 [ ] Distribución queda al final (solo para reso)
 [ ] Visaciones debajo de la distribución

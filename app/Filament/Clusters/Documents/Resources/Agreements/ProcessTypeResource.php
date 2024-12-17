@@ -46,8 +46,12 @@ class ProcessTypeResource extends Resource
                 Forms\Components\TextInput::make('description')
                     ->label('Descripción')
                     ->maxLength(255)
-                    ->columnSpan(2)
+                    ->columnSpan(3)
                     ->default(null),
+                Forms\Components\Toggle::make('bilateral')
+                    ->label('Bilateral')
+                    ->inline(false)
+                    ->required(),
                 Forms\Components\Toggle::make('has_resolution')
                     ->label('Tiene Resolución')
                     ->inline(false)
@@ -56,12 +60,10 @@ class ProcessTypeResource extends Resource
                     ->schema([
                         Forms\Components\Toggle::make('is_dependent')
                             ->label('Es Dependiente')
-                            ->inline(false)
-                            ->required(),
+                            ->inline(false),
                         Forms\Components\Select::make('father_process_type_id')
                             ->relationship('fatherProcessType', 'name')
-                            ->label('Tipo de Proceso Padre')
-                            ->required(),
+                            ->label('Tipo de Proceso Padre'),
                     ])
                     ->columnSpan(2),
                 Forms\Components\Toggle::make('active')
@@ -83,7 +85,7 @@ class ProcessTypeResource extends Resource
                     ])
                     ->columnSpanFull(),
             ])
-            ->columns(4);
+            ->columns(5);
     }
 
     public static function table(Table $table): Table
@@ -97,6 +99,9 @@ class ProcessTypeResource extends Resource
                     ->label('Descripción')
                     ->searchable()
                     ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\IconColumn::make('bilateral')
+                    ->label('Bilateral')
+                    ->boolean(),
                 Tables\Columns\IconColumn::make('is_dependent')
                     ->label('Dependiente')
                     ->boolean(),
@@ -105,6 +110,7 @@ class ProcessTypeResource extends Resource
                     ->boolean(),
                 Tables\Columns\TextColumn::make('childProcessType.name')
                     ->label('Sigiente Proceso')
+                    ->wrap()
                     ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
