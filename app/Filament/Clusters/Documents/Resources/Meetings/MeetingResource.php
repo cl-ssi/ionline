@@ -13,6 +13,8 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Forms\Components\Grid;
+use Filament\Infolists\Components\Section;
 
 use Filament\Pages\SubNavigationPosition;
 
@@ -35,9 +37,54 @@ class MeetingResource extends Resource
     public static function form(Form $form): Form
     {
         return $form
-            ->schema([
-                //
-            ]);
+        ->schema([
+            Forms\Components\Section::make('Descripción reunión')
+                // ->description('Prevent abuse by limiting the number of requests per period')
+                ->schema([
+                    Grid::make(12)->schema([
+                        Forms\Components\DatePicker::make('date')
+                            ->label('Fecha Reunión')
+                            ->columnSpan(3)
+                            ->required(),
+                        Forms\Components\Select::make('type')
+                            ->label('Tipo')
+                            ->options([
+                                'extraordinaria'    => 'Extraordinaria', 
+                                'no extraordinaria' => 'No extraordinaria',
+                                'lobby' => 'Lobby',
+                            ])
+                            ->default(null)
+                            ->required()
+                            ->columnSpan(3),
+                        Forms\Components\TextInput::make('subject')
+                            ->label('Asunto')
+                            ->required()
+                            ->maxLength(255)
+                            ->columnSpan(6),
+                        Forms\Components\Textarea::make('description')
+                            ->label('Descripción')
+                            ->required()
+                            ->columnSpanFull(),
+                        Forms\Components\Select::make('mechanism')
+                            ->label('Medio')
+                            ->options([
+                                'videoconferencia'  => 'Videoconferencia',
+                                'presencial'        => 'Presencial',
+                            ])
+                            ->default(null)
+                            ->required()
+                            ->columnSpan(3),
+                        Forms\Components\DateTimePicker::make('start_at')
+                            ->label('Fecha Hora inicio')
+                            ->columnSpan(3)
+                            ->required(),
+                        Forms\Components\DateTimePicker::make('end_at')
+                            ->label('Fecha Hora término')
+                            ->columnSpan(3)
+                            ->required(),
+                    ]),
+                ]),
+        ]);
     }
 
     public static function table(Table $table): Table
