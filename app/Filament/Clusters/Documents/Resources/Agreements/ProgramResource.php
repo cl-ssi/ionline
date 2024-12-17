@@ -45,7 +45,7 @@ class ProgramResource extends Resource
                     ->label('Periodo')
                     ->required()
                     ->options(function () {
-                        $currentYear = now()->year;
+                        $currentYear = now()->year + 1;
                         $years       = [];
                         for ($i = 0; $i < 10; $i++) {
                             $years[$currentYear - $i] = $currentYear - $i;
@@ -86,18 +86,25 @@ class ProgramResource extends Resource
                         Forms\Components\DatePicker::make('ministerial_resolution_date')
                             ->label('Fecha')
                             ->default(null),
+                        Forms\Components\FileUpload::make('ministerial_resolution_file')
+                            ->directory('ionline/agreements/programs')
+                            ->downloadable()
+                            ->columnSpanFull(),
                     ])
                     ->columnSpan(2),
-                    Forms\Components\Fieldset::make('Resolución de Distribución de Recursos')
-                        ->schema([
-                            Forms\Components\TextInput::make('resource_distribution_number')
-                                ->label('Número')
-                                ->numeric()
-                                ->default(null),
-                            Forms\Components\DatePicker::make('resource_distribution_date')
-                                ->label('Fecha')
-                                ->default(null)
-                                ,
+                Forms\Components\Fieldset::make('Resolución de Distribución de Recursos')
+                    ->schema([
+                        Forms\Components\TextInput::make('resource_distribution_number')
+                            ->label('Número')
+                            ->numeric()
+                            ->default(null),
+                        Forms\Components\DatePicker::make('resource_distribution_date')
+                            ->label('Fecha')
+                            ->default(null),
+                        Forms\Components\FileUpload::make('resource_distribution_file')
+                            ->downloadable()
+                            ->directory('ionline/agreements/programs')
+                            ->columnSpanFull(),
                     ])
                     ->columnSpan(2),
                 // Forms\Components\Select::make('establishment_id')
@@ -191,9 +198,9 @@ class ProgramResource extends Resource
                     // Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ]);
-            // ->modifyQueryUsing(function ($query) {
-            //     $query->where('is_program', true);
-            // });
+        // ->modifyQueryUsing(function ($query) {
+        //     $query->where('is_program', true);
+        // });
     }
 
     public static function getRelations(): array
