@@ -7,6 +7,7 @@ use App\Filament\Clusters\Documents\Resources\ApprovalResource\Pages;
 use App\Filament\Clusters\Documents\Resources\ApprovalResource\RelationManagers;
 use App\Models\Documents\Approval;
 use App\Models\Documents\DigitalSignature;
+use App\Models\Rrhh\OrganizationalUnit;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Notifications\Notification;
@@ -54,6 +55,7 @@ class ApprovalResource extends Resource
                     ->disabled()
                     ->default(null),
                 Forms\Components\TextInput::make('initials')
+                    ->label('Iniciales')
                     ->maxLength(6)
                     ->default(null)
                     ->disabled(),
@@ -61,6 +63,7 @@ class ApprovalResource extends Resource
                 //     ->maxLength(255)
                 //     ->default(null),
                 Forms\Components\TextInput::make('subject')
+                    ->label('Asunto')
                     ->required()
                     ->maxLength(255)
                     ->columnSpanFull(),
@@ -74,27 +77,41 @@ class ApprovalResource extends Resource
                 //     ->maxLength(255)
                 //     ->default(null),
                 Forms\Components\Select::make('sent_to_ou_id')
-                    ->relationship('sentToOu', 'id')
+                    ->label('Unidad Organizacional')
+                    ->relationship('sentToOu', 'name')
                     ->searchable()
+                    ->getOptionLabelFromRecordUsing(fn (OrganizationalUnit $record) => "{$record->establishment->name} - {$record->name}")
                     ->columnSpan(2),
                 Forms\Components\Select::make('sent_to_user_id')
+                    ->label('Enviado a usuario')
                     ->relationship('sentToUser', 'full_name')
                     ->searchable()
                     ->columnSpan(2),
                 Forms\Components\Select::make('approver_ou_id')
+                    ->label('Unidad del Aprobador')
                     ->relationship('approverOu', 'id')
                     ->columnSpan(2)
                     ->searchable(),
                 Forms\Components\Select::make('approver_id')
+                    ->label('Aprobador')
                     ->relationship('approver', 'id')
                     ->columnSpan(2)
                     ->searchable(),
+                Forms\Components\Select::make('status')
+                    ->label('Estado')
+                    ->options([
+                        0 => 'Rechazado',
+                        1 => 'Aprobado',
+                        null => 'Pendiente'
+                    ]),
+                Forms\Components\DateTimePicker::make('approver_at')
+                    ->label('Fecha de aprobación')
+                    ->disabled(),
                 Forms\Components\TextInput::make('approver_observation')
+                    ->label('Observaciones del aprobador')
                     ->maxLength(255)
-                    ->columnSpan(3)
+                    ->columnSpan(2)
                     ->default(null),
-                Forms\Components\DateTimePicker::make('approver_at'),
-                Forms\Components\Toggle::make('status'),
                 // Forms\Components\Toggle::make('approvable_callback')
                 //     ->required(),
                 // Forms\Components\TextInput::make('callback_controller_method')
@@ -105,13 +122,6 @@ class ApprovalResource extends Resource
                 //     ->default(null),
                 // Forms\Components\Textarea::make('callback_feedback_inputs')
                 //     ->columnSpanFull(),
-                Forms\Components\Toggle::make('active')
-                    ->required(),
-
-                Forms\Components\Toggle::make('digital_signature')
-                    ->required(),
-                Forms\Components\Toggle::make('endorse')
-                    ->required(),
                 Forms\Components\TextInput::make('position')
                     ->maxLength(255)
                     ->default(null),
@@ -124,6 +134,27 @@ class ApprovalResource extends Resource
                 Forms\Components\Select::make('previous_approval_id')
                     ->relationship('previousApproval', 'id')
                     ->searchable(),
+                Forms\Components\Toggle::make('active')
+                    ->label('Activa')
+                    ->required(),
+                Forms\Components\Toggle::make('digital_signature')
+                    ->label('Firma Digital')
+                    ->required(),
+                Forms\Components\Toggle::make('endorse')
+                    ->label('Visación')
+                    ->required(),
+
+                Forms\Components\Repeater::make('callback_feedback_inputs')
+                    ->schema([
+                        Forms\Components\DatePicker::make('fecha')->required(),
+                        Forms\Components\Select::make('inmunizacion')
+                            ->options([
+                                'covid' => 'Covid',
+                                'influenza' => 'influenza',
+                            ])
+                            ->required(),
+    ])
+    ->columns(2)
             ])
             ->columns(4);
     }
@@ -294,7 +325,8 @@ class ApprovalResource extends Resource
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
-            ]);
+            ])
+            ->defaultSort('id', 'desc');
     }
 
     public static function getRelations(): array
