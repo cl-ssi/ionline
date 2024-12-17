@@ -26,6 +26,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
+use Mohamedsabil83\FilamentFormsTinyeditor\Components\TinyEditor;
 
 class ProcessResource extends Resource
 {
@@ -125,14 +126,6 @@ class ProcessResource extends Resource
                             ->options(
                                 options: fn (Get $get): Collection => Establishment::where('cl_commune_id', $get('commune_id'))->pluck('name', 'id')
                             ),
-                        Forms\Components\Select::make('signer_id')
-                            ->label('Firmante')
-                            ->options(
-                                Signer::with('user')->get()->pluck('user.full_name', 'id')
-                            )
-                            ->required()
-                            ->columnSpan(2),
-
                         // Forms\Components\Select::make('next_process_id')
                         //     ->label('Siguiente proceso')
                         //     ->relationship('nextProcess', 'id')
@@ -231,12 +224,12 @@ class ProcessResource extends Resource
                     ])
                     ->footerActionsAlignment(Alignment::End)
                     ->schema([
-                        Forms\Components\RichEditor::make('document_content')
+                        TinyEditor::make('content')::make('document_content')
                             ->hiddenLabel()
+                            ->profile('ionline')
                             ->disabled(fn(?Process $record) => $record->status === Status::Finished),
                         Forms\Components\Textarea::make('distribution')
-                            ->label('Distribución')
-                            ->required(),
+                            ->label('Distribución'),
                     ])
                     ->hiddenOn('create'),
                 // ->hidden(fn (?Process $record) => $record->document_content === null)
@@ -292,7 +285,7 @@ class ProcessResource extends Resource
                                     ->required(),
                             ])
                             ->action(function (Process $record, array $data): void {
-                                $record->createApprovals($data['referer_id']);
+                                $record->createEndorses($data['referer_id']);
                                 Notifications\Notification::make()
                                     ->title('Visado solicitado')
                                     ->success()
@@ -300,7 +293,7 @@ class ProcessResource extends Resource
                             }),
                     ])
                     ->schema([
-                        Forms\Components\Repeater::make('approvals')
+                        Forms\Components\Repeater::make('endorses')
                             ->relationship()
                             ->addActionLabel('Agregar visación')
                             ->hiddenLabel()
@@ -308,7 +301,7 @@ class ProcessResource extends Resource
                             ->simple(
                                 Forms\Components\TextInput::make('initials')
                                     ->label('Nombre')
-                                    ->required()
+                                    ->disabled()
                                     ->suffixIcon('heroicon-m-check-circle')
                                     ->suffixIconColor(fn ($record) => match ($record['status'] ?? null) {
                                         true    => 'success',
@@ -349,35 +342,51 @@ class ProcessResource extends Resource
                             ->icon('heroicon-m-check-circle')
                             ->requiresConfirmation()
                             ->action(function (Process $record, array $data): void {
-                                $record->createApprovals($data['referer_id']);
+                                $record->createApproval();
                                 Notifications\Notification::make()
-                                    ->title('Visado solicitado')
+                                    ->title('Solicitud de firma a dirección')
                                     ->success()
                                     ->send();
                             }),
                     ])
                     ->schema([
-                        Forms\Components\TextInput::make('signer.user.full_name')
-                            ->label('Nombre')
+                        Forms\Components\Select::make('signer_id')
+                            ->label('Firmante')
+                            ->options(
+                                Signer::with('user')->get()->pluck('user.full_name', 'id')
+                            )
                             ->required()
-                            ->suffixIcon('heroicon-m-check-circle')
-                            ->suffixIconColor(fn ($record) => match ($record['status']) {
-                                true    => 'success',
-                                false   => 'danger',
-                                default => 'gray',
-                            }),
+                            ->columnSpan(2),
+                        Forms\Components\Group::make()
+                            ->relationship('signer')
+                            ->schema([
+                                Forms\Components\TextInput::make('appellative')
+                                    ->label('Nombre')
+                                    ->disabled()
+                                    ->suffixIcon('heroicon-m-check-circle')
+                                    ->suffixIconColor(fn ($record) => match ($record['status']) {
+                                        true    => 'success',
+                                        false   => 'danger',
+                                        default => 'gray',
+                                    }),
+                            ]),
+                    ])
+                    ->columns(7)
+                    ->hiddenOn('create'),
+
+                Forms\Components\Section::make('Final del proceso')
+                    ->description('Debe subir el documento firmado por el director a Doc Digital para la numeración y distribución, luego completar los campos de número y fecha del proceso y subir el documento firmado. IMPORTANTE: El proceso no se dará por terminado si no estan completos estos campos.')
+                    ->schema([
                         Forms\Components\TextInput::make('number')
                             ->label('Número del proceso')
-                            ->numeric()
-                            ->default(null),
+                            ->numeric(),
                         Forms\Components\DatePicker::make('date')
-                            ->label('Fecha del proceso')
-                            ->columnSpan(2),
+                            ->label('Fecha del proceso'),
                         Forms\Components\FileUpload::make('attachment')
                             ->label('Proceso firmado')
                             ->columnSpan(3),
                     ])
-                    ->columns(7)
+                    ->columns(5)
                     ->hiddenOn('create'),
 
                 Forms\Components\Section::make('Siguiente Proceso')
@@ -386,22 +395,7 @@ class ProcessResource extends Resource
                             ->icon('heroicon-m-plus-circle')
                             ->requiresConfirmation()
                             ->action(function (Process $record): void {
-                                $nextProcess = $record->nextProcess()->create([
-                                    'process_type_id' => $record->processType->childProcessType->id,
-                                    'period'          => $record->period,
-                                    'program_id'      => $record->program_id,
-                                    'commune_id'      => $record->commune_id,
-                                    'municipality_id' => $record->municipality_id,
-                                    'mayor_id'        => $record->mayor_id,
-                                    'total_amount'    => $record->total_amount,
-                                    'quotas_qty'      => $record->quotas_qty,
-                                    'establishments'  => $record->establishments,
-                                    'signer_id'       => $record->signer_id,
-                                    // 'quotas'          => $record->quotas,
-                                ]);
-
-                                $record->update(['next_process_id' => $nextProcess->id]);
-
+                                $record->createNextProcess();
                                 Notifications\Notification::make()
                                     ->title('Proceso dependiente creado')
                                     ->success()
@@ -438,6 +432,7 @@ class ProcessResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('processType.name')
                     ->label('Tipo de proceso')
+                    ->wrap()
                     ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('program.name')
@@ -448,7 +443,7 @@ class ProcessResource extends Resource
                     ->hiddenOn(ProcessesRelationManager::class),
                 Tables\Columns\TextColumn::make('period')
                     ->label('Periodo')
-                    ->numeric()
+                    // ->numeric()
                     ->sortable()
                     ->searchable()
                     ->hiddenOn(ProcessesRelationManager::class),
@@ -456,11 +451,11 @@ class ProcessResource extends Resource
                     ->label('Comuna')
                     ->searchable()
                     ->sortable(),
-                Tables\Columns\ImageColumn::make('approvals.avatar')
-                    ->label('Aprobaciones')
+                Tables\Columns\ImageColumn::make('endorses.avatar')
+                    ->label('Visaciones')
                     ->circular()
                     ->stacked(),
-                Tables\Columns\ImageColumn::make('approvalSigner.avatar')
+                Tables\Columns\ImageColumn::make('approval.avatar')
                     ->label('Firma Director')
                     ->circular()
                     ->sortable(),

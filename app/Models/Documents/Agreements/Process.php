@@ -18,6 +18,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 #[ObservedBy([ProcessObserver::class])]
@@ -129,9 +130,13 @@ class Process extends Model
     /**
      * Get all of the approvations of a model.
      */
-    public function approvals(): MorphMany
+    public function approval(): MorphOne
     {
-        return $this->morphMany(Approval::class, 'approvable');
+        return $this->morphOne(Approval::class, 'approvable')->where('endorse',false);
+    }
+    public function endorses(): MorphMany
+    {
+        return $this->morphMany(Approval::class, 'approvable')->where('endorse',operator: true);
     }
 
     public function createOrUpdateDocument(): void
@@ -156,9 +161,28 @@ class Process extends Model
         // }
     }
 
-    public function createApprovals($referer_id): void
+    public function createNextProcess(): void
     {
-        // Referente
+        $nextProcess = $this->nextProcess()->create([
+            'process_type_id' => $this->processType->childProcessType->id,
+            'period'          => $this->period,
+            'program_id'      => $this->program_id,
+            'commune_id'      => $this->commune_id,
+            'municipality_id' => $this->municipality_id,
+            'mayor_id'        => $this->mayor_id,
+            'total_amount'    => $this->total_amount,
+            'quotas_qty'      => $this->quotas_qty,
+            'establishments'  => $this->establishments,
+            'signer_id'       => $this->signer_id,
+            // 'quotas'          => $this->quotas,
+        ]);
+
+        $this->update(['next_process_id' => $nextProcess->id]);
+    }
+
+    public function createEndorses($referer_id): void
+    {
+        // Visación del Referente
         $this->approvals()->create([
             "module" => "Convenios",
             "module_icon" => "fas fa-handshake",
@@ -170,7 +194,7 @@ class Process extends Model
             "sent_to_user_id" => $referer_id,
         ]);
 
-        // Flujos de aprobación
+        // El resto de los visadores de obtienen del Flujo de aprobación
         $steps = ApprovalFlow::getByObject($this);
         foreach($steps as $step) {
             $this->approvals()->create([
@@ -181,8 +205,25 @@ class Process extends Model
                 "document_route_params" => json_encode([
                     "record" => $this->id
                 ]),
+                "endorse" => true,
                 "sent_to_ou_id" => $step->organizational_unit_id,
             ]);
         }
+    }
+
+    public function createApproval(): void
+    {
+        // Solicitud de firma del director
+        $this->approval()->create([
+            "module" => "Convenios",
+            "module_icon" => "fas fa-handshake",
+            "subject" => "Firmar convenio",
+            "document_route_name" => "documents.agreements.processes.view",
+            "document_route_params" => json_encode([
+                "record" => $this->id
+            ]),
+            "digital_signature" => true,
+            "sent_to_ou_id" => $this->signer->user->organizational_unit_id,
+        ]);
     }
 }
