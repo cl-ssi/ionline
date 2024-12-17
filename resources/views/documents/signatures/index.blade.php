@@ -163,7 +163,7 @@
                                         <span
                                             class="circle-icon d-inline-block img-thumbnail border-dark bg-danger text-white rounded-circle font-monospace"
                                             tabindex="0" data-toggle="tooltip"
-                                            title="{{ $signatureFlow->signature_date }} - Rechazado por {{ $signatureFlow->signerName }} - Motivo: {{ $signatureFlow->observation }}">
+                                            title="{{ $signatureFlow->created_at }} - Rechazado por {{ $signatureFlow->signerName }} - Motivo: {{ $signatureFlow->observation }}">
                                             {{ substr($signatureFlow->userSigner->initials, 0, 2) }}
                                         </span>
                                     @endif
@@ -347,7 +347,7 @@
                                         <span
                                             class="circle-icon d-inline-block img-thumbnail border-dark bg-danger text-white rounded-circle font-monospace"
                                             tabindex="0" data-toggle="tooltip"
-                                            title="{{ $signatureFlow->signature_date }} - Rechazado por {{ $signatureFlow->signerName }} - Motivo: {{ $signatureFlow->observation }}">
+                                            title="{{ $signatureFlow->created_at }} - Rechazado por {{ $signatureFlow->signerName }} - Motivo: {{ $signatureFlow->observation }}">
                                             {{ substr($signatureFlow->userSigner->initials, 0, 2) }}
                                         </span>
                                     @endif
@@ -490,7 +490,7 @@
                                         <span
                                             class="circle-icon d-inline-block img-thumbnail border-dark bg-danger text-white rounded-circle font-monospace"
                                             tabindex="0" data-toggle="tooltip"
-                                            title="{{ $signatureFlow->signature_date }} - Rechazado por {{ $signatureFlow->signerName }} - Motivo: {{ $signatureFlow->observation }}">
+                                            title="{{ $signatureFlow->created_at }} - Rechazado por {{ $signatureFlow->signerName }} - Motivo: {{ $signatureFlow->observation }}">
                                             {{ substr($signatureFlow->userSigner->initials, 0, 2) }}
                                         </span>
                                     @endif
