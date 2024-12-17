@@ -11,9 +11,7 @@
                 No se puede firmar
             @endif
         </h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-        </button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
     </div>
     @if($pendingSignaturesFlow)
     <form method="POST" class="form-horizontal"
@@ -63,8 +61,7 @@
             </div>
         </div>
         <div class="modal-footer">
-            <button type="button" id="cancelSignBtn" class="btn btn-secondary" data-dismiss="modal">Cancelar
-            </button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close">Cancelar</button>
             @if($pendingSignaturesFlow)
                 @if(count($pendingSignaturesFlow->validationMessages) === 0)
                     <button class="btn btn-primary" id="signBtn" type="submit">
