@@ -147,6 +147,20 @@ br {
     /* padding-left: 6px; */
 }
 
+/* Este es para dejar las signatures antes del en footer @section('approvals')*/
+.endorse-footer {
+    position: absolute;
+    margin-left: 25px;
+    bottom: 52px;
+}
+
+.endorse {
+    vertical-align: top;
+    padding-top: 0px;
+    padding-right: 1px;
+    padding-bottom: 2px;
+}
+
 .danger {
     color: #dc3545!important;
 }
