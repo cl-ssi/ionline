@@ -304,12 +304,12 @@ TODO:
 [X] Una vez estado es "enviado a visación bloquear los campos o mostrar un view"
 [X] Traducir boton en relation manager de crear componentes
 [X] Crear vista del process para poder mostrar el documento y para las aprobaciones
+[X] Crear Proceso - Auto calcular las cuotas
 [-] Crear Proceso - Comentarios dejar fijos los que ya se ingresaron
 [-] Mostrar vinculo al siguiente proceso
 [-] Poblar approval flow
 [-] Agregar archivo adjunto, resolución firmada por alcalde
 [ ] Mostrar section con datos del programa y sus componentes
-[ ] Crear Proceso - Auto calcular las cuotas
 [ ] Parametrizar abogado
 [ ] Permitir edición abogado
 [ ] Agregar otros archivos adjunto

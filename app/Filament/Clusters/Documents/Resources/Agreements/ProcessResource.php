@@ -126,10 +126,6 @@ class ProcessResource extends Resource
                             ->options(
                                 options: fn (Get $get): Collection => Establishment::where('cl_commune_id', $get('commune_id'))->pluck('name', 'id')
                             ),
-                        // Forms\Components\Select::make('next_process_id')
-                        //     ->label('Siguiente proceso')
-                        //     ->relationship('nextProcess', 'id')
-                        //     ->default(null),
 
                         Forms\Components\Repeater::make('quotas')
                             ->label('Cuotas')
@@ -143,11 +139,34 @@ class ProcessResource extends Resource
                                     ->label('Porcentaje')
                                     ->numeric()
                                     ->required(),
+                                    // ->afterStateUpdated(function (Set $set, Get $get, $state) {
+                                    //     // Obtiene el monto total
+                                    //     $totalAmount = $get('total_amount');
+                                    //     dd($totalAmount);
+                                        
+                                    //     // Valida si totalAmount y el porcentaje son valores numéricos
+                                    //     if (is_numeric($totalAmount) && is_numeric($state)) {
+                                    //         // Calcula el monto con el porcentaje
+                                    //         $amount = ($totalAmount * $state) / 100;
+                                    //         $set('amount', round($amount, 2)); // Redondear a 2 decimales
+                                    //     }
+                                    // }),
                                 Forms\Components\TextInput::make('amount')
                                     ->label('Monto')
                                     ->required()
                                     ->numeric()
-                                    ->columnSpan(2),
+                                    ->columnSpan(2)
+                                    ->suffixAction(
+                                        Forms\Components\Actions\Action::make('calculateAmount')
+                                            ->label('Calcular valor cuota')
+                                            ->icon('heroicon-m-calculator')
+                                            ->action(function (Set $set, Get $get, $livewire, $state) {
+                                                $total_amount = $get('../../total_amount');
+                                                $percentage = $get('percentage');
+                                                $amount = ($total_amount * $percentage) / 100;
+                                                $set('amount', $amount);
+                                            })
+                                    ),
                             ])
                             ->columns(6)
                             ->columnSpanFull(),

@@ -18,8 +18,9 @@ class Comment extends Model
     /**
      * Ejemplo de uso (organizationalUnit y establishment se llenan automáticamente):
      */
-    // $comment = Comment::create([
-    //    'body' => 'Comentario de prueba'
+    // $comment = $modelo->comments()->create([
+    //    'body' => 'Comentario de prueba',
+    //    'is_from_system' => true, //opcional si es un comentario del sistema
     // ]);
 
     protected $fillable = [
