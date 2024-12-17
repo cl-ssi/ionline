@@ -12,6 +12,7 @@ use App\Models\Parameters\ApprovalFlow;
 use App\Models\Parameters\Mayor;
 use App\Models\Parameters\Municipality;
 use App\Models\Parameters\Program;
+use App\Models\User;
 use App\Observers\Documents\Agreements\ProcessObserver;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Model;
@@ -193,6 +194,12 @@ class Process extends Model
                 "record" => $this->id
             ]),
             "sent_to_user_id" => $referer_id,
+
+            /* Aprobado por defecto */
+            "approver_ou_id" => User::find($referer_id)->organizational_unit_id ?? null,
+            "approver_id" => $referer_id,
+            "approver_at" => now(),
+            "status" => true,
         ]);
 
         // El resto de los visadores de obtienen del Flujo de aprobación

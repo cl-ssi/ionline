@@ -281,12 +281,12 @@ TODO:
 [X] Botón siguiente proceso en el index
 [X] Firma de directora con su propio circulo en el index
 [X] Indentificar que procesos van a la comuna para firma, para mostrar o no el cuadro
-[ ] Poder cargar documento numerado de OF Partes, donde corresponda
+[+] Poder cargar documento numerado de OF Partes, donde corresponda
 [ ] Distribución queda al final (solo para reso)
-[ ] Visaciones debajo de la distribución
-[ ] En programa: Adjuntar archivos para ambas reso (Aprobatoria y Distribución de recursos)
+[X] Visaciones debajo de la distribución
+[X] En programa: Adjuntar archivos para ambas reso (Aprobatoria y Distribución de recursos)
 [ ] En aprobaciones que se vean los adjuntos
-[ ] Auto aprobar la visacion del referente
+[X] Auto aprobar la visacion del referente
 [ ] Certificado De no fraccionamiento y de rendiciones, se crea por convenio
 [ ] Escoger no enviar a la comuna (caso observaciones de contraloría, ya que visto bueno de comuna es técnico y no jurídico)
 
