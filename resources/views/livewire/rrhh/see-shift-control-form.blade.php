@@ -152,7 +152,7 @@
                                 <th style="text-align: left;">NOMBRES</th>
                                 <td>
                                     @if ( isset( $usr ) )
-                                       {{$usr->getFirstNameAttribute()}}
+                                       {{$usr->firstName}}
 
                                     @else
 

@@ -261,7 +261,7 @@
                             <td>    {{strtoupper($usr->mothers_family) }} </td>
                             <td>
                                 @if ( isset( $usr ) )
-                                    {{strtoupper($usr->getFirstNameAttribute())         }}
+                                    {{strtoupper($usr->firstName)         }}
 
                                 @endif
                             </td>
