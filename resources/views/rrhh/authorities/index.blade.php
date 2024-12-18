@@ -39,21 +39,21 @@
                         @if($item['manager'])
                             <hr class="mt-1 mb-1" >
                             @can('Authorities: edit') <a href="{{ route('rrhh.authorities.edit', $item['manager']->id) }}"> @endcan
-                            {{ optional($item['manager']->user)->tinnyName }} <br>
+                            {{ optional($item['manager']->user)->tinyName }} <br>
                             @can('Authorities: edit') </a> @endcan
                             <em class="text-muted">{{ $item['manager']->position }}</em><br>
                         @endif
                         @if($item['delegate'])
                             <hr class="mt-1 mb-1" >
                             @can('Authorities: edit') <a href="{{ route('rrhh.authorities.edit', $item['delegate']->id) }}"> @endcan
-                            {{ $item['delegate']->user->tinnyName }} <br>
+                            {{ $item['delegate']->user->tinyName }} <br>
                             @can('Authorities: edit') </a> @endcan
                             <em class="text-muted">{{ $item['delegate']->position }}</em><br>
                         @endif
                         @if($item['secretary'])
                             <hr class="mt-1 mb-1" >
                             @can('Authorities: edit') <a href="{{ route('rrhh.authorities.edit', $item['secretary']->id) }}"> @endcan
-                            {{ $item['secretary']->user->tinnyName }} <br>
+                            {{ $item['secretary']->user->tinyName }} <br>
                             @can('Authorities: edit') </a> @endcan
                             <em class="text-muted">{{ $item['secretary']->position }}</em> <br>
                         @endif
@@ -109,13 +109,13 @@
                     <tbody>
                     @foreach($authorities as $authority)
                         <tr class="small">
-                            <td>{{ optional($authority->user)->tinnyName }} {{ trashed($authority->user) }}</td>
+                            <td>{{ optional($authority->user)->tinyName }} {{ trashed($authority->user) }}</td>
                             <td nowrap>{{ $authority->from->format('d-m-Y') }}</td>
                             <td nowrap>{{ ($authority->to) ? $authority->to->format('d-m-Y') : '' }}</td>
                             <td>{{ $authority->position }}</td>
                             <td>
                                 {{ $authority->created_at->format('Y-m-d H:i') }}<br>
-                                <small>{{ $authority->creator->tinnyName }}</small>
+                                <small>{{ $authority->creator->tinyName }}</small>
                             </td>
                             <th>
                                 @can('Authorities: edit')

@@ -78,8 +78,8 @@
         <td class="col-md-3" colspan="3">
             <ul>
                 @foreach($uniqueUsers as $user)
-                    @if($user && isset($user->tinny_name))
-                        <li>{{ $user->tinny_name }}</li>
+                    @if($user && isset($user->tinyName))
+                        <li>{{ $user->tinyName }}</li>
                     @endif
                 @endforeach
             </ul>

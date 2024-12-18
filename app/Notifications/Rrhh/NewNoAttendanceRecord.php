@@ -55,7 +55,7 @@ class NewNoAttendanceRecord extends Notification
         return [
             'module'  => 'Asistencia', // Opcional
             'icon'    => '<i class="fas fa-fw fa-clock"></i>', // Opcional
-            'subject' => 'Constancia marca de '.$this->noAttendanceRecord->user->tinnyName,
+            'subject' => 'Constancia marca de '.$this->noAttendanceRecord->user->tinyName,
             'action' => route('rrhh.attendance.no-records.confirmation',[$this->noAttendanceRecord->id], false),
         ];
     }

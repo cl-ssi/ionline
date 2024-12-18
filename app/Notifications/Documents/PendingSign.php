@@ -60,7 +60,7 @@ class PendingSign extends Notification
             // 'module'  => 'Prueba', // Opcional
             'module'  => 'Firma',
             'icon'    => '<i class="fas fa-bell"></i>', // Opcional
-            'subject' => 'El Usuario '.auth()->user()->tinny_name.' le recuerda Firmar/Visar la Solicitud de Firma '.$this->signature->id, 
+            'subject' => 'El Usuario '.auth()->user()->tinyName.' le recuerda Firmar/Visar la Solicitud de Firma '.$this->signature->id, 
             'action' => route('documents.signatures.index',['pendientes'], false),
         ];
     }

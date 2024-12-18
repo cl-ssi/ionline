@@ -99,7 +99,7 @@
                         </td>
                         <td>
                             @if($inventory->responsible)
-                                {{ $inventory->responsible->tinny_name }}
+                                {{ $inventory->responsible->tinyName }}
                             @endif
                         </td>
                         <td>
@@ -107,13 +107,13 @@
                             <ul>
                                 @foreach($inventory->inventoryUsers as $inventoryuser)
                                     <li>
-                                        {{ $inventoryuser->user->tinny_name }}
+                                        {{ $inventoryuser->user->tinyName }}
                                     </li>
                                 @endforeach
                             </ul>
                         @endif
                             <!-- @if($inventory->using)
-                                {{ $inventory->using->tinny_name }}
+                                {{ $inventory->using->tinyName }}
                             @endif -->
                         </td>
                         <td class="text-center" nowrap>

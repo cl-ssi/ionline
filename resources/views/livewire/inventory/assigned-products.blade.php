@@ -131,14 +131,14 @@
                         {{ $inventory->place?->architectural_design_code }}
                     </td>
                     <td>
-                        {{ optional($inventory->responsible)->tinny_name }}
+                        {{ optional($inventory->responsible)->tinyName }}
                     </td>
                     <td>
                         @if($inventory->inventoryUsers)
                             <ul>
                                 @foreach($inventory->inventoryUsers as $inventoryuser)
                                     <li>
-                                        {{ $inventoryuser->user->tinny_name }}
+                                        {{ $inventoryuser->user->tinyName }}
                                         @if($inventory->user_responsible_id == auth()->user()->id)
                                             <button class="btn btn-danger btn-sm" title="Eliminar Usuario" wire:click="removeInventoryUser({{ $inventoryuser->id }})">
                                                 <i class="fas fa-trash-alt"></i>

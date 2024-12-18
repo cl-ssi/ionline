@@ -140,9 +140,9 @@
                 @foreach($responsibles as $itemResponsible)
                     <option value="{{ $itemResponsible->id }}">
                         @if($itemResponsible->trashed())
-                            {{ $itemResponsible->tinny_name }} (Eliminado)
+                            {{ $itemResponsible->tinyName }} (Eliminado)
                         @else
-                            {{ $itemResponsible->tinny_name }}
+                            {{ $itemResponsible->tinyName }}
                         @endif
                     </option>
                 @endforeach
@@ -161,9 +161,9 @@
                 @foreach($users as $itemUser)
                 <option value="{{ $itemUser->id }}">
                     @if($itemUser->trashed())
-                        {{ $itemUser->tinny_name }} (Eliminado)
+                        {{ $itemUser->tinyName }} (Eliminado)
                     @else
-                        {{ $itemUser->tinny_name }}
+                        {{ $itemUser->tinyName }}
                     @endif
                 </option>
                 @endforeach
@@ -276,12 +276,12 @@
                 </td>
                 <td>
                     @if($userResponsible)
-                        {{ $userResponsible->tinny_name }}
+                        {{ $userResponsible->tinyName }}
                     @endif
                 </td>
                 <td>
                     @if($userUsing)
-                        {{ $userUsing->tinny_name }}
+                        {{ $userUsing->tinyName }}
                     @endif
                 </td>
                 <td class="text-center">
@@ -438,12 +438,12 @@
                     <td class="text-center">
                         @if($inventory->lastMovement)
                             @if($inventory->lastMovement->reception_date == null)
-                                {{ optional($inventory->lastMovement->responsibleUser)->tinny_name }}
+                                {{ optional($inventory->lastMovement->responsibleUser)->tinyName }}
                                 <span class="text-danger">
                                     Pendiente
                                 </span>
                             @else
-                                {{ optional($inventory->responsible)->tinny_name }}
+                                {{ optional($inventory->responsible)->tinyName }}
                             @endif
                         @endif
                     </td>
@@ -453,9 +453,9 @@
                                 @foreach($inventory->inventoryUsers as $inventoryuser)
                                         <li>
                                             @if($inventoryuser->user?->trashed())
-                                                <del>{{ $inventoryuser->user?->tinny_name }}</del>
+                                                <del>{{ $inventoryuser->user?->tinyName }}</del>
                                             @else
-                                                {{ $inventoryuser->user?->tinny_name }}
+                                                {{ $inventoryuser->user?->tinyName }}
                                             @endif
                                             <button class="btn btn-danger btn-sm" title="Eliminar Usuario" wire:click="removeInventoryUser({{ $inventoryuser->id }})">
                                                 <i class="fas fa-trash-alt"></i>

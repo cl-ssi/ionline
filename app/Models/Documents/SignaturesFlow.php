@@ -109,7 +109,7 @@ class SignaturesFlow extends Model implements Auditable
      */
     public function getSignerNameAttribute(): string
     {
-        return $this->userSigner->tinnyName;
+        return $this->userSigner->tinyName;
     }
 
     /**
@@ -119,7 +119,7 @@ class SignaturesFlow extends Model implements Auditable
      */
     public function getRealSignerNameAttribute(): string
     {
-        return $this->realSigner->tinnyName;
+        return $this->realSigner->tinyName;
     }
 
     /**

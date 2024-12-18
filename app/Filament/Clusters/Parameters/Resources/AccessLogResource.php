@@ -46,7 +46,7 @@ class AccessLogResource extends Resource
                     ->label('Fecha')
                     ->dateTime('Y-m-d H:i:s')
                     ->sortable(),
-                Tables\Columns\TextColumn::make(name: 'user.tinnyName')
+                Tables\Columns\TextColumn::make(name: 'user.tinyName')
                     ->numeric()
                     ->label('Usuario')
                     ->icon(fn($record) => !$record->user->active ? 'heroicon-o-no-symbol' : '')
@@ -56,7 +56,7 @@ class AccessLogResource extends Resource
                     ->label('Tipo')
                     ->sortable()
                     ->searchable(),
-                Tables\Columns\TextColumn::make('switchUser.tinnyName')
+                Tables\Columns\TextColumn::make('switchUser.tinyName')
                     ->label('Usuario Switch')
                     ->numeric()
                     ->searchable(['full_name']),

@@ -33,7 +33,7 @@
                 </td>
                 <td>
                     <a href="{{ route('rrhh.users.edit', $accessLog->user->id ?? 1) }}">
-                        {{ optional($accessLog->user)->tinnyName }}
+                        {{ optional($accessLog->user)->tinyName }}
                     </a>
                     @if(! optional($accessLog->user)->active)
                     <i class="fas fa-ban"></i>
@@ -45,7 +45,7 @@
                 <td>
                     {{ $accessLog->type }}
                 </td>
-                <td>{{ optional($accessLog->switchUser)->tinnyName }}</td>
+                <td>{{ optional($accessLog->switchUser)->tinyName }}</td>
             </tr>
             @empty
 

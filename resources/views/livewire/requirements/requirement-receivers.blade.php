@@ -23,7 +23,7 @@
                 <select class="form-control" name="to_user_id" id="user" required="" wire:model="to_user_id" wire:key="{{ $to_ou_id }}">
                     @if($users)
                         @foreach($users as $user)
-                            <option value="{{$user->id}}">@if($this->authority != null && $this->authority->user_id == $user->id)👑@endif {{ $user->tinnyName }}</option>
+                            <option value="{{$user->id}}">@if($this->authority != null && $this->authority->user_id == $user->id)👑@endif {{ $user->tinyName }}</option>
                         @endforeach
                     @endif
                 </select>
@@ -66,7 +66,7 @@
                     <tr><input style="display:none" name='users[]' class='users' value='{{$user_key->id}}'>
                         <input style="display:none" name='enCopia[]' value='{{$enCopia[$key]}}'>
                         <td>{{ $user_key->organizationalUnit->name }}</td>
-                        <td>{{ $user_key->tinnyName }}</td>
+                        <td>{{ $user_key->tinyName }}</td>
                         <td>
                             @if($enCopia[$key]==1)Sí
                             @else No @endif

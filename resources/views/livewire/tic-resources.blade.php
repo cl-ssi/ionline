@@ -69,8 +69,8 @@
                 <td>{{ $inventory->model }}</td>
                 <td>{{ $inventory->serial_number }}</td>
                 <!-- <td>{{ $inventory->observations }}</td> -->
-                <td>{{ $inventory->using->tinnyName }}</td>
-                <td>{{ $inventory->responsible->tinnyName }}</td>
+                <td>{{ $inventory->using->tinyName }}</td>
+                <td>{{ $inventory->responsible->tinyName }}</td>
                 <td>{{ $inventory->place->name }}</td>
                 <td>{{ $inventory->estado }}</td>
                 <td class="text-center" nowrap>

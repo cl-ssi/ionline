@@ -11,7 +11,7 @@
                         @if($approvalSelected->sent_to_ou_id)
                             de {{ $approvalSelected->sentToOu->name }}
                         @else
-                            {{ auth()->user()->tinnyName }}
+                            {{ auth()->user()->tinyName }}
                         @endif
                     </h6>
 

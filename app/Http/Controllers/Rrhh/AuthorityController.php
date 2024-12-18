@@ -88,7 +88,7 @@ class AuthorityController extends Controller
               $backgroundColor = '#007bff';
             }
             $event = [
-                'title' => $authority->user->tinnyName,
+                'title' => $authority->user->tinyName,
                 'start' => $authority->date,
                 'end' => $authority->date,
                 'backgroundColor' => $backgroundColor,

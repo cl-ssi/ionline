@@ -99,7 +99,7 @@
                                     @if ($pendingSignaturesFlow->userSigner->subrogant)
                                         <br>
                                         <b>Firma Subrrogada por</b>:<br>
-                                        {{ $pendingSignaturesFlow->userSigner->subrogant->tinnyName }}
+                                        {{ $pendingSignaturesFlow->userSigner->subrogant->tinyName }}
                                     @endif
                                 @endif
                             </td>
@@ -110,7 +110,7 @@
                                 {{ $pendingSignaturesFlow->signature->subject }}
                             </td>
                             <td>{!! $pendingSignaturesFlow->signature->description !!}</td>
-                            <td>{{ $pendingSignaturesFlow->signature->responsable->tinnyName }}</td>
+                            <td>{{ $pendingSignaturesFlow->signature->responsable->tinyName }}</td>
                             <td>
                                 @can('Documents: signatures and distribution')
                                     <button type="button" class="btn btn-sm btn-outline-primary" @disabled(auth()->user()->godMode)
@@ -289,7 +289,7 @@
                             <td>{{ $signedSignaturesFlow->signature->id ?? '' }}</td>
                             <td>{{ $signedSignaturesFlow->signature->created_at->format('Y-m-d') }}</td>
                             <td>
-                                <b>{{ $signedSignaturesFlow->userSigner->tinnyName }}</b>
+                                <b>{{ $signedSignaturesFlow->userSigner->tinyName }}</b>
                                 <br>
                                 {{ $signedSignaturesFlow->signature ? $signedSignaturesFlow->type : '' }}
                             </td>
@@ -297,7 +297,7 @@
                             <td>{!! $signedSignaturesFlow->signature->description ?? '' !!}</td>
                             <td>
                                 @if ($signedSignaturesFlow->signature)
-                                    {{ $signedSignaturesFlow->signature->responsable->tinnyName }}
+                                    {{ $signedSignaturesFlow->signature->responsable->tinyName }}
                                 @endif
                             </td>
                             <td class="text-center">

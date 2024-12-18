@@ -148,7 +148,7 @@ class InvoiceManagement extends Component
 
             $technicalSigner->notify(new TechnicalReception($subject));
 
-            session()->flash('success', "La solicitud de firma del Ingreso #". $control->id . " fue enviada a $technicalSigner->tinny_name.");
+            session()->flash('success', "La solicitud de firma del Ingreso #". $control->id . " fue enviada a $technicalSigner->tinyName.");
         }
     }
 }

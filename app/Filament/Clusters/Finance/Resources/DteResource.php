@@ -280,7 +280,7 @@ class DteResource extends Resource
                     ->toggleable(),
                 Tables\Columns\TextColumn::make('requestForm.folio')
                     ->label('FR')
-                    ->description(fn (Dte $record): string => $record->requestForm?->contractManager?->tinnyName ?? '')
+                    ->description(fn (Dte $record): string => $record->requestForm?->contractManager?->tinyName ?? '')
                     ->url(fn(Dte $record) => $record->requestForm ? route('request_forms.show', $record->requestForm?->id) : null)
                     ->searchable(),
                 Tables\Columns\TextColumn::make('receptions.id')

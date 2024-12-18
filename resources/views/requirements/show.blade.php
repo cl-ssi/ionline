@@ -194,7 +194,7 @@
                 @if($event_->status == "en copia")
                     @if($event_->body == $event->body && $event->created_at->format('H') == $event_->created_at->format('H'))
                         @php
-                            $cc = $cc . $event_->to_user->tinnyName . ", ";
+                            $cc = $cc . $event_->to_user->tinyName . ", ";
                         @endphp
                     @endif
                 @endif

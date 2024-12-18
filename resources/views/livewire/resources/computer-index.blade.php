@@ -56,7 +56,7 @@
                     <td>{{ $computer->ip }}</td>
                     <td>
                         @foreach($computer->users as $user)
-                            {{ $user->tinnyName }}<br>
+                            {{ $user->tinyName }}<br>
                         @endforeach
                     </td>
                     <td>
