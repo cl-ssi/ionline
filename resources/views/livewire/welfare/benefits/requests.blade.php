@@ -89,7 +89,7 @@
                                                          'user' => auth()->user()])
                     @else
                         <input type="hidden" wire:model.live="user_id">
-                        <input type="text" class="form-control" disabled value="{{auth()->user()->getTinnyNameAttribute()}}">
+                        <input type="text" class="form-control" disabled value="{{auth()->user()->tinyName}}">
                     @endif
                     @error('user_id') <span class="text-danger">{{ $message }}</span> @enderror
                 </div>
