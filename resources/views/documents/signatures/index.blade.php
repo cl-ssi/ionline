@@ -54,6 +54,7 @@
         <h4>Pendientes por firmar</h4>
 
         <button class="btn btn-primary mb-2" id="massSign" onclick="getMassSignModalContent()" disabled
+            data-bs-toggle="modal"
             title="Seleccione solicitudes pendientes para firmar de forma masiva.">
             <i class="fas fa-file-signature"></i>Firmar
         </button>
@@ -662,11 +663,11 @@
                     responseType: 'document'
                 })
                 .then(function(response) {
-                    const contentdiv = document.getElementById("massSignModalContent");
+                    const contentdiv = document.getElementById("signModalContent");
                     contentdiv.innerHTML = response.data.documentElement.innerHTML;
                 })
                 .then(function() {
-                    const massSignModal = new bootstrap.Modal(document.getElementById('massSignModal'));
+                    const massSignModal = new bootstrap.Modal(document.getElementById('signModal'));
                     massSignModal.show();
                 })
                 .catch(function(error) {
