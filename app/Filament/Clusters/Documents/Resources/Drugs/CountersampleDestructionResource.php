@@ -55,33 +55,33 @@ class CountersampleDestructionResource extends Resource
                         'Armada de Chile' => 'Armada de Chile',
                     ])
                     ->required(),
-                Forms\Components\Select::make('user_id')
-                    ->label('Usuario')
-                    ->options(fn () => User::all()->pluck('full_name', 'id'))
-                    ->searchable()
-                    ->required(),
-                Forms\Components\Select::make('manager_id')
-                    ->label('Encargado')
-                    ->options(fn () => User::all()->pluck('full_name', 'id'))
-                    ->searchable()
-                    ->required(),
+                // Forms\Components\Select::make('user_id')
+                //     ->label('Usuario')
+                //     ->options(fn () => User::all()->pluck('full_name', 'id'))
+                //     ->searchable()
+                //     ->required(),
+                // Forms\Components\Select::make('manager_id')
+                //     ->label('Encargado')
+                //     ->options(fn () => User::all()->pluck('full_name', 'id'))
+                //     ->searchable()
+                //     ->required(),
                 Forms\Components\Select::make('lawyer_id')
-                    ->label('Abogado')
+                    ->label('Jurídica')
                     ->options(fn () => User::all()->pluck('full_name', 'id'))
                     ->searchable()
                     ->required(),
                 Forms\Components\Select::make('observer_id')
-                    ->label('Observador')
+                    ->label('Ministro de Fe')
                     ->options(fn () => User::all()->pluck('full_name', 'id'))
                     ->searchable()
                     ->required(),
                 Forms\Components\Select::make('lawyer_observer_id')
-                    ->label('Abogado observador')
+                    ->label('Ministro de Fe Jurídico')
                     ->options(fn () => User::all()->pluck('full_name', 'id'))
                     ->searchable()
                     ->required(),
             ])
-            ->columns(3);
+            ->columns(4);
     }
 
     public static function table(Table $table): Table

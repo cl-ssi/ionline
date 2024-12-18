@@ -6,6 +6,7 @@ use App\Filament\Clusters\Documents;
 use App\Filament\Clusters\Documents\Resources\Drugs\ReceptionItemResource\Pages;
 use App\Filament\Clusters\Documents\Resources\Drugs\ReceptionItemResource\RelationManagers;
 use App\Models\Drugs\CountersampleDestruction;
+use App\Models\Drugs\Court;
 use App\Models\Drugs\ReceptionItem;
 use App\Models\User;
 use Filament\Forms;
@@ -174,37 +175,43 @@ class ReceptionItemResource extends Resource
                     // Tables\Actions\DeleteBulkAction::make(),
                     Tables\Actions\BulkAction::make('create_countersample_destruction')
                         ->form([
-                            Forms\Components\Select::make('police')
-                                ->label('Policía')
-                                ->options([
-                                    'Policía de Investigaciones' => 'Policía de Investigaciones',
-                                    'Carabineros de Chile' => 'Carabineros de Chile',
-                                    'Armada de Chile' => 'Armada de Chile',
-                                ])
-                                ->required(),
-                            Forms\Components\Select::make('lawyer_id')
-                                ->label('Abogado')
-                                ->options(User::query()->pluck('full_name', 'id'))
-                                ->searchable()
-                                ->required(),
-                            Forms\Components\Select::make('observer_id')
-                                ->label('Ministro de Fe')
-                                ->options(User::query()->pluck('full_name', 'id'))
-                                ->searchable()
-                                ->required(),
-                            Forms\Components\Select::make('lawyer_observer_id')
-                                ->label('Ministro de Fe Jurídico')
-                                ->options(User::query()->pluck('full_name', 'id'))
-                                ->searchable()
-                                ->required(),
+                            Forms\Components\Grid::make(3)->schema([
+                                Forms\Components\DatePicker::make('destructed_at')
+                                    ->label('Fecha de destrucción')
+                                    ->required(),
+                                Forms\Components\Select::make('court_id')
+                                    ->label('Juzgado')
+                                    ->options(Court::pluck('name', 'id'))
+                                    ->default(null),
+                                Forms\Components\Select::make('police')
+                                    ->label('Policía')
+                                    ->options([
+                                        'Policía de Investigaciones' => 'Policía de Investigaciones',
+                                        'Carabineros de Chile' => 'Carabineros de Chile',
+                                        'Armada de Chile' => 'Armada de Chile',
+                                    ])
+                                    ->required(),
+                                Forms\Components\Select::make('lawyer_id')
+                                    ->label('Jurídica')
+                                    ->options(User::pluck('full_name', 'id'))
+                                    ->searchable('full_name')
+                                    ->required(),
+                                Forms\Components\Select::make('observer_id')
+                                    ->label('Ministro de Fe')
+                                    ->options(User::pluck('full_name', 'id'))
+                                    ->searchable('full_name')
+                                    ->required(),
+                                Forms\Components\Select::make('lawyer_observer_id')
+                                    ->label('Ministro de Fe Jurídico')
+                                    ->options(User::pluck('full_name', 'id'))
+                                    ->searchable('full_name')
+                                    ->required(),
+                            ]),
                         ])
                         ->icon('heroicon-o-fire')
                         ->label('Destrucción contramuestras')
                         ->action(function (array $data, Collection $records): void {
-                            // dd($records->first()->reception);
                             $countersampleDestruction = CountersampleDestruction::create([
-                                'user_id' => auth()->id(),
-                                'manager_id' => auth()->id(),
                                 'court_id' => $records->first()->reception->court_id,
                                 'police' => '',
                                 'destructed_at' => now(),
@@ -217,7 +224,6 @@ class ReceptionItemResource extends Resource
                                     'countersample_destruction_id' => $countersampleDestruction->id,
                                 ]);
                             });
-                            // redirect to countersample destruction
                             redirect()->to(CountersampleDestructionResource::getUrl('edit', ['record' => $countersampleDestruction]));
                         }),
                 ]),
