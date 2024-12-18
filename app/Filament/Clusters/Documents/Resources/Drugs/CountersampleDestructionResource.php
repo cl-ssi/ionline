@@ -89,35 +89,44 @@ class CountersampleDestructionResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('number')
+                    ->label('Número')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('destructed_at')
-                    ->date()
+                    ->label('Fecha de destrucción')
+                    ->date('Y-m-d')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('court.name')
+                    ->label('Juzgado')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('police')
+                    ->label('Policía')
                     ->searchable()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('user.name')
+                    ->label('Creador')
                     ->numeric()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('manager.name')
+                    ->label('')
                     ->numeric()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('lawyer.name')
+                    ->label('Jurídica')
                     ->numeric()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('observer.name')
+                    ->label('Ministro de Fe')
                     ->numeric()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('lawyerObserver.name')
+                    ->label('Ministro de Fe Jurídico')
                     ->numeric()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
