@@ -1044,26 +1044,23 @@ class User extends Authenticatable implements Auditable, FilamentUser
         );
     }
 
-    public function getActiveStoreAttribute()
+    protected function activeStore(): Attribute
     {
-        $storeActive = $this->stores->where('pivot.status', '=', 1)->first();
-        if ($storeActive) {
-            return $storeActive;
-        } else {
-            return null;
-        }
+        return Attribute::make(
+            get: fn () => $this->stores->where('pivot.status', 1)->first()
+        );
     }
 
-    public function getSubrogantAttribute()
+    protected function subrogant(): Attribute
     {
-        if ($this->absent) {
-            return $this->subrogations
-                ->where('subrogant.absent', false)
-                ->first()
-                ->subrogant ?? null;
-        } else {
-            return $this;
-        }
+        return Attribute::make(
+            get: fn () => $this->absent
+                ? $this->subrogations
+                    ->where('subrogant.absent', false)
+                    ->first()
+                    ->subrogant ?? null
+                : $this
+        );
     }
 
     /* Este debería devolver si soy subrogante de tipo autoridad */
@@ -1123,33 +1120,39 @@ class User extends Authenticatable implements Auditable, FilamentUser
      *                     example with params:
      *                     <img src="{{ auth()->user()->gravatarUrl }}?s=80&d=mp&r=g" class="img-thumbnail rounded-circle" alt="Avatar">
      */
-    public function getGravatarUrlAttribute()
+    protected function gravatarUrl(): Attribute
     {
-        $hash = md5(strtolower(trim($this->attributes['email'])));
-
-        return "https://www.gravatar.com/avatar/$hash";
+        return Attribute::make(
+            get: fn () => "https://www.gravatar.com/avatar/" . md5(strtolower(trim($this->email)))
+        );
     }
 
-    public function getCheckGravatarAttribute()
+    protected function checkGravatar(): Attribute
     {
-        $hash    = md5($this->email);
-        $uri     = 'https://www.gravatar.com/avatar/'.$hash.'?d=404';
-        $headers = @get_headers($uri);
+        return Attribute::make(
+            get: function () {
+                $hash = md5(strtolower(trim($this->attributes['email'])));
+                $uri = 'https://www.gravatar.com/avatar/' . $hash . '?d=404';
+                $headers = @get_headers($uri);
 
-        /* Permite login local si no hay conexión a internet */
-        if ($headers) {
-            if (preg_match('|200|', $headers[0])) {
-                if (! $this->gravatar) {
-                    $this->gravatar = true;
-                    $this->save();
+                /* Permite login local si no hay conexión a internet */
+                if ($headers) {
+                    if (preg_match('|200|', $headers[0])) {
+                        if (!$this->gravatar) {
+                            $this->gravatar = true;
+                            $this->save();
+                        }
+                    } else {
+                        if ($this->gravatar) {
+                            $this->gravatar = false;
+                            $this->save();
+                        }
+                    }
                 }
-            } else {
-                if ($this->gravatar) {
-                    $this->gravatar = false;
-                    $this->save();
-                }
+
+                return $this->gravatar;
             }
-        }
+        );
     }
 
     public function checkEmailFormat()
@@ -1165,9 +1168,11 @@ class User extends Authenticatable implements Auditable, FilamentUser
     /**
      * Checkea si estoy en god mode
      */
-    public function getGodModeAttribute()
+    protected function godMode(): Attribute
     {
-        return session()->has('god');
+        return Attribute::make(
+            get: fn () => session()->has('god')
+        );
     }
 
     /**
