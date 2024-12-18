@@ -18,7 +18,7 @@
     <div class="form-row">
         <fieldset class="form-group col-12 col-sm-6">
             <label for="for_creator_name">Creador de Solicitud</label>
-            <input type="text" class="form-control" name="creator_name" id="for_creator_name" value="{{ $requestReplacementStaff->user->TinnyName }}" disabled>
+            <input type="text" class="form-control" name="creator_name" id="for_creator_name" value="{{ $requestReplacementStaff->user->tinyName }}" disabled>
         </fieldset>
 
         <fieldset class="form-group col-6 col-md-6">

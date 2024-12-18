@@ -234,7 +234,7 @@
                                 {{--
                                 @if($subrogants && $allowanceSign->status == 'pending')
                                     <div class="alert alert-info" role="alert">
-                                        <b>Estimado Usuario</b>: Según el calendario de autoridades <b>{{ $allowance->userAllowance->TinnyName }}</b> es director(a) {{ $allowance->userAllowance->organizationalUnit->establishment->name }}
+                                        <b>Estimado Usuario</b>: Según el calendario de autoridades <b>{{ $allowance->userAllowance->tinyName }}</b> es director(a) {{ $allowance->userAllowance->organizationalUnit->establishment->name }}
                                     </div>
                                 @endif
                                 
@@ -301,7 +301,7 @@
                                     auth()->user()->organizationalUnit->establishment_id == App\Models\Parameters\Parameter::get('establishment', 'SSTarapaca'))
                                     @if($subrogants && $allowanceSign->status == 'pending')
                                         <div class="alert alert-info" role="alert">
-                                            <b>Estimado Usuario</b>: Según el calendario de autoridades <b>{{ $allowance->userAllowance->TinnyName }}</b> es director(a) {{ $allowance->userAllowance->organizationalUnit->establishment->name }}
+                                            <b>Estimado Usuario</b>: Según el calendario de autoridades <b>{{ $allowance->userAllowance->tinyName }}</b> es director(a) {{ $allowance->userAllowance->organizationalUnit->establishment->name }}
                                         </div>
                                     @endif
                                     

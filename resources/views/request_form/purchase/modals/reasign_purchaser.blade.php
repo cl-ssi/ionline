@@ -26,7 +26,7 @@
                                 <select name="new_purchaser_user_id" class="form-control form-control-sm">
                                     <option value="">Seleccione...</option>
                                     @foreach($users as $user)
-                                    <option value="{{ $user->id }}">{{ ucfirst(trans($user->TinnyName)) }}</option>
+                                    <option value="{{ $user->id }}">{{ ucfirst(trans($user->tinyName)) }}</option>
                                     @endforeach
                                 </select>
                             </fieldset>

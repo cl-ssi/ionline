@@ -206,7 +206,7 @@
                     {{ $requestReplacementStaff->organizationalUnit->name }}
                 </td>
                 <td style="width: 33%">
-                    {{($requestReplacementStaff->requesterUser) ?  $requestReplacementStaff->requesterUser->TinnyName : '' }}
+                    {{($requestReplacementStaff->requesterUser) ?  $requestReplacementStaff->requesterUser->tinyName : '' }}
                 </td>
             </tr>
             <tr>
@@ -501,7 +501,7 @@
                                         <span style="color: green;">
                                             <i class="fas fa-check-circle"></i> {{ $sign->StatusValue }} 
                                         </span><br>
-                                        <i class="fas fa-user"></i> {{ $sign->user->TinnyName }}<br>
+                                        <i class="fas fa-user"></i> {{ $sign->user->tinyName }}<br>
                                         <i class="fas fa-calendar-alt"></i> {{ ($sign->date_sign) ? $sign->date_sign->format('d-m-Y H:i:s') : '' }}<br>
                                     @endif
                                     @if($sign->request_status == 'rejected')
@@ -616,7 +616,7 @@
                                 <span style="color: green;">
                                     <i class="fas fa-check-circle"></i> {{ $sign->StatusValue }} 
                                 </span><br>
-                                <i class="fas fa-user"></i> {{ $sign->user->TinnyName }}<br>
+                                <i class="fas fa-user"></i> {{ $sign->user->tinyName }}<br>
                                 <i class="fas fa-calendar-alt"></i> {{ ($sign->date_sign) ? $sign->date_sign->format('d-m-Y H:i:s') : '' }}<br>
                             @endif
                             @if($sign->request_status == 'rejected')

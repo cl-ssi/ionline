@@ -112,8 +112,8 @@
             @foreach(auth()->user()->getIAmSubrogantNoAuthorityAttribute() as $key => $subrogation)
                 <tr>
                     <td>{{ $key+1 }}</td>
-                    <td>{{ auth()->user()->TinnyName }}</td>
-                    <td>{{ $subrogation->user->TinnyName }}</td>
+                    <td>{{ auth()->user()->tinyName }}</td>
+                    <td>{{ $subrogation->user->tinyName }}</td>
                     <td>{{ $subrogation->level }}</td>
                 </tr>
             @endforeach

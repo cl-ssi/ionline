@@ -165,7 +165,7 @@
                                         {{ $requestReplacementStaff->organizationalUnit->name }}
                                     </td>
                                     <td style="width: 33%">
-                                        {{($requestReplacementStaff->requesterUser) ?  $requestReplacementStaff->requesterUser->TinnyName : '' }}
+                                        {{($requestReplacementStaff->requesterUser) ?  $requestReplacementStaff->requesterUser->tinyName : '' }}
                                     </td>
                                 </tr>
                                 <tr>

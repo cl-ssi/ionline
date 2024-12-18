@@ -22,10 +22,10 @@
                         <td width="20%">
                             {{ $commitment->meeting->subject }}
                             <br><br>
-                            <small>Creado por: <b>{{ $commitment->meeting->userCreator->TinnyName }}</b></small>
+                            <small>Creado por: <b>{{ $commitment->meeting->userCreator->tinyName }}</b></small>
                         </td>
                         <td style="text-align: justify;">{{ $commitment->description }}</td>
-                        <td width="14%" class="text-center">{{ ($commitment->commitment_user_id) ?  $commitment->commitmentUser->TinnyName : $commitment->commitmentOrganizationalUnit->name }}</td>
+                        <td width="14%" class="text-center">{{ ($commitment->commitment_user_id) ?  $commitment->commitmentUser->tinyName : $commitment->commitmentOrganizationalUnit->name }}</td>
                         <td width="7%" class="text-center">
                             {{ ($commitment['closing_date']) ? $commitment['closing_date'] : 'Sin fecha límite' }} <br>
                             @switch($commitment->priority)

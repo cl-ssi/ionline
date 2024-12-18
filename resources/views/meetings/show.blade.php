@@ -112,7 +112,7 @@
                 <tr>        
                     <th class="text-center">{{ $loop->iteration }}</th>
                     <td style="text-align: justify;">{{ $commitment->description }}</td>
-                    <td class="text-center">{{ ($commitment->commitment_user_id) ?  $commitment->commitmentUser->TinnyName : $commitment->commitmentOrganizationalUnit->name }}</td>
+                    <td class="text-center">{{ ($commitment->commitment_user_id) ?  $commitment->commitmentUser->tinyName : $commitment->commitmentOrganizationalUnit->name }}</td>
                     <td class="text-center">
                         {{ ($commitment['closing_date']) ? $commitment['closing_date'] : 'Sin fecha límite' }} <br>
                         @switch($commitment->priority)

@@ -34,7 +34,7 @@
                         <td>
                             {{ $meeting->subject }}
                             <br><br>
-                            <small>Creado por: <b>{{ $meeting->userCreator->TinnyName }}</b></small>
+                            <small>Creado por: <b>{{ $meeting->userCreator->tinyName }}</b></small>
                         </td>
                         <td class="text-center">{{ ($meeting->commitments) ? $meeting->commitments->count() : 0 }}</td>
                         <td class="text-center">

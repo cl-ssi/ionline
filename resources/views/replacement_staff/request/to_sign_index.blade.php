@@ -117,9 +117,9 @@
                         </td>
                         <td>
                             <p>
-                                <b>Creado por</b>: {{ $requestReplacementStaff->user->TinnyName}} <br>
+                                <b>Creado por</b>: {{ $requestReplacementStaff->user->tinyName}} <br>
                                 ({{ $requestReplacementStaff->organizationalUnit->name }}) <br>
-                                <b>Solicitado por</b>: {{($requestReplacementStaff->requesterUser) ?  $requestReplacementStaff->requesterUser->TinnyName : '' }}
+                                <b>Solicitado por</b>: {{($requestReplacementStaff->requesterUser) ?  $requestReplacementStaff->requesterUser->tinyName : '' }}
                             </p>
                         </td>
                         <td class="text-center">
@@ -468,9 +468,9 @@
                     </td>
                     <td>
                         <p>
-                            <b>Creado por</b>: {{ $requestReplacementStaff->user->TinnyName}} <br>
+                            <b>Creado por</b>: {{ $requestReplacementStaff->user->tinyName}} <br>
                             ({{ $requestReplacementStaff->organizationalUnit->name }}) <br>
-                            <b>Solicitado por</b>: {{($requestReplacementStaff->requesterUser) ?  $requestReplacementStaff->requesterUser->TinnyName : '' }}
+                            <b>Solicitado por</b>: {{($requestReplacementStaff->requesterUser) ?  $requestReplacementStaff->requesterUser->tinyName : '' }}
                         </p>
                     </td>
                     <td class="text-center">
