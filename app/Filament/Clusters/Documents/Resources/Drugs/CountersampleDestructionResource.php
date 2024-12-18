@@ -50,9 +50,9 @@ class CountersampleDestructionResource extends Resource
                 Forms\Components\Select::make('police')
                     ->label('Policía')
                     ->options([
-                        'Policía de Investigaciones',
-                        'Carabineros de Chile',
-                        'Armada de Chile',
+                        'Policía de Investigaciones' => 'Policía de Investigaciones',
+                        'Carabineros de Chile' => 'Carabineros de Chile',
+                        'Armada de Chile' => 'Armada de Chile',
                     ])
                     ->required(),
                 Forms\Components\Select::make('user_id')
