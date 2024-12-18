@@ -183,7 +183,7 @@ Editar Item Programación Operativa </h4>
             title="Población Objetivo" 
             data-content="Expresar numéricamente la cantidad de población Ej: 15000">
             <i class="fas fa-info-circle"></i></a>
-            <input type="number" class="form-control " id="cant_target_population" name="cant_target_population" value="{{$programmingItem->cant_target_population ?? '0' }}" required="" form="edit-form">
+            <input type="number" class="form-control " id="cant_target_population" name="cant_target_population" value="{{$programmingItem->cant_target_population ?? '1' }}" required="" form="edit-form">
         </div>
         <div class="form-group col-md-2">
         <label for="forprogram">
@@ -217,7 +217,7 @@ Editar Item Programación Operativa </h4>
             title="Cobertura (%)" 
             data-content="Es el porcentaje de la población que se va a atender. Se expresa en porcentaje. Las prestaciones universales se deben consignar por sobre un 90% de cobertura Ej: 43%">
             <i class="fas fa-info-circle"></i></a>
-            <input type="number" step="any" class="form-control" id="coverture" name="coverture" value="{{$programmingItem->coverture ?? '0' }}" required="" form="edit-form">
+            <input type="number" step="any" class="form-control" id="coverture" name="coverture" value="{{$programmingItem->coverture ?? '1' }}" required="" form="edit-form">
         </div>
 
         <div class="form-group col-md-2">
@@ -226,7 +226,7 @@ Editar Item Programación Operativa </h4>
             title="Población a Atender" 
             data-content="Es el cálculo matemático de una actividad ponderada: multiplicación de la población por su incidencia/prevalencia y por la cobertura.">
             <i class="fas fa-info-circle"></i></a>
-            <input type="number" class="form-control" id="population_attend" name="population_attend" value="{{$programmingItem->population_attend ?? '0' }}" required="" readonly form="edit-form">
+            <input type="number" class="form-control" id="population_attend" name="population_attend" value="{{$programmingItem->population_attend ?? '1' }}" required="" readonly form="edit-form">
         </div>
         
     </div>
@@ -239,27 +239,27 @@ Editar Item Programación Operativa </h4>
             title="Concentración" 
             data-content="La cantidad de veces que debo darle el control anual">
             <i class="fas fa-info-circle"></i></a>
-            <input type="number" class="form-control" id="concentration" name="concentration" value="{{$programmingItem->concentration}}" {{ $programmingItem->workshop == 'SI' ? 'readonly' : 'required'  }} form="edit-form">
+            <input type="number" class="form-control" id="concentration" name="concentration" value="{{$programmingItem->concentration ?? '1'}}" {{ $programmingItem->workshop == 'SI' ? 'readonly' : 'required'  }} form="edit-form">
         </div>
         @if($programmingItem->workshop == 'SI')
         <div class="form-group col-md-2">
             <label for="forprogram">N° De Personas por Grupo</label>
-            <input type="number" class="form-control" id="activity_group" name="activity_group" value="{{$programmingItem->activity_group ?? '0' }}" form="edit-form">
+            <input type="number" class="form-control" id="activity_group" name="activity_group" value="{{$programmingItem->activity_group ?? '1' }}" form="edit-form">
         </div>
 
         <div class="form-group col-md-2">
             <label for="forprogram">N° De Talleres</label>
-            <input type="number" class="form-control" id="workshop_number" name="workshop_number"  value="{{$programmingItem->workshop_number ?? '0' }}" form="edit-form" readonly >
+            <input type="number" class="form-control" id="workshop_number" name="workshop_number"  value="{{$programmingItem->workshop_number ?? '1' }}" form="edit-form" readonly >
         </div>
 
         <div class="form-group col-md-2">
             <label for="forprogram">N° De Sesión por Talleres</label>
-            <input type="number" class="form-control" id="workshop_session_number" name="workshop_session_number" value="{{$programmingItem->workshop_session_number ?? '0' }}" form="edit-form" > 
+            <input type="number" class="form-control" id="workshop_session_number" name="workshop_session_number" value="{{$programmingItem->workshop_session_number ?? '1' }}" form="edit-form" > 
         </div>
         @endif
         <div class="form-group col-md-2">
             <label for="forprogram">Total Actividad</label>
-            <input type="input" class="form-control" id="activity_total" name="activity_total" value="{{$programmingItem->activity_total ?? '0' }}" required="" readonly form="edit-form">
+            <input type="input" class="form-control" id="activity_total" name="activity_total" value="{{$programmingItem->activity_total ?? '1' }}" required="" readonly form="edit-form">
         </div>
         
     </div>
