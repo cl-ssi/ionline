@@ -71,7 +71,7 @@
                     <td nowrap>{{ $roomBooking->id}}</td>
                     <td nowrap>{{ $roomBooking->room->hotel->name}}</td>
                     <td nowrap>{{ $roomBooking->room->identifier}}</td>
-                    <td nowrap>@if($roomBooking->user) {{ $roomBooking->user->getShortNameAttribute() }} @endif</td>
+                    <td nowrap>@if($roomBooking->user) {{ $roomBooking->user->shortName }} @endif</td>
                     <td nowrap>{{ $roomBooking->start_date->format('Y-m-d') }}</td>
                     <td nowrap>{{ $roomBooking->end_date->format('Y-m-d') }}</td>
                     <td nowrap>
