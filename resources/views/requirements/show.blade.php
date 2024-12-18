@@ -254,7 +254,7 @@
                 @foreach($groupedRequirements as $groupedRequirement)
                     @foreach($groupedRequirement->events as $event)
                         @if($event->status == "creado")
-                        <li> <strong> {{$event->to_user->getFullNameAttribute() }} </strong> </li>
+                        <li> <strong> {{$event->to_user->fullName }} </strong> </li>
                         @endif
                     @endforeach
                 @endforeach

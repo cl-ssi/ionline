@@ -124,11 +124,11 @@
             <td class="small">
                 @if ($created->status == 'respondido' or $created->status == 'creado' and $created->from_user != auth()->user())
                     @if ($created->events->last()->from_user != null)
-                        {{ $created->events->last()->from_user->getFullNameAttribute() }}
+                        {{ $created->events->last()->from_user->fullName }}
                     @endif
                 @else
                     @if ($created->events->last()->to_user != null)
-                        {{ $created->events->last()->to_user->getFullNameAttribute() }}
+                        {{ $created->events->last()->to_user->fullName }}
                     @endif
                 @endif
 
@@ -291,7 +291,7 @@
             </td>
             <td class="small">
                 @if ($archived->events->last()->to_user != null)
-                    {{ $archived->events->last()->to_user->getFullNameAttribute() }}
+                    {{ $archived->events->last()->to_user->fullName }}
                 @endif
             </td>
             <td class="small text-center">{{ optional($archived->created_at)->format('Y-m-d H:i') }}</td>

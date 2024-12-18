@@ -500,7 +500,7 @@
                         <tr>
                             <td>Responsable</td>
                             <td>{{$fulfillment->responsable_approbation_date}}</td>
-                            <td>{{$fulfillment->responsableUser->getFullNameAttribute()}}</td>
+                            <td>{{$fulfillment->responsableUser->fullName}}</td>
                             <td>@if($fulfillment->responsable_approbation === 1) APROBADO @else RECHAZADO @endif</td>
                         </tr>
                         @endif
@@ -508,7 +508,7 @@
                         <tr>
                             <td>RRHH</td>
                             <td>{{$fulfillment->rrhh_approbation_date}}</td>
-                            <td>{{$fulfillment->rrhhUser->getFullNameAttribute()}}</td>
+                            <td>{{$fulfillment->rrhhUser->fullName}}</td>
                             <td>@if($fulfillment->rrhh_approbation === 1) APROBADO @else RECHAZADO @endif</td>
                         </tr>
                         @endif
@@ -516,7 +516,7 @@
                         <tr>
                             <td>Finanzas</td>
                             <td>{{$fulfillment->finances_approbation_date}}</td>
-                            <td>{{$fulfillment->financesUser->getFullNameAttribute()}}</td>
+                            <td>{{$fulfillment->financesUser->fullName}}</td>
                             <td>@if($fulfillment->finances_approbation === 1) APROBADO @else RECHAZADO @endif</td>
                         </tr>
                         @endif
@@ -734,7 +734,7 @@
                         <tr>
                             <td>Responsable</td>
                             <td>{{$fulfillment->responsable_approbation_date}}</td>
-                            <td>{{$fulfillment->responsableUser->getFullNameAttribute()}}</td>
+                            <td>{{$fulfillment->responsableUser->fullName}}</td>
                             <td>@if($fulfillment->responsable_approbation === 1) APROBADO @else RECHAZADO @endif</td>
                         </tr>
                         @endif
@@ -742,7 +742,7 @@
                         <tr>
                             <td>RRHH</td>
                             <td>{{$fulfillment->rrhh_approbation_date}}</td>
-                            <td>{{$fulfillment->rrhhUser->getFullNameAttribute()}}</td>
+                            <td>{{$fulfillment->rrhhUser->fullName}}</td>
                             <td>@if($fulfillment->rrhh_approbation === 1) APROBADO @else RECHAZADO @endif</td>
                         </tr>
                         @endif
@@ -750,7 +750,7 @@
                         <tr>
                             <td>Finanzas</td>
                             <td>{{$fulfillment->finances_approbation_date}}</td>
-                            <td>{{$fulfillment->financesUser->getFullNameAttribute()}}</td>
+                            <td>{{$fulfillment->financesUser->fullName}}</td>
                             <td>@if($fulfillment->finances_approbation === 1) APROBADO @else RECHAZADO @endif</td>
                         </tr>
                         @endif

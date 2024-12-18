@@ -47,7 +47,7 @@ class PrefinanceAuthorization extends Component
       // }
       $this->lstProgram         = Program::with('Subtitle')->where('establishment_id', auth()->user()->establishment_id == $estab_hetg ? $estab_hetg : NULL)->orderBy('alias_finance')->get();
       $this->organizationalUnit = auth()->user()->organizationalUnit->name;
-      $this->userAuthority      = auth()->user()->getFullNameAttribute();
+      $this->userAuthority      = auth()->user()->fullName;
       $this->position           = auth()->user()->position;
       $this->program            = $requestForm->program;
       $this->program_id         = $requestForm->program_id;

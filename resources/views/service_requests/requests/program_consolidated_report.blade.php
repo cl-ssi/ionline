@@ -98,7 +98,7 @@
                     <td nowrap>@if($serviceRequest->establishment){{$serviceRequest->establishment->sirh_code}}@endif</td>
                     <td nowrap>@if($serviceRequest->establishment){{$serviceRequest->establishment->name}}@endif</td>
                     <td nowrap>{{$serviceRequest->employee->runNotFormat()}}</td>
-                    <td nowrap>{{$serviceRequest->employee->getFullNameAttribute()}}</td>
+                    <td nowrap>{{$serviceRequest->employee->fullName}}</td>
                     <td nowrap>{{$serviceRequest->employee->birthday? $serviceRequest->employee->birthday->format('d-m-Y'):''}}</td>
                     <td nowrap>@if($serviceRequest->employee->country){{$serviceRequest->employee->country->name}}@endif</td>
                     <td nowrap>{{$serviceRequest->programm_name}}</td>

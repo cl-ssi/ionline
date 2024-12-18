@@ -25,7 +25,7 @@
     @foreach($userbankaccounts as $userbankaccount)
     <tr>
         <td>{{ $userbankaccount->user->runFormat() ?? '' }}</td>
-        <td>{{ $userbankaccount->user->getFullNameAttribute() ?? '' }}</td>
+        <td>{{ $userbankaccount->user->fullName ?? '' }}</td>
         <td>{{ $userbankaccount->user->address ?? '' }}</td>
         <td>{{ $userbankaccount->user->phone_number ?? '' }}</td>
         <td>{{ $userbankaccount->user->email ?? '' }}</td>

@@ -81,7 +81,7 @@
           <td>{{$computer->ip}}</td>
           <td>{{(isset($computer->place))?$computer->place->name:''}}</td>
           <td>{{(isset($computer->place->location))?$computer->place->location->name:''}}</td>
-          <td>{{(!is_null($computer->users->first()))?$computer->users->first()->getFullNameAttribute():''}}</td>
+          <td>{{(!is_null($computer->users->first()))?$computer->users->first()->fullName:''}}</td>
           <td>{{$computer->tipoActivo()}}</td>
         </tr>
       @endforeach
@@ -91,7 +91,7 @@
           <td>{{$printer->ip}}</td>
           <td>{{(isset($printer->place))?$printer->place->name:''}}</td>
           <td>{{(isset($printer->place->location))?$printer->place->location->name:''}}</td>
-          <td>{{(!is_null($printer->users->first()))?$printer->users->first()->getFullNameAttribute():''}}</td>
+          <td>{{(!is_null($printer->users->first()))?$printer->users->first()->fullName:''}}</td>
           <td>{{$printer->tipoActivo()}}</td>
         </tr>
       @endforeach

@@ -20,7 +20,7 @@
     </tr>
     @foreach($servicerequests as $servicerequest)
     <tr>
-        <td>{{ $servicerequest->employee->getFullNameAttribute() ?? '' }}</td>
+        <td>{{ $servicerequest->employee->fullName ?? '' }}</td>
         <td>{{ $servicerequest->employee->runNotFormat() ?? '' }}</td>
         <td>{{ $servicerequest->responsabilityCenter->name ?? '' }}</td>
         <td>{{ $servicerequest->phone_number ?? '' }}</td>

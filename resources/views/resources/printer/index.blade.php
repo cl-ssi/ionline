@@ -116,7 +116,7 @@
                 <td>{{ $printer->serial }}</td>
                 <td>{{ $printer->ip }}</td>
                 <td>@if($printer->place <> null) {{ $printer->place->name }} @endif</td>
-                <td>@if($printer->users->first() <> null) {{ $printer->users->first()->getFullNameAttribute() }} @endif
+                <td>@if($printer->users->first() <> null) {{ $printer->users->first()->fullName }} @endif
                 </td>
                 <td>
                     <a

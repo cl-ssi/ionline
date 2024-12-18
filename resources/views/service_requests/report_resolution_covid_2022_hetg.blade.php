@@ -284,7 +284,7 @@
           <th>Monto Total</th>
         </tr>
         <tr>
-          <td style="text-align:center">{{$ServiceRequest->employee->getFullNameAttribute()}}</td>
+          <td style="text-align:center">{{$ServiceRequest->employee->fullName}}</td>
           <td style="text-align:center">{{$ServiceRequest->employee->runFormat()}}</td>
           <td style="text-align:center">{{$ServiceRequest->profession->name}} - {{$ServiceRequest->working_day_type}}</td>
           <!-- <td style="text-align:center">{{$ServiceRequest->weekly_hours}}</td> -->
@@ -308,7 +308,7 @@
           <th>Valor por Hora</th>
         </tr>
         <tr>
-          <td style="text-align:center">{{$ServiceRequest->employee->getFullNameAttribute()}}</td>
+          <td style="text-align:center">{{$ServiceRequest->employee->fullName}}</td>
           <td style="text-align:center">{{$ServiceRequest->employee->runFormat()}}</td>
           <td style="text-align:center">{{$ServiceRequest->profession->name}} - {{$ServiceRequest->working_day_type}}</td>
           <td style="text-align:center">{{$ServiceRequest->working_day_type}}</td>
@@ -330,7 +330,7 @@
           <th>Monto Total</th>
         </tr>
         <tr>
-          <td style="text-align:center">{{$ServiceRequest->employee->getFullNameAttribute()}}</td>
+          <td style="text-align:center">{{$ServiceRequest->employee->fullName}}</td>
           <td style="text-align:center">{{$ServiceRequest->employee->runFormat()}}</td>
           <td style="text-align:center">{{$ServiceRequest->profession->name}} - {{$ServiceRequest->working_day_type}}</td>
           <td style="text-align:center">{{$ServiceRequest->start_date->format('d/m/Y')}}</td>
@@ -353,14 +353,14 @@
         En Iquique, a {{$inputs['Fecha']}}, comparece por una parte el <b>HOSPITAL ERNESTO TORRES GALDAMES</b>, persona jurídica de derecho público, RUT. 62.000.530-4 , con domicilio en calle Av.héroes de la concepcion N 502 de la ciudad de {{$ServiceRequest->employee->commune->name}}, representado por su {{App\Models\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->position}}
         <b>{{App\Models\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->user->FullNameUpper}}</b>,
         chileno, Cédula Nacional de Identidad N°{{App\Models\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->user->runFormat()}}, del mismo domicilio del servicio público que representa, en
-        adelante , "El Director del Hospital Ernesto Torres Galdames", y por la otra don <b>{{$ServiceRequest->employee->getFullNameAttribute()}}</b>@if($ServiceRequest->profession), {{$ServiceRequest->profession->name}}@endif, RUT:{{$ServiceRequest->employee->id}}-{{$ServiceRequest->employee->dv}}, chileno,
+        adelante , "El Director del Hospital Ernesto Torres Galdames", y por la otra don <b>{{$ServiceRequest->employee->fullName}}</b>@if($ServiceRequest->profession), {{$ServiceRequest->profession->name}}@endif, RUT:{{$ServiceRequest->employee->id}}-{{$ServiceRequest->employee->dv}}, chileno,
         con domicilio en {{$ServiceRequest->address}}, de la ciudad de {{$ServiceRequest->employee->commune->name}}, en adelante “El Profesional” y exponen lo siguiente:
       </p>
 
 
       <p class="justify">
         <strong>PRIMERO:</strong>
-        Don {{App\Models\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->user->FullNameUpper}}, en su calidad de {{App\Models\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->position}} del Hospital “Dr. Ernesto Torres Galdames” de Iquique, contrata los servicios a honorarios a suma alzada de {{$ServiceRequest->employee->getFullNameAttribute()}}, ({{$ServiceRequest->profession->name}} - {{$ServiceRequest->working_day_type}}), para que preste servicios en el {{$ServiceRequest->responsabilityCenter->name}} al fin de cubrir la recarga de las tareas provocadas por la pandemia de COVID-19.
+        Don {{App\Models\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->user->FullNameUpper}}, en su calidad de {{App\Models\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->position}} del Hospital “Dr. Ernesto Torres Galdames” de Iquique, contrata los servicios a honorarios a suma alzada de {{$ServiceRequest->employee->fullName}}, ({{$ServiceRequest->profession->name}} - {{$ServiceRequest->working_day_type}}), para que preste servicios en el {{$ServiceRequest->responsabilityCenter->name}} al fin de cubrir la recarga de las tareas provocadas por la pandemia de COVID-19.
       </p>
 
       <p class="justify">
@@ -686,7 +686,7 @@
 
 
         Para constancia firman: <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-        {{$ServiceRequest->employee->getFullNameAttribute()}}
+        {{$ServiceRequest->employee->fullName}}
         <br><br>
 
         <p class="">

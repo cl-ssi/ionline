@@ -4,7 +4,7 @@
         <label for="for_users">{{$key}}</label>
         <select name="users[]" class="form-control" id="{{$key}}" data-live-search="true" required="" data-size="5" readonly>
           @foreach($users as $key => $user)
-            <option value="{{$user->id}}" @if($user->id == $signatureFlow) selected @else disabled @endif >{{$user->getFullNameAttribute()}}</option>
+            <option value="{{$user->id}}" @if($user->id == $signatureFlow) selected @else disabled @endif >{{$user->fullName}}</option>
           @endforeach
         </select>
     </fieldset>

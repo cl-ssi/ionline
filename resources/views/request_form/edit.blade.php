@@ -20,7 +20,7 @@
         <tbody class="small">
             <tr>
                 <th class="table-active" style="width: 33%">Nombre del Solicitante</th>
-                <td>{{ $requestForm->user->getFullNameAttribute() }}</td>
+                <td>{{ $requestForm->user->fullName }}</td>
             </tr>
             <tr>
                 <th class="table-active" style="width: 33%">Unidad Organizacional</th>

@@ -272,7 +272,7 @@ class DispatchController extends Controller
       $array_dispatch = $dispatch->toArray();
       $array_dispatch = array_add($array_dispatch, 'pharmacy', $dispatch->pharmacy->name);
       $array_dispatch = array_add($array_dispatch, 'destiny', $dispatch->destiny->name);
-      $array_dispatch = array_add($array_dispatch, 'user', $dispatch->user->getFullNameAttribute());;
+      $array_dispatch = array_add($array_dispatch, 'user', $dispatch->user->fullName);;
 
       //obtiene detalles
       $flag = 0;

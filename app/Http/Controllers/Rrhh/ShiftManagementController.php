@@ -1221,7 +1221,7 @@ class ShiftManagementController extends Controller
 
                 $sheet->setCellValue('A'.$index,  $index );
                 $sheet->setCellValue('B'.$index,  strtoupper($r->user->runFormat()) );
-                $sheet->setCellValue('C'.$index,  strtoupper($r->user->getFullNameAttribute()) );
+                $sheet->setCellValue('C'.$index,  strtoupper($r->user->fullName) );
                 $sheet->setCellValue('D'.$index,  strtoupper($r->total_hours) );
                 $sheet->setCellValue('E'.$index,  strtoupper($r->first_confirmation_commentary) );
                 $sheet->setCellValue('F'.$index,  strtoupper($r->first_confirmation_user_id) );
@@ -1386,7 +1386,7 @@ class ShiftManagementController extends Controller
         foreach($reportResult as $r){
 
             $sheet->setCellValue('A'.$index,  strtoupper($r->ShiftUser->user->runFormat()) );
-            $sheet->setCellValue('B'.$index,  strtoupper($r->ShiftUser->user->getFullNameAttribute()) );
+            $sheet->setCellValue('B'.$index,  strtoupper($r->ShiftUser->user->fullName) );
             $sheet->setCellValue('C'.$index,  strtoupper(isset($r->ShiftUser->user->organizationalUnit) && $r->ShiftUser->user->organizationalUnit !="" && isset($r->ShiftUser->user->organizationalUnit->name) ) ? $r->ShiftUser->user->organizationalUnit->name:"");
             $sheet->setCellValue('D'.$index,  strtoupper($r->day));
 
@@ -1405,7 +1405,7 @@ class ShiftManagementController extends Controller
 
             $dayF = Carbon::createFromFormat('Y-m-d',  $r->day, 'Europe/London');
             $sheet->setCellValue('F'.$index, ucfirst ( ( $r->status == 1 && $dayF->isPast() ) ? "Completado" : $this->shiftStatus [ $r->status ]  ) );
-            $sheet->setCellValue('G'.$index, ($r->derived_from != "" && isset($r->DerivatedShift) ) ? $r->DerivatedShift->ShiftUser->user->runFormat()." ".$r->DerivatedShift->ShiftUser->user->getFullNameAttribute() : "--" );
+            $sheet->setCellValue('G'.$index, ($r->derived_from != "" && isset($r->DerivatedShift) ) ? $r->DerivatedShift->ShiftUser->user->runFormat()." ".$r->DerivatedShift->ShiftUser->user->fullName : "--" );
             $index++;
         }
 

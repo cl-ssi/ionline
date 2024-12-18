@@ -71,7 +71,7 @@ Materia: {{ $parte->subject }}
 
                     {{ $event->created_at }} - {{ $event->action }}
                     en <strong>{{ $event->organizationalUnit->name }}</strong>
-                    por <span class="text-success">{{ $event->user->getFullNameAttribute() }}</span>
+                    por <span class="text-success">{{ $event->user->fullName }}</span>
                     @if($event->comment)
                         <span class="text-primary">{{ $event->comment }} </span>
                     @endif

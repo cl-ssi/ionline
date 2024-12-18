@@ -199,15 +199,15 @@
 <div id="firmas">
     <div class="center" style="width: 100%;">
         <strong>
-        <!-- <span class="uppercase">{{$serviceRequest->SignatureFlows->where('sign_position',2)->first()->user->getFullNameAttribute()}}</span><br>
+        <!-- <span class="uppercase">{{$serviceRequest->SignatureFlows->where('sign_position',2)->first()->user->fullName}}</span><br>
         <span class="uppercase">{{$serviceRequest->SignatureFlows->where('sign_position',2)->first()->user->position}}</span><br>
         <span class="uppercase">{{$serviceRequest->SignatureFlows->where('sign_position',2)->first()->user->organizationalUnit->name}}</span><br> -->
-        <span class="uppercase">{{$serviceRequest->SignatureFlows->where('sign_position',2)->first()->user->getFullNameAttribute()}}</span><br>
+        <span class="uppercase">{{$serviceRequest->SignatureFlows->where('sign_position',2)->first()->user->fullName}}</span><br>
         <!-- <span class="uppercase">{{$serviceRequest->SignatureFlows->where('sign_position',2)->first()->user->position}}</span><br>
         <span class="uppercase">{{$serviceRequest->SignatureFlows->where('sign_position',2)->first()->user->organizationalUnit->name}}</span><br> -->
         <!-- 1 Hospital -->
         @if($serviceRequest->responsabilityCenter->establishment->id == 1)
-        <!-- <span class="uppercase">{{$serviceRequest->SignatureFlows->where('sign_position',2)->first()->user->getFullNameAttribute()}}</span><br> -->
+        <!-- <span class="uppercase">{{$serviceRequest->SignatureFlows->where('sign_position',2)->first()->user->fullName}}</span><br> -->
         
 
         {{$serviceRequest->responsabilityCenter->establishment->name}}

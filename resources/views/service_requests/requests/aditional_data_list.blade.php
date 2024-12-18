@@ -112,7 +112,7 @@
       <td>{{ $serviceRequest->type }}</td>
       <td nowrap>{{ \Carbon\Carbon::parse($serviceRequest->request_date)->format('d-m-Y') }}</td>
       <td nowrap>@if($serviceRequest->employee){{ $serviceRequest->employee->runNotFormat() }}@endif</td>
-      <td nowrap>@if($serviceRequest->employee){{ $serviceRequest->employee->getFullNameAttribute() }}@endif</td>
+      <td nowrap>@if($serviceRequest->employee){{ $serviceRequest->employee->fullName }}@endif</td>
       <td nowrap>{{ \Carbon\Carbon::parse($serviceRequest->start_date)->format('d-m-Y') }}</td>
       <td nowrap>{{ \Carbon\Carbon::parse($serviceRequest->end_date)->format('d-m-Y') }}</td>
       <td>@if($serviceRequest->SignatureFlows->whereNull('status')->count() > 0) Pendiente

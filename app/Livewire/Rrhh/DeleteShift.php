@@ -36,8 +36,8 @@ class DeleteShift extends Component
         // $this->clearDeleteModal();
         // dd($actuallyShiftDay[0]["id"]);
         $this->ShiftUser = ShiftUser::find($actuallyShiftDay[0]["id"]);
-        // dd($this->ShiftUser->user->getFullNameAttribute());
-       $this->userName = $this->ShiftUser->user->getFullNameAttribute();
+        // dd($this->ShiftUser->user->fullName);
+       $this->userName = $this->ShiftUser->user->fullName;
        $this->rutUser =  $this->ShiftUser->user->runFormat();
         $this->actuallyGroup =  htmlentities(Session::get('groupname'));
        $this->actuallyShift = Session::get('actuallyShift');
