@@ -56,7 +56,7 @@ class MonthlyAttendanceResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('user.shortName')
                     ->label('Usuario')
-                    ->sortable()
+                    ->sortable(['full_name'])
                     ->searchable(['full_name']),
                 Tables\Columns\TextColumn::make('date')
                     ->label('Periodo')

@@ -65,8 +65,8 @@ class SubrogationsRelationManager extends RelationManager
                     ->sortable(),
                 Tables\Columns\TextColumn::make('user.shortName')
                     ->label('Usuario')
-                    ->numeric()
-                    ->sortable(),
+                    ->sortable(['full_name'])
+                    ->searchable(['full_name']),
                 Tables\Columns\TextColumn::make('type')
                     ->label('Tipo')
                     ->searchable(),
