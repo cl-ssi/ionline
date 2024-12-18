@@ -16,22 +16,12 @@ class ReferersRelationManager extends RelationManager
 
     protected static ?string $title = 'Referentes';
 
-    public function form(Form $form): Form
-    {
-        return $form
-            ->schema([
-                Forms\Components\TextInput::make('id')
-                    ->required()
-                    ->maxLength(255),
-            ]);
-    }
-
     public function table(Table $table): Table
     {
         return $table
-            ->recordTitleAttribute('fathers_family')
+            ->recordTitleAttribute('full_name')
             ->columns([
-                Tables\Columns\TextColumn::make('shortName')
+                Tables\Columns\TextColumn::make('fullName')
                     ->label('Nombre'),
             ])
             ->filters([
@@ -39,9 +29,6 @@ class ReferersRelationManager extends RelationManager
             ])
             ->headerActions([
                 Tables\Actions\AttachAction::make()
-                    // ->modalWidth('2xl')
-                    ->recordSelectSearchColumns(['full_name', 'name', 'fathers_family', 'mothers_family']),
-                    // ->recordSelectOptionsQuery(fn ($query) => $query->filterByName(request('search'))),
             ])
             ->actions([
                 Tables\Actions\DetachAction::make(),

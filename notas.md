@@ -317,7 +317,7 @@ TODO:
 [ ] Approvals permitir poner vizaciones
 
 
-[ ] Fixear busqueda por nombre en asociar un referente
+[X] Fixear busqueda por nombre en asociar un referente
 [ ] Poblar convenios 2025
 
 
