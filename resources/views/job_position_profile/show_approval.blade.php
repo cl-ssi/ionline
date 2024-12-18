@@ -373,7 +373,7 @@
                     @endswitch
                     <br>
                     @if($approval->StatusInWords == 'Aprobado' || $approval->StatusInWords == 'Rechazado')
-                        <i class="fas fa-user"></i> {{ ($approval->approver) ? $approval->approver->FullName : '' }} <br>
+                        <i class="fas fa-user"></i> {{ ($approval->approver) ? $approval->approver->fullName : '' }} <br>
                         <i class="fas fa-calendar-alt"></i> {{ ($approval->approver_at) ? $approval->approver_at->format('d-m-Y H:i:s') : '' }}
                     @endif
                 </td>           
@@ -405,7 +405,7 @@
                             <i class="fas fa-check-circle"></i> {{ $sign->StatusValue }}
                         </span> 
                         <br>
-                        <i class="fas fa-user"></i> {{ $sign->user->FullName }}<br>
+                        <i class="fas fa-user"></i> {{ $sign->user->fullName }}<br>
                         <i class="fas fa-calendar-alt"></i> {{ $sign->date_sign->format('d-m-Y H:i:s') }}<br>
                     @endif
 
@@ -414,7 +414,7 @@
                             <i class="fas fa-times-circle fa-2x"></i> {{ $sign->StatusValue }}
                         </span> 
                         <br>
-                        <i class="fas fa-user"></i> {{ $sign->user->FullName }}<br>
+                        <i class="fas fa-user"></i> {{ $sign->user->fullName }}<br>
                         <i class="fas fa-calendar-alt"></i> {{ $sign->date_sign->format('d-m-Y H:i:s') }}<br>
                     @endif
                 </td>

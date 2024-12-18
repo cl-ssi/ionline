@@ -67,7 +67,7 @@
             <th style="width: 20%; background-color: #EEEEEE;">Calidad</th>
         </tr>
         <tr align="center">
-            <td>{{ $allowance->userAllowance->FullName }}</td>
+            <td>{{ $allowance->userAllowance->fullName }}</td>
             <td>{{ $allowance->userAllowance->id }}-{{ $allowance->userAllowance->dv }}</td>
             <td>{{ $allowance->contractualCondition->name }}</td>
             <td>N° {{ number_format($allowance->law, 0, ",", ".") }}</td>

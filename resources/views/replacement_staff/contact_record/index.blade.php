@@ -11,7 +11,7 @@
 <div class="row">
     <div class="col-sm-4">
         <h5><i class="fas fa-address-book"></i> Registro de Contacto Teléfonico.</h5>
-        <h6><i class="fas fa-user"></i> {{ $staff->FullName }}</h6>
+        <h6><i class="fas fa-user"></i> {{ $staff->fullName }}</h6>
     </div>
     <div class="col-sm">
         <!-- Button trigger modal -->
@@ -43,7 +43,7 @@
                   @foreach($contactRecords as $contactRecord)
                     <tr>
                         <td>{{ $contactRecord->contact_date->format('d-m-Y H:i:s') }}</td>
-                        <td>{{ $contactRecord->replacementStaff->FullName }}</td>
+                        <td>{{ $contactRecord->replacementStaff->fullName }}</td>
                         <td class="text-center">
                           @switch($contactRecord->type)
                               @case('email')
@@ -60,7 +60,7 @@
                           @endswitch
                         </td>
                         <td>{{ $contactRecord->observation }}</td>
-                        <td>{{ $contactRecord->user->FullName }}</td>
+                        <td>{{ $contactRecord->user->fullName }}</td>
                         <td>
                             <a href=""
                               class="btn btn-outline-secondary btn-sm disabled"

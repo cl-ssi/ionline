@@ -279,7 +279,7 @@
                             <td class="text-center">{{ $loop->iteration }}</td>
                             <td class="text-center">{{ $correction->created_at->format('d-m-Y H:i:s') }}</td>
                             <td>{{ $correction->reason }}</td>
-                            <td class="text-center">{{ $correction->user->FullName }}</td>
+                            <td class="text-center">{{ $correction->user->fullName }}</td>
                         </tr>
                     </tbody>
                 @endforeach

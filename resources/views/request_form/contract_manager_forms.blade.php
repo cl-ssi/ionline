@@ -78,10 +78,10 @@
                             <td>{{ ($requestForm->purchaseMechanism) ? $requestForm->purchaseMechanism->PurchaseMechanismValue : '' }}<br>
                                 {{ $requestForm->SubtypeValue }}</td>
                             <td>{{ $requestForm->name }}</td>
-                            <td>{{ $requestForm->user ? $requestForm->user->FullName : 'Usuario eliminado' }}<br>
+                            <td>{{ $requestForm->user ? $requestForm->user->fullName : 'Usuario eliminado' }}<br>
                                 {{ $requestForm->userOrganizationalUnit ? $requestForm->userOrganizationalUnit->name : 'Usuario eliminado' }}
                             </td>
-                            <td>{{ $requestForm->purchasers->first()->FullName ?? 'No asignado' }}</td>
+                            <td>{{ $requestForm->purchasers->first()->fullName ?? 'No asignado' }}</td>
                             <td align="center">{{ $requestForm->quantityOfItems() }}</td>
                             <td class="text-center">
                                   @foreach($requestForm->eventRequestForms as $sign)

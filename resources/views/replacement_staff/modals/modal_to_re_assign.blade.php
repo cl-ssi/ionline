@@ -18,7 +18,7 @@
                       <select name="to_user_id" id="for_to_user_id" class="form-control">
                           <option value="">Seleccione...</option>
                           @foreach($users_rys as $user_rys)
-                              <option value="{{ $user_rys->id }}">{{ $user_rys->FullName }}</option>
+                              <option value="{{ $user_rys->id }}">{{ $user_rys->fullName }}</option>
                           @endforeach
                       </select>
                   </fieldset>

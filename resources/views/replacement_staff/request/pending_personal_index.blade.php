@@ -99,7 +99,7 @@
                     <td>
                         {{ $requestReplacementStaff->WorkDayValue }}
                     </td>
-                    <td>{{ $requestReplacementStaff->user->FullName }}<br>
+                    <td>{{ $requestReplacementStaff->user->fullName }}<br>
                         {{ $requestReplacementStaff->organizationalUnit->name }}
                     </td>
                     <td class="text-center">

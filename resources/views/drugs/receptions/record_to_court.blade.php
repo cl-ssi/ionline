@@ -130,7 +130,7 @@
 <!-- <div id="firmas">
     <div class="center" style="width: 100%;">
         <p class="uppercase">
-            {{ $recordToCourt->lawyer->FullName }}<br>
+            {{ $recordToCourt->lawyer->fullName }}<br>
             {{ $recordToCourt->lawyer->position }}<br>
             {{ env('APP_SS') }}
         </p>

@@ -89,7 +89,7 @@
                 @foreach($replacementStaff as $staff)
                 <tr>
                     <td>{{ $staff->created_at->format('d-m-Y H:i:s') }}</td>
-                    <td>{{ $staff->FullName }}</td>
+                    <td>{{ $staff->fullName }}</td>
                     <td>{{ $staff->Identifier }}</td>
                     <td>
                         @foreach($staff->profiles as $title)

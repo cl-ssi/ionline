@@ -98,7 +98,7 @@
                 <th class="table-active">Staff Sugerido</th>
                 <td colspan="2">
                   @if($requestReplacementStaff->replacementStaff)
-                      {{ $requestReplacementStaff->replacementStaff->FullName }}
+                      {{ $requestReplacementStaff->replacementStaff->fullName }}
                   @endif
                 </td>
             </tr>

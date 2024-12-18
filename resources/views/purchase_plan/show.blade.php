@@ -35,7 +35,7 @@
             </tr>
             <tr>
                 <th class="table-secondary">Funcionario Responsable</th>
-                <td class="text-left">{{ $purchasePlan->userResponsible->FullName }}</td>
+                <td class="text-left">{{ $purchasePlan->userResponsible->fullName }}</td>
             </tr>
             <tr>
                 <th class="table-secondary">Cargo</th>
@@ -67,7 +67,7 @@
             </tr>
             <tr>
                 <th class="table-secondary">Asigando a: (Comprador)</th>
-                <td>{{ $purchasePlan->assignPurchaser?->FullName }}</td>
+                <td>{{ $purchasePlan->assignPurchaser?->fullName }}</td>
             </tr>
         </thead>
     </table>
@@ -282,7 +282,7 @@
                         @endswitch
                         <br>
                         @if($approval->StatusInWords == 'Aprobado' || $approval->StatusInWords == 'Rechazado')
-                            <i class="fas fa-user"></i> {{ ($approval->approver) ? $approval->approver->FullName : '' }} <br>
+                            <i class="fas fa-user"></i> {{ ($approval->approver) ? $approval->approver->fullName : '' }} <br>
                             <i class="fas fa-calendar-alt"></i> {{ ($approval->approver_at) ? $approval->approver_at->format('d-m-Y H:i:s') : '' }}
                             @if($approval->approver_observation)
                                 <hr>
@@ -335,7 +335,7 @@
                         <tr class="text-center">
                             <td>{{ ($approval->approver_at) ?  $approval->approver_at->format('d-m-Y H:i:s') : '' }}</td>
                             <td>{{ $approval->approver_observation }}</td> 
-                            <td>{{ ($approval->approver) ? $approval->approver->FullName : '' }}</td>
+                            <td>{{ ($approval->approver) ? $approval->approver->fullName : '' }}</td>
                             <td>{{ $approval->sentToOu->name }}</td>         
                         </tr>
                     @endif
@@ -449,10 +449,10 @@
                                 {{ $child->SubtypeValue }}
                             </td>
                             <td>{{ $child->name }}</td>
-                            <td>{{ $child->user ? $child->user->FullName : 'Usuario eliminado' }}<br>
+                            <td>{{ $child->user ? $child->user->fullName : 'Usuario eliminado' }}<br>
                                 {{ $child->userOrganizationalUnit ? $child->userOrganizationalUnit->name : 'Usuario eliminado' }}
                             </td>
-                            <td>{{ $child->purchasers->first()->FullName ?? 'No asignado' }}</td>
+                            <td>{{ $child->purchasers->first()->fullName ?? 'No asignado' }}</td>
                             <td align="center">{{ $child->quantityOfItems() }}</td>
                             <td align="right">{{$child->symbol_currency}}{{ number_format($child->estimated_expense,$child->precision_currency,",",".") }}</td>
                             <td align="right">{{ $child->purchasingProcess ? $child->symbol_currency.number_format($child->purchasingProcess->getExpense(),$child->precision_currency,",",".") : '-' }}</td>

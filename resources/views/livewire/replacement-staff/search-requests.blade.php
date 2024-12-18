@@ -457,7 +457,7 @@
                             <!-- PERMITE INGRESAR A LA EVALUACION TÉCNICA -->
                             @if(($typeIndex == 'assign' || $typeIndex == 'assigned_to') 
                                 && $requestReplacementStaff->technicalEvaluation)
-                                <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="Asignado a: {{ $requestReplacementStaff->assignEvaluations->last()->userAssigned->FullName }}">
+                                <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="Asignado a: {{ $requestReplacementStaff->assignEvaluations->last()->userAssigned->fullName }}">
                                     <a href="{{ route('replacement_staff.request.technical_evaluation.edit', $requestReplacementStaff) }}"
                                     class="btn btn-outline-secondary btn-sm"><i class="fas fa-edit"></i></a>
                                 </span>
@@ -523,7 +523,7 @@
                                 @else
                                     <!-- BOTÓN PARA GESTIONAR EVALUACIÓN TÉCNICA -->
                                     @if(($typeIndex == 'assign' || $typeIndex == 'assigned_to') && $requestReplacementStaff->technicalEvaluation)
-                                        <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="Asignado a: {{ $requestReplacementStaff->assignEvaluations->last()->userAssigned->FullName }}">
+                                        <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="Asignado a: {{ $requestReplacementStaff->assignEvaluations->last()->userAssigned->fullName }}">
                                             <a href="{{ route('replacement_staff.request.technical_evaluation.edit', $requestReplacementStaff) }}"
                                                 class="btn btn-outline-secondary btn-sm"><i class="fas fa-edit"></i></a>
                                         </span>
@@ -567,7 +567,7 @@
                 <select wire:model.live="userToAssign" id="for_to_user_id" class="form-control">
                     <option value="">Seleccione...</option>
                     @foreach($users_rys as $user_rys)
-                        <option value="{{ $user_rys->id }}">{{ $user_rys->FullName }}</option>
+                        <option value="{{ $user_rys->id }}">{{ $user_rys->fullName }}</option>
                     @endforeach
                 </select>
             </fieldset>

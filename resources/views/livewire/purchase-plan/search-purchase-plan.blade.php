@@ -105,7 +105,7 @@
                                 </td>
                                 <td>{{ $purchasePlan->subject }}</td>
                                 <td>
-                                    <b>{{ $purchasePlan->userResponsible->FullName }}</b><br>
+                                    <b>{{ $purchasePlan->userResponsible->fullName }}</b><br>
                                     {{ $purchasePlan->organizationalUnit->name }} ({{$purchasePlan->organizationalUnit->establishment->name}})<br><br>
                                     
                                     creado por: <b>{{ $purchasePlan->userCreator->tinyName }}</b>
@@ -269,7 +269,7 @@
                                     <td rowspan="2">{{ $purchasePlan->subject }}</td>
                                     <td rowspan="2">{{ $purchasePlan->description }}</td>
                                     <td rowspan="2">{{ $purchasePlan->purpose }}</td>
-                                    <td rowspan="2">{{ $purchasePlan->userResponsible->FullName }}</td>
+                                    <td rowspan="2">{{ $purchasePlan->userResponsible->fullName }}</td>
                                     <td rowspan="2">{{ $purchasePlan->position }}</td>
                                     <td rowspan="2">{{ $purchasePlan->telephone }}</td>
                                     <td rowspan="2">{{ $purchasePlan->email }}</td>
@@ -353,7 +353,7 @@
                                 </td>
                                 <td>{{ $purchasePlan->subject }}</td>
                                 <td>
-                                    <b>{{ $purchasePlan->userResponsible->FullName }}</b><br>
+                                    <b>{{ $purchasePlan->userResponsible->fullName }}</b><br>
                                     {{ $purchasePlan->organizationalUnit->name }} ({{$purchasePlan->organizationalUnit->establishment->name}})<br><br>
                                         
                                     <small>creado por: <b>{{ $purchasePlan->userCreator->tinyName }}</b></small>
@@ -448,7 +448,7 @@
                                 </td>
                                 <td>{{ $purchasePlan->subject }}</td>
                                 <td>
-                                    <b>{{ $purchasePlan->userResponsible->FullName }}</b><br>
+                                    <b>{{ $purchasePlan->userResponsible->fullName }}</b><br>
                                     {{ $purchasePlan->organizationalUnit->name }} ({{$purchasePlan->organizationalUnit->establishment->name}})<br><br>
                                         
                                     <small>creado por: <b>{{ $purchasePlan->userCreator->tinyName }}</b></small>

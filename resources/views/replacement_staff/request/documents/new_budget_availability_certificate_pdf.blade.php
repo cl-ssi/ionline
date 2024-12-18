@@ -39,7 +39,7 @@
     <div style="text-align: justify;" class="ocho">
         De conformidad a lo dispuesto en el Artículo 11 de Ley 21.516 del Ministerio de Hacienda, que aprueba el presupuesto del Sector Público 
         para el año 2024, vengo en certificar que la Dirección del Servicio de Salud Tarapacá, cuenta con presupuesto para la contratación del funcionario (a) 
-        {{ $requestReplacementStaff->technicalEvaluation->applicants->where('selected', 1)->where('desist', NULL)->first()->replacementStaff->FullName }} - 
+        {{ $requestReplacementStaff->technicalEvaluation->applicants->where('selected', 1)->where('desist', NULL)->first()->replacementStaff->fullName }} - 
         RUT {{ $requestReplacementStaff->technicalEvaluation->applicants->where('selected', 1)->where('desist', NULL)->first()->replacementStaff->run }}-{{ $requestReplacementStaff->technicalEvaluation->applicants->where('selected', 1)->where('desist', NULL)->first()->replacementStaff->dv }} 
         que se individualiza, por el periodo {{ $requestReplacementStaff->technicalEvaluation->applicants->where('selected', 1)->where('desist', NULL)->first()->start_date->format('d-m-Y') }} - 
         {{ $requestReplacementStaff->technicalEvaluation->applicants->where('selected', 1)->where('desist', NULL)->first()->end_date->format('d-m-Y') }} 
@@ -50,7 +50,7 @@
     <div style="text-align: justify;" class="ocho">
         De conformidad a lo dispuesto en el Artículo 11 de Ley 21.516 del Ministerio de Hacienda, que aprueba el presupuesto del Sector Público 
         para el año 2024, vengo en certificar que la Dirección del Servicio de Salud Tarapacá, cuenta con presupuesto para la contratación del funcionario (a) 
-        {{ $requestReplacementStaff->technicalEvaluation->applicants->where('selected', 1)->first()->replacementStaff->FullName }} - 
+        {{ $requestReplacementStaff->technicalEvaluation->applicants->where('selected', 1)->first()->replacementStaff->fullName }} - 
         RUT {{ $requestReplacementStaff->technicalEvaluation->applicants->where('selected', 1)->first()->replacementStaff->run }}-{{ $requestReplacementStaff->technicalEvaluation->applicants->where('selected', 1)->first()->replacementStaff->dv }} 
         que se individualiza, por el periodo {{ $requestReplacementStaff->technicalEvaluation->applicants->where('selected', 1)->first()->start_date->format('d-m-Y') }} - 
         {{ $requestReplacementStaff->technicalEvaluation->applicants->where('selected', 1)->first()->end_date->format('d-m-Y') }} 

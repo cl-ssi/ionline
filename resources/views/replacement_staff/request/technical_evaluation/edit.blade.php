@@ -56,7 +56,7 @@
         <tbody class="small">
             <tr>
                 <th class="table-active">Solicitante</th>
-                <td style="width: 33%">{{ $requestReplacementStaff->user->FullName }}</td>
+                <td style="width: 33%">{{ $requestReplacementStaff->user->fullName }}</td>
                 <td style="width: 33%">{{ $requestReplacementStaff->organizationalUnit->name }}</td>
             </tr>
             <tr>
@@ -131,7 +131,7 @@
                 <th class="table-active">Staff Sugerido</th>
                 <td colspan="2">
                     @if($requestReplacementStaff->replacementStaff)
-                        {{ $requestReplacementStaff->replacementStaff->FullName }}
+                        {{ $requestReplacementStaff->replacementStaff->fullName }}
                     @endif
                 </td>
             </tr>
@@ -187,7 +187,7 @@
             <tr>
                 <th class="table-active">Creador / Solicitante</th>
                 <td style="width: 33%">
-                    {{ $requestReplacementStaff->user->FullName }} <br>
+                    {{ $requestReplacementStaff->user->fullName }} <br>
                     {{ $requestReplacementStaff->organizationalUnit->name }}
                 </td>
                 <td style="width: 33%">
@@ -344,14 +344,14 @@
                                     <span style="color: green;">
                                         <i class="fas fa-check-circle"></i> {{ $approval->StatusInWords }}
                                     </span> <br>
-                                    <i class="fas fa-user"></i> {{ $approval->approver->FullName }}<br>
+                                    <i class="fas fa-user"></i> {{ $approval->approver->fullName }}<br>
                                     <i class="fas fa-calendar-alt"></i> {{ $approval->approver_at->format('d-m-Y H:i:s') }}<br>
                                 @endif
                                 @if($approval->StatusInWords == "Rechazado")
                                     <span style="color: tomato;">
                                         <i class="fas fa-check-circle"></i> {{ $approval->StatusInWords }}
                                     </span> <br>
-                                    <i class="fas fa-user"></i> {{ $approval->approver->FullName }}<br>
+                                    <i class="fas fa-user"></i> {{ $approval->approver->fullName }}<br>
                                     <i class="fas fa-calendar-alt"></i> {{ $approval->approver_at->format('d-m-Y H:i:s') }}
                                     <hr>
                                     {{ $approval->approver_observation }}
@@ -373,7 +373,7 @@
                                 <span style="color: Tomato;">
                                     <i class="fas fa-times-circle"></i> {{ $sign->StatusValue }} 
                                 </span><br>
-                                <i class="fas fa-user"></i> {{ $sign->user->FullName }}<br>
+                                <i class="fas fa-user"></i> {{ $sign->user->fullName }}<br>
                                 <i class="fas fa-calendar-alt"></i> {{ $sign->date_sign->format('d-m-Y H:i:s') }}<br>
                                 <hr>
                                 {{ $sign->observation }}<br>
@@ -397,14 +397,14 @@
                                     <span style="color: green;">
                                         <i class="fas fa-check-circle"></i> {{ $approval->StatusInWords }}
                                     </span> <br>
-                                    <i class="fas fa-user"></i> {{ $approval->approver->FullName }}<br>
+                                    <i class="fas fa-user"></i> {{ $approval->approver->fullName }}<br>
                                     <i class="fas fa-calendar-alt"></i> {{ $approval->approver_at->format('d-m-Y H:i:s') }}<br>
                                 @endif
                                 @if($approval->StatusInWords == "Rechazado")
                                     <span style="color: tomato;">
                                         <i class="fas fa-check-circle"></i> {{ $approval->StatusInWords }}
                                     </span> <br>
-                                    <i class="fas fa-user"></i> {{ $approval->approver->FullName }}<br>
+                                    <i class="fas fa-user"></i> {{ $approval->approver->fullName }}<br>
                                     <i class="fas fa-calendar-alt"></i> {{ $approval->approver_at->format('d-m-Y H:i:s') }}
                                     <hr>
                                     {{ $approval->approver_observation }}
@@ -424,14 +424,14 @@
                                 <span style="color: green;">
                                     <i class="fas fa-check-circle"></i> {{ $requestReplacementStaff->approvals->last()->StatusInWords }}
                                 </span> <br>
-                                <i class="fas fa-user"></i> {{ $requestReplacementStaff->approvals->last()->approver->FullName }}<br>
+                                <i class="fas fa-user"></i> {{ $requestReplacementStaff->approvals->last()->approver->fullName }}<br>
                                 <i class="fas fa-calendar-alt"></i> {{ $requestReplacementStaff->approvals->last()->approver_at->format('d-m-Y H:i:s') }}<br>
                             @endif
                             @if($requestReplacementStaff->approvals->last()->StatusInWords == "Rechazado")
                                 <span style="color: tomato;">
                                     <i class="fas fa-check-circle"></i> {{ $requestReplacementStaff->approvals->last()->StatusInWords }}
                                 </span> <br>
-                                <i class="fas fa-user"></i> {{ $requestReplacementStaff->approvals->last()->approver->FullName }}<br>
+                                <i class="fas fa-user"></i> {{ $requestReplacementStaff->approvals->last()->approver->fullName }}<br>
                                 <i class="fas fa-calendar-alt"></i> {{ $requestReplacementStaff->approvals->last()->approver_at->format('d-m-Y H:i:s') }}
                                 <hr>
                                 {{ $requestReplacementStaff->approvals->last()->approver_observation }}
@@ -455,7 +455,7 @@
                                 <span style="color: Tomato;">
                                     <i class="fas fa-times-circle"></i> {{ $sign->StatusValue }} 
                                 </span><br>
-                                <i class="fas fa-user"></i> {{ $sign->user->FullName }}<br>
+                                <i class="fas fa-user"></i> {{ $sign->user->fullName }}<br>
                                 <i class="fas fa-calendar-alt"></i> {{ $sign->date_sign->format('d-m-Y H:i:s') }}<br>
                                 <hr>
                                 {{ $sign->observation }}<br>
@@ -590,14 +590,14 @@
                                     <span style="color: green;">
                                         <i class="fas fa-check-circle"></i> {{ $approval->StatusInWords }}
                                     </span> <br>
-                                    <i class="fas fa-user"></i> {{ $approval->approver->FullName }}<br>
+                                    <i class="fas fa-user"></i> {{ $approval->approver->fullName }}<br>
                                     <i class="fas fa-calendar-alt"></i> {{ $approval->approver_at->format('d-m-Y H:i:s') }}<br>
                                 @endif
                                 @if($approval->StatusInWords == "Rechazado")
                                     <span style="color: tomato;">
                                         <i class="fas fa-check-circle"></i> {{ $approval->StatusInWords }}
                                     </span> <br>
-                                    <i class="fas fa-user"></i> {{ $approval->approver->FullName }}<br>
+                                    <i class="fas fa-user"></i> {{ $approval->approver->fullName }}<br>
                                     <i class="fas fa-calendar-alt"></i> {{ $approval->approver_at->format('d-m-Y H:i:s') }}
                                     <hr>
                                     {{ $approval->approver_observation }}
@@ -623,7 +623,7 @@
                                         <span style="color: Tomato;">
                                             <i class="fas fa-times-circle"></i> {{ $sign->StatusValue }} 
                                         </span><br>
-                                        <i class="fas fa-user"></i> {{ $sign->user->FullName }}<br>
+                                        <i class="fas fa-user"></i> {{ $sign->user->fullName }}<br>
                                         <i class="fas fa-calendar-alt"></i> {{ $sign->date_sign->format('d-m-Y H:i:s') }}<br>
                                         <hr>
                                         {{ $sign->observation }}<br>
@@ -655,14 +655,14 @@
                                     <span style="color: green;">
                                         <i class="fas fa-check-circle"></i> {{ $approval->StatusInWords }}
                                     </span> <br>
-                                    <i class="fas fa-user"></i> {{ $approval->approver->FullName }}<br>
+                                    <i class="fas fa-user"></i> {{ $approval->approver->fullName }}<br>
                                     <i class="fas fa-calendar-alt"></i> {{ $approval->approver_at->format('d-m-Y H:i:s') }}<br>
                                 @endif
                                 @if($approval->StatusInWords == "Rechazado")
                                     <span style="color: tomato;">
                                         <i class="fas fa-check-circle"></i> {{ $approval->StatusInWords }}
                                     </span> <br>
-                                    <i class="fas fa-user"></i> {{ $approval->approver->FullName }}<br>
+                                    <i class="fas fa-user"></i> {{ $approval->approver->fullName }}<br>
                                     <i class="fas fa-calendar-alt"></i> {{ $approval->approver_at->format('d-m-Y H:i:s') }}
                                     <hr>
                                     {{ $approval->approver_observation }}
@@ -698,14 +698,14 @@
                                         <span style="color: green;">
                                             <i class="fas fa-check-circle"></i> {{ $approval->StatusInWords }}
                                         </span> <br>
-                                        <i class="fas fa-user"></i> {{ $approval->approver->FullName }}<br>
+                                        <i class="fas fa-user"></i> {{ $approval->approver->fullName }}<br>
                                         <i class="fas fa-calendar-alt"></i> {{ $approval->approver_at->format('d-m-Y H:i:s') }}<br>
                                     @endif
                                     @if($approval->StatusInWords == "Rechazado")
                                         <span style="color: tomato;">
                                             <i class="fas fa-check-circle"></i> {{ $approval->StatusInWords }}
                                         </span> <br>
-                                        <i class="fas fa-user"></i> {{ $approval->approver->FullName }}<br>
+                                        <i class="fas fa-user"></i> {{ $approval->approver->fullName }}<br>
                                         <i class="fas fa-calendar-alt"></i> {{ $approval->approver_at->format('d-m-Y H:i:s') }}
                                         <hr>
                                         {{ $approval->approver_observation }}
@@ -738,7 +738,7 @@
                                 <span style="color: Tomato;">
                                     <i class="fas fa-times-circle"></i> {{ $sign->StatusValue }} 
                                 </span><br>
-                                <i class="fas fa-user"></i> {{ $sign->user->FullName }}<br>
+                                <i class="fas fa-user"></i> {{ $sign->user->fullName }}<br>
                                 <i class="fas fa-calendar-alt"></i> {{ $sign->date_sign->format('d-m-Y H:i:s') }}<br>
                                 <hr>
                                 {{ $sign->observation }}<br>
@@ -818,8 +818,8 @@
                   @foreach($requestReplacementStaff->assignEvaluations as $assignEvaluation)
                     <tr>
                         <td>{{ $assignEvaluation->created_at->format('d-m-Y H:i:s') }}</th>
-                        <td>{{ $assignEvaluation->user->FullName }}</td>
-                        <td>{{ $assignEvaluation->userAssigned->FullName }}</td>
+                        <td>{{ $assignEvaluation->user->fullName }}</td>
+                        <td>{{ $assignEvaluation->userAssigned->fullName }}</td>
                         <td>{{ $assignEvaluation->observation }}</td>
                     </tr>
                   @endforeach
@@ -909,7 +909,7 @@
                 <tbody class="small">
                     @foreach($requestReplacementStaff->technicalEvaluation->commissions as $commission)
                     <tr>
-                        <td>{{ $commission->user->FullName }}</td>
+                        <td>{{ $commission->user->fullName }}</td>
                         <td>{{ $commission->user->organizationalUnit->name }}</td>
                         <td>{{ $commission->job_title }}</td>
                         <td>
@@ -1043,7 +1043,7 @@
                     <tr class="{{ ($applicant->selected == 1 && $applicant->desist == NULL)?'table-success':''}}">
                         <td>
                           <a href="{{ route('replacement_staff.show_replacement_staff', $applicant->replacementStaff) }}"
-                            target="_blank">{{ $applicant->replacementStaff->FullName }}
+                            target="_blank">{{ $applicant->replacementStaff->fullName }}
                           <a>
                           <br>
                           @if($applicant->selected == 1 && $applicant->desist == NULL)
@@ -1378,7 +1378,7 @@
                   @foreach($requestReplacementStaff->technicalEvaluation->technicalEvaluationFiles->sortByDesc('created_at') as $technicalEvaluationFile)
                     <tr>
                       <td>{{ $technicalEvaluationFile->name }}</td>
-                      <td>{{ $technicalEvaluationFile->user->FullName }}</td>
+                      <td>{{ $technicalEvaluationFile->user->fullName }}</td>
                       <td>{{ $technicalEvaluationFile->created_at->format('d-m-Y H:i:s') }}</td>
                       <td style="width: 4%">
                           <a href="{{ route('replacement_staff.request.technical_evaluation.file.show_file', $technicalEvaluationFile) }}"
@@ -1494,7 +1494,7 @@
                 <td>
                     {{ $requestChild->WorkDayValue }}
                 </td>
-                <td>{{ $requestChild->user->FullName }}<br>
+                <td>{{ $requestChild->user->fullName }}<br>
                     {{ $requestChild->organizationalUnit->name }}
                 </td>
                 <td>

@@ -124,7 +124,7 @@ class TrainingCreate extends Component
             $this->userExternal = UserExternal::where('id',Auth::guard('external')->user()->id)->first();
             $this->searchedUser = $this->userExternal;
             $this->searchedUserId = $this->userExternal->id;
-            $this->searchedUserName = $this->userExternal->FullName;
+            $this->searchedUserName = $this->userExternal->fullName;
             $this->run = $this->userExternal->id;
             $this->dv = $this->userExternal->dv;
             $this->email = $this->userExternal->email;
@@ -327,7 +327,7 @@ class TrainingCreate extends Component
         if($this->training){
             $this->idTraining                   = $this->training->id;
             $this->searchedUser                 = $this->training->userTraining;
-            $this->searchedUserName             = $this->searchedUser->FullName;
+            $this->searchedUserName             = $this->searchedUser->fullName;
             $this->run                          = $this->searchedUser->id;
             $this->dv                           = $this->searchedUser->dv;
             $this->selectedEstament             = $this->training->estament_id;

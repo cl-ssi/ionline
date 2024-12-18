@@ -94,9 +94,9 @@
                                     </td>
                                     <td nowrap>{{ substr($requestForm->name, 0, 100) }}</td>
                                     <td nowrap>{{ $requestForm->associateProgram ? $requestForm->associateProgram->alias_finance.' '.$requestForm->associateProgram->period : $requestForm->program }}</td>
-                                    <td nowrap>{{ $requestForm->user->FullName }}</td>
+                                    <td nowrap>{{ $requestForm->user->fullName }}</td>
                                     <td nowrap>{{ $requestForm->userOrganizationalUnit->name }}</td>
-                                    <td nowrap>{{ $requestForm->purchasers->first()->FullName ?? 'No asignado' }}</td>
+                                    <td nowrap>{{ $requestForm->purchasers->first()->fullName ?? 'No asignado' }}</td>
                                     <td class="text-center">
                                         @if($loop->first)
                                             {{ $requestForm->itemRequestForms->count() }}
@@ -202,9 +202,9 @@
                                     </td>
                                     <td nowrap>{{ substr($requestForm->name, 0, 100) }}</td>
                                     <td nowrap>{{ $requestForm->associateProgram ? $requestForm->associateProgram->alias_finance.' '.$requestForm->associateProgram->period : $requestForm->program }}</td>
-                                    <td nowrap>{{ $requestForm->user->FullName }}</td>
+                                    <td nowrap>{{ $requestForm->user->fullName }}</td>
                                     <td nowrap>{{ $requestForm->userOrganizationalUnit->name }}</td>
-                                    <td nowrap>{{ $requestForm->purchasers->first()->FullName ?? 'No asignado' }}</td>
+                                    <td nowrap>{{ $requestForm->purchasers->first()->fullName ?? 'No asignado' }}</td>
                                     <td class="text-center">
                                         @if($loop->first)
                                             {{ $requestForm->itemRequestForms->count() }}
@@ -293,9 +293,9 @@
                                     </td>
                                     <td nowrap>{{ substr($requestForm->name, 0, 100) }}</td>
                                     <td nowrap>{{ $requestForm->associateProgram ? $requestForm->associateProgram->alias_finance.' '.$requestForm->associateProgram->period : $requestForm->program }}</td>
-                                    <td nowrap>{{ $requestForm->user->FullName }}</td>
+                                    <td nowrap>{{ $requestForm->user->fullName }}</td>
                                     <td nowrap>{{ $requestForm->userOrganizationalUnit->name }}</td>
-                                    <td nowrap>{{ $requestForm->purchasers->first()->FullName ?? 'No asignado' }}</td>
+                                    <td nowrap>{{ $requestForm->purchasers->first()->fullName ?? 'No asignado' }}</td>
                                     <td class="text-center">
                                         @if($loop->first)
                                             {{ $requestForm->passengers->count() }}
@@ -401,9 +401,9 @@
                                     </td>
                                     <td nowrap>{{ substr($requestForm->name, 0, 100) }}</td>
                                     <td nowrap>{{ $requestForm->associateProgram ? $requestForm->associateProgram->alias_finance.' '.$requestForm->associateProgram->period : $requestForm->program }}</td>
-                                    <td nowrap>{{ $requestForm->user->FullName }}</td>
+                                    <td nowrap>{{ $requestForm->user->fullName }}</td>
                                     <td nowrap>{{ $requestForm->userOrganizationalUnit->name }}</td>
-                                    <td nowrap>{{ $requestForm->purchasers->first()->FullName ?? 'No asignado' }}</td>
+                                    <td nowrap>{{ $requestForm->purchasers->first()->fullName ?? 'No asignado' }}</td>
                                     <td class="text-center">
                                         @if($loop->first)
                                             {{ $requestForm->passengers->count() }}

@@ -4,7 +4,7 @@
     @if($totalCurrentAllowancesDaysByUser < 90 && $userAllowance && $form == 'create')
         <div class="alert alert-info alert-block">
             <button type="button" class="close" data-dismiss="alert">×</button>	
-            El usuario <b>{{ $userAllowance->FullName }}</b> ha utilizado los siguientes días de viáticos completo (100%): <br>
+            El usuario <b>{{ $userAllowance->fullName }}</b> ha utilizado los siguientes días de viáticos completo (100%): <br>
             - <b>Utilizados Año</b>: {{ $totalCurrentAllowancesDaysByUser }}/90 <br>
             - <b>Utilizados Mes</b>:  {{ $totalCurrentMonthAllowancesDaysByUser }}/10 <br>
         </div>

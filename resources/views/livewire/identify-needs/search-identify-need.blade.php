@@ -19,7 +19,7 @@
                     <td>{{ $identifyNeed->subject }}</td>
                     <td>{{ Str::limit($identifyNeed->reason, 120) }}</td>
                     <td class="text-center">
-                        {{ $identifyNeed->user->FullName }} <br>
+                        {{ $identifyNeed->user->fullName }} <br>
                         <b><small>{{ $identifyNeed->organizationalUnit->name }}</small></b>
                     </td>
                     <td class="text-center">

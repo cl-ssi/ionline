@@ -84,9 +84,9 @@ class ReceptionController extends Controller
     {
         $substances = Substance::where('presumed', true)->orderBy('name')->get();
         $trashedDestructions = Destruction::onlyTrashed()->where('reception_id', $reception->id)->get();
-        $manager = User::Find(Parameter::get('drugs','Jefe'))->FullName;
-        $observer = optional(User::Find(Parameter::get('drugs','MinistroDeFe')))->FullName;
-        $lawyer_observer = optional(User::Find(Parameter::get('drugs','MinistroDeFeJuridico')))->FullName;
+        $manager = User::Find(Parameter::get('drugs','Jefe'))->fullName;
+        $observer = optional(User::Find(Parameter::get('drugs','MinistroDeFe')))->fullName;
+        $lawyer_observer = optional(User::Find(Parameter::get('drugs','MinistroDeFeJuridico')))->fullName;
 
         return view('drugs.receptions.show', compact('reception', 'substances', 'trashedDestructions','manager','observer','lawyer_observer'));
     }

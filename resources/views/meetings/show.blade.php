@@ -51,7 +51,7 @@
             </tr>
             <tr>
                 <th class="table-secondary" width="25%">Usuario Creador / Fecha Creación</th>
-                <td colspan="3">{{ $meeting->userCreator->FullName }} / {{ $meeting->created_at->format('d-m-Y H:i:s') }}</td>
+                <td colspan="3">{{ $meeting->userCreator->fullName }} / {{ $meeting->created_at->format('d-m-Y H:i:s') }}</td>
             </tr>
         </tbody>
     </table>

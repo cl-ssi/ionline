@@ -17,7 +17,7 @@
       <li><strong>Nº Solicitud</strong>: {{ $req->id }}</li>
       <li><strong>Fecha Solicitud</strong>: {{ $req->created_at->format('d-m-Y H:i:s') }}</li>
       <li><strong>Nombre Solicitud</strong>: {{ $req->name }}</li>
-      <li><strong>Administrador de Contrato</strong>: {{ $req->contractManager->FullName }}</li>
+      <li><strong>Administrador de Contrato</strong>: {{ $req->contractManager->fullName }}</li>
   </ul>
 
   <hr>

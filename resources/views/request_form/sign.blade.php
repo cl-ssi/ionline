@@ -53,7 +53,7 @@
           <tr>
             <th class="table-active" rowspan="2" scope="row">Solicitante</th>
             <th class="table-active" scope="row">Usuario Gestor</th>
-            <td>{{ $requestForm->user->FullName }}</td>
+            <td>{{ $requestForm->user->fullName }}</td>
           </tr>
           <tr>
             <th class="table-active" scope="row">Unidad Organizacional</th>
@@ -62,7 +62,7 @@
           <tr>
             <th class="table-active" rowspan="2" scope="row">Administrador de Contrato</th>
             <th class="table-active" scope="row">Usuario</th>
-            <td>{{ $requestForm->contractManager->FullName }}</td>
+            <td>{{ $requestForm->contractManager->fullName }}</td>
           </tr>
           <tr>
             <th class="table-active" scope="row">Unidad Organizacional</th>
@@ -92,7 +92,7 @@
           </tr>
           <tr>
             <th class="table-active" colspan="2" scope="row">Comprador</th>
-            <td>{{ $requestForm->purchasers->first()->FullName ?? 'No asignado' }}</td>
+            <td>{{ $requestForm->purchasers->first()->fullName ?? 'No asignado' }}</td>
           </tr>
         </tbody>
       </table>
@@ -147,7 +147,7 @@
           <span style="color: green;">
             <i class="fas fa-check-circle"></i> {{ $event->StatusValue }} <br>
           </span>
-          <i class="fas fa-user"></i> {{ $event->signerUser->FullName }}<br>
+          <i class="fas fa-user"></i> {{ $event->signerUser->fullName }}<br>
           <p style="font-size: 11px">
             {{ $event->position_signer_user }} {{ $event->signerOrganizationalUnit->name }}<br>
           </p>
@@ -165,7 +165,7 @@
           <span style="color: Tomato;">
             <i class="fas fa-times-circle"></i> {{ $event->StatusValue }} <br>
           </span>
-          <i class="fas fa-user"></i> {{ $event->signerUser->FullName }}<br>
+          <i class="fas fa-user"></i> {{ $event->signerUser->fullName }}<br>
           <i class="fas fa-calendar-alt"></i> {{ Carbon\Carbon::parse($event->signature_date)->format('d-m-Y H:i:s') }}<br>
 
           @if($event->comment)
@@ -201,7 +201,7 @@
                     </span> 
                     @endif
                 </td>
-                <td><i class="fas fa-calendar"></i> {{ $event->signature_date?->format('d-m-Y H:i:s') }} por: {{ $event->signerUser?->FullName }} en calidad de {{ $event->EventTypeValue }}</td>
+                <td><i class="fas fa-calendar"></i> {{ $event->signature_date?->format('d-m-Y H:i:s') }} por: {{ $event->signerUser?->fullName }} en calidad de {{ $event->EventTypeValue }}</td>
                 <td class="text-left font-italic"><i class="fas fa-comment"></i> "{{ $event->comment }}"</td>
             </tr>
             @endforeach
@@ -357,7 +357,7 @@
       @foreach($requestForm->messages->sortByDesc('created_at') as $requestFormMessage)
       <div class="card" id="message">
         <div class="card-header col-sm">
-          <i class="fas fa-user"></i> {{ $requestFormMessage->user->FullName }}
+          <i class="fas fa-user"></i> {{ $requestFormMessage->user->fullName }}
 
         </div>
         <div class="card-body">

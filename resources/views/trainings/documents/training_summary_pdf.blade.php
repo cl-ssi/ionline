@@ -46,7 +46,7 @@
                 <th width="50%" colspan="2" style="background-color:#EEEEEE;">RUN</th>
             </tr>
             <tr>
-                <td colspan="2" style="text-align: center">{{ ($training->userTraining) ? $training->userTraining->FullName : null }}</td>
+                <td colspan="2" style="text-align: center">{{ ($training->userTraining) ? $training->userTraining->fullName : null }}</td>
                 <td colspan="2" style="text-align: center">{{ $training->userTraining->id }}-{{ $training->userTraining->dv }}</td>
             </tr>
             <tr>
@@ -186,7 +186,7 @@
                     @foreach($training->approvals as $approval)
                         <td style="text-align: center">
                             <p style="color: green">{{ $approval->StatusInWords }}</p> <br><br>
-                            {{ $approval->approver->FullName }}<br> 
+                            {{ $approval->approver->fullName }}<br> 
                             {{ $approval->approver_at }}
                             
                             @if($approval->approver_observation != null) 

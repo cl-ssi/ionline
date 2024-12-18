@@ -57,7 +57,7 @@
                         </td>
                         <td class="text-center">{{ $allowance->created_at->monthName }}</td>
                         <td class="text-center" style="width: 7%">{{ $allowance->created_at->format('d-m-Y') }}</td>
-                        <td>{{ $allowance->userAllowance->FullName }}</td>
+                        <td>{{ $allowance->userAllowance->fullName }}</td>
                         <td>
                             {{ $allowance->organizationalUnitAllowance->name }} <br><br>
                             <small><b>{{ $allowance->organizationalUnitAllowance->establishment->name }}</b></small>

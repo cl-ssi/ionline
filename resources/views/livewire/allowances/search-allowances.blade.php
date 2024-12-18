@@ -114,7 +114,7 @@
                         </th>
                         <td>{{ $allowance->created_at->format('d-m-Y H:i:s') }}</td>
                         <td>
-                            <b>{{ $allowance->userAllowance->FullName }}</b> <br>
+                            <b>{{ $allowance->userAllowance->fullName }}</b> <br>
                             <small>{{ ($allowance->organizationalUnitAllowance) ? $allowance->organizationalUnitAllowance->name : '' }}</small> <br>
                             <small><b>{{ $allowance->allowanceEstablishment->name }}</b></small> <br><br>
                             <b>Creado por</b>: {{ $allowance->userCreator->tinyName }}

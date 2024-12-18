@@ -2,7 +2,7 @@
     @foreach($messages as $message)
     <div class="card" id="message">
         <div class="card-header col-sm">
-            <i class="fas fa-user"></i> {{ $message->user->FullName }}
+            <i class="fas fa-user"></i> {{ $message->user->fullName }}
         </div>
         <div class="card-body">
             <i class="fas fa-calendar"></i> {{ $message->created_at->format('d-m-Y H:i:s') }}<br>

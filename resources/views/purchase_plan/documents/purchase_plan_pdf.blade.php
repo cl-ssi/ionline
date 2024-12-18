@@ -64,7 +64,7 @@
 		</tr>
 		<tr>
 			<td style="background-color: #EEEEEE;">Funcionario Responsable</td>
-			<td>{{ $purchasePlan->userResponsible->FullName }}</td>
+			<td>{{ $purchasePlan->userResponsible->fullName }}</td>
 		</tr>
 		<tr>
 			<td style="background-color: #EEEEEE;">Cargo</td>

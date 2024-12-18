@@ -14,7 +14,7 @@
                 <select class="form-select" aria-label="Default select example" wire:model="assignUserId">
                     <option value="">Selecione...</option>
                     @foreach($purchasers as $purchaser)
-                        <option value="{{ $purchaser->id }}">{{ $purchaser->FullName }}</option>
+                        <option value="{{ $purchaser->id }}">{{ $purchaser->fullName }}</option>
                     @endforeach
                 </select>
             </div>

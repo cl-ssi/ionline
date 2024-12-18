@@ -116,7 +116,7 @@
         Funcionario que entrega
     </div>
     <div class="center" style="width: 49%">
-        <span class="uppercase">{{ $reception->user->FullName }}</span><br>
+        <span class="uppercase">{{ $reception->user->fullName }}</span><br>
         {{ $reception->user->position }} <br>
         Funcionario que Recibe<br style="padding-bottom: 6px;">
 

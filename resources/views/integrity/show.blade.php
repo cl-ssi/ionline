@@ -12,7 +12,7 @@
 
         <p><strong>Tipo:</strong> {{ $complaint->type }}</p>
 
-        <p><strong>Autor:</strong> {{ $complaint->user ? $complaint->user->FullName : '' }}</p>
+        <p><strong>Autor:</strong> {{ $complaint->user ? $complaint->user->fullName : '' }}</p>
 
         <p><strong>Valor:</strong> {{ $complaint->value->name }} {{ $complaint->other_value }}</p>
 

@@ -29,7 +29,7 @@
                             <tr class="{{ ($applicant->selected == 1 && $applicant->desist == NULL)?'table-success':''}}">
                                 <td>
                                   <a href="{{ route('replacement_staff.show_replacement_staff', $applicant->replacementStaff) }}"
-                                    target="_blank">{{ $applicant->replacementStaff->FullName }}
+                                    target="_blank">{{ $applicant->replacementStaff->fullName }}
                                   <a>
                                   <br>
                                   @if($applicant->selected == 1 && $applicant->desist == NULL)

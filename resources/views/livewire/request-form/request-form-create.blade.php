@@ -18,7 +18,7 @@
                         class="form-control form-control-sm selectpicker show-tick" data-live-search="true" data-size="5" {{ $editRF ? 'disabled' : 'required' }} >
                         <option>Seleccione...</option>
                         @foreach($users as $user)
-                            <option value="{{ $user->id }}">{{ ucfirst(trans($user->FullName)) }}</option>
+                            <option value="{{ $user->id }}">{{ ucfirst(trans($user->fullName)) }}</option>
                         @endforeach
                       </select>
                     </div>

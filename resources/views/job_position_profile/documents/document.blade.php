@@ -468,7 +468,7 @@
                 @foreach($jobPositionProfile->jobPositionProfileSigns as $sign)
                 <td>
                     <b>{{ $sign->organizationalUnit->name }}</b> <br>
-                    {{ ($sign->user) ? $sign->user->FullName : 'sin firmar' }} <br>
+                    {{ ($sign->user) ? $sign->user->fullName : 'sin firmar' }} <br>
                     {{ ($sign->date_sign) ? $sign->date_sign->format('d-m-Y H:i:s') : 'pendiente' }}
                 </td>
                 @endforeach

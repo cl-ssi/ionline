@@ -41,7 +41,7 @@
                   @foreach($staffManageByOu as $staffManage)
                     <tr>
                         <td>{{ $staffManage->replacementStaff->created_at->format('d-m-Y H:i:s') }}</td>
-                        <td>{{ $staffManage->replacementStaff->FullName }}</td>
+                        <td>{{ $staffManage->replacementStaff->fullName }}</td>
                         <td>{{ $staffManage->replacementStaff->Identifier }}</td>
                         <td>
                             @foreach($staffManage->replacementStaff->profiles as $title)
