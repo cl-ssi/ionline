@@ -136,6 +136,7 @@ class Process extends Model
     {
         return $this->morphOne(Approval::class, 'approvable')->where('endorse',false);
     }
+
     public function endorses(): MorphMany
     {
         return $this->morphMany(Approval::class, 'approvable')->where('endorse',operator: true);

@@ -9,6 +9,7 @@ use App\Models\Parameters\Program;
 use Filament\Forms;
 use Filament\Forms\Components\Group;
 use Filament\Forms\Form;
+use Filament\Pages\SubNavigationPosition;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -26,6 +27,8 @@ class ProgramResource extends Resource
     protected static ?string $navigationGroup = 'Servicio';
 
     protected static ?string $modelLabel = 'Programa';
+
+    protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
 
     public static function form(Form $form): Form
     {
@@ -93,30 +96,35 @@ class ProgramResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('name')
                     ->label('Nombre')
+                    ->wrap()
                     ->searchable()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('establishment.name')
-                    ->label('Establecimiento')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('alias')
-                    ->sortable()
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('alias_finance')
-                    ->label('Alias Finanzas')
-                    ->sortable()
-                    ->searchable(),
+                // Tables\Columns\TextColumn::make('establishment.name')
+                //     ->label('Establecimiento')
+                //     ->numeric()
+                //     ->sortable(),
+                // Tables\Columns\TextColumn::make('alias')
+                //     ->sortable()
+                //     ->searchable(),
+                // Tables\Columns\TextColumn::make('alias_finance')
+                //     ->label('Alias Finanzas')
+                //     ->sortable()
+                //     ->searchable(),
                 Tables\Columns\TextColumn::make('financial_type')
                     ->label('Financiamiento')
                     ->sortable()
                     ->searchable(),
-                Tables\Columns\TextColumn::make('folio')
-                    ->numeric()
-                    ->sortable(),
+                // Tables\Columns\TextColumn::make('folio')
+                //     ->numeric()
+                //     ->sortable(),
                 Tables\Columns\TextColumn::make('subtitle.name')
                     ->label('Subtitulo')
                     ->numeric()
                     ->sortable(),
+                // Tables\Columns\TextColumn::make('')
+                //     ->label('Subtitulo')
+                //     ->numeric()
+                //     ->sortable(),
                 Tables\Columns\TextColumn::make('budget')
                     ->label('Presupuesto')
                     ->numeric()
@@ -124,7 +132,6 @@ class ProgramResource extends Resource
                     ->money('CL'),
                 Tables\Columns\TextColumn::make('period')
                     ->label('Periodo')
-                    ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
@@ -140,7 +147,9 @@ class ProgramResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
+                Tables\Filters\SelectFilter::make('period')
+                    ->options(range(now()->year - 4, now()->year + 1))
+                    ->label('Periodo'),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
