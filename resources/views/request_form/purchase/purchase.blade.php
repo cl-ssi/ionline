@@ -607,7 +607,7 @@
 @endif
 
 <!-- COMPRA INMEDIATA A PARTIR DE OTRO RF o COMPRA ÁGIL (cod 7) o CONVENIO MARCO MENOR A 1.000 UTM (cod 4) -->
-@if( $requestForm->father || in_array($requestForm->purchase_type_id, [4, 7]))
+@if( $requestForm->father || in_array($requestForm->purchase_type_id, [4, 7, 26]))
     @include('request_form.purchase.partials.immediate_purchase_form')
 @endif
 
