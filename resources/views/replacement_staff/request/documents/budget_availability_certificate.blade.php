@@ -44,9 +44,9 @@
     @foreach($requestReplacementStaff->requestSign as $sign)
         @if($sign->user)
             @if($sign->ou_alias != 'sub_rrhh')
-                {{ $sign->user->getInitialsAttribute() }} -
+                {{ $sign->user->initials }} -
             @else
-                {{ $sign->user->getInitialsAttribute() }}
+                {{ $sign->user->initials }}
             @endif
         @endif
     @endforeach

@@ -202,7 +202,7 @@
         <div class="signature" style="padding-left: 32px; vertical-align: middle;">
             @foreach($purchasePlan->approvals as $approval)
                 @if($approval->digital_signature == 0)
-                    {{ $approval->approver->getInitialsAttribute() }} &nbsp;&nbsp;&nbsp;
+                    {{ $approval->approver->initials }} &nbsp;&nbsp;&nbsp;
                 @endif
             @endforeach
         </div>

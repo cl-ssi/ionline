@@ -76,15 +76,15 @@
         <div class="signature" style="padding-left: 32px;">
             @if($approvals = $requestReplacementStaff->approvals->where('position', 'left'))
                 @foreach($approvals->where('subject', 'Solicitud de Aprobación Jefatura Depto. o Unidad') as $approval)
-                    {{ $approval->approver->getInitialsAttribute() }} -
+                    {{ $approval->approver->initials }} -
                 @endforeach
 
                 @foreach($requestReplacementStaff->requestSign as $sign)
-                    {{ $sign->user->getInitialsAttribute() }} -
+                    {{ $sign->user->initials }} -
                 @endforeach
 
                 @foreach($approvals->where('subject', '!=','Solicitud de Aprobación Jefatura Depto. o Unidad') as $approval)
-                    {{ $approval->approver->getInitialsAttribute() }} {{ ($approval->subject != 'Solicitud de Aprobación SDGP') ? '-' : '' }}
+                    {{ $approval->approver->initials }} {{ ($approval->subject != 'Solicitud de Aprobación SDGP') ? '-' : '' }}
                 @endforeach
             @endif
         </div>

@@ -13,7 +13,7 @@
           </tr>
           <tr>
               <th class="text-muted col-3 align-middle">Unidad Organizacional</th>
-              <td class="col-3 align-middle">{{ $requestForm->organizationalUnit->getInitialsAttribute() }}</td>
+              <td class="col-3 align-middle">{{ $requestForm->organizationalUnit->initials }}</td>
               <th class="text-muted col-3 align-middle">Mecanismo de Compra</th>
               <td class="col-3 align-middle">
                   <select wire:model.live="purchaseMechanism" name="purchaseMechanism" wire:change="changePurchaseMechanism('lst')" class="form-control form-control-sm" required>
