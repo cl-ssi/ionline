@@ -145,21 +145,20 @@ class ProgramResource extends Resource
                 //     ->sortable(),
                 Tables\Columns\TextColumn::make('period')
                     ->label('Periodo')
-                    ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('ministerial_resolution_number')
                     ->label('Reso Minsal')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('ministerial_resolution_date')
                     ->label('Fecha Reso Minsal')
-                    ->date()
+                    ->date('Y-m-d')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('resource_distribution_number')
                     ->label('Reso Distribución')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('resource_distribution_date')
                     ->label('Fecha Reso Distribución')
-                    ->date()
+                    ->date('Y-m-d')
                     ->sortable(),
                 // Tables\Columns\TextColumn::make('establishment.name')
                 //     ->numeric()
@@ -169,7 +168,7 @@ class ProgramResource extends Resource
                     ->wrap()
                     ->bulleted()
                     ->searchable(['full_name'])
-                    ->sortable()
+                    ->sortable(['full_name'])
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
