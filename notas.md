@@ -315,6 +315,10 @@ TODO:
 [ ] Agregar otros archivos adjunto
 [ ] Eliminar document_id
 [ ] Approvals permitir poner vizaciones
+[ ] Auto solicitar firma de directora despues de la visación
+[ ] Agregar descargar documento firmado por directora
+[ ] Comentario marcar como del sistema
+[ ] Eliminar boton para borrar en masa
 
 
 [X] Fixear busqueda por nombre en asociar un referente

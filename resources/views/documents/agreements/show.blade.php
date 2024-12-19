@@ -22,13 +22,26 @@
         @endforeach
     </div>
 
-    <div class="signature-footer">
-        {{-- <div class="signature" style="padding-left: 6px;"></div> --}}
-        <div class="signature" style="padding-left: 6px;"></div>
-        <div class="signature" style="padding-left: 6px;">
-            @include('sign.approvation', [
-                'approval' => $record->approval,
-            ])
+    @if($record->approval)
+        <div class="signature-footer">
+            <div class="signature" style="padding-left: 6px;"></div>
+            <div class="signature" style="padding-left: 6px;">
+                @include('sign.approvation', [
+                    'approval' => $record->approval,
+                ])
+            </div>
         </div>
-    </div>
+
+
+        <div class="signature-footer">
+            {{-- <div class="signature" style="padding-left: 6px;"></div> --}}
+            <div class="signature" style="padding-left: 6px;"></div>
+            <div class="signature" style="padding-left: 6px;">
+                @include('sign.approvation', [
+                    'approval' => $record->approval,
+                ])
+            </div>
+        </div>
+
+    @endif
 @endsection
