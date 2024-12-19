@@ -40,7 +40,7 @@ class ProgramResource extends Resource
                     ->label('Nombre')
                     ->required()
                     ->maxLength(255)
-                    ->columnSpan(2),
+                    ->columnSpan(3),
                 Forms\Components\Select::make('period')
                     ->label('Periodo')
                     ->required()
@@ -57,6 +57,10 @@ class ProgramResource extends Resource
                     ->label('Presupuesto')
                     ->numeric()
                     ->default(null),
+                Forms\Components\Select::make('subtitle_id')
+                    ->label('Subtítulo')
+                    ->relationship('subtitle', 'name')
+                    ->required(),
                 // Forms\Components\TextInput::make('alias')
                 //     ->maxLength(50)
                 //     ->default(null),
@@ -91,7 +95,7 @@ class ProgramResource extends Resource
                             ->downloadable()
                             ->columnSpanFull(),
                     ])
-                    ->columnSpan(2),
+                    ->columnSpan(3),
                 Forms\Components\Fieldset::make('Resolución de Distribución de Recursos')
                     ->schema([
                         Forms\Components\TextInput::make('resource_distribution_number')
@@ -106,18 +110,14 @@ class ProgramResource extends Resource
                             ->directory('ionline/agreements/programs')
                             ->columnSpanFull(),
                     ])
-                    ->columnSpan(2),
+                    ->columnSpan(3),
                 // Forms\Components\Select::make('establishment_id')
                 //     ->relationship('establishment', 'name')
                 //     ->default(null),
-                // Forms\Components\Select::make('subtitle_id')
-                //     ->label('Subtítulo')
-                //     ->relationship('subtitle', 'name')
-                //     ->required(),
                 Forms\Components\Toggle::make('is_program')
                     ->label('Es Programa APS'),
             ])
-            ->columns(4);
+            ->columns(6);
     }
 
     public static function table(Table $table): Table
