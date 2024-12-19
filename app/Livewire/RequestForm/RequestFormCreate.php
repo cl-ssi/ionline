@@ -46,6 +46,8 @@ class RequestFormCreate extends Component
 
         public $form_status, $lstProgram, $program_id;
 
+        public $period, $disabled;
+
 
         protected function rules(){
             return [
@@ -146,9 +148,11 @@ class RequestFormCreate extends Component
             $this->contractManagerOuId=   $this->requestForm->contract_manager_ou_id;
             $this->contractManager    =   $this->requestForm->contractManager;
             $this->superiorChief      =   $this->requestForm->superior_chief;
+            $this->period             =   $this->requestForm->associateProgram->period;
             $this->program            =   $this->requestForm->program;
-            // $this->program_id         =   $this->requestForm->program_id ?? 'other';
-            $this->program_id         =   $this->requestForm->program_id;
+            $this->searchedProgram    =   $this->requestForm->associateProgram;
+
+            $this->program_id         =   $this->requestForm->associateProgram->id;
             $this->justify            =   $this->requestForm->justification;
             $this->purchaseMechanism  =   $this->requestForm->purchase_mechanism_id;
             $this->typeOfCurrency     =   $this->requestForm->type_of_currency;
@@ -619,5 +623,23 @@ class RequestFormCreate extends Component
         #[On('searchedTechnicalReviewOu')]
         public function searchedTechnicalReviewOu(OrganizationalUnit $organizationalUnit){
             $this->technicalReviewOuId = $organizationalUnit->id;
+        }
+
+        // NUEVA SELECCION DE PROGRAMAS
+        public function updatedPeriod($value)
+        {
+            $this->dispatch('contentChanged', contentChanged: $value);
+        }
+        
+        #[On('clearSearchedProgram')]
+        public function clearSearchedProgram(){
+            $this->searchedProgram = null;
+            $this->program_id = null;
+        }
+
+        #[On('searchedProgram')]
+        public function searchedProgram(Program $searchedProgram){
+            $this->searchedProgram = $searchedProgram;
+            $this->program_id = $searchedProgram->id;
         }
 }
