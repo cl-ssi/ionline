@@ -77,13 +77,13 @@ class ApprovalResource extends Resource
                 //     ->maxLength(255)
                 //     ->default(null),
                 Forms\Components\Select::make('sent_to_ou_id')
-                    ->label('Unidad Organizacional')
+                    ->label('Enviado a Unidad Organizacional')
                     ->relationship('sentToOu', 'name')
                     ->searchable()
                     ->getOptionLabelFromRecordUsing(fn (OrganizationalUnit $record) => "{$record->establishment->name} - {$record->name}")
                     ->columnSpan(2),
                 Forms\Components\Select::make('sent_to_user_id')
-                    ->label('Enviado a usuario')
+                    ->label('Enviado a Usuario')
                     ->relationship('sentToUser', 'full_name')
                     ->searchable()
                     ->columnSpan(2),
@@ -236,11 +236,12 @@ class ApprovalResource extends Resource
                 //     ->sortable(),
                 // Tables\Columns\TextColumn::make('filename')
                 //     ->searchable(),
-                // Tables\Columns\TextColumn::make('approvable_type')
-                //     ->searchable(),
-                // Tables\Columns\TextColumn::make('approvable_id')
-                //     ->numeric()
-                //     ->sortable(),
+                Tables\Columns\TextColumn::make('approvable_type')
+                    ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('approvable_id')
+                    ->numeric()
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
