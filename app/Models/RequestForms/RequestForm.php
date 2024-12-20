@@ -461,7 +461,7 @@ class RequestForm extends Model implements Auditable
 
     public function isPurchaseInProcess()
     {
-        return $this->purchasingProcess == null || ($this->purchasingProcess && $this->purchasingProcess->status->value == 'in_process');
+        return $this->purchasingProcess == null || ($this->purchasingProcess && in_array($this->purchasingProcess->status->value, ['in_process', 'canceled']));
     }
 
     public function getSubtypeValueAttribute()
@@ -974,7 +974,7 @@ class RequestForm extends Model implements Auditable
             ->whereIn('event_type', ['budget_event', 'pre_budget_event', 'pre_finance_budget_event']);
 
         return in_array($this->status->value, ['saved', 'pending', 'rejected']) || 
-            ($this->status->value == 'approved' && !$this->purchasingProcess)  || 
+            ($this->status->value == 'approved' && (!$this->purchasingProcess || $this->purchasingProcess->status->value == 'canceled'))  || 
                 $hasBudgetEvents->last()?->status == 'rejected';
     }
 

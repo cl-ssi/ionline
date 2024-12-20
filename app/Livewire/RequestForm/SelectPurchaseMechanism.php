@@ -54,7 +54,13 @@ class SelectPurchaseMechanism extends Component
 
         $this->requestForm->load('purchasingProcess');
         if($this->requestForm->purchasingProcess)
-            $this->requestForm->purchasingProcess()->update(['purchase_mechanism_id' => $this->selectedPurchaseMechanism, 'purchase_type_id' => $this->selectedPurchaseType]);
+            $this->requestForm->purchasingProcess()->update(
+                [
+                    'purchase_mechanism_id' => $this->selectedPurchaseMechanism, 
+                    'purchase_type_id'      => $this->selectedPurchaseType,
+                    'status'                => 'in_process'
+                ]
+            );
 
         session()->flash('success', 'Estimado Usuario/a: el Mecanismo de Compra fue editado con éxito.');
         return redirect()->route('request_forms.supply.purchase', $this->requestForm);
