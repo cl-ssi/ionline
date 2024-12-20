@@ -84,7 +84,13 @@ class ProcessResource extends Resource
                             ->relationship('program', 'name', fn (Builder $query, callable $get) => $query->where('is_program', true)->where('period', $get('period')))
                             ->hiddenOn(ProcessesRelationManager::class)
                             ->required()
-                            ->columnSpan(2),
+                            ->columnSpan(2)
+                            ->suffixAction(
+                                Forms\Components\Actions\Action::make('ir_al_programa')
+                                    ->label('Ir al programa')
+                                    ->icon('bi-link')
+                                    ->action(fn(Get $get) => redirect()->to(ProgramResource::getUrl('edit', ['record' => $get('program_id')])))
+                            ),
 
                         Forms\Components\Select::make('commune_id')
                             ->label('Comuna')
@@ -235,6 +241,9 @@ class ProcessResource extends Resource
                             ->disabled(fn(?Process $record) => $record->status === Status::Finished),
                     ])
                     ->footerActions([
+                        Forms\Components\Actions\Action::make('guardar_cambios')
+                            ->icon('bi-save')
+                            ->action('save'),
                         Forms\Components\Actions\Action::make('Finalizar')
                             ->icon('heroicon-m-check')
                             ->requiresConfirmation()
@@ -273,9 +282,9 @@ class ProcessResource extends Resource
                             ->icon('heroicon-m-check-circle')
                             ->requiresConfirmation()
                             ->action(function (Process $record, array $data): void {
-                                $record->createApprovals($data['referer_id']);
+                                // $record->createApprovals($data['referer_id']);
                                 Notifications\Notification::make()
-                                    ->title('Visado solicitado')
+                                    ->title('Solicitud de revisión enviada (sin implementar aún)')
                                     ->success()
                                     ->send();
                             }),
@@ -283,22 +292,22 @@ class ProcessResource extends Resource
                     ->schema([
                         Forms\Components\Fieldset::make('Jurídico')
                             ->schema([
-                                Forms\Components\DatePicker::make('date')
+                                Forms\Components\DatePicker::make('revision_by_lawyer_at')
                                     ->label('Fecha de revisión'),
-                                Forms\Components\Placeholder::make('Estado')
-                                    ->content('Pendiente'),
+                                Forms\Components\Placeholder::make('Revisado por')
+                                    ->content(fn(?Process $record) => $record->revisionByLawyerUser?->full_name),
                             ])
                             ->columnSpan(1)
-                            ->columns(1),
+                            ->columns(2),
                         Forms\Components\Fieldset::make('Comuna')
                             ->schema([
-                                Forms\Components\DatePicker::make('date')
+                                Forms\Components\DatePicker::make('revision_by_commune_at')
                                     ->label('Fecha de revisión'),
-                                Forms\Components\Placeholder::make('Estado')
-                                    ->content('Pendiente'),
+                                Forms\Components\Placeholder::make('Revisado por')
+                                ->content(fn(?Process $record) => $record->revisionByCommuneUser?->full_name),
                             ])
                             ->columnSpan(1)
-                            ->columns(1)
+                            ->columns(2)
                             ->visible(fn (?Process $record) => $record->processType->bilateral),
 
                     ])
@@ -323,7 +332,8 @@ class ProcessResource extends Resource
                                     ->title('Visado solicitado')
                                     ->success()
                                     ->send();
-                            }),
+                            })
+                            ->disabled(fn(?Process $record) => $record->endorses->isNotEmpty() ),
                     ])
                     ->schema([
                         Forms\Components\Repeater::make('endorses')
@@ -351,11 +361,11 @@ class ProcessResource extends Resource
 
                 Forms\Components\Section::make('Comuna')
                     ->schema([
-                        Forms\Components\DateTimePicker::make('sended_at')
+                        Forms\Components\DatePicker::make('sended_to_commune_at')
                             ->label('Fecha de envío a la comuna'),
                         Forms\Components\Fieldset::make('Devolución de la comuna')
                             ->schema([
-                                Forms\Components\DateTimePicker::make('received_at')
+                                Forms\Components\DatePicker::make('returned_from_commune_at')
                                     ->label('Fecha de devolución')
                                     ->columnSpanFull(),
                                 Forms\Components\FileUpload::make('attachment')

@@ -15,6 +15,7 @@ use App\Models\Parameters\Program;
 use App\Models\User;
 use App\Observers\Documents\Agreements\ProcessObserver;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -31,19 +32,10 @@ class Process extends Model
     protected $table = 'agr_processes';
 
     protected $fillable = [
-        'program_id',
-        'period',
         'process_type_id',
+        'period',
+        'program_id',
         'commune_id',
-        'total_amount',
-        'number',
-        'date',
-        'establishments',
-        'quotas_qty',
-        'signer_id',
-        'signer_appellative',
-        'signer_decree',
-        'signer_name',
         'municipality_id',
         'municipality_name',
         'municipality_rut',
@@ -53,10 +45,31 @@ class Process extends Model
         'mayor_run',
         'mayor_appelative',
         'mayor_decree',
+
+        'total_amount',
+        'quotas_qty',
+        'establishments',
+        
+        'signer_id',
+        'signer_appellative',
+        'signer_decree',
+        'signer_name',
+
+        'number',
+        'date',
         'status',
-        'document_id',
+
+        // 'document_id',
         'document_content',
         'next_process_id',
+        
+        'revision_by_lawyer_at',
+        'revision_by_lawyer_user_id',
+        'revision_by_commune_at',
+        'revision_by_commune_user_id',
+        'sended_to_commune_at',
+        'returned_from_commune_at',
+
         'establishment_id',
     ];
 
@@ -71,7 +84,7 @@ class Process extends Model
         return $this->belongsTo(Program::class, 'program_id');
     }
 
-    public function processType(): BelongsTo
+    public function processType(): BelongsTo|Builder
     {
         return $this->belongsTo(ProcessType::class, 'process_type_id');
     }
@@ -99,6 +112,16 @@ class Process extends Model
     public function document(): BelongsTo
     {
         return $this->belongsTo(Document::class, 'document_id');
+    }
+
+    public function revisionByLawyerUser(): BelongsTo|Builder
+    {
+        return $this->belongsTo(User::class, 'revision_by_lawyer_user_id')->withTrashed();
+    }
+
+    public function revisionByCommuneUser(): BelongsTo|Builder
+    {
+        return $this->belongsTo(User::class, 'revision_by_commune_user_id')->withTrashed();
     }
 
     public function nextProcess(): BelongsTo
@@ -185,8 +208,13 @@ class Process extends Model
 
     public function createEndorses($referer_id): void
     {
+        // no hacer nada si ya tiene visadores
+        if ($this->endorses->isNotEmpty()) {
+            return;
+        }
+
         // Visación del Referente
-        $this->approvals()->create([
+        $this->endorses()->create([
             "module" => "Convenios",
             "module_icon" => "fas fa-handshake",
             "subject" => "Visar convenio",
@@ -206,7 +234,7 @@ class Process extends Model
         // El resto de los visadores de obtienen del Flujo de aprobación
         $steps = ApprovalFlow::getByObject($this);
         foreach($steps as $step) {
-            $this->approvals()->create([
+            $this->endorses()->create([
                 "module" => "Convenios",
                 "module_icon" => "fas fa-handshake",
                 "subject" => "Visar convenio",
