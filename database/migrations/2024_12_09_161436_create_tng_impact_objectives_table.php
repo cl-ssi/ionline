@@ -22,7 +22,7 @@ return new class extends Migration
             $table->softDeletes();
         });
 
-        // Se elimina el campo descripción.
+        /* Se elimina el campo descripción.
         Schema::table('tng_strategic_axes', function (Blueprint $table) {
             $table->dropColumn('description');
         });
@@ -248,6 +248,7 @@ return new class extends Migration
             'description'       => 'Fortalecer la entrega de servicios de salud con equidad, calidad y énfasis en Satisfacción Usuaria',
             'strategic_axis_id' =>  9
         ]);
+        */
     }
 
     /**

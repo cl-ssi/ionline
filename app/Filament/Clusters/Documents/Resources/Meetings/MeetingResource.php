@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Forms\Components\Grid;
 use Filament\Infolists\Components\Section;
+use Filament\Forms\Components\FileUpload;
 
 use Filament\Pages\SubNavigationPosition;
 
@@ -74,16 +75,30 @@ class MeetingResource extends Resource
                             ->default(null)
                             ->required()
                             ->columnSpan(3),
-                        Forms\Components\DateTimePicker::make('start_at')
+                        Forms\Components\TimePicker::make('start_at')
                             ->label('Fecha Hora inicio')
+                            ->seconds(false) // Restringe la selección solo a horas y minutos
                             ->columnSpan(3)
                             ->required(),
-                        Forms\Components\DateTimePicker::make('end_at')
+                        Forms\Components\TimePicker::make('end_at')
                             ->label('Fecha Hora término')
+                            ->seconds(false) // Restringe la selección solo a horas y minutos
                             ->columnSpan(3)
                             ->required(),
+                        Forms\Components\Group::make()
+                            ->relationship('file')
+                            ->schema([
+                                Forms\Components\FileUpload::make('storage_path')
+                                    ->label('Adjunto')
+                                    ->directory('/ionline/meetings/attachments') // Directorio donde se guardarán los archivos,
+                                    ->downloadable()
+                                    ->columnSpan(9),
+                            ])
+                            ->columnSpan(9),
                     ]),
+                    
                 ]),
+
         ]);
     }
 
