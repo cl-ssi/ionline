@@ -75,7 +75,6 @@ class ProcessResource extends Resource
                                 for ($i = 0; $i < 6; $i++) {
                                     $years[$currentYear - $i] = $currentYear - $i;
                                 }
-
                                 return $years;
                             })
                             ->default(now()->year)
@@ -127,6 +126,15 @@ class ProcessResource extends Resource
                                 options: fn (Get $get): Collection => Establishment::where('cl_commune_id', $get('commune_id'))->pluck('name', 'id')
                             ),
 
+                        Forms\Components\Select::make('signer_id')
+                            ->label('Firmante')
+                            ->options(
+                                Signer::with('user')->get()->pluck('user.full_name', 'id')
+                            )
+                            ->required()
+                            ->columnSpan(2)
+                            ->visibleOn('create'),
+
                         Forms\Components\Repeater::make('quotas')
                             ->label('Cuotas')
                             ->relationship()
@@ -168,6 +176,7 @@ class ProcessResource extends Resource
                                             })
                                     ),
                             ])
+                            ->defaultItems(0)
                             ->columns(6)
                             ->columnSpanFull(),
 
@@ -211,6 +220,7 @@ class ProcessResource extends Resource
                         //     ),
                     ])
                     ->columnSpan(['lg' => 1])
+                    ->visibleOn('edit')
                     ->hidden(fn (?Process $record) => $record === null),
 
                 Forms\Components\Section::make('Documento')
