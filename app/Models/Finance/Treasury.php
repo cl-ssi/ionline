@@ -21,9 +21,9 @@ class Treasury extends Model
     protected $fillable = [
         'name',
         'bank_receipt_date',
-        'bank_receipt_file',
+        // 'bank_receipt_file',
         'third_parties_date',
-        'third_parties_file',
+        // 'third_parties_file',
         'treasureable_type',
         'treasureable_id',
         'user_id',

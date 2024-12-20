@@ -25,6 +25,7 @@ use Filament\Support\Enums\Alignment;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Mohamedsabil83\FilamentFormsTinyeditor\Components\TinyEditor;
 
@@ -368,12 +369,33 @@ class ProcessResource extends Resource
                                 Forms\Components\DatePicker::make('returned_from_commune_at')
                                     ->label('Fecha de devolución')
                                     ->columnSpanFull(),
-                                Forms\Components\FileUpload::make('attachment')
-                                    ->label('Archivo firmado por comuna')
+                                /**
+                                 * Ejemplo completo de uso de relación file
+                                 */
+                                Forms\Components\Group::make()
+                                    ->relationship('signedCommuneFile') // Nombre de la relación que está con MorphOne
+                                    ->schema([
+                                        Forms\Components\FileUpload::make('storage_path') // Ruta donde quedará almacenado el archivo
+                                            ->label('Archivo firmado por comuna')
+                                            ->directory('ionline/documents/agreements/signed-commune-files')
+                                            ->storeFileNamesIn('name')
+                                            ->acceptedFileTypes(['application/pdf']),
+                                        Forms\Components\Hidden::make('type') // Campo oculto para almacenar el tipo de archivo dentro del modelo File
+                                            ->default('signed_commune_file')
+                                            ->columnSpanFull(),
+                                    ])
                                     ->columnSpanFull(),
+                                /* Fin del uso de relacion MorphOne de File */
+                                
                             ])
                             ->columnSpan(1),
                     ])
+                    ->footerActions([
+                        Forms\Components\Actions\Action::make('guardar_cambios')
+                            ->icon('bi-save')
+                            ->action('save'),
+                    ])
+                    ->footerActionsAlignment(Alignment::End)
                     ->columns(2)
                     ->hiddenOn('create')
                     ->columnSpanFull()
@@ -426,8 +448,19 @@ class ProcessResource extends Resource
                             ->numeric(),
                         Forms\Components\DatePicker::make('date')
                             ->label('Fecha del proceso'),
-                        Forms\Components\FileUpload::make('attachment')
-                            ->label('Proceso firmado')
+
+                        Forms\Components\Group::make()
+                            ->relationship('finalProcessFile')
+                            ->schema([
+                                Forms\Components\FileUpload::make('storage_path')
+                                    ->label('Proceso firmado')
+                                    ->directory('ionline/documents/agreements/signed-process-files')
+                                    ->storeFileNamesIn('name')
+                                    ->acceptedFileTypes(['application/pdf']),
+                                Forms\Components\Hidden::make('type')
+                                    ->default('final_process_file')
+                                    ->columnSpanFull(),
+                            ])
                             ->columnSpan(3),
                     ])
                     ->columns(5)

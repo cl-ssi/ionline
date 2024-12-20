@@ -14,6 +14,7 @@ use App\Models\Parameters\Municipality;
 use App\Models\Parameters\Program;
 use App\Models\User;
 use App\Observers\Documents\Agreements\ProcessObserver;
+use App\Models\File;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -163,6 +164,22 @@ class Process extends Model
     public function endorses(): MorphMany
     {
         return $this->morphMany(Approval::class, 'approvable')->where('endorse',operator: true);
+    }
+
+    /**
+     * Get the file model.
+     */
+    public function signedCommuneFile(): MorphOne
+    {
+        return $this->morphOne(File::class, 'fileable')->where('type', 'signed_commune_file');
+    }
+
+    /**
+     * Get the file model.
+     */
+    public function finalProcessFile(): MorphOne
+    {
+        return $this->morphOne(File::class, 'fileable')->where('type', 'final_process_file');
     }
 
     public function createOrUpdateDocument(): void
