@@ -26,6 +26,7 @@ class UpdateNotificationsToFilamentFormat extends Command
      */
     public function handle()
     {
+
         // Fetch all notifications
         $notifications = DB::table('notifications')->get();
 
@@ -39,20 +40,41 @@ class UpdateNotificationsToFilamentFormat extends Command
                 continue;
             }
 
+            // Mapeo de FontAwesome a Heroicons.
+            $iconMapping = [
+                '<i class="fas fa-wallet"></i>' => 'bi-wallet',
+                '<i class="fas fa-question-circle"></i>' => 'bi-question-circle',
+                '<i class="fas fa-bell"></i>' => 'bi-bell',
+                '<i class="fas fa-fw fa-file-invoice-dollar"></i>' => 'bi-file-earmark-dollar',
+                '<i class="fas fa-id-badge fa-fw"></i>' => 'bi-person-badge',
+                '<i class="far fa-id-card"></i>' => 'bi-person-id',
+                '<i class="fas fa-fw fa-clock"></i>' => 'bi-clock',
+                '<i class="fas fa-fw fa-box-open"></i>' => 'bi-box',
+                '<i class="fas fa-fw fa-boxes"></i>' => 'bi-archive',
+            ];     
+            
             // Convert the Laravel notification data to Filament format
             $filamentData = [
-                'actions' => [],
+                'icon' => $iconMapping[$data['icon']] ?? null,
+                'iconColor' => null,
+                'title' => $data['module'] ?? 'Notification',
                 'body' => $data['subject'] ?? null,
+                'actions' => [
+                    [
+                        'name' => str_replace('\\', '_', $notification->type),
+                        'label' => $data['action_label'] ?? 'Ver Notificación',
+                        'url' => $data['action'] ?? null,
+                        'color' => 'primary',
+                        'icon' => 'heroicon-o-eye',
+                        'shouldOpenInNewTab' => false,
+                    ],
+                ],
                 'color' => null,
                 'duration' => 'persistent',
-                'icon' => $data['icon'] ?? null,
-                'iconColor' => null,
-                'status' => null,
-                'title' => $data['module'] ?? 'Notification',
+                'status' => $data['status'] ?? 'info',
                 'view' => 'filament-notifications::notification',
-                'viewData' => [],
+                'viewData' => ['additional_info' => $data['additional_info'] ?? null,],
                 'format' => 'filament',
-                'subject' => $data['subject'] ?? null,
             ];
 
             // Update the notification in the database
