@@ -56,11 +56,34 @@ class NotificationEndSigningProcess extends Notification
      */
     public function toArray($notifiable)
     {
+        // return [
+        //     'module'  => 'Solicitudes de Contratación', // Opcional
+        //     'icon'    => '<i class="far fa-id-card"></i>',
+        //     'subject' => 'Fin proceso de firmas solicitud ID: '.$this->requestReplacementStaff->id,
+        //     'action'  => route('replacement_staff.request.index', [],false),
+        // ];
+
         return [
-            'module'  => 'Solicitudes de Contratación', // Opcional
-            'icon'    => '<i class="far fa-id-card"></i>',
-            'subject' => 'Fin proceso de firmas solicitud ID: '.$this->requestReplacementStaff->id,
-            'action'  => route('replacement_staff.request.index', [],false),
+            "actions" => [
+                [
+                    "name" => "view_replacement_request",
+                    "label" => "Ver Solicitud de Reemplazo", 
+                    "url" => route('replacement_staff.request.index', [], false), 
+                    "color" => "primary", 
+                    "icon" => "heroicon-o-pencil",  
+                    "shouldOpenInNewTab" => true, 
+                ],
+            ],
+            "body" => 'El proceso de firma para la solicitud de reemplazo ID: '.$this->requestReplacementStaff->id.' ha finalizado.',
+            "color" => "info",  
+            "duration" => "persistent",  
+            "icon" => "heroicon-o-identification",  
+            "iconColor" => "blue",  
+            "status" => "info",  
+            "title" => 'Fin de Proceso de Firma',
+            "view" => "filament-notifications::notification", 
+            "format" => "filament", 
         ];
+        
     }
 }

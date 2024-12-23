@@ -55,12 +55,35 @@ class InventoryNewItem extends Notification
      */
     public function toArray($notifiable)
     {
-        $subject = $this->movement->inventory->unspscProduct->name ?? null;
+        // $subject = $this->movement->inventory->unspscProduct->name ?? null;
+        // return [
+        //     'module'  => 'Inventario', // Opcional
+        //     'icon'    => '<i class="fas fa-fw fa-boxes"></i>',
+        //     'subject' => 'Recepcionar ingreso de: '.$subject,
+        //     'action'  => route('inventories.check-transfer', [$this->movement->id], false)
+        // ];
+
         return [
-            'module'  => 'Inventario', // Opcional
-            'icon'    => '<i class="fas fa-fw fa-boxes"></i>',
-            'subject' => 'Recepcionar ingreso de: '.$subject,
-            'action'  => route('inventories.check-transfer', [$this->movement->id], false)
+            "actions" => [
+                [
+                    "name" => "check_transfer",
+                    "label" => "Ver Ingreso de Inventario", 
+                    "url" => route('inventories.check-transfer', [$this->movement->id], false),
+                    "color" => "primary", 
+                    "icon" => "heroicon-o-eye", 
+                    "shouldOpenInNewTab" => true, 
+                ],
+            ],
+            "body" => 'Recepcionar ingreso de: ' . ($this->movement->inventory->unspscProduct->name ?? 'Producto desconocido'),
+            "color" => "info",
+            "duration" => "persistent",
+            "icon" => "heroicon-o-archive-box",
+            "iconColor" => "blue",
+            "status" => "info",
+            "title" => 'Nuevo Ingreso de Inventario',
+            "view" => "filament-notifications::notification",
+            "format" => "filament",
         ];
+        
     }
 }

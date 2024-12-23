@@ -56,11 +56,34 @@ class NotificationSign extends Notification
      */
     public function toArray($notifiable)
     {
+        // return [
+        //     'module'  => 'Solicitudes de Contratación', // Opcional
+        //     'icon'    => '<i class="far fa-id-card"></i>',
+        //     'subject' => 'Nueva Solicitud para Aprobación ID: '.$this->requestReplacementStaff->id,
+        //     'action'  => route('replacement_staff.request.to_sign', $this->requestReplacementStaff->id, false),
+        // ];
+
         return [
-            'module'  => 'Solicitudes de Contratación', // Opcional
-            'icon'    => '<i class="far fa-id-card"></i>',
-            'subject' => 'Nueva Solicitud para Aprobación ID: '.$this->requestReplacementStaff->id,
-            'action'  => route('replacement_staff.request.to_sign', $this->requestReplacementStaff->id, false),
+            "actions" => [
+                [
+                    "name" => "view_replacement_request",
+                    "label" => "Ver Solicitud de Contratación", 
+                    "url" => route('replacement_staff.request.to_sign', $this->requestReplacementStaff->id),
+                    "color" => "primary", 
+                    "icon" => "heroicon-o-document-text", 
+                    "shouldOpenInNewTab" => true, 
+                ],
+            ],
+            "body" => 'Nueva solicitud de contratación para aprobación. ID: '.$this->requestReplacementStaff->id,
+            "color" => "info", 
+            "duration" => "persistent", 
+            "icon" => "heroicon-o-identification", 
+            "iconColor" => "blue", 
+            "status" => "info", 
+            "title" => 'Nueva Solicitud de Contratación', 
+            "view" => "filament-notifications::notification", 
+            "format" => "filament", 
         ];
+        
     }
 }

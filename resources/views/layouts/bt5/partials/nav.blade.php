@@ -731,18 +731,29 @@
                         <div class="dropdown-divider"></div>
 
                         @if(count(auth()->user()->unreadNotifications))
-                        @foreach(auth()->user()->unreadNotifications->where('type', '!=', 'Filament\Notifications\DatabaseNotification') as $notification)
-                        <a class="dropdown-item small" href="{{ route('openNotification', $notification) }}">
-                            {!! $notification->data['icon'] ?? null !!}
-                            <b>{{ $notification->data['module'] ?? '' }}</b>
+                         @foreach(auth()->user()->unreadNotifications as $notification)
+                          <a class="dropdown-item small" href="{{ route('openNotification', $notification) }}">
+                        {{-- Mostrar el icono --}}
+                        {!! $notification->data['icon'] ?? ($notification->data['actions'][0]['icon'] ?? '') !!}
+
+                        {{-- Mostrar título o módulo --}}
+                        <b>{{ $notification->data['title'] ?? ($notification->data['module'] ?? 'Notificación') }}</b>
+
+                        {{-- Mostrar cuerpo o sujeto --}}
+                        @if(isset($notification->data['subject']))
                             {!! $notification->data['subject'] !!}
-                        </a>
-                        @endforeach
+                        @elseif(isset($notification->data['body']))
+                            {!! $notification->data['body'] !!}
                         @else
-                        <div class="dropdown-item small">
-                            <i class="fas fa-exclamation"></i> Sin Notificaciones Nuevas
-                        </div>
-                        @endif
+                            Sin detalles disponibles
+                    @endif
+                </a>
+            @endforeach
+        @else
+            <div class="dropdown-item small">
+                <i class="fas fa-exclamation"></i> Sin Notificaciones Nuevas
+            </div>
+        @endif
                     </ul>
                 </li>
 

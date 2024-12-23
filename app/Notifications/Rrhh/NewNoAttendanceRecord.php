@@ -52,11 +52,35 @@ class NewNoAttendanceRecord extends Notification
      */
     public function toArray($notifiable)
     {
+        // return [
+        //     'module'  => 'Asistencia', // Opcional
+        //     'icon'    => '<i class="fas fa-fw fa-clock"></i>', // Opcional
+        //     'subject' => 'Constancia marca de '.$this->noAttendanceRecord->user->tinnyName,
+        //     'action' => route('rrhh.attendance.no-records.confirmation',[$this->noAttendanceRecord->id], false),
+        // ];
+
         return [
-            'module'  => 'Asistencia', // Opcional
-            'icon'    => '<i class="fas fa-fw fa-clock"></i>', // Opcional
-            'subject' => 'Constancia marca de '.$this->noAttendanceRecord->user->tinyName,
-            'action' => route('rrhh.attendance.no-records.confirmation',[$this->noAttendanceRecord->id], false),
+            "actions" => [
+                [
+                    "name" => "confirm_attendance",
+                    "label" => "Confirmar Asistencia",
+                    "url" => route('rrhh.attendance.no-records.confirmation', [$this->noAttendanceRecord->id]),
+                    "color" => "primary",
+                    "icon" => "heroicon-o-check",
+                    "shouldOpenInNewTab" => false,
+                ],
+            ],
+            "body" => 'Constancia de marca de ' . $this->noAttendanceRecord->user->tinnyName,
+            "color" => "warning",
+            "duration" => "persistent",
+            "icon" => "heroicon-o-clock",
+            "iconColor" => "blue",
+            "status" => "info",
+            "title" => 'Nueva Constancia de Marca',
+            "view" => "filament-notifications::notification",
+            "format" => "filament",
         ];
+        
+
     }
 }

@@ -43,9 +43,9 @@ class EndSigningProcess extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->line('The introduction to the notification.')
-                    ->action('Notification Action', url('/'))
-                    ->line('Thank you for using our application!');
+            ->line('The introduction to the notification.')
+            ->action('Notification Action', url('/'))
+            ->line('Thank you for using our application!');
     }
 
     /**
@@ -56,11 +56,33 @@ class EndSigningProcess extends Notification
      */
     public function toArray($notifiable)
     {
+        // return [
+        //     'module'  => 'Perfil de Cargos', // Opcional
+        //     'icon'    => '<i class="fas fa-id-badge fa-fw"></i>',
+        //     'subject' => 'Se ha completado aprobación de Perfil de Cargo, ID: '.$this->jobPositionProfile->id,
+        //     'action'  => route('job_position_profile.show', [$this->jobPositionProfile], false),
+        // ];
+
         return [
-            'module'  => 'Perfil de Cargos', // Opcional
-            'icon'    => '<i class="fas fa-id-badge fa-fw"></i>',
-            'subject' => 'Se ha completado aprobación de Perfil de Cargo, ID: '.$this->jobPositionProfile->id,
-            'action'  => route('job_position_profile.show', [$this->jobPositionProfile], false),
+            "actions" => [
+                [
+                    "name" => "view_job_position_profile",
+                    "label" => "Ver Perfil de Cargo",
+                    "url" => route('job_position_profile.show', [$this->jobPositionProfile], false), 
+                    "color" => "primary",
+                    "icon" => "heroicon-o-eye",
+                    "shouldOpenInNewTab" => true,
+                ],
+            ],
+            "body" => 'El proceso de aprobación del perfil de cargo ha finalizado.',
+            "color" => "success",
+            "duration" => "persistent",
+            "icon" => "heroicon-o-check-circle",
+            "iconColor" => "green",
+            "status" => "success",
+            "title" => 'Aprobación Finalizada',
+            "view" => "filament-notifications::notification",
+            "format" => "filament",
         ];
     }
 }
