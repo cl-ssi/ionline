@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Rrhh;
 
 use App\Http\Controllers\Controller;
 use App\Models\Establishment;
-use App\Models\Rrhh\Attendance;
+use App\Models\Rrhh\MonthlyAttendance;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -18,8 +18,8 @@ class AttendanceController extends Controller
      */
     public function index(): View
     {
-        // $attendances = Attendance::where();
-        $periods = Attendance::selectRaw("DATE_FORMAT(date, '%Y-%m') as period")
+        // $attendances = MonthlyAttendance::where();
+        $periods = MonthlyAttendance::selectRaw("DATE_FORMAT(date, '%Y-%m') as period")
             ->where('user_id', auth()->id())
             ->groupBy('period')
             ->orderBy('period', 'desc')
@@ -60,7 +60,7 @@ class AttendanceController extends Controller
             $array = explode(',', $line);
             //print_r($array);
             if ( count($array) >= 2 ) {
-                Attendance::create([
+                MonthlyAttendance::create([
                     'user_id'   => intval($array[3]),
                     'type'      => $array[2],
                     'timestamp' => '20' . $array[9] . '-' . $array[7] . '-' . $array[8] . ' ' . $array[5] . ':' . $array[6],
@@ -70,7 +70,7 @@ class AttendanceController extends Controller
 
         }
 
-        $attendances = Attendance::all();
+        $attendances = MonthlyAttendance::all();
         return view('rrhh.attendances.import', compact('attendances'));
     }
 
@@ -82,7 +82,7 @@ class AttendanceController extends Controller
      */
     public function show($user, $date)
     {
-        $attendance    = Attendance::where('user_id', $user)->where('date', $date)->firstOrFail();
+        $attendance    = MonthlyAttendance::where('user_id', $user)->where('date', $date)->firstOrFail();
         $establishment = Establishment::find(38);
 
         return Pdf::loadView('rrhh.attendances.show', [

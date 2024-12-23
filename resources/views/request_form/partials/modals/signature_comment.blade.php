@@ -9,7 +9,7 @@
         </button>
       </div>
       <div class="modal-body">
-          <p class="text-left"><i class="fas fa-calendar"></i> {{ $event->signature_date->format('d-m-Y H:i:s') }} por: {{ $event->signerUser->FullName }}</p>
+          <p class="text-left"><i class="fas fa-calendar"></i> {{ $event->signature_date->format('d-m-Y H:i:s') }} por: {{ $event->signerUser->fullName }}</p>
           @if($event->StatusValue == 'Aprobado')
             <p class="text-left">
               <span style="color: green;">

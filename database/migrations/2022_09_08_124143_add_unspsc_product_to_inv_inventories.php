@@ -2,10 +2,8 @@
 
 use App\Models\Inv\Inventory;
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
 
-class AddUnspscProductToInvInventories extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -14,12 +12,11 @@ class AddUnspscProductToInvInventories extends Migration
      */
     public function up()
     {
+        //TODO: Esto es posible que ya no sea necesario
         $inventories = Inventory::all();
 
-        foreach($inventories as $inventory)
-        {
-            if($inventory->product)
-            {
+        foreach ($inventories as $inventory) {
+            if ($inventory->product) {
                 $inventory->update([
                     'unspsc_product_id' => $inventory->product->unspsc_product_id,
                 ]);
@@ -37,4 +34,4 @@ class AddUnspscProductToInvInventories extends Migration
     {
         //
     }
-}
+};

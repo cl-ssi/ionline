@@ -51,7 +51,7 @@
             <tbody class="small">
                 @foreach($replacementStaff as $staff)
                 <tr>
-                    <td>{{ $staff->FullName }}</td>
+                    <td>{{ $staff->fullName }}</td>
                     <td>{{ $staff->Identifier }}</td>
                     <td>
                         @foreach($staff->profiles as $title)

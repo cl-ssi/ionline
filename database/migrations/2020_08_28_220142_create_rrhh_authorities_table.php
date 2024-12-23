@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateRrhhAuthoritiesTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -17,15 +17,15 @@ class CreateRrhhAuthoritiesTable extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained('users');
             $table->foreignId('organizational_unit_id')->constrained('organizational_units');
+            $table->date('date')->nullable();
             $table->string('position');
-            $table->enum('type', ['manager', 'delegate','secretary'])->default('manager');
+            $table->enum('type', ['manager', 'delegate', 'secretary'])->default('manager');
             $table->string('decree')->nullable();
-            $table->date('from');
-            $table->date('to')->nullable();
+            $table->date('from_time');
+            $table->date('to_time')->nullable();
             $table->foreignId('representation_id')->nullable()->constrained('users');
-            $table->foreignId('creator_id')->constrained('users');
             $table->timestamps();
-            $table->unique(['date','organizational_unit_id','type']); 
+            $table->unique(['date', 'organizational_unit_id', 'type']);
         });
     }
 
@@ -38,4 +38,4 @@ class CreateRrhhAuthoritiesTable extends Migration
     {
         Schema::dropIfExists('rrhh_authorities');
     }
-}
+};

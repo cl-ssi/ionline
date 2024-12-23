@@ -15,10 +15,10 @@ return new class extends Migration
     {
         Schema::create('inv_inventory_user', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('inventory_id')->nullable()->constrained('inv_inventories');
-            $table->foreignId('user_id')->nullable()->constrained('users');
+            $table->foreignId('inventory_id')->constrained('inv_inventories');
+            $table->foreignId('user_id')->constrained('users');
             $table->timestamps();
-             $table->softDeletes();
+            $table->softDeletes();
         });
     }
 

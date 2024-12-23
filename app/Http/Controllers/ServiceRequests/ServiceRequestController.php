@@ -516,7 +516,7 @@ class ServiceRequestController extends Controller
         }
 
         if ($ou_id == null) {
-          session()->flash('info', User::find($user)->getFullNameAttribute() . ' no posee unidad organizacional asignada.');
+          session()->flash('info', User::find($user)->fullName . ' no posee unidad organizacional asignada.');
           return redirect()->back();
         }
       }
@@ -1473,8 +1473,8 @@ class ServiceRequestController extends Controller
   {
 
     $user_id = auth()->id();
-    $sender_name = User::find(auth()->id())->getFullNameAttribute();
-    $receiver_name = User::find($request->derive_user_id)->getFullNameAttribute();
+    $sender_name = User::find(auth()->id())->fullName;
+    $receiver_name = User::find($request->derive_user_id)->fullName;
     $receiver_email = User::find($request->derive_user_id)->email;
 
     $serviceRequests = ServiceRequest::whereHas("SignatureFlows", function ($subQuery) use ($user_id) {
@@ -1650,7 +1650,7 @@ class ServiceRequestController extends Controller
       if ($cant_rechazados == 0) {
         if ($total != $cant_aprobados) {
           if ($serviceRequest->SignatureFlows->whereNull('status')->first()) {
-            $array[$serviceRequest->SignatureFlows->whereNull('status')->sortBy('sign_position')->first()->user->getFullNameAttribute()][$serviceRequest->id] = $serviceRequest->SignatureFlows->whereNull('status')->sortBy('sign_position')->first()->user;
+            $array[$serviceRequest->SignatureFlows->whereNull('status')->sortBy('sign_position')->first()->user->fullName][$serviceRequest->id] = $serviceRequest->SignatureFlows->whereNull('status')->sortBy('sign_position')->first()->user;
             $hoja_ruta_falta_aprobar += 1;
           }
         }
@@ -1675,7 +1675,7 @@ class ServiceRequestController extends Controller
     $cumplimiento_falta_ingresar = 0;
     foreach ($serviceRequests as $key => $serviceRequest) {
         if($serviceRequest->SignatureFlows->where('sign_position', 2)->count() > 0){
-            $fulfillments_missing[$serviceRequest->SignatureFlows->where('sign_position', 2)->first()->user->getFullNameAttribute()] = 0;
+            $fulfillments_missing[$serviceRequest->SignatureFlows->where('sign_position', 2)->first()->user->fullName] = 0;
         }
     }
 
@@ -1685,7 +1685,7 @@ class ServiceRequestController extends Controller
         if ($serviceRequest->fulfillments->count() == 0) {
             $cumplimiento_falta_ingresar += 1;
             if($serviceRequest->SignatureFlows->where('sign_position', 2)->count() > 0){
-                $fulfillments_missing[$serviceRequest->SignatureFlows->where('sign_position', 2)->first()->user->getFullNameAttribute()] += 1;
+                $fulfillments_missing[$serviceRequest->SignatureFlows->where('sign_position', 2)->first()->user->fullName] += 1;
             }
         }
 
@@ -1693,7 +1693,7 @@ class ServiceRequestController extends Controller
         if ($serviceRequest->fulfillments->whereNull('responsable_approbation')->count() > 0) {
             $cumplimiento_falta_ingresar += 1;
             if($serviceRequest->SignatureFlows->where('sign_position', 2)->count() > 0){
-                $fulfillments_missing[$serviceRequest->SignatureFlows->where('sign_position', 2)->first()->user->getFullNameAttribute()] += 1;
+                $fulfillments_missing[$serviceRequest->SignatureFlows->where('sign_position', 2)->first()->user->fullName] += 1;
             }
             
         }
@@ -1781,7 +1781,7 @@ class ServiceRequestController extends Controller
     foreach($serviceRequests as $key => $serviceRequest)
     {
       $array[$key]['employee']['run'] = $serviceRequest->employee->runFormat();
-      $array[$key]['employee']['name'] = $serviceRequest->employee->getFullNameAttribute();
+      $array[$key]['employee']['name'] = $serviceRequest->employee->fullName;
       $array[$key]['employee']['email'] = $serviceRequest->email;
       $array[$key]['employee']['phone'] = $serviceRequest->phone_number;
 

@@ -56,7 +56,7 @@
                     <tr>
                         <th class="table-active" rowspan="2" scope="row">Gestor</th>
                         <th class="table-active" scope="row">Usuario</th>
-                        <td>{{ $requestForm->user->FullName }}</td>
+                        <td>{{ $requestForm->user->fullName }}</td>
                     </tr>
                     <tr>
                         <th class="table-active" scope="row">Unidad Organizacional</th>
@@ -65,7 +65,7 @@
                     <tr>
                         <th class="table-active" rowspan="2" scope="row">Administrador de Contrato</th>
                         <th class="table-active" scope="row">Usuario</th>
-                        <td>{{ $requestForm->contractManager->FullName }}</td>
+                        <td>{{ $requestForm->contractManager->fullName }}</td>
                     </tr>
                     <tr>
                         <th class="table-active" scope="row">Unidad Organizacional</th>
@@ -118,7 +118,7 @@
                     </tr>
                     <tr>
                         <th class="table-active" colspan="2" scope="row">Comprador</th>
-                        <td>{{ $requestForm->purchasers->first()->FullName ?? 'No asignado' }}</td>
+                        <td>{{ $requestForm->purchasers->first()->fullName ?? 'No asignado' }}</td>
                     </tr>
                     </tbody>
                 </table>
@@ -174,7 +174,7 @@
                             <span style="color: green;">
             <i class="fas fa-check-circle"></i> {{ $event->StatusValue }} <br>
           </span>
-                            <i class="fas fa-user"></i> {{ $event->signerUser->FullName }}<br>
+                            <i class="fas fa-user"></i> {{ $event->signerUser->fullName }}<br>
                             <p style="font-size: 11px">
                                 @if($event->event_type != 'pre_finance_event')
                                     {{ $event->position_signer_user }} {{ $event->signerOrganizationalUnit->name }}<br>
@@ -196,7 +196,7 @@
                             <span style="color: Tomato;">
             <i class="fas fa-times-circle"></i> {{ $event->StatusValue }} <br>
           </span>
-                            <i class="fas fa-user"></i> {{ $event->signerUser->FullName }}<br>
+                            <i class="fas fa-user"></i> {{ $event->signerUser->fullName }}<br>
                             <p style="font-size: 11px">
                                 {{ $event->position_signer_user }} {{ $event->signerOrganizationalUnit->name }}<br>
                             </p>
@@ -237,7 +237,7 @@
                         </span> 
                         @endif
                     </td>
-                    <td><i class="fas fa-calendar"></i> {{ $event->signature_date->format('d-m-Y H:i:s') }} por: {{ $event->signerUser->FullName }} en calidad de {{ $event->EventTypeValue }}</td>
+                    <td><i class="fas fa-calendar"></i> {{ $event->signature_date->format('d-m-Y H:i:s') }} por: {{ $event->signerUser->fullName }} en calidad de {{ $event->EventTypeValue }}</td>
                     <td class="text-left font-italic"><i class="fas fa-comment"></i> "{{ $event->comment }}"</td>
                 </tr>
                 @endif
@@ -539,10 +539,10 @@
                                     {{ $requestForm->SubtypeValue }}
                                 </td>
                                 <td>{{ $child->name }}</td>
-                                <td>{{ $child->user ? $child->user->FullName : 'Usuario eliminado' }}<br>
+                                <td>{{ $child->user ? $child->user->fullName : 'Usuario eliminado' }}<br>
                                     {{ $child->userOrganizationalUnit ? $child->userOrganizationalUnit->name : 'Usuario eliminado' }}
                                 </td>
-                                <td>{{ $child->purchasers->first()->FullName ?? 'No asignado' }}</td>
+                                <td>{{ $child->purchasers->first()->fullName ?? 'No asignado' }}</td>
                                 <td align="center">{{ $child->quantityOfItems() }}</td>
                                 <td align="right">{{$requestForm->symbol_currency}}{{ number_format($child->estimated_expense,$requestForm->precision_currency,",",".") }}</td>
                                 <td align="right">{{ $child->purchasingProcess ? $requestForm->symbol_currency.number_format($child->purchasingProcess->getExpense(),$requestForm->precision_currency,",",".") : '-' }}</td>
@@ -585,7 +585,7 @@
             @foreach($requestForm->messages->sortByDesc('created_at') as $requestFormMessage)
                 <div class="card" id="message">
                     <div class="card-header col-sm">
-                        <i class="fas fa-user"></i> {{ $requestFormMessage->user->FullName }}
+                        <i class="fas fa-user"></i> {{ $requestFormMessage->user->fullName }}
 
                     </div>
                     <div class="card-body">
@@ -639,7 +639,36 @@
                 <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
                      data-parent="#accordionExample">
                     <div class="card-body">
-                        @include('partials.audit', ['audits' => $requestForm->audits()])
+                        {{-- @include('partials.audit', ['audits' => $requestForm->audits()]) --}}
+                        <h6 class="mt-3 mt-4">Historial de cambios</h6>
+                        <div class="table-responsive-md">
+                            <table class="table table-sm small text-muted mt-3">
+                                <thead>
+                                <tr>
+                                    <th>Fecha</th>
+                                    <th>Usuario</th>
+                                    <th>Modificaciones</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                        @foreach($requestForm->audits->sortByDesc('updated_at') as $audit)
+                                            <tr>
+                                                <td nowrap>{{ $audit->created_at }}</td>
+                                                <td nowrap>{{ optional($audit->user)->fullName }}</td>
+                                                <td>
+                                                    @foreach($audit->getModified() as $attribute => $modified)
+                                                        @if(isset($modified['old']) OR isset($modified['new']))
+                                                            <strong>{{ $attribute }}</strong>
+                                                            :  {{ isset($modified['old']) ? $modified['old'] : '' }}
+                                                            => {{ $modified['new'] ?? '' }};
+                                                        @endif
+                                                    @endforeach
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>

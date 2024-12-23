@@ -1,10 +1,10 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
-class CreateArqPassengersTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -20,7 +20,7 @@ class CreateArqPassengersTable extends Migration
             $table->string('document_number')->nullable();
             $table->foreignId('user_id')->nullable()->constrained('users');
             $table->string('run')->nullable();
-            $table->char('dv',1)->nullable();
+            $table->char('dv', 1)->nullable();
             $table->string('name');
             $table->string('fathers_family');
             $table->string('mothers_family')->nullable();
@@ -50,4 +50,4 @@ class CreateArqPassengersTable extends Migration
     {
         Schema::dropIfExists('arq_passengers');
     }
-}
+};

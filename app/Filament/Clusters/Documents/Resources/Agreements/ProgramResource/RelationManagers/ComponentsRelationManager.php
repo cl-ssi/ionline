@@ -16,6 +16,10 @@ class ComponentsRelationManager extends RelationManager
 
     protected static ?string $title = 'Componentes';
 
+    protected static ?string $modelLabel = 'componente';
+
+    protected static ?string $pluralModelLabel = 'componentes';
+
     public function form(Form $form): Form
     {
         return $form

@@ -18,8 +18,8 @@
         </a>
     </li>
     <li class="nav-item">
-        <a class="nav-link {{ active('rrhh.attendance.index') }}" 
-            href="{{ route('rrhh.attendance.index') }}#">
+        <a class="nav-link" 
+            href="{{ route('filament.intranet.rrhh.resources.monthly-attendances.index') }}">
             <i class="bi bi-clock"></i> Mi Asistencia
         </a>
     </li>

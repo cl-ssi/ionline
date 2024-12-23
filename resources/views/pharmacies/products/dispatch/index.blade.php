@@ -41,7 +41,6 @@
 				<th scope="col">Notas</th>
 				<th scope="col">Estado recepción</th>
 				<th nowrap scope="col"></th>
-				<!-- @if(auth()->user()->pharmacies->first()->id != 3) <th nowrap scope="col">C-19</th> @endif -->
 			</tr>
 		</thead>
 		<tbody>
@@ -93,31 +92,6 @@
 					@endif
 					{{-- @endcan --}}
 				</td>
-				<!-- @if(auth()->user()->pharmacies->first()->id != 3)
-				<td nowrap>
-					@if($dispatch->sendC19 == 0)
-						<form method="POST" action="{{ route('pharmacies.products.dispatch.sendC19', $dispatch) }}" class="d-inline">
-	            @csrf
-	            @method('GET')
-							<button type="submit" class="btn btn-outline-secondary btn-sm" onclick="return confirm('¿Está seguro de subir la información?');">
-								<span style="font-size: 1em; color: #C9C8C8;">
-								  <i class="fas fa-arrow-up"></i>
-								</span>
-							</button>
-						</form>
-					@else
-						<form method="POST" action="{{ route('pharmacies.products.dispatch.deleteC19', $dispatch) }}" class="d-inline">
-	            @csrf
-	            @method('GET')
-							<button type="submit" class="btn btn-outline-secondary btn-sm" onclick="return confirm('¿Está seguro de bajar la información?');">
-								<span style="font-size: 1em; color: #06F606;">
-									<i class="fas fa-arrow-up"></i>
-								</span>
-							</button>
-						</form>
-					@endif
-				</td>
-				@endif -->
 			</tr>
 			@endforeach
 		</tbody>

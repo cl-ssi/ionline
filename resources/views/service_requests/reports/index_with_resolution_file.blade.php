@@ -21,7 +21,7 @@
         <tr>
             <td>{{$key + 1}}</td>
             <td>{{$serviceRequest->id}}</td>
-            <td>{{$serviceRequest->employee->getFullNameAttribute()}}</td>
+            <td>{{$serviceRequest->employee->fullName}}</td>
             <td>{{$serviceRequest->phone_number}}</td>
             <td>{{ optional($serviceRequest->start_date)->format('Y-m-d') }}</td>
             <td>{{ optional($serviceRequest->end_date)->format('Y-m-d') }}</td>

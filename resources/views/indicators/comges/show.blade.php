@@ -43,9 +43,9 @@
         @if(auth()->user()->hasAnyPermission(['Indicators: manager']) || $comges->users->contains('id', Auth::id()) || $indicator->users->contains('id', Auth::id())) <a href="{{route('indicators.comges.action.create', [$comges->year, $comges->number, isset($corte) ? $corte->number : $section, $indicator])}}"><span class="fa fa-plus-square"></span></a>@endif
         <br>
         @php($referente = $comges->getReferrer(1) ?? $indicator->getReferrer(1) )
-        @if($referente)<span class="badge badge-pill badge-light">Referente titular: {{$referente->tinnyName}}</span> @endif
+        @if($referente)<span class="badge badge-pill badge-light">Referente titular: {{$referente->tinyName}}</span> @endif
         @php($referente = $comges->getReferrer(2) ?? $indicator->getReferrer(2) )
-        @if($referente)<span class="badge badge-pill badge-light">Referente subrogante: {{$referente->tinnyName}}</span>@endif
+        @if($referente)<span class="badge badge-pill badge-light">Referente subrogante: {{$referente->tinyName}}</span>@endif
         </p>
         <div class="collapse" id="ind{{ $indicator->number }}">
         <!-- resumen indicador -->

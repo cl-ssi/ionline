@@ -22,7 +22,7 @@ return new class extends Migration
             $table->datetime('end_date');
             $table->string('status'); // creado, pendiente, cerrado, aperturado
             $table->longText('observation')->nullable();
-            
+
             $table->timestamps();
             $table->softDeletes();
         });

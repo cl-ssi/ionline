@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateProTrainingItemsTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -27,7 +27,7 @@ class CreateProTrainingItemsTable extends Migration
             $table->integer('total')->nullable();
             $table->string('num_hr_pedagodicas')->nullable();
             $table->string('item_cap')->nullable();
-            $table->enum('fondo_muni',['SI','NO'])->nullable()->default('SI');
+            $table->enum('fondo_muni', ['SI', 'NO'])->nullable()->default('SI');
             $table->string('otro_fondo')->nullable();
             $table->string('total_presupuesto_est')->nullable();
             $table->string('org_ejecutor')->nullable();
@@ -37,6 +37,7 @@ class CreateProTrainingItemsTable extends Migration
             $table->timestamps();
         });
     }
+
     /**
      * Reverse the migrations.
      *
@@ -46,4 +47,4 @@ class CreateProTrainingItemsTable extends Migration
     {
         Schema::dropIfExists('pro_training_items');
     }
-}
+};

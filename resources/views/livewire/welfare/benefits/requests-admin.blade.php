@@ -4,22 +4,35 @@
     <h4>Administrador de solicitudes</h4>
 
     <br>
+
+    <!-- Filtros -->
     <div>
         <label>
-            <input type="checkbox" wire:model.live="statusFilters" value="En revisión"> En revisión
+            <input type="checkbox" wire:model="statusFilters" value="En revisión"> En revisión
         </label>
         <label>
-            <input type="checkbox" wire:model.live="statusFilters" value="Aceptado"> Aceptado
+            <input type="checkbox" wire:model="statusFilters" value="Aceptado"> Aceptado
         </label>
         <label>
-            <input type="checkbox" wire:model.live="statusFilters" value="Rechazado"> Rechazado
+            <input type="checkbox" wire:model="statusFilters" value="Rechazado"> Rechazado
         </label>
         <label>
-            <input type="checkbox" wire:model.live="statusFilters" value="Pagado"> Pagado
+            <input type="checkbox" wire:model="statusFilters" value="Pagado"> Pagado
         </label>
+        <div class="d-inline-block position-relative">
+            <!-- Botón de búsqueda -->
+            <button class="btn btn-primary" wire:click="applyFilters" wire:loading.attr="disabled">
+                Buscar
+            </button>
+            <!-- Ícono de carga -->
+            <div wire:loading wire:target="applyFilters" class="position-absolute top-50 start-100 translate-middle-y">
+                <i class="fas fa-spinner fa-spin text-primary"></i> <!-- Ícono de carga -->
+            </div>
+        </div>
     </div>
     <br>
 
+    <!-- Mensajes -->
     <div>
         @if (session()->has('message'))
             <div class="alert alert-info">
@@ -87,47 +100,50 @@
                             @if($request->status == "En proceso de pago")
                                 {{$request->status}}
                             @endif
-                            @if($request->status == "En revisión")
+                            @if ($request->status == "En revisión")
                                 <div wire:loading wire:target="accept">
                                     <i class="fas fa-spinner fa-spin"></i> Espere...
                                 </div>
                                 <div wire:loading.remove wire:target="accept">
-                                    <button class="btn btn-outline-success" wire:click="accept({{$request->id}})" type="button">
-                                        <i class="fa fa-check" aria-hidden="true"></i>
+                                    <button wire:click="accept" class="btn btn-outline-success btn-sm">
+                                        <i class="fa fa-check" aria-hidden="true"></i> Aceptar
                                     </button>
                                 </div>
                                 <div wire:loading wire:target="reject">
                                     <i class="fas fa-spinner fa-spin"></i> Espere...
                                 </div>
                                 <div wire:loading.remove wire:target="reject">
-                                    <button class="btn btn-outline-danger" wire:click="reject({{$request->id}})" type="button">
-                                        <i class="fa fa-times" aria-hidden="true"></i>
+                                    <button wire:click="reject" class="btn btn-outline-danger btn-sm">
+                                        <i class="fa fa-times" aria-hidden="true"></i> Rechazar
                                     </button>
                                 </div>
-                                
-                            @endif
-                            @if($request->status == "Aceptado")
-                                <button class="btn btn-success" type="button"><i class="fa fa-check" aria-hidden="true"></i></button>
+                            @elseif ($request->status == "Aceptado")
+                                <button class="btn btn-success btn-sm" type="button">
+                                    <i class="fa fa-check" aria-hidden="true"></i> Aceptado
+                                </button>
                                 <div wire:loading wire:target="reject">
                                     <i class="fas fa-spinner fa-spin"></i> Espere...
                                 </div>
                                 <div wire:loading.remove wire:target="reject">
-                                    <button class="btn btn-outline-danger" wire:click="reject({{$request->id}})" type="button">
-                                        <i class="fa fa-times" aria-hidden="true"></i>
+                                    <button wire:click="reject" class="btn btn-outline-danger btn-sm">
+                                        <i class="fa fa-times" aria-hidden="true"></i> Rechazar
                                     </button>
                                 </div>
-                            @endif
-                            @if($request->status == "Rechazado")
+                            @elseif ($request->status == "Rechazado")
                                 <div wire:loading wire:target="accept">
                                     <i class="fas fa-spinner fa-spin"></i> Espere...
                                 </div>
                                 <div wire:loading.remove wire:target="accept">
-                                    <button class="btn btn-outline-success" wire:click="accept({{$request->id}})" type="button">
-                                        <i class="fa fa-check" aria-hidden="true"></i>
+                                    <button wire:click="accept" class="btn btn-outline-success btn-sm">
+                                        <i class="fa fa-check" aria-hidden="true"></i> Aceptar
                                     </button>
                                 </div>
-                                <button class="btn btn-danger" type="button">
-                                    <i class="fa fa-times" aria-hidden="true"></i>
+                                <button class="btn btn-danger btn-sm" type="button" disabled>
+                                    <i class="fa fa-times" aria-hidden="true"></i> Rechazado
+                                </button>
+                            @elseif ($request->status == "Pagado")
+                                <button class="btn btn-info btn-sm" type="button" disabled>
+                                    <i class="bi bi-cash-coin"></i> Pagado
                                 </button>
                             @endif
                         </div>
@@ -214,4 +230,9 @@
             @endforeach
         </tbody>
     </table>
+
+    <!-- Paginación -->
+    <div class="d-flex justify-content-center">
+        {{ $requests->links() }}
+    </div>
 </div>

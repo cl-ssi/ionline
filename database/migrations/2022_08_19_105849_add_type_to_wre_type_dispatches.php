@@ -2,10 +2,8 @@
 
 use App\Models\Warehouse\TypeDispatch;
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
 
-class AddTypeToWreTypeDispatches extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -20,7 +18,7 @@ class AddTypeToWreTypeDispatches extends Migration
         ]);
 
         TypeDispatch::create([
-            'name' => 'Egreso Externo',
+            'name'   => 'Egreso Externo',
             'active' => true,
         ]);
     }
@@ -34,4 +32,4 @@ class AddTypeToWreTypeDispatches extends Migration
     {
         //
     }
-}
+};

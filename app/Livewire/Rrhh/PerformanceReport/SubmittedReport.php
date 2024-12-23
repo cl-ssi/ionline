@@ -114,7 +114,7 @@ class SubmittedReport extends Component
             return $report->approvals()->create([
            "module"        => "Calificaciones",
             "module_icon"   => "bi bi-graph-up-arrow",
-            "subject"       => "Reporte de Calificación de funcionario: ".$report->receivedUser->TinnyName,
+            "subject"       => "Reporte de Calificación de funcionario: ".$report->receivedUser->tinyName,
             "document_route_name" => "rrhh.performance-report.show",
             "document_route_params"             => json_encode
             ([
@@ -139,7 +139,7 @@ class SubmittedReport extends Component
         // $approval = $report->approvals()->Create([
         //     "module"        => "Calificaciones",
         //     "module_icon"   => "bi bi-graph-up-arrow",
-        //     "subject"       => "Reporte de Calificación de funcionario: ".$report->receivedUser->TinnyName,
+        //     "subject"       => "Reporte de Calificación de funcionario: ".$report->receivedUser->tinyName,
         //     "document_route_name" => "rrhh.performance-report.show",
         //     "document_route_params"             => json_encode
         //     ([
@@ -159,7 +159,7 @@ class SubmittedReport extends Component
         $report->approvals()->Create([
             "module"        => "Calificaciones",
             "module_icon"   => "bi bi-graph-up-arrow",
-            "subject"       => "Reporte de Calificación de funcionario: ".$report->receivedUser->TinnyName,
+            "subject"       => "Reporte de Calificación de funcionario: ".$report->receivedUser->tinyName,
             "document_route_name" => "rrhh.performance-report.show",
             "document_route_params"             => json_encode
             ([

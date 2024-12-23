@@ -29,6 +29,7 @@ return new class extends Migration
             $table->integer('monto')->nullable();
             $table->timestamps();
             $table->softDeletes();
+            $table->unique(['id_amipass', 'fecha', 'run'], 'UNIQUE');
         });
     }
 

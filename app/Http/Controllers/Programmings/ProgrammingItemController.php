@@ -175,7 +175,17 @@ class ProgrammingItemController extends Controller
         ->get();
 
         $reviewItem = ReviewItem::find($request->review_id);
-
+        
+        // se reasigna por defecto el profesional cuando se cumplan las condiciones (para que aparezca boton para agregar profesionales)
+        if($reviewItem && $reviewItem->review == "Actividad pendiente por programar" && $programmingitem->professionalHours->count() == 0){
+            $programmingitem->professionalHours()->attach($professionalHours->first()->id,
+                                                        ['activity_performance' => 1, 
+                                                        'designated_hours_weeks' => 1,
+                                                        'hours_required_year' => 1, 
+                                                        'hours_required_day' => 1, 
+                                                        'direct_work_year' => 1, 
+                                                        'direct_work_hour' => 1]);
+        }
 
         return view('programmings.programmingItems.show', compact('programmingitem', 'programmingDays', 'professionalHoursSel', 'professionalHours', 'activityItems', 'reviewItem'))->withProgrammingItem($programmingitem);
 

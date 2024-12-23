@@ -26,7 +26,7 @@
             <select name="request_user_id" data-container="#for-bootstrap-select" class="form-control form-control-sm selectpicker show-tick" data-live-search="true" data-size="5">
                 <option value="">Seleccione...</option>
                 @foreach($users as $user)
-                <option value="{{ $user->id }}" {{ (old('request_user_id')==$user->id)?'selected':''}}>{{ ucfirst(trans($user->FullName)) }}</option>
+                <option value="{{ $user->id }}" {{ (old('request_user_id')==$user->id)?'selected':''}}>{{ ucfirst($user->fullName) }}</option>
                 @endforeach
             </select>
         </fieldset>
@@ -36,7 +36,7 @@
             <select name="contract_manager_id" data-container="#for-bootstrap-select" class="form-control form-control-sm selectpicker show-tick" data-live-search="true" data-size="5">
                 <option value="">Seleccione...</option>
                 @foreach($users as $user)
-                <option value="{{ $user->id }}" {{ (old('contract_manager_id')==$user->id)?'selected':''}}>{{ ucfirst(trans($user->FullName)) }}</option>
+                <option value="{{ $user->id }}" {{ (old('contract_manager_id')==$user->id)?'selected':''}}>{{ ucfirst($user->fullName) }}</option>
                 @endforeach
             </select>
         </fieldset>
@@ -47,7 +47,7 @@
             <select name="purchaser_user_id" data-container="#for-bootstrap-select" class="form-control form-control-sm selectpicker show-tick" data-live-search="true" data-size="5">
                 <option value="">Seleccione...</option>
                 @foreach($users as $user)
-                <option value="{{ $user->id }}" {{ (old('purchaser_user_id')==$user->id)?'selected':''}}>{{ ucfirst(trans($user->FullName)) }}</option>
+                <option value="{{ $user->id }}" {{ (old('purchaser_user_id')==$user->id)?'selected':''}}>{{ ucfirst($user->fullName) }}</option>
                 @endforeach
             </select>
         </fieldset>

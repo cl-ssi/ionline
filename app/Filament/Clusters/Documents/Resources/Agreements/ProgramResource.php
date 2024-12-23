@@ -12,6 +12,7 @@ use Filament\Pages\SubNavigationPosition;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 
 class ProgramResource extends Resource
 {
@@ -44,7 +45,7 @@ class ProgramResource extends Resource
                     ->label('Periodo')
                     ->required()
                     ->options(function () {
-                        $currentYear = now()->year;
+                        $currentYear = now()->year + 1;
                         $years       = [];
                         for ($i = 0; $i < 10; $i++) {
                             $years[$currentYear - $i] = $currentYear - $i;
@@ -52,6 +53,14 @@ class ProgramResource extends Resource
 
                         return $years;
                     }),
+                Forms\Components\TextInput::make('budget')
+                    ->label('Presupuesto')
+                    ->numeric()
+                    ->default(null),
+                Forms\Components\Select::make('subtitle_id')
+                    ->label('Subtítulo')
+                    ->relationship('subtitle', 'name')
+                    ->required(),
                 // Forms\Components\TextInput::make('alias')
                 //     ->maxLength(50)
                 //     ->default(null),
@@ -81,33 +90,34 @@ class ProgramResource extends Resource
                         Forms\Components\DatePicker::make('ministerial_resolution_date')
                             ->label('Fecha')
                             ->default(null),
+                        Forms\Components\FileUpload::make('ministerial_resolution_file')
+                            ->directory('ionline/agreements/programs')
+                            ->downloadable()
+                            ->columnSpanFull(),
                     ])
-                    ->columnSpan(2),
-                    Forms\Components\Fieldset::make('Resolución de Distribución de Recursos')
-                        ->schema([
-                            Forms\Components\TextInput::make('resource_distribution_number')
-                                ->label('Número')
-                                ->numeric()
-                                ->default(null),
-                            Forms\Components\DatePicker::make('resource_distribution_date')
-                                ->label('Fecha')
-                                ->default(null)
-                                ,
+                    ->columnSpan(3),
+                Forms\Components\Fieldset::make('Resolución de Distribución de Recursos')
+                    ->schema([
+                        Forms\Components\TextInput::make('resource_distribution_number')
+                            ->label('Número')
+                            ->numeric()
+                            ->default(null),
+                        Forms\Components\DatePicker::make('resource_distribution_date')
+                            ->label('Fecha')
+                            ->default(null),
+                        Forms\Components\FileUpload::make('resource_distribution_file')
+                            ->downloadable()
+                            ->directory('ionline/agreements/programs')
+                            ->columnSpanFull(),
                     ])
-                    ->columnSpan(2),
+                    ->columnSpan(3),
                 // Forms\Components\Select::make('establishment_id')
                 //     ->relationship('establishment', 'name')
                 //     ->default(null),
-                Forms\Components\Select::make('subtitle_id')
-                    ->label('Subtítulo')
-                    ->relationship('subtitle', 'name')
-                    ->required(),
-                Forms\Components\TextInput::make('budget')
-                    ->label('Presupuesto')
-                    ->numeric()
-                    ->default(null),
+                Forms\Components\Toggle::make('is_program')
+                    ->label('Es Programa APS'),
             ])
-            ->columns(4);
+            ->columns(6);
     }
 
     public static function table(Table $table): Table
@@ -116,6 +126,7 @@ class ProgramResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('name')
                     ->label('Nombre')
+                    ->wrap()
                     ->searchable(),
                 // Tables\Columns\TextColumn::make('alias')
                 //     ->searchable(),
@@ -134,25 +145,31 @@ class ProgramResource extends Resource
                 //     ->sortable(),
                 Tables\Columns\TextColumn::make('period')
                     ->label('Periodo')
-                    ->numeric()
                     ->sortable(),
-                // Tables\Columns\TextColumn::make('start_date')
-                //     ->date()
-                //     ->sortable(),
-                // Tables\Columns\TextColumn::make('end_date')
-                //     ->date()
-                //     ->sortable(),
-                // Tables\Columns\TextColumn::make('description')
-                //     ->searchable(),
-                // Tables\Columns\IconColumn::make('is_program')
-                //     ->boolean(),
+                Tables\Columns\TextColumn::make('ministerial_resolution_number')
+                    ->label('Reso Minsal')
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('ministerial_resolution_date')
+                    ->label('Fecha Reso Minsal')
+                    ->date('Y-m-d')
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('resource_distribution_number')
+                    ->label('Reso Distribución')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('resource_distribution_date')
+                    ->label('Fecha Reso Distribución')
+                    ->date('Y-m-d')
+                    ->sortable(),
                 // Tables\Columns\TextColumn::make('establishment.name')
                 //     ->numeric()
                 //     ->sortable(),
                 Tables\Columns\TextColumn::make('referers.full_name')
                     ->label('Referentes')
+                    ->wrap()
                     ->bulleted()
-                    ->sortable(),
+                    ->searchable(['full_name'])
+                    ->sortable(['full_name'])
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -167,19 +184,22 @@ class ProgramResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
+                Tables\Filters\Filter::make('is_program')
+                    ->query(fn (Builder $query): Builder => $query->where('is_program', true))
+                    ->label('Es Programa APS')
+                    ->default(true),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                    // Tables\Actions\DeleteBulkAction::make(),
                 ]),
-            ])
-            ->modifyQueryUsing(function ($query) {
-                $query->where('is_program', true);
-            });
+            ]);
+        // ->modifyQueryUsing(function ($query) {
+        //     $query->where('is_program', true);
+        // });
     }
 
     public static function getRelations(): array

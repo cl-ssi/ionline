@@ -17,7 +17,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
+use App\Observers\Documents\ParteObserver;
 
+#[ObservedBy([ParteObserver::class])]
 class Parte extends Model
 {
     use SoftDeletes;
@@ -61,6 +64,7 @@ class Parte extends Model
      */
     protected $casts = [
         'date' => 'date:Y-m-d',
+        'entered_at' => 'datetime',
         'viewed_at' => 'datetime',
     ];
 
@@ -274,7 +278,7 @@ class Parte extends Model
                     break;
                 case 'without_sgr':
                     $query->whereDoesntHave('requirements');
-                    $query->whereDate('created_at', '>=', date('Y') - 1 . '-01-01');
+                    $query->whereDate('created_at', '>=', today()->startOfYear()->subYear()->toDateString());
                     break;
                 case 'important':
                     $query->whereNotNull('important');

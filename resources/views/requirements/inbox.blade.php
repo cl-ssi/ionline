@@ -12,7 +12,7 @@
 
     <div class="col-7">
         <h3 class="mb-3">
-           Requerimientos de {{ $user->tinnyName }}
+           Requerimientos de {{ $user->tinyName }}
         </h3>
     </div>
 
@@ -21,14 +21,14 @@
             <li class="nav-item">
                 <a class="nav-link {{ ($user->id == auth()->id())?'disabled':'' }}" 
                     href="{{ route('requirements.inbox',auth()->user()) }}">
-                    {{ auth()->user()->tinnyName }}
+                    {{ auth()->user()->tinyName }}
                 </a> 
             </li>
             @foreach($allowed_users as $allowed)
             <li class="nav-item">
                 <a class="nav-link {{ ($user == $allowed)?'disabled':'' }}" 
                     href="{{ route('requirements.inbox',$allowed) }}">
-                    {{ $allowed->tinnyName }}
+                    {{ $allowed->tinyName }}
                 </a>
             </li>
             @endforeach

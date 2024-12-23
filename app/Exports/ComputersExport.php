@@ -36,7 +36,7 @@ class ComputersExport implements FromCollection,WithHeadings, WithMapping, Shoul
         $assigned_users[] = null;
         if($computer->users){
             foreach($computer->users as $key => $user){
-				$assigned_users[$key] = $user->FullName;
+				$assigned_users[$key] = $user->fullName;
             }
             $assigned_user = implode(",", $assigned_users);
         }

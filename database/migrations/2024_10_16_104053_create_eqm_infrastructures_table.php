@@ -33,7 +33,7 @@ return new class extends Migration
             $table->integer('annual_maintenance_frequency'); // FRECUENCIA ANUAL DE MANTENIMIENTO
 
             $table->timestamps();
-            $table->softDeletes(); 
+            $table->softDeletes();
         });
     }
 

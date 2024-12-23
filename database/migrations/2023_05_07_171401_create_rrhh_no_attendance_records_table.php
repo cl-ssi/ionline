@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateRrhhNoAttendanceRecordsTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -28,11 +28,12 @@ class CreateRrhhNoAttendanceRecordsTable extends Migration
             $table->timestamp('rrhh_at')->nullable();
             $table->string('rrhh_observation')->nullable();
             $table->boolean('rrhh_status')->nullable();
-            $table->foreignId('establishment_id')->default(38)->constrained('establishments');
+            $table->foreignId('establishment_id')->constrained('establishments');
             $table->timestamps();
             $table->softDeletes();
         });
     }
+
     /**
      * Reverse the migrations.
      *
@@ -42,4 +43,4 @@ class CreateRrhhNoAttendanceRecordsTable extends Migration
     {
         Schema::dropIfExists('rrhh_no_attendance_records');
     }
-}
+};

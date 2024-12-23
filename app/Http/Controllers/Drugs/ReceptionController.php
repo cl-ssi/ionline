@@ -84,9 +84,9 @@ class ReceptionController extends Controller
     {
         $substances = Substance::where('presumed', true)->orderBy('name')->get();
         $trashedDestructions = Destruction::onlyTrashed()->where('reception_id', $reception->id)->get();
-        $manager = User::Find(Parameter::get('drugs','Jefe'))->FullName;
-        $observer = optional(User::Find(Parameter::get('drugs','MinistroDeFe')))->FullName;
-        $lawyer_observer = optional(User::Find(Parameter::get('drugs','MinistroDeFeJuridico')))->FullName;
+        $manager = User::Find(Parameter::get('drugs','Jefe'))->fullName;
+        $observer = optional(User::Find(Parameter::get('drugs','MinistroDeFe')))->fullName;
+        $lawyer_observer = optional(User::Find(Parameter::get('drugs','MinistroDeFeJuridico')))->fullName;
 
         return view('drugs.receptions.show', compact('reception', 'substances', 'trashedDestructions','manager','observer','lawyer_observer'));
     }
@@ -323,10 +323,25 @@ class ReceptionController extends Controller
             ->whereDate('created_at', '>', now()->startOfYear()->subYears(3))  // ultimos 3 años
             ->get();
 
+        /**
+         * Obtiene todas las recepciones que tengan items y que el item tenga una contra muestra
+         * y tenga más de 2 años de antiguedad, utiliozando Reception
+         */
+        $itemsGreatherThanTwoYears = Reception::with('items')
+            ->whereHas('items', function ($query) {
+                $query->where('countersample', '>', 0);
+            })
+            ->whereBetween('created_at', [
+                now()->subYears(2)->subMonth(),
+                now()->subYears(2), 
+            ])
+            ->get();
+
         return view('drugs.receptions.alerts', compact(
             'receptionsNotSentToIsp', 
             'receptionsWithDestructionNotSendedToCourt',
-            'receptionsWithoutRecordToCourtOlderThan30Days'
+            'receptionsWithoutRecordToCourtOlderThan30Days',
+            'itemsGreatherThanTwoYears'
         ));
     }
 

@@ -48,7 +48,7 @@
                 <tr><input style="display:none" name='users[]' class="users" value="{{$user->id}}">
                     <input style="display:none" name='enCopia[]' value='{{$enCopia[$key]}}'>
                     <td>{{ $user->organizationalUnit->name }}</td>
-                    <td>{{ $user->tinnyName }}</td>
+                    <td>{{ $user->tinyName }}</td>
                     <td>
                         @if($enCopia[$key]==1)Sí
                         @else No @endif

@@ -18,15 +18,50 @@
     <form method="GET" class="form-horizontal" action="{{ route('hotel_booking.search_booking') }}">
         <div class="form-row">
 
+            @cannot('welfare: hotel booking administrator')
+                @php
+                    $today = \Carbon\Carbon::now();
+                    // Si es el día 15 o posterior, permite hasta el final del próximo mes
+                    $maxDate = $today->day >= 15 
+                        ? $today->copy()->endOfMonth()->addMonth()->endOfMonth()->toDateString() 
+                        : $today->copy()->endOfMonth()->toDateString();
+                @endphp
+            @endcannot
+
             <fieldset class="form-group col-3">
                 <label for="for_hotel_id">Entrando el</label>
-                <input type="date" class="form-control" required name="start_date" @if($request->start_date) value="{{$request->start_date}}" @endif>
+                <input 
+                    type="date" 
+                    class="form-control" 
+                    required 
+                    name="start_date" 
+                    @if($request->start_date) 
+                        value="{{ $request->start_date }}" 
+                    @endif
+                    @cannot('welfare: hotel booking administrator')
+                        min="{{ $today->toDateString() }}" 
+                        max="{{ $maxDate }}"
+                    @endcannot
+                >
             </fieldset>
 
             <fieldset class="form-group col-3">
                 <label for="for_hotel_id">Saliendo el</label>
-                <input type="date" class="form-control" required name="end_date" @if($request->end_date) value="{{$request->end_date}}" @endif>
+                <input 
+                    type="date" 
+                    class="form-control" 
+                    required 
+                    name="end_date" 
+                    @if($request->end_date) 
+                        value="{{ $request->end_date }}" 
+                    @endif
+                    @cannot('welfare: hotel booking administrator')
+                        min="{{ $today->toDateString() }}" 
+                        max="{{ $maxDate }}"
+                    @endcannot
+                >
             </fieldset>
+
 
             <fieldset class="form-group col-1">
                 <label for="for_hotel_id"><br></label>

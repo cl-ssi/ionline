@@ -153,9 +153,8 @@ class Calendar extends Component
         }
 
         foreach ($newAuthorities as $authority) {
-
-            $this->data[$authority->date->format('Y-m-d')][$authority->type] = $authority->user;
-            $this->data[$authority->date->format('Y-m-d')][$authority->type]['position'] = $authority->position;
+            $this->data[$authority->date->format('Y-m-d')][$authority->type->value] = $authority->user;
+            $this->data[$authority->date->format('Y-m-d')][$authority->type->value]['position'] = $authority->position;
             $this->data[$authority->date->format('Y-m-d')]['authority_id'] = $authority->id;
         }
 
@@ -169,7 +168,7 @@ class Calendar extends Component
         $lastDayOfYear = Carbon::now()->endOfYear();
 
         //Elimina todos los registros de autoridades de la misma categoría y unidad organizativa a partir de la fecha de la autoridad seleccionada hasta el final del año actual"
-        Authority::whereBetween('date', [$from, $lastDayOfYear])->where('type',$authority->type)->where('organizational_unit_id',$authority->organizational_unit_id)->delete();
+        Authority::whereBetween('date', [$from, $lastDayOfYear])->where('type',$authority->type->value)->where('organizational_unit_id',$authority->organizational_unit_id)->delete();
     }
 
     public function cancel()

@@ -18,7 +18,7 @@
             <option value="">Seleccione...</option>
               @if(!is_null($staffManageByOu))
                 @foreach($staffManageByOu as $ou)
-                  <option value="{{ $ou->replacementStaff->id }}"  {{-- @if($replacementStaff) {{ ($replacementStaff->commune_id == $communeSelected) ? 'selected' : '' }} @endif --}}>{{ $ou->replacementStaff->FullName }}</option>
+                  <option value="{{ $ou->replacementStaff->id }}"  {{-- @if($replacementStaff) {{ ($replacementStaff->commune_id == $communeSelected) ? 'selected' : '' }} @endif --}}>{{ $ou->replacementStaff->fullName }}</option>
                 @endforeach
               @endif
         </select>

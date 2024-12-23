@@ -89,7 +89,7 @@
                     <strong>Usuario</strong>
                 </td>
                 <td>
-                    {{ optional($inventory->using)->tinny_name }}
+                    {{ optional($inventory->using)->tinyName }}
                 </td>
             </tr>
             <tr>
@@ -97,7 +97,7 @@
                     <strong>Responsable</strong>
                 </td>
                 <td>
-                    {{ optional($inventory->responsible)->tinny_name }}
+                    {{ optional($inventory->responsible)->tinyName }}
                 </td>
             </tr>
             <tr>

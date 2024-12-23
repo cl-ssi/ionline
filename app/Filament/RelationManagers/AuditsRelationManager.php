@@ -37,8 +37,8 @@ class AuditsRelationManager extends RelationManager
                     ->dateTime('Y-m-d H:i:s')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('user.shortName')
-                    ->searchable()
-                    ->sortable(),
+                    ->searchable(['full_name'])
+                    ->sortable(['full_name']),
                 Tables\Columns\TextColumn::make('event')
                     ->description(function (Audit $record): HtmlString {
                         $modified = $record->getModified();

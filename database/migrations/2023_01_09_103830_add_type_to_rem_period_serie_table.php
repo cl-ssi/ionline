@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddTypeToRemPeriodSerieTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -16,7 +16,7 @@ class AddTypeToRemPeriodSerieTable extends Migration
         Schema::table('rem_period_series', function (Blueprint $table) {
             $table->string('type')
                 ->nullable()
-                ->after('serie_id');            
+                ->after('serie_id');
             //
         });
     }
@@ -33,4 +33,4 @@ class AddTypeToRemPeriodSerieTable extends Migration
             $table->dropColumn('type');
         });
     }
-}
+};

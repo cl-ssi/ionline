@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateJppExpertisesTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -27,7 +27,7 @@ class CreateJppExpertisesTable extends Migration
 
         Schema::create('jpp_expertises_profile', function (Blueprint $table) {
             $table->id();
-            
+
             $table->foreignId('expertise_id')->nullable()->constrained('jpp_expertises');
             $table->string('value')->nullable();
             $table->foreignId('job_position_profile_id')->nullable()->constrained('jpp_job_position_profiles');
@@ -47,4 +47,4 @@ class CreateJppExpertisesTable extends Migration
         Schema::dropIfExists('jpp_expertises');
         Schema::dropIfExists('jpp_expertise_profile');
     }
-}
+};

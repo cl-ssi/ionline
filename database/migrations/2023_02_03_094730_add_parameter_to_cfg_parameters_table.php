@@ -2,10 +2,8 @@
 
 use App\Models\Parameters\Parameter;
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
 
-class AddParameterToCfgParametersTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -15,10 +13,10 @@ class AddParameterToCfgParametersTable extends Migration
     public function up()
     {
         Parameter::Create([
-            'module'     => 'ou',
-            'parameter'  => 'DireccionSSI',
-            'value'      => 1,
-            'description'=> 'Dirección del Servicio Salud Tarapacá']);
+            'module'      => 'ou',
+            'parameter'   => 'DireccionSSI',
+            'value'       => 1,
+            'description' => 'Dirección del Servicio Salud Tarapacá']);
     }
 
     /**
@@ -30,4 +28,4 @@ class AddParameterToCfgParametersTable extends Migration
     {
         //
     }
-}
+};

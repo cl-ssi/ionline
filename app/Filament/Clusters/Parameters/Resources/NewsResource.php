@@ -65,8 +65,7 @@ class NewsResource extends Resource
                     ->sortable(),
                 Tables\Columns\TextColumn::make('user.shortName')
                     ->label('Creador')
-                    ->numeric()
-                    ->sortable(),
+                    ->sortable(['full_name']),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

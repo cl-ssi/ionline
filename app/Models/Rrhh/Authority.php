@@ -2,8 +2,10 @@
 
 namespace App\Models\Rrhh;
 
+use App\Enums\Rrhh\AuthorityType;
 use App\Models\Agreements\Agreement;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -16,7 +18,6 @@ class Authority extends Model implements Auditable
     const TYPE_MANAGER = 'manager';
     const TYPE_SECRETARY = 'secretary';
     const TYPE_DELEGATE = 'delegate';
-
 
     /**
      * The table associated with the model.
@@ -49,6 +50,7 @@ class Authority extends Model implements Auditable
      */
     protected $casts = [
         'date' => 'date:Y-m-d',
+        'type' => AuthorityType::class,
     ];
 
     /**
@@ -62,7 +64,7 @@ class Authority extends Model implements Auditable
     /**
      * Get the user that owns the authority.
      */
-    public function user(): BelongsTo
+    public function user(): BelongsTo|Builder
     {
         return $this->belongsTo(User::class)->withTrashed();
     }
@@ -71,7 +73,7 @@ class Authority extends Model implements Auditable
     /**
      * Get the creator of the authority.
      */
-    public function creator(): BelongsTo
+    public function creator(): BelongsTo|Builder
     {
         return $this->belongsTo(User::class, 'creator_id')->withTrashed();
     }
@@ -79,7 +81,7 @@ class Authority extends Model implements Auditable
     /**
      * Get the user that the authority represents.
      */
-    public function representation(): BelongsTo
+    public function representation(): BelongsTo|Builder
     {
         return $this->belongsTo(User::class, 'representation_id')->withTrashed();
     }

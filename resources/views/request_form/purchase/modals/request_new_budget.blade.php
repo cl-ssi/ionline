@@ -82,14 +82,14 @@
                                         @endif
                                         </td>
                                         <td align="right">
-                                        <input type="number" class="form-control form-control-sm text-right" step="0.01" min="0.1" id="for_new_quantity" name="new_quantity[]" value="{{ old('new_quantity.'.$key, $item->quantity) }}">
+                                        <input type="number" class="form-control form-control-sm text-right new-item" step="0.01" min="0.1" id="for_new_quantity" name="new_quantity[]" value="{{ old('new_quantity.'.$key, $item->quantity) }}">
                                         </td>
                                         <td align="right">
-                                            <input type="number" class="form-control form-control-sm text-right" step="0.01" min="1" id="for_new_unit_value" name="new_unit_value[]" value="{{ old('new_unit_value.'.$key, $item->unit_value) }}">
+                                            <input type="number" class="form-control form-control-sm text-right new-item" step="0.01" min="1" id="for_new_unit_value" name="new_unit_value[]" value="{{ old('new_unit_value.'.$key, $item->unit_value) }}">
                                         </td>
                                         <td align="right">
                                         <!-- <input type="text" class="form-control form-control-sm text-right" id="for_tax" name="tax[]" value="{{ $item->tax }}"> -->
-                                        <select name="new_tax[]" class="form-control form-control-sm" id="for_new_tax">
+                                        <select name="new_tax[]" class="form-control form-control-sm new-item" id="for_new_tax">
                                         <option value="">Seleccione...</option>    
                                         <option value="iva" {{$item->tax == 'iva' ? 'selected' : ''}} >I.V.A. 19%</option>
                                         <option value="bh" {{$item->tax == 'bh' ? 'selected' : ''}} ></option>
@@ -99,7 +99,7 @@
                                         </select>
                                         </td>
                                         <td align="right">
-                                        <input type="number" class="form-control form-control-sm text-right" step="0.01" min="1" id="for_new_item_total" name="new_item_total[]" value="{{ old('new_item_total.'.$key, $item->expense) }}" readonly>
+                                        <input type="number" class="form-control form-control-sm text-right new-item-total" step="0.01" min="1" name="new_item_total[]" value="{{ old('new_item_total.'.$key, $item->expense) }}" readonly>
                                         </td>
                                     </tr>
                                     @endforeach
@@ -109,7 +109,7 @@
                                         <td colspan="8"></td>
                                         <td class="text-right">Valor Total</td>
                                         <td align="right">
-                                        <input type="number" step="0.01" min="1" class="form-control form-control-sm text-right" id="total_new_amount" name="new_amount" readonly>
+                                        <input type="number" step="0.01" min="1" class="form-control form-control-sm text-right " id="total_new_amount" name="new_amount" readonly>
                                         </td>
                                     </tr>
                                 </tfoot>

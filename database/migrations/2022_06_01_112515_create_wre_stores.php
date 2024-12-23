@@ -1,11 +1,10 @@
 <?php
 
-use App\Models\Warehouse\Store;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateWreStores extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -34,4 +33,4 @@ class CreateWreStores extends Migration
     {
         Schema::dropIfExists('wre_stores');
     }
-}
+};

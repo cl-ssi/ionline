@@ -39,7 +39,8 @@ class Training extends Model implements Auditable
         'establishment_id',
         'email', 
         'telephone', 
-        'strategic_axes_id', 
+        'strategic_axes_id',
+        'impact_objective_id',
         'objective',
         'activity_name',
         'activity_type',
@@ -163,7 +164,7 @@ class Training extends Model implements Auditable
                 return 'Jornada';
                 break;
             
-            case 'estadía pasantía':
+            case 'estadia pasantia':
                 return 'Estadía Pasantía';
                 break;
             

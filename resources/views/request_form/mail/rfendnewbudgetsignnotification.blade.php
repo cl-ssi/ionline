@@ -17,16 +17,16 @@
       <li><strong>Folio</strong>: {{ $req->folio }}</li>
       <li><strong>Nombre Formulario</strong>: {{ $req->name }}</li>
       <li><strong>Fecha Solicitud</strong>: {{ $req->eventSignatureDate('budget_event', 'approved') }}</li>
-      <li><strong>Solicitado por</strong>: {{ $req->eventPurchaserNewBudget()->FullName }}</li>
+      <li><strong>Solicitado por</strong>: {{ $req->eventPurchaserNewBudget()->fullName }}</li>
   </ul>
 
   <hr>
 
   <ul>
-      <li><strong>Creado por</strong>: {{ $req->user->FullName }}</li>
+      <li><strong>Creado por</strong>: {{ $req->user->fullName }}</li>
       <li><strong>Unidad Organizacional</strong>: {{ $req->userOrganizationalUnit->name }}</li>
-      <li><strong>Administrador de Contrato</strong>: {{ $req->contractManager->FullName }}</li>
-      <li><strong>Comprador asignado</strong>: {{ $req->purchasers()->first()->FullName }}</li>
+      <li><strong>Administrador de Contrato</strong>: {{ $req->contractManager->fullName }}</li>
+      <li><strong>Comprador asignado</strong>: {{ $req->purchasers()->first()->fullName }}</li>
   </ul>
 
   <br>

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateProProgrammingDaysTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -15,21 +15,21 @@ class CreateProProgrammingDaysTable extends Migration
     {
         Schema::create('pro_programming_days', function (Blueprint $table) {
             $table->id();
-            $table->decimal('weekends',5,2)->nullable()->default('0'); // FINES DE SEMANA
-            $table->decimal('national_holidays',5,2)->nullable()->default('0'); // DÍAS FERIADOS  
-            $table->decimal('noon_estament',5,2)->nullable()->default('0'); // MEDIO DIA POR ESTAMENTO
-            $table->decimal('noon_parties',5,2)->nullable()->default('0'); // MEDIO DIA POR FIESTAS (PATRIAS, NAVIDAD, AÑO NUEVO)
-            $table->decimal('training',5,2)->nullable()->default('0'); // CAPACITACIÓN
-            $table->decimal('holidays',5,2)->nullable()->default('0'); // VACACIONES
-            $table->decimal('administrative_permits',5,2)->nullable()->default('0'); // PERMISOS ADMINISTRATIVOS
-            $table->decimal('associations_lunches',5,2)->nullable()->default('0'); // ALMUERZOS DE ASOCIACIONES
-            $table->decimal('others',5,2)->nullable()->default('0'); // VACACIONES
-            $table->decimal('days_year',5,2)->nullable()->default('0'); // TOTAL A RESTAR
-            $table->decimal('days_programming',5,2)->nullable()->default('0'); // DÍAS DEL AÑO
-            $table->decimal('day_work_hours',5,2)->nullable()->default('0'); // DÍAS DEL AÑO
+            $table->decimal('weekends', 5, 2)->nullable()->default('0'); // FINES DE SEMANA
+            $table->decimal('national_holidays', 5, 2)->nullable()->default('0'); // DÍAS FERIADOS
+            $table->decimal('noon_estament', 5, 2)->nullable()->default('0'); // MEDIO DIA POR ESTAMENTO
+            $table->decimal('noon_parties', 5, 2)->nullable()->default('0'); // MEDIO DIA POR FIESTAS (PATRIAS, NAVIDAD, AÑO NUEVO)
+            $table->decimal('training', 5, 2)->nullable()->default('0'); // CAPACITACIÓN
+            $table->decimal('holidays', 5, 2)->nullable()->default('0'); // VACACIONES
+            $table->decimal('administrative_permits', 5, 2)->nullable()->default('0'); // PERMISOS ADMINISTRATIVOS
+            $table->decimal('associations_lunches', 5, 2)->nullable()->default('0'); // ALMUERZOS DE ASOCIACIONES
+            $table->decimal('others', 5, 2)->nullable()->default('0'); // VACACIONES
+            $table->decimal('days_year', 5, 2)->nullable()->default('0'); // TOTAL A RESTAR
+            $table->decimal('days_programming', 5, 2)->nullable()->default('0'); // DÍAS DEL AÑO
+            $table->decimal('day_work_hours', 5, 2)->nullable()->default('0'); // DÍAS DEL AÑO
 
             $table->unsignedBigInteger('programming_id');
- 
+
             $table->timestamps();
         });
     }
@@ -43,4 +43,4 @@ class CreateProProgrammingDaysTable extends Migration
     {
         Schema::dropIfExists('pro_programming_days');
     }
-}
+};

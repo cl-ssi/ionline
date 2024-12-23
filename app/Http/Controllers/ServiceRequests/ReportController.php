@@ -462,7 +462,7 @@ class ReportController extends Controller
       foreach ($filas as $fila) {
         fputcsv($file, array(
           $fila->user->runFormat(),
-          $fila->user->getFullNameAttribute(),
+          $fila->user->fullName,
           $fila->user->address,
           $fila->user->phone_number,
           $fila->user->email,
@@ -1847,7 +1847,7 @@ class ReportController extends Controller
           $start_date = $serviceRequest->start_date;
           $end_date = $serviceRequest->end_date;
 
-          $results[$serviceRequest->employee->getFullNameAttribute()][$serviceRequest->start_date->format('Y-m-d') . " - " . $serviceRequest->end_date->format('Y-m-d') . "(" . ($serviceRequest->programm_name) . ")"] = $serviceRequest;
+          $results[$serviceRequest->employee->fullName][$serviceRequest->start_date->format('Y-m-d') . " - " . $serviceRequest->end_date->format('Y-m-d') . "(" . ($serviceRequest->programm_name) . ")"] = $serviceRequest;
           do {
             $serviceRequest_aux = ServiceRequest::where('program_contract_type', 'Mensual')
               // ->where('programm_name', $request->programm_name)
@@ -1876,12 +1876,12 @@ class ReportController extends Controller
               $end_date = $serviceRequest_aux->end_date;
               $programm_name = $serviceRequest_aux->programm_name;
 
-              $results[$serviceRequest->employee->getFullNameAttribute()][$start_date->format('Y-m-d') . " - " . $end_date->format('Y-m-d') . "(" . ($programm_name) . ")"] = $serviceRequest_aux;
+              $results[$serviceRequest->employee->fullName][$start_date->format('Y-m-d') . " - " . $end_date->format('Y-m-d') . "(" . ($programm_name) . ")"] = $serviceRequest_aux;
               // dd($results);
-              // print_r($serviceRequest->employee->getFullNameAttribute() ." - ". $end_date."<br>");
+              // print_r($serviceRequest->employee->fullName ." - ". $end_date."<br>");
             } else {
-              // $results[$serviceRequest->employee->getFullNameAttribute()][$end_date->format('Y-m-d') . " - xx"] = 0; //muestra los contratos que debiesen estar pero no existen
-              unset($results[$serviceRequest->employee->getFullNameAttribute()]); //elimina los que no son consecutivos
+              // $results[$serviceRequest->employee->fullName][$end_date->format('Y-m-d') . " - xx"] = 0; //muestra los contratos que debiesen estar pero no existen
+              unset($results[$serviceRequest->employee->fullName]); //elimina los que no son consecutivos
             }
           } while ($serviceRequest_aux && $end_date <= $request->to);
         }

@@ -26,7 +26,7 @@
                 </td>
                 <td>{{ $log->created_at }}</td>
                 <td>{{ $log->type }}</td>
-                <td>{{ optional($log->switchUser)->tinnyName }}</td>
+                <td>{{ optional($log->switchUser)->tinyName }}</td>
             </tr>
             @endforeach
         </tbody>

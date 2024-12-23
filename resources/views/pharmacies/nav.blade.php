@@ -85,6 +85,10 @@
                 href="{{ route('pharmacies.reports.consume_history') }}">
                 <i class="fas fa-file-alt"></i> Consumos históricos</a>
 
+            <a class="dropdown-item"
+                href="{{ route('pharmacies.reports.endorsementReport') }}">
+                <i class="fas fa-file-alt"></i> Refrendación</a>
+                
         </div>
     </li>
     @endcan

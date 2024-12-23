@@ -103,9 +103,9 @@
             <td class="small">
                 @if($doc->user)
                     @if($doc->user->gravatar )
-                        <img src="{{ $doc->user->gravatarUrl }}?s=40&d=mp&r=g" class="border rounded-circle" alt="{{ optional($doc->user)->tinnyName }}" title="{{ optional($doc->user)->tinnyName }}">
+                        <img src="{{ $doc->user->gravatarUrl }}?s=40&d=mp&r=g" class="border rounded-circle" alt="{{ optional($doc->user)->tinyName }}" title="{{ optional($doc->user)->tinyName }}">
                     @else
-                        {{ optional($doc->user)->tinnyName }}
+                        {{ optional($doc->user)->tinyName }}
                     @endif
                 @endif
                 <br>
@@ -214,9 +214,9 @@
             <td class="small">
                 @if($doc->user)
                     @if($doc->user->gravatar )
-                        <img src="{{ $doc->user->gravatarUrl }}?s=40&d=mp&r=g" class="border rounded-circle" alt="{{ optional($doc->user)->tinnyName }}" title="{{ optional($doc->user)->tinnyName }}">
+                        <img src="{{ $doc->user->gravatarUrl }}?s=40&d=mp&r=g" class="border rounded-circle" alt="{{ optional($doc->user)->tinyName }}" title="{{ optional($doc->user)->tinyName }}">
                     @else
-                        {{ optional($doc->user)->tinnyName }}
+                        {{ optional($doc->user)->tinyName }}
                     @endif
                 @endif
                 <br>

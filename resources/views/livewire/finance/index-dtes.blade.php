@@ -167,8 +167,8 @@
                     <td class="small">
                         @include('finance.payments.partials.fr-info')
 
-                        {{ $dte->requestForm?->contractManager?->tinnyName }} 
-                        {{ $dte->contractManager?->tinnyName }}
+                        {{ $dte->requestForm?->contractManager?->tinyName }} 
+                        {{ $dte->contractManager?->tinyName }}
                         <br>
                         
                         <!-- Si tiene administrador de contrato mostrar el avion para enviar notificación -->

@@ -29,7 +29,7 @@
                             @foreach($requestReplacementStaff->technicalEvaluation->applicants->sortByDesc('score') as $applicant)
                             <tr class="{{ ($applicant->selected == 1 && $applicant->desist == NULL)?'table-success':''}}">
                                 <td>
-                                    {{ $applicant->replacementStaff->FullName }}
+                                    {{ $applicant->replacementStaff->fullName }}
                                     <br>
                                     @if($applicant->selected == 1 && $applicant->desist == NULL)
                                       <span class="badge bg-success">Seleccionado</span>

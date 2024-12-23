@@ -22,7 +22,7 @@
                   <select wire:ignore name="user_id[]" class="form-control" required>
                       <option value="">Seleccione</option>
                       @foreach($users as $user)
-                          <option value="{{ $user->id }}">{{ ucfirst(trans($user->FullName)) }}</option>
+                          <option value="{{ $user->id }}">{{ ucfirst($user->fullName) }}</option>
                       @endforeach
                   </select>
               </fieldset>

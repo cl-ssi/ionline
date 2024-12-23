@@ -27,7 +27,7 @@
       <a>
     </td>
     <td>{{$serviceRequest->employee->runNotFormat()}}</td>
-    <td>{{$serviceRequest->employee->getFullNameAttribute()}}</td>
+    <td>{{$serviceRequest->employee->fullName}}</td>
     <td>{{$serviceRequest->responsabilityCenter->name??''}}</td>
     <td nowrap>{{$serviceRequest->start_date->format('d-m-Y')}}</td>
     <td nowrap>{{$serviceRequest->end_date->format('d-m-Y')}}</td>

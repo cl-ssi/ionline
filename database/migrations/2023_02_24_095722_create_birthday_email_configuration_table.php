@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateBirthdayEmailConfigurationTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -26,7 +26,7 @@ class CreateBirthdayEmailConfigurationTable extends Migration
 
         Schema::create('sirh_active_users', function (Blueprint $table) {
             $table->bigInteger('id')->unsigned()->unique();
-            $table->char('dv',1);
+            $table->char('dv', 1);
             $table->string('name');
             $table->string('email')->nullable();
             $table->date('birthdate');
@@ -50,4 +50,4 @@ class CreateBirthdayEmailConfigurationTable extends Migration
         Schema::dropIfExists('sirh_active_users');
         Schema::dropIfExists('rrhh_birthday_email_configuration');
     }
-}
+};

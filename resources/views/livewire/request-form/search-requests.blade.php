@@ -255,11 +255,11 @@
                         </td>
                         <td>{{ $requestForm->name }}</td>
                         <td>
-                            {{ $requestForm->user ? $requestForm->user->FullName : 'Usuario eliminado' }}<br>
+                            {{ $requestForm->user ? $requestForm->user->fullName : 'Usuario eliminado' }}<br>
                             {{ $requestForm->userOrganizationalUnit ? $requestForm->userOrganizationalUnit->name : 'Usuario eliminado' }}<br><br>
                             <small><b>{{ $requestForm->contractOrganizationalUnit ? $requestForm->contractOrganizationalUnit->establishment->name : 'Establecimiento eliminado' }}</b></small>
                         </td>
-                        <td>{{ $requestForm->purchasers->first()->FullName?? 'No asignado' }}</td>
+                        <td>{{ $requestForm->purchasers->first()->fullName?? 'No asignado' }}</td>
                         <td align="center">{{ $requestForm->quantityOfItems() }}</td>
                         <td class="text-right">{{$requestForm->symbol_currency}}{{ number_format($requestForm->estimated_expense,$requestForm->precision_currency,",",".") }}</td>
                         <td class="text-center">
@@ -406,7 +406,7 @@
                             {{ $requestForm->SubtypeValue }}
                         </td>
                         <td>{{ $requestForm->name }}</td>
-                        <td>{{ $requestForm->user ? $requestForm->user->FullName : 'Usuario eliminado' }}<br>
+                        <td>{{ $requestForm->user ? $requestForm->user->fullName : 'Usuario eliminado' }}<br>
                             {{ $requestForm->user ? $requestForm->userOrganizationalUnit->name : 'Usuario eliminado' }}<br><br>
 
                             <small><b>{{ $requestForm->contractOrganizationalUnit ? $requestForm->contractOrganizationalUnit->establishment->name : 'Establecimiento eliminado' }}</b></small>
@@ -570,9 +570,9 @@
                                     </td>
                                     <td nowrap>{{ substr($requestForm->name, 0, 100) }}</td>
                                     <td nowrap>{{ $requestForm->associateProgram ? $requestForm->associateProgram->alias_finance.' '.$requestForm->associateProgram->period : $requestForm->program }}</td>
-                                    <td nowrap>{{ $requestForm->user->FullName }}</td>
+                                    <td nowrap>{{ $requestForm->user->fullName }}</td>
                                     <td nowrap>{{ $requestForm->userOrganizationalUnit->name }}</td>
-                                    <td nowrap>{{ $requestForm->purchasers->first()->FullName ?? 'No asignado' }}</td>
+                                    <td nowrap>{{ $requestForm->purchasers->first()->fullName ?? 'No asignado' }}</td>
                                     <td class="text-center">
                                         @if($loop->first)
                                             {{ $requestForm->itemRequestForms->count() }}
@@ -674,9 +674,9 @@
                                     </td>
                                     <td nowrap>{{ substr($requestForm->name, 0, 100) }}</td>
                                     <td nowrap>{{ $requestForm->associateProgram ? $requestForm->associateProgram->alias_finance.' '.$requestForm->associateProgram->period : $requestForm->program }}</td>
-                                    <td nowrap>{{ $requestForm->user->FullName }}</td>
+                                    <td nowrap>{{ $requestForm->user->fullName }}</td>
                                     <td nowrap>{{ $requestForm->userOrganizationalUnit->name }}</td>
-                                    <td nowrap>{{ $requestForm->purchasers->first()->FullName ?? 'No asignado' }}</td>
+                                    <td nowrap>{{ $requestForm->purchasers->first()->fullName ?? 'No asignado' }}</td>
                                     <td class="text-center">
                                         @if($loop->first)
                                             {{ $requestForm->itemRequestForms->count() }}
@@ -760,9 +760,9 @@
                                     </td>
                                     <td nowrap>{{ substr($requestForm->name, 0, 100) }}</td>
                                     <td nowrap>{{ $requestForm->associateProgram ? $requestForm->associateProgram->alias_finance.' '.$requestForm->associateProgram->period : $requestForm->program }}</td>
-                                    <td nowrap>{{ $requestForm->user->FullName }}</td>
+                                    <td nowrap>{{ $requestForm->user->fullName }}</td>
                                     <td nowrap>{{ $requestForm->userOrganizationalUnit->name }}</td>
-                                    <td nowrap>{{ $requestForm->purchasers->first()->FullName ?? 'No asignado' }}</td>
+                                    <td nowrap>{{ $requestForm->purchasers->first()->fullName ?? 'No asignado' }}</td>
                                     <td class="text-center">
                                         @if($loop->first)
                                             {{ $requestForm->passengers->count() }}
@@ -863,9 +863,9 @@
                                     </td>
                                     <td nowrap>{{ substr($requestForm->name, 0, 100) }}</td>
                                     <td nowrap>{{ $requestForm->associateProgram ? $requestForm->associateProgram->alias_finance.' '.$requestForm->associateProgram->period : $requestForm->program }}</td>
-                                    <td nowrap>{{ $requestForm->user->FullName }}</td>
+                                    <td nowrap>{{ $requestForm->user->fullName }}</td>
                                     <td nowrap>{{ $requestForm->userOrganizationalUnit->name }}</td>
-                                    <td nowrap>{{ $requestForm->purchasers->first()->FullName ?? 'No asignado' }}</td>
+                                    <td nowrap>{{ $requestForm->purchasers->first()->fullName ?? 'No asignado' }}</td>
                                     <td class="text-center">
                                         @if($loop->first)
                                             {{ $requestForm->passengers->count() }}

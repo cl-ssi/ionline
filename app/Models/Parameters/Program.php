@@ -49,8 +49,10 @@ class Program extends Model implements Auditable
         'is_program',
         'ministerial_resolution_number',
         'ministerial_resolution_date',
+        'ministerial_resolution_file',
         'resource_distribution_number',
         'resource_distribution_date',
+        'resource_distribution_file',
         'establishment_id',
     ];
 

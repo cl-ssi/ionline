@@ -1,10 +1,10 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
-class CreatePartesTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -17,7 +17,7 @@ class CreatePartesTable extends Migration
             $table->id();
             $table->unsignedInteger('correlative')->default(0);
             $table->datetime('entered_at');
-            $table->foreignId('type_id')->nullable()->constrained('doc_types');
+            $table->foreignId('type_id')->constrained('doc_types');
             $table->boolean('reserved')->nullable();
             $table->date('date');
             $table->integer('number')->unsigned()->nullable();
@@ -33,7 +33,7 @@ class CreatePartesTable extends Migration
             $table->foreignId('signatures_file_id')->nullable()->constrained('doc_signatures_files');
             $table->datetime('reception_date')->nullable();
             $table->timestamp('viewed_at')->nullable();
-            
+
             $table->timestamps();
             $table->softDeletes();
             //$table->foreign('organizational_unit_id')->references('id')->on('organizational_units');
@@ -49,4 +49,4 @@ class CreatePartesTable extends Migration
     {
         Schema::dropIfExists('partes');
     }
-}
+};

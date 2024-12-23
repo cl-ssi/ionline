@@ -66,8 +66,9 @@ class BookRoom extends Component
                                                    });
                                          })
                                          ->where(function ($query) {
-                                            $query->where('end_date', '!=', $this->start_date);  // No considerar las reservas que terminan el mismo día que la nueva comienza
-                                         })
+                                            $query->where('end_date', '!=', $this->start_date)  // No considerar reservas que terminan el mismo día que la nueva comienza
+                                                  ->where('start_date', '!=', $this->end_date); // No considerar reservas que comienzan el mismo día que la nueva termina
+                                        })
                                          ->count();
     
         // Si el usuario ya tiene una reserva para ese día o se solapa con una existente

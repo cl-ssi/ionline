@@ -34,14 +34,26 @@
     </div>
     
     <div style="clear: both; padding-bottom: 20px">&nbsp;</div>
+    
+    {{--
+    <div style="text-align: justify;" class="ocho">
+        De conformidad a lo dispuesto en el Artículo 11 de Ley 21.516 del Ministerio de Hacienda, que aprueba el presupuesto del Sector Público 
+        para el año 2024, vengo en certificar que la Dirección del Servicio de Salud Tarapacá, cuenta con presupuesto para la contratación del funcionario (a) 
+        {{ $requestReplacementStaff->technicalEvaluation->applicants->where('selected', 1)->where('desist', NULL)->first()->replacementStaff->fullName }} - 
+        RUT {{ $requestReplacementStaff->technicalEvaluation->applicants->where('selected', 1)->where('desist', NULL)->first()->replacementStaff->run }}-{{ $requestReplacementStaff->technicalEvaluation->applicants->where('selected', 1)->where('desist', NULL)->first()->replacementStaff->dv }} 
+        que se individualiza, por el periodo {{ $requestReplacementStaff->technicalEvaluation->applicants->where('selected', 1)->where('desist', NULL)->first()->start_date->format('d-m-Y') }} - 
+        {{ $requestReplacementStaff->technicalEvaluation->applicants->where('selected', 1)->where('desist', NULL)->first()->end_date->format('d-m-Y') }} 
+        señalado en la presente solicitud y resolución, con cargo al subtítulo {{ $requestReplacementStaff->budgetItem->code }} - {{ $requestReplacementStaff->budgetItem->name }}.
+    </div>
+    --}}
 
     <div style="text-align: justify;" class="ocho">
         De conformidad a lo dispuesto en el Artículo 11 de Ley 21.516 del Ministerio de Hacienda, que aprueba el presupuesto del Sector Público 
         para el año 2024, vengo en certificar que la Dirección del Servicio de Salud Tarapacá, cuenta con presupuesto para la contratación del funcionario (a) 
-        {{ $requestReplacementStaff->technicalEvaluation->applicants->where('selected', 1)->where('desist', NULL)->first()->replacementStaff->FullName }} - 
-        RUT {{ $requestReplacementStaff->technicalEvaluation->applicants->where('selected', 1)->where('desist', NULL)->first()->replacementStaff->run }}-{{ $requestReplacementStaff->technicalEvaluation->applicants->where('selected', 1)->where('desist', NULL)->first()->replacementStaff->dv }} 
-        que se individualiza, por el periodo {{ $requestReplacementStaff->technicalEvaluation->applicants->where('selected', 1)->where('desist', NULL)->first()->start_date->format('d-m-Y') }} - 
-        {{ $requestReplacementStaff->technicalEvaluation->applicants->where('selected', 1)->where('desist', NULL)->first()->end_date->format('d-m-Y') }} 
+        {{ $requestReplacementStaff->technicalEvaluation->applicants->where('selected', 1)->first()->replacementStaff->fullName }} - 
+        RUT {{ $requestReplacementStaff->technicalEvaluation->applicants->where('selected', 1)->first()->replacementStaff->run }}-{{ $requestReplacementStaff->technicalEvaluation->applicants->where('selected', 1)->first()->replacementStaff->dv }} 
+        que se individualiza, por el periodo {{ $requestReplacementStaff->technicalEvaluation->applicants->where('selected', 1)->first()->start_date->format('d-m-Y') }} - 
+        {{ $requestReplacementStaff->technicalEvaluation->applicants->where('selected', 1)->first()->end_date->format('d-m-Y') }} 
         señalado en la presente solicitud y resolución, con cargo al subtítulo {{ $requestReplacementStaff->budgetItem->code }} - {{ $requestReplacementStaff->budgetItem->name }}.
     </div>
 
@@ -64,15 +76,15 @@
         <div class="signature" style="padding-left: 32px;">
             @if($approvals = $requestReplacementStaff->approvals->where('position', 'left'))
                 @foreach($approvals->where('subject', 'Solicitud de Aprobación Jefatura Depto. o Unidad') as $approval)
-                    {{ $approval->approver->getInitialsAttribute() }} -
+                    {{ $approval->approver->initials }} -
                 @endforeach
 
                 @foreach($requestReplacementStaff->requestSign as $sign)
-                    {{ $sign->user->getInitialsAttribute() }} -
+                    {{ $sign->user->initials }} -
                 @endforeach
 
                 @foreach($approvals->where('subject', '!=','Solicitud de Aprobación Jefatura Depto. o Unidad') as $approval)
-                    {{ $approval->approver->getInitialsAttribute() }} {{ ($approval->subject != 'Solicitud de Aprobación SDGP') ? '-' : '' }}
+                    {{ $approval->approver->initials }} {{ ($approval->subject != 'Solicitud de Aprobación SDGP') ? '-' : '' }}
                 @endforeach
             @endif
         </div>

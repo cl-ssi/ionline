@@ -36,7 +36,9 @@ class UserController extends Controller
                 'organizationalUnit',
                 'permissions',
                 'roles',
-            ])->orderBy('name', 'Asc')->paginate(100);
+            ])
+            ->orderBy('full_name', 'asc')
+            ->paginate(100);
 
         $permissions = Permission::orderBy('name')->pluck('name');
         $roles = Role::orderBy('name')->pluck('name');
@@ -324,7 +326,6 @@ class UserController extends Controller
             auth()->user()->accessLogs()->create([
                 'type' => 'switch',
                 'switch_id' => session()->get('god'),
-                'enviroment' => env('OLD_SERVER') ? 'Servidor':'Cloud Run'
             ]);
         }
 

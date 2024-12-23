@@ -146,13 +146,13 @@ class Calendar extends Component
                     if(auth()->user()->hasPermissionTo('HotelBooking: Administrador')){
 
                         if($this->data[$day->format('Y-m-d')]['user']!=null){
-                            $user = $this->data[$day->format('Y-m-d')]['user'] . "\n Ingresa: " . $roomBooking->user->getTinnyNameAttribute();
+                            $user = $this->data[$day->format('Y-m-d')]['user'] . "\n Ingresa: " . $roomBooking->user->tinyName;
                         }else{
                             if($day->format('Y-m-d') == $roomBooking->start_date->format('Y-m-d')){
-                                $user = "Ingresa: " . $roomBooking->user->getTinnyNameAttribute();
+                                $user = "Ingresa: " . $roomBooking->user->tinyName;
                             }  
                             else{
-                                $user = "Sale: " . $roomBooking->user->getTinnyNameAttribute();
+                                $user = "Sale: " . $roomBooking->user->tinyName;
                             }  
                         }
 

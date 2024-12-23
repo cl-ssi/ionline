@@ -42,7 +42,7 @@
                         <th>Ley</th>
                     </tr>
                     <tr>
-                        <td>{{ $allowance->userAllowance->FullName }}</td>
+                        <td>{{ $allowance->userAllowance->fullName }}</td>
                         <td>{{ $allowance->userAllowance->id }}-{{ $allowance->userAllowance->dv }}</td>
                         <td>{{ $allowance->contractualCondition->name }}</td>
                         <td>{{ $allowance->LawValue }}</td>
@@ -223,7 +223,7 @@
                             @if(count($allowance->approvals) > 0)
                                 @foreach($allowance->approvals as $approval)
                                     <td class="table-active text-center">
-                                        <strong>{{ ($approval->sentToOu) ? $approval->sentToOu->name : $approval->sentToUser->FullName }}</strong><br>
+                                        <strong>{{ ($approval->sentToOu) ? $approval->sentToOu->name : $approval->sentToUser->fullName }}</strong><br>
                                     </td>
                                 @endforeach
                             @endif
@@ -234,7 +234,7 @@
                                 {{--
                                 @if($subrogants && $allowanceSign->status == 'pending')
                                     <div class="alert alert-info" role="alert">
-                                        <b>Estimado Usuario</b>: Según el calendario de autoridades <b>{{ $allowance->userAllowance->TinnyName }}</b> es director(a) {{ $allowance->userAllowance->organizationalUnit->establishment->name }}
+                                        <b>Estimado Usuario</b>: Según el calendario de autoridades <b>{{ $allowance->userAllowance->tinyName }}</b> es director(a) {{ $allowance->userAllowance->organizationalUnit->establishment->name }}
                                     </div>
                                 @endif
                                 
@@ -252,7 +252,7 @@
                                                 <select name="approver" id="for_approver" class="form-control" required>
                                                     <option value="">Seleccione...</option>                                           
                                                     @foreach($subrogants as $subrogant)
-                                                        <option value="{{ $subrogant->subrogant_id}}">{{ $subrogant->subrogant->FullName }}</option>
+                                                        <option value="{{ $subrogant->subrogant_id}}">{{ $subrogant->subrogant->fullName }}</option>
                                                     @endforeach
                                                 </select>
                                             </fieldset>
@@ -301,7 +301,7 @@
                                     auth()->user()->organizationalUnit->establishment_id == App\Models\Parameters\Parameter::get('establishment', 'SSTarapaca'))
                                     @if($subrogants && $allowanceSign->status == 'pending')
                                         <div class="alert alert-info" role="alert">
-                                            <b>Estimado Usuario</b>: Según el calendario de autoridades <b>{{ $allowance->userAllowance->TinnyName }}</b> es director(a) {{ $allowance->userAllowance->organizationalUnit->establishment->name }}
+                                            <b>Estimado Usuario</b>: Según el calendario de autoridades <b>{{ $allowance->userAllowance->tinyName }}</b> es director(a) {{ $allowance->userAllowance->organizationalUnit->establishment->name }}
                                         </div>
                                     @endif
                                     
@@ -316,7 +316,7 @@
                                                 <select name="approver" id="for_approver" class="form-control" required>
                                                     <option value="">Seleccione...</option>                                           
                                                     @foreach($subrogants as $subrogant)
-                                                        <option value="{{ $subrogant->subrogant_id}}">{{ $subrogant->subrogant->FullName }}</option>
+                                                        <option value="{{ $subrogant->subrogant_id}}">{{ $subrogant->subrogant->fullName }}</option>
                                                     @endforeach
                                                 </select>
                                             </fieldset>
@@ -450,14 +450,14 @@
                                     <span style="color: green;">
                                         <i class="fas fa-check-circle"></i> {{ $allowanceSign->StatusValue }}
                                     </span> <br>
-                                    <i class="fas fa-user"></i> {{ $allowanceSign->user->FullName }}<br>
+                                    <i class="fas fa-user"></i> {{ $allowanceSign->user->fullName }}<br>
                                     <i class="fas fa-calendar-alt"></i> {{ $allowanceSign->date_sign->format('d-m-Y H:i:s') }}<br>
                                 @endif
                                 @if($allowanceSign->status == 'rejected')
                                     <span style="color: Tomato;">
                                         <i class="fas fa-times-circle"></i> {{ $allowanceSign->StatusValue }} 
                                     </span><br>
-                                    <i class="fas fa-user"></i> {{ $allowanceSign->user->FullName }}<br>
+                                    <i class="fas fa-user"></i> {{ $allowanceSign->user->fullName }}<br>
                                     <i class="fas fa-calendar-alt"></i> {{ $allowanceSign->date_sign->format('d-m-Y H:i:s') }}<br>
                                     <hr>
                                     {{ $allowanceSign->observation }}<br>
@@ -480,14 +480,14 @@
                                             <span style="color: green;">
                                                 <i class="fas fa-check-circle"></i> {{ $approval->StatusInWords }}
                                             </span> <br>
-                                            <i class="fas fa-user"></i> {{ $approval->approver->FullName }}<br>
+                                            <i class="fas fa-user"></i> {{ $approval->approver->fullName }}<br>
                                             <i class="fas fa-calendar-alt"></i> {{ $approval->approver_at->format('d-m-Y H:i:s') }}<br>
                                         @endif
                                         @if($approval->StatusInWords == "Rechazado")
                                             <span style="color: tomato;">
                                                 <i class="fas fa-check-circle"></i> {{ $approval->StatusInWords }}
                                             </span> <br>
-                                            <i class="fas fa-user"></i> {{ $approval->approver->FullName }}<br>
+                                            <i class="fas fa-user"></i> {{ $approval->approver->fullName }}<br>
                                             <i class="fas fa-calendar-alt"></i> {{ $approval->approver_at->format('d-m-Y H:i:s') }}
                                             <hr>
                                             {{ $approval->approver_observation }}

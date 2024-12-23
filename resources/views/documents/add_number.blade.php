@@ -33,7 +33,7 @@
         </div>
         <div class="col">
             <p> <strong>Tipo:</strong> {{ optional($document->type)->name }}<br>
-            <strong>Propietario:</strong> {{ $document->user->FullName }} </p>
+            <strong>Propietario:</strong> {{ $document->user->fullName }} </p>
         </div>
     </div>
     <div class="form-row">

@@ -363,35 +363,6 @@ class RequestForm extends Model implements Auditable
         return $this->hasOne(Cdp::class);
     }
 
-    /**
-     * Get the treasury model.
-     */
-    public function treasury(): MorphOne
-    {
-        return $this->morphOne(Treasury::class, 'treasureable');
-    }
-
-    protected function treasuryId(): Attribute
-    {
-        return Attribute::make(
-            get: fn () => $this->id,
-        );
-    }
-
-    protected function treasurySubject(): Attribute
-    {
-        return Attribute::make(
-            get: fn () => $this->type_form,
-        );
-    }
-
-    protected function modelName(): Attribute
-    {
-        return Attribute::make(
-            get: fn () => 'Formulario de Requerimiento',
-        );
-    }
-
 
     // FIXME: corregir este código
     public function isBlocked()
@@ -490,7 +461,7 @@ class RequestForm extends Model implements Auditable
 
     public function isPurchaseInProcess()
     {
-        return $this->purchasingProcess == null || ($this->purchasingProcess && $this->purchasingProcess->status->value == 'in_process');
+        return $this->purchasingProcess == null || ($this->purchasingProcess && in_array($this->purchasingProcess->status->value, ['in_process', 'canceled']));
     }
 
     public function getSubtypeValueAttribute()
@@ -597,7 +568,7 @@ class RequestForm extends Model implements Auditable
     {
         $event = $this->eventRequestForms()->where('status', 'rejected')->where('event_type', '!=', 'budget_event')->first();
         if (!is_null($event))
-            return $event->signerUser->tinnyName;
+            return $event->signerUser->tinyName;
     }
 
     public function rejectedComment()
@@ -628,7 +599,7 @@ class RequestForm extends Model implements Auditable
     {
         $event = $this->eventRequestForms()->where('status', $status)->where('event_type', $event_type)->first();
         if (!is_null($event)) {
-            return $event->signerUser->tinnyName;
+            return $event->signerUser->tinyName;
         }
     }
 
@@ -999,9 +970,12 @@ class RequestForm extends Model implements Auditable
 
     public function canEdit()
     {
-        $hasBudgetEvents = $this->eventRequestForms->where('event_type', 'budget_event')->count() > 0;
+        $hasBudgetEvents = $this->eventRequestForms
+            ->whereIn('event_type', ['budget_event', 'pre_budget_event', 'pre_finance_budget_event']);
 
-        return in_array($this->status->value, ['saved', 'pending', 'rejected']) || ($this->status->value == 'approved' && !$this->purchasingProcess && !$hasBudgetEvents);
+        return in_array($this->status->value, ['saved', 'pending', 'rejected']) || 
+            ($this->status->value == 'approved' && (!$this->purchasingProcess || $this->purchasingProcess->status->value == 'canceled'))  || 
+                $hasBudgetEvents->last()?->status == 'rejected';
     }
 
     public function canDelete()

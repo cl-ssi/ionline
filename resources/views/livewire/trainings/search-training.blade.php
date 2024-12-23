@@ -45,7 +45,7 @@
                     </td>
                     <td width="7%">{{ $training->created_at->format('d-m-Y H:i:s') }}</td>
                     <td width="29%">
-                        {{ $training->userTraining->FullName }} <br><br>
+                        {{ $training->userTraining->fullName }} <br><br>
                         <small><b>{{ ($training->userTrainingOu) ? $training->userTrainingOu->name : 'Funcionario Externo'}}</b></small> <br>
                         <small><b>{{ ($training->userTrainingEstablishment) ? $training->userTrainingEstablishment->name : '' }}</b></small>
                     </td>

@@ -1,10 +1,10 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
-class CreateAgrAgreementsTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -21,16 +21,16 @@ class CreateAgrAgreementsTable extends Migration
             $table->string('file')->nullable();
             $table->string('fileAgreeEnd')->nullable();
             $table->string('fileResEnd')->nullable();
-            $table->foreignId('program_id')->constrained('agr_programs');
+            $table->foreignId('program_id')->nullable()->cosntrained('agr_programs');
             $table->foreignId('commune_id')->constrained('communes');
-            $table->foreignId('authority_id')->nullable()->constrained('rrhh_authorities');
+
             $table->smallInteger('quotas');
             $table->integer('total_amount')->nullable();
             $table->string('referente')->nullable();
             $table->foreignId('referrer_id')->nullable()->cosntrained('users');
             $table->foreignId('referrer2_id')->nullable()->constrained('users');
             $table->foreignId('director_signer_id')->nullable()->constrained('agr_signers');
-            
+
             // MUNICIPALIDAD
             $table->string('representative')->nullable();
             $table->string('representative_rut')->nullable();
@@ -40,15 +40,15 @@ class CreateAgrAgreementsTable extends Migration
             $table->string('municipality_rut')->nullable();
 
             // RESOLUCIÓN
-            $table->integer('number')->nullable();// NÚMERO RESOLUCIÓN DEL CONVENIO
+            $table->integer('number')->nullable(); // NÚMERO RESOLUCIÓN DEL CONVENIO
             $table->date('resolution_date')->nullable();
 
             // RESOLUCIÓN EXCENTA
-            $table->integer('res_exempt_number')->nullable();// NÚMERO RESOLUCIÓN EXCENTA
+            $table->integer('res_exempt_number')->nullable(); // NÚMERO RESOLUCIÓN EXCENTA
             $table->date('res_exempt_date')->nullable();
 
             // RESOLUCIÓN DISTRIBUYE RECURSOS
-            $table->integer('res_resource_number')->nullable();// NÚMERO RESOLUCIÓN DISTRIBUYE RECURSOS
+            $table->integer('res_resource_number')->nullable(); // NÚMERO RESOLUCIÓN DISTRIBUYE RECURSOS
             $table->date('res_resource_date')->nullable();
 
             // CONVENIOS ESTABLECIMIENTOS
@@ -72,4 +72,4 @@ class CreateAgrAgreementsTable extends Migration
     {
         Schema::dropIfExists('agr_agreements');
     }
-}
+};

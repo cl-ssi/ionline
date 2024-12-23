@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateIndHealthGoalsTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -18,7 +18,7 @@ class CreateIndHealthGoalsTable extends Migration
             $table->string('law')->nullable();
             $table->string('name');
             $table->integer('year');
-            $table->enum('status',['development', 'review', 'verified'])->default('development');
+            $table->enum('status', ['development', 'review', 'verified'])->default('development');
             $table->tinyInteger('number');
             $table->timestamps();
             $table->softDeletes();
@@ -34,4 +34,4 @@ class CreateIndHealthGoalsTable extends Migration
     {
         Schema::dropIfExists('ind_health_goals');
     }
-}
+};

@@ -113,12 +113,12 @@ class ApplicantController extends Controller
 
             return redirect()
               ->to(route('replacement_staff.request.technical_evaluation.show', $applicant->technicalEvaluation->requestReplacementStaff).'#applicant')
-              ->with('message-success-sirh-contract', 'Fecha de contrato correctamente ingresada para: '.$applicant->replacementStaff->FullName);
+              ->with('message-success-sirh-contract', 'Fecha de contrato correctamente ingresada para: '.$applicant->replacementStaff->fullName);
         }
         else{
             return redirect()
               ->to(route('replacement_staff.request.technical_evaluation.edit', $applicant->technicalEvaluation->requestReplacementStaff).'#applicant')
-              ->with('message-success-evaluate-applicants', 'Calificación ingresada para: '.$applicant->replacementStaff->FullName);
+              ->with('message-success-evaluate-applicants', 'Calificación ingresada para: '.$applicant->replacementStaff->fullName);
         }
     }
 
@@ -174,7 +174,7 @@ class ApplicantController extends Controller
                 "subject"                           => 'Certificado de disponibilidad presupuestaria<br><br>
                                                         ID: '. $applicant_evaluated->technicalEvaluation->requestReplacementStaff->id.'<br><br>'.
                                                         '<small><b>Periodo</b>: '. $applicant_evaluated->start_date->format('d-m-Y').' - '.$applicant_evaluated->end_date->format('d-m-Y').'<br>'.
-                                                        '<b>Funcionario</b>: '. $applicant_evaluated->replacementStaff->FullName.'<br>'.
+                                                        '<b>Funcionario</b>: '. $applicant_evaluated->replacementStaff->fullName.'<br>'.
                                                         '<b> Codigo Item Presupuestario </b> - Nombre Item Presupuestario </small>',
                 "sent_to_ou_id"                     => Parameter::get('ou','FinanzasSSI'),
                 "document_route_name"               => "replacement_staff.request.create_budget_availability_certificate_approval_view",
@@ -197,7 +197,7 @@ class ApplicantController extends Controller
                 "subject"                           => 'Certificado de disponibilidad presupuestaria<br><br>
                                                             ID: '. $applicant_evaluated->technicalEvaluation->requestReplacementStaff->id.'<br><br>'.
                                                             '<small><b>Periodo</b>: '. $applicant_evaluated->start_date->format('d-m-Y').' - '.$applicant_evaluated->end_date->format('d-m-Y').'<br>'.
-                                                            '<b>Funcionario</b>: '. $applicant_evaluated->replacementStaff->FullName.'<br>'.
+                                                            '<b>Funcionario</b>: '. $applicant_evaluated->replacementStaff->fullName.'<br>'.
                                                             '<b>'.$applicant_evaluated->technicalEvaluation->requestReplacementStaff->budgetItem->code.'</b> - '.$applicant_evaluated->technicalEvaluation->requestReplacementStaff->budgetItem->name.'</small>',
                 "sent_to_ou_id"                     => ($applicant_evaluated->technicalEvaluation->requestReplacementStaff->establishment_id == Parameter::get('establishment','SSTarapaca')) ? Parameter::get('ou','FinanzasSSI') : (($applicant_evaluated->technicalEvaluation->requestReplacementStaff->establishment_id == Parameter::get('establishment','HospitalAltoHospicio')) ? Parameter::get('ou','FinanzasHAH') : ''),
                 "document_route_name"               => "replacement_staff.request.show_new_budget_availability_certificate_pdf",

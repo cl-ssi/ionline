@@ -16,7 +16,7 @@
                   <div class="form-row">
                       <fieldset class="form-group col">
                           <label for="for_replacement_staff_id">Nombre de Postulante</label>
-                          <input type="text" class="form-control" name="replacement_staff_id" id="for_replacement_staff_id" value="{{ $staff->FullName }}" readonly>
+                          <input type="text" class="form-control" name="replacement_staff_id" id="for_replacement_staff_id" value="{{ $staff->fullName }}" readonly>
                       </fieldset>
                   </div>
 

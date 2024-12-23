@@ -69,7 +69,7 @@
                     </td>
                     <td>
                         @if($movement->reception_date == null)
-                            {{ optional($movement->responsibleUser)->tinny_name }}
+                            {{ optional($movement->responsibleUser)->tinyName }}
                         @endif
                     </td>                    
                     <td class="text-center" nowrap>

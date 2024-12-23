@@ -5,7 +5,7 @@ namespace App\Filament\Clusters\Rrhh\Resources;
 use App\Filament\Clusters\Rrhh;
 use App\Filament\Clusters\Rrhh\Resources\OvertimeRefundResource\Pages;
 use App\Filament\Exports\Rrhh\OvertimeRefundExporter;
-use App\Models\Rrhh\Attendance;
+use App\Models\Rrhh\MonthlyAttendance;
 use App\Models\Rrhh\OvertimeRefund;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Filament\Forms;
@@ -32,6 +32,8 @@ class OvertimeRefundResource extends Resource
 
     protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
 
+    protected static ?int $navigationSort = 5;
+
     public static function form(Form $form): Form
     {
         return $form
@@ -52,7 +54,7 @@ class OvertimeRefundResource extends Resource
                             ->hiddenLabel()
                             ->live()
                             ->required()
-                            ->options(fn () => Attendance::where('user_id', auth()->id())
+                            ->options(fn () => MonthlyAttendance::where('user_id', auth()->id())
                                 ->orderBy('date', 'desc')
                                 ->pluck('date', 'date')
                                 ->map(fn ($date) => $date->format('Y-m'))
@@ -67,7 +69,7 @@ class OvertimeRefundResource extends Resource
                         Forms\Components\Actions::make([
                             Forms\Components\Actions\Action::make('Buscar')
                                 ->action(function (Get $get, Set $set) {
-                                    $attendance = Attendance::where('user_id', auth()->id())
+                                    $attendance = MonthlyAttendance::where('user_id', auth()->id())
                                         ->whereDate('date', $get('date'))
                                         ->first();
 
@@ -245,7 +247,7 @@ class OvertimeRefundResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('user.shortName')
                     ->label('Usuario')
-                    ->sortable()
+                    ->sortable(['full_name'])
                     ->searchable(['full_name']),
                 Tables\Columns\TextColumn::make('date')
                     ->label('Fecha')
@@ -266,6 +268,7 @@ class OvertimeRefundResource extends Resource
                     ->stacked(),
                 Tables\Columns\TextColumn::make('status')
                     ->label('Estado')
+                    // ->description(fn (OvertimeRefund $record): string => $record->lastApproval->approver_observation ?? '')
                     ->sortable()
                     ->searchable(),
                 Tables\Columns\TextColumn::make('total_hours_day')
@@ -336,7 +339,9 @@ class OvertimeRefundResource extends Resource
                         ->exporter(OvertimeRefundExporter::class)
                         ->columnMapping(false)
                 ]),
-            ]);
+            ])
+            ->defaultSort('id', 'desc')
+            ->paginationPageOptions([5,10,25,50]);
     }
 
     public static function getRelations(): array

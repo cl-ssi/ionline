@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddTypeToRemFilesTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -15,10 +15,10 @@ class AddTypeToRemFilesTable extends Migration
     {
         Schema::table('rem_files', function (Blueprint $table) {
             $table->string('type')
-            ->nullable()
-            ->after('rem_period_series_id');
-    });
-        
+                ->nullable()
+                ->after('rem_period_series_id');
+        });
+
     }
 
     /**
@@ -33,4 +33,4 @@ class AddTypeToRemFilesTable extends Migration
             $table->dropColumn('type');
         });
     }
-}
+};

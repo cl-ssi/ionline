@@ -89,12 +89,12 @@
                         <td class="text-center">
                             @if($inventory->lastMovement)
                                 @if($inventory->lastMovement->reception_date == null)
-                                    {{ optional($inventory->lastMovement->responsibleUser)->tinny_name }}
+                                    {{ optional($inventory->lastMovement->responsibleUser)->tinyName }}
                                     <span class="text-danger">
                                         Pendiente
                                     </span>
                                 @else
-                                    {{ optional($inventory->responsible)->tinny_name }}
+                                    {{ optional($inventory->responsible)->tinyName }}
                                 @endif
                             @endif
                         </td>

@@ -256,7 +256,7 @@
                 <th>Monto Total</th>
                 </tr>
                 <tr>
-                <td style="text-align:center">{{$ServiceRequest->employee->getFullNameAttribute()}}</td>
+                <td style="text-align:center">{{$ServiceRequest->employee->fullName}}</td>
                 <td style="text-align:center">{{$ServiceRequest->employee->runFormat()}}</td>
                 <td style="text-align:center">{{$ServiceRequest->profession->name}} - {{$ServiceRequest->working_day_type}}</td>
                 <!-- <td style="text-align:center">{{$ServiceRequest->weekly_hours}}</td> -->
@@ -277,16 +277,16 @@
 
             <p class="justify">
                 En Iquique, a {{$inputs['Fecha']}}, comparece por una parte el <b>HOSPITAL ERNESTO TORRES GALDAMES</b>, persona jurídica de derecho público, RUT. 62.000.530-4 , con domicilio en calle Av. Héroes de la Concepción N°502 de la ciudad de Iquique, representado por su {{App\Models\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->position}} 
-                <b>{{App\Models\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->user->FullNameUpper}}</b>, 
+                <b>{{App\Models\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->user->fullNameUpper}}</b>, 
                 chileno, Cédula Nacional de Identidad N°{{App\Models\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->user->runFormat()}}, del mismo domicilio del servicio público que representa, en 
-                adelante , "El Director del Hospital Ernesto Torres Galdames", y por la otra don <b>{{$ServiceRequest->employee->getFullNameAttribute()}}</b>@if($ServiceRequest->profession), {{$ServiceRequest->profession->name}}@endif, RUT:{{$ServiceRequest->employee->id}}-{{$ServiceRequest->employee->dv}}, chileno, 
+                adelante , "El Director del Hospital Ernesto Torres Galdames", y por la otra don <b>{{$ServiceRequest->employee->fullName}}</b>@if($ServiceRequest->profession), {{$ServiceRequest->profession->name}}@endif, RUT:{{$ServiceRequest->employee->id}}-{{$ServiceRequest->employee->dv}}, chileno, 
                 con domicilio en {{$ServiceRequest->address}}, Iquique, de la ciudad de Iquique, en adelante “El Profesional” y exponen lo siguiente:
             </p>
 
 
             <p class="justify">
                 <strong>PRIMERO:</strong>
-                Don {{App\Models\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->user->FullNameUpper}}, en su calidad de {{App\Models\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->position}} del Hospital Ernesto Torres Galdames, contrata los servicios a honorarios a suma alzada de {{$ServiceRequest->employee->getFullNameAttribute()}}, {{$ServiceRequest->profession->name}}, apoyo a {{$ServiceRequest->responsabilityCenter->name}} del Hospital Ernesto Torres Galdames, al fin de cubrir la recarga de las tareas provocadas por la pandemia de COVID-19 y estado de alerta sanitaria
+                Don {{App\Models\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->user->fullNameUpper}}, en su calidad de {{App\Models\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->position}} del Hospital Ernesto Torres Galdames, contrata los servicios a honorarios a suma alzada de {{$ServiceRequest->employee->fullName}}, {{$ServiceRequest->profession->name}}, apoyo a {{$ServiceRequest->responsabilityCenter->name}} del Hospital Ernesto Torres Galdames, al fin de cubrir la recarga de las tareas provocadas por la pandemia de COVID-19 y estado de alerta sanitaria
             </p>
 
             <p class="justify">
@@ -433,7 +433,7 @@
             @endif
 
             Para constancia firman: <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-            {{$ServiceRequest->employee->getFullNameAttribute()}}
+            {{$ServiceRequest->employee->fullName}}
             <br><br>
 
             <p class="">
@@ -480,7 +480,7 @@
                     @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
                         <strong>
                         <span class="uppercase">
-                            {{App\Models\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->user->FullNameUpper}}
+                            {{App\Models\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->user->fullNameUpper}}
                         </span>
                         <br>
                         <span style="text-transform:uppercase">{{App\Models\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->position}}</span>

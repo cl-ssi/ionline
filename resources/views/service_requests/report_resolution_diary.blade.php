@@ -277,7 +277,7 @@
           <th>Monto Total</th>
         </tr>
         <tr>
-          <td style="text-align:center">{{$ServiceRequest->employee->getFullNameAttribute()}}</td>
+          <td style="text-align:center">{{$ServiceRequest->employee->fullName}}</td>
           <td style="text-align:center">{{$ServiceRequest->employee->runFormat()}}</td>
           <td style="text-align:center">{{$ServiceRequest->profession->name}} - {{$ServiceRequest->working_day_type}}</td>
           <td style="text-align:center">{{$ServiceRequest->start_date->format('d/m/Y')}}</td>
@@ -296,28 +296,28 @@
       @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
       <p class="justify">
         En Iquique, a {{$inputs['Fecha']}}, comparece por una parte el <b>HOSPITAL ERNESTO TORRES GALDAMES</b>, persona jurídica de derecho público, RUT. 62.000.530-4 , con domicilio en calle Av.héroes de la concepcion N 502 de la ciudad de {{$ServiceRequest->employee->commune->name}}, representado por su {{App\Models\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->position}}
-        <b>{{App\Models\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->user->FullNameUpper}}</b>,
+        <b>{{App\Models\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->user->fullNameUpper}}</b>,
         chileno, Cédula Nacional de Identidad N°{{App\Models\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->user->runFormat()}}, del mismo domicilio del servicio público que representa, en
-        adelante , "El Director del Hospital Ernesto Torres Galdames", y por la otra don <b>{{$ServiceRequest->employee->getFullNameAttribute()}}</b>@if($ServiceRequest->profession), {{$ServiceRequest->profession->name}}@endif, RUT:{{$ServiceRequest->employee->id}}-{{$ServiceRequest->employee->dv}}, chileno,
+        adelante , "El Director del Hospital Ernesto Torres Galdames", y por la otra don <b>{{$ServiceRequest->employee->fullName}}</b>@if($ServiceRequest->profession), {{$ServiceRequest->profession->name}}@endif, RUT:{{$ServiceRequest->employee->id}}-{{$ServiceRequest->employee->dv}}, chileno,
         con domicilio en {{$ServiceRequest->address}}, de la ciudad de {{$ServiceRequest->employee->commune->name}}, en adelante “El Profesional” y exponen lo siguiente:
       </p>
       @else
       <p class="justify">
         En Iquique, a {{$inputs['Fecha']}}, comparece por una parte el <b>SERVICIO DE SALUD TARAPACÁ</b>, persona jurídica de derecho público, RUT. 61.606.100-3, con domicilio en calle Aníbal
-        Pinto N°815 de la ciudad de {{$ServiceRequest->employee->commune->name}}, representado por su Director <b>{{App\Models\Rrhh\Authority::getAuthorityFromDate(1,now(),['manager'])->user->FullNameUpper}}</b> chileno, Cédula Nacional de Identidad N°{{App\Models\Rrhh\Authority::getAuthorityFromDate(1,now(),['manager'])->user->runFormat()}}, del mismo domicilio del servicio público que representa, en
-        adelante , "La Directora del Servicio de Salud Tarapacá", y por la otra don <b>{{$ServiceRequest->employee->getFullNameAttribute()}}</b>@if($ServiceRequest->profession), {{$ServiceRequest->profession->name}}@endif, RUT:{{$ServiceRequest->employee->id}}-{{$ServiceRequest->employee->dv}}, chileno,
+        Pinto N°815 de la ciudad de {{$ServiceRequest->employee->commune->name}}, representado por su Director <b>{{App\Models\Rrhh\Authority::getAuthorityFromDate(1,now(),['manager'])->user->fullNameUpper}}</b> chileno, Cédula Nacional de Identidad N°{{App\Models\Rrhh\Authority::getAuthorityFromDate(1,now(),['manager'])->user->runFormat()}}, del mismo domicilio del servicio público que representa, en
+        adelante , "La Directora del Servicio de Salud Tarapacá", y por la otra don <b>{{$ServiceRequest->employee->fullName}}</b>@if($ServiceRequest->profession), {{$ServiceRequest->profession->name}}@endif, RUT:{{$ServiceRequest->employee->id}}-{{$ServiceRequest->employee->dv}}, chileno,
         con domicilio en {{$ServiceRequest->address}}, de la ciudad de {{$ServiceRequest->employee->commune->name}}, en adelante “El Profesional” y exponen lo siguiente:
       </p>
 
       @endif
       @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
       <strong>PRIMERO:</strong>
-      Don {{App\Models\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->user->FullNameUpper}}, en su calidad de {{App\Models\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->position}} del Hospital Ernesto Torres Galdames, contrata los servicios a honorarios a suma alzada de {{$ServiceRequest->employee->getFullNameAttribute()}},
+      Don {{App\Models\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->user->fullNameUpper}}, en su calidad de {{App\Models\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->position}} del Hospital Ernesto Torres Galdames, contrata los servicios a honorarios a suma alzada de {{$ServiceRequest->employee->fullName}},
       @if($ServiceRequest->profession){{$ServiceRequest->profession->name}},@endif apoyo a {{$ServiceRequest->responsabilityCenter->name}} de la Dirección del Hospital Ernesto Torres Galdames.
       @else
       <p class="justify">
         <strong>PRIMERO:</strong>
-        D. {{App\Models\Rrhh\Authority::getAuthorityFromDate(1,now(),['manager'])->user->FullNameUpper}}, en su calidad de {{App\Models\Rrhh\Authority::getAuthorityFromDate(1,now(),['manager'])->user->position}} del Servicio de Salud Tarapacá, contrata los servicios a honorarios a suma alzada de {{$ServiceRequest->employee->getFullNameAttribute()}},
+        D. {{App\Models\Rrhh\Authority::getAuthorityFromDate(1,now(),['manager'])->user->fullNameUpper}}, en su calidad de {{App\Models\Rrhh\Authority::getAuthorityFromDate(1,now(),['manager'])->user->position}} del Servicio de Salud Tarapacá, contrata los servicios a honorarios a suma alzada de {{$ServiceRequest->employee->fullName}},
         @if($ServiceRequest->profession){{$ServiceRequest->profession->name}},@endif apoyo a {{$ServiceRequest->responsabilityCenter->name}} de la Dirección del Servicio Salud Tarapacá.
       </p>
       @endif
@@ -428,7 +428,7 @@
         <strong>DÉCIMO SEGUNDO:</strong> Déjese establecido que el trabajador se regirá por el procedimiento establecido en el “Manual de Procedimientos de Denuncia, Prevención y Sanación del Maltrato, Acoso Laboral y/o Sexual y Discriminación, conforme resolución vigente en el Servicio de Salud Iquique.
       </p>
 
-      Para constancia firman: <br><br> {{$ServiceRequest->employee->getFullNameAttribute()}} <br><br>
+      Para constancia firman: <br><br> {{$ServiceRequest->employee->fullName}} <br><br>
 
       <p class="">
         <strong>2.</strong> El convenio que por este acto se aprueban, se entiende que forman parte integrante de la presente Resolución.
@@ -494,7 +494,7 @@
           @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
           <strong>
             <span class="uppercase">
-              {{App\Models\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->user->FullNameUpper}}
+              {{App\Models\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->user->fullNameUpper}}
             </span>
             <br>
               <span style="text-transform:uppercase">{{App\Models\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->position}}</span>

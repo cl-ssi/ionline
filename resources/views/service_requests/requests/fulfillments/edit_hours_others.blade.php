@@ -327,7 +327,7 @@
 						<td>{{$serviceRequest->created_at}}</td>
 						<td>@if($serviceRequest->creator->organizationalUnit){{$serviceRequest->creator->organizationalUnit->name}}@endif</td>
 						<td>{{$serviceRequest->creator->position}}</td>
-						<td>{{$serviceRequest->creator->getFullNameAttribute()}}</td>
+						<td>{{$serviceRequest->creator->fullName}}</td>
 						<td>Creador</td>
 						<td>Creada</td>
 						<td></td>
@@ -346,7 +346,7 @@
 						<td>{{ $SignatureFlow->signature_date}}</td>
 						<td>{{ $SignatureFlow->organizationalUnit->name}}</td>
 						<td>{{ $SignatureFlow->employee }}</td>
-						<td>{{ $SignatureFlow->user->getFullNameAttribute() }}</td>
+						<td>{{ $SignatureFlow->user->fullName }}</td>
 						<!-- <td>{{ $SignatureFlow->type }}</td> -->
 						@if($SignatureFlow->sign_position == 1)
 						<td>Responsable</td>

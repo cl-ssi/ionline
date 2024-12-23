@@ -106,4 +106,15 @@ class TestNotification extends Notification implements ShouldQueue
             "format" => "filament",
         ];
     }
+
+    /**
+     * $user = User::find(15287582)
+     * 
+     * LARAVEL
+     * $user->notify(new TestNotification('parametro'))
+     * 
+     * FILAMENT
+     * use Filament\Notifications\Notification;
+     * Filament\Notifications\Notification::make()->title('Notificacion de filament')->sendToDatabase($user);
+     */
 }

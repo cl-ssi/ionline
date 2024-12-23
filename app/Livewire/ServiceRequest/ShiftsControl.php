@@ -18,6 +18,13 @@ class ShiftsControl extends Component
     public $observation;
     public $msg = "";
 
+    public function formatHours($minutes)
+    {
+        $hours = floor($minutes / 60); // Obtener las horas completas
+        $remainingMinutes = $minutes % 60; // Obtener los minutos restantes
+        return "{$hours} hrs y {$remainingMinutes} minutos";
+    }
+
     public function save()
     {
       $shiftControl = new ShiftControl();

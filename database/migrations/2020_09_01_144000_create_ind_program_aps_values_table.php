@@ -1,10 +1,10 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
-class CreateIndProgramApsValuesTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -40,4 +40,4 @@ class CreateIndProgramApsValuesTable extends Migration
     {
         Schema::dropIfExists('ind_program_aps_values');
     }
-}
+};

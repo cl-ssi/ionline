@@ -158,6 +158,11 @@ class User extends Authenticatable implements Auditable, FilamentUser
         return ($panelId == 'intranet' && !$this->external) || ($panelId == 'extranet' && $this->external);
     }
 
+    public function canImpersonate(): bool
+    {
+        return auth()->user()->can('dev');
+    }
+
     /**
      * Get the establishment that owns the user.
      */
@@ -395,6 +400,42 @@ class User extends Authenticatable implements Auditable, FilamentUser
         return $this->hasMany(Authority::class)
             ->where('type', 'delegate')
             ->where('date', today());
+    }
+
+        /**
+     * Organizational Units where the user is manager.
+     */
+    public function isManagerOf(): BelongsToMany
+    {
+        return $this->belongsToMany(OrganizationalUnit::class,'rrhh_authorities','user_id','organizational_unit_id')
+            ->as('authority')
+            ->withPivot('position','type','decree','representation_id')
+            ->wherePivot('type', Authority::TYPE_MANAGER)
+            ->wherePivot('date', now()->toDateString());
+    }
+
+    /**
+     * Organizational Units where the user is secretary.
+     */
+    public function isSecretaryOf(): BelongsToMany
+    {
+        return $this->belongsToMany(OrganizationalUnit::class,'rrhh_authorities','user_id','organizational_unit_id')
+            ->as('authority')
+            ->withPivot('position','type','decree','representation_id')
+            ->wherePivot('type', Authority::TYPE_SECRETARY)
+            ->wherePivot('date', now()->startOfDay());
+    }
+
+    /**
+     * Organizational Units where the user is delegate.
+     */
+    public function isDelegateOf(): BelongsToMany
+    {
+        return $this->belongsToMany(OrganizationalUnit::class,'rrhh_authorities','user_id','organizational_unit_id')
+            ->as('authority')
+            ->withPivot('position','type','decree','representation_id')
+            ->wherePivot('type', Authority::TYPE_DELEGATE)
+            ->wherePivot('date', now()->startOfDay());
     }
 
     /**
@@ -919,93 +960,107 @@ class User extends Authenticatable implements Auditable, FilamentUser
         return number_format($this->id, 0, '.', '.').'-'.$this->dv;
     }
 
-    public function getFullNameAttribute()
-    {
-        return mb_convert_case(mb_strtolower("{$this->name} {$this->fathers_family} {$this->mothers_family}"), MB_CASE_TITLE, 'UTF-8');
+    public function fullName(): Attribute {
+        return Attribute::make(
+            get: fn (): string => mb_convert_case(mb_strtolower("{$this->name} {$this->fathers_family} {$this->mothers_family}"), MB_CASE_TITLE, 'UTF-8')
+        );
     }
 
-    public function getFullNameUpperAttribute()
-    {
-        return mb_convert_case(mb_strtoupper("{$this->name} {$this->fathers_family} {$this->mothers_family}"), MB_CASE_UPPER, 'UTF-8');
+    public function fullNameUpper(): Attribute {
+        return Attribute::make(
+            get: fn (): string => mb_convert_case(mb_strtoupper("{$this->name} {$this->fathers_family} {$this->mothers_family}"), MB_CASE_UPPER, 'UTF-8')
+        );
     }
 
     /* $user->shortName (PrimerNombre Apellido1 Apellido2), para las Marías contempla sus segundo nombre */
-    public function getShortNameAttribute()
-    {
-        return implode(' ', [
-            $this->firstName,
-            mb_convert_case($this->fathers_family, MB_CASE_TITLE, 'UTF-8'),
-            mb_convert_case($this->mothers_family, MB_CASE_TITLE, 'UTF-8'),
-        ]);
+    public function shortName(): Attribute {
+        return Attribute::make(
+            get: fn (): string => implode(' ', [
+                $this->firstName,
+                mb_convert_case($this->fathers_family, MB_CASE_TITLE, 'UTF-8'),
+                mb_convert_case($this->mothers_family, MB_CASE_TITLE, 'UTF-8'),
+            ])
+        );
     }
 
     /* $user->tinyName (PrimerNombre Apellido1) */
-    public function getTinnyNameAttribute()
-    {
-        if (! is_null($this->name)) {
-            return $this->firstName.' '.mb_convert_case($this->fathers_family, MB_CASE_TITLE, 'UTF-8');
-        } else {
-            return '';
-        }
+    public function tinyName(): Attribute {
+        return Attribute::make(
+            get: fn (): string => implode(' ', [
+                $this->firstName,
+                mb_convert_case($this->fathers_family, MB_CASE_TITLE, 'UTF-8'),
+            ])
+        );
     }
 
-    public function getFirstNameAttribute()
+    /**
+     * Primer nombre, para las Marías contempla sus segundo nombre
+     */
+    protected function firstName(): Attribute
     {
-        $names     = explode(' ', trim(mb_convert_case($this->name, MB_CASE_TITLE, 'UTF-8')));
-        $cantNames = count($names);
-        if ($cantNames >= 2 and ($names[0] == 'María' or $names[0] == 'Maria')) {
-            if ($cantNames >= 3 and ($names[1] == 'De' or $names[1] == 'Del')) {
-                if ($cantNames >= 4 and ($names[2] == 'Los' or $names[2] == 'Las')) {
-                    $firstName = $names[0].' '.$names[1].' '.$names[2].' '.$names[3];
-                } else {
-                    $firstName = $names[0].' '.$names[1].' '.$names[2];
+        return Attribute::make(
+            get: function () {
+                if ( $this->name === null) {
+                    return '';
                 }
-            } elseif ($cantNames >= 2) {
-                $firstName = $names[0].' '.$names[1];
+
+                $names = explode(' ', trim(mb_convert_case($this->name, MB_CASE_TITLE, 'UTF-8')));
+                $cantNames = count($names);
+        
+                if ($cantNames >= 2 && in_array($names[0], ['María', 'Maria'])) {
+                    if ($cantNames >= 3 && in_array($names[1], ['De', 'Del'])) {
+                        if ($cantNames >= 4 && in_array($names[2], ['Los', 'Las'])) {
+                            return "{$names[0]} {$names[1]} {$names[2]} {$names[3]}";
+                        }
+                        return "{$names[0]} {$names[1]} {$names[2]}";
+                    }
+                    return "{$names[0]} {$names[1]}";
+                }
+        
+                return $names[0];
             }
-        } else {
-            $firstName = $names[0];
-        }
-
-        return $firstName;
+        );
     }
 
-    public function getInitialsAttribute()
+    protected function initials(): Attribute
     {
-        $a       = ['À', 'Á', 'Â', 'Ã', 'Ä', 'Å', 'Æ', 'Ç', 'È', 'É', 'Ê', 'Ë', 'Ì', 'Í', 'Î', 'Ï', 'Ð', 'Ñ', 'Ò', 'Ó', 'Ô', 'Õ', 'Ö', 'Ø', 'Ù', 'Ú', 'Û', 'Ü', 'Ý', 'ß', 'à', 'á', 'â', 'ã', 'ä', 'å', 'æ', 'ç', 'è', 'é', 'ê', 'ë', 'ì', 'í', 'î', 'ï', 'ñ', 'ò', 'ó', 'ô', 'õ', 'ö', 'ø', 'ù', 'ú', 'û', 'ü', 'ý', 'ÿ', 'Ā', 'ā', 'Ă', 'ă', 'Ą', 'ą', 'Ć', 'ć', 'Ĉ', 'ĉ', 'Ċ', 'ċ', 'Č', 'č', 'Ď', 'ď', 'Đ', 'đ', 'Ē', 'ē', 'Ĕ', 'ĕ', 'Ė', 'ė', 'Ę', 'ę', 'Ě', 'ě', 'Ĝ', 'ĝ', 'Ğ', 'ğ', 'Ġ', 'ġ', 'Ģ', 'ģ', 'Ĥ', 'ĥ', 'Ħ', 'ħ', 'Ĩ', 'ĩ', 'Ī', 'ī', 'Ĭ', 'ĭ', 'Į', 'į', 'İ', 'ı', 'Ĳ', 'ĳ', 'Ĵ', 'ĵ', 'Ķ', 'ķ', 'Ĺ', 'ĺ', 'Ļ', 'ļ', 'Ľ', 'ľ', 'Ŀ', 'ŀ', 'Ł', 'ł', 'Ń', 'ń', 'Ņ', 'ņ', 'Ň', 'ň', 'ŉ', 'Ō', 'ō', 'Ŏ', 'ŏ', 'Ő', 'ő', 'Œ', 'œ', 'Ŕ', 'ŕ', 'Ŗ', 'ŗ', 'Ř', 'ř', 'Ś', 'ś', 'Ŝ', 'ŝ', 'Ş', 'ş', 'Š', 'š', 'Ţ', 'ţ', 'Ť', 'ť', 'Ŧ', 'ŧ', 'Ũ', 'ũ', 'Ū', 'ū', 'Ŭ', 'ŭ', 'Ů', 'ů', 'Ű', 'ű', 'Ų', 'ų', 'Ŵ', 'ŵ', 'Ŷ', 'ŷ', 'Ÿ', 'Ź', 'ź', 'Ż', 'ż', 'Ž', 'ž', 'ſ', 'ƒ', 'Ơ', 'ơ', 'Ư', 'ư', 'Ǎ', 'ǎ', 'Ǐ', 'ǐ', 'Ǒ', 'ǒ', 'Ǔ', 'ǔ', 'Ǖ', 'ǖ', 'Ǘ', 'ǘ', 'Ǚ', 'ǚ', 'Ǜ', 'ǜ', 'Ǻ', 'ǻ', 'Ǽ', 'ǽ', 'Ǿ', 'ǿ'];
-        $b       = ['A', 'A', 'A', 'A', 'A', 'A', 'AE', 'C', 'E', 'E', 'E', 'E', 'I', 'I', 'I', 'I', 'D', 'N', 'O', 'O', 'O', 'O', 'O', 'O', 'U', 'U', 'U', 'U', 'Y', 's', 'a', 'a', 'a', 'a', 'a', 'a', 'ae', 'c', 'e', 'e', 'e', 'e', 'i', 'i', 'i', 'i', 'n', 'o', 'o', 'o', 'o', 'o', 'o', 'u', 'u', 'u', 'u', 'y', 'y', 'A', 'a', 'A', 'a', 'A', 'a', 'C', 'c', 'C', 'c', 'C', 'c', 'C', 'c', 'D', 'd', 'D', 'd', 'E', 'e', 'E', 'e', 'E', 'e', 'E', 'e', 'E', 'e', 'G', 'g', 'G', 'g', 'G', 'g', 'G', 'g', 'H', 'h', 'H', 'h', 'I', 'i', 'I', 'i', 'I', 'i', 'I', 'i', 'I', 'i', 'IJ', 'ij', 'J', 'j', 'K', 'k', 'L', 'l', 'L', 'l', 'L', 'l', 'L', 'l', 'l', 'l', 'N', 'n', 'N', 'n', 'N', 'n', 'n', 'O', 'o', 'O', 'o', 'O', 'o', 'OE', 'oe', 'R', 'r', 'R', 'r', 'R', 'r', 'S', 's', 'S', 's', 'S', 's', 'S', 's', 'T', 't', 'T', 't', 'T', 't', 'U', 'u', 'U', 'u', 'U', 'u', 'U', 'u', 'U', 'u', 'U', 'u', 'W', 'w', 'Y', 'y', 'Y', 'Z', 'z', 'Z', 'z', 'Z', 'z', 's', 'f', 'O', 'o', 'U', 'u', 'A', 'a', 'I', 'i', 'O', 'o', 'U', 'u', 'U', 'u', 'U', 'u', 'U', 'u', 'U', 'u', 'A', 'a', 'AE', 'ae', 'O', 'o'];
-        $name    = str_replace($a, $b, $this->name);
-        $fathers = str_replace($a, $b, $this->fathers_family);
-        $mothers = str_replace($a, $b, $this->mothers_family);
+        return Attribute::make(
+            get: function () {
+                $a = ['À', 'Á', 'Â', 'Ã', 'Ä', 'Å', 'Æ', 'Ç', 'È', 'É', 'Ê', 'Ë', 'Ì', 'Í', 'Î', 'Ï', 'Ð', 'Ñ', 'Ò', 'Ó', 'Ô', 'Õ', 'Ö', 'Ø', 'Ù', 'Ú', 'Û', 'Ü', 'Ý', 'ß', 'à', 'á', 'â', 'ã', 'ä', 'å', 'æ', 'ç', 'è', 'é', 'ê', 'ë', 'ì', 'í', 'î', 'ï', 'ñ', 'ò', 'ó', 'ô', 'õ', 'ö', 'ø', 'ù', 'ú', 'û', 'ü', 'ý', 'ÿ', 'Ā', 'ā', 'Ă', 'ă', 'Ą', 'ą', 'Ć', 'ć', 'Ĉ', 'ĉ', 'Ċ', 'ċ', 'Č', 'č', 'Ď', 'ď', 'Đ', 'đ', 'Ē', 'ē', 'Ĕ', 'ĕ', 'Ė', 'ė', 'Ę', 'ę', 'Ě', 'ě', 'Ĝ', 'ĝ', 'Ğ', 'ğ', 'Ġ', 'ġ', 'Ģ', 'ģ', 'Ĥ', 'ĥ', 'Ħ', 'ħ', 'Ĩ', 'ĩ', 'Ī', 'ī', 'Ĭ', 'ĭ', 'Į', 'į', 'İ', 'ı', 'Ĳ', 'ĳ', 'Ĵ', 'ĵ', 'Ķ', 'ķ', 'Ĺ', 'ĺ', 'Ļ', 'ļ', 'Ľ', 'ľ', 'Ŀ', 'ŀ', 'Ł', 'ł', 'Ń', 'ń', 'Ņ', 'ņ', 'Ň', 'ň', 'ŉ', 'Ō', 'ō', 'Ŏ', 'ŏ', 'Ő', 'ő', 'Œ', 'œ', 'Ŕ', 'ŕ', 'Ŗ', 'ŗ', 'Ř', 'ř', 'Ś', 'ś', 'Ŝ', 'ŝ', 'Ş', 'ş', 'Š', 'š', 'Ţ', 'ţ', 'Ť', 'ť', 'Ŧ', 'ŧ', 'Ũ', 'ũ', 'Ū', 'ū', 'Ŭ', 'ŭ', 'Ů', 'ů', 'Ű', 'ű', 'Ų', 'ų', 'Ŵ', 'ŵ', 'Ŷ', 'ŷ', 'Ÿ', 'Ź', 'ź', 'Ż', 'ż', 'Ž', 'ž', 'ſ', 'ƒ', 'Ơ', 'ơ', 'Ư', 'ư', 'Ǎ', 'ǎ', 'Ǐ', 'ǐ', 'Ǒ', 'ǒ', 'Ǔ', 'ǔ', 'Ǖ', 'ǖ', 'Ǘ', 'ǘ', 'Ǚ', 'ǚ', 'Ǜ', 'ǜ', 'Ǻ', 'ǻ', 'Ǽ', 'ǽ', 'Ǿ', 'ǿ'];
+                $b = ['A', 'A', 'A', 'A', 'A', 'A', 'AE', 'C', 'E', 'E', 'E', 'E', 'I', 'I', 'I', 'I', 'D', 'N', 'O', 'O', 'O', 'O', 'O', 'O', 'U', 'U', 'U', 'U', 'Y', 's', 'a', 'a', 'a', 'a', 'a', 'a', 'ae', 'c', 'e', 'e', 'e', 'e', 'i', 'i', 'i', 'i', 'n', 'o', 'o', 'o', 'o', 'o', 'o', 'u', 'u', 'u', 'u', 'y', 'y', 'A', 'a', 'A', 'a', 'A', 'a', 'C', 'c', 'C', 'c', 'C', 'c', 'C', 'c', 'D', 'd', 'D', 'd', 'E', 'e', 'E', 'e', 'E', 'e', 'E', 'e', 'E', 'e', 'G', 'g', 'G', 'g', 'G', 'g', 'G', 'g', 'H', 'h', 'H', 'h', 'I', 'i', 'I', 'i', 'I', 'i', 'I', 'i', 'I', 'i', 'IJ', 'ij', 'J', 'j', 'K', 'k', 'L', 'l', 'L', 'l', 'L', 'l', 'L', 'l', 'l', 'l', 'N', 'n', 'N', 'n', 'N', 'n', 'n', 'O', 'o', 'O', 'o', 'O', 'o', 'OE', 'oe', 'R', 'r', 'R', 'r', 'R', 'r', 'S', 's', 'S', 's', 'S', 's', 'S', 's', 'T', 't', 'T', 't', 'T', 't', 'U', 'u', 'U', 'u', 'U', 'u', 'U', 'u', 'U', 'u', 'U', 'u', 'W', 'w', 'Y', 'y', 'Y', 'Z', 'z', 'Z', 'z', 'Z', 'z', 's', 'f', 'O', 'o', 'U', 'u', 'A', 'a', 'I', 'i', 'O', 'o', 'U', 'u', 'U', 'u', 'U', 'u', 'U', 'u', 'U', 'u', 'A', 'a', 'AE', 'ae', 'O', 'o'];
+                $name = str_replace($a, $b, $this->name);
+                $fathers = str_replace($a, $b, $this->fathers_family);
+                $mothers = str_replace($a, $b, $this->mothers_family);
 
-        return $name[0].$fathers[0].$mothers[0];
+                return "$name[0]$fathers[0]$mothers[0]";
+            }
+        );
     }
 
-    public function getTwoInitialsAttribute()
+    protected function twoInitials(): Attribute
     {
-        return substr($this->initials, 0, 2);
+        return Attribute::make(
+            get: fn () => substr($this->initials, 0, 2)
+        );
     }
 
-    public function getActiveStoreAttribute()
+    protected function activeStore(): Attribute
     {
-        $storeActive = $this->stores->where('pivot.status', '=', 1)->first();
-        if ($storeActive) {
-            return $storeActive;
-        } else {
-            return null;
-        }
+        return Attribute::make(
+            get: fn () => $this->stores->where('pivot.status', 1)->first()
+        );
     }
 
-    public function getSubrogantAttribute()
+    protected function subrogant(): Attribute
     {
-        if ($this->absent) {
-            return $this->subrogations
-                ->where('subrogant.absent', false)
-                ->first()
-                ->subrogant ?? null;
-        } else {
-            return $this;
-        }
+        return Attribute::make(
+            get: fn () => $this->absent
+                ? $this->subrogations
+                    ->where('subrogant.absent', false)
+                    ->first()
+                    ->subrogant ?? null
+                : $this
+        );
     }
 
     /* Este debería devolver si soy subrogante de tipo autoridad */
@@ -1065,33 +1120,39 @@ class User extends Authenticatable implements Auditable, FilamentUser
      *                     example with params:
      *                     <img src="{{ auth()->user()->gravatarUrl }}?s=80&d=mp&r=g" class="img-thumbnail rounded-circle" alt="Avatar">
      */
-    public function getGravatarUrlAttribute()
+    protected function gravatarUrl(): Attribute
     {
-        $hash = md5(strtolower(trim($this->attributes['email'])));
-
-        return "https://www.gravatar.com/avatar/$hash";
+        return Attribute::make(
+            get: fn () => "https://www.gravatar.com/avatar/" . md5(strtolower(trim($this->email)))
+        );
     }
 
-    public function getCheckGravatarAttribute()
+    protected function checkGravatar(): Attribute
     {
-        $hash    = md5($this->email);
-        $uri     = 'https://www.gravatar.com/avatar/'.$hash.'?d=404';
-        $headers = @get_headers($uri);
+        return Attribute::make(
+            get: function () {
+                $hash = md5(strtolower(trim($this->attributes['email'])));
+                $uri = 'https://www.gravatar.com/avatar/' . $hash . '?d=404';
+                $headers = @get_headers($uri);
 
-        /* Permite login local si no hay conexión a internet */
-        if ($headers) {
-            if (preg_match('|200|', $headers[0])) {
-                if (! $this->gravatar) {
-                    $this->gravatar = true;
-                    $this->save();
+                /* Permite login local si no hay conexión a internet */
+                if ($headers) {
+                    if (preg_match('|200|', $headers[0])) {
+                        if (!$this->gravatar) {
+                            $this->gravatar = true;
+                            $this->save();
+                        }
+                    } else {
+                        if ($this->gravatar) {
+                            $this->gravatar = false;
+                            $this->save();
+                        }
+                    }
                 }
-            } else {
-                if ($this->gravatar) {
-                    $this->gravatar = false;
-                    $this->save();
-                }
+
+                return $this->gravatar;
             }
-        }
+        );
     }
 
     public function checkEmailFormat()
@@ -1107,9 +1168,11 @@ class User extends Authenticatable implements Auditable, FilamentUser
     /**
      * Checkea si estoy en god mode
      */
-    public function getGodModeAttribute()
+    protected function godMode(): Attribute
     {
-        return session()->has('god');
+        return Attribute::make(
+            get: fn () => session()->has('god')
+        );
     }
 
     /**

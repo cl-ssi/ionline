@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 #[ObservedBy([OvertimeRefundObserver::class])]
@@ -75,6 +76,14 @@ class OvertimeRefund extends Model
     public function approvals(): MorphMany
     {
         return $this->morphMany(Approval::class, 'approvable');
+    }
+
+    /**
+     * Get the last of the approvations of a model.
+     */
+    public function lastApproval(): MorphOne
+    {
+        return $this->morphOne(Approval::class, 'approvable')->orderByDesc('id');
     }
 
     public function userApproval(): Approval

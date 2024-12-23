@@ -21,7 +21,7 @@ class SignerPolicy
      */
     public function viewAny(User $user): bool
     {
-        return false;
+        return $user->can('Agreement: manage municipalities and signers');
     }
 
     /**
@@ -37,7 +37,7 @@ class SignerPolicy
      */
     public function create(User $user): bool
     {
-        return false;
+        return $user->can('Agreement: manage municipalities and signers');
     }
 
     /**
@@ -45,7 +45,7 @@ class SignerPolicy
      */
     public function update(User $user, Signer $signer): bool
     {
-        return false;
+        return $user->can('Agreement: manage municipalities and signers');
     }
 
     /**
@@ -53,7 +53,7 @@ class SignerPolicy
      */
     public function delete(User $user, Signer $signer): bool
     {
-        return false;
+        return $user->can('Agreement: manage municipalities and signers');
     }
 
     /**

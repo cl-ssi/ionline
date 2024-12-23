@@ -17,6 +17,10 @@ class ProcessesRelationManager extends RelationManager
 
     protected static ?string $title = 'Procesos';
 
+    protected static ?string $modelLabel = 'proceso';
+
+    protected static ?string $pluralModelLabel = 'procesos';
+
     public function form(Form $form): Form
     {
         return ProcessResource::form($form);

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCfgPurchaseTypesTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -33,4 +33,4 @@ class CreateCfgPurchaseTypesTable extends Migration
     {
         Schema::dropIfExists('cfg_purchase_types');
     }
-}
+};

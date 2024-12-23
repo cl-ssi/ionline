@@ -1,10 +1,10 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
-class CreateIndActionsTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -18,7 +18,7 @@ class CreateIndActionsTable extends Migration
             $table->string('number');
             $table->text('name');
             $table->text('verification_means');
-            $table->enum('target_type',['de mantención','de disminución de la brecha'])->nullable();
+            $table->enum('target_type', ['de mantención', 'de disminución de la brecha'])->nullable();
             $table->boolean('is_accum')->nullable();
             $table->string('numerator')->nullable();
             $table->string('numerator_source')->nullable();
@@ -30,7 +30,7 @@ class CreateIndActionsTable extends Migration
             $table->text('denominator_cols')->nullable();
             $table->decimal('weighting', 6, 3)->nullable(); // Ponderación al corte de la acción
             $table->foreignId('section_id')->constrained('ind_sections');
-            
+
             $table->timestamps();
         });
     }
@@ -44,4 +44,4 @@ class CreateIndActionsTable extends Migration
     {
         Schema::dropIfExists('ind_actions');
     }
-}
+};

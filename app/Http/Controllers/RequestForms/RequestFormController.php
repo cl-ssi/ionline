@@ -260,7 +260,7 @@ class RequestFormController extends Controller {
 
     // public function edit(RequestForm $requestForm) {
     //     if($requestForm->request_user_id != auth()->user()->id){
-    //       session()->flash('danger', 'Formulario de Requerimiento N° '.$requestForm->id.' NO pertenece a Usuario: '.auth()->user()->getFullNameAttribute());
+    //       session()->flash('danger', 'Formulario de Requerimiento N° '.$requestForm->id.' NO pertenece a Usuario: '.auth()->user()->fullName);
     //       return redirect()->route('request_forms.my_forms');
     //     }
     //     if($requestForm->eventRequestForms->first()->status != 'pending'){
@@ -272,7 +272,7 @@ class RequestFormController extends Controller {
     //     if(is_null($manager))
     //         $manager= '<h6 class="text-danger">'.auth()->user()->organizationalUnit->name.', no registra una Autoridad.</h6>';
     //     else
-    //         $manager = $manager->user->getFullNameAttribute();
+    //         $manager = $manager->user->fullName;
     //     $requestForms = RequestForm::all();
     //     return view('request_form.edit', compact('requestForm', 'manager', 'requestForms'));
     // }
@@ -357,7 +357,7 @@ class RequestFormController extends Controller {
         // if(is_null($manager))
         //     $manager = 'No se ha registrado una Autoridad en el módulo correspondiente!';
         // else
-        //     $manager = $manager->user->getFullNameAttribute();
+        //     $manager = $manager->user->fullName;
         return view('request_form.sign', compact('requestForm', 'eventType', 'title'));
     }
 
@@ -468,7 +468,7 @@ class RequestFormController extends Controller {
     // public function supervisorUserIndex()
     // {
     //     if(auth()->user()->organizationalUnit->id != '37' ){
-    //         session()->flash('danger', 'Usuario: '.auth()->user()->getFullNameAttribute().' no pertenece a '.OrganizationalUnit::getName('37').'.');
+    //         session()->flash('danger', 'Usuario: '.auth()->user()->fullName.' no pertenece a '.OrganizationalUnit::getName('37').'.');
     //         return redirect()->route('request_forms.index');
     //     }else
     //       {

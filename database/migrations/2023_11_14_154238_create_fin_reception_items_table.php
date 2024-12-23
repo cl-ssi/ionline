@@ -16,9 +16,7 @@ return new class extends Migration
         Schema::create('fin_reception_items', function (Blueprint $table) {
             $table->id();
             $table->foreignId('reception_id')->constrained('fin_receptions');
-
             $table->unsignedSmallInteger('item_position')->nullable();
-
             $table->string('CodigoCategoria')->nullable();
             $table->string('Producto')->nullable();
             $table->integer('Cantidad')->nullable();
@@ -26,10 +24,10 @@ return new class extends Migration
             $table->string('EspecificacionComprador')->nullable();
             $table->string('EspecificacionProveedor')->nullable();
             $table->integer('PrecioNeto')->nullable();
+            $table->integer('PrecioExento')->nullable();
             $table->integer('TotalDescuentos')->nullable();
             $table->integer('TotalCargos')->nullable();
             $table->integer('Total')->nullable();
-
             $table->timestamps();
             $table->softDeletes();
         });

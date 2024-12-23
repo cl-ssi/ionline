@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateRrhhShiftDayHitoryOfChangesTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -24,7 +24,7 @@ class CreateRrhhShiftDayHitoryOfChangesTable extends Migration
             $table->integer('change_type');
             $table->longText('commentary');
             $table->foreignId('shift_user_day_id')->constrained('rrhh_shift_user_days');
-        
+
             $table->timestamps();
         });
     }
@@ -38,4 +38,4 @@ class CreateRrhhShiftDayHitoryOfChangesTable extends Migration
     {
         Schema::dropIfExists('rrhh_shift_day_hitory_of_changes');
     }
-}
+};

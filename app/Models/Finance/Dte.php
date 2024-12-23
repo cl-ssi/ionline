@@ -444,6 +444,14 @@ class Dte extends Model implements Auditable
         return $this->morphOne(Treasury::class, 'treasureable');
     }
 
+    /**
+     * Get the treasury model.
+     */
+    public function accountable(): MorphOne
+    {
+        return $this->morphOne(Accountancy::class, 'accountable');
+    }
+
     protected function treasuryId(): Attribute
     {
         return Attribute::make(

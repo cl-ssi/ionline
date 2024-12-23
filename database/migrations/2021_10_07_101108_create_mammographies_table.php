@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateMammographiesTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -24,17 +24,14 @@ class CreateMammographiesTable extends Migration
             $table->integer('age');
             $table->string('email')->nullable();
             $table->string('personal_email')->nullable();
+            $table->string('telephone')->nullable();
             $table->foreignId('establishment_id')->constrained('establishments');
-            $table->foreignId('organizational_unit_id')->nullable(); //Confirmar
+            $table->foreignId('organizational_unit_id')->nullable()->constrained('organizational_units'); //Confirmar
             $table->string('organizationalUnit')->nullable(); //Confirmar
             $table->boolean('inform_method')->nullable(); //Confirmar
-
             $table->datetime('arrival_at')->nullable(); //Confirmar
-
             $table->datetime('exam_date')->nullable(); //Confirmar
             $table->string('ed_observation')->nullable(); //Confirmar
-
-            $table->foreign('organizational_unit_id')->references('id')->on('organizational_units');
 
             $table->timestamps();
             $table->softDeletes();
@@ -50,4 +47,4 @@ class CreateMammographiesTable extends Migration
     {
         Schema::dropIfExists('mammographies');
     }
-}
+};

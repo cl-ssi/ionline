@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateRstFundamentDetailManagesTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -44,4 +44,4 @@ class CreateRstFundamentDetailManagesTable extends Migration
         Schema::dropIfExists('rst_detail_fundaments');
         Schema::dropIfExists('rst_fundament_detail_manages');
     }
-}
+};

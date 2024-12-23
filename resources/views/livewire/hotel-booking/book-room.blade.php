@@ -19,7 +19,7 @@
                                                              'user' => auth()->user()])
                         @else
                             <input type="hidden" wire:model.live="user_id">
-                            <input type="text" class="form-control" disabled value="{{auth()->user()->getTinnyNameAttribute()}}">
+                            <input type="text" class="form-control" disabled value="{{auth()->user()->tinyName}}">
                         @endif
                     </fieldset>
 

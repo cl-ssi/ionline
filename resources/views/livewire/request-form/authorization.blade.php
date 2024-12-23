@@ -57,7 +57,7 @@
                     <select wire:model="supervisorUser" wire:click="resetError" name="supervisorUser" class="form-control form-control-sm" required>
                         <option value="">Seleccione...</option>
                         @foreach($lstSupervisorUser as $user)
-                        <option value="{{$user->id}}">{{ $user->tinnyName }}</option>
+                        <option value="{{$user->id}}">{{ $user->tinyName }}</option>
                         @endforeach
                     </select>
                     @error('supervisorUser') <span class="error text-danger">{{ $message }}</span> @enderror

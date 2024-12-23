@@ -61,7 +61,7 @@ class JobPositionProfileResource extends Resource
                     ->label('Usuario Creador / Unidad Organizacional')
                     ->getStateUsing(function ($record) {
                         // Obtener el nombre completo del usuario creador
-                        $creatorFullName = $record->user ? $record->user->FullName : 'Usuario no disponible';
+                        $creatorFullName = $record->user ? $record->user->fullName : 'Usuario no disponible';
                         // Obtener el nombre de la unidad organizacional
                         $unitName = $record->organizationalUnit ? $record->organizationalUnit->name : 'Unidad no disponible';
                         // Combinar ambos datos en una sola línea con salto de linea

@@ -64,7 +64,7 @@
                 <select class="form-control" name="to_user_id" id="user" wire:model="to_user_id" wire:key="{{ $to_ou_id }}" {{$endorse_type_enabled}}>
                     @if($users)
                         @foreach($users as $user)
-                            <option value="{{$user->id}}">@if($this->authority != null && $this->authority->user_id == $user->id)👑@endif {{ $user->tinnyName }}</option>
+                            <option value="{{$user->id}}">@if($this->authority != null && $this->authority->user_id == $user->id)👑@endif {{ $user->tinyName }}</option>
                         @endforeach
                     @endif
                 </select>
@@ -120,7 +120,7 @@
                         <input style="display:none" name="ou_id_visator[]" value='{{$user_key->organizationalUnit->id}}'>
                         <input style="display:none" name='user_visator[]' class='users' value='{{$user_key->id}}'>
                         <td>{{ $user_key->organizationalUnit->name }}</td>
-                        <td>{{ $user_key->tinnyName }}</td>
+                        <td>{{ $user_key->tinyName }}</td>
                         <td>
                             @if(isset($visatorType[$key]))
                                 <label 

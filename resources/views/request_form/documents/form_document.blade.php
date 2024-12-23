@@ -181,11 +181,11 @@
           @endif
           <tr>
               <th align="left">Solicitante</th>
-              <td colspan="2">{{ $requestForm->user ? $requestForm->user->FullName : 'Usuario eliminado' }}</td>
+              <td colspan="2">{{ $requestForm->user ? $requestForm->user->fullName : 'Usuario eliminado' }}</td>
           </tr>
           <tr>
               <th align="left">Nombre Administrador de Contrato</th>
-              <td colspan="2">{{ $requestForm->contractManager ? $requestForm->contractManager->FullName : 'Usuario eliminado' }}</td>
+              <td colspan="2">{{ $requestForm->contractManager ? $requestForm->contractManager->fullName : 'Usuario eliminado' }}</td>
           </tr>
           <tr>
               <th align="left">Teléfono del Administrador de Contrato</th>
@@ -360,7 +360,7 @@
           <tbody>
               <tr>
                   <th align="left" style="width: 50%">Nombre</th>
-                  <td>{{ $requestForm->eventSigner('leader_ship_event', 'approved')->signerUser->FullName }}</td>
+                  <td>{{ $requestForm->eventSigner('leader_ship_event', 'approved')->signerUser->fullName }}</td>
               </tr>
               <tr>
                   <th align="left" style="width: 50%">Cargo</th>
@@ -423,9 +423,9 @@
                   <th align="left" style="width: 50%">Nombre</th>
                   @if(request()->has_increased_expense == 11)
                   @php($currentFinanceManager = App\Models\Rrhh\OrganizationalUnit::find($requestForm->eventSigner('finance_event', 'pending')->ou_signer_user)->currentManager)
-                  <td>{{ $currentFinanceManager->user->FullName }}</td>
+                  <td>{{ $currentFinanceManager->user->fullName }}</td>
                   @else
-                  <td>{{ auth()->user()->FullName }}</td>
+                  <td>{{ auth()->user()->fullName }}</td>
                   @endif
               </tr>
               <tr>
@@ -462,7 +462,7 @@
           <tbody>
               <tr>
                   <th align="left" style="width: 50%">Nombre</th>
-                  <td>{{ $requestForm->eventSigner('supply_event', 'approved')->signerUser->FullName }}</td>
+                  <td>{{ $requestForm->eventSigner('supply_event', 'approved')->signerUser->fullName }}</td>
               </tr>
               <tr>
                   <th align="left" style="width: 50%">Cargo</th>
@@ -479,7 +479,7 @@
               <tr>
                   <th align="left" style="width: 50%">COMPRADOR(ES) ASIGNADO(S): </th>
                   @foreach($requestForm->purchasers as $purchaser)
-                  <td>{{ $purchaser->FullName }}</td>
+                  <td>{{ $purchaser->fullName }}</td>
                   @endforeach
               </tr>
           </tbody>

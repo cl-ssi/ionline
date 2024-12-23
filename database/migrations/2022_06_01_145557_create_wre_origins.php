@@ -1,11 +1,10 @@
 <?php
 
-use App\Models\Warehouse\Origin;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateWreOrigins extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -16,10 +15,8 @@ class CreateWreOrigins extends Migration
     {
         Schema::create('wre_origins', function (Blueprint $table) {
             $table->id();
-
             $table->string('name', 255)->nullable();
             $table->foreignId('store_id')->nullable()->constrained('wre_stores');
-
             $table->timestamps();
             $table->softDeletes();
         });
@@ -34,4 +31,4 @@ class CreateWreOrigins extends Migration
     {
         Schema::dropIfExists('wre_store_origins');
     }
-}
+};

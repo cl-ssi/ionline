@@ -36,7 +36,7 @@
             </tr>
             <tr>
                 <th class="table-secondary">Funcionario Responsable</th>
-                <td class="text-left">{{ $purchasePlan->userResponsible->FullName }}</td>
+                <td class="text-left">{{ $purchasePlan->userResponsible->fullName }}</td>
             </tr>
             <tr>
                 <th class="table-secondary">Cargo</th>
@@ -211,7 +211,7 @@
                     @endswitch
                     <br>
                     @if($approval->StatusInWords == 'Aprobado' || $approval->StatusInWords == 'Rechazado')
-                        <i class="fas fa-user"></i> {{ ($approval->approver) ? $approval->approver->FullName : '' }} <br>
+                        <i class="fas fa-user"></i> {{ ($approval->approver) ? $approval->approver->fullName : '' }} <br>
                         <i class="fas fa-calendar-alt"></i> {{ ($approval->approver_at) ? $approval->approver_at->format('d-m-Y H:i:s') : '' }}
                         @if($approval->approver_observation)
                             <hr>

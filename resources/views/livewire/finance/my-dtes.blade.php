@@ -42,8 +42,8 @@
                     <td class="small">
                         @include('finance.payments.partials.fr-info')
 
-                        {{ $dte->requestForm?->contractManager?->tinnyName }} 
-                        {{ $dte->contractManager?->tinnyName }}
+                        {{ $dte->requestForm?->contractManager?->tinyName }} 
+                        {{ $dte->contractManager?->tinyName }}
                         <br>
                         {{ $dte->estado_reclamo }}
                     </td>

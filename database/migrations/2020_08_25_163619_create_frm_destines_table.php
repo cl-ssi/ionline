@@ -21,7 +21,7 @@ return new class extends Migration
             $table->foreignId('pharmacy_id')->nullable()->constrained('frm_pharmacies');
             $table->timestamps();
             $table->softDeletes();
-            $table->unique(['name','pharmacy_id'],'frm_destines_name_unique');
+            $table->unique(['name', 'pharmacy_id'], 'frm_destines_name_pharamacy_id_unique');
         });
     }
 

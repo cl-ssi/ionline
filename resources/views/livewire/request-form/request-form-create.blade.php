@@ -5,25 +5,11 @@
         </div>
         <div class="card-body">
             <div class="form-row">
-                <fieldset class="form-group col-sm-4">
+                <fieldset class="form-group col-sm-8">
                     <label for="forRut">Nombre de Formulario:</label>
                     <input wire:model="name" name="name" class="form-control form-control-sm" type="text" placeholder="EJ: ADIQUISICIÓN DE MOBILIARIO PARA OFICINA..." value="">
                     @error('name') <span class="text-danger small">{{ $message }}</span> @enderror
                 </fieldset>
-
-                {{--<fieldset class="form-group col-sm-4">
-                    <label>Administrador de Contrato:</label><br>
-                    <div wire:ignore id="for-bootstrap-select">
-                      <select wire:model="contractManagerId" name="contractManagerId" data-container="#for-bootstrap-select"
-                        class="form-control form-control-sm selectpicker show-tick" data-live-search="true" data-size="5" {{ $editRF ? 'disabled' : 'required' }} >
-                        <option>Seleccione...</option>
-                        @foreach($users as $user)
-                            <option value="{{ $user->id }}">{{ ucfirst(trans($user->FullName)) }}</option>
-                        @endforeach
-                      </select>
-                    </div>
-                    @error('contractManagerId') <span class="text-danger small">{{ $message }}</span> @enderror
-                </fieldset>--}}
                 
                 <fieldset class="form-group col-12 col-md-4">
                     <label for="for_requester_id">Administrador de Contrato:</label>
@@ -35,28 +21,45 @@
                 </fieldset>
 
                 
-                {{-- <fieldset class="form-group col-sm-{{$program_id == 'other' ? 1 : 4}}"> --}}
+                {{-- <fieldset class="form-group col-sm-{{$program_id == 'other' ? 1 : 4}}"> 
                 <fieldset class="form-group col-sm">
-                    {{-- <label>Programa @if($program_id != 'other')Asociado:@endif</label><br> --}}
                     <label>Programa Asociado</label><br>
                     <select wire:model.live="program_id" name="program_id" class="form-control form-control-sm " required>
                         <option value="">Seleccione...</option>
                         @foreach($lstProgram as $val)
                         <option value="{{$val->id}}">{{$val->alias_finance}} {{$val->period}} - Subtítulo {{$val->Subtitle->name}}</option>
                         @endforeach
-                        {{-- <option value="other">Otro</option> --}}
                     </select>
                     @error('program_id') <span class="text-danger small">{{ $message }}</span> @enderror
                 </fieldset>
-                {{--
-                @if($program_id == 'other')
-                <fieldset class="form-group col-sm-3">
-                    <label for="forRut">&nbsp;</label>
-                    <input wire:model="program" name="program" class="form-control form-control-sm" type="text" placeholder="Nombre del programa asociado">
-                    @error('program') <span class="text-danger small">{{ $message }}</span> @enderror
-                </fieldset>
-                @endif
                 --}}
+
+            </div>
+
+            <div class="form-row">
+                <fieldset class="form-group col-12 col-md-4">
+                    <label for="year">Año</label>
+                    <select class="form-control form-control-sm" id="for_year" name="year" wire:model.live="period">
+                        <option value="">Selección...</option>
+                        <option value="2025">2025</option>
+                        <option value="2024">2024</option>
+                        <option value="2023">2023</option>
+                        <option value="2022">2022</option>
+                    </select>
+                    @error('selectedYear') <span class="text-danger error small">{{ $message }}</span> @enderror
+                </fieldset>
+
+                <fieldset class="form-group col-4">
+                    <label for="for_program">Programa</label>
+                    @livewire('search-select-program',[
+                        'emit_name'     => 'searchedProgram',
+                        'program'       => $requestForm->associateProgram ?? null,
+                        'disabled'      => $disabled,
+                        'year'          => $period ?? null,
+                        'small_option'  => true,
+                    ])
+                    @error('selectedProgram') <span class="text-danger error small">{{ $message }}</span> @enderror
+                </fieldset>
             </div>
 
             <div class="form-row">

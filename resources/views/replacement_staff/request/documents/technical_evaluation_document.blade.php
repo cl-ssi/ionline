@@ -184,7 +184,7 @@
               </tr>
               <tr>
                   <td><strong>Solicitante</strong></th>
-                  <td style="width: 33%">{{ $requestReplacementStaff->user->FullName }}</td>
+                  <td style="width: 33%">{{ $requestReplacementStaff->user->fullName }}</td>
                   <td style="width: 33%">{{ $requestReplacementStaff->organizationalUnit->name }}</td>
               </tr>
               <tr>
@@ -246,7 +246,7 @@
                   <td><strong>Staff Sugerido</strong></td>
                   <td colspan="2">
                     @if($requestReplacementStaff->replacementStaff)
-                        {{ $requestReplacementStaff->replacementStaff->FullName }}
+                        {{ $requestReplacementStaff->replacementStaff->fullName }}
                     @endif
                   </td>
               </tr>
@@ -303,12 +303,12 @@
                               <td align="center"> 
                                   @if($approval->StatusInWords == "Aprobado")
                                       {{ $approval->StatusInWords }}<br>
-                                      {{ $approval->approver->FullName }}<br>
+                                      {{ $approval->approver->fullName }}<br>
                                       {{ $approval->approver_at->format('d-m-Y H:i:s') }}<br>
                                   @endif
                                   @if($approval->StatusInWords == "Rechazado")
                                       {{ $approval->StatusInWords }}<br>
-                                      {{ $approval->approver->FullName }}<br>
+                                      {{ $approval->approver->fullName }}<br>
                                       {{ $approval->approver_at->format('d-m-Y H:i:s') }}<br>
                                       <hr>
                                       {{ $approval->approver_observation }}
@@ -321,12 +321,12 @@
                           <td align="center"> 
                               @if($sign->request_status == 'accepted')
                                   {{ $sign->StatusValue }}<br>
-                                  {{ $sign->user->FullName }}<br>
+                                  {{ $sign->user->fullName }}<br>
                                   {{ $sign->date_sign->format('d-m-Y H:i:s') }}<br>
                               @endif
                               @if($sign->request_status == 'rejected')
                                   {{ $sign->StatusValue }}<br>
-                                  {{ $sign->user->FullName }}<br>
+                                  {{ $sign->user->fullName }}<br>
                                   {{ $sign->date_sign->format('d-m-Y H:i:s') }}<br>
                                   <hr>
                                   {{ $sign->observation }}<br>
@@ -339,12 +339,12 @@
                               <td align="center"> 
                                   @if($approval->StatusInWords == "Aprobado")
                                       {{ $approval->StatusInWords }}<br>
-                                      {{ $approval->approver->FullName }}<br>
+                                      {{ $approval->approver->fullName }}<br>
                                       {{ $approval->approver_at->format('d-m-Y H:i:s') }}<br>
                                   @endif
                                   @if($approval->StatusInWords == "Rechazado")
                                       {{ $approval->StatusInWords }}<br>
-                                      {{ $approval->approver->FullName }}<br>
+                                      {{ $approval->approver->fullName }}<br>
                                       {{ $approval->approver_at->format('d-m-Y H:i:s') }}<br>
                                       <hr>
                                       {{ $approval->approver_observation }}
@@ -357,12 +357,12 @@
                           <td align="center"> 
                               @if($sign->request_status == 'accepted')
                                   {{ $sign->StatusValue }}<br>
-                                  {{ $sign->user->FullName }}<br>
+                                  {{ $sign->user->fullName }}<br>
                                   {{ $sign->date_sign->format('d-m-Y H:i:s') }}<br>
                               @endif
                               @if($sign->request_status == 'rejected')
                                   {{ $sign->StatusValue }}<br>
-                                  {{ $sign->user->FullName }}<br>
+                                  {{ $sign->user->fullName }}<br>
                                   {{ $sign->date_sign->format('d-m-Y H:i:s') }}<br>
                                   <hr>
                                   {{ $sign->observation }}<br>
@@ -372,7 +372,7 @@
                                       @foreach($requestReplacementStaff->signaturesFile->signaturesFlows as $flow)
                                           @if($flow->status == 1)
                                               Aceptada<br>
-                                              {{ $flow->userSigner->FullName }}<br>
+                                              {{ $flow->userSigner->fullName }}<br>
                                               {{ $flow->signature_date->format('d-m-Y H:i:s') }}
                                           @endif
                                           @if($flow->status === 0)
@@ -431,7 +431,7 @@
               <tbody>
                 @foreach($requestReplacementStaff->technicalEvaluation->commissions as $commission)
                   <tr>
-                      <td>{{ $commission->user->FullName }}</td>
+                      <td>{{ $commission->user->fullName }}</td>
                       <td>{{ $commission->user->organizationalUnit->name }}</td>
                       <td>{{ $commission->job_title }}</td>
                   </tr>
@@ -502,7 +502,7 @@
                               @endif
                           @endif
                       </td>
-                      <td>{{ $applicant->replacementStaff->FullName }}</td>
+                      <td>{{ $applicant->replacementStaff->fullName }}</td>
                       <td align="center">{{ $applicant->psycholabor_evaluation_score }} <br> {{ $applicant->PsyEvaScore }}</td>
                       <td align="center">{{ $applicant->technical_evaluation_score }} <br> {{ $applicant->TechEvaScore }}</td>
                       <td>{{ $applicant->observations }}</td>

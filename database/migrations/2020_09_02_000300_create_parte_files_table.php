@@ -1,10 +1,10 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
-class CreateParteFilesTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -17,10 +17,10 @@ class CreateParteFilesTable extends Migration
             $table->id();
             $table->string('file')->nullable();
             $table->string('name')->nullable();
-            $table->bigInteger('parte_id')->unsigned();
-
-            $table->foreign('parte_id')->references('id')->on('partes')->onDelete('cascade');
+            $table->bigInteger('parte_id')->constrained('partes')->onDelete('cascade');
+            $table->foreignId('signature_file_id')->nullable()->constrained('doc_signatures_files');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
@@ -33,4 +33,4 @@ class CreateParteFilesTable extends Migration
     {
         Schema::dropIfExists('parte_files');
     }
-}
+};

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateRrhhShiftUsersTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -37,4 +37,4 @@ class CreateRrhhShiftUsersTable extends Migration
     {
         Schema::dropIfExists('rrhh_shift_users');
     }
-}
+};

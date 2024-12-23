@@ -59,7 +59,7 @@ class AllowancesExport implements FromCollection, WithHeadings, WithMapping, Sho
             $allowance->StatusValue,
             $allowance->created_at->monthName,
             $allowance->created_at->format('d-m-Y'),
-            $allowance->userAllowance->FullName,
+            $allowance->userAllowance->fullName,
             $allowance->organizationalUnitAllowance->name,
             $allowance->organizationalUnitAllowance->establishment->name,
             $allowance->from->format('d-m-Y'),

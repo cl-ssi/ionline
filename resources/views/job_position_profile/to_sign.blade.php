@@ -404,7 +404,7 @@
                         <span style="color: green;">
                             <i class="fas fa-check-circle"></i> {{ $sign->StatusValue }}
                         </span> <br>
-                        <i class="fas fa-user"></i> {{ $sign->user->FullName }}<br>
+                        <i class="fas fa-user"></i> {{ $sign->user->fullName }}<br>
                         <i class="fas fa-calendar-alt"></i> {{ $sign->date_sign->format('d-m-Y H:i:s') }}<br>
                     @endif
                 </td>

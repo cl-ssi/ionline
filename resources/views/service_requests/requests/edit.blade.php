@@ -58,7 +58,7 @@
 			@if($serviceRequest->SignatureFlows->isNotEmpty())
 			<select name="responsable_id" id="responsable_id" class="form-control selectpicker" data-live-search="true" required="" data-size="5" disabled>
 				@foreach($users as $key => $user)
-					<option value="{{$user->id}}" @if($user->id == $serviceRequest->SignatureFlows->where('sign_position',1)->first()->responsable_id) selected @endif >{{$user->getFullNameAttribute()}}</option>
+					<option value="{{$user->id}}" @if($user->id == $serviceRequest->SignatureFlows->where('sign_position',1)->first()->responsable_id) selected @endif >{{$user->fullName}}</option>
 				@endforeach
 			</select>
 			@else
@@ -71,7 +71,7 @@
 			@if($serviceRequest->SignatureFlows->isNotEmpty())
 			<select name="users[]" id="users" class="form-control selectpicker" data-live-search="true" required="" data-size="5" disabled>
 				@foreach($users as $key => $user)
-					<option value="{{$user->id}}" @if($user->id == $serviceRequest->SignatureFlows->where('sign_position',2)->first()->responsable_id) selected @endif >{{$user->getFullNameAttribute()}}</option>
+					<option value="{{$user->id}}" @if($user->id == $serviceRequest->SignatureFlows->where('sign_position',2)->first()->responsable_id) selected @endif >{{$user->fullName}}</option>
 				@endforeach
 			</select>
 			@else
@@ -107,7 +107,7 @@
                 <label for="for_users">{{$signatureFlows->user->position}}</label>
                 <select name="users[]" id="users" class="form-control selectpicker" data-live-search="true" required="" data-size="5" disabled>
                     @foreach($users as $key => $user)
-                        <option value="{{$user->id}}" @if($user->id == $signatureFlows->responsable_id) selected @endif >{{$user->getFullNameAttribute()}}</option>
+                        <option value="{{$user->id}}" @if($user->id == $signatureFlows->responsable_id) selected @endif >{{$user->fullName}}</option>
                     @endforeach
                 </select>
         </fieldset>
@@ -135,7 +135,7 @@
         <fieldset class="form-group col-6 col-md-6">
             <label for="for_name">Nombre completo</label>
             <input type="text" class="form-control" id="for_name" required="required"
-              value="{{ $serviceRequest->employee->getFullNameAttribute() }}" disabled>
+              value="{{ $serviceRequest->employee->fullName }}" disabled>
         </fieldset>
 
         <fieldset class="form-group col-2 col-md-2">
@@ -798,7 +798,7 @@
                 <td>{{ $serviceRequest->created_at }}</td>
                 <td>{!! optional($serviceRequest->creator->organizationalUnit)->name ?? '<span class="text-danger">SIN UNIDAD ORGANIZACIONAL</span>' !!}</td>
                 <td>{{ $serviceRequest->creator->position }}</td>
-                <td>{{ $serviceRequest->creator->getFullNameAttribute() }}</td>
+                <td>{{ $serviceRequest->creator->fullName }}</td>
                 <td>Creador</td>
                 <td>Creada</td>
                 <td></td>
@@ -813,7 +813,7 @@
                     <td>{{ $SignatureFlow->signature_date}}</td>
                     <td>{{ $SignatureFlow->organizationalUnit->name}}</td>
                     <td>{{ $SignatureFlow->employee }}</td>
-                    <td>{{ $SignatureFlow->user->getFullNameAttribute() }}</td>
+                    <td>{{ $SignatureFlow->user->fullName }}</td>
                     <td>{{ $SignatureFlow->type }}</td>
                     <td>Devuelta</td>
                     <td>{{ $SignatureFlow->observation }}</td>
@@ -840,7 +840,7 @@
                     <td>{!! optional($SignatureFlow->user->organizationalUnit)->name ?? '<span class="text-danger">SIN UNIDAD ORGANIZACIONAL</span>' !!}</td>
                     <td>{{ $SignatureFlow->user->position }}</td>
                     <td>
-                        {{ $SignatureFlow->user->getFullNameAttribute() }}
+                        {{ $SignatureFlow->user->fullName }}
                     </td>
                     @if($SignatureFlow->sign_position == 1)
                         <td>Responsable</td>

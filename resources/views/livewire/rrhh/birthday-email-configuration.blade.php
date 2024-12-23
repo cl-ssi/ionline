@@ -85,7 +85,7 @@
                 @else <tr class="table-danger">
                 @endif
                     <th scope="row">{{$user->runFormat}}</th>
-                    <td>{{$user->FullName}}</td>
+                    <td>{{$user->fullName}}</td>
                     <td>{{$user->birthday->format('m-d')}}</td>
                     <td>{{$user->birthday->age}}</td>
                     <td>{{$user->email_personal}}</td>

@@ -48,6 +48,7 @@ class HotelBookingController extends Controller
     public function search_booking(Request $request)
     {
         // $commune_id = $request->commune_id;
+        $today = Carbon::now();
         $start_date = Carbon::parse($request->start_date);
         $end_date = Carbon::parse($request->end_date);
         $diff = (int) $start_date->diffInDays($end_date);
@@ -66,6 +67,16 @@ class HotelBookingController extends Controller
             if ($count >= 2) {
                 session()->flash('warning', 'Has excedido el límite de reservas para este año.');
                 return redirect()->back();
+            }
+
+            // Calcular el rango máximo permitido para las fechas
+            $maxDate = $today->day >= 15
+                ? $today->copy()->endOfMonth()->addMonth()->endOfMonth()
+                : $today->copy()->endOfMonth();
+
+            if ($start_date->greaterThan($maxDate) || $end_date->greaterThan($maxDate)) {
+                session()->flash('warning', 'La fecha seleccionada no puede exceder el límite permitido: ' . $maxDate->format('d-m-Y'));
+                return redirect()->route('hotel_booking.index');
             }
         }
 

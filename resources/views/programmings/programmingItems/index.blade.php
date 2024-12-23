@@ -472,7 +472,7 @@
             @endif
             <td class="text-center align-middle" rowspan="{{ $programmingitem->rowspan() }}">{{ $programmingitem->activityItem->verification_rem ?? $programmingitem->information_source }}</td>
             <td class="text-center align-middle" rowspan="{{ $programmingitem->rowspan() }}">{{ $programmingitem->prap_financed }}</td>
-            <td class="text-center align-middle" rowspan="{{ $programmingitem->rowspan() }}">{{ $programmingitem->user->tinny_name }}</td>
+            <td class="text-center align-middle" rowspan="{{ $programmingitem->rowspan() }}">{{ $programmingitem->user->tinyName }}</td>
             @if($canDuplicate && $programming->status == 'active')
             <td class="text-center align-middle no-print" rowspan="{{ $programmingitem->rowspan() }}">
                 <form method="POST" action="{{ route('programmingitems.clone', $programmingitem->id) }}" class="small d-inline">
@@ -626,7 +626,7 @@
             @endif
             <td class="text-center align-middle" rowspan="{{ $programmingitemsIndirect->rowspan() }}">{{ $programmingitemsIndirect->information_source }}</td>
             <td class="text-center align-middle" rowspan="{{ $programmingitemsIndirect->rowspan() }}">{{ $programmingitemsIndirect->prap_financed }}</td>
-            <td class="text-center align-middle" rowspan="{{ $programmingitemsIndirect->rowspan() }}">{{ $programmingitemsIndirect->user->tinny_name }}</td>
+            <td class="text-center align-middle" rowspan="{{ $programmingitemsIndirect->rowspan() }}">{{ $programmingitemsIndirect->user->tinyName }}</td>
             @if($canDuplicate && $programming->status == 'active')
             <td class="text-center align-middle no-print" rowspan="{{ $programmingitemsIndirect->rowspan() }}">
                 <form method="POST" action="{{ route('programmingitems.clone', $programmingitemsIndirect->id) }}" class="small d-inline">
@@ -806,7 +806,7 @@
             @endif
             <td class="text-center align-middle" rowspan="{{ $programmingitemsIndirect->rowspan() }}">{{ $programmingitemsIndirect->activityItem->verification_rem ?? $programmingitemsIndirect->information_source }}</td>
             <td class="text-center align-middle" rowspan="{{ $programmingitemsIndirect->rowspan() }}">{{ $programmingitemsIndirect->prap_financed }}</td>
-            <td class="text-center align-middle" rowspan="{{ $programmingitemsIndirect->rowspan() }}">{{ $programmingitemsIndirect->user->tinny_name }}</td>
+            <td class="text-center align-middle" rowspan="{{ $programmingitemsIndirect->rowspan() }}">{{ $programmingitemsIndirect->user->tinyName }}</td>
             @if($canDuplicate && $programming->status == 'active')
             <td class="text-center align-middle no-print" rowspan="{{ $programmingitemsIndirect->rowspan() }}">
                 <form method="POST" action="{{ route('programmingitems.clone', $programmingitemsIndirect->id) }}" class="small d-inline">
@@ -989,7 +989,7 @@
             @endif
             <td class="text-center align-middle" rowspan="{{ $programmingItemworkshop->rowspan() }}">{{ $programmingItemworkshop->activityItem->verification_rem ?? $programmingItemworkshop->information_source }}</td>
             <td class="text-center align-middle" rowspan="{{ $programmingItemworkshop->rowspan() }}">{{ $programmingItemworkshop->prap_financed }}</td>
-            <td class="text-center align-middle" rowspan="{{ $programmingItemworkshop->rowspan() }}">{{ $programmingItemworkshop->user->tinny_name }}</td>
+            <td class="text-center align-middle" rowspan="{{ $programmingItemworkshop->rowspan() }}">{{ $programmingItemworkshop->user->tinyName }}</td>
             @if($canDuplicate && $programming->status == 'active')
             <td class="text-center align-middle no-print" rowspan="{{ $programmingItemworkshop->rowspan() }}">
                 <form method="POST" action="{{ route('programmingitems.clone', $programmingItemworkshop->id) }}" class="small d-inline">

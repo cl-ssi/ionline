@@ -164,10 +164,14 @@ for ip in ip_list:
         users = [row.find_all("td")[0].find("input")["value"] for row in rows[1:] if len(row.find_all("td")) >= 7 and row.find_all("td")[0].find("input")]
 
         # Configurar fechas
-        today_date = datetime.now().strftime("%Y-%m-%d")
+        sdate = datetime.now().strftime("%Y-%m-%d")
+        edate = datetime.now().strftime("%Y-%m-%d")
+        # Configurar fechas
+        # sdate = "2024-11-01"
+        # edate = "2024-11-25"
         query_payload = {
-            "sdate": today_date,
-            "edate": today_date,
+            "sdate": sdate,
+            "edate": edate,
             "uid": users,
             "period": "0",
         }

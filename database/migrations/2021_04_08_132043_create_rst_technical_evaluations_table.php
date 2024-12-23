@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateRstTechnicalEvaluationsTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -16,7 +16,7 @@ class CreateRstTechnicalEvaluationsTable extends Migration
         Schema::create('rst_technical_evaluations', function (Blueprint $table) {
             $table->id();
             $table->dateTime('date_end')->nullable();
-            $table->enum('technical_evaluation_status',['pending', 'complete', 'rejected']);
+            $table->enum('technical_evaluation_status', ['pending', 'complete', 'rejected']);
             $table->string('reason')->nullable();
             $table->text('observation')->nullable();
             $table->foreignId('user_id')->nullable()->constrained('users');
@@ -37,4 +37,4 @@ class CreateRstTechnicalEvaluationsTable extends Migration
     {
         Schema::dropIfExists('rst_technical_evaluations');
     }
-}
+};

@@ -177,7 +177,7 @@
               <th align="left" width="10 px">RUN</th>
               <td>{{ $purchasingProcessDetail->internalPurchaseOrder->supplier->run }}-{{ $purchasingProcessDetail->internalPurchaseOrder->supplier->dv }}</td>
               <th align="left" width="10 px">EMISOR</th>
-              <td>{{ $purchasingProcessDetail->user->FullName }}</td>
+              <td>{{ $purchasingProcessDetail->user->fullName }}</td>
           </tr>
           <tr>
               <th align="left">DIRECCION</th>

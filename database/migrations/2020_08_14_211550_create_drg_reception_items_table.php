@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateDrgReceptionItemsTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -19,13 +19,13 @@ class CreateDrgReceptionItemsTable extends Migration
             $table->foreignId('substance_id')->constrained('drg_substances');
             $table->string('nue')->nullable();
             $table->integer('sample_number');
-            $table->float('document_weight',10,3)->nullable();
-            $table->float('gross_weight',10,3);
-            $table->float('net_weight',10,3)->nullable();
-            $table->float('estimated_net_weight',10,3)->nullable();
-            $table->float('sample',8,3);
-            $table->float('countersample',8,3);
-            $table->float('destruct',10,3);
+            $table->decimal('document_weight', 10, 3)->nullable();
+            $table->decimal('gross_weight', 10, 3);
+            $table->decimal('net_weight', 10, 3)->nullable();
+            $table->decimal('estimated_net_weight', 10, 3)->nullable();
+            $table->decimal('sample', 8, 3);
+            $table->decimal('countersample', 8, 3);
+            $table->decimal('destruct', 10, 3);
             $table->string('equivalent')->nullable();
             $table->foreignId('reception_id')->constrained('drg_receptions');
             $table->integer('result_number')->nullable();
@@ -47,4 +47,4 @@ class CreateDrgReceptionItemsTable extends Migration
     {
         Schema::dropIfExists('drg_reception_items');
     }
-}
+};

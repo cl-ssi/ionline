@@ -1,10 +1,10 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
-class CreateFrmProductsTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -25,7 +25,7 @@ class CreateFrmProductsTable extends Migration
             $table->integer('critic_stock')->nullable();
             $table->string('min_stock')->nullable();
             $table->string('max_stock')->nullable();
-            $table->longText('storage_conditions')->nullable(); 
+            $table->longText('storage_conditions')->nullable();
             //$table->string('category');
             //$table->string('program')->nullable();
             //$table->integer('valued'); On the fly
@@ -49,4 +49,4 @@ class CreateFrmProductsTable extends Migration
     {
         Schema::dropIfExists('frm_products');
     }
-}
+};

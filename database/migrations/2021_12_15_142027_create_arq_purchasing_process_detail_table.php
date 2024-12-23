@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateArqPurchasingProcessDetailTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -54,4 +54,4 @@ class CreateArqPurchasingProcessDetailTable extends Migration
     {
         Schema::dropIfExists('arq_purchasing_process_detail');
     }
-}
+};

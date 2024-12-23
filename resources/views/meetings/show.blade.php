@@ -51,7 +51,7 @@
             </tr>
             <tr>
                 <th class="table-secondary" width="25%">Usuario Creador / Fecha Creación</th>
-                <td colspan="3">{{ $meeting->userCreator->FullName }} / {{ $meeting->created_at->format('d-m-Y H:i:s') }}</td>
+                <td colspan="3">{{ $meeting->userCreator->fullName }} / {{ $meeting->created_at->format('d-m-Y H:i:s') }}</td>
             </tr>
         </tbody>
     </table>
@@ -112,7 +112,7 @@
                 <tr>        
                     <th class="text-center">{{ $loop->iteration }}</th>
                     <td style="text-align: justify;">{{ $commitment->description }}</td>
-                    <td class="text-center">{{ ($commitment->commitment_user_id) ?  $commitment->commitmentUser->TinnyName : $commitment->commitmentOrganizationalUnit->name }}</td>
+                    <td class="text-center">{{ ($commitment->commitment_user_id) ?  $commitment->commitmentUser->tinyName : $commitment->commitmentOrganizationalUnit->name }}</td>
                     <td class="text-center">
                         {{ ($commitment['closing_date']) ? $commitment['closing_date'] : 'Sin fecha límite' }} <br>
                         @switch($commitment->priority)

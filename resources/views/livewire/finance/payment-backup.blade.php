@@ -71,8 +71,7 @@
                 <th>Recepción/Adjuntos</th>
                 <th>SIGFE</th>
                 <th>Folio Pago</th>
-                <th>Pdf Pago sin Firma</th>
-                <th>Pdf Pago con Firma</th>
+                <th>Comprobante de Pago</th>
             </tr>
         </thead>
 
@@ -94,8 +93,8 @@
                     <td class="small">
                         @include('finance.payments.partials.fr-info')
 
-                        {{ $dte->requestForm?->contractManager?->tinnyName }}
-                        {{ $dte->contractManager?->tinnyName }}
+                        {{ $dte->requestForm?->contractManager?->tinyName }}
+                        {{ $dte->contractManager?->tinyName }}
                         <br>
 
                         <!-- Si tiene administrador de contrato mostrar el avion para enviar notificación -->
@@ -149,16 +148,7 @@
                     </td>
                     <td>{{$dte->tgrPayedDte?->folio}}</td>
                     <td>
-                        @livewire('finance.upload-pdf', ['dteId' => $dte->id, 'type' => 'comprobante_pago'], key('upload-pdf-' . $dte->id))
-                    </td>
-                    <td>
-                        @if($dte->comprobantePago && $dte->comprobantePago->allApprovalsOk() && $dte->comprobantePago->approvals->last())
-                            <a class="btn btn-sm btn-outline-danger" target="_blank"
-                            href="{{ route('documents.signed.approval.pdf', $dte->comprobantePago->approvals->last()) }}"
-                            >
-                                <i class="fas fa-fw fa-file-pdf"></i>
-                            </a>
-                        @endif
+                        @livewire('finance.upload-pdf', ['dteId' => $dte->id, 'type' => 'comprobante_pago', 'approval' => 'false'], key('upload-pdf-' . $dte->id))
                     </td>
                 </tr>
             @endforeach

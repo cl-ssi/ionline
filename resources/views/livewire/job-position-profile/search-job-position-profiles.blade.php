@@ -124,7 +124,7 @@
                         </th>
                         <td>{{ $jobPositionProfile->created_at->format('d-m-Y H:i:s') }}</td>
                         <td>
-                            <b>{{ $jobPositionProfile->user->FullName }}</b> <br>
+                            <b>{{ $jobPositionProfile->user->fullName }}</b> <br>
                             {{ ($jobPositionProfile->organizationalUnit) ? $jobPositionProfile->organizationalUnit->name : '' }} <br><br>
                         </td>
                         <td>{{ $jobPositionProfile->name }}</td>
@@ -325,7 +325,7 @@
                         </th>
                         <td>{{ $jobPositionProfile->created_at->format('d-m-Y H:i:s') }}</td>
                         <td>
-                            <b>{{ $jobPositionProfile->user->FullName }}</b> <br>
+                            <b>{{ $jobPositionProfile->user->fullName }}</b> <br>
                             {{ $jobPositionProfile->organizationalUnit->name }} <br><br>
                         </td>
                         <td>{{ $jobPositionProfile->name }}</td>

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateProProgrammingsTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -22,7 +22,7 @@ class CreateProProgrammingsTable extends Migration
             $table->json('access')->nullable();
             $table->string('file_a')->nullable();
             $table->string('file_b')->nullable();
-            $table->enum('status',['active','inactive','finished'])->nullable()->default('active');
+            $table->enum('status', ['active', 'inactive', 'finished'])->nullable()->default('active');
             $table->timestamps();
         });
     }
@@ -36,4 +36,4 @@ class CreateProProgrammingsTable extends Migration
     {
         Schema::dropIfExists('pro_programmings');
     }
-}
+};

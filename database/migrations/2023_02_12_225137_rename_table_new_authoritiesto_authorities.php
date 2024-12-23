@@ -1,10 +1,9 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class RenameTableNewAuthoritiestoAuthorities extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -28,4 +27,4 @@ class RenameTableNewAuthoritiestoAuthorities extends Migration
         //
         Schema::rename('rrhh_authorities', 'rrhh_new_authorities');
     }
-}
+};

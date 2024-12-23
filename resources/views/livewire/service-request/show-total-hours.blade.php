@@ -2,12 +2,12 @@
 @if(!$errorMsg)
     @if($forResolution)
         @if(!$fulfillment->serviceRequest->working_day_type == "HORA EXTRA")
-            {{floor($totalHoursDay)}} Horas diurnas y {{floor($totalHoursNight)}} horas nocturnas en turno extras en el mes de {{$fulfillment->serviceRequest->start_date->monthName}},
+            {{ $this->formatHours($totalHoursDay) }} Horas diurnas y {{ $this->formatHours($totalHoursNight) }} horas nocturnas en turno extras en el mes de {{$fulfillment->serviceRequest->start_date->monthName}},
             cuya suma alzada total es de ${{number_format($fulfillment->total_to_pay)}}.- ({{$fulfillment->total_to_pay_description}}) impuesto incluido, en conformidad a lo dispuesto en el inciso segundo del Art.
             2º del Decreto Nº 98 de 1991 del Ministerio de Hacienda y se cancelará en una cuota de ${{number_format($fulfillment->total_to_pay)}} el mes de {{$fulfillment->serviceRequest->start_date->monthName}}
         @else
         
-            {{floor($totalHoursDayString)}} Horas diurnas y {{floor($totalHoursNightString)}} horas nocturnas
+            {{ $this->formatHours($totalHoursDayString) }} Horas diurnas y {{ $this->formatHours($totalHoursNightString) }} horas nocturnas
         @endif
     @else
     @if(!$forCertificate)
@@ -27,8 +27,8 @@
                     <tr>
                         <td @if($fulfillment->serviceRequest->working_day_type === 'DIURNO PASADO A TURNO') @if($hourDetailArray['is_start_date_holiday']) style="color:#dc3545" @endif @endif >{{$hourDetailArray['start_date']}}</td>
                         <td @if($fulfillment->serviceRequest->working_day_type === 'DIURNO PASADO A TURNO') @if($hourDetailArray['is_end_date_holiday']) style="color:#dc3545" @endif @endif>{{$hourDetailArray['end_date']}}</td>
-                        <td>{{$hourDetailArray['hours_day']}}</td>
-                        <td>{{$hourDetailArray['hours_night']}}</td>
+                        <td>{{ $this->formatHours($hourDetailArray['hours_day']) }}</td>
+                        <td>{{ $this->formatHours($hourDetailArray['hours_night']) }}</td>
                         <td>{{$hourDetailArray['observation']}}</td>
                     </tr>
                 @endforeach
@@ -52,12 +52,12 @@
             </thead>
             <tbody>
             <tr>
-                <td>{{$totalHoursDay}}</td>
+                <td>{{ $this->formatHours($totalHoursDay) }}</td>
                 @if($fulfillment->serviceRequest->working_day_type === 'DIURNO PASADO A TURNO')
-                    <td>{{$refundHours}}</td> @endif
-                <td>{{$totalHoursNight}}</td>
-                <td>{{$totalHours}}</td>
-                <td>{{$totalHoursContab}}</td>
+                    <td>{{ $this->formatHours($refundHours) }}</td> @endif
+                <td>{{ $this->formatHours($totalHoursNight) }}</td>
+                <td>{{ $this->formatHours($totalHours) }}</td>
+                <td>{{ $this->formatHours($totalHoursContab) }}</td>
                 <td>{{ '$'.number_format($totalAmount, 0, ',', '.') }} <span
                         class="text-muted small">(Se debe comprobar)</span></td>
             </tr>
@@ -79,12 +79,12 @@
             </thead>
             <tbody>
             <tr>
-                <td>{{$totalHoursDay}}</td>
+                <td>{{ $this->formatHours($totalHoursDay) }}</td>
                 @if($fulfillment->serviceRequest->working_day_type === 'DIURNO PASADO A TURNO')
-                    <td>{{$refundHours}}</td> @endif
-                <td>{{$totalHoursNight}}</td>
+                    <td>{{ $this->formatHours($refundHours) }}</td> @endif
+                <td>{{ $this->formatHours($totalHoursNight) }}</td>
 
-                <td>{{$totalHours}}</td>
+                <td>{{ $this->formatHours($totalHours) }}</td>
                 @if(!$forCertificate) <td>{{ '$'.number_format($totalAmount, 0, ',', '.') }} <span
                         class="text-muted small">(Se debe comprobar)</span></td> @endif
             </tr>

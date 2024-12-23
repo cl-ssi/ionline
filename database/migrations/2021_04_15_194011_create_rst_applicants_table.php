@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateRstApplicantsTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -47,4 +47,4 @@ class CreateRstApplicantsTable extends Migration
     {
         Schema::dropIfExists('rst_applicants');
     }
-}
+};

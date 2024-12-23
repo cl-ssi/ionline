@@ -15,18 +15,15 @@ return new class extends Migration
     {
         Schema::create('dnc_identify_needs', function (Blueprint $table) {
             $table->id();
-
+            $table->string('status')->nullable();
             $table->string('subject')->nullable();
-
             $table->longText('reason')->nullable();
             $table->longText('behaviors')->nullable();
-
             $table->boolean('performance_evaluation')->nullable();
             $table->boolean('observation_of_performance')->nullable();
             $table->boolean('report_from_other_users')->nullable();
             $table->boolean('organizational_unit_indicators')->nullable();
             $table->string('other')->nullable();
-
             $table->longText('goal')->nullable();
             $table->longText('expected_results')->nullable();
             $table->longText('longterm_impact')->nullable();
@@ -38,10 +35,8 @@ return new class extends Migration
             $table->longText('current_training_level')->nullable();
             $table->longText('need_training_level')->nullable();
             $table->longText('expertise_required')->nullable();
-
             $table->longText('justification')->nullable();
             $table->longText('can_solve_the_need')->nullable();
-
             $table->foreignId('user_id')->nullable()->constrained('users');
             $table->foreignId('organizational_unit_id')->nullable()->constrained('organizational_units');
 

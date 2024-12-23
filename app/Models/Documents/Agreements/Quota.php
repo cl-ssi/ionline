@@ -25,7 +25,7 @@ class Quota extends Model
         'amount',
         'transfer_at',
         'voucher_number',
-        'agreement_id',
+        'process_id',
     ];
 
     /**

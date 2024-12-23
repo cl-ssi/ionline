@@ -17,7 +17,7 @@
                             <fieldset class="form-group col-sm">
                                 <label>Comprador Actual:</label><br>
                                 <select name="" class="form-control form-control-sm" disabled>
-                                    <option value="{{ $requestForm->purchasers->first()->id }}">{{ ucfirst(trans($requestForm->purchasers->first()->tinnyName ?? '')) }}</option>
+                                    <option value="{{ $requestForm->purchasers->first()->id }}">{{ ucfirst($requestForm->purchasers->first()->tinyName ?? '') }}</option>
                                 </select>
                             </fieldset>
 
@@ -26,7 +26,7 @@
                                 <select name="new_purchaser_user_id" class="form-control form-control-sm">
                                     <option value="">Seleccione...</option>
                                     @foreach($users as $user)
-                                    <option value="{{ $user->id }}">{{ ucfirst(trans($user->TinnyName)) }}</option>
+                                    <option value="{{ $user->id }}">{{ ucfirst($user->tinyName) }}</option>
                                     @endforeach
                                 </select>
                             </fieldset>
@@ -35,7 +35,7 @@
                             <fieldset class="form-group col-sm">
                                 <label>Usuario Gestor Actual:</label><br>
                                 <select name="" class="form-control form-control-sm" disabled>
-                                    <option value="{{ $requestForm->request_user_id }}">{{ ucfirst(trans($requestForm->user->tinnyName ?? '')) }}</option>
+                                    <option value="{{ $requestForm->request_user_id }}">{{ ucfirst($requestForm->user->tinyName ?? '') }}</option>
                                 </select>
                             </fieldset>
 

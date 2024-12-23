@@ -15,12 +15,12 @@ return new class extends Migration
     {
         Schema::create('alw_destinations', function (Blueprint $table) {
             $table->id();
-            
+
             $table->foreignId('commune_id')->nullable()->constrained('cl_communes');
             $table->foreignId('locality_id')->nullable()->constrained('cl_localities');
             $table->string('description')->nullable();
             $table->foreignId('allowance_id')->nullable()->constrained('alw_allowances');
-            
+
             $table->timestamps();
             $table->softDeletes();
         });

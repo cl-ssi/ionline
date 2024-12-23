@@ -15,7 +15,7 @@
       <select wire:model.blur="user_to_id" class="form-control selectpicker" data-live-search="true" data-size="5" required data-container="#for-picker">
           <option value=""></option>
           @foreach($users as $key => $user)
-          <option value="{{$user->id}}">{{$user->getFullNameAttribute()}}</option>
+          <option value="{{$user->id}}">{{$user->fullName}}</option>
           @endforeach
       </select>
   </div>
@@ -24,7 +24,7 @@
       <select wire:model.blur="user_to_id" class="form-control selectpicker" data-live-search="true" data-size="5" required data-container="#for-picker">
           <option value=""></option>
           @foreach($users as $key => $user)
-          <option value="{{$user->id}}">{{$user->getFullNameAttribute()}}</option>
+          <option value="{{$user->id}}">{{$user->fullName}}</option>
           @endforeach
       </select>
   </div>
@@ -36,13 +36,13 @@
             <tr>
                 <td>{{$signatureFlow->responsable_id}}</td>
                 <td>{{$signatureFlow->sign_position}}</td>
-                <td>{{$signatureFlow->user->getFullNameAttribute()}}</td>
+                <td>{{$signatureFlow->user->fullName}}</td>
                 <td>-</td>
                 <td>
                   <select class="form-control selectpicker" data-live-search="true" data-size="5" required>
                       <option value=""></option>
                       @foreach($users as $key => $user)
-                      <option value="{{$user->id}}">{{$user->getFullNameAttribute()}}</option>
+                      <option value="{{$user->id}}">{{$user->fullName}}</option>
                       @endforeach
                   </select>
                 </td>

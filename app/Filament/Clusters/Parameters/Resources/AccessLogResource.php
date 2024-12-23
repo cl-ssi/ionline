@@ -5,8 +5,9 @@ namespace App\Filament\Clusters\Parameters\Resources;
 use App\Filament\Clusters\Parameters;
 use App\Filament\Clusters\Parameters\Resources\AccessLogResource\Pages;
 use App\Filament\Clusters\Parameters\Resources\AccessLogResource\RelationManagers;
-use App\Filament\Resources\UserResource\Pages\EditUser;
+use App\Filament\Clusters\Rrhh\Resources\UserResource\Pages\EditUser;
 use App\Models\Parameters\AccessLog;
+use App\Models\User;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -41,6 +42,24 @@ class AccessLogResource extends Resource
     {
         return $table
             ->columns([
+                Tables\Columns\TextColumn::make('created_at')
+                    ->label('Fecha')
+                    ->dateTime('Y-m-d H:i:s')
+                    ->sortable(),
+                Tables\Columns\TextColumn::make(name: 'user.tinyName')
+                    ->numeric()
+                    ->label('Usuario')
+                    ->icon(fn($record) => !$record->user->active ? 'heroicon-o-no-symbol' : '')
+                    ->iconPosition(IconPosition::After)
+                    ->searchable(['full_name']),
+                Tables\Columns\TextColumn::make('type')
+                    ->label('Tipo')
+                    ->sortable()
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('switchUser.tinyName')
+                    ->label('Usuario Switch')
+                    ->numeric()
+                    ->searchable(['full_name']),
                 Tables\Columns\TextColumn::make('enviroment')
                     ->colors([
                         'success' => 'Cloud Run',
@@ -50,37 +69,26 @@ class AccessLogResource extends Resource
                     ])
                     ->label('Ambiente')
                     ->searchable(),
-                Tables\Columns\TextColumn::make(name: 'user.tinnyName')
-                    ->numeric()
-                    ->label('Usuario')
-                    ->icon(fn($record) => !$record->user->active ? 'heroicon-o-no-symbol' : '')
-                    ->iconPosition(IconPosition::After)
-                    ->searchable(['name', 'fathers_family'])
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('created_at')
-                    ->label('Fecha')
-                    ->dateTime()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('type')
-                    ->label('Tipo')
-                    ->sortable()
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('switchUser.tinnyName')
-                    ->label('Usuario Switch')
-                    ->numeric()
-                    ->sortable(),
             ])
-            ->defaultSort('created_at')
+            ->defaultSort('created_at','desc')
             ->filters([
-                Filter::make('local')
+                Tables\Filters\SelectFilter::make('user')
+                    ->options(fn(): array => User::pluck('full_name', 'id')->toArray())
+                    ->label('Usuario')
+                    ->relationship('user', 'name',)
+                    ->searchable(),
+                Tables\Filters\SelectFilter::make('switchUser')
+                    ->options(fn(): array => User::pluck('full_name', 'id')->toArray())
+                    ->label('Swicher')
+                    ->relationship('switchUser', 'name',)
+                    ->searchable(),
+                Tables\Filters\Filter::make('local')
                     ->query(fn(Builder $query): Builder => $query->where('type', 'local'))
                     ->label('Local'),
-
-                Filter::make('switch')
+                Tables\Filters\Filter::make('switch')
                     ->query(fn(Builder $query): Builder => $query->where('type', 'switch'))
                     ->label('Switch'),
-
-                Filter::make('clave_unica')
+                Tables\Filters\Filter::make('clave_unica')
                     ->query(fn(Builder $query): Builder => $query->where('type', 'Clave Unica'))
                     ->label('Clave Unica'),
             ])

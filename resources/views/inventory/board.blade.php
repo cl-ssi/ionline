@@ -79,7 +79,7 @@
                     $uniqueUsers = $uniqueUsers->unique('id');
                 @endphp
                 @foreach($uniqueUsers as $user)
-                    <li>{{ $user->tinny_name }}</li>
+                    <li>{{ $user->tinyName }}</li>
                 @endforeach
             </ul>
         </td>

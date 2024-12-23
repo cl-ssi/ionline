@@ -17,7 +17,7 @@
                 @foreach($audits->sortByDesc('updated_at') as $audit)
                 <tr>
                     <td nowrap>{{ $audit->created_at }}</td>
-                    <td nowrap>{{ optional($audit->user)->tinnyName }}</td>
+                    <td nowrap>{{ optional($audit->user)->tinyName }}</td>
                     <td nowrap>{{ $audit->url }}</td>
                     <td nowrap>{{ $audit->event }}</td>
                     <td>

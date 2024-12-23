@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateWellAmiAbscencesTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -45,7 +45,7 @@ class CreateWellAmiAbscencesTable extends Migration
             $table->timestamps();
             $table->softDeletes();
         });
-    } 
+    }
 
     /**
      * Reverse the migrations.
@@ -56,4 +56,4 @@ class CreateWellAmiAbscencesTable extends Migration
     {
         Schema::dropIfExists('well_ami_abscences');
     }
-}
+};

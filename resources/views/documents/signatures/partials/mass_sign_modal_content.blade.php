@@ -23,9 +23,7 @@
 
         <h5 class="modal-title" id="exampleModalLongTitle"> 
                 {{$modalTitleText}}</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-        </button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
     </div>
     <form method="POST" class="form-horizontal"
           action="{{route('signPdfFlow', 1)}}"
@@ -85,8 +83,7 @@
             </div>
         </div>
         <div class="modal-footer">
-            <button type="button" id="cancelSignBtn" class="btn btn-secondary" data-dismiss="modal">Cancelar
-            </button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close">Cancelar</button>
 
             @if(!$hasValidationMessages)
                 <button class="btn btn-primary" id="signBtn" type="submit">

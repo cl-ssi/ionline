@@ -79,7 +79,7 @@
 <div id="firmas">
     <div class="center" style="width: 100%;">
         <p class="uppercase">
-            {{ $reception->lawyer->FullName }}<br>
+            {{ $reception->lawyer->fullName }}<br>
             {{ $reception->lawyer->position }}<br>
             {{ env('APP_SS') }}
         </p>

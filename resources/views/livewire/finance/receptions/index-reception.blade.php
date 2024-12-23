@@ -177,6 +177,7 @@
                                 <span class="badge bg-danger">Rechazada</span>
                             @else
                                 @foreach ($reception->approvals as $approval)
+                                    {{-- <img src="{{ $approval->avatar }}" alt=""> --}}
                                     <span style="width=50px;"
                                         @class([
                                             'd-inline-bloc',
@@ -188,13 +189,16 @@
                                         ])
                                         tabindex="0"
                                         data-toggle="tooltip"
-                                        title="Fecha: ">
-                                        <small>
+                                        >
+                                        <small title="
                                             @if ($approval->approver)
+                                                {{ $approval->approver->shortName }}">
                                                 {{ $approval->approver->initials }}
                                             @elseif($approval->sentToOu)
+                                                {{ $approval->sentToOu->currentManager?->user->shortName }}">
                                                 {{ $approval->sentToOu->currentManager?->user->initials }}
                                             @elseif($approval->sentToUser)
+                                                {{ $approval->sentToUser->shortName }}">
                                                 {{ $approval->sentToUser->initials }}
                                             @endif
                                         </small>

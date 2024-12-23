@@ -700,7 +700,7 @@ class AllowancesCreate extends Component
                 "module"                            => "Viáticos",
                 "module_icon"                       => "bi bi-wallet",
                 "subject"                           => 'Solicitud de Viático: ID '.$alw->id.'<br>
-                                                        Funcionario: '.$alw->userAllowance->FullName,
+                                                        Funcionario: '.$alw->userAllowance->fullName,
                 "sent_to_ou_id"                     => $currentOu->id,
                 "document_route_name"               => "allowances.show_approval",
                 "document_route_params"             => json_encode([
@@ -735,7 +735,7 @@ class AllowancesCreate extends Component
             "module"                            => "Viáticos",
             "module_icon"                       => "bi bi-wallet",
             "subject"                           => 'Solicitud de Viático: ID '.$alw->id.'<br>
-                                                    Funcionario: '.$alw->userAllowance->FullName,
+                                                    Funcionario: '.$alw->userAllowance->fullName,
             "sent_to_ou_id"                     => Parameter::get('ou','FinanzasSSI'),
             "document_route_name"               => "allowances.show_approval",
             "document_route_params"             => json_encode([

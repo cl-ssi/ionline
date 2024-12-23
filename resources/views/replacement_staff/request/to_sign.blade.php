@@ -37,7 +37,7 @@
             <tbody>
                 <tr>
                     <th class="table-active">Solicitante</th>
-                    <td style="width: 33%">{{ $requestReplacementStaff->user->FullName }}</td>
+                    <td style="width: 33%">{{ $requestReplacementStaff->user->fullName }}</td>
                     <td style="width: 33%">{{ $requestReplacementStaff->organizationalUnit->name }}</td>
                 </tr>
                 <tr>
@@ -110,7 +110,7 @@
                     <th class="table-active">Staff Sugerido</th>
                     <td colspan="2">
                         @if($requestReplacementStaff->replacementStaff)
-                            {{ $requestReplacementStaff->replacementStaff->FullName }}
+                            {{ $requestReplacementStaff->replacementStaff->fullName }}
                         @endif
                     </td>
                 </tr>
@@ -158,11 +158,11 @@
                 <tr>
                     <th class="table-active">Creador / Solicitante</th>
                     <td style="width: 33%">
-                        {{ $requestReplacementStaff->user->FullName }} <br>
+                        {{ $requestReplacementStaff->user->fullName }} <br>
                         {{ $requestReplacementStaff->organizationalUnit->name }}
                     </td>
                     <td style="width: 33%">
-                        {{($requestReplacementStaff->requesterUser) ?  $requestReplacementStaff->requesterUser->TinnyName : '' }}
+                        {{($requestReplacementStaff->requesterUser) ?  $requestReplacementStaff->requesterUser->tinyName : '' }}
                     </td>
                 </tr>
                 <tr>
@@ -320,7 +320,7 @@
                             <span style="color: green;">
                                 <i class="fas fa-check-circle"></i> {{ $requestSign->StatusValue }}
                             </span> <br>
-                            <i class="fas fa-user"></i> {{ $requestSign->user->FullName }}<br>
+                            <i class="fas fa-user"></i> {{ $requestSign->user->fullName }}<br>
                             <i class="fas fa-calendar-alt"></i> {{ $requestSign->date_sign->format('d-m-Y H:i:s') }}<br>
                         @else
                             @if($requestSign->request_status == NULL)

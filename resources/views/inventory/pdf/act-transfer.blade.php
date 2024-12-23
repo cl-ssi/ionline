@@ -97,7 +97,7 @@
                     <strong>Responsable</strong>
                 </td>
                 <td>
-                    {{ optional($movement->inventory->responsible)->tinny_name }}
+                    {{ optional($movement->inventory->responsible)->tinyName }}
                 </td>
             </tr>
             <tr>
@@ -105,7 +105,7 @@
                     <strong>Usuario</strong>
                 </td>
                 <td>
-                    {{ optional($movement->inventory->using)->tinny_name }}
+                    {{ optional($movement->inventory->using)->tinyName }}
                 </td>
             </tr>
             @if(isset($movement->inventory->lastMovement->installation_date))

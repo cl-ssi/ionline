@@ -198,7 +198,16 @@
                                 dia
                             @endif
                         @else
-                            
+                            @foreach($requestReplacementStaff->positions as $position)
+                                @foreach($position->selectedPositions as $key => $selectedPosition)
+                                    {{ $selectedPosition->start_date ? $selectedPosition->start_date->format('d-m-Y') : '' }}
+                                    @if($selectedPosition->start_date != NULL)
+                                        <span class="badge badge-warning">3 meses: {{ $selectedPosition->start_date ? $selectedPosition->start_date->addMonths(3)->format('d-m-Y') : '' }}</span> 
+                                        <span class="badge badge-danger">6 meses: {{ $selectedPosition->start_date ? $selectedPosition->start_date->addMonths(6)->format('d-m-Y') : '' }}</span> 
+                                        <hr>
+                                    @endif
+                                @endforeach
+                            @endforeach
                         @endif
                     </td>
                     <td>
@@ -224,9 +233,9 @@
                     </td>
                     <td>
                         <p>
-                            <b>Creado por</b>: {{ $requestReplacementStaff->user->TinnyName}} <br>
+                            <b>Creado por</b>: {{ $requestReplacementStaff->user->tinyName}} <br>
                             ({{ $requestReplacementStaff->organizationalUnit->name }}) <br>
-                            <b>Solicitado por</b>: {{($requestReplacementStaff->requesterUser) ?  $requestReplacementStaff->requesterUser->TinnyName : '' }}
+                            <b>Solicitado por</b>: {{($requestReplacementStaff->requesterUser) ?  $requestReplacementStaff->requesterUser->tinyName : '' }}
                         </p>
                     </td>
                     
@@ -448,7 +457,7 @@
                             <!-- PERMITE INGRESAR A LA EVALUACION TÉCNICA -->
                             @if(($typeIndex == 'assign' || $typeIndex == 'assigned_to') 
                                 && $requestReplacementStaff->technicalEvaluation)
-                                <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="Asignado a: {{ $requestReplacementStaff->assignEvaluations->last()->userAssigned->FullName }}">
+                                <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="Asignado a: {{ $requestReplacementStaff->assignEvaluations->last()->userAssigned->fullName }}">
                                     <a href="{{ route('replacement_staff.request.technical_evaluation.edit', $requestReplacementStaff) }}"
                                     class="btn btn-outline-secondary btn-sm"><i class="fas fa-edit"></i></a>
                                 </span>
@@ -514,7 +523,7 @@
                                 @else
                                     <!-- BOTÓN PARA GESTIONAR EVALUACIÓN TÉCNICA -->
                                     @if(($typeIndex == 'assign' || $typeIndex == 'assigned_to') && $requestReplacementStaff->technicalEvaluation)
-                                        <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="Asignado a: {{ $requestReplacementStaff->assignEvaluations->last()->userAssigned->FullName }}">
+                                        <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="Asignado a: {{ $requestReplacementStaff->assignEvaluations->last()->userAssigned->fullName }}">
                                             <a href="{{ route('replacement_staff.request.technical_evaluation.edit', $requestReplacementStaff) }}"
                                                 class="btn btn-outline-secondary btn-sm"><i class="fas fa-edit"></i></a>
                                         </span>
@@ -558,7 +567,7 @@
                 <select wire:model.live="userToAssign" id="for_to_user_id" class="form-control">
                     <option value="">Seleccione...</option>
                     @foreach($users_rys as $user_rys)
-                        <option value="{{ $user_rys->id }}">{{ $user_rys->FullName }}</option>
+                        <option value="{{ $user_rys->id }}">{{ $user_rys->fullName }}</option>
                     @endforeach
                 </select>
             </fieldset>

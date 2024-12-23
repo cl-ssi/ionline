@@ -97,7 +97,7 @@
               {{ $requestForm->SubtypeValue }}
             </td>
             <td>{{ $requestForm->name }}</td>
-            <td>{{ $requestForm->user->FullName }}<br>
+            <td>{{ $requestForm->user->fullName }}<br>
               {{ $requestForm->userOrganizationalUnit->name ?? '' }}
             </td>          
             <td align="center">{{ $requestForm->quantityOfItems() }}</td>
@@ -244,10 +244,10 @@
             {{ $requestForm->SubtypeValue }}
           </td>
           <td>{{ $requestForm->name }}</td>
-          <td>{{ $requestForm->user ? $requestForm->user->FullName : 'Usuario eliminado' }}<br>
+          <td>{{ $requestForm->user ? $requestForm->user->fullName : 'Usuario eliminado' }}<br>
             {{ $requestForm->userOrganizationalUnit ? $requestForm->userOrganizationalUnit->name : 'Usuario eliminado' }}
           </td>
-          <td>{{ $requestForm->purchasers->first()->FullName ?? 'No asignado' }}</td>
+          <td>{{ $requestForm->purchasers->first()->fullName ?? 'No asignado' }}</td>
           <td align="center">{{ $requestForm->quantityOfItems() }}</td>
           <td class="text-right">{{$requestForm->symbol_currency}}{{ number_format($requestForm->estimated_expense,$requestForm->precision_currency,",",".") }}</td>
           <td class="text-center">
@@ -394,10 +394,10 @@
             {{ $requestForm->SubtypeValue }}
           </td>
           <td>{{ $requestForm->name }}</td>
-          <td>{{ $requestForm->user ? $requestForm->user->FullName : 'Usuario eliminado' }}<br>
+          <td>{{ $requestForm->user ? $requestForm->user->fullName : 'Usuario eliminado' }}<br>
             {{ $requestForm->userOrganizationalUnit ? $requestForm->userOrganizationalUnit->name : 'Usuario eliminado' }}
           </td>
-          <td>{{ $requestForm->purchasers->first()->FullName ?? 'No asignado' }}</td>
+          <td>{{ $requestForm->purchasers->first()->fullName ?? 'No asignado' }}</td>
           <td align="center">{{ $requestForm->quantityOfItems() }}</td>
           <td class="text-right">{{$requestForm->symbol_currency}}{{ number_format($requestForm->estimated_expense,$requestForm->precision_currency,",",".") }}</td>
           <td class="text-center">

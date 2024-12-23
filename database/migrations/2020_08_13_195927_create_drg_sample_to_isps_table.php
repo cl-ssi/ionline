@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateDrgSampleToIspsTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -17,7 +17,7 @@ class CreateDrgSampleToIspsTable extends Migration
             $table->id('id');
             $table->integer('number')->nullable();
             $table->date('document_date')->nullable();
-            $table->float('envelope_weight', 8, 2);
+            $table->decimal('envelope_weight', 8, 2);
             $table->text('observation')->nullable();
             $table->foreignId('reception_id')->constrained('drg_receptions');
             $table->foreignId('user_id')->constrained('users');
@@ -37,4 +37,4 @@ class CreateDrgSampleToIspsTable extends Migration
     {
         Schema::dropIfExists('drg_sample_to_isps');
     }
-}
+};

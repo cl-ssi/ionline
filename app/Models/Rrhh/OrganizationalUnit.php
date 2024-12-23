@@ -10,6 +10,8 @@ use App\Models\Requirements\Category;
 use App\Models\ServiceRequests\OrganizationalUnitLimit;
 use App\Models\ServiceRequests\ServiceRequest;
 use App\Models\User;
+use App\Observers\Rrhh\OrganizationalUnitObserver;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -21,6 +23,7 @@ use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use OwenIt\Auditing\Contracts\Auditable;
 
+#[ObservedBy([OrganizationalUnitObserver::class])]
 class OrganizationalUnit extends Model implements Auditable
 {
     use \OwenIt\Auditing\Auditable;
@@ -37,6 +40,7 @@ class OrganizationalUnit extends Model implements Auditable
         'id',
         'name',
         'level',
+        'order',
         'organizational_unit_id',
         'establishment_id',
         'sirh_function',
@@ -165,6 +169,51 @@ class OrganizationalUnit extends Model implements Auditable
     {
         return $this->hasMany(Subrogation::class)
             ->where('type', 'manager');
+    }
+
+    /**
+     * Ordenar unidades organizacionales dentro del mismo establecimiento.
+     *
+     * @param int $establishmentId
+     * @return void
+     */
+    public static function reorderUnits(int $establishmentId): void
+    {
+        $root = self::with('childs')
+            ->whereNull('organizational_unit_id')
+            ->where('establishment_id', $establishmentId)
+            ->orderBy('name')
+            ->first();
+
+        $order = 1;
+
+        $order = self::updateOrder($root, $order);
+    }
+
+    /**
+     * Actualizar el orden de un nodo y sus hijos recursivamente.
+     *
+     * @param OrganizationalUnit $node
+     * @param int $currentOrder
+     * @return int
+     */
+    private static function updateOrder(OrganizationalUnit $node, int $currentOrder): int
+    {
+        // Verificar si el valor actual es diferente del esperado
+        if ($node->order !== $currentOrder) {
+            $node->order = $currentOrder;
+            $node->saveQuietly();
+        }
+
+        $currentOrder++;
+
+        $children = $node->childs()->orderBy('name')->get();
+
+        foreach ($children as $child) {
+            $currentOrder = self::updateOrder($child, $currentOrder);
+        }
+
+        return $currentOrder;
     }
 
     public function scopeSearch($query, $name)

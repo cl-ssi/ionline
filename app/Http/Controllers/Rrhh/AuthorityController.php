@@ -80,19 +80,19 @@ class AuthorityController extends Controller
     
         foreach ($newAuthorities as $authority) {
             $backgroundColor = '';
-            if ($authority->type == 'delegate') {
+            if ($authority->type->value == 'delegate') {
               $backgroundColor = '#6c757d';
-            } elseif ($authority->type == 'secretary') {
+            } elseif ($authority->type->value == 'secretary') {
               $backgroundColor = '#ffc107';
-            } elseif ($authority->type == 'manager') {
+            } elseif ($authority->type->value == 'manager') {
               $backgroundColor = '#007bff';
             }
             $event = [
-                'title' => $authority->user->tinnyName,
+                'title' => $authority->user->tinyName,
                 'start' => $authority->date,
                 'end' => $authority->date,
                 'backgroundColor' => $backgroundColor,
-                'type' => $authority->type,
+                'type' => $authority->type->value,
                 // agrega más campos aquí si los necesitas
             ];
             $events[] = $event;

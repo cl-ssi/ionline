@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateArqPurchasingProcessesTable extends Migration
+return new class extends Migration
 {
     /**
      * Tipos de Estados en el Proceso de Compra.
@@ -28,7 +28,7 @@ class CreateArqPurchasingProcessesTable extends Migration
             $table->dateTime('end_date', $precision = 0)->nullable();
             $table->string('status'); // 'in_progress', 'total', 'partial', 'desert',  'timed_out', 'not_available'
             $table->text('observation')->nullable();
-            $table->foreignId('user_id')->constrained('users');; //Usuario que crea el proceso de compra.
+            $table->foreignId('user_id')->constrained('users'); //Usuario que crea el proceso de compra.
             $table->foreignId('request_form_id')->constrained('arq_request_forms');
 
             // $table->foreignId('purchase_unit_id');
@@ -68,4 +68,4 @@ class CreateArqPurchasingProcessesTable extends Migration
     {
         Schema::dropIfExists('arq_purchasing_processes');
     }
-}
+};

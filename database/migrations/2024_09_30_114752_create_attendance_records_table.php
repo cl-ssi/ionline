@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained();
             $table->datetime('record_at');
             $table->boolean('type');
-            $table->enum('verification',['iOnline','Finger','Password'])->default('iOnline');
+            $table->enum('verification', ['iOnline', 'Finger', 'Password'])->default('iOnline');
             $table->string('clock_ip')->nullable();
             $table->string('clock_serial')->nullable();
             $table->string('observation')->nullable();

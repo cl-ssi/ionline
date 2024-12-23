@@ -178,7 +178,7 @@
                 <th style="width: 20%">Calidad</th>
             </tr>
             <tr align="center">
-                <td colspan="2">{{ $allowance->userAllowance->FullName }}</td>
+                <td colspan="2">{{ $allowance->userAllowance->fullName }}</td>
                 <td>{{ $allowance->userAllowance->id }}-{{ $allowance->userAllowance->dv }}</td>
                 <td>{{ $allowance->ContractualConditionValue }}</td>
             </tr>

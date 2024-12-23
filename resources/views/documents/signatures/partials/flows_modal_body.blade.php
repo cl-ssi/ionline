@@ -27,7 +27,7 @@
             @else
                 <li class="list-group-item list-group-item-warning">
                     Pendiente 
-                    {{ $signatureFlow->type == 'firmante' ? 'firma ' : 'visación ' }}                    
+                    {{ $signatureFlow->type == 'firmante' ? 'firma ' : 'visación ' }}
                     de {{ $signatureFlow->signerName }}
                 </li>
             @endif

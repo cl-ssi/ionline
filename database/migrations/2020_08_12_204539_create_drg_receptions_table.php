@@ -1,10 +1,10 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
-class CreateDrgReceptionsTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -17,7 +17,7 @@ class CreateDrgReceptionsTable extends Migration
             $table->id('id');
             $table->timestamp('date')->nullable();
             $table->string('parte')->nullable();
-            $table->enum('parte_label', ['Parte','Oficio Reservado','RUC']);
+            $table->enum('parte_label', ['Parte', 'Oficio Reservado', 'RUC']);
             $table->foreignId('parte_police_unit_id')->constrained('drg_police_units');
             $table->string('document_number');
             $table->foreignId('document_police_unit_id')->constrained('drg_police_units');
@@ -26,8 +26,8 @@ class CreateDrgReceptionsTable extends Migration
             $table->string('delivery_run')->nullable();
             $table->string('delivery_position')->nullable();
             $table->foreignId('court_id')->constrained('drg_courts');
-            $table->string('imputed',512)->nullable();
-            $table->string('imputed_run',512)->nullable();
+            $table->string('imputed', 512)->nullable();
+            $table->string('imputed_run', 512)->nullable();
             $table->text('observation')->nullable();
             $table->integer('reservado_isp_number')->nullable();
             $table->date('reservado_isp_date')->nullable();
@@ -48,4 +48,4 @@ class CreateDrgReceptionsTable extends Migration
     {
         Schema::dropIfExists('drg_receptions');
     }
-}
+};

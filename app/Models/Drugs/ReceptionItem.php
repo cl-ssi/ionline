@@ -39,6 +39,7 @@ class ReceptionItem extends Model implements Auditable
         'countersample_number',
         'countersample',
         'destruct',
+        'countersample_destruction_id',
         'equivalent',
         'result_number',
         'result_date',
@@ -94,6 +95,11 @@ class ReceptionItem extends Model implements Auditable
     public function actPrecursorItem(): HasOne
     {
         return $this->hasOne(ActPrecursorItem::class);
+    }
+
+    public function countersampleDestruction(): BelongsTo
+    {
+        return $this->belongsTo(CountersampleDestruction::class);
     }
 
     /**

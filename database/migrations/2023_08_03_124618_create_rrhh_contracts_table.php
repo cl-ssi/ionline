@@ -89,11 +89,11 @@ return new class extends Migration
             $table->date('fecha_termino_ausentismo')->nullable();
             $table->date('fecha_primer_contrato')->nullable();
             $table->boolean('shift')->default(false);
-            
+
             $table->timestamps();
             $table->softDeletes();
 
-            $table->unique(['rut','correlativo'],'UNIQUE');
+            $table->unique(['rut', 'correlativo'], 'UNIQUE');
         });
     }
 

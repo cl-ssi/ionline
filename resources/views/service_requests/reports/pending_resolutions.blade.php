@@ -23,7 +23,7 @@
       <tr>
           <td>{{$serviceRequest->id}}</td>
           <td>{{$serviceRequest->employee->runNotFormat()}}</td>
-          <td>{{$serviceRequest->employee->getFullNameAttribute()}}</td>
+          <td>{{$serviceRequest->employee->fullName}}</td>
           <td nowrap>{{ $serviceRequest->start_date->format('d-m-Y') }}</td>
     			<td nowrap>{{ $serviceRequest->end_date->format('d-m-Y') }}</td>
           <td>{{$serviceRequest->program_contract_type}}</td>

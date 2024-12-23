@@ -57,7 +57,7 @@
             <tbody>
                 <tr>
                     <th class="table-active">Solicitante</th>
-                    <td style="width: 33%">{{ $requestReplacementStaff->user->FullName }}</td>
+                    <td style="width: 33%">{{ $requestReplacementStaff->user->fullName }}</td>
                     <td style="width: 33%">{{ $requestReplacementStaff->organizationalUnit->name }}</td>
                 </tr>
                 <tr>
@@ -140,7 +140,7 @@
                     <th class="table-active">Staff Sugerido</th>
                     <td colspan="2">
                         @if($requestReplacementStaff->replacementStaff)
-                            {{ $requestReplacementStaff->replacementStaff->FullName }}
+                            {{ $requestReplacementStaff->replacementStaff->fullName }}
                         @endif
                     </td>
                 </tr>
@@ -188,11 +188,11 @@
                 <tr>
                     <th class="table-active">Creador / Solicitante</th>
                     <td style="width: 33%">
-                        {{ $requestReplacementStaff->user->FullName }} <br>
+                        {{ $requestReplacementStaff->user->fullName }} <br>
                         {{ $requestReplacementStaff->organizationalUnit->name }}
                     </td>
                     <td style="width: 33%">
-                        {{($requestReplacementStaff->requesterUser) ?  $requestReplacementStaff->requesterUser->TinnyName : '' }}
+                        {{($requestReplacementStaff->requesterUser) ?  $requestReplacementStaff->requesterUser->tinyName : '' }}
                     </td>
                 </tr>
                 <tr>
@@ -359,14 +359,14 @@
                                 <span style="color: green;">
                                     <i class="fas fa-check-circle"></i> {{ $approval->StatusInWords }}
                                 </span> <br>
-                                <i class="fas fa-user"></i> {{ $approval->approver->FullName }}<br>
+                                <i class="fas fa-user"></i> {{ $approval->approver->fullName }}<br>
                                 <i class="fas fa-calendar-alt"></i> {{ $approval->approver_at->format('d-m-Y H:i:s') }}<br>
                             @endif
                             @if($approval->StatusInWords == "Rechazado")
                                 <span style="color: tomato;">
                                     <i class="fas fa-check-circle"></i> {{ $approval->StatusInWords }}
                                 </span> <br>
-                                <i class="fas fa-user"></i> {{ $approval->approver->FullName }}<br>
+                                <i class="fas fa-user"></i> {{ $approval->approver->fullName }}<br>
                                 <i class="fas fa-calendar-alt"></i> {{ $approval->approver_at->format('d-m-Y H:i:s') }}
                                 <hr>
                                 {{ $approval->approver_observation }}
@@ -384,14 +384,14 @@
                                     <span style="color: green;">
                                         <i class="fas fa-check-circle"></i> {{ $sign->StatusValue }} 
                                     </span><br>
-                                    <i class="fas fa-user"></i> {{ $sign->user->TinnyName }}<br>
+                                    <i class="fas fa-user"></i> {{ $sign->user->tinyName }}<br>
                                     <i class="fas fa-calendar-alt"></i> {{ ($sign->date_sign) ? $sign->date_sign->format('d-m-Y H:i:s') : '' }}<br>
                                 @endif
                                 @if($sign->request_status == 'rejected')
                                     <span style="color: Tomato;">
                                         <i class="fas fa-times-circle"></i> {{ $sign->StatusValue }} 
                                     </span><br>
-                                    <i class="fas fa-user"></i> {{ $sign->user->FullName }}<br>
+                                    <i class="fas fa-user"></i> {{ $sign->user->fullName }}<br>
                                     <i class="fas fa-calendar-alt"></i> {{ $sign->date_sign->format('d-m-Y H:i:s') }}<br>
                                     <hr>
                                     {{ $sign->observation }}<br>
@@ -430,14 +430,14 @@
                                     <span style="color: green;">
                                         <i class="fas fa-check-circle"></i> {{ $approval->StatusInWords }}
                                     </span> <br>
-                                    <i class="fas fa-user"></i> {{ $approval->approver->FullName }}<br>
+                                    <i class="fas fa-user"></i> {{ $approval->approver->fullName }}<br>
                                     <i class="fas fa-calendar-alt"></i> {{ $approval->approver_at->format('d-m-Y H:i:s') }}<br>
                                 @endif
                                 @if($approval->StatusInWords == "Rechazado")
                                     <span style="color: tomato;">
                                         <i class="fas fa-check-circle"></i> {{ $approval->StatusInWords }}
                                     </span> <br>
-                                    <i class="fas fa-user"></i> {{ $approval->approver->FullName }}<br>
+                                    <i class="fas fa-user"></i> {{ $approval->approver->fullName }}<br>
                                     <i class="fas fa-calendar-alt"></i> {{ $approval->approver_at->format('d-m-Y H:i:s') }}
                                     <hr>
                                     {{ $approval->approver_observation }}
@@ -462,14 +462,14 @@
                         <span style="color: green;">
                             <i class="fas fa-check-circle"></i> {{ $sign->StatusValue }} 
                         </span><br>
-                        <i class="fas fa-user"></i> {{ $sign->user->TinnyName }}<br>
+                        <i class="fas fa-user"></i> {{ $sign->user->tinyName }}<br>
                         <i class="fas fa-calendar-alt"></i> {{ ($sign->date_sign) ? $sign->date_sign->format('d-m-Y H:i:s') : '' }}<br>
                     @endif
                     @if($sign->request_status == 'rejected')
                         <span style="color: Tomato;">
                             <i class="fas fa-times-circle"></i> {{ $sign->StatusValue }} 
                         </span><br>
-                        <i class="fas fa-user"></i> {{ $sign->user->FullName }}<br>
+                        <i class="fas fa-user"></i> {{ $sign->user->fullName }}<br>
                         <i class="fas fa-calendar-alt"></i> {{ $sign->date_sign->format('d-m-Y H:i:s') }}<br>
                         <hr>
                         {{ $sign->observation }}<br>

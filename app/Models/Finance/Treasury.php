@@ -3,30 +3,30 @@
 namespace App\Models\Finance;
 
 use App\Models\File;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\MorphTo;
+use App\Models\User;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Model;
 
 class Treasury extends Model
 {
+    use HasFactory;
+    use SoftDeletes;
+    
     protected $table = 'fin_treasuries';
 
     protected $fillable = [
         'name',
-        'description',
-        'resolution_folio',
-        'resolution_date',
-        'resolution_file',
-        'commitment_folio_sigfe',
-        'commitment_date_sigfe',
-        'commitment_file_sigfe',
-        'accrual_folio_sigfe',
-        'accrual_date_sigfe',
-        'accrual_file_sigfe',
         'bank_receipt_date',
-        'bank_receipt_file',
+        // 'bank_receipt_file',
+        'third_parties_date',
+        // 'third_parties_file',
         'treasureable_type',
         'treasureable_id',
+        'user_id',
     ];
 
     public function treasureable(): MorphTo
@@ -34,8 +34,13 @@ class Treasury extends Model
         return $this->morphTo();
     }
 
+    public function user(): HasOne
+    {
+        return $this->HasOne(User::class);
+    }
+
     /**
-     * Get support file, archivo de respaldo.
+     * Get third Parties file.
      */
     public function thirdPartiesFile(): MorphOne
     {
@@ -43,7 +48,7 @@ class Treasury extends Model
     }
  
     /**
-     * Get support file, archivo de respaldo.
+     * Get bank receipt file.
      */
     public function bankReceiptFile(): MorphOne
     {

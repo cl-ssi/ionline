@@ -9,10 +9,15 @@ use App\Notifications\Welfare\Benefits\RequestTransfer;
 use App\Notifications\Welfare\Benefits\RequestAccept;
 use App\Notifications\Welfare\Benefits\RequestReject;
 use App\Models\File;
+use Livewire\WithPagination;
+use Illuminate\Pagination\Paginator;
 
 class RequestsAdmin extends Component
 {
-    public $requests;
+    use WithPagination;
+    
+    // public $requests;
+    public $appliedFilters = []; // Almacena filtros aplicados con el botón
     public $statusFilters = ['En revisión']; // Establecer el filtro predeterminado
     public $currentRequestId = null;
     public $showTextarea = false;
@@ -25,6 +30,12 @@ class RequestsAdmin extends Component
         'requests.*.installments_number' => 'required',
     ];
 
+    public function boot()
+    {
+        // Habilitar estilos de paginación de Bootstrap
+        Paginator::useBootstrap();
+    }
+
     public function updatedStatusFilters()
     {
         // Limpiar el filtro si "Todos" está seleccionado
@@ -35,6 +46,12 @@ class RequestsAdmin extends Component
         elseif (!empty($this->statusFilters) && count($this->statusFilters) > 1 && in_array('Todos', $this->statusFilters)) {
             $this->statusFilters = array_diff($this->statusFilters, ['Todos']);
         }
+    }
+
+    public function applyFilters()
+    {
+        $this->appliedFilters = $this->statusFilters;
+        $this->resetPage(); // Reiniciar la paginación
     }
 
     public function accept($id)
@@ -165,8 +182,10 @@ class RequestsAdmin extends Component
         }
 
         // Obtener las solicitudes filtradas
-        $this->requests = $query->orderByDesc('id')->get();
+        $this->requests = $query->orderByDesc('id')->paginate(10);
 
-        return view('livewire.welfare.benefits.requests-admin');
+        return view('livewire.welfare.benefits.requests-admin', [
+            'requests' => $this->requests,
+        ]);
     }
 }

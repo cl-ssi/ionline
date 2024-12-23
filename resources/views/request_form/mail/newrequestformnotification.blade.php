@@ -19,9 +19,9 @@
   <hr>
 
   <ul>
-      <li><strong>Solicitado por</strong>: {{ $req->user->FullName }}</li>
+      <li><strong>Solicitado por</strong>: {{ $req->user->fullName }}</li>
       <li><strong>Unidad Organizacional</strong>: {{ $req->userOrganizationalUnit->name }}</li>
-      <li><strong>Administrador de Contrato</strong>: {{ $req->contractManager->FullName }}</li>
+      <li><strong>Administrador de Contrato</strong>: {{ $req->contractManager->fullName }}</li>
   </ul>
 
   <br>

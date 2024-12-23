@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateProProgrammingReviewsTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -17,13 +17,13 @@ class CreateProProgrammingReviewsTable extends Migration
             $table->id();
             $table->string('revisor')->nullable();
             $table->string('general_features')->nullable();
-            $table->enum('answer',['SI','NO','REGULAR'])->nullable();
+            $table->enum('answer', ['SI', 'NO', 'REGULAR'])->nullable();
             $table->tinyInteger('score')->nullable();
             $table->text('observation')->nullable();
-            $table->enum('active',['SI','NO'])->nullable();
+            $table->enum('active', ['SI', 'NO'])->nullable();
 
             $table->foreignId('user_id')->constrained('users');
-            $table->foreignId('updated_by')->nullable()->constrained('users');  
+            $table->foreignId('updated_by')->nullable()->constrained('users');
             $table->foreignId('commune_file_id')->constrained('pro_commune_files');
 
             $table->timestamps();
@@ -39,4 +39,4 @@ class CreateProProgrammingReviewsTable extends Migration
     {
         Schema::dropIfExists('pro_programming_reviews');
     }
-}
+};

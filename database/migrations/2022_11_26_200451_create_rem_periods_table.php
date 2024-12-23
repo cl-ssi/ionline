@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateRemPeriodsTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -15,9 +15,9 @@ class CreateRemPeriodsTable extends Migration
     {
         Schema::create('rem_periods', function (Blueprint $table) {
             $table->id();
-            $table->date('period')->nullable();;
-            $table->unsignedInteger('year')->nullable();;
-            $table->unsignedInteger('month')->nullable();;
+            $table->date('period')->nullable();
+            $table->unsignedInteger('year')->nullable();
+            $table->unsignedInteger('month')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
@@ -32,4 +32,4 @@ class CreateRemPeriodsTable extends Migration
     {
         Schema::dropIfExists('rem_periods');
     }
-}
+};

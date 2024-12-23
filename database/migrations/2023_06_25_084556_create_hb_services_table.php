@@ -1,12 +1,11 @@
 <?php
 
+use App\Models\HotelBooking\Service;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-use App\Models\HotelBooking\Service;
-
-class CreateHbServicesTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -18,37 +17,20 @@ class CreateHbServicesTable extends Migration
         Schema::create('hb_services', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('img_url');
+            $table->string('img_url')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
 
-        Service::create([
-            'name' => 'Conserjería'
-        ]);
-
-        Service::create([
-            'name' => 'Agua caliente'
-        ]);
-
-        Service::create([
-            'name' => 'Servicio a la habitación'
-        ]);
-
-        Service::create([
-            'name' => 'Desayuno'
-        ]);
-
-        Service::create([
-            'name' => 'Servicio de lavandería'
-        ]);
-
-        Service::create([
-            'name' => 'Piscina'
-        ]);
-
-        Service::create([
-            'name' => 'Toallas'
+        // Insertar múltiples registros en una sola consulta
+        Service::insert([
+            ['name' => 'Conserjería'],
+            ['name' => 'Agua caliente'],
+            ['name' => 'Servicio a la habitación'],
+            ['name' => 'Desayuno'],
+            ['name' => 'Servicio de lavandería'],
+            ['name' => 'Piscina'],
+            ['name' => 'Toallas'],
         ]);
 
     }
@@ -62,4 +44,4 @@ class CreateHbServicesTable extends Migration
     {
         Schema::dropIfExists('hb_services');
     }
-}
+};

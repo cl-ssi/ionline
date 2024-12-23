@@ -88,7 +88,7 @@
                             @foreach ($file->users as $user)
                                 <li class="list-group-item py-2">
                                     {{ $user->fullName }}
-                                    <form method="POST" action="{{ route('indicators.rni_db.revoke_user', $file->id) }}" onclick="return confirm('¿Está seguro de dar quitar accesos a este archivo a {{$user->tinnyName}}?');" class="d-inline">
+                                    <form method="POST" action="{{ route('indicators.rni_db.revoke_user', $file->id) }}" onclick="return confirm('¿Está seguro de dar quitar accesos a este archivo a {{$user->tinyName}}?');" class="d-inline">
                                         {{ method_field('DELETE') }} {{ csrf_field() }}
                                         <input type="hidden" name="user_id" value="{{$user->id}}">
                                         <button class="btn btn-link btn-sm float-right"><i class="far fa-trash-alt" style="color:red"></i></button>

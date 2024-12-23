@@ -18,7 +18,7 @@ return new class extends Migration
 
             $table->string('name')->nullable();
             $table->foreignId('commune_id')->nullable()->constrained('cl_communes');
-            
+
             $table->timestamps();
             $table->softDeletes();
         });

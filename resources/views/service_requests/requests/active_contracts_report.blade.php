@@ -70,7 +70,7 @@
                 @endif
                 <td nowrap>{{$serviceRequest->weekly_hours}}</td>
                 <td nowrap>@if($serviceRequest->employee) {{$serviceRequest->employee->runNotFormat()}} @endif</td>
-                <td nowrap>@if($serviceRequest->employee) {{$serviceRequest->employee->getFullNameAttribute()}} @endif</td>
+                <td nowrap>@if($serviceRequest->employee) {{$serviceRequest->employee->fullName}} @endif</td>
                 
                 <td nowrap>{{$serviceRequest->responsabilityCenter->name}}</td>
                 <td nowrap>{{\Carbon\Carbon::parse($serviceRequest->start_date)->format('Y-m-d')}}</td>

@@ -17,8 +17,8 @@ return new class extends Migration
             $table->id();
             $table->string('model_route');
             $table->longText('data_json');
-            $table->text('column_mapping'); 
-            $table->text('primary_keys'); 
+            $table->text('column_mapping');
+            $table->text('primary_keys');
             $table->boolean('procesed')->default(0);
             $table->timestamps();
         });

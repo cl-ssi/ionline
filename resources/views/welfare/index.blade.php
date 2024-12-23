@@ -10,12 +10,12 @@
         <div class="col-12 col-md-12">
             <h3 class="mb-3">¡Bienvenidos al Módulo de Bienestar!</h3><br>
 
-            <div class="alert alert-warning" role="alert" style="font-size: 22px; color: #856404; background-color: #fff3cd; border-color: #ffeeba;">
+            <!-- <div class="alert alert-warning" role="alert" style="font-size: 22px; color: #856404; background-color: #fff3cd; border-color: #ffeeba;">
                 <strong>Módulo de reserva de cabañas</strong><br>
                 El módulo de reserva de cabañas se encuentra en mantención temporalmente. Lo anterior, con el fin de mejorar el servicio a nuestros socios y socias.<br><br>
                 Desde hoy toda reserva se realizará de forma presencial en Oficina de Bienestar Hospital o al teléfono Anexo
                 Minsal <b>576143</b> o otro <b>572-536143</b>.
-            </div><br>
+            </div><br> -->
 
             <li>Este módulo de iOnline permite visualizar el estado financiero en el tiempo del Servicio de Bienestar</li>
             <li>Este módulo de iOnline permite hacer gestión sobre amipass.</li>
@@ -64,6 +64,22 @@
             <div class="row">
                 <fieldset class="form-group col-12 col-md-12">
                     <iframe src="https://drive.google.com/file/d/1lh2YXr6WW_XwYNWodIyFwhq6iu8euoAB/preview" width="100%" height="540" allow="autoplay; fullscreen" allowfullscreen></iframe>
+                </fieldset>
+            </div>
+        </div>
+
+        <h5 class="text-white p-2 bg_azul_gob mt-3 text-center">
+            <i class="fas fa-file-signature"></i>
+            Solicitud de devolución de horas
+        </h5>
+
+        <div class="mt-4 p-5 text-black rounded bg-light">
+
+            <h6>En el siguiente video podrá visualizar como realizar una solicitud de devolución de horas.</h6>
+            <br>
+            <div class="row">
+                <fieldset class="form-group col-12 col-md-12">
+                    <iframe src="https://drive.google.com/file/d/1G8clldHDmhFy1edQXy06GyCgVmwe8fQu/preview" width="100%" height="315" allow="autoplay; fullscreen" allowfullscreen></iframe>
                 </fieldset>
             </div>
         </div>

@@ -27,6 +27,10 @@ class AttendanceRecordResource extends Resource
 
     protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
 
+    protected static ?int $navigationSort = 3;
+
+    protected static ?string $navigationGroup = 'Asistencia';
+
     public static function form(Form $form): Form
     {
         return $form
@@ -75,8 +79,8 @@ class AttendanceRecordResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('user.shortName')
                     ->label('Usuario')
-                    ->numeric()
-                    ->sortable(),
+                    ->sortable(['full_name'])
+                    ->searchable(['full_name']),
                 Tables\Columns\TextColumn::make('record_at')
                     ->label('Fecha y hora')
                     ->dateTime('Y-m-d H:i')

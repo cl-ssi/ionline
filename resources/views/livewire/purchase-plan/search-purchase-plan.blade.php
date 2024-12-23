@@ -105,10 +105,10 @@
                                 </td>
                                 <td>{{ $purchasePlan->subject }}</td>
                                 <td>
-                                    <b>{{ $purchasePlan->userResponsible->FullName }}</b><br>
+                                    <b>{{ $purchasePlan->userResponsible->fullName }}</b><br>
                                     {{ $purchasePlan->organizationalUnit->name }} ({{$purchasePlan->organizationalUnit->establishment->name}})<br><br>
                                     
-                                    creado por: <b>{{ $purchasePlan->userCreator->TinnyName }}</b>
+                                    creado por: <b>{{ $purchasePlan->userCreator->tinyName }}</b>
                                 </td>
                                 <td>{{ $purchasePlan->program }}</td>
                                 <td class="text-center">
@@ -269,12 +269,12 @@
                                     <td rowspan="2">{{ $purchasePlan->subject }}</td>
                                     <td rowspan="2">{{ $purchasePlan->description }}</td>
                                     <td rowspan="2">{{ $purchasePlan->purpose }}</td>
-                                    <td rowspan="2">{{ $purchasePlan->userResponsible->FullName }}</td>
+                                    <td rowspan="2">{{ $purchasePlan->userResponsible->fullName }}</td>
                                     <td rowspan="2">{{ $purchasePlan->position }}</td>
                                     <td rowspan="2">{{ $purchasePlan->telephone }}</td>
                                     <td rowspan="2">{{ $purchasePlan->email }}</td>
                                     <td rowspan="2">{{ $purchasePlan->organizationalUnit->name }} ({{$purchasePlan->organizationalUnit->establishment->name}})</td>
-                                    <td rowspan="2">{{ $purchasePlan->userCreator->TinnyName }}</td>
+                                    <td rowspan="2">{{ $purchasePlan->userCreator->tinyName }}</td>
                                     <td rowspan="2">{{ $purchasePlan->program }}</td>
                                     <td rowspan="2" class="text-center">{{ $purchasePlan->purchasePlanItems->count() }}</td>
                                     <td rowspan="2" class="text-end">{{ $purchasePlan->symbol_currency }}{{ number_format($purchasePlan->estimated_expense,$purchasePlan->precision_currency,",",".") }}</td>
@@ -353,10 +353,10 @@
                                 </td>
                                 <td>{{ $purchasePlan->subject }}</td>
                                 <td>
-                                    <b>{{ $purchasePlan->userResponsible->FullName }}</b><br>
+                                    <b>{{ $purchasePlan->userResponsible->fullName }}</b><br>
                                     {{ $purchasePlan->organizationalUnit->name }} ({{$purchasePlan->organizationalUnit->establishment->name}})<br><br>
                                         
-                                    <small>creado por: <b>{{ $purchasePlan->userCreator->TinnyName }}</b></small>
+                                    <small>creado por: <b>{{ $purchasePlan->userCreator->tinyName }}</b></small>
                                 </td>
                                 <td>{{ $purchasePlan->program }}</td>
                                 <td class="text-center">
@@ -448,10 +448,10 @@
                                 </td>
                                 <td>{{ $purchasePlan->subject }}</td>
                                 <td>
-                                    <b>{{ $purchasePlan->userResponsible->FullName }}</b><br>
+                                    <b>{{ $purchasePlan->userResponsible->fullName }}</b><br>
                                     {{ $purchasePlan->organizationalUnit->name }} ({{$purchasePlan->organizationalUnit->establishment->name}})<br><br>
                                         
-                                    <small>creado por: <b>{{ $purchasePlan->userCreator->TinnyName }}</b></small>
+                                    <small>creado por: <b>{{ $purchasePlan->userCreator->tinyName }}</b></small>
                                 </td>
                                 <td>{{ $purchasePlan->program }}</td>
                                 <td class="text-center">
@@ -481,7 +481,7 @@
                                     <br>
                                     <span class="badge bg-{{$purchasePlan->getColorStatus()}} badge-sm">{{ $purchasePlan->getStatus() }}</span>
                                     <br><br>
-                                    <small nowrap>Asignado a: <b>{{ $purchasePlan->assignPurchaser->TinnyName }}</b></small>
+                                    <small nowrap>Asignado a: <b>{{ $purchasePlan->assignPurchaser->tinyName }}</b></small>
                                 </td>
                                 <td class="text-center">
                                     <a href="{{ route('purchase_plan.show', $purchasePlan) }}"

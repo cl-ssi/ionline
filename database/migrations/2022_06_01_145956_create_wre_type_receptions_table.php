@@ -5,7 +5,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateWreTypeReceptionsTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -26,25 +26,24 @@ class CreateWreTypeReceptionsTable extends Migration
 
         $receptions = [
             [
-                'name' => 'Ingreso Normal',
+                'name'   => 'Ingreso Normal',
                 'active' => true,
             ],
             [
-                'name' => 'Recibir de Bodega',
+                'name'   => 'Recibir de Bodega',
                 'active' => true,
             ],
             [
-                'name' => 'Devolución',
+                'name'   => 'Devolución',
                 'active' => true,
             ],
             [
-                'name' => 'Orden de Compra',
+                'name'   => 'Orden de Compra',
                 'active' => true,
-            ]
+            ],
         ];
 
-        foreach($receptions as $reception)
-        {
+        foreach ($receptions as $reception) {
             TypeReception::create($reception);
         }
     }
@@ -58,4 +57,4 @@ class CreateWreTypeReceptionsTable extends Migration
     {
         Schema::dropIfExists('wre_type_receptions');
     }
-}
+};

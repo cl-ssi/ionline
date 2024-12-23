@@ -72,7 +72,7 @@
 
                     <td class="{{ $copia }}">
                         <b>Creado por</b><br>
-                        {{ $req->events->first()->from_user->tinnyName }}<br>
+                        {{ $req->events->first()->from_user->tinyName }}<br>
                         {{ $req->created_at->format('Y-m-d H:i') }}<br>
                         {{ $req->created_at->diffForHumans() }}<br>
                     </td>
@@ -84,24 +84,24 @@
 
                         @case('cerrado')
                         <b>Cerrado por</b><br>
-                        {{ $req->events->last()->from_user->tinnyName }}<br>
+                        {{ $req->events->last()->from_user->tinyName }}<br>
                         {{ $req->events->last()->created_at->format('Y-m-d H:i') }}<br>
                         @break
 
                         @case('respondido')
                         @case('reabierto')
                         <b>{{ ucfirst($req->status) }} por</b><br>
-                        {{ $req->events->last()->from_user->tinnyName }}<br>
+                        {{ $req->events->last()->from_user->tinyName }}<br>
                         {{ $req->events->last()->created_at->format('Y-m-d H:i') }}<br>
-                        <b>para </b>{{ $req->events->last()->to_user->tinnyName }}
+                        <b>para </b>{{ $req->events->last()->to_user->tinyName }}
                         @break
 
 
                         @case('derivado')
                         <b>{{ ucfirst($req->status) }} para</b><br>
-                        {{ $req->events->last()->to_user->tinnyName }}<br>
+                        {{ $req->events->last()->to_user->tinyName }}<br>
                         {{ $req->events->last()->created_at->format('Y-m-d H:i') }}<br>
-                        <b>de </b>{{ $req->events->last()->from_user->tinnyName }}
+                        <b>de </b>{{ $req->events->last()->from_user->tinyName }}
                         @break
                     @endswitch
                     

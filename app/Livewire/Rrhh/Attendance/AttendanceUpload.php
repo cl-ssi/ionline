@@ -7,7 +7,7 @@ use Carbon\Carbon;
 use DateTime;
 use Livewire\Component;
 use Livewire\WithFileUploads;
-use App\Models\Rrhh\Attendance;
+use App\Models\Rrhh\MonthlyAttendance;
 
 class AttendanceUpload extends Component
 {
@@ -95,6 +95,7 @@ class AttendanceUpload extends Component
                     'date' => $date,
                     'report_date' => $report_date,
                     'records' => $line,
+                    'establishment_id' => auth()->user()->establishment_id,
                 ];
 
             } elseif ( array_key_exists($ct_records,$records) ) {
@@ -104,7 +105,7 @@ class AttendanceUpload extends Component
 
         // Comprobar que el array $records tenga registros
         if ( !empty($records) ) {
-            Attendance::upsert($records, ['user_id', 'date'], ['report_date', 'records']);
+            MonthlyAttendance::upsert($records, ['user_id', 'date'], ['report_date', 'records']);
         }
 
         fclose($file);

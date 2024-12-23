@@ -70,7 +70,7 @@ Iquique, <strong>{{ $protocol->created_at->day }} de {{ $protocol->created_at->m
 
 <div id="firmas" class="center">
     <div  style="width: 100%">
-        <span class="uppercase">{{ $protocol->user->FullName }}</span><br>
+        <span class="uppercase">{{ $protocol->user->fullName }}</span><br>
         {{ $protocol->user->position }} <br>
         {{ env('APP_SS') }}<br style="padding-bottom: 6px;">
     </div>

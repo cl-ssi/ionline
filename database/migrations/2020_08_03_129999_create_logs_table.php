@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateLogsTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -26,7 +26,7 @@ class CreateLogsTable extends Migration
             $table->string('level_name');
             $table->string('channel')->index();
             $table->longText('extra');
-            // Additional custom fields I added 
+            // Additional custom fields I added
             $table->string('remote_addr')->nullable();
             $table->string('user_agent')->nullable();
             $table->string('record_datetime');
@@ -44,4 +44,4 @@ class CreateLogsTable extends Migration
     {
         Schema::dropIfExists('logs');
     }
-}
+};

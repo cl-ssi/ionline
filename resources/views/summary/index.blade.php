@@ -79,8 +79,8 @@
                         @endif
                     </td>
                     <td>{{ (int) $summary->start_at->diffInDays(now()) }}</td>
-                    <td>{{ optional($summary->investigator)->tinnyName }}</td>
-                    <td>{{ optional($summary->actuary)->tinnyName }}</td>
+                    <td>{{ optional($summary->investigator)->tinyName }}</td>
+                    <td>{{ optional($summary->actuary)->tinyName }}</td>
                     --}}
                     <td>
                         <a href="{{ route('summary.edit', $summary) }}" class="btn btn-primary">

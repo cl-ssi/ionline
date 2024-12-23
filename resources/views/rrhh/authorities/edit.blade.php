@@ -80,9 +80,9 @@
         <fieldset class="form-group col-6 col-md-3">
             <label for="for_type">Tipo*</label>
             <select name="type" id="for_type" class="form-control" required>
-                <option value="manager" {{ ($authority->type == 'manager')?'selected':'' }}>Encargado (Jefes)</option>
-                <option value="delegate" {{ ($authority->type == 'delegate')?'selected':'' }}>Delegado (Igual acceso que el jefe)</option>
-                <option value="secretary" {{ ($authority->type == 'secretary')?'selected':'' }}>Secretario/a</option>
+                <option value="manager" {{ ($authority->type->value == 'manager')?'selected':'' }}>Encargado (Jefes)</option>
+                <option value="delegate" {{ ($authority->type->value == 'delegate')?'selected':'' }}>Delegado (Igual acceso que el jefe)</option>
+                <option value="secretary" {{ ($authority->type->value == 'secretary')?'selected':'' }}>Secretario/a</option>
             </select>
         </fieldset>
 

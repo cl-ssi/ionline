@@ -2,7 +2,9 @@
 
 namespace App\Filament\Clusters\Rrhh\Resources\OrganizationalUnitResource\RelationManagers;
 
+use App\Enums\Rrhh\AuthorityType;
 use App\Models\User;
+use Auth;
 use Carbon\Carbon;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -28,35 +30,52 @@ class AuthoritiesRelationManager extends RelationManager
                     ->options($this->getOwnerRecord()->managers->pluck('full_name','id'))
                     ->label('Usuario')
                     ->required(),
-                Forms\Components\TextInput::make('position')
-                    ->maxLength(255)
-                    ->translateLabel()
+                Forms\Components\Select::make('position')
+                    ->options([
+                        'Director' => 'Director',
+                        'Directora' => 'Directora',
+                        'Director (S)' => 'Director (S)',
+                        'Directora (S)' => 'Directora (S)',
+                        'Subdirector' => 'Subdirector',
+                        'Subdirectora' => 'Subdirectora',
+                        'Subdirector (S)' => 'Subdirector (S)',
+                        'Subdirectora (S)' => 'Subdirectora (S)',
+                        'Jefe' => 'Jefe',
+                        'Jefa' => 'Jefa',
+                        'Jefe (S)' => 'Jefe (S)',
+                        'Jefa (S)' => 'Jefa (S)',
+                        'Encargado' => 'Encargado',
+                        'Encargada' => 'Encargada',
+                        'Encargado (S)' => 'Encargado (S)',
+                        'Encargada (S)' => 'Encargada (S)',
+                        'Secretario' => 'Secretario',
+                        'Secretaria' => 'Secretaria',
+                        'Secretario (S)' => 'Secretario (S)',
+                        'Secretaria (S)' => 'Secretaria (S)',
+                    ])
+                    ->label('Cargo')
                     ->required(),
                 Forms\Components\DatePicker::make('date')
                     ->format('Y-m-d')
-                    ->translateLabel()
+                    ->label('Desde')
                     ->required(),
                 Forms\Components\DatePicker::make('until')
                     ->format('Y-m-d')
-                    ->translateLabel()
+                    ->label('Hasta')
                     ->required(),
                 Forms\Components\Select::make('type')
-                    ->options([
-                        'manager' => 'Jefetura',
-                        'delegate' => 'Delegado/a',
-                        'secretary' => 'Secretario/a',
-                    ])
+                    ->options(AuthorityType::class)
                     ->hiddenOn('edit')
                     ->required()
                     ->default(null),
                 Forms\Components\TextInput::make('decree')
                     ->maxLength(255)
-                    ->translateLabel()
+                    ->label('Decreto')
                     ->default(null),
                 Forms\Components\Select::make('representation_id')
                     ->options($this->getOwnerRecord()->managers->pluck('full_name','id'))
-                    ->translateLabel()
-                    ->default(null)
+                    ->label('En representación de')
+                    ->searchable()
             ]);
     }
 
@@ -83,6 +102,7 @@ class AuthoritiesRelationManager extends RelationManager
             ])
             ->filters([
                 Tables\Filters\Filter::make('date')
+                    ->label('Mes')
                     ->form([
                         Forms\Components\TextInput::make('date')
                             ->type('month')
@@ -95,11 +115,8 @@ class AuthoritiesRelationManager extends RelationManager
                         $query->whereBetween('date', [$startOfMonth, $endOfMonth]);
                     }),
                 Tables\Filters\SelectFilter::make('type')
-                    ->options([
-                        'manager' => 'Jefetura',
-                        'delegate' => 'Delegado/a',
-                        'secretary' => 'Secretario/a',
-                    ])
+                    ->label('Tipo')
+                    ->options(AuthorityType::class)
                     ->default('manager'),
 
             ], layout: FiltersLayout::AboveContent)
@@ -163,6 +180,7 @@ class AuthoritiesRelationManager extends RelationManager
             ->bulkActions([
 
             ])
-            ->paginated(false);
+            ->paginated(false)
+            ->defaultGroup('type');
     }
 }

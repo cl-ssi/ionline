@@ -864,11 +864,9 @@
                             <i class="fas fa-fw fa-key"></i> Cambio de clave
                         </a>
 
-                        @can('dev')
                         <a class="dropdown-item bg-dark text-white" href="{{ route('filament.intranet.pages.dashboard') }}">
                             <i class="bi icon-logo-ionline-white"></i> iOnline <span class="text-danger">Plus</span>
                         </a>
-                        @endcan
 
                         <a class="dropdown-item" href="{{ route('logout') }}">
                             <i class="fas fa-fw fa-sign-out-alt"></i> {{ __('Cerrar sesión') }}

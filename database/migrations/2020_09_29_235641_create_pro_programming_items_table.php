@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateProProgrammingItemsTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -15,7 +15,7 @@ class CreateProProgrammingItemsTable extends Migration
     {
         Schema::create('pro_programming_items', function (Blueprint $table) {
             $table->id();
-            $table->enum('activity_type',['Directa','Indirecta','Otra'])->nullable();
+            $table->enum('activity_type', ['Directa', 'Indirecta', 'Otra'])->nullable();
             $table->string('activity_subtype')->nullable();
             $table->string('activity_category')->nullable();
             $table->string('cycle')->nullable();
@@ -26,9 +26,9 @@ class CreateProProgrammingItemsTable extends Migration
             $table->string('def_target_population')->nullable();
             $table->string('source_population')->nullable();
             $table->integer('cant_target_population')->nullable();
-            $table->decimal('prevalence_rate',5,1)->nullable();
+            $table->decimal('prevalence_rate', 5, 1)->nullable();
             $table->string('source_prevalence')->nullable();
-            $table->decimal('coverture',5,1)->nullable();
+            $table->decimal('coverture', 5, 1)->nullable();
             $table->integer('population_attend')->nullable(); // Población a atender
             $table->integer('concentration')->nullable(); // Cantidad de veces que debo darle control anual
             $table->integer('times_month')->nullable();
@@ -45,21 +45,22 @@ class CreateProProgrammingItemsTable extends Migration
 
             $table->string('professional')->nullable();
             $table->decimal('activity_performance', 7, 1)->nullable();
-            $table->double('hours_required_year',8,2)->nullable();
-            $table->double('hours_required_day',8,2)->nullable();
-            $table->double('direct_work_year',15,8)->nullable(); // Jornadas Directas Año
-            $table->double('direct_work_hour',15,8)->nullable(); // Jornadas Horas Directas Diarias double('column', 15, 8)
+            $table->double('hours_required_year', 8, 2)->nullable();
+            $table->double('hours_required_day', 8, 2)->nullable();
+            $table->double('direct_work_year', 15, 8)->nullable(); // Jornadas Directas Año
+            $table->double('direct_work_hour', 15, 8)->nullable(); // Jornadas Horas Directas Diarias double('column', 15, 8)
             $table->string('information_source')->nullable();
             $table->string('prap_financed')->nullable();
             $table->string('observation')->nullable();
-            $table->enum('workshop',['SI','NO'])->nullable();
-            $table->enum('active',['SI','NO'])->nullable();
+            $table->enum('workshop', ['SI', 'NO'])->nullable();
+            $table->enum('active', ['SI', 'NO'])->nullable();
             $table->foreignId('user_id')->constrained('users');
             $table->foreignId('programming_id')->constrained('pro_programmings');
             $table->timestamps();
             $table->softDeletes();
         });
     }
+
     /**
      * Reverse the migrations.
      *
@@ -69,4 +70,4 @@ class CreateProProgrammingItemsTable extends Migration
     {
         Schema::dropIfExists('pro_programming_items');
     }
-}
+};

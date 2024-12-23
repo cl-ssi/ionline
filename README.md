@@ -8,7 +8,7 @@ sistemas.sst@redsalud.gob.cl
 
 # Instalacion
 
-> Este proyecto está desarrollado en Laravel 10.
+> Este proyecto está desarrollado en Laravel 11.
 
 > Incluye Bootstrap 5 jQuery y Font Awesome y Bootstrap Icons.
 

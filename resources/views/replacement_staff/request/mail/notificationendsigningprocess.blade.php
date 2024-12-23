@@ -19,7 +19,7 @@
   <hr>
 
   <ul>
-      <li><strong>Solicitado por</strong>: {{ $requestReplacementStaff->user->FullName }}</li>
+      <li><strong>Solicitado por</strong>: {{ $requestReplacementStaff->user->fullName }}</li>
       <li><strong>Unidad Organizacional</strong>: {{ $requestReplacementStaff->organizationalUnit->name }}</li>
   </ul>
 

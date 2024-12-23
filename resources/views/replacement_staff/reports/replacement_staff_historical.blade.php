@@ -38,7 +38,7 @@
             <tbody class="small">
                 <tr>
                     <th class="table-active" width="25%">Nombre</th>
-                    <td>{{ $replacementStaff->FullName }}</td>
+                    <td>{{ $replacementStaff->fullName }}</td>
                 </tr>
                 <tr>
                     <th class="table-active">Run</th>

@@ -72,7 +72,7 @@
                         {{ optional($inventory->place)->name }}
                     </td>
                     <td>
-                        {{ optional($inventory->responsible)->tinny_name }}
+                        {{ optional($inventory->responsible)->tinyName }}
                     </td>
                     <td>
                         {{ $inventory->removal_request_reason_at }}
@@ -82,7 +82,7 @@
                     </td>
                     @if($showRemoved or $showRejected)
                         <td>
-                            {{ optional($inventory->removedUser)->tinny_name }}
+                            {{ optional($inventory->removedUser)->tinyName }}
                         </td>
                         <td>
                             {{ $inventory->removed_at }}

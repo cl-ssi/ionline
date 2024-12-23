@@ -1515,7 +1515,7 @@ class RequirementController extends Controller
             $matrix[$key]['reabierto'] = 0;
             foreach ($organizationalUnit->users as $key2 => $user) {
                 $matrix2[$cont]['unidad'] = $organizationalUnit->name;
-                $matrix2[$cont]['usuario'] = $user->getFullNameAttribute();
+                $matrix2[$cont]['usuario'] = $user->fullName;
                 $matrix2[$cont]['creado'] = 0;
                 $matrix2[$cont]['respondido'] = 0;
                 $matrix2[$cont]['cerrado'] = 0;

@@ -21,7 +21,7 @@ class OrganizationalUnitPolicy
      */
     public function viewAny(User $user): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -37,7 +37,7 @@ class OrganizationalUnitPolicy
      */
     public function create(User $user): bool
     {
-        return false;
+        return $user->can('OrganizationalUnits: create');
     }
 
     /**
@@ -45,7 +45,7 @@ class OrganizationalUnitPolicy
      */
     public function update(User $user, OrganizationalUnit $organizationalUnit): bool
     {
-        return false;
+        return $user->can('OrganizationalUnits: edit');
     }
 
     /**
@@ -53,7 +53,7 @@ class OrganizationalUnitPolicy
      */
     public function delete(User $user, OrganizationalUnit $organizationalUnit): bool
     {
-        return false;
+        return $user->can('OrganizationalUnits: delete');
     }
 
     /**
@@ -61,7 +61,7 @@ class OrganizationalUnitPolicy
      */
     public function restore(User $user, OrganizationalUnit $organizationalUnit): bool
     {
-        return false;
+        return $user->can('OrganizationalUnits: delete');
     }
 
     /**

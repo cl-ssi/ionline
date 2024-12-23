@@ -161,7 +161,7 @@
 				<tr>
 					<td>{{$loop->iteration}}</td>
 					<td>{{$r->ShiftUser->user->runFormat()}}</td>
-					<td>{{$r->ShiftUser->user->getFullNameAttribute()}}</td>
+					<td>{{$r->ShiftUser->user->fullName}}</td>
 					<td>{{(isset($r->ShiftUser->user->organizationalUnit) && $r->ShiftUser->user->organizationalUnit !="" && isset($r->ShiftUser->user->organizationalUnit->name) ) ? $r->ShiftUser->user->organizationalUnit->name:""}}</td>
                     <td>{{$r->day}}</td>
 
@@ -185,7 +185,7 @@
                         $dayF = \Carbon\Carbon::createFromFormat('Y-m-d',  $r->day, 'Europe/London');   
                     @endphp
 					<td>{{ ucfirst ( ( $r->status == 1 && $dayF->isPast() ) ? "Completado" : $shiftStatus [ $r->status ]  )}}</td>
-					<td>{{ ($r->derived_from != "" && isset($r->DerivatedShift) ) ? $r->DerivatedShift->ShiftUser->user->runFormat()." ".$r->DerivatedShift->ShiftUser->user->getFullNameAttribute() : "--"}}</td>
+					<td>{{ ($r->derived_from != "" && isset($r->DerivatedShift) ) ? $r->DerivatedShift->ShiftUser->user->runFormat()." ".$r->DerivatedShift->ShiftUser->user->fullName : "--"}}</td>
 					<td>
 				 		<!-- <small>Confirmado por supervisor area  <i class="fa fa-check"></i></small><br>
 				 		<small>Confirmado por supervicion medica <i class="fa fa-check"></i></small><br>

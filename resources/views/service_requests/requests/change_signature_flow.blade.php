@@ -32,13 +32,13 @@
                 <input type="hidden" name="signature_flow_id" value="{{$signatureFlow->id}}">
                 <td>{{$signatureFlow->responsable_id}}</td>
                 <td>{{$signatureFlow->sign_position}}</td>
-                <td>{{$signatureFlow->user->getFullNameAttribute()}}</td>
+                <td>{{$signatureFlow->user->fullName}}</td>
                 <td><i class="fas fa-sign-in-alt"></i></td>
                 <td>
                   <select class="form-control selectpicker" name="user_id" data-live-search="true" data-size="5" required>
                       <option value=""></option>
                       @foreach($users as $key => $user)
-                      <option value="{{$user->id}}">{{$user->getFullNameAttribute()}}</option>
+                      <option value="{{$user->id}}">{{$user->fullName}}</option>
                       @endforeach
                   </select>
                 </td>

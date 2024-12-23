@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateProCommuneFilesTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -22,7 +22,7 @@ class CreateProCommuneFilesTable extends Migration
             $table->string('file_b')->nullable();
             $table->string('file_c')->nullable();
             $table->text('observation')->nullable();
-            $table->enum('status',['active','inactive']);
+            $table->enum('status', ['active', 'inactive']);
 
             $table->foreignId('user_id')->constrained('users');
             $table->foreignId('commune_id')->constrained('communes');
@@ -40,4 +40,4 @@ class CreateProCommuneFilesTable extends Migration
     {
         Schema::dropIfExists('pro_commune_files');
     }
-}
+};

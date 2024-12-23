@@ -46,7 +46,7 @@ class NewPerformanceReport extends Notification
     {
         return (new MailMessage)
             ->level('info')
-            ->subject('Calificación periodo: ' . $this->performanceReport->period->name. ' -  para Funcionario: ' .$this->performanceReport->receivedUser->TinnyName )
+            ->subject('Calificación periodo: ' . $this->performanceReport->period->name. ' -  para Funcionario: ' .$this->performanceReport->receivedUser->tinyName )
             ->greeting('Hola ' . $this->performanceReport->receivedUser->shortName)
             ->line('Se Informa que se encuentra disponible su informe de calificación, correspondiente al periodo:' . $this->performanceReport->period->name)
             ->action('Revisar Informe de Calificación', route('rrhh.performance-report.received_report') )

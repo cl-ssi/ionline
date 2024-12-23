@@ -56,7 +56,7 @@ class EndApprovalProcess extends Notification
                     ->level('info')
                     ->replyTo($this->training->email)
                     ->subject('[Notificación] Adjuntar certificado final de la actividad')
-                    ->greeting('Hola, ' . $this->training->userTraining->FullName)
+                    ->greeting('Hola, ' . $this->training->userTraining->fullName)
                     ->line(new HtmlString('<p style="text-align: justify;">Espero que se encuentre muy bien.</p>'))
                     ->line(new HtmlString('<p style="text-align: justify;">Queremos agradecerle por participar en la actividad 
                         <b>'.$this->training->activity_name.'</b>. Nos complace que haya sido parte de esta experiencia 

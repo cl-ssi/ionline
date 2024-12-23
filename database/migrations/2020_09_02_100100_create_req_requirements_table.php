@@ -1,10 +1,10 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
-class CreateReqRequirementsTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -16,8 +16,8 @@ class CreateReqRequirementsTable extends Migration
         Schema::create('req_requirements', function (Blueprint $table) {
             $table->id();
             $table->text('subject');
-            $table->enum('priority',['normal','urgente']);
-            $table->enum('status',['creado','respondido','cerrado','derivado','reabierto']);
+            $table->enum('priority', ['normal', 'urgente']);
+            $table->enum('status', ['creado', 'respondido', 'cerrado', 'derivado', 'reabierto']);
             //$table->boolean('archived')->default(0);
             $table->datetime('limit_at')->nullable();
             $table->foreignId('user_id')->constrained('users');
@@ -42,7 +42,7 @@ class CreateReqRequirementsTable extends Migration
         Schema::create('req_requirements_status', function (Blueprint $table) {
             $table->foreignId('requirement_id')->constrained('req_requirements')->onDelete('cascade');
             $table->foreignId('user_id')->constrained('users');
-            $table->enum('status',['not viewed','viewed','archived']);
+            $table->enum('status', ['not viewed', 'viewed', 'archived']);
             //$table->integer('category_id')->unsigned();
             $table->timestamps();
         });
@@ -59,4 +59,4 @@ class CreateReqRequirementsTable extends Migration
         Schema::dropIfExists('req_requirements_status');
         Schema::dropIfExists('req_requirements');
     }
-}
+};

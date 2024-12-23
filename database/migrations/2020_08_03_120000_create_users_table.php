@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateUsersTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -16,8 +16,8 @@ class CreateUsersTable extends Migration
         Schema::create('users', function (Blueprint $table) {
             /** No se usa id() porque no es autoincremental */
             $table->bigInteger('id')->unsigned()->unique();
-            $table->char('dv',1);
-            $table->string('run', 10)->virtualAs("UPPER(CONCAT(CAST(id AS CHAR), TRIM(dv)))");
+            $table->char('dv', 1);
+            $table->string('run', 10)->virtualAs('UPPER(CONCAT(CAST(id AS CHAR), TRIM(dv)))');
             $table->string('name');
             $table->string('fathers_family');
             $table->string('mothers_family');
@@ -57,4 +57,4 @@ class CreateUsersTable extends Migration
     {
         Schema::dropIfExists('users');
     }
-}
+};

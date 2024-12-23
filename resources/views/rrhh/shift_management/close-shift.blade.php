@@ -168,7 +168,7 @@
 				<tr>
 					<td>{{$loop->iteration}}</td>
 					<td>{{$c->user->runFormat() }}</td>
-					<td>{{$c->user->getFullNameAttribute()}}</td>
+					<td>{{$c->user->fullName}}</td>
 					<td>{{$c->total_hours}}</td>
 					<td>{{$c->first_confirmation_commentary}}</td>
 					<td>{{$c->close_user_id}}</td>
@@ -219,7 +219,7 @@
 					<tr>
 						<td>{{$loop->iteration}}</td>
 						<td>{{$f->user->runFormat() }}</td>
-						<td>{{$f->user->getFullNameAttribute()}}</td>
+						<td>{{$f->user->fullName}}</td>
 						<td>{{$f->total_hours}}</td>
 						<td>{{$f->first_confirmation_commentary}}</td>
 						<td>{{$f->first_confirmation_user_id}}</td>
@@ -270,7 +270,7 @@
 				<tr>
 					<td>{{$loop->iteration?? '' }}</td>
 					<td>{{$s->user&&$s->user->id? $s->user->runFormat(): '' }}</td>
-					<td>{{$s->user&&$s->user->id? $s->user->getFullNameAttribute(): '' }}</td>
+					<td>{{$s->user&&$s->user->id? $s->user->fullName: '' }}</td>
 					<form method="post" action="{{ route('rrhh.shiftManag.closeShift.firstConfirmation') }}">
 						<td><!-- <input type="text" class="form-control" name="commentX" value="Comentario de prueba desde el area anterior"> -->
 							<textarea  class="form-control" name="comment" id="comment1_{{$s->id}}" placeholder ="Ingrese un comentario  " ></textarea>
@@ -344,7 +344,7 @@
 				<tr>
 					<td>{{$loop->iteration}}</td>
 					<td>{{$r->user->runFormat() }}</td>
-					<td>{{$r->user->getFullNameAttribute()}}</td>
+					<td>{{$r->user->fullName}}</td>
 					<td>{{$r->first_confirmation_commentary}}</td>
 					<td>{{$r->total_hours}}</td>
 					<td>{{$r->first_confirmation_user_id}}</td>

@@ -54,7 +54,7 @@
                         {{ $requestForm->SubtypeValue }}
                     </td>
                     <td>{{ $requestForm->name }}</td>
-                    <td>{{ $requestForm->user ? $requestForm->user->FullName : 'Usuario eliminado' }}<br>
+                    <td>{{ $requestForm->user ? $requestForm->user->fullName : 'Usuario eliminado' }}<br>
                         {{ $requestForm->user ? $requestForm->userOrganizationalUnit->name : 'Usuario eliminado' }}
                     </td>
                     <td>{{ $requestForm->quantityOfItems() }}</td>
@@ -139,10 +139,10 @@
                         {{ $requestForm->SubtypeValue }}
                     </td>
                     <td>{{ $requestForm->name }}</td>
-                    <td>{{ $requestForm->user ? $requestForm->user->FullName : 'Usuario eliminado' }}<br>
+                    <td>{{ $requestForm->user ? $requestForm->user->fullName : 'Usuario eliminado' }}<br>
                         {{ $requestForm->user ? $requestForm->userOrganizationalUnit->name : 'Usuario eliminado' }}
                     </td>
-                    <td>@foreach($requestForm->purchasers as $purchaser) {{ $purchaser->FullName }} <br> @endforeach</td>
+                    <td>@foreach($requestForm->purchasers as $purchaser) {{ $purchaser->fullName }} <br> @endforeach</td>
                     <td>{{ $requestForm->quantityOfItems() }}</td>
                     <td class="text-right">{{$requestForm->symbol_currency}}{{ number_format($requestForm->estimated_expense,$requestForm->precision_currency,",",".") }}</td>
                     <td>{{ $requestForm->created_at->diffForHumans() }}</td>

@@ -9,6 +9,14 @@ use Illuminate\Auth\Access\Response;
 class OvertimeRefundPolicy
 {
     /**
+     * Perform pre-authorization checks.
+     */
+    public function before(User $user, string $ability): bool|null
+    {
+        return $user->can('be god') ? true : null;
+    }
+
+    /**
      * Determine whether the user can view any models.
      */
     public function viewAny(User $user): bool
@@ -43,7 +51,7 @@ class OvertimeRefundPolicy
      */
     public function create(User $user): bool
     {
-        return true;
+        return false;
     }
 
     /**
@@ -51,7 +59,7 @@ class OvertimeRefundPolicy
      */
     public function update(User $user, OvertimeRefund $overtimeRefund): bool
     {
-        return true;
+        return false;
     }
 
     /**
@@ -59,7 +67,8 @@ class OvertimeRefundPolicy
      */
     public function delete(User $user, OvertimeRefund $overtimeRefund): bool
     {
-        return $overtimeRefund->status === 'pending' OR $user->canAny(['be god']);
+        // return $overtimeRefund->user_id == $user->id AND $overtimeRefund->status->value === 'pending';
+        return false;
     }
 
     /**
@@ -67,7 +76,7 @@ class OvertimeRefundPolicy
      */
     public function restore(User $user, OvertimeRefund $overtimeRefund): bool
     {
-        return true;
+        return false;
     }
 
     /**
@@ -75,6 +84,6 @@ class OvertimeRefundPolicy
      */
     public function forceDelete(User $user, OvertimeRefund $overtimeRefund): bool
     {
-        return true;
+        return false;
     }
 }

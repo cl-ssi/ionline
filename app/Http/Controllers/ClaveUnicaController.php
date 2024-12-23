@@ -238,7 +238,6 @@ class ClaveUnicaController extends Controller
                 /** Log access */
                 auth()->user()->accessLogs()->create([
                     'type' => 'clave única',
-                    'enviroment' => env('OLD_SERVER') ? 'Servidor' : 'Cloud Run'
                 ]);
 
                 /** Check if user have a gravatar */

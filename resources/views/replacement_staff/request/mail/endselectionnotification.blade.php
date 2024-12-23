@@ -30,7 +30,7 @@
 
       <ul>
         @foreach($technicalEvaluation->applicants->where('selected', 1)->where('desist', NULL) as $applicant)
-          <li><strong>Seleccionado</strong>: {{ $applicant->replacementStaff->FullName }}</li>
+          <li><strong>Seleccionado</strong>: {{ $applicant->replacementStaff->fullName }}</li>
           <li><strong>Fecha Efectiva de Ingreso</strong>: {{ $applicant->start_date->format('d-m-Y') }}</li>
           <li><strong>Fin</strong>: {{ $applicant->end_date->format('d-m-Y') }}</li>
         @endforeach
@@ -48,7 +48,7 @@
   <hr>
 
   <ul>
-      <li><strong>Solicitado por</strong>: {{ $technicalEvaluation->requestReplacementStaff->user->FullName }}</li>
+      <li><strong>Solicitado por</strong>: {{ $technicalEvaluation->requestReplacementStaff->user->fullName }}</li>
       <li><strong>Unidad Organizacional</strong>: {{ $technicalEvaluation->requestReplacementStaff->organizationalUnit->name }}</li>
   </ul>
 

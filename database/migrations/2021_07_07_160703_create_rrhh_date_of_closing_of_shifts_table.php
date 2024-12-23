@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateRrhhDateOfClosingOfShiftsTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -32,4 +32,4 @@ class CreateRrhhDateOfClosingOfShiftsTable extends Migration
     {
         Schema::dropIfExists('rrhh_date_of_closing_of_shifts');
     }
-}
+};

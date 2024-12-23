@@ -1,11 +1,11 @@
 <?php
 
+use App\Models\Parameters\Area;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use App\Models\Parameters\Area;
 
-class CreateCfgAreasTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -22,21 +22,21 @@ class CreateCfgAreasTable extends Migration
         });
 
         Area::create([
-            'name' => 'Administrativo'
+            'name' => 'Administrativo',
         ]);
         Area::create([
-            'name' => 'Asistencial', 
+            'name' => 'Asistencial',
         ]);
         Area::create([
-            'name' => 'Directivo', 
+            'name' => 'Directivo',
         ]);
         Area::create([
-            'name' => 'Gestión', 
+            'name' => 'Gestión',
         ]);
         Area::create([
-            'name' => 'Operaciones'
+            'name' => 'Operaciones',
         ]);
-        
+
     }
 
     /**
@@ -48,4 +48,4 @@ class CreateCfgAreasTable extends Migration
     {
         Schema::dropIfExists('cfg_areas');
     }
-}
+};

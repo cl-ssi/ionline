@@ -110,7 +110,7 @@ class ConsolidatedReport implements FromCollection, WithTitle, WithHeadings
                     $sirh_code,
                     $establishment_name,
                     $serviceRequest->employee->runNotFormat(),
-                    $serviceRequest->employee->getFullNameAttribute(),
+                    $serviceRequest->employee->fullName,
                     $birthday,
                     $serviceRequest->employee->country->name,
                     $serviceRequest->employee->phone_number,

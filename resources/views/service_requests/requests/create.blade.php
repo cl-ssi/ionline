@@ -45,9 +45,12 @@
 		</fieldset>
 
 		<fieldset class="form-group col-12 col-md-3">
-			<label for="for_end_date">Fecha Término de Contrato</label>
-			<input type="date" class="form-control" id="for_end_date" name="end_date" min="{{now()->subYear()->format('Y-m-d')}}" max="{{now()->addYear()->format('Y-m-d')}}" required>
-		</fieldset>
+            <label for="for_end_date">Fecha Término de Contrato</label>
+            <input type="date" class="form-control" id="for_end_date" name="end_date" 
+                min="{{ now()->subYear()->format('Y-m-d') }}" 
+                max="{{ now()->addYears(1)->endOfYear()->format('Y-m-d') }}" 
+                required>
+        </fieldset>
 
 	</div>
 

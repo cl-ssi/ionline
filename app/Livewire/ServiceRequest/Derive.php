@@ -35,8 +35,8 @@ class Derive extends Component
         /* Acá va el código para derivar desde $user_form_id a $user_to_id */
         $user_from_id = $this->user_from_id;        
         $user_to_id = $this->user_to_id;
-        $sender_name = User::find($user_from_id)->getFullNameAttribute();
-        $receiver_name = User::find($user_to_id)->getFullNameAttribute();
+        $sender_name = User::find($user_from_id)->fullName;
+        $receiver_name = User::find($user_to_id)->fullName;
         $receiver_email = User::find($user_to_id)->email;
         $type = $this->type;
 

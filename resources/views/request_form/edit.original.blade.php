@@ -24,7 +24,7 @@
     </tr>
     <tr>
         <th>Nombre Administrador de Contrato</th>
-        <td>{{ $requestForm->admin->FullName }}</td>
+        <td>{{ $requestForm->admin->fullName }}</td>
     </tr>
     <tr>
         <th>Programa Asociado</th>
@@ -190,7 +190,7 @@
                 <tr>
                   <td>{{ ++$key }}</td>
                   <td>{{ $passage->RunFormat }}</td>
-                  <td>{{ $passage->FullName }}</td>
+                  <td>{{ $passage->fullName }}</td>
                   <td>{{ $passage->DepartureDateFormat }}</td>
                   <td>{{ $passage->FromDateFormat }}</td>
                   <td>{{ $passage->BaggageName }}</td>
@@ -230,7 +230,7 @@
               @foreach($requestForm->requestformfiles as $key => $file)
                   <p class="card-text">
                       <a href="{{ route('request_forms.files.store', $file->id) }}"><i class="fas fa-paperclip"></i> {{ $file->name }} </a>
-                      por: <i class="fas fa-user"></i> {{ $file->user->FullName }} <i class="fas fa-calendar"></i> {{ $file->CreationDate }}
+                      por: <i class="fas fa-user"></i> {{ $file->user->fullName }} <i class="fas fa-calendar"></i> {{ $file->CreationDate }}
                   </p>
               @endforeach
           </div>
@@ -282,7 +282,7 @@
             </tr>
             <tr>
                 <th>Nombre</th>
-                <td>{{ $requestForm->whorequest->FullName ?? '' }}</td>
+                <td>{{ $requestForm->whorequest->fullName ?? '' }}</td>
             </tr>
             <tr>
                 <th>Cargo</th>
@@ -328,7 +328,7 @@
             </tr>
             <tr>
                 <th>Nombre</th>
-                <td>{{ $requestForm->whoauthorize->FullName ?? '' }}</td>
+                <td>{{ $requestForm->whoauthorize->fullName ?? '' }}</td>
             </tr>
             <tr>
                 <th>Cargo</th>
@@ -598,7 +598,7 @@
           </tr>
           <tr>
               <th>Nombre</th>
-              <td>{{ $requestForm->whoauthorize_finance->FullName ?? '' }}</td>
+              <td>{{ $requestForm->whoauthorize_finance->fullName ?? '' }}</td>
           </tr>
           <tr>
               <th>Cargo</th>
@@ -760,7 +760,7 @@
                       @if ($event->user_id == null)
                           <i class="fas fa-desktop"></i> <strong>Creado Por</strong>: Sistema - <br>
                       @else
-                          <i class="fas fa-desktop"></i> <strong>Creado Por</strong>: {{ $event->user ? $event->user->FullName : 'Usuario eliminado' }} <br>
+                          <i class="fas fa-desktop"></i> <strong>Creado Por</strong>: {{ $event->user ? $event->user->fullName : 'Usuario eliminado' }} <br>
                       @endif
                       <i class="fas fa-comment-dots"></i> <strong>Comentario</strong>: {{ $event->comment }}
                   </li>

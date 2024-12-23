@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateArqTendersTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -40,11 +40,11 @@ class CreateArqTendersTable extends Migration
             $table->dateTime('final_date')->nullable();
             $table->dateTime('pub_answers_date')->nullable();
             $table->dateTime('opening_act_date')->nullable();
-            $table->dateTime('pub_date')->nullable(); 
-            $table->dateTime('grant_date')->nullable(); 
-            $table->dateTime('estimated_grant_date')->nullable(); 
-            $table->dateTime('field_visit_date')->nullable(); 
-            $table->integer('n_suppliers')->nullable(); 
+            $table->dateTime('pub_date')->nullable();
+            $table->dateTime('grant_date')->nullable();
+            $table->dateTime('estimated_grant_date')->nullable();
+            $table->dateTime('field_visit_date')->nullable();
+            $table->integer('n_suppliers')->nullable();
             $table->date('start_date')->nullable();
             $table->integer('duration')->nullable();
             $table->text('justification')->nullable();
@@ -63,4 +63,4 @@ class CreateArqTendersTable extends Migration
     {
         Schema::dropIfExists('arq_tenders');
     }
-}
+};

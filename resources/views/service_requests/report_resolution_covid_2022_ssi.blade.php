@@ -270,7 +270,7 @@
           <th>Monto Total</th>
         </tr>
         <tr>
-          <td style="text-align:center">{{$ServiceRequest->employee->getFullNameAttribute()}}</td>
+          <td style="text-align:center">{{$ServiceRequest->employee->fullName}}</td>
           <td style="text-align:center">{{$ServiceRequest->employee->runFormat()}}</td>
           <td style="text-align:center">{{$ServiceRequest->profession->name}} - {{$ServiceRequest->working_day_type}}</td>
           <td style="text-align:center">{{$ServiceRequest->weekly_hours}}</td>
@@ -294,7 +294,7 @@
           <th>Valor por Hora</th>
         </tr>
         <tr>
-          <td style="text-align:center">{{$ServiceRequest->employee->getFullNameAttribute()}}</td>
+          <td style="text-align:center">{{$ServiceRequest->employee->fullName}}</td>
           <td style="text-align:center">{{$ServiceRequest->employee->runFormat()}}</td>
           <td style="text-align:center">{{$ServiceRequest->profession->name}} - {{$ServiceRequest->working_day_type}}</td>
           <td style="text-align:center">{{$ServiceRequest->working_day_type}}</td>
@@ -316,7 +316,7 @@
           <th>Monto Total</th>
         </tr>
         <tr>
-          <td style="text-align:center">{{$ServiceRequest->employee->getFullNameAttribute()}}</td>
+          <td style="text-align:center">{{$ServiceRequest->employee->fullName}}</td>
           <td style="text-align:center">{{$ServiceRequest->employee->runFormat()}}</td>
           <td style="text-align:center">{{$ServiceRequest->profession->name}} - {{$ServiceRequest->working_day_type}}</td>
           <td style="text-align:center">{{$ServiceRequest->start_date->format('d/m/Y')}}</td>
@@ -339,10 +339,10 @@
       <p class="justify">
         @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
         En Iquique, a {{$inputs['Fecha']}}, entre
-        <b>{{App\Models\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->user->FullNameUpper}}</b>, RUN: {{App\Models\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->user->runFormat()}}
-        en su calidad de {{App\Models\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->position}} del Hospital “Dr. Ernesto Torres Galdames” de Iquique, con domicilio en Av. Héroes de la Concepción N° 502 de Iquique, en adelante "el Director del Hospital “Dr. Ernesto Torres Galdames", y por la otra <b>{{$ServiceRequest->employee->getFullNameAttribute()}}, RUN: {{$ServiceRequest->employee->id}}-{{$ServiceRequest->employee->dv}}</b>, domiciliado en {{$ServiceRequest->address}}, de la Ciudad de Iquique, en adelante "el prestador”, ambos mayores de edad, se ha convenido el siguiente:
+        <b>{{App\Models\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->user->fullNameUpper}}</b>, RUN: {{App\Models\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->user->runFormat()}}
+        en su calidad de {{App\Models\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->position}} del Hospital “Dr. Ernesto Torres Galdames” de Iquique, con domicilio en Av. Héroes de la Concepción N° 502 de Iquique, en adelante "el Director del Hospital “Dr. Ernesto Torres Galdames", y por la otra <b>{{$ServiceRequest->employee->fullName}}, RUN: {{$ServiceRequest->employee->id}}-{{$ServiceRequest->employee->dv}}</b>, domiciliado en {{$ServiceRequest->address}}, de la Ciudad de Iquique, en adelante "el prestador”, ambos mayores de edad, se ha convenido el siguiente:
         @else
-        En Iquique, a {{$inputs['Fecha']}}, entre <b>D. {{App\Models\Rrhh\Authority::getAuthorityFromDate(1,now(),['manager'])->user->FullNameUpper}}, RUN: {{App\Models\Rrhh\Authority::getAuthorityFromDate(1,now(),['manager'])->user->runFormat()}}</b>, en su calidad de {{App\Models\Rrhh\Authority::getAuthorityFromDate(1,now(),['manager'])->position}} del Servicio de Salud Iquique, con domicilio Aníbal Pinto N° 815 de Iquique, en adelante el Director del Servicio de Salud Iquique, y por la otra <b>{{$ServiceRequest->employee->getFullNameAttribute()}}, RUN: {{$ServiceRequest->employee->id}}-{{$ServiceRequest->employee->dv}}</b>, domiciliado en {{$ServiceRequest->address}}, de la Ciudad de Iquique, en adelante "el prestador”, ambos mayores de edad, se ha convenido el siguiente:
+        En Iquique, a {{$inputs['Fecha']}}, entre <b>D. {{App\Models\Rrhh\Authority::getAuthorityFromDate(1,now(),['manager'])->user->fullNameUpper}}, RUN: {{App\Models\Rrhh\Authority::getAuthorityFromDate(1,now(),['manager'])->user->runFormat()}}</b>, en su calidad de {{App\Models\Rrhh\Authority::getAuthorityFromDate(1,now(),['manager'])->position}} del Servicio de Salud Iquique, con domicilio Aníbal Pinto N° 815 de Iquique, en adelante el Director del Servicio de Salud Iquique, y por la otra <b>{{$ServiceRequest->employee->fullName}}, RUN: {{$ServiceRequest->employee->id}}-{{$ServiceRequest->employee->dv}}</b>, domiciliado en {{$ServiceRequest->address}}, de la Ciudad de Iquique, en adelante "el prestador”, ambos mayores de edad, se ha convenido el siguiente:
         @endif
       </p>
 
@@ -350,9 +350,9 @@
       <p class="justify">
         <strong>PRIMERO:</strong>
         @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
-        Don {{App\Models\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->user->FullNameUpper}}, en su calidad de {{App\Models\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->position}} del Hospital “Dr. Ernesto Torres Galdames” de Iquique, contrata a {{$ServiceRequest->employee->getFullNameAttribute()}}, ({{$ServiceRequest->profession->name}} - {{$ServiceRequest->working_day_type}}), para que preste servicios en el {{$ServiceRequest->responsabilityCenter->name}} del Hospital de Iquique bajo la modalidad de Honorarios a Suma Alzada.
+        Don {{App\Models\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->user->fullNameUpper}}, en su calidad de {{App\Models\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->position}} del Hospital “Dr. Ernesto Torres Galdames” de Iquique, contrata a {{$ServiceRequest->employee->fullName}}, ({{$ServiceRequest->profession->name}} - {{$ServiceRequest->working_day_type}}), para que preste servicios en el {{$ServiceRequest->responsabilityCenter->name}} del Hospital de Iquique bajo la modalidad de Honorarios a Suma Alzada.
         @else
-        D. {{App\Models\Rrhh\Authority::getAuthorityFromDate(1,now(),['manager'])->user->FullNameUpper}}, en su calidad de {{App\Models\Rrhh\Authority::getAuthorityFromDate(1,now(),['manager'])->position}} del Servicio de Salud Iquique de Iquique, contrata a {{$ServiceRequest->employee->getFullNameAttribute()}}, ({{$ServiceRequest->profession->name}} - {{$ServiceRequest->working_day_type}}), para que preste servicios en el {{$ServiceRequest->responsabilityCenter->name}} del Servicio de Salud Iquique bajo la modalidad de Honorarios a Suma Alzada.
+        D. {{App\Models\Rrhh\Authority::getAuthorityFromDate(1,now(),['manager'])->user->fullNameUpper}}, en su calidad de {{App\Models\Rrhh\Authority::getAuthorityFromDate(1,now(),['manager'])->position}} del Servicio de Salud Iquique de Iquique, contrata a {{$ServiceRequest->employee->fullName}}, ({{$ServiceRequest->profession->name}} - {{$ServiceRequest->working_day_type}}), para que preste servicios en el {{$ServiceRequest->responsabilityCenter->name}} del Servicio de Salud Iquique bajo la modalidad de Honorarios a Suma Alzada.
         @endif
       </p>
 
@@ -653,7 +653,7 @@
       </p>
       @else
       <p class="justify">
-        <strong>DÉCIMO PRIMERO:</strong> La personería de D.{{App\Models\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->user->FullNameUpper}} , para representar al Hospital “Dr. E. Torres G.” de Iquique, en su calidad de {{App\Models\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->position}}, consta en
+        <strong>DÉCIMO PRIMERO:</strong> La personería de D.{{App\Models\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->user->fullNameUpper}} , para representar al Hospital “Dr. E. Torres G.” de Iquique, en su calidad de {{App\Models\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->position}}, consta en
         {{App\Models\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->decree}},
         del Servicio de Salud Iquique.
       </p>
@@ -666,7 +666,7 @@
       </p>
       @elseif($ServiceRequest->program_contract_type == "Horas")
       <p class="justify">
-        <strong>DÉCIMO PRIMERO:</strong> La personería de D. {{App\Models\Rrhh\Authority::getAuthorityFromDate(1,now(),['manager'])->user->FullNameUpper}} , para representar al Servicio Salud Iquique, en su calidad de {{App\Models\Rrhh\Authority::getAuthorityFromDate(1,now(),['manager'])->position}}, consta en
+        <strong>DÉCIMO PRIMERO:</strong> La personería de D. {{App\Models\Rrhh\Authority::getAuthorityFromDate(1,now(),['manager'])->user->fullNameUpper}} , para representar al Servicio Salud Iquique, en su calidad de {{App\Models\Rrhh\Authority::getAuthorityFromDate(1,now(),['manager'])->position}}, consta en
         {{App\Models\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->decree}},
         del Servicio de Salud Iquique.
       </p>
@@ -705,11 +705,11 @@
       <p class="justify">
         <strong>DECIMO CUARTO:</strong>
         @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
-        La personería de D.{{App\Models\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->user->FullNameUpper}}, para representar al Hospital “Dr. E. Torres G.” de Iquique, en su calidad de {{App\Models\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->position}}, consta en
+        La personería de D.{{App\Models\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->user->fullNameUpper}}, para representar al Hospital “Dr. E. Torres G.” de Iquique, en su calidad de {{App\Models\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->position}}, consta en
         {{App\Models\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->decree}},
         del Servicio de Salud Iquique.
         @else
-        La personería de D. {{App\Models\Rrhh\Authority::getAuthorityFromDate(1,now(),['manager'])->user->FullNameUpper}}, para representar al Servicio de Salud Iquique, en su calidad de {{App\Models\Rrhh\Authority::getAuthorityFromDate(1,now(),['manager'])->position}}, consta en el {{App\Models\Rrhh\Authority::getAuthorityFromDate(1,now(),['manager'])->decree}}.
+        La personería de D. {{App\Models\Rrhh\Authority::getAuthorityFromDate(1,now(),['manager'])->user->fullNameUpper}}, para representar al Servicio de Salud Iquique, en su calidad de {{App\Models\Rrhh\Authority::getAuthorityFromDate(1,now(),['manager'])->position}}, consta en el {{App\Models\Rrhh\Authority::getAuthorityFromDate(1,now(),['manager'])->decree}}.
         @endif
       </p>
       @elseif($ServiceRequest->program_contract_type == "Horas")
@@ -724,11 +724,11 @@
       <p class="justify">
         <strong>DECIMO TERCERO:</strong>
         @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
-        La personería de D.{{App\Models\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->user->FullNameUpper}}, para representar al Hospital “Dr. E. Torres G.” de Iquique, en su calidad de {{App\Models\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->position}}, consta en
+        La personería de D.{{App\Models\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->user->fullNameUpper}}, para representar al Hospital “Dr. E. Torres G.” de Iquique, en su calidad de {{App\Models\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->position}}, consta en
         {{App\Models\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->decree}},
         del Servicio de Salud Iquique.
         @else
-        La personería de D. {{App\Models\Rrhh\Authority::getAuthorityFromDate(1,now(),['manager'])->user->FullNameUpper}}, para representar al Servicio de Salud Iquique, en su calidad de {{App\Models\Rrhh\Authority::getAuthorityFromDate(1,now(),['manager'])->position}}, consta en el Dto. de Nombramiento N° 42/2019 del Ministerio de Salud.
+        La personería de D. {{App\Models\Rrhh\Authority::getAuthorityFromDate(1,now(),['manager'])->user->fullNameUpper}}, para representar al Servicio de Salud Iquique, en su calidad de {{App\Models\Rrhh\Authority::getAuthorityFromDate(1,now(),['manager'])->position}}, consta en el Dto. de Nombramiento N° 42/2019 del Ministerio de Salud.
         @endif
       </p>
       @else
@@ -740,7 +740,7 @@
       <div class="page-break"></div>
       @endif
 
-      Para constancia firman: <br><br> {{$ServiceRequest->employee->getFullNameAttribute()}} <br><br>
+      Para constancia firman: <br><br> {{$ServiceRequest->employee->fullName}} <br><br>
 
       <p class="">
         <strong>2.</strong> El convenio que por este acto se aprueban, se entiende que forman parte integrante de la presente Resolución.
@@ -788,7 +788,7 @@
           @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
           <strong>
             <span class="uppercase">
-              {{App\Models\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->user->FullNameUpper}}
+              {{App\Models\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->user->fullNameUpper}}
             </span>
             <br>
               <span style="text-transform:uppercase">{{App\Models\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->position}}</span>

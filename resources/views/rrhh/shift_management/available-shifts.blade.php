@@ -167,7 +167,7 @@
 
 						<b>ID:<small># {{$aDay->id }}</small></b><br>
     					<b>Propietario</b>
-						<p>{{$aDay->ShiftUser->user->runFormat()}} -  {{$aDay->ShiftUser->user->getFullNameAttribute()}} </p>
+						<p>{{$aDay->ShiftUser->user->runFormat()}} -  {{$aDay->ShiftUser->user->fullName}} </p>
     					<b>Comentario</b>
 						<p>{{$aDay->commentary}}</p>
 						
@@ -222,13 +222,13 @@
     				
 
     				<b>Propietario</b>
-    				<p>{{$solicitud->ShiftUserDay->ShiftUser->user->runFormat()}} -  {{$solicitud->ShiftUserDay->ShiftUser->user->getFullNameAttribute()}} </p>
+    				<p>{{$solicitud->ShiftUserDay->ShiftUser->user->runFormat()}} -  {{$solicitud->ShiftUserDay->ShiftUser->user->fullName}} </p>
     			
     				<b>Día</b>
     				<p> {{ $solicitud->ShiftUserDay->day }}, Jornada: {{ $solicitud->ShiftUserDay->working_day}} - {{ $tiposJornada [ $solicitud->ShiftUserDay->working_day ] }}</p>
 
     				<b>Solicitud</b>
-    				<p>Solicitado por {{$solicitud->user->runFormat()}} -  {{$solicitud->user->getFullNameAttribute()}} </p>
+    				<p>Solicitado por {{$solicitud->user->runFormat()}} -  {{$solicitud->user->fullName}} </p>
 
     				<p> Solicitado en {{ $solicitud->created_at}}</p>
     				<b>Estado</b>

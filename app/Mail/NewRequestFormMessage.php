@@ -26,7 +26,7 @@ use Queueable, SerializesModels;
     public function build()
     {        
         
-        $subject = "Nuevo Mensaje para su Formulario de Requerimiento°{$this->requestformmessage->requestForm->id} digitado por el usuario {$this->requestformmessage->user->FullName}";
+        $subject = "Nuevo Mensaje para su Formulario de Requerimiento°{$this->requestformmessage->requestForm->id} digitado por el usuario {$this->requestformmessage->user->fullName}";
         return $this->view('request_form.mail.newrequestformmessage')
             ->subject($subject);
 

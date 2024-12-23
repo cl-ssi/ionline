@@ -10,7 +10,7 @@
         <div class="form-row mb-3">
             <fieldset class="col-12 col-md-5">
                 <label for="">Responsable*</label>
-                <input type="text" class="form-control" required value="{{ $meeting->responsible->FullName ?? '' }}"
+                <input type="text" class="form-control" required value="{{ $meeting->responsible->fullName ?? '' }}"
                     readonly>
             </fieldset>
 

@@ -21,6 +21,7 @@ return new class extends Migration
             $table->text('status'); //en revisión, aceptado, rechazado
 
             $table->integer('installments_number')->nullable();
+            $table->integer('folio_number')->nullable();
 
             $table->datetime('status_update_date')->nullable();
             $table->foreignId('status_update_responsable_id')->nullable()->constrained('users');
@@ -33,7 +34,7 @@ return new class extends Migration
             $table->datetime('payed_date')->nullable();
             $table->foreignId('payed_responsable_id')->nullable()->constrained('users');
             $table->float('payed_amount', 14, 2)->nullable();
-            
+
             $table->timestamps();
             $table->softDeletes();
         });

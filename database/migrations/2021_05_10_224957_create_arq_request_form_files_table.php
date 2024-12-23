@@ -1,10 +1,10 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
-class CreateArqRequestFormFilesTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -17,8 +17,8 @@ class CreateArqRequestFormFilesTable extends Migration
             $table->id();
             $table->string('file')->nullable();
             $table->string('name')->nullable();
-            $table->unsignedBigInteger('request_form_id')->unsigned()->nullable();//id del formulario de requerimiento.
-            $table->unsignedBigInteger('user_id')->nullable();//id del usuario.
+            $table->unsignedBigInteger('request_form_id')->unsigned()->nullable(); //id del formulario de requerimiento.
+            $table->unsignedBigInteger('user_id')->nullable(); //id del usuario.
 
             $table->timestamps();
             $table->softDeletes();
@@ -35,4 +35,4 @@ class CreateArqRequestFormFilesTable extends Migration
     {
         Schema::dropIfExists('arq_request_form_files');
     }
-}
+};

@@ -60,7 +60,7 @@ class Authorization extends Component
       
       $this->organizationalUnit = $this->requestForm->eventRequestForms->where('status', 'pending')->whereNull('deleted_at')->first()->signerOrganizationalUnit->name;
       
-      $this->userAuthority      = auth()->user()->getFullNameAttribute();
+      $this->userAuthority      = auth()->user()->fullName;
       if(!empty($iam_authorities_in)){
         $this->position = $this->requestForm->eventRequestForms->where('status', 'pending')->whereNull('deleted_at')->first()->signerOrganizationalUnit->currentManager->position ?? auth()->user()->position;
       }

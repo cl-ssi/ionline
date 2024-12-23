@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateWreStoreUser extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -19,7 +19,7 @@ class CreateWreStoreUser extends Migration
             $table->foreignId('user_id')->nullable()->constrained('users');
             $table->foreignId('role_id')->nullable()->constrained('roles');
             $table->boolean('status')->nullable();
-            $table->boolean('is_visator')->after('status')->default(0);
+            $table->boolean('is_visator')->default(false);
             $table->timestamps();
         });
     }
@@ -33,4 +33,4 @@ class CreateWreStoreUser extends Migration
     {
         Schema::dropIfExists('wre_store_user');
     }
-}
+};

@@ -212,7 +212,7 @@ class MeetingCreate extends Component
             'type'          => $this->typeGrouping,
             'name'          => $this->nameGrouping,
             'user_id'       => ($this->searchedUser) ? $this->searchedUser->id : null,
-            'user_name'     => ($this->searchedUser) ? $this->searchedUser->FullName : null,
+            'user_name'     => ($this->searchedUser) ? $this->searchedUser->fullName : null,
             'meeting_id'    => ($this->meetingToEdit) ? $this->meetingToEdit->id : null,
         ];
 
@@ -233,7 +233,7 @@ class MeetingCreate extends Component
                     'type'          => $grouping->type,
                     'name'          => $grouping->name,
                     'user_id'       => $grouping->user_id,
-                    'user_name'     => ($grouping->type == "funcionario") ? $grouping->groupingUser->FullName  : null,
+                    'user_name'     => ($grouping->type == "funcionario") ? $grouping->groupingUser->fullName  : null,
                     'meeting_id'    => $grouping->meeting_id
                 ];
             }
@@ -268,7 +268,7 @@ class MeetingCreate extends Component
             'description'           => $this->commitmentDescription,
             'type'                  => $this->typeResponsible,
             'commitment_user_id'    => ($this->typeResponsible == 'individual') ? $this->searchedCommitmentUser->id : null,
-            'commitment_user_name'  => ($this->typeResponsible == 'individual') ? $this->searchedCommitmentUser->FullName : null,
+            'commitment_user_name'  => ($this->typeResponsible == 'individual') ? $this->searchedCommitmentUser->fullName : null,
             'commitment_ou_id'      => ($this->typeResponsible == 'ou') ? $this->searchedCommitmentOu->id : null,
             'commitment_ou_name'    => ($this->typeResponsible == 'ou') ? $this->searchedCommitmentOu->name : null,
             'closing_date'          => $this->closingDate,
@@ -295,7 +295,7 @@ class MeetingCreate extends Component
                     'description'           => $commitment->description,
                     'type'                  => $commitment->type,
                     'commitment_user_id'    => $commitment->commitment_user_id,
-                    'commitment_user_name'  => ($commitment->commitment_user_id) ? $commitment->commitmentUser->FullName : null,
+                    'commitment_user_name'  => ($commitment->commitment_user_id) ? $commitment->commitmentUser->fullName : null,
                     'commitment_ou_id'      => $commitment->commitment_ou_id,
                     'commitment_ou_name'    => ($commitment->commitment_ou_id) ? $commitment->commitmentOrganizationalUnit->name : null,
                     'priority'              => $commitment->priority,
