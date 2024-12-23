@@ -13,7 +13,7 @@ class MeetingPolicy
      */
     public function viewAny(User $user): bool
     {
-        return $user->canany(['Meetings: all meetings']);
+        return $user->canany(['Meetings: all meetings', 'be god']);
     }
 
     /**
