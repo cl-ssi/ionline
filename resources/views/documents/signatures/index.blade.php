@@ -123,9 +123,9 @@
                             </td>
                             <td>
                                 @can('Documents: signatures and distribution')
-                                    <button type="button" class="btn btn-sm btn-outline-danger" data-toggle="modal"
+                                    <button type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal"
                                         @disabled(auth()->user()->godMode)
-                                        data-target="#rejectSignature{{ $pendingSignaturesFlow->id }}"
+                                        data-bs-target="#rejectSignature{{ $pendingSignaturesFlow->id }}"
                                         title="Rechazar documento">
                                         <i class="fas fa-fw fa-times-circle"></i>
                                     </button>
@@ -216,14 +216,12 @@
                         </tr>
                         {{-- Modal rechazo --}}
                         <div class="modal fade" id="rejectSignature{{ $pendingSignaturesFlow->id }}" tabindex="-1"
-                            role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                            <div class="modal-dialog modal-dialog-centered" role="document">
+                            aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <h5 class="modal-title" id="exampleModalLongTitle">Rechazar Firma</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <form method="POST" class="form-horizontal"
                                         action="{{ route('documents.signatures.rejectSignature', $pendingSignaturesFlow->id) }}"
@@ -244,7 +242,7 @@
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary"
-                                                data-dismiss="modal">Cancelar
+                                                data-bs-dismiss="modal">Cancelar
                                             </button>
 
                                             <button form="rejectForm{{ $pendingSignaturesFlow->id }}"
