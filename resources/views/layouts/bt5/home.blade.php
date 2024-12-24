@@ -73,7 +73,7 @@
 
     <div class="row pt-2">
         <div class="col-sm-8 col-12">
-            @env('local')
+            @env('production')
             <div id="carouselNews"
                 class="carousel slide">
                 <div class="carousel-indicators">
