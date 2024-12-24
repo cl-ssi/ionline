@@ -731,22 +731,22 @@
                         <div class="dropdown-divider"></div>
 
                         @if(count(auth()->user()->unreadNotifications))
-                         @foreach(auth()->user()->unreadNotifications as $notification)
-                          <a class="dropdown-item small" href="{{ route('openNotification', $notification) }}">
-                          @if(isset($notification->data['fa_icon']))
-                         {!! $notification->data['fa_icon'] !!}
-                         @elseif(isset($notification->data['icon']))
-                        {{-- Compatibilidad con íconos de Filament --}}
-                        <i class="{{ $notification->data['icon'] }}"></i>
-                        @else
-                         {{-- Ícono genérico si no hay ícono definido --}}
-                        <i class="fas fa-bell"></i>
+                            @foreach(auth()->user()->unreadNotifications as $notification)
+                                <a class="dropdown-item small" href="{{ route('openNotification', $notification) }}">
+                                @if(isset($notification->data['fa_icon']))
+                                    {!! $notification->data['fa_icon'] !!}
+                                @elseif(isset($notification->data['icon']))
+                                    <!-- Compatibilidad con íconos de Filament -->
+                                    {!! $notification->data['icon'] !!}
+                                @else
+                                    <!-- Ícono genérico si no hay ícono definido -->
+                                    <i class="fas fa-bell"></i>
                         @endif
 
-                        {{-- Mostrar título o módulo --}}
+                        <!-- Mostrar título o módulo -->
                         <b>{{ $notification->data['title'] ?? ($notification->data['module'] ?? 'Notificación') }}</b>
 
-                        {{-- Mostrar cuerpo o sujeto --}}
+                        <!-- Mostrar cuerpo o sujeto -->
                         @if(isset($notification->data['subject']))
                             {!! $notification->data['subject'] !!}
                         @elseif(isset($notification->data['body']))
