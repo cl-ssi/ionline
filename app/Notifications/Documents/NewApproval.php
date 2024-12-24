@@ -75,13 +75,12 @@ class NewApproval extends Notification
                     "shouldOpenInNewTab" => true, 
                 ],
             ],
-            "body" => "El usuario ".auth()->user()->name." le recuerda revisar la aprobación con ID ".$this->approval->id, 
+            "body" => "El usuario " . auth()->user()->name . " le recuerda revisar la aprobación con ID " . $this->approval->id, 
             "color" => "info", 
             "duration" => "persistent", 
-            "icon" => "heroicon-o-identification",
-            "iconColor" => "blue", 
+            "icon" => $this->mapIcon($this->approval->module_icon), // Generar dinámicamente el ícono
             "status" => "info", 
-            "title" => "Nueva Aprobación", 
+            "title" => "Nueva Aprobación en " . ucfirst($this->approval->module), // Título dinámico
             "view" => "filament-notifications::notification", 
             "format" => "filament", 
         ];
