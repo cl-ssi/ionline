@@ -306,12 +306,19 @@
                 </h5>
                 <ul class="list-group">
                     @foreach (auth()->user()->unreadNotifications->where('type', '!=', 'Filament\Notifications\DatabaseNotification')->take(7) as $notification)
+                        
                         <a href="{{ route('openNotification', $notification) }}"
                             class="list-group-item list-group-item-action small">
-                            {{ $notification->created_at }} -
-                            {!! $notification->data['icon'] ?? null !!}
+                            {{ $notification->created_at }} -                         
+                                {{-- Verifica si existe el ícono en formato antiguo --}}
+                            @if(isset($notification->data['fa_icon']))
+                             {!! $notification->data['fa_icon'] !!}
+                             @else
+                                {{-- Ícono genérico si no se encuentra el antiguo --}}
+                            <i class="fas fa-bell"></i>
+                            @endif
                             <b>{{ $notification->data['module'] ?? '' }}</b>
-                            {{-- Manejo flexible para mostrar 'subject' o 'body' --}}
+                                {{-- Manejo flexible para mostrar 'subject' o 'body' --}}
                             @if(array_key_exists('subject', $notification->data))
                                 {!! $notification->data['subject'] !!}
                             @elseif(array_key_exists('body', $notification->data))
