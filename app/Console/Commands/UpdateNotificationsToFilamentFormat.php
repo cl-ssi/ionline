@@ -45,17 +45,24 @@ class UpdateNotificationsToFilamentFormat extends Command
                 '<i class="fas fa-wallet"></i>' => 'bi-wallet',
                 '<i class="fas fa-question-circle"></i>' => 'bi-question-circle',
                 '<i class="fas fa-bell"></i>' => 'bi-bell',
-                '<i class="fas fa-fw fa-file-invoice-dollar"></i>' => 'bi-file-earmark-dollar',
+                '<i class="fas fa-fw fa-file-invoice-dollar"></i>' => 'bi-cash-coin',
                 '<i class="fas fa-id-badge fa-fw"></i>' => 'bi-person-badge',
-                '<i class="far fa-id-card"></i>' => 'bi-person-id',
+                '<i class="far fa-id-card"></i>' => 'bi-card-text',
                 '<i class="fas fa-fw fa-clock"></i>' => 'bi-clock',
                 '<i class="fas fa-fw fa-box-open"></i>' => 'bi-box',
                 '<i class="fas fa-fw fa-boxes"></i>' => 'bi-archive',
-            ];     
-            
-            // Convert the Laravel notification data to Filament format
+            ];
+
+            // Obtener ícono de FontAwesome
+            $faIcon = $data['icon'] ?? null;
+
+            // Convertir ícono a formato Bootstrap Icons
+            $bootstrapIcon = $iconMapping[$faIcon] ?? null;
+
+            // Convertir los datos de la notificación a un formato compatible con ambos sistemas
             $filamentData = [
-                'icon' => $iconMapping[$data['icon']] ?? null,
+                'icon' => $bootstrapIcon,         // Para Filament
+                'fa_icon' => $faIcon,            // Para el sistema antiguo
                 'iconColor' => null,
                 'title' => $data['module'] ?? 'Notification',
                 'body' => $data['subject'] ?? null,
@@ -72,8 +79,6 @@ class UpdateNotificationsToFilamentFormat extends Command
                 'color' => null,
                 'duration' => 'persistent',
                 'status' => $data['status'] ?? 'info',
-                'view' => 'filament-notifications::notification',
-                'viewData' => ['additional_info' => $data['additional_info'] ?? null,],
                 'format' => 'filament',
             ];
 

@@ -32,9 +32,14 @@
                 <td>{!! $notification->data['icon'] ?? null !!} {{ $notification->data['module'] ?? '' }}</td>
                 <td>
                     @if(isset($notification->data['subject']))
-                        {!! $notification->data['subject'] !!}
+                    {{-- Mostrar el formato antiguo --}}
+                    {!! $notification->data['subject'] !!}
                     @elseif(isset($notification->data['body']))
-                        {!! $notification->data['body'] !!}
+                     {{-- Mostrar el formato nuevo --}}
+                    {!! $notification->data['body'] !!}
+                    @elseif(isset($notification->data['message']))
+                    {{-- Fallback adicional para mensajes genéricos --}}
+                    {!! $notification->data['message'] !!}
                     @else
                         Sin detalles disponibles
                     @endif
