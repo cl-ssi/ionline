@@ -9,9 +9,9 @@ class NewsWidget extends Widget
 {
     protected static string $view = 'filament.widgets.news-widget';
 
-    protected static ?int $sort = 1;
+    protected static ?int $sort = 2;
 
-    protected int|string|array $columnSpan = 'full';
+    protected int|string|array $columnSpan = '2';
 
     public function getNews()
     {
