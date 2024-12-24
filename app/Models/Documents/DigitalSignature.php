@@ -132,7 +132,7 @@ class DigitalSignature extends Model
             "purpose"   => $purpose,
             "entity"    => $entity,
             "run"       => $user->id,
-            "expiration"=> now()->add(30, 'minutes')->format('Y-m-d\TH:i:s'),
+            "expiration"=> now()->addMinutes(30)->format('Y-m-d\TH:i:s'),
         ];
 
         $this->data['token'] = JWT::encode($payload, $secret, 'HS256');
@@ -141,7 +141,7 @@ class DigitalSignature extends Model
     /**
      * Firma Normal
      */
-    public function signature($user, $otp, $files, $positions)
+    public function signature($user, $otp, $files, $positions, $page = 'LAST')
     {
         if(count($files) != count($positions)) {
             abort( response()->json('Error: La cantidad de archivos a firmar no coincide la cantidad posiciones suministrada, informe esto a los desarrolladores', 406) );
@@ -149,13 +149,13 @@ class DigitalSignature extends Model
         $this->setConfig($user,'signature');
 
         /** En que página va la firma */
-        $this->page = 'LAST';
+        $this->page = $page;
 
         /** Obtener la imagen de la firma */
         $this->signatureBase64 = app(ImageService::class)->createSignature($this->user);
 
         /** Tamaño de la imagen de la firma x el factor */
-        $this->signatureWidth = 930 * $this->factorWidth;   // = 160
+        $this->signatureWidth  = 930 * $this->factorWidth;  // = 160
         $this->signatureHeight = 206 * $this->factorHeight; // =  39
 
         $coordinates = $this->calculateSignaturesCoordinates($positions);
@@ -273,26 +273,16 @@ class DigitalSignature extends Model
                 $position['margin-bottom'] = 0;
             }
 
-            switch($position['column']) {
-                case 'left':
-                    $coordinates['x'] = 93.3; // Left
-                    break;
-                case 'center':
-                    $coordinates['x'] = 256.4; // Center
-                    break;
-                case 'right':
-                    $coordinates['x'] = 418.8; // Right
-                    break;
-            }
+            $coordinates['x'] = match ($position['column']) {
+                'left' => 93.3,
+                'center' => 256.4,
+                'right' => 418.8,
+            };
 
-            switch($position['row']) {
-                case 'first':
-                    $coordinates['y'] = 72.3 + $position['margin-bottom'];
-                    break;
-                case 'second':
-                    $coordinates['y'] = 110.4 + $position['margin-bottom'];
-                    break;
-            }
+            $coordinates['y'] = match ($position['row']) {
+                'first' => 72.3 + $position['margin-bottom'],
+                'second' => 110.4 + $position['margin-bottom'],
+            };
 
             $coordinates[] = $coordinates;
         }
@@ -314,7 +304,7 @@ class DigitalSignature extends Model
         /**
          * Calculo de milimetros a centimetros
          */
-        $widthFile = $size['width'] / 10;
+        $widthFile  = $size['width'] / 10;
         $heightFile = $size['height'] / 10;
 
         /**

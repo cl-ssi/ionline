@@ -4,11 +4,11 @@
 
         @foreach ($this->getNews() as $news)
             <div class="my-4">
-                <h4 class="text-md font-semibold">{{ $news->title }}</h4>
-                <p>{{ $news->body }}</p>
                 @if ($news->image)
                     <img src="{{ Storage::url($news->image) }}" alt="{{ $news->title }}" class="w-full h-auto mb-4">
                 @endif
+                <h4 class="text-md font-bold">{{ $news->title }}</h4>
+                <p style="white-space: pre-wrap;">{{ $news->body }}</p>
                 <hr>
             </div>
         @endforeach
