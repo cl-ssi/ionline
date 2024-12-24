@@ -73,7 +73,7 @@
 
     <div class="row pt-2">
         <div class="col-sm-8 col-12">
-            @env('production')
+            @env('local')
             <div id="carouselNews"
                 class="carousel slide">
                 <div class="carousel-indicators">
@@ -91,11 +91,11 @@
                         <div class="carousel-item @if ($loop->index == 0) active @endif">
                             @if($news->image)
                                 <img src="{{ Storage::url($news->image) }}"
-                                    class="d-block w-100"
+                                    class="d-block w-100 mb-3"
                                     alt="{{ $news->title }}">
                             @endif
                             <strong>{{ $news->created_at }} - {{ $news->title }}</strong>
-                            <p>{{ $news->body }}</p>
+                            <p style="white-space: pre-wrap;">{!! $news->body !!}</p>
                             <br>
                         </div>
                         @endforeach
