@@ -134,26 +134,26 @@ class UpdateNotificationsToFilamentFormat extends Command
     protected function getFilamentIcon($module)
     {
         $filamentIcons = [
-            'Modificaciones Ficha APS' => 'bi bi-file-medical',
-            'Asistencia' => 'bi bi-clock',
-            'Modulo Bodega' => 'bi bi-rocket',
-            'Honorarios' => 'bi bi-rocket',
-            'Plan de Compras' => 'bi bi-cart-check',
+            'Modificaciones Ficha APS' => 'bi-file-medical',
+            'Asistencia' => 'bi-clock',
+            'Modulo Bodega' => 'bi-rocket',
+            'Honorarios' => 'bi-rocket',
+            'Plan de Compras' => 'bi-cart-check',
             'Perfil de Cargos' => 'bi-person-badge',
-            'Recepcion' => 'bi bi-list-task',
-            'Viáticos' => 'bi bi-wallet',
-            'Solicitudes de Contración' => 'bi bi-person-lines-fill',
-            'Calificaciones' => 'bi bi-graph-up-arrow',
-            'Drogas' => 'bi bi-capsule',
-            'Signature Request' => 'bi bi-pencil',
+            'Recepcion' => 'bi-list-task',
+            'Viáticos' => 'bi-wallet',
+            'Solicitudes de Contración' => 'bi-person-lines-fill',
+            'Calificaciones' => 'bi-graph-up-arrow',
+            'Drogas' => 'bi-capsule',
+            'Signature Request' => 'bi-pencil',
             'CDP' => 'bi-cash-coin',
-            'Finance' => 'bi bi-file-earmark-pdf',
-            'Solicitud Permiso Capacitación' => 'bi bi-person-workspace',
-            'Ausentismo' => 'bi bi-airplane',
-            'Devolución Horas Extras' => 'bi bi-clock-history',
-            'Convenios' => 'bi bi-handshake',
+            'Finance' => 'bi-file-earmark-pdf',
+            'Solicitud Permiso Capacitación' => 'bi-person-workspace',
+            'Ausentismo' => 'bi-airplane',
+            'Devolución Horas Extras' => 'bi-clock-history',
+            'Convenios' => 'bi-handshake',
         ];
 
-        return $filamentIcons[$module] ?? 'bi bi-question-circle'; // Default BI icon
+        return $filamentIcons[$module] ?? 'bi-question-circle'; // Default BI icon
     }
 }
