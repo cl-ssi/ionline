@@ -32,7 +32,7 @@ class MigrateAttendanceRecrodsToApprovals extends Command
         foreach($records as $record) {
             $record->approvals()->create([
                 "module" => "Asistencia",
-                "module_icon" => "fas fa-clock",
+                "module_icon" => "bi bi-clock",
                 "subject" => $record->date . ' : ' . $record->user->shortName . ':<br>'. $record->observation, 
                 "document_route_name" => "finance.purchase-orders.showByCode",
                 "document_route_params" => json_encode(["1272565-444-AG23"]),

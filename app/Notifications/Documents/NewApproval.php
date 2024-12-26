@@ -68,6 +68,11 @@ class NewApproval extends Notification
         $moduleIconParts = explode(' ', $this->approval->module_icon);
         $icon = end($moduleIconParts);
 
+        // si el icono empieza con fa- entonces reemplaza por fas-
+        if (strpos($icon, 'fa-') === 0) {
+            $icon = str_replace('fa-', 'fas-', $icon);
+        }
+
         return [
             "title" => ucfirst($this->approval->module), // Modulo
             "body" => $this->approval->subject, // Subject
