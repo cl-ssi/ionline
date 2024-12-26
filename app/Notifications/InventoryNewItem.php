@@ -12,6 +12,8 @@ class InventoryNewItem extends Notification
 {
     use Queueable;
 
+    public $movement;
+
     /**
      * Create a new notification instance.
      *
@@ -64,6 +66,10 @@ class InventoryNewItem extends Notification
         // ];
 
         return [
+            "icon" => "heroicon-o-archive-box",
+            "status" => "info",
+            "title" => 'Inventario',
+            "body" => 'Recepcionar ingreso de: ' . ($this->movement->inventory->unspscProduct->name ?? 'Producto desconocido'),
             "actions" => [
                 [
                     "name" => "check_transfer",
@@ -72,18 +78,13 @@ class InventoryNewItem extends Notification
                     "color" => "primary", 
                     "icon" => "heroicon-o-eye", 
                     "shouldOpenInNewTab" => true, 
+                    "shouldMarkAsRead"=> true, // Marcar como leída al hacer clic
+                    "view"=> "filament-actions::button-action",
                 ],
             ],
-            "body" => 'Recepcionar ingreso de: ' . ($this->movement->inventory->unspscProduct->name ?? 'Producto desconocido'),
-            "color" => "info",
             "duration" => "persistent",
-            "icon" => "heroicon-o-archive-box",
-            "iconColor" => "blue",
-            "status" => "info",
-            "title" => 'Nuevo Ingreso de Inventario',
             "view" => "filament-notifications::notification",
             "format" => "filament",
         ];
-        
     }
 }

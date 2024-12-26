@@ -11,6 +11,8 @@ class TechnicalReception extends Notification
 {
     use Queueable;
 
+    public $subject;
+
     /**
      * Create a new notification instance.
      *
@@ -61,6 +63,10 @@ class TechnicalReception extends Notification
         // ];
 
         return [
+            "icon" => "heroicon-o-inbox",
+            "status" => "info", //Color del icono
+            "title" => 'Firma Pendiente',
+            "body" => 'Firma pendiente de ' . $this->subject,
             "actions" => [
                 [
                     "name" => "sign_document",
@@ -69,15 +75,11 @@ class TechnicalReception extends Notification
                     "color" => "primary",
                     "icon" => "heroicon-o-pencil",
                     "shouldOpenInNewTab" => false,
+                    "shouldMarkAsRead"=> true, // Marcar como leída al hacer clic
+                    "view"=> "filament-actions::button-action",
                 ],
-            ],
-            "body" => 'Firma pendiente de ' . $this->subject,
-            "color" => "warning",
+            ],     
             "duration" => "persistent",
-            "icon" => "heroicon-o-inbox",
-            "iconColor" => "blue",
-            "status" => "info",
-            "title" => 'Firma Pendiente',
             "view" => "filament-notifications::notification",
             "format" => "filament",
         ];

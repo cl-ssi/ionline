@@ -72,6 +72,10 @@ class ResponseDoubt extends Notification
         // ];
 
         return [
+            'icon' => 'heroicon-o-question-mark-circle',
+            "status" => "info", 
+            "title" => 'Amipass Consulta', 
+            "body" => 'Han Respondido su Consulta/Sugerencia Amipass Nº: '.$this->param,
             "actions" => [
                 [
                     "name" => "view_amipass_question",
@@ -80,15 +84,11 @@ class ResponseDoubt extends Notification
                     "color" => "primary", 
                     "icon" => "heroicon-o-eye", 
                     "shouldOpenInNewTab" => true, 
+                    "shouldMarkAsRead"=> true, // Marcar como leída al hacer clic
+                    "view"=> "filament-actions::button-action",
                 ],
             ],
-            "body" => 'Han Respondido su Consulta/Sugerencia Amipass Nº: '.$this->param,
-            "color" => "info", 
             "duration" => "persistent", 
-            "icon" => 'bi bi-question-circle', 
-            "iconColor" => "blue", 
-            "status" => "info", 
-            "title" => 'Respuesta a Consulta Amipass', 
             "view" => "filament-notifications::notification", 
             "format" => "filament", 
         ];

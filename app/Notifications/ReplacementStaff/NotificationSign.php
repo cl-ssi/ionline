@@ -65,6 +65,10 @@ class NotificationSign extends Notification
         // ];
 
         return [
+            "icon" => "heroicon-o-identification",  
+            "status" => "info", 
+            "title" => 'Solicitudes de Contratación', 
+            "body" => 'Nueva solicitud de contratación para aprobación. ID: '.$this->requestReplacementStaff->id,
             "actions" => [
                 [
                     "name" => "view_replacement_request",
@@ -73,18 +77,13 @@ class NotificationSign extends Notification
                     "color" => "primary", 
                     "icon" => "heroicon-o-document-text", 
                     "shouldOpenInNewTab" => true, 
+                    "shouldMarkAsRead"=> true, // Marcar como leída al hacer clic
+                    "view"=> "filament-actions::button-action",
                 ],
             ],
-            "body" => 'Nueva solicitud de contratación para aprobación. ID: '.$this->requestReplacementStaff->id,
-            "color" => "info", 
             "duration" => "persistent", 
-            "icon" => "heroicon-o-identification", 
-            "iconColor" => "blue", 
-            "status" => "info", 
-            "title" => 'Nueva Solicitud de Contratación', 
             "view" => "filament-notifications::notification", 
             "format" => "filament", 
         ];
-        
     }
 }

@@ -13,6 +13,8 @@ class NotificationEndSelection extends Notification
 {
     use Queueable;
 
+    public $requestReplacementStaff;
+
     /**
      * Create a new notification instance.
      *
@@ -72,6 +74,10 @@ class NotificationEndSelection extends Notification
         // ];
 
         return [
+            "icon" => "heroicon-o-identification",
+            "status" => "success", 
+            "title" => 'Solicitudes de Contratación',
+            "body" => 'Se ha finalizado el proceso de selección para la solicitud ID: ' . $this->requestReplacementStaff->id,
             "actions" => [
                 [
                     "name" => "view_request",
@@ -80,18 +86,13 @@ class NotificationEndSelection extends Notification
                     "color" => "primary", 
                     "icon" => "heroicon-o-document",
                     "shouldOpenInNewTab" => false, 
+                    "shouldMarkAsRead"=> true, // Marcar como leída al hacer clic
+                    "view"=> "filament-actions::button-action",
                 ],
             ],
-            "body" => 'Se ha finalizado el proceso de selección para la solicitud ID: ' . $this->requestReplacementStaff->id,
-            "color" => "success", 
             "duration" => "persistent", 
-            "icon" => "heroicon-o-identification",
-            "iconColor" => "green", 
-            "status" => "success", 
-            "title" => 'Proceso de selección finalizado',
             "view" => "filament-notifications::notification", 
             "format" => "filament", 
         ];
-        
     }
 }

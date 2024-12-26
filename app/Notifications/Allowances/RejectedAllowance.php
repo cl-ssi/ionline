@@ -13,6 +13,8 @@ class RejectedAllowance extends Notification
 {
     use Queueable;
 
+    public $allowance;
+
     /**
      * Create a new notification instance.
      *
@@ -64,6 +66,10 @@ class RejectedAllowance extends Notification
         // ];
 
         return [
+            "icon" => "heroicon-o-wallet",
+            "status" => "danger", 
+            "title" => 'Víaticos', 
+            "body" => 'Se ha rechazado la solicitud de viático ID: '.$this->allowance->id,
             "actions" => [
                 [
                     "name" => "view_allowance_details",
@@ -72,19 +78,13 @@ class RejectedAllowance extends Notification
                     "color" => "primary", 
                     "icon" => "heroicon-o-eye", 
                     "shouldOpenInNewTab" => true, 
+                    "shouldMarkAsRead"=> true, // Marcar como leída al hacer clic
+                    "view"=> "filament-actions::button-action",
                 ],
             ],
-            "body" => 'Se ha rechazado la solicitud de viático ID: '.$this->allowance->id,
-            "color" => "danger", 
             "duration" => "persistent", 
-            "icon" => 'bi bi-wallet', 
-            "iconColor" => "red", 
-            "status" => "danger", 
-            "title" => 'Rechazo de Solicitud de Viático', 
             "view" => "filament-notifications::notification", 
-            "format" => "filament", 
+            "format" => "filament",  
         ];
-        
-        
     }
 }

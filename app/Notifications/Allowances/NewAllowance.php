@@ -6,12 +6,13 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
-
 use App\Models\Allowances\Allowance;
 
 class NewAllowance extends Notification
 {
     use Queueable;
+
+    public $allowance;
 
     /**
      * Create a new notification instance.
@@ -64,6 +65,10 @@ class NewAllowance extends Notification
         // ];
 
         return [
+            "icon" => "heroicon-o-wallet",
+            "status" => "info",
+            "title" => 'Víaticos',
+            "body" => 'Se ha creado una nueva solicitud de viático con el ID: '.$this->allowance->id,
             "actions" => [
                 [
                     "name" => "view_allowance",
@@ -72,15 +77,11 @@ class NewAllowance extends Notification
                     "color" => "primary",
                     "icon" => "heroicon-o-eye",
                     "shouldOpenInNewTab" => true,
+                    "shouldMarkAsRead"=> true, // Marcar como leída al hacer clic
+                    "view"=> "filament-actions::button-action",
                 ],
             ],
-            "body" => 'Se ha creado una nueva solicitud de viático con el ID: '.$this->allowance->id,
-            "color" => "info",
             "duration" => "persistent",
-            "icon" => "heroicon-o-wallet",
-            "iconColor" => "blue",
-            "status" => "info",
-            "title" => 'Nueva Solicitud de Viático',
             "view" => "filament-notifications::notification",
             "format" => "filament",
         ];

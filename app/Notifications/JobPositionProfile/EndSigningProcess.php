@@ -13,6 +13,8 @@ class EndSigningProcess extends Notification
 {
     use Queueable;
 
+    public $jobPositionProfile;
+
     /**
      * Create a new notification instance.
      *
@@ -64,23 +66,23 @@ class EndSigningProcess extends Notification
         // ];
 
         return [
+            "icon" => "heroicon-o-check-circle",
+            "status" => "success",
+            "title" => 'Perfil de Cargos',
+            "body" => 'El proceso de aprobación del perfil de cargo ha finalizado.',
             "actions" => [
                 [
                     "name" => "view_job_position_profile",
                     "label" => "Ver Perfil de Cargo",
-                    "url" => route('job_position_profile.show', [$this->jobPositionProfile], false), 
+                    "url" => route('job_position_profile.show', [$this->jobPositionProfile], false),
                     "color" => "primary",
                     "icon" => "heroicon-o-eye",
                     "shouldOpenInNewTab" => true,
+                    "shouldMarkAsRead"=> true, // Marcar como leída al hacer clic
+                    "view"=> "filament-actions::button-action",
                 ],
             ],
-            "body" => 'El proceso de aprobación del perfil de cargo ha finalizado.',
-            "color" => "success",
             "duration" => "persistent",
-            "icon" => "heroicon-o-check-circle",
-            "iconColor" => "green",
-            "status" => "success",
-            "title" => 'Aprobación Finalizada',
             "view" => "filament-notifications::notification",
             "format" => "filament",
         ];
