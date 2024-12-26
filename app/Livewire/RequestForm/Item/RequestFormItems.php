@@ -135,6 +135,7 @@ class RequestFormItems extends Component
         $this->dispatch('onClearSearch');
     }
 
+    /*
     public function deleteItem($key)
     {
         if($this->editRF && array_key_exists('id',$this->items[$key]))
@@ -144,6 +145,30 @@ class RequestFormItems extends Component
         }
         if($this->items[$key]['articleFile']) $this->deleteFile($key);
         unset($this->items[$key]);
+        $this->estimateExpense();
+        $this->cleanItem();
+        $this->dispatch('savedItems', items: $this->items);
+    }
+    */
+
+    public function deleteItem($key)
+    {
+        // Verifica si el índice existe antes de proceder
+        if (isset($this->items[$key])) {
+            if ($this->editRF && array_key_exists('id', $this->items[$key])) {
+                $this->deletedItems[] = $this->items[$key]['id'];
+                $this->dispatch('deletedItems', items: $this->deletedItems);
+            }
+            if ($this->items[$key]['articleFile']) {
+                $this->deleteFile($key);
+            }
+            unset($this->items[$key]);
+
+            // Opcional: Reindexar las claves del array
+            $this->items = array_values($this->items);
+        }
+
+        // Estimar el nuevo gasto total
         $this->estimateExpense();
         $this->cleanItem();
         $this->dispatch('savedItems', items: $this->items);
