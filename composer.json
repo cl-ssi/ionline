@@ -27,7 +27,7 @@
         "maatwebsite/excel": "^3.1",
         "mohamedsabil83/filament-forms-tinyeditor": "^2.3",
         "owen-it/laravel-auditing": "^13.5",
-        "owenvoke/blade-fontawesome": "^2.6",
+        "owenvoke/blade-fontawesome": "^2.8",
         "phpoffice/phpword": "^1.1",
         "pxlrbt/filament-environment-indicator": "^2.0",
         "setasign/fpdf": "^1.8",
