@@ -77,20 +77,20 @@ class NewApproval extends Notification
             "title" => ucfirst($this->approval->module), // Modulo
             "body" => $this->approval->subject, // Subject
             "icon" => $icon, // Generar dinámicamente el ícono
-            // "status" => "info", 
             "actions" => [
                 [
+                    "name" => str_replace('\\', '_', get_class($this)),
                     "icon" => "heroicon-o-document", 
-                    "color" => "primary", 
                     "label" => "Ver Aprobación", 
                     "url" => route('documents.approvals', [$this->approval->id], false), 
                     "shouldOpenInNewTab" => true, 
-                    "name" => str_replace('\\', '_', get_class($this)), 
+                    "shouldMarkAsRead"=> true, // Marcar como leída al hacer clic
+                    "view"=> "filament-actions::button-action",
                 ],
             ],
             "format" => "filament", 
             "duration" => "persistent", 
-            // "view" => "filament-notifications::notification", 
+            "view" => "filament-notifications::notification", 
         ];
         
     }

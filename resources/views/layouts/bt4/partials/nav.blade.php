@@ -735,7 +735,7 @@
                                     href="{{ route('openNotification', $notification) }}">
                                     {{-- Mostrar el icono --}}
                                     @if (isset($notification->data['fa_icon']))
-                                        <i class="{!! $notification->data['fa_icon'] !!}"></i>
+                                        {!! $notification->data['fa_icon'] !!}
                                     @elseif(isset($notification->data['icon']))
                                         {{-- Compatibilidad con íconos de Filament --}}
                                         <i class="{{ $icon }} {!! $notification->data['icon'] !!}"></i>

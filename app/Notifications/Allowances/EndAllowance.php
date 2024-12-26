@@ -13,6 +13,8 @@ class EndAllowance extends Notification
 {
     use Queueable;
 
+    public $allowance;
+
     /**
      * Create a new notification instance.
      *

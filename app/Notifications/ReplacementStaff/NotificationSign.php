@@ -2,16 +2,17 @@
 
 namespace App\Notifications\ReplacementStaff;
 
+use Illuminate\Notifications\Notification;
+use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Notifications\Messages\MailMessage;
-use Illuminate\Notifications\Notification;
-
 use App\Models\ReplacementStaff\RequestReplacementStaff;
 
 class NotificationSign extends Notification
 {
     use Queueable;
+
+    public $requestReplacementStaff;
 
     /**
      * Create a new notification instance.

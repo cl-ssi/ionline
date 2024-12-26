@@ -90,16 +90,20 @@ class TestNotification extends Notification implements ShouldQueue
             // 'status'  => 'primary', /* Color del icono */
             'actions' => [
                 [
+                    'name'               => str_replace('\\', '_', get_class($this)), // una especie de pk para la notificación
                     'icon'               => 'heroicon-o-rocket-launch', /* Icono de la acción */
-                    // 'color'              => 'danger', /* Color del icono y del texto */
                     'label'              => 'Crear Ausentismo',
+                    // 'color'              => 'danger', /* Color del icono y del texto */
                     'url'                => CreateAbsenteeism::getUrl(), /* Url de la acción */
                     'shouldOpenInNewTab' => true, // Abrir o no en una nueva tab
-                    'name'               => str_replace('\\', '_', get_class($this)), // una especie de pk para la notificación
+                    "view"=> "filament-actions::button-action", // Fijo
+                    // "shouldClose"=> true, // Elimina la notificación al hacer clic
+                    "shouldMarkAsRead"=> true, // Marcar como leída al hacer clic
                 ],
             ],
             'format'   => 'filament', // Fijo
             'duration' => 'persistent', // Fijo
+            "view" => "filament-notifications::notification", // Fijo
         ];
     }
 

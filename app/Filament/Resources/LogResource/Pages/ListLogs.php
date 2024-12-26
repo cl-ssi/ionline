@@ -5,6 +5,7 @@ namespace App\Filament\Resources\LogResource\Pages;
 use App\Filament\Resources\LogResource;
 use App\Models\Parameters\Log;
 use Filament\Actions;
+use Filament\Notifications\Actions\Action;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\ListRecords;
 
@@ -36,6 +37,23 @@ class ListLogs extends ListRecords
                         ->success() // Define el tipo de notificación como "success"
                         ->send();
                 }),
+            Actions\Action::make('Send Database Notification')
+                ->action(fn () => Notification::make()
+                    ->icon('heroicon-o-document')
+                    ->title('Title:Módulo')
+                    ->body('Body:Subject')
+                    ->actions([
+                        Action::make('Ver')
+                            ->button()
+                            ->url(route('home'), shouldOpenInNewTab: true)
+                            ->close(),
+                        Action::make('marcarComoLeíada')
+                            ->button()
+                            ->color('secondary')
+                            ->markAsRead(),
+                    ])
+                    ->sendToDatabase(auth()->user())
+                ),
         ];
     }
 }

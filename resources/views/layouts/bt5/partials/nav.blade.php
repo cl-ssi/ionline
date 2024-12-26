@@ -738,7 +738,7 @@
                                 <a class="dropdown-item small"
                                     href="{{ route('openNotification', $notification) }}">
                                     @if (isset($notification->data['fa_icon']))
-                                        <i class="{!! $notification->data['fa_icon'] !!}"></i>
+                                        {!! $notification->data['fa_icon'] !!}
                                     @elseif(isset($notification->data['icon']))
                                         <!-- Compatibilidad con íconos de Filament -->
                                         <i class="{{ $icon }} {!! $notification->data['icon'] !!}"></i>
