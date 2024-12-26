@@ -321,6 +321,16 @@ class SuitabilityController extends Controller
     }
     public function storeSuitabilityExternal(Request $request)
     {
+
+        $existingRequest = PsiRequest::where('user_external_id', $request->input('id'))
+        ->where('school_id', $request->input('school_id'))
+        ->first();
+
+        if ($existingRequest) {
+        session()->flash('danger', 'Ya hay creada una solicitud para este usuario');
+        return redirect()->route('external');
+        }
+
         $userexternal = new UserExternal($request->All());
         if (UserExternal::find(request('id'))) {
             $userexternal->update();
