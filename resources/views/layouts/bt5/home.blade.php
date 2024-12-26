@@ -309,7 +309,7 @@
                         
                         <a href="{{ route('openNotification', $notification) }}"
                             class="list-group-item list-group-item-action small">
-                            {{ $notification->created_at }} -                         
+                            {{ $notification->created_at }} - 
                             <!-- Verifica si existe el ícono en formato antiguo  -->
                             @if(isset($notification->data['fa_icon']))
                                 {!! $notification->data['fa_icon'] !!}

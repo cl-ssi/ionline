@@ -2,12 +2,12 @@
 
 namespace App\Notifications;
 
+use App\Filament\Clusters\Rrhh\Resources\Rrhh\AbsenteeismResource\Pages\CreateAbsenteeism;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-use App\Filament\Clusters\Rrhh\Resources\Rrhh\AbsenteeismResource\Pages\CreateAbsenteeism;
 class TestNotification extends Notification implements ShouldQueue
 {
     use Queueable;
@@ -17,17 +17,16 @@ class TestNotification extends Notification implements ShouldQueue
     /**
      * Pasos:
      * Crear una nueva $ php artisan make:notification Modulo/Notificación
-     * 
+     *
      * 1. (Opcional) En el constructor se pueden pasar parámetros
      * 2. Cambiar a 'database' en el método via
      * 3. En método toArray va la notificación
-     * 
+     *
      * Para utilizarlo:
      * $user->notify(new App\Notifications\TestNotification($param));
-     * 
+     *
      * Ej:
      * $user->notify(new App\Notifications\TestNotification(69));
-     * 
      */
 
     /**
@@ -62,8 +61,8 @@ class TestNotification extends Notification implements ShouldQueue
         return (new MailMessage)
             ->level('info')
             ->subject('Nueva notificación de prueba')
-            ->line('Hola ' . $notifiable->shortName)
-            ->line('Notificación de prueba, parametro: ' . $this->param)
+            ->line('Hola '.$notifiable->shortName)
+            ->line('Notificación de prueba, parametro: '.$this->param)
             ->action('Notification Action', url('/'))
             ->line('Utilizando Colas')
             ->salutation('Saludos cordiales.');
@@ -85,34 +84,35 @@ class TestNotification extends Notification implements ShouldQueue
         // ];
 
         return [
-            "actions" => [
+            'title'   => 'Ausentismos', /* Modulo */
+            'body'    => "Nuevo ausentismo de {$this->param}", /* Subject */
+            'icon'    => 'bi-rocket', /* Icono de la notificación */
+            // 'status'  => 'primary', /* Color del icono */
+            'actions' => [
                 [
-                    "name" => "create_absenteeism",
-                    "label" => "Crear Ausentismo",
-                    "url" => CreateAbsenteeism::getUrl(),
-                    "color" => "primary",
-                    "icon" => "heroicon-o-plus",
-                    "shouldOpenInNewTab" => true,
+                    'icon'               => 'heroicon-o-rocket-launch', /* Icono de la acción */
+                    // 'color'              => 'danger', /* Color del icono y del texto */
+                    'label'              => 'Crear Ausentismo',
+                    'url'                => CreateAbsenteeism::getUrl(), /* Url de la acción */
+                    'shouldOpenInNewTab' => true, // Abrir o no en una nueva tab
+                    'name'               => str_replace('\\', '_', get_class($this)), // una especie de pk para la notificación
                 ],
             ],
-            "body" => 'Haz clic en el botón para crear un nuevo ausentismo.',
-            "color" => "info",
-            "duration" => "persistent",
-            "icon" => '<i class="fas fa-fw fa-plus-circle"></i>',
-            "iconColor" => "blue",
-            "status" => "info",
-            "title" => 'Crear Ausentismo',
-            "view" => "filament-notifications::notification",
-            "format" => "filament",
+            'format'   => 'filament', // Fijo
+            'duration' => 'persistent', // Fijo
         ];
     }
 
     /**
+     * Tinker:
+     * User::find(15287582)->notify(new TestNotification('Alvaro Torres'))
+     *
+     *
      * $user = User::find(15287582)
-     * 
+     *
      * LARAVEL
      * $user->notify(new TestNotification('parametro'))
-     * 
+     *
      * FILAMENT
      * use Filament\Notifications\Notification;
      * Filament\Notifications\Notification::make()->title('Notificacion de filament')->sendToDatabase($user);
