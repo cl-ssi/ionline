@@ -716,10 +716,12 @@
 
 
                 <li class="nav-item dropdown">
-                    <a class="nav-link" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" v-pre>
+                    <a class="nav-link" href="#" role="button" data-bs-toggle="dropdown"
+                        aria-expanded="false" v-pre>
                         <i class="fas fa-bell text-warning" title="Notificaciones"></i>
-                        @if(count(auth()->user()->unreadNotifications))
-                        <span class="badge text-bg-danger">{{ count(auth()->user()->unreadNotifications) }}</span>
+                        @if (count(auth()->user()->unreadNotifications))
+                            <span
+                                class="badge text-bg-danger">{{ count(auth()->user()->unreadNotifications) }}</span>
                         @endif
                     </a>
 
@@ -730,37 +732,39 @@
 
                         <div class="dropdown-divider"></div>
 
-                        @if(count(auth()->user()->unreadNotifications))
-                            @foreach(auth()->user()->unreadNotifications as $notification)
-                                <a class="dropdown-item small" href="{{ route('openNotification', $notification) }}">
-                                @if(isset($notification->data['fa_icon']))
-                                    {!! $notification->data['fa_icon'] !!}
-                                @elseif(isset($notification->data['icon']))
-                                    <!-- Compatibilidad con íconos de Filament -->
-                                    {!! $notification->data['icon'] !!}
-                                @else
-                                    <!-- Ícono genérico si no hay ícono definido -->
-                                    <i class="fas fa-bell"></i>
-                        @endif
+                        @if (count(auth()->user()->unreadNotifications))
+                            @foreach (auth()->user()->unreadNotifications as $notification)
+                                @php($icon = current(explode(' ', $notification->data['icon'])))
+                                <a class="dropdown-item small"
+                                    href="{{ route('openNotification', $notification) }}">
+                                    @if (isset($notification->data['fa_icon']))
+                                        <i class="{!! $notification->data['fa_icon'] !!}"></i>
+                                    @elseif(isset($notification->data['icon']))
+                                        <!-- Compatibilidad con íconos de Filament -->
+                                        <i class="{{ $icon }} {!! $notification->data['icon'] !!}"></i>
+                                    @else
+                                        <!-- Ícono genérico si no hay ícono definido -->
+                                        <i class="fas fa-bell"></i>
+                                    @endif
 
-                        <!-- Mostrar título o módulo -->
-                        <b>{{ $notification->data['title'] ?? ($notification->data['module'] ?? 'Notificación') }}</b>
+                                    <!-- Mostrar título o módulo -->
+                                    <b>{{ $notification->data['title'] ?? ($notification->data['module'] ?? 'Notificación') }}</b>
 
-                        <!-- Mostrar cuerpo o sujeto -->
-                        @if(isset($notification->data['subject']))
-                            {!! $notification->data['subject'] !!}
-                        @elseif(isset($notification->data['body']))
-                            {!! $notification->data['body'] !!}
+                                    <!-- Mostrar cuerpo o sujeto -->
+                                    @if (isset($notification->data['subject']))
+                                        {!! $notification->data['subject'] !!}
+                                    @elseif(isset($notification->data['body']))
+                                        {!! $notification->data['body'] !!}
+                                    @else
+                                        Sin detalles disponibles
+                                    @endif
+                                </a>
+                            @endforeach
                         @else
-                            Sin detalles disponibles
-                    @endif
-                </a>
-            @endforeach
-        @else
-            <div class="dropdown-item small">
-                <i class="fas fa-exclamation"></i> Sin Notificaciones Nuevas
-            </div>
-        @endif
+                            <div class="dropdown-item small">
+                                <i class="fas fa-exclamation"></i> Sin Notificaciones Nuevas
+                            </div>
+                        @endif
                     </ul>
                 </li>
 
