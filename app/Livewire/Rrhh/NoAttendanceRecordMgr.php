@@ -88,7 +88,7 @@ class NoAttendanceRecordMgr extends Component
         if ( !$this->noAttendanceRecord->approval ) {
             $this->noAttendanceRecord->approval()->create([
                 "module" => "Asistencia",
-                "module_icon" => "fas fa-clock",
+                "module_icon" => "bi bi-clock",
                 "subject" => $this->noAttendanceRecord->date . ' : ' . $this->noAttendanceRecord->user->shortName . '<br>' . $this->noAttendanceRecord->reason->name . ': ' . $this->noAttendanceRecord->observation,
                 "document_route_name" => "rrhh.attendance.no-records.show",
                 "document_route_params" => json_encode([ "no_attendance_record_id" => $this->noAttendanceRecord->id]),

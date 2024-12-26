@@ -558,7 +558,7 @@ class FulfillmentController extends Controller
         // crear una solicitud de aprobación
         $fulfillment->approval()->create([
             'module' => 'Honorarios',
-            "module_icon" => "fas fa-rocket", 
+            "module_icon" => "bi bi-check-circle", 
             "subject" => "Nuevo cumplimiento para aprobación",
             "digital_signature" => false,
             "document_route_name" => "rrhh.service-request.fulfillment.certificate-pdf-signed", 

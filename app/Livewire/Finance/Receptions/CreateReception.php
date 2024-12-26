@@ -418,7 +418,7 @@ class CreateReception extends Component
 
         $this->approvals[$position] = ([
             "module"        => "Recepcion",
-            "module_icon"   => "fas fa-list",
+            "module_icon"   => "bi bi-list-check",
             "subject"       => "Acta de recepción conforme",
             "document_route_name" => "finance.receptions.show",
             "position"      => $position,

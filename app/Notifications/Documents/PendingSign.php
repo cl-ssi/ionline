@@ -12,6 +12,8 @@ class PendingSign extends Notification
 {
     use Queueable;
 
+    public $signature;
+
     /**
      * Create a new notification instance.
      *
@@ -19,7 +21,6 @@ class PendingSign extends Notification
      */
     public function __construct(Signature $signature)
     {
-        //
         $this->signature = $signature;
     }
 

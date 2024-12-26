@@ -60,7 +60,7 @@ class ModificationMgr extends Component
             if ($status) {
                 $modrequest->approvals()->create([
                     'module' => 'Modificaciones Ficha APS',
-                    'module_icon' => 'fas fa-notes-medical',
+                    'module_icon' => 'bi bi-file-medical',
                     'subject' => $modrequest->subject,
                     'document_route_name' => 'his.modification-request.show',
                     'document_route_params' => json_encode(['modification_request_id' => $modrequest->id]),

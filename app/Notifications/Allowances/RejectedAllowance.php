@@ -58,7 +58,7 @@ class RejectedAllowance extends Notification
     {
         // return [
         //     'module'  => 'Víaticos', // Opcional
-        //     'icon'    => '<i class="fas fa-wallet"></i>',
+        //     'icon'    => '<i class="bi bi-wallet"></i>',
         //     'subject' => 'Se ha rechazado solicitud de viático ID: '.$this->allowance->id,
         //     'action'  => route('allowances.show', $this->allowance->id, false)
         // ];
@@ -77,7 +77,7 @@ class RejectedAllowance extends Notification
             "body" => 'Se ha rechazado la solicitud de viático ID: '.$this->allowance->id,
             "color" => "danger", 
             "duration" => "persistent", 
-            "icon" => '<i class="fas fa-fw fa-wallet"></i>', 
+            "icon" => 'bi bi-wallet', 
             "iconColor" => "red", 
             "status" => "danger", 
             "title" => 'Rechazo de Solicitud de Viático', 

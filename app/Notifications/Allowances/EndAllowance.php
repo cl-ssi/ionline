@@ -60,7 +60,7 @@ class EndAllowance extends Notification
     {
         // return [
         //     'module'  => 'Víaticos', // Opcional
-        //     'icon'    => '<i class="fas fa-wallet"></i>',
+        //     'icon'    => '<i class="bi bi-wallet"></i>',
         //     'subject' => 'Se ha aprobado solicitud de viático ID: '.$this->allowance->id,
         //     'action'  => route('allowances.show', $this->allowance->id, false)
         // ];
@@ -79,7 +79,7 @@ class EndAllowance extends Notification
             "body" => 'Se ha aprobado la solicitud de viático ID: '.$this->allowance->id,
             "color" => "success", 
             "duration" => "persistent", 
-            "icon" => '<i class="fas fa-fw fa-wallet"></i>', 
+            "icon" => 'bi bi-wallet', 
             "iconColor" => "green", 
             "status" => "success", 
             "title" => 'Aprobación de Solicitud de Viático', 

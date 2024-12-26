@@ -96,7 +96,7 @@ class ControlCreate extends Component
             $warehouse_user = auth()->id();
             $approval_contract_manager = Approval::create([
                 "module" => "Modulo Bodega",
-                "module_icon" => "fas fa-rocket",
+                "module_icon" => "bi bi-check-circle",
                 "subject" => "Nueva Solicitud de Visación de  Administrador de Contrato por parte de Bodega",
                 "approver_id" => $warehouse_user,
                 "document_route_name" => "warehouse.control.showPdf",
@@ -107,7 +107,7 @@ class ControlCreate extends Component
             $approval_warehouse_manager =
                 Approval::create([
                     "module" => "Modulo Bodega",
-                    "module_icon" => "fas fa-rocket",
+                    "module_icon" => "bi bi-check-circle",
                     "subject" => "Nueva Solicitud de Visación de  Administrador de Contrato por parte de Bodega",
                     "sent_to_ou_id" => auth()->user()->organizational_unit_id,
                     "document_route_name" => "warehouse.control.showPdf",

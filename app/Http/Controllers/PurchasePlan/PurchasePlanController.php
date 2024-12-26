@@ -145,7 +145,7 @@ class PurchasePlanController extends Controller
         /* APROBACION CORRESPONDIENTE A JEFATURA DEPARTAMENTO O UNIDAD */
         $prev_approval = $purchasePlan->approvals()->create([
             "module"                        => "Plan de Compras",
-            "module_icon"                   => "fas fa-shopping-cart",
+            "module_icon"                   => "bi bi-cart",
             "subject"                       => 'Solicitud de Aprobacion Jefatura <br>'.
                                                 '<small><b>Asunto</b>: '.$purchasePlan->subject.'<br>'.
                                                 '<b>Subtitulo</b>: '.$purchasePlan->program.'</small>',
@@ -164,7 +164,7 @@ class PurchasePlanController extends Controller
             /* APROBACION CORRESPONDIENTE A JEFATURA DEPARTAMENTO SALUD MENTAL EN CASO DE SER GESTIONADO POR ESTABLECIMIENTOS Y DISPOSITIVOS */
             $prev_approval = $purchasePlan->approvals()->create([
                 "module"                        => "Plan de Compras",
-                "module_icon"                   => "fas fa-shopping-cart",
+                "module_icon"                   => "bi bi-cart",
                 "subject"                       => 'Solicitud de Aprobacion Jefatura Depto. Salud Mental<br>'.
                                                     '<small><b>Asunto</b>: '.$purchasePlan->subject.'<br>'.
                                                     '<b>Subtitulo</b>: '.$purchasePlan->program.'</small>',
@@ -184,7 +184,7 @@ class PurchasePlanController extends Controller
         /* APROBACION CORRESPONDIENTE A ABASTECIMIENTO */
         $prev_approval = $purchasePlan->approvals()->create([
             "module"                        => "Plan de Compras",
-            "module_icon"                   => "fas fa-shopping-cart",
+            "module_icon"                   => "bi bi-cart",
             "subject"                       => 'Solicitud de Aprobacion Abastecimiento<br>'.
                                                 '<small><b>Asunto</b>: '.$purchasePlan->subject.'<br>'.
                                                 '<b>Subtitulo</b>: '.$purchasePlan->program.'</small>',
@@ -213,7 +213,7 @@ class PurchasePlanController extends Controller
             ]),
 
             "module"                => "Plan de Compras",
-            "module_icon"           => "fas fa-shopping-cart",
+            "module_icon"           => "bi bi-cart",
             "subject"               => 'Solicitud de Aprobacion Depto. Gestion Financiera<br>'.
                                         '<small><b>Asunto</b>: '.$purchasePlan->subject.'<br>'.
                                         '<b>Subtitulo</b>: '.$purchasePlan->program.'</small>',
@@ -239,7 +239,7 @@ class PurchasePlanController extends Controller
 
         $prev_approval = $purchasePlan->approvals()->create([
             "module"                => "Plan de Compras",
-            "module_icon"           => "fas fa-shopping-cart",
+            "module_icon"           => "bi bi-cart",
             "subject"               => 'Solicitud de Aprobacion Subdir. Recursos Fisicos y Financieros<br>'.
                                         '<small><b>Asunto</b>: '.$purchasePlan->subject.'<br>'.
                                         '<b>Subtitulo</b>: '.$purchasePlan->program.'</small>',

@@ -491,7 +491,7 @@ class TrainingCreate extends Component
             //  APROBACION CORRESPONDIENTE A JEFATURA DIRECCIÓN APS
             $external_approval = $this->training->approvals()->create([
                 "module"                        => "Solicitud Permiso Capacitación",
-                "module_icon"                   => "fas fa-chalkboard-teacher",
+                "module_icon"                   => "bi bi-mortarboard",
                 "subject"                       => 'Solicitud Permiso Capacitación <br>'.
                                                     'ID: '.$this->training->id,
                 "sent_to_ou_id"                 => Parameter::get('ou', 'DireccionAPS'),
@@ -512,7 +512,7 @@ class TrainingCreate extends Component
             // AQUÍ APPROVALS DE JEFATURAS INTERNAS
             $approval = $this->training->approvals()->create([
                 "module"                        => "Solicitud Permiso Capacitación",
-                "module_icon"                   => "fas fa-chalkboard-teacher",
+                "module_icon"                   => "bi bi-mortarboard",
                 "subject"                       => 'Solicitud Permiso Capacitación <br>'.
                                                     'ID: '.$this->training->id,
                 "sent_to_ou_id"                 => $this->training->organizational_unit_id,
@@ -532,7 +532,7 @@ class TrainingCreate extends Component
             if($this->training->userTrainingOu->father != null){
                 $approval = $this->training->approvals()->create([
                     "module"                        => "Solicitud Permiso Capacitación",
-                    "module_icon"                   => "fas fa-chalkboard-teacher",
+                    "module_icon"                   => "bi bi-mortarboard",
                     "subject"                       => 'Solicitud Permiso Capacitación <br>'.
                                                         'ID: '.$this->training->id,
                     "sent_to_ou_id"                 => $this->training->userTrainingOu->father->id,
@@ -554,7 +554,7 @@ class TrainingCreate extends Component
         // APPROVALS DE CAPACITACIÓN
         $external_approval = $this->training->approvals()->create([
             "module"                        => "Solicitud Permiso Capacitación",
-            "module_icon"                   => "fas fa-chalkboard-teacher",
+            "module_icon"                   => "bi bi-mortarboard",
             "subject"                       => 'Solicitud Permiso Capacitación <br>'.
                                                 'ID: '.$this->training->id,
             "sent_to_ou_id"                 => Parameter::get('ou', 'Capacitación'),

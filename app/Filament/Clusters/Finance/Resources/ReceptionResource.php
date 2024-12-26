@@ -362,7 +362,7 @@ class ReceptionResource extends Resource
                             })
                             ->mutateRelationshipDataBeforeCreateUsing(function (array $data, Get $get): array {
                                 $data['module']              = 'Recepcion';
-                                $data['module_icon']         = 'fas fa-list';
+                                $data['module_icon']         = 'bi bi-list-check';
                                 $data['subject']             = 'Acta de recepción conforme';
                                 $data['document_route_name'] = 'finance.receptions.show';
 

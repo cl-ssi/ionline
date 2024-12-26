@@ -61,7 +61,7 @@ class JobPositionProfileSignController extends Controller
             for ($i = $jobPositionProfile->organizationalUnit->level; $i >= 3; $i--){
                 $approval = $jobPositionProfile->approvals()->create([
                     "module"                        => "Perfil de Cargos",
-                    "module_icon"                   => "fas fa-id-badge fa-fw",
+                    "module_icon"                   => "bi bi-person-badge",
                     "subject"                       => "Solicitud de Aprobación Jefatura Depto. o Unidad",
                     "sent_to_ou_id"                 => $organizationalUnit->id,
                     "document_route_name"           => "job_position_profile.show_approval",
@@ -84,7 +84,7 @@ class JobPositionProfileSignController extends Controller
             /* SE CREA APROBACIÓN DEPTO. GESTIÓN DEL TALENTO */
             $dgt_approval = $jobPositionProfile->approvals()->create([
                 "module"                => "Perfil de Cargos",
-                "module_icon"           => "fas fa-id-badge fa-fw",
+                "module_icon"           => "bi bi-person-badge",
                 "subject"               => "Solicitud de Aprobación Depto. Gestión del Talento",
                 "sent_to_ou_id"         => Parameter::get('ou','GestionDesarrolloDelTalento'),
                 "document_route_name"   => "job_position_profile.show_approval",
@@ -104,7 +104,7 @@ class JobPositionProfileSignController extends Controller
                 /* SE CREA APROBACIÓN PARA S.D. AREA REQUIRENTE (EXCEPTO SDGP) */
                 $sdr_approval = $jobPositionProfile->approvals()->create([
                     "module"                => "Perfil de Cargos",
-                    "module_icon"           => "fas fa-id-badge fa-fw",
+                    "module_icon"           => "bi bi-person-badge",
                     "subject"               => "Solicitud de Aprobación Subdirección O Depto.",
                     "sent_to_ou_id"         => $organizationalUnit->id,
                     "document_route_name"   => "job_position_profile.show_approval",
@@ -122,7 +122,7 @@ class JobPositionProfileSignController extends Controller
             /* SE CREA APROBACIÓN PARA S.D.G.P. */
             $sdrgp_approval = $jobPositionProfile->approvals()->create([
                 "module"                => "Perfil de Cargos",
-                "module_icon"           => "fas fa-id-badge fa-fw",
+                "module_icon"           => "bi bi-person-badge",
                 "subject"               => "Solicitud de Aprobación Subdirección G.P.",
                 "sent_to_ou_id"         => Parameter::get('ou','SubRRHH'),
                 "document_route_name"   => "job_position_profile.show_approval",

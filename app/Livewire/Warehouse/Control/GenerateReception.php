@@ -525,7 +525,7 @@ class GenerateReception extends Component
         // if ($control->require_contract_manager_visation == 1 and $this->request_form){        
         //     $approval_contract_manager = Approval::create([
         //         "module" => "Modulo Bodega",
-        //         "module_icon" => "fas fa-rocket",
+        //         "module_icon" => "bi bi-rocket",
         //         "subject" => "Nueva Solicitud de Visación de  Administrador de Contrato por parte de Bodega",                
         //         "approver_id" => $control->requestForm->contract_manager_id, 
         //     ]);
@@ -576,7 +576,7 @@ class GenerateReception extends Component
         if ($contract_manager_visation_id) {
             $approval_contract_manager = Approval::create([
                 "module" => "Modulo Bodega",
-                "module_icon" => "fas fa-rocket",
+                "module_icon" => "bi bi-check-circle",
                 "subject" => "Nueva Solicitud de Visación de  Administrador de Contrato por parte de Bodega",
                 "approver_id" => $control->requestForm->contract_manager_id,
             ]);
@@ -585,7 +585,7 @@ class GenerateReception extends Component
         if ($approval_contract_manager) {
             $approval_warehouse_manager = Approval::create([
                 "module" => "Modulo Bodega",
-                "module_icon" => "fas fa-rocket",
+                "module_icon" => "bi bi-check-circle",
                 "subject" => "Nueva Solicitud de Visación de  Administrador de Contrato por parte de Bodega",
                 "approver_id" => auth()->user()->boss->id,
                 "active" => false,
@@ -595,7 +595,7 @@ class GenerateReception extends Component
         else{
             $approval_warehouse_manager = Approval::create([
                 "module" => "Modulo Bodega",
-                "module_icon" => "fas fa-rocket",
+                "module_icon" => "bi bi-check-circle",
                 "subject" => "Nueva Solicitud de Visación de  Administrador de Contrato por parte de Bodega",
                 "approver_id" => auth()->user()->boss->id,
             ]);

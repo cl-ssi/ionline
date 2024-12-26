@@ -16,7 +16,7 @@ class Sign extends Component
             "module" => "Drogas",
 
             /* Ícono del módulo para que aparezca en la bandeja de aprobación */
-            "module_icon" => "fas fa-cannabis",
+            "module_icon" => "bi bi-flower2",
 
             /* Asunto de la aprobación */
             "subject" => "Protocolo de análisis: " . $this->protocol->id,

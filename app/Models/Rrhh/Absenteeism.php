@@ -139,7 +139,7 @@ class Absenteeism extends Model
 
         $this->approval()->create([
             "module"                => "Ausentismo",
-            "module_icon"           => "fas fa-plane",
+            "module_icon"           => "bi bi-ariplane",
             "subject"               => $subject,
             "document_route_name"   => "rrhh.absenteeisms.show",
             "document_route_params" => json_encode([

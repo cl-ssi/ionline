@@ -233,7 +233,7 @@ class Process extends Model
         // Visación del Referente
         $this->endorses()->create([
             "module" => "Convenios",
-            "module_icon" => "fas fa-handshake",
+            "module_icon" => "bi bi-file-earmark-text",
             "subject" => "Visar convenio",
             "document_route_name" => "documents.agreements.processes.view",
             "document_route_params" => json_encode([
@@ -253,7 +253,7 @@ class Process extends Model
         foreach($steps as $step) {
             $this->endorses()->create([
                 "module" => "Convenios",
-                "module_icon" => "fas fa-handshake",
+                "module_icon" => "bi bi-file-earmark-text",
                 "subject" => "Visar convenio",
                 "document_route_name" => "documents.agreements.processes.view",
                 "document_route_params" => json_encode([
@@ -277,7 +277,7 @@ class Process extends Model
         // Solicitud de firma del director
         $this->approval()->create([
             "module" => "Convenios",
-            "module_icon" => "fas fa-handshake",
+            "module_icon" => "bi bi-file-earmark-text",
             "subject" => "Firmar convenio",
             "document_route_name" => "documents.agreements.processes.view",
             "document_route_params" => json_encode([

@@ -66,7 +66,7 @@ class ResponseDoubt extends Notification
     {
         // return [
         //     'module'  => 'Amipass Consulta', // Opcional
-        //     'icon'    => '<i class="fas fa-question-circle"></i>', // Opcional
+        //     'icon'    => '<i class="bi bi-question-circle"></i>', // Opcional
         //     'subject' => 'Han Respondido su Consulta/Sugerencia Amipass Nº: '.$this->param,
         //     'action' => route('welfare.amipass.question-show',[$this->param], false),
         // ];
@@ -85,7 +85,7 @@ class ResponseDoubt extends Notification
             "body" => 'Han Respondido su Consulta/Sugerencia Amipass Nº: '.$this->param,
             "color" => "info", 
             "duration" => "persistent", 
-            "icon" => '<i class="fas fa-fw fa-question-circle"></i>', 
+            "icon" => 'bi bi-question-circle', 
             "iconColor" => "blue", 
             "status" => "info", 
             "title" => 'Respuesta a Consulta Amipass', 

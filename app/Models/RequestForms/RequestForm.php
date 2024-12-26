@@ -903,7 +903,7 @@ class RequestForm extends Model implements Auditable
 
         $cdp->approval()->create([
             "module"                     => "CDP",
-            "module_icon"                => "fas fa-file-invoice-dollar",
+            "module_icon"                => "bi bi-currency-dollar",
             "subject"                    => "Certificado de Disponibilidad Presupuestaria<br>Formulario 
                 <a target=\"_blank\" href=\"$url\">#{$this->folio}</a>",
             "document_route_name"        => "finance.cdp.show",

@@ -96,7 +96,7 @@ class Approval extends Model
             "module" => "Asistencia",
 
             /* Ícono del módulo para que aparezca en la bandeja de aprobación */
-            "module_icon" => "fas fa-clock",
+            "module_icon" => "bi bi-clock",
 
             /* Asunto de la aprobación */
             "subject" => "Nuevo registro de asistencia",
