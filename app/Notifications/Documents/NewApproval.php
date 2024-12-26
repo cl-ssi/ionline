@@ -69,23 +69,22 @@ class NewApproval extends Notification
         $icon = end($moduleIconParts);
 
         return [
+            "title" => ucfirst($this->approval->module), // Modulo
+            "body" => $this->approval->subject, // Subject
             "icon" => $icon, // Generar dinámicamente el ícono
-            "title" => "Nueva Aprobación en " . ucfirst($this->approval->module), // Título dinámico
-            "body" => "El usuario " . auth()->user()->name . " le recuerda revisar la aprobación con ID " . $this->approval->id, 
-            "color" => "info", 
-            "duration" => "persistent", 
-            "status" => "info", 
-            "format" => "filament", 
+            // "status" => "info", 
             "actions" => [
                 [
-                    "name" => "view_approval", 
+                    "icon" => "heroicon-o-document", 
+                    "color" => "primary", 
                     "label" => "Ver Aprobación", 
                     "url" => route('documents.approvals', [$this->approval->id], false), 
-                    "color" => "primary", 
-                    "icon" => "heroicon-o-document", 
                     "shouldOpenInNewTab" => true, 
+                    "name" => str_replace('\\', '_', get_class($this)), 
                 ],
             ],
+            "format" => "filament", 
+            "duration" => "persistent", 
             // "view" => "filament-notifications::notification", 
         ];
         
