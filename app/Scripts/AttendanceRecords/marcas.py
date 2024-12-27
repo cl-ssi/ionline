@@ -2,8 +2,8 @@
 Script de procesamiento de registros de asistencia desde dispositivos biométricos.
 
 Descripción:
-Este script interactúa con dispositivos biométricos conectados en red para obtener registros de asistencia, 
-procesarlos y enviarlos al sistema IOnline (modelo `AttendanceRecords`) mediante una API REST. 
+Este script interactúa con dispositivos biométricos conectados en red para obtener registros de asistencia,
+procesarlos y enviarlos al sistema IOnline (modelo `AttendanceRecords`) mediante una API REST.
 Se ejecuta de forma automatizada a través de cron jobs en el servidor `10.66.142.123` (Red MINSAL).
 
 Funcionalidades:
@@ -29,11 +29,11 @@ Notas:
 
 from requests.auth import HTTPBasicAuth
 from bs4 import BeautifulSoup
-from datetime import datetime
+from datetime import datetime, timedelta
 import requests
 
 # Leer configuración desde un archivo
-def load_configuration(file_path="configuration.txt"):
+def load_configuration(file_path="/root/scripts/configuration.txt"):
     config = {}
     try:
         with open(file_path, 'r') as f:
@@ -93,12 +93,12 @@ def log_python_message(ip, message, log_type="error"):
 
         # Enviar solicitud
         response = requests.post(
-            log_error_api_url, 
-            json=payload, 
-            headers=headers, 
+            log_error_api_url,
+            json=payload,
+            headers=headers,
             auth=HTTPBasicAuth(user, password)
         )
-        
+
         # Verificar respuesta
         if response.status_code == 200:
             print(f"Log '{log_type}' registrado exitosamente para IP {ip}.")
@@ -163,12 +163,17 @@ for ip in ip_list:
         rows = soup.select("table tr")
         users = [row.find_all("td")[0].find("input")["value"] for row in rows[1:] if len(row.find_all("td")) >= 7 and row.find_all("td")[0].find("input")]
 
-        # Configurar fechas
-        sdate = datetime.now().strftime("%Y-%m-%d")
-        edate = datetime.now().strftime("%Y-%m-%d")
-        # Configurar fechas
-        # sdate = "2024-11-01"
-        # edate = "2024-11-25"
+        # Obtener la fecha actual
+        now = datetime.now()
+
+        # Calcular 3 días antes usando timedelta
+        days_to_subtract = 2
+        sdate = (now - timedelta(days=days_to_subtract)).strftime("%Y-%m-%d")
+
+        # Fecha actual como string
+        edate = now.strftime("%Y-%m-%d")
+
+        # Crear payload
         query_payload = {
             "sdate": sdate,
             "edate": edate,
