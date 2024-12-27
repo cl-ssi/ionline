@@ -171,7 +171,8 @@
                                             'button_size' => null, // (Opcional) Tamaño del boton: btn-sm, btn-lg, etc.
                                         ])
                                     @endif
-                                    @if($index == 'own' && $purchasePlan->canCreateRquestForm())
+
+                                    @if(($index == 'own' || ($index == 'all' && auth()->user()->hasPermissionTo('Purchase Plan: all'))) && $purchasePlan->canCreateRquestForm())
                                     <a href="{{ route('request_forms.items.create', $purchasePlan) }}"
                                         class="btn btn-outline-secondary btn-sm mb-1"><i class="fas fa-file-invoice-dollar fa-fw"></i></a>
                                     @endif
