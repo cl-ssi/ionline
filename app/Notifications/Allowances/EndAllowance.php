@@ -66,6 +66,10 @@ class EndAllowance extends Notification
         // ];
 
         return [
+            "icon" => 'heroicon-o-wallet', 
+            "status" => "success", 
+            "title" => 'Víaticos', 
+            "body" => 'Se ha aprobado la solicitud de viático ID: '.$this->allowance->id,
             "actions" => [
                 [
                     "name" => "view_allowance_details",
@@ -74,15 +78,11 @@ class EndAllowance extends Notification
                     "color" => "primary", 
                     "icon" => "heroicon-o-eye", 
                     "shouldOpenInNewTab" => true, 
+                    "shouldMarkAsRead"=> true, // Marcar como leída al hacer clic
+                    "view"=> "filament-actions::button-action",
                 ],
             ],
-            "body" => 'Se ha aprobado la solicitud de viático ID: '.$this->allowance->id,
-            "color" => "success", 
             "duration" => "persistent", 
-            "icon" => 'bi bi-wallet', 
-            "iconColor" => "green", 
-            "status" => "success", 
-            "title" => 'Aprobación de Solicitud de Viático', 
             "view" => "filament-notifications::notification", 
             "format" => "filament", 
         ];

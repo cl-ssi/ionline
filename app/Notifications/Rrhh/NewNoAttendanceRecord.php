@@ -12,6 +12,8 @@ class NewNoAttendanceRecord extends Notification
 {
     use Queueable;
 
+    public $noAttendanceRecord;
+
     /**
      * Create a new notification instance.
      *
@@ -60,6 +62,10 @@ class NewNoAttendanceRecord extends Notification
         // ];
 
         return [
+            "icon" => "heroicon-o-clock",
+            "status" => "info",
+            "title" => 'Asistencia',
+            "body" => 'Constancia de marca de ' . $this->noAttendanceRecord->user->tinnyName,
             "actions" => [
                 [
                     "name" => "confirm_attendance",
@@ -68,19 +74,13 @@ class NewNoAttendanceRecord extends Notification
                     "color" => "primary",
                     "icon" => "heroicon-o-check",
                     "shouldOpenInNewTab" => false,
+                    "shouldMarkAsRead"=> true, // Marcar como leída al hacer clic
+                    "view"=> "filament-actions::button-action",
                 ],
             ],
-            "body" => 'Constancia de marca de ' . $this->noAttendanceRecord->user->tinnyName,
-            "color" => "warning",
             "duration" => "persistent",
-            "icon" => "heroicon-o-clock",
-            "iconColor" => "blue",
-            "status" => "info",
-            "title" => 'Nueva Constancia de Marca',
             "view" => "filament-notifications::notification",
             "format" => "filament",
         ];
-        
-
     }
 }

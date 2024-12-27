@@ -13,6 +13,8 @@ class NotificationRejectedRequest extends Notification
 {
     use Queueable;
 
+    public $requestReplacementStaff;
+
     /**
      * Create a new notification instance.
      *
@@ -73,6 +75,10 @@ class NotificationRejectedRequest extends Notification
 
         
         return [
+            "icon" => "heroicon-o-x-circle",
+            "status" => "error", 
+            "title" => "Solicitudes de Contratación", 
+            "body" => "Se ha rechazado la solicitud ID: {$this->requestReplacementStaff->id}. Haz clic en el botón para más información.", 
             "actions" => [
                 [
                     "name" => "view_request",
@@ -81,18 +87,13 @@ class NotificationRejectedRequest extends Notification
                     "color" => "primary", 
                     "icon" => "heroicon-o-eye", 
                     "shouldOpenInNewTab" => false, 
+                    "shouldMarkAsRead"=> true, // Marcar como leída al hacer clic
+                    "view"=> "filament-actions::button-action",
                 ],
             ],
-            "body" => "Se ha rechazado la solicitud ID: {$this->requestReplacementStaff->id}. Haz clic en el botón para más información.", 
-            "color" => "danger", 
             "duration" => "persistent", 
-            "icon" => "heroicon-o-x-circle",
-            "iconColor" => "red", 
-            "status" => "error", 
-            "title" => "Solicitud Rechazada", 
             "view" => "filament-notifications::notification", 
             "format" => "filament", 
         ];
-        
     }
 }

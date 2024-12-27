@@ -13,6 +13,8 @@ class NotificationNewRequest extends Notification
 {
     use Queueable;
 
+    public $requestReplacementStaff;
+
     /**
      * Create a new notification instance.
      *
@@ -57,12 +59,12 @@ class NotificationNewRequest extends Notification
      */
     public function toArray($notifiable)
     {
-        // if($this->to == 'reclutamiento'){
-        //     $action = 'replacement_staff.request.index';
-        // }
-        // else{
-        //     $action = 'replacement_staff.request.own_index';
-        // }
+        if($this->to == 'reclutamiento'){
+            $action = 'replacement_staff.request.index';
+        }
+        else{
+            $action = 'replacement_staff.request.own_index';
+        }
 
         // return [
         //     'module'  => 'Solicitudes de Contratación', // Opcional
@@ -72,6 +74,10 @@ class NotificationNewRequest extends Notification
         // ];
 
         return [
+            "icon" => "heroicon-o-identification",
+            "status" => "info",
+            "title" => "Solicitudes de Contratación",
+            "body" => 'Se ha creado una nueva solicitud ID:'.$this->requestReplacementStaff->id,
             "actions" => [
                 [
                     "name" => "view_request",
@@ -80,18 +86,13 @@ class NotificationNewRequest extends Notification
                     "color" => "primary",
                     "icon" => "heroicon-o-eye",
                     "shouldOpenInNewTab" => false,
+                    "shouldMarkAsRead"=> true, // Marcar como leída al hacer clic
+                    "view"=> "filament-actions::button-action",
                 ],
             ],
-            "body" => "Se ha creado una nueva solicitud ID: {$this->requestReplacementStaff->id}.",
-            "color" => "info",
             "duration" => "persistent",
-            "icon" => "heroicon-o-identification",
-            "iconColor" => "blue",
-            "status" => "info",
-            "title" => "Nueva Solicitud de Contratación",
             "view" => "filament-notifications::notification",
             "format" => "filament",
-        ];
-        
+        ];  
     }
 }

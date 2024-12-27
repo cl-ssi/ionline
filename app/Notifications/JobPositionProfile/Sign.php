@@ -13,6 +13,8 @@ class Sign extends Notification
 {
     use Queueable;
 
+    public $jobPositionProfile;
+
     /**
      * Create a new notification instance.
      *
@@ -64,6 +66,10 @@ class Sign extends Notification
         // ];
 
         return [
+            "icon" => "heroicon-o-user-circle",
+            "status" => "info", 
+            "title" => 'Perfil de Cargos', 
+            "body" => 'Se ha creado un nuevo perfil de cargo para aprobación. Revisa los detalles y realiza las acciones correspondientes.', 
             "actions" => [
                 [
                     "name" => "approve_job_position_profile",
@@ -72,15 +78,11 @@ class Sign extends Notification
                     "color" => "primary", 
                     "icon" => "heroicon-o-check", 
                     "shouldOpenInNewTab" => true, 
+                    "shouldMarkAsRead"=> true, // Marcar como leída al hacer clic
+                    "view"=> "filament-actions::button-action",
                 ],
             ],
-            "body" => 'Se ha creado un nuevo perfil de cargo para aprobación. Revisa los detalles y realiza las acciones correspondientes.', 
-            "color" => "info", 
             "duration" => "persistent", 
-            "icon" => "heroicon-o-user-circle",
-            "iconColor" => "blue", 
-            "status" => "info", 
-            "title" => 'Nuevo Perfil de Cargo para Aprobación', 
             "view" => "filament-notifications::notification", 
             "format" => "filament", 
         ];

@@ -66,6 +66,10 @@ class PendingSign extends Notification
         // ];
 
         return [
+            "icon" => "heroicon-o-bell",
+            "status" => "info",
+            "title" => 'Firma',
+            "body" => 'El Usuario ' . auth()->user()->tinny_name . ' le recuerda Firmar/Visar la Solicitud de Firma ' . $this->signature->id,
             "actions" => [
                 [
                     "name" => "view_pending_signatures",
@@ -74,18 +78,13 @@ class PendingSign extends Notification
                     "color" => "primary",
                     "icon" => "heroicon-o-pencil",
                     "shouldOpenInNewTab" => false,
+                    "shouldMarkAsRead"=> true, // Marcar como leída al hacer clic
+                    "view"=> "filament-actions::button-action",
                 ],
             ],
-            "body" => 'El Usuario ' . auth()->user()->tinny_name . ' le recuerda Firmar/Visar la Solicitud de Firma ' . $this->signature->id,
-            "color" => "info",
             "duration" => "persistent",
-            "icon" => "heroicon-o-bell",
-            "iconColor" => "blue",
-            "status" => "info",
-            "title" => 'Recordatorio de Firma',
             "view" => "filament-notifications::notification",
             "format" => "filament",
         ];
-
     }
 }

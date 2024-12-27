@@ -11,6 +11,8 @@ class ApprovalsStatusReport extends Notification
 {
     use Queueable;
 
+    public $pendingsCount;
+
     /**
      * Create a new notification instance.
      *
@@ -62,6 +64,10 @@ class ApprovalsStatusReport extends Notification
         // ];
 
         return [
+            "icon" => "heroicon-o-identification",
+            "status" => "info",
+            "title" => 'Solicitudes de Contratatación',
+            "body" => 'Estimado Usuario, favor dirigirse al módulo Solicitudes de Aprobación. <br>' . $this->pendingsCount . ' solicitudes en espera.',
             "actions" => [
                 [
                     "name" => "go_to_approvals",
@@ -70,18 +76,13 @@ class ApprovalsStatusReport extends Notification
                     "color" => "primary", 
                     "icon" => "heroicon-o-paper-clip", 
                     "shouldOpenInNewTab" => false, 
+                    "shouldMarkAsRead"=> true, // Marcar como leída al hacer clic
+                    "view"=> "filament-actions::button-action",
                 ],
             ],
-            "body" => 'Estimado Usuario, favor dirigirse al módulo Solicitudes de Aprobación. <br>' . $this->pendingsCount . ' solicitudes en espera.',
-            "color" => "info",
             "duration" => "persistent",
-            "icon" => "heroicon-o-identification",
-            "iconColor" => "blue",
-            "status" => "info",
-            "title" => 'Solicitudes de Aprobación Pendientes',
             "view" => "filament-notifications::notification",
             "format" => "filament",
-        ];
-        
+        ]; 
     }
 }
