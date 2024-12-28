@@ -160,16 +160,4 @@ class Meeting extends Model implements Auditable
 
         return $mechanisms[$this->mechanism] ?? null;
     }
-
-    /*
-    protected static function boot()
-    {
-        parent::boot();
-
-        static::creating(function ($meeting) {
-            //TODO: PARAMETRIZAR TYPE_ID VIATICOS
-            $meeting->correlative = Correlative::getCorrelativeFromType(10, $allowance->organizationalUnitAllowance->establishment_id);
-        });
-    }
-    */
 }

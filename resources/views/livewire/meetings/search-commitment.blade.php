@@ -27,7 +27,7 @@
                         <td style="text-align: justify;">{{ $commitment->description }}</td>
                         <td width="14%" class="text-center">{{ ($commitment->commitment_user_id) ?  $commitment->commitmentUser->tinyName : $commitment->commitmentOrganizationalUnit->name }}</td>
                         <td width="7%" class="text-center">
-                            {{ ($commitment['closing_date']) ? $commitment['closing_date'] : 'Sin fecha límite' }} <br>
+                            {{ ($commitment['closing_date']) ? $commitment['closing_date']->format('d-m-Y') : 'Sin fecha límite' }} <br>
                             @switch($commitment->priority)
                                 @case('normal')
                                     <span class="badge text-bg-success">{{ $commitment->priority }}</span>

@@ -54,7 +54,7 @@ class Commitment extends Model implements Auditable
         'updated_at'
     ];
 
-    protected $cast = [
+    protected $casts = [
         'closing_date' => 'date:Y-m-d',
     ];
 

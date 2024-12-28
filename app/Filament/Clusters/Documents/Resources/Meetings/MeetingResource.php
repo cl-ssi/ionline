@@ -130,7 +130,7 @@ class MeetingResource extends Resource
                     ->label('Tipo')
                     ->getStateUsing(fn ($record) => $record->type_value)
                     ->alignment('center'),
-                Tables\Columns\TextColumn::make('userCreator.TinnyName')
+                Tables\Columns\TextColumn::make('userCreator.TinyName')
                     ->label('Creado Por'),
                 Tables\Columns\TextColumn::make('subject')
                     ->label('Asunto')
