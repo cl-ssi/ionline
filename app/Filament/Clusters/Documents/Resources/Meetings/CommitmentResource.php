@@ -25,7 +25,7 @@ class CommitmentResource extends Resource
 
     protected static ?string $navigationGroup = 'Reuniones';
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-rocket-launch';
 
     protected static ?string $cluster = Documents::class;
 
@@ -64,16 +64,13 @@ class CommitmentResource extends Resource
                     // ->searchable(),
                 Tables\Columns\TextColumn::make('meeting.userCreator.TinyName')
                     ->label('Creado Por'),
-                Tables\Columns\TextColumn::make('requirement.status')
+                Tables\Columns\TextColumn::make('priority')
                     ->label('Prioridad')
                     ->sortable()
                     ->badge()
                     ->color(fn (string $state): string => match ($state) {
-                        'creado'        => 'gray',
-                        'respondido'    => 'warning',
-                        'cerrado'       => 'success',
-                        'derivado'      => 'info',
-                        'reabierto'     => 'primary',
+                        'normal'    => 'success',
+                        'urgente'   => 'danger',
                     })
                     ->alignment('center'),
                 Tables\Columns\TextColumn::make('meeting.subject')
@@ -85,7 +82,7 @@ class CommitmentResource extends Resource
                     ->sortable(),
                 Tables\Columns\TextColumn::make('user_ou')
                     ->label('Funcionario / Unidad Organizacional')
-                    ->getStateUsing(fn ($record) => $record->commitmentUser?->name ?? $record->commitmentOrganizationalUnit?->name ?? '-')
+                    ->getStateUsing(fn ($record) => $record->commitmentUser?->TinyName ?? $record->commitmentOrganizationalUnit?->name ?? '-')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('closing_date')
                     ->label('Fecha Límite')
@@ -93,13 +90,16 @@ class CommitmentResource extends Resource
                         ? $record->closing_date->format('d-m-Y') 
                         : 'Sin fecha límite')
                     ->sortable(),
-                Tables\Columns\TextColumn::make('priority')
-                    ->label('Prioridad')
+                Tables\Columns\TextColumn::make('requirement.status')
+                    ->label('Estado SGR')
                     ->sortable()
                     ->badge()
                     ->color(fn (string $state): string => match ($state) {
-                        'normal'    => 'success',
-                        'urgente'   => 'danger',
+                        'creado'        => 'gray',
+                        'respondido'    => 'warning',
+                        'cerrado'       => 'success',
+                        'derivado'      => 'info',
+                        'reabierto'     => 'primary',
                     })
                     ->alignment('center'),
                     
@@ -110,6 +110,12 @@ class CommitmentResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\Action::make('view_sgr')
+                    ->label('Ver SGR')
+                    ->url(fn ($record) => route('requirements.show', $record->requirement->id))
+                    ->icon('heroicon-o-eye')
+                    ->color('secondary') // Puedes personalizar el color
+                    ->openUrlInNewTab(), // Si deseas abrir en una nueva pestaña
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
