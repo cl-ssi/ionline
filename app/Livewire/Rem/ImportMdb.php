@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Rem;
 
+use App\Jobs\ProcessSqlLine;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
@@ -78,21 +79,23 @@ class ImportMdb extends Component
                 $this->info['step4'] = "Serie a procesar: $serie año $year";
 
                 // $year tiene que estar entre el año actual y el anterior
-                if ( $year < date('Y') - 10) {
+                if ( $year < date('Y') - 2 ) {
                     $this->info['step5'] = 'Error: Año incorrecto, debe estar entre el año actual y el anterior';
                     session()->flash('status','danger');
                     return;
                 }
                 $tabla = "{$year}rems";
 
-                $command = "mdb-export -I mysql $fullpath Datos | sed 's/INTO `Datos`/INTO `$tabla`/'";
+                $sqlFilePath = "$fullpath.sql";
+
+                // dd($sqlFilePath);
+
+                $command = "mdb-export -I mysql $fullpath Datos | sed 's/INTO `Datos`/INTO `$tabla`/' > $sqlFilePath";
                 $output = shell_exec($command);
                 $this->info['step5'] = "Obteniendo los datos de la tabla Datos";
 
-                $connection = DB::connection('mysql_rem');
 
-                // vaciar la tabla $tabla de mysql
-                // $connection->table($tabla)->truncate();
+                $connection = DB::connection('mysql_rem');
 
                 // Borrar solo los datos de la serie
                 $sql = "DELETE FROM $tabla WHERE codigoprestacion IN (SELECT codigo_prestacion FROM {$year}prestaciones WHERE serie='$serie')";
@@ -101,19 +104,42 @@ class ImportMdb extends Component
 
                 $this->info['step6'] = "Borrar los datos de la serie: $serie de la tabla: $tabla";
 
-                // Procesar la salida y ejecutar cada instrucción SQL generada por mdb-export
-                foreach (explode("\n", $output) as $sql) {
-                    if (!empty($sql)) {
-                        // Ejecutar el SQL en la $tabla
-                        try {
-                            $connection->unprepared($sql);
-                        } catch (\Exception $e) {
-                            $this->error("Error ejecutando SQL: " . $e->getMessage());
-                            return;
+                /**
+                 * Lo cambié por jobs para ejecutar en cola
+                 */
+                // // Procesar la salida y ejecutar cada instrucción SQL generada por mdb-export
+                // foreach (explode("\n", $output) as $sql) {
+                //     if (!empty($sql)) {
+                //         // Ejecutar el SQL en la $tabla
+                //         try {
+                //             $connection->unprepared($sql);
+                //         } catch (\Exception $e) {
+                //             $this->error("Error ejecutando SQL: " . $e->getMessage());
+                //             return;
+                //         }
+                //     }
+                // }
+
+                if (file_exists($sqlFilePath)) {
+                    $sqlContent = file_get_contents($sqlFilePath);
+                    $sqlLines = explode(";\n", $sqlContent);
+        
+                    foreach ($sqlLines as $sql) {
+                        if (stripos($sql, 'INSERT INTO') !== false) {
+                            ProcessSqlLine::dispatch($sql);
                         }
                     }
+                    // cantidad de jobs creados
+                    $ct = count($sqlLines);
+                    $this->info['step7'] = "Se cargaron $ct trabajos a la cola para carga los Datos a la tabla $tabla";
                 }
-                $this->info['step7'] = "Cargados los Datos a la tabla $tabla";
+
+                // delete all filles, zip, mdb and sql
+                unlink($fullpath);
+                unlink($sqlFilePath);
+                unlink(storage_path("app/rems/$safeFilename"));
+
+                
                 $this->info['Fin'] = "Proceso terminado exitosamente";
                 session()->flash('status','success');
             }
