@@ -125,7 +125,7 @@ class ImportMdb extends Component
         
                     foreach ($sqlLines as $sql) {
                         if (stripos($sql, 'INSERT INTO') !== false) {
-                            ProcessSqlLine::dispatch($sql)->afterResponse();
+                            ProcessSqlLine::dispatch($sql);
                         }
                     }
                     // cantidad de jobs creados
