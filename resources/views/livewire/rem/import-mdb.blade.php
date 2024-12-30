@@ -9,7 +9,7 @@
             <li>Seleccione el archivo desde su computador, 
                 espere a que termine de cargar y luego presione el botón azúl para procesar.</li>
             <li>Un solo archivo por cada mdb.</li>
-            <li>El archivo debe estar comprimido en zip, 
+            <li>El archivo debe estar comprimido en zip, <b>Usar el compresor de zip de windows (enviar a > carpeta comprimida)</b></li>
                 ej: archivo 02A21022024.mdb > comprimir en 02A21022024.zip</li>
             <li>El archivo debe pertenecer al año actual o al anterior</li>
         </ul>
