@@ -366,6 +366,7 @@
 				<option value="SENDA PSIQUIATRIA ADULTO" @if($serviceRequest->programm_name == 'SENDA PSIQUIATRIA ADULTO') selected @endif>SENDA PSIQUIATRIA ADULTO</option>
 				<option value="SENADIS" @if($serviceRequest->programm_name == 'SENADIS') selected @endif>SENADIS</option>
 				<option value="SUBT.31" @if($serviceRequest->programm_name == 'SUBT.31') selected @endif>SUBT.31</option>
+                <option value="GUATITA DELANTAL" @if($serviceRequest->programm_name == 'GUATITA DELANTAL') selected @endif>GUATITA DELANTAL</option>
 				@endif
 
         	</select>
@@ -1251,6 +1252,7 @@
 				$("#programm_name option[value='SENDA PSIQUIATRIA ADULTO']").hide();
 				$("#programm_name option[value='SENADIS']").hide();
 				$("#programm_name option[value='SUBT.31']").hide();
+                $("#programm_name option[value='GUATITA DELANTAL']").hide();
 
   				$("#programm_name option[value='CONSULTORIO DE LLAMADA']").show();
   				$("#programm_name option[value='33 MIL HORAS']").show();
@@ -1281,6 +1283,7 @@
 				$("#programm_name option[value='SENDA PSIQUIATRIA ADULTO']").show();
 				$("#programm_name option[value='SENADIS']").show();
 				$("#programm_name option[value='SUBT.31']").show();
+                $("#programm_name option[value='GUATITA DELANTAL']").show();
 
 				$("#programm_name option[value='CONSULTORIO DE LLAMADA']").hide();
 				$("#programm_name option[value='33 MIL HORAS']").hide();

@@ -72,6 +72,7 @@
       				<option value="SENDA PSIQUIATRIA ADULTO" @if($request->programm_name == 'SENDA PSIQUIATRIA ADULTO') selected @endif>SENDA PSIQUIATRIA ADULTO</option>
       				<option value="SENADIS" @if($request->programm_name == 'SENADIS') selected @endif>SENADIS</option>
       				<option value="SUBT.31" @if($request->programm_name == 'SUBT.31') selected @endif>SUBT.31</option>
+                    <option value="GUATITA DELANTAL" @if($request->programm_name == 'GUATITA DELANTAL') selected @endif>GUATITA DELANTAL</option>
       				@endif
       			</select>
         </fieldset>

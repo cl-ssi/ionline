@@ -265,6 +265,7 @@
                     <option value="SENDA PSIQUIATRIA ADULTO">SENDA PSIQUIATRIA ADULTO</option>
                     <option value="SENADIS">SENADIS</option>
                     <option value="SUBT.31">SUBT.31</option>
+                    <option value="GUATITA DELANTAL">GUATITA DELANTAL</option>
                 @endif
 			</select>
 		</fieldset>
@@ -524,6 +525,7 @@
 		$("#programm_name option[value='SENDA PSIQUIATRIA ADULTO']").hide();
 		$("#programm_name option[value='SENADIS']").hide();
 		$("#programm_name option[value='SUBT.31']").hide();
+        $("#programm_name option[value='GUATITA DELANTAL']").hide();
 
 		$("#programm_name option[value='CONSULTORIO DE LLAMADA']").hide();
 		$("#programm_name option[value='33 MIL HORAS']").hide();
@@ -772,6 +774,7 @@
 				$("#programm_name option[value='SENDA PSIQUIATRIA ADULTO']").hide();
 				$("#programm_name option[value='SENADIS']").hide();
 				$("#programm_name option[value='SUBT.31']").hide();
+                $("#programm_name option[value='GUATITA DELANTAL']").hide();
 
 				$("#programm_name option[value='CONSULTORIO DE LLAMADA']").show();
 				$("#programm_name option[value='33 MIL HORAS']").show();
@@ -805,6 +808,7 @@
 				$("#programm_name option[value='SENDA PSIQUIATRIA ADULTO']").show();
 				$("#programm_name option[value='SENADIS']").show();
 				$("#programm_name option[value='SUBT.31']").show();
+                $("#programm_name option[value='GUATITA DELANTAL']").show();
 
 				$("#programm_name option[value='CONSULTORIO DE LLAMADA']").hide();
 				$("#programm_name option[value='33 MIL HORAS']").hide();
@@ -854,6 +858,7 @@
 			$("#programm_name option[value='SENDA PSIQUIATRIA ADULTO']").hide();
 			$("#programm_name option[value='SENADIS']").hide();
 			$("#programm_name option[value='SUBT.31']").hide();
+            $("#programm_name option[value='GUATITA DELANTAL']").hide();
 
 			$("#programm_name option[value='CONSULTORIO DE LLAMADA']").hide();
 			$("#programm_name option[value='33 MIL HORAS']").hide();
