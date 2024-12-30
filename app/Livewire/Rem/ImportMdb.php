@@ -119,13 +119,16 @@ class ImportMdb extends Component
                 //     }
                 // }
 
+                $cola = [];
                 if (file_exists($sqlFilePath)) {
                     $sqlContent = file_get_contents($sqlFilePath);
                     $sqlLines = explode(";\n", $sqlContent);
         
                     foreach ($sqlLines as $sql) {
                         if (stripos($sql, 'INSERT INTO') !== false) {
-                            ProcessSqlLine::dispatch($sql);
+                            ProcessSqlLine::dispatch($sql)->delay(now()->addSeconds(15));
+                            //clear memory
+                            unset($sql);
                         }
                     }
                     // cantidad de jobs creados
