@@ -49,6 +49,7 @@ class SearchAllowances extends Component
                             'approvals',
                             'allowanceEstablishment'
                         ])
+                        ->latest()
                         ->orderBy('correlative', 'DESC')
                         ->whereDoesntHave("archive", function($subQuery){
                             $subQuery->where('user_id', auth()->id());
@@ -78,6 +79,7 @@ class SearchAllowances extends Component
                             'approvals',
                             'allowanceEstablishment'
                         ])
+                        ->latest()
                         ->orderBy('correlative', 'DESC')
                         ->where('establishment_id', auth()->user()->organizationalUnit->establishment_id)
                         ->whereHas("allowanceSigns", function($subQuery){
@@ -110,6 +112,7 @@ class SearchAllowances extends Component
                             'approvals',
                             'allowanceEstablishment'
                         ])
+                        ->latest()
                         ->orderBy('correlative', 'DESC')
                         ->whereHas("archive", function($subQuery){
                             $subQuery->where('user_id', auth()->id());
@@ -138,6 +141,7 @@ class SearchAllowances extends Component
                         'approvals',
                         'allowanceEstablishment'
                     ])
+                    ->latest()
                     ->orderBy('correlative', 'DESC')
                     ->where('user_allowance_id', auth()->id())
                     ->orWhere('creator_user_id', auth()->id())
@@ -165,6 +169,7 @@ class SearchAllowances extends Component
                             'approvals',
                             'allowanceEstablishment'
                         ])
+                        ->latest()
                         ->orderBy('correlative', 'DESC')
                         ->search($this->selectedStatus,
                             $this->selectedId,
@@ -187,6 +192,7 @@ class SearchAllowances extends Component
                         'approvals',
                         'allowanceEstablishment'
                     ])
+                    ->latest()
                     ->orderBy('correlative', 'DESC')
                     ->orderBy('id', 'DESC')
                     ->where('establishment_id', Auth::user()->organizationalUnit->establishment_id)
@@ -215,6 +221,7 @@ class SearchAllowances extends Component
                         'approvals',
                         'allowanceEstablishment'
                     ])
+                    ->latest()
                     ->orderBy('correlative', 'DESC')
                     ->whereHas("Approvals", function($subQuery){
                         $subQuery->where('sent_to_ou_id', Parameter::get('ou','DireccionSSI'));

@@ -200,6 +200,7 @@ class AllowancesCreate extends Component
         // $this->totalCurrentAllowancesDaysByUser = $this->totalCurrentAllowancesDaysByUser + 87;
 
         $alw = DB::transaction(function () {
+            /*
             $alw = Allowance::updateOrCreate(
                 [
                     'id'  =>  $this->idAllowance,
@@ -238,6 +239,84 @@ class AllowancesCreate extends Component
                     'creator_ou_id'                     => auth()->user()->organizationalUnit->id
                 ]
             );
+            */
+
+            // Buscar el registro con lockForUpdate
+            $alw = Allowance::where('id', $this->idAllowance)
+                ->lockForUpdate()
+                ->first();
+
+            // Si existe, actualiza. Si no, crea uno nuevo.
+            if ($alw) {
+                $alw->update([
+                    'status'                            => 'pending',
+                    'user_allowance_id'                 => $this->userAllowance->id,
+                    'contractual_condition_id'          => $this->contractualConditionId,
+                    'position'                          => $this->position,
+                    'allowance_value_id'                => $this->allowanceValueId(),
+                    'grade'                             => ($this->law != "19664" || $this->contractualConditionId != "2") ? $this->grade : null,
+                    'law'                               => $this->law,
+                    'establishment_id'                  => $this->userAllowance->organizationalUnit->establishment->id,
+                    'organizational_unit_allowance_id'  => $this->userAllowance->organizationalUnit->id, 
+                    'reason'                            => $this->reason,
+                    'overnight'                         => $this->overnight,
+                    'accommodation'                     => $this->accommodation,
+                    'food'                              => $this->food,
+                    'passage'                           => $this->passage, 
+                    'means_of_transport'                => $this->meansOfTransport, 
+                    'origin_commune_id'                 => $this->originCommune->id,
+                    'round_trip'                        => $this->roundTrip,
+                    'from'                              => $this->from, 
+                    'to'                                => $this->to,
+                    'total_days'                        => $this->totalDays(),
+                    'total_half_days'                   => $this->totalHalfDays(),
+                    'fifty_percent_total_days'          => $this->totalFiftyPercentDays(),
+                    'sixty_percent_total_days'          => $this->totalSixtyPercentDays(),
+                    'half_days_only'                    => $this->halfDaysOnly,
+                    'day_value'                         => $this->allowanceDayValue(),
+                    'half_day_value'                    => $this->allowanceHalfDayValue(),
+                    'fifty_percent_day_value'           => $this->allowanceFiftyPercentDayValue(),
+                    'sixty_percent_day_value'           => $this->allowanceSixtyPercentDayValue(),
+                    'total_value'                       => $this->allowanceTotalValue(),
+                    'creator_user_id'                   => auth()->id(), 
+                    'creator_ou_id'                     => auth()->user()->organizationalUnit->id
+                ]);
+            } else {
+                $alw = Allowance::create([
+                    'id'                                => $this->idAllowance,
+                    'status'                            => 'pending',
+                    'user_allowance_id'                 => $this->userAllowance->id,
+                    'contractual_condition_id'          => $this->contractualConditionId,
+                    'position'                          => $this->position,
+                    'allowance_value_id'                => $this->allowanceValueId(),
+                    'grade'                             => ($this->law != "19664" || $this->contractualConditionId != "2") ? $this->grade : null,
+                    'law'                               => $this->law,
+                    'establishment_id'                  => $this->userAllowance->organizationalUnit->establishment->id,
+                    'organizational_unit_allowance_id'  => $this->userAllowance->organizationalUnit->id, 
+                    'reason'                            => $this->reason,
+                    'overnight'                         => $this->overnight,
+                    'accommodation'                     => $this->accommodation,
+                    'food'                              => $this->food,
+                    'passage'                           => $this->passage, 
+                    'means_of_transport'                => $this->meansOfTransport, 
+                    'origin_commune_id'                 => $this->originCommune->id,
+                    'round_trip'                        => $this->roundTrip,
+                    'from'                              => $this->from, 
+                    'to'                                => $this->to,
+                    'total_days'                        => $this->totalDays(),
+                    'total_half_days'                   => $this->totalHalfDays(),
+                    'fifty_percent_total_days'          => $this->totalFiftyPercentDays(),
+                    'sixty_percent_total_days'          => $this->totalSixtyPercentDays(),
+                    'half_days_only'                    => $this->halfDaysOnly,
+                    'day_value'                         => $this->allowanceDayValue(),
+                    'half_day_value'                    => $this->allowanceHalfDayValue(),
+                    'fifty_percent_day_value'           => $this->allowanceFiftyPercentDayValue(),
+                    'sixty_percent_day_value'           => $this->allowanceSixtyPercentDayValue(),
+                    'total_value'                       => $this->allowanceTotalValue(),
+                    'creator_user_id'                   => auth()->id(), 
+                    'creator_ou_id'                     => auth()->user()->organizationalUnit->id
+                ]);
+            }
 
             return $alw;
         });

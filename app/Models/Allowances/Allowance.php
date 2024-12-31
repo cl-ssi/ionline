@@ -26,6 +26,10 @@ use App\Models\Allowances\AllowanceFile;
 use App\Models\Allowances\AllowanceSign;
 use App\Models\Allowances\AllowanceCorrection;
 
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
+use App\Observers\AllowanceObserver;
+
+#[ObservedBy([AllowanceObserver::class])]
 class Allowance extends Model implements Auditable
 {
     use HasFactory;
@@ -427,6 +431,10 @@ class Allowance extends Model implements Auditable
         return $approval;
     }
 
+    /*
+
+    SE REEMPLAZA POR OBSERVER
+
     protected static function boot()
     {
         parent::boot();
@@ -436,4 +444,5 @@ class Allowance extends Model implements Auditable
             $allowance->correlative = Correlative::getCorrelativeFromType(20, $allowance->organizationalUnitAllowance->establishment_id);
         });
     }
+    */
 }
