@@ -20,7 +20,9 @@ class EnsureMovement
 
         if($movement->responsibleUser->id == auth()->id())
             return $next($request);
-
+        if($movement->responsibleUser->id == auth()->user()->IAmSubrogantOf->first()->id)
+            return $next($request);
+        
         session()->flash('danger', 'Ud. no posee los permisos para ver los detalles del movimiento.');
         return redirect()->route('inventories.pending-movements');
     }

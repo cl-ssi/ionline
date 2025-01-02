@@ -28,7 +28,7 @@ class UpdatePma extends Component
     public function mount()
     {
         $this->selectedItems = array_fill(0, count($this->inventories), false);
-        $this->inventories = Inventory::where('user_responsible_id', auth()->user()->id)->get();
+        $this->inventories = $this->myInventories()->get();
     }
 
     #[On('myPlaceId')] 
@@ -42,8 +42,9 @@ class UpdatePma extends Component
     }    
     public function render()
     {
-        $inventoriesQuery = Inventory::where('place_id', $this->place_id)
-            ->where('user_responsible_id', auth()->user()->id);    
+        // $inventoriesQuery = Inventory::where('place_id', $this->place_id)
+        //     ->where('user_responsible_id', auth()->user()->id);
+        $inventoriesQuery = $this->myInventories()->where('place_id', $this->place_id);
         
         if ($this->searchTerm) {
             $inventoriesQuery->where(function ($query) {
@@ -92,7 +93,17 @@ class UpdatePma extends Component
         $this->updateCompleted = true;
     }
     
-    
+    public function myInventories()
+    {        
+        
+        if(auth()->user()->IAmSubrogantOf->isNotEmpty()){
+            $subrogantIds = auth()->user()->IAmSubrogantOf->pluck('id')->toArray();
+            $inventories = Inventory::whereIn('user_responsible_id', [auth()->user()->id, $subrogantIds]);
+        } else {
+            $inventories = Inventory::where('user_responsible_id', auth()->user()->id);
+        }
+        return $inventories;
+    }
 
 
     public function resetData()
