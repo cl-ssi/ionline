@@ -74,7 +74,9 @@ class Program extends Model implements Auditable
      */
     public function referers(): BelongsToMany|Builder
     {
-        return $this->belongsToMany(User::class, 'cfg_program_user')->withTrashed();
+        return $this->belongsToMany(User::class, 'cfg_program_user')
+            ->withTimestamps()
+            ->withTrashed();
     }
 
     public function cdps(): HasMany
