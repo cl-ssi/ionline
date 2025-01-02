@@ -521,44 +521,34 @@
                             </td>
                             <td class="text-center">
                                 <a class="btn btn-sm btn-outline-danger" title="Eliminar solicitud"
-                                    @if ($signature->responsable_id != Auth::id()) disabled @endif data-toggle="modal"
-                                    data-target="#deleteSignature{{ $signature->id }}">
+                                    @if ($signature->responsable_id != Auth::id()) disabled @endif data-bs-toggle="modal"
+                                    data-bs-target="#deleteSignature{{ $signature->id }}">
                                     <i class="fas fa-fw fa-trash"></i>
                                 </a>
                             </td>
                         </tr>
                         {{-- Modal eliminar --}}
-                        <div class="modal fade" id="deleteSignature{{ $signature->id }}" tabindex="-1" role="dialog"
-                            aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                            <div class="modal-dialog modal-dialog-centered" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="exampleModalLongTitle">¿Desea eliminar la solicitud?
-                                        </h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
+                        <div class="modal fade" id="deleteSignature{{ $signature->id }}" tabindex="-1" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLongTitle">¿Desea eliminar la solicitud?</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <form method="POST" class="form-horizontal" action="{{ route('documents.signatures.destroy', $signature) }}" enctype="multipart/form-data">
+                                    @csrf
+                                    @method('DELETE')
+
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                        <button class="btn btn-danger" type="submit">
+                                            <i class="fas fa-edit"></i> Eliminar
                                         </button>
                                     </div>
-                                    <form method="POST" class="form-horizontal"
-                                        action="{{ route('documents.signatures.destroy', $signature) }}"
-                                        enctype="multipart/form-data">
-                                        @csrf
-                                        <!-- input hidden contra ataques CSRF -->
-                                        @method('DELETE')
-
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary"
-                                                data-dismiss="modal">Cancelar
-                                            </button>
-
-                                            <button class="btn btn-danger" type="submit">
-                                                <i class="fas fa-edit"></i> Eliminar
-                                            </button>
-                                        </div>
-                                    </form>
-                                </div>
+                                </form>
                             </div>
                         </div>
+                    </div>
                     @endforeach
                 </tbody>
             </table>
