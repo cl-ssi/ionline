@@ -76,6 +76,7 @@ class Program extends Model implements Auditable
     {
         return $this->belongsToMany(User::class, 'cfg_program_user')
             ->withTimestamps()
+            ->withPivot('external')
             ->withTrashed();
     }
 

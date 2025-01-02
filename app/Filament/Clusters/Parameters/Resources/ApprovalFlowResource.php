@@ -5,10 +5,13 @@ namespace App\Filament\Clusters\Parameters\Resources;
 use App\Filament\Clusters\Parameters;
 use App\Filament\Clusters\Parameters\Resources\ApprovalFlowResource\Pages;
 use App\Filament\Clusters\Parameters\Resources\ApprovalFlowResource\RelationManagers;
+use App\Models\Establishment;
 use App\Models\Parameters\ApprovalFlow;
 use App\Models\Rrhh\OrganizationalUnit;
+use CodeWithDennis\FilamentSelectTree\SelectTree;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Forms\Get;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -35,11 +38,33 @@ class ApprovalFlowResource extends Resource
                     ->required(),
                 Forms\Components\Repeater::make('steps')
                     ->relationship()
-                    ->simple(
+                    ->schema([
                         Forms\Components\Select::make('organizational_unit_id')
-                            ->options(fn (): array => OrganizationalUnit::pluck('name', 'id')->toArray())
-                            ->required(),
-                    )
+                            ->relationship()
+                            ->options(OrganizationalUnit::pluck('name','id'))
+                            ->hiddenOn('create'),
+                        Forms\Components\Select::make('establishment_id')
+                            ->options(fn (): array => Establishment::orderBy('name')->pluck('name', 'id')->toArray())
+                            ->searchable()
+                            ->live()
+                            ->required()
+                            ->hiddenOn('edit'),
+                        SelectTree::make('organizational_unit_id')
+                            ->label('Unidad Organizacional')
+                            ->relationship(
+                                relationship: 'organizationalUnit',
+                                titleAttribute: 'name',
+                                parentAttribute: 'organizational_unit_id',
+                                modifyQueryUsing: fn($query, $get) => $query->where('establishment_id', $get('establishment_id'))->orderBy('name'),
+                                modifyChildQueryUsing: fn($query, $get) => $query->where('establishment_id', $get('establishment_id'))->orderBy('name')
+                            )
+                            ->searchable()
+                            ->parentNullValue(null)
+                            ->enableBranchNode()
+                            ->defaultOpenLevel(1)
+                            ->hiddenOn('edit'),
+                    ])
+                    ->columns(2)
                     ->orderColumn('order')
                     ->columnSpanFull()
             ]);
