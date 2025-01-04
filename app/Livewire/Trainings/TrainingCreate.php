@@ -8,7 +8,7 @@ use App\Models\Trainings\Training;
 use App\Models\Parameters\Estament;
 use App\Models\Parameters\ContractualCondition;
 use App\Models\User;
-use App\Models\Trainings\StrategicAxes;
+use App\Models\Trainings\StrategicAxis;
 use App\Models\Trainings\TrainingCost;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -20,7 +20,7 @@ use App\Models\Documents\Approval;
 use App\Models\Parameters\Parameter;
 use App\Models\Establishment;
 use App\Models\ClCommune;
-use App\Models\Trainings\ImpactObjectives;
+use App\Models\Trainings\ImpactObjective;
 
 class TrainingCreate extends Component
 {
@@ -117,7 +117,7 @@ class TrainingCreate extends Component
     {
         $estaments = Estament::orderBy('id')->get();
         $contractualConditions = ContractualCondition::orderBy('id')->get();
-        $strategicAxes = StrategicAxes::orderBy('number', 'ASC')->get();
+        $strategicAxes = StrategicAxis::orderBy('number', 'ASC')->get();
         $establishments = Establishment::all();
 
         if(auth()->guard('external')->check() == true && Route::is('external_trainings.external_create') ){
@@ -499,6 +499,7 @@ class TrainingCreate extends Component
                 "document_route_params"         => json_encode(["training_id" => $this->training->id]),
                 "active"                        => true,
                 "previous_approval_id"          => null,
+                "status"                        => null,
                 "callback_controller_method"    => "App\Http\Controllers\Trainings\TrainingController@approvalCallback",
                 "callback_controller_params"    => json_encode([
                                                         'training_id' => $this->training->id,
@@ -520,6 +521,7 @@ class TrainingCreate extends Component
                 "document_route_params"         => json_encode(["training_id" => $this->training->id]),
                 "active"                        => true,
                 "previous_approval_id"          => ($external_approval) ? $external_approval->id : $previousApprovalId,
+                "status"                        => null,
                 "callback_controller_method"    => "App\Http\Controllers\Trainings\TrainingController@approvalCallback",
                 "callback_controller_params"    => json_encode([
                                                         'training_id' => $this->training->id,
@@ -540,6 +542,7 @@ class TrainingCreate extends Component
                     "document_route_params"         => json_encode(["training_id" => $this->training->id]),
                     "active"                        => false,
                     "previous_approval_id"          => $previousApprovalId,
+                    "status"                        => null,
                     "callback_controller_method"    => "App\Http\Controllers\Trainings\TrainingController@approvalCallback",
                     "callback_controller_params"    => json_encode([
                                                             'training_id' => $this->training->id,
@@ -562,6 +565,7 @@ class TrainingCreate extends Component
             "document_route_params"         => json_encode(["training_id" => $this->training->id]),
             "active"                        => false,
             "previous_approval_id"          => ($external_approval) ? $external_approval->id : $previousApprovalId,
+            "status"                        => null,
             "callback_controller_method"    => "App\Http\Controllers\Trainings\TrainingController@approvalCallback",
             "callback_controller_params"    => json_encode([
                                                     'training_id' => $this->training->id,
@@ -623,7 +627,7 @@ class TrainingCreate extends Component
     }
 
     public function updatedselectedStrategicAxis($value){
-        $this->impactObjectives = ImpactObjectives::where('strategic_axis_id', $value)->get();
+        $this->impactObjectives = ImpactObjective::where('strategic_axis_id', $value)->get();
     }
 
     public function deleteFile($value){

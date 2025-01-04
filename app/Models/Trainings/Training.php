@@ -84,8 +84,8 @@ class Training extends Model implements Auditable
         return $this->belongsTo('App\Models\Parameters\ContractualCondition');
     }
 
-    public function StrategicAxes() {
-        return $this->belongsTo('App\Models\Trainings\StrategicAxes');
+    public function strategicAxis() {
+        return $this->belongsTo('App\Models\Trainings\StrategicAxis', 'strategic_axes_id');
     }
 
     /**

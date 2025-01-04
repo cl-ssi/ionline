@@ -100,7 +100,7 @@
                 <th colspan="4" class="table-secondary">Eje estratégico asociados a la Actividad</th>
             </tr>
             <tr>
-                <td colspan="4">{{ $training->StrategicAxes->name }}</td>
+                <td colspan="4">{{ $training->strategicAxis->name }}</td>
             </tr>
             <tr>
                 <th colspan="4" class="table-secondary">Objetivo</th>
