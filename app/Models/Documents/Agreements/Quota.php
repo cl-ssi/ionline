@@ -2,8 +2,10 @@
 
 namespace App\Models\Documents\Agreements;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Number;
 
 class Quota extends Model
 {
@@ -44,5 +46,12 @@ class Quota extends Model
     public function process(): BelongsTo
     {
         return $this->belongsTo(Process::class);
+    }
+
+    public function amountInWords(): Attribute
+    {
+        return Attribute::make(
+            get: fn (): string => Number::spell($this->amount,locale:'es')
+        );
     }
 }

@@ -2,7 +2,6 @@
 
 namespace App\Models\Documents;
 
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
@@ -38,146 +37,142 @@ class Template extends Model
 
     public function parseTemplate($record)
     {
-        /** Ejemplo de datos */
-        // $data['fecha'] = now()->format('d/m/Y');
-        // $data['usuario']['nombre_completo'] = auth()->user()->full_name;
-        // $data['usuario']['premium'] = false;
-        // $data['unidad']['nombre'] = auth()->user()->organizationalUnit->name;
-        // $data['unidad']['autoridad'] = auth()->user()->boss->full_name;
-        // $data['cuotas'] = [
-        //     ['name' => 'Cuota 1','valor' => 100],
-        //     ['name' => 'Cuota 2','valor' => 200],
-        //     ['name' => 'Cuota 3','valor' => 300]
+        /** Template de ejemplo para tinker */
+        // Template::find(1)->parseTemplate(Process::first())
+
+        /** Objeto de ejemplo */
+        // $record = (object) [
+        //     'program' => (object) ['name' => 'Programa de Prueba'],
+        //     'quotas'  => collect([
+        //         (object) ['description' => 'Cuota 1', 'amount' => 100],
+        //         (object) ['description' => 'Cuota 2', 'amount' => 200],
+        //         (object) ['description' => 'Cuota 3', 'amount' => 300],
+        //     ]),
+        //     'positiva' => true,
+        //     'negativa' => false,
         // ];
 
-        /** Ejemplo de template */
-        // <p>Hola <strong>{{usuario.nombre_completo}}</strong></p>
-        // <p>Esta es una nota r&aacute;pida de c&oacute;mo hacer una plantilla que tiene una iteraci&oacute;n.</p>
+        /* Template
+        ========================
+        <p>Programa: <strong>{{program.name}}</strong></p>
+        <p>Ejemplo de Foreach</p>
+        <ul>
+        @foreach(quotas)
+            <li><b>{{description}}</b>: {{amount}} </li>
+        @endforeach
+        </ul>
 
-        // @if(usuario.premium)
-        //     <p>¡Gracias por ser un miembro premium!</p>
-        // @else
-        //     <p>Considera unirte a nuestro programa premium para obtener más beneficios.</p>
-        // @endif
+        <p>Ejemplo de if</p>
+        @if(positiva)
+            <p>Variable positiva es true</p>
+        @endif
 
-        // <p>Usando tablas</p>
-        // <table style="border-collapse: collapse; width: 100%;" border="1">
-        //     <colgroup><col style="width: 50%;"><col style="width: 50%;"></colgroup>
-        //     <tbody>
-        //         <tr>
-        //             <td><strong>Nombre de la cuota</strong></td>
-        //             <td style="text-align: center;"><strong>Valor</strong></td>
-        //         </tr>
-        //         @foreach(cuotas)
-        //         <tr>
-        //             <td>{{cuotas.name}}</td>
-        //             <td style="text-align: center;">{{cuotas.valor}}</td>
-        //         </tr>
-        //         @endforeach
-        //     </tbody>
-        // </table>
+        <p>Ejemplo e if y else</p>
+        @if(negativa)
+            <p>Variable negativa es true</p>
+        @else
+            <p>Variable negativa es false</p>
+        @endif
 
-        // <p>Usando Listas</p>
-        // <ul>
-        //     @foreach(cuotas)
-        //     <li><b>{{cuotas.name}}</b>: {{cuotas.valor}}</li>
-        //     @endforeach
-        // </ul>
-        // <p>Atentamente,</p>
-        // <p><strong>{{unidad.autoridad}}</strong><br><strong>{{unidad.nombre}}</strong></p>
+        Resultado esperado
+        ========================
+        <p>Programa: <strong>Programa de Prueba</strong></p>
 
-        // Buscar todas las variables entre {{ }}
-        preg_match_all('/\{\{([a-zA-Z0-9_.]+)\}\}/', $this->content, $matches);
+        <p>Ejemplo de Foreach</p>
+        <ul>
+            <li><b>Cuota 1</b>: 100 </li>
+            <li><b>Cuota 2</b>: 200 </li>
+            <li><b>Cuota 3</b>: 300 </li>
+        </ul>
 
-        // Eliminar duplicados y ordenar las variables
-        $variables = array_unique($matches[1]);
+        <p>Ejemplo de if</p>
+        <p>Variable positiva es true</p>
 
-        // Crear el array $data con los valores desde $record
-        $data = [];
-        foreach ($variables as $variable) {
-            $path = explode('.', $variable); // Dividir por puntos para manejar estructuras anidadas
-            $value = '$record';
+        <p>Ejemplo e if y else</p>
+        <p>Variable negativa es false</p>
+        */
+
+        $content = $this->content;
+
+        // Manejo de bloques @foreach
+        $pattern = '/@foreach\((\w+(?:\.[a-zA-Z0-9_]+)*)\)(.*?)@endforeach/s';
+        while (preg_match($pattern, $content, $matches)) {
+            $collectionName = $matches[1];
+            $block          = $matches[2];
+
+            // Navegar por el objeto para obtener la colección
+            $path       = explode('.', $collectionName);
+            $collection = $record;
             foreach ($path as $segment) {
-                $value .= "->$segment";
+                $collection = $collection->$segment ?? [];
             }
-            eval("\$tempValue = isset($value) ? $value : null;"); // Obtener el valor dinámico
-        
-            // Verificar si el valor es una instancia de Carbon
-            if ($tempValue instanceof Carbon) {
-                $tempValue = $tempValue->toDateString();
+
+            $repeatedBlock = '';
+
+            if (is_iterable($collection)) {
+                foreach ($collection as $item) {
+                    $tempBlock = $block;
+
+                    // Reemplazar variables dentro del bloque foreach
+                    $tempBlock = $this->replaceSimpleVariables($tempBlock, $item);
+
+                    // Reemplazar la referencia completa a la colección en variables del tipo {{quotas.percentage}}
+                    $tempBlock = $this->replaceSimpleVariables($tempBlock, $item, $collectionName);
+
+                    $repeatedBlock .= $tempBlock;
+                }
             }
-        
-            $data[$variable] = $tempValue;
+
+            // Reemplazar el bloque completo
+            $content = str_replace($matches[0], $repeatedBlock, $content);
         }
 
-        // // Imprimir el array $data
-        // dd($data);
+        // Manejo de condicionales @if @else @endif
+        $pattern = '/@if\((.*?)\)(.*?)(@else(.*?))?@endif/s';
+        while (preg_match($pattern, $content, $matches)) {
+            $condition = trim($matches[1]);
+            $ifBlock   = $matches[2];
+            $elseBlock = isset($matches[4]) ? $matches[4] : '';
 
+            // Evaluar la condición
+            $value = null;
+            eval('$value = isset($record->'.str_replace('.', '->', $condition).') ? $record->'.str_replace('.', '->', $condition).' : false;');
 
-
-        // return $data;
-
-        // Reemplazo de variables simples
-        foreach ($data as $key => $values) {
-            if (is_array($values) && isset($values[0]) && is_array($values[0])) {
-                // Manejar iteraciones
-                $pattern = '/@foreach\(' . $key . '\)(.*?)@endforeach/s';
-                while (preg_match($pattern, $this->content, $matches)) {
-                    $repeatedBlock = '';
-                    foreach ($values as $item) {
-                        $tempBlock = $matches[1];
-                        foreach ($item as $subKey => $subValue) {
-                            $tempBlock = str_replace('{{' . $key . '.' . $subKey . '}}', $subValue, $tempBlock);
-                        }
-                        $repeatedBlock .= $tempBlock;
-                    }
-                    $this->content = str_replace($matches[0], $repeatedBlock, $this->content);
-                }
-            } elseif (is_array($values)) {
-                // Variables simples con subclaves
-                foreach ($values as $subKey => $value) {
-                    $this->content = str_replace('{{' . $key . '.' . $subKey . '}}', $value, $this->content);
-                }
+            if ($value) {
+                $content = str_replace($matches[0], $ifBlock, $content);
             } else {
-                // Variables de una dimensión
-                $this->content = str_replace('{{' . $key . '}}', $values, $this->content);
+                $content = str_replace($matches[0], $elseBlock, $content);
             }
         }
-        
-        return $this->content;
 
-        // // Manejar condicionales
-        // $patternIf = '/@if\((.*?)\)(.*?)@else(.*?)@endif/s';
-        // while (preg_match($patternIf, $this->content, $matches)) {
-        //     $condition = $matches[1];
-        //     $ifBlock = $matches[2];
-        //     $elseBlock = $matches[3];
+        // Reemplazo de variables simples en formato {{program.name}}
+        $content = $this->replaceSimpleVariables($content, $record);
 
-        //     // Evaluar condición (solo booleanas)
-        //     $condition = str_replace(['usuario.premium'], [$data['usuario']['premium']], $condition);
+        return $content;
+    }
 
-        //     if (eval("return $condition;")) {
-        //         $this->content = str_replace($matches[0], $ifBlock, $this->content);
-        //     } else {
-        //         $this->content = str_replace($matches[0], $elseBlock, $this->content);
-        //     }
-        // }
+    private function replaceSimpleVariables($content, $record, $prefix = '')
+    {
+        preg_match_all('/\{\{([a-zA-Z0-9_.]+)\}\}/', $content, $matches);
+        foreach ($matches[1] as $variable) {
+            $path = explode('.', $variable);
 
-        // // Manejar condicionales sin else
-        // $patternIfNoElse = '/@if\((.*?)\)(.*?)@endif/s';
-        // while (preg_match($patternIfNoElse, $this->content, $matches)) {
-        //     $condition = $matches[1];
-        //     $ifBlock = $matches[2];
+            // Si hay un prefijo, ajustarlo para subvariables
+            if ($prefix && strpos($variable, $prefix.'.') === 0) {
+                $path = explode('.', substr($variable, strlen($prefix) + 1));
+            }
 
-        //     // Evaluar condición (solo booleanas)
-        //     $condition = str_replace(['usuario.premium'], [$data['usuario']['premium']], $condition);
+            $value = $record;
 
-        //     if (eval("return $condition;")) {
-        //         $this->content = str_replace($matches[0], $ifBlock, $this->content);
-        //     } else {
-        //         $this->content = str_replace($matches[0], '', $this->content);
-        //     }
-        // }
-        // return $this->content;
+            // Navegar por el objeto $record usando el path
+            foreach ($path as $segment) {
+                $value = $value->$segment ?? null;
+            }
+
+            // Si el valor no es una cadena, convertirlo en una
+            $content = str_replace("{{{$variable}}}", is_scalar($value) ? (string) $value : '', $content);
+        }
+
+        return $content;
     }
 }

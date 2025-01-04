@@ -14,6 +14,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Mohamedsabil83\FilamentFormsTinyeditor\Components\TinyEditor;
 
 class ProcessTypeResource extends Resource
 {
@@ -78,7 +79,8 @@ class ProcessTypeResource extends Resource
                             ->label('Título')
                             ->maxLength(255)
                             ->required(),
-                        Forms\Components\RichEditor::make('content')
+                        TinyEditor::make('content')
+                        // Forms\Components\RichEditor::make('content')
                             ->label('Contenido')
                             ->required()
                             ->columnSpanFull(),

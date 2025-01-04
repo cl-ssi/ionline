@@ -17,6 +17,7 @@ use App\Observers\Documents\Agreements\ProcessObserver;
 use App\Models\File;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -24,6 +25,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Number;
 
 #[ObservedBy([ProcessObserver::class])]
 class Process extends Model
@@ -293,5 +295,20 @@ class Process extends Model
         $this->comments()->create([
             'body' => $comment,
         ]);
+    }
+
+    //attribute to convert amount to Number::spell($this->total_amount,locale:'es')
+    public function totalAmountInWords(): Attribute
+    {
+        return Attribute::make(
+            get: fn (): string => Number::spell($this->total_amount,locale:'es')
+        );
+    }
+
+    public function nextPeriod(): Attribute
+    {
+        return Attribute::make(
+            get: fn (): string => $this->period + 1
+        );
     }
 }

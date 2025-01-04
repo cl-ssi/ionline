@@ -21,7 +21,7 @@ class EditProcess extends EditRecord
     protected function getHeaderWidgets(): array
     {
         return [
-            Widgets\StepsChart::class,
+            // Widgets\StepsChart::class,
         ];
     }
 }
