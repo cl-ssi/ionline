@@ -373,7 +373,10 @@ class ProcessResource extends Resource
                                  * Ejemplo completo de uso de relación file
                                  */
                                 Forms\Components\Group::make()
-                                    ->relationship('signedCommuneFile') // Nombre de la relación que está con MorphOne
+                                    ->relationship(
+                                        'signedCommuneFile',
+                                        condition: fn (?array $state): bool => filled($state['storage_path']),
+                                    ) // Nombre de la relación que está con MorphOne
                                     ->schema([
                                         Forms\Components\FileUpload::make('storage_path') // Ruta donde quedará almacenado el archivo
                                             ->label('Archivo firmado por comuna')
@@ -450,7 +453,10 @@ class ProcessResource extends Resource
                             ->label('Fecha del proceso'),
 
                         Forms\Components\Group::make()
-                            ->relationship('finalProcessFile')
+                            ->relationship(
+                                'finalProcessFile',
+                                condition: fn (?array $state): bool => filled($state['storage_path']),
+                            )
                             ->schema([
                                 Forms\Components\FileUpload::make('storage_path')
                                     ->label('Proceso firmado')
@@ -628,7 +634,7 @@ class ProcessResource extends Resource
     public static function getWidgets(): array
     {
         return [
-            Widgets\StepsChart::class,
+            // Widgets\StepsChart::class,
         ];
     }
 
