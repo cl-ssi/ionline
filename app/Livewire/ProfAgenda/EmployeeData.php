@@ -61,7 +61,7 @@ class EmployeeData extends Component
                 if ($this->email != null) {
                 $user = User::where('email',$this->email)->first();
                 if ($user != null) {
-                    $this->message = "No es posible utilizar el coreo " . $this->email . ", ya está siendo utilizado por " . $user->getFullNameUpperAttribute();
+                    $this->message = "No es posible utilizar el coreo " . $this->email . ", ya está siendo utilizado por " . $user->fullNameUpper;
                 }
                 }
             }

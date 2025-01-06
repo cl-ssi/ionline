@@ -61,7 +61,7 @@ class ExternalEmployeeData extends Component
                 if ($this->email != null) {
                 $externaluser = ExternalUser::where('email',$this->email)->first();
                 if ($externaluser != null) {
-                    $this->message = "No es posible utilizar el coreo " . $this->email . ", ya está siendo utilizado por " . $externaluser->getFullNameUpperAttribute();
+                    $this->message = "No es posible utilizar el coreo " . $this->email . ", ya está siendo utilizado por " . $externaluser->fullNameUpper;
                 }
                 }
             }

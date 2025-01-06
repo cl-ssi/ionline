@@ -48,7 +48,7 @@
 				@foreach($pharmacy->users as $key => $user)
 					<tr>
 						<td>{{ $pharmacy->name }}</td>
-						<td>{{ $user->getFullNameUpperAttribute() }}</td>
+						<td>{{ $user->fullNameUpper }}</td>
 						<td>
 							<form method="POST" action="{{ route('pharmacies.user_asign_destroy', [$pharmacy,$user]) }}" class="d-inline">
 								@csrf
