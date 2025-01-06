@@ -8,7 +8,7 @@
         </div>
     @endif
 
-    @if(count($inventories) > 0)
+    @if($inventories)
     <br><br>
     <div class="row g-2 mb-3">
         <fieldset class="col text-end">
@@ -19,17 +19,20 @@
             >{{ $selectAllText }}</button>
         </fieldset>
     </div>
-
-    {{--
-    <div class="row g-3 align-items-center">
-        <div class="col-2">
-            <label for="searchTerm" class="form-label">Buscar:</label>
-        </div>
-        <div class="col-10">
-            <input type="text" class="form-control" wire:model.live="searchTerm" id="searchTerm" placeholder="Ingrese término de búsqueda">
-        </div>
+    <div class="row g-2">
+        <fieldset class="form-group col">
+            <label for="search" class="form-label">Buscador</label>
+            <input
+                type="text"
+                id="search"
+                class="form-control"
+                placeholder="Ingresa un número inventario (nuevo o antiguo) o nombre de producto o nombre unspc o ubicación o Código Arquitectónico"
+                wire:model.live="search"
+                autocomplete="off"
+            >
+        </fieldset>
     </div>
-    --}}
+    
     <br>
 
 
@@ -105,6 +108,8 @@
                 @endforeach
             </tbody>
         </table>
+        
+        {{ $inventories->links() }}
 
     </div>
 

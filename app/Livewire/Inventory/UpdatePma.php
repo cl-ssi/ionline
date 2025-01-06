@@ -16,20 +16,13 @@ class UpdatePma extends Component
 
     public $place_id = null;
     public $new_place_id = null;
-    public $inventories = [];
     public $place = null;
     public $placeNew = null;
     public $selectAll = false;
     public $updateCompleted = false;
     public $selectedItems = [];
     public $selectAllText = 'Seleccionar todos';
-    public $searchTerm = '';
-
-    public function mount()
-    {
-        $this->selectedItems = array_fill(0, count($this->inventories), false);
-        $this->inventories = $this->myInventories()->get();
-    }
+    public $search = '';
 
     #[On('myPlaceId')] 
     public function myPlaceId($value, $key)
@@ -42,28 +35,56 @@ class UpdatePma extends Component
     }    
     public function render()
     {
-        // $inventoriesQuery = Inventory::where('place_id', $this->place_id)
-        //     ->where('user_responsible_id', auth()->user()->id);
-        $inventoriesQuery = $this->myInventories()->where('place_id', $this->place_id);
-        
-        if ($this->searchTerm) {
-            $inventoriesQuery->where(function ($query) {
-                $query->where('number', 'like', '%' . $this->searchTerm . '%')
-                    ->orWhere('old_number', 'like', '%' . $this->searchTerm . '%');
-            });
-        }
-    
-        $inventories = $inventoriesQuery->paginate(50);
-    
         return view('livewire.inventory.update-pma', [
-            'inventories' => $inventories,
+            'inventories' => $this->getInventories(),
             'place' => $this->place,
             'placeNew' => $this->placeNew,
             'establishment' => auth()->user()->establishment,
         ]);
     }
     
-    
+    public function getInventories()
+    {
+        $search = "%$this->search%";
+        $inventoriesQuery = $this->myInventories()
+            ->when($this->place_id, function($q){
+                $q->where('place_id', $this->place_id);
+            })
+            ->when(strlen($this->search) > 2, function($q) use ($search) {
+                $q->where(function ($query) use ($search) {
+                    $query->where('number', 'like', $search)->orWhere('old_number', 'like', $search) 
+                        ->orWhereHas('unspscProduct', function ($query) use ($search) {
+                            $query->where('name', 'like', $search);
+                        })
+                        ->orWhereHas('product', function ($query) use ($search) {
+                            $query->where('name', 'like', $search)
+                                    ->orWhere('name', 'like', $search);
+                        })
+                        ->orWhere('description', 'like', $search)
+                        ->orWhereHas('place', function ($query) use ($search) {
+                            
+                            $query->where('name', 'like', $search)
+                            ->orWhere('architectural_design_code', 'like', $search)
+                                    ->orWhereHas('location', function ($query) use ($search) {
+                                        $query->where('name', 'like', $search);
+                                    });
+                        });
+                });
+            });
+        return $inventoriesQuery->orderByDesc('id')->paginate(50);
+    }
+
+    public function myInventories()
+    {        
+        
+        if(auth()->user()->IAmSubrogantOf->isNotEmpty()){
+            $subrogantIds = auth()->user()->IAmSubrogantOf->pluck('id')->toArray();
+            $inventories = Inventory::whereIn('user_responsible_id', [auth()->user()->id, $subrogantIds]);
+        } else {
+            $inventories = Inventory::where('user_responsible_id', auth()->user()->id);
+        }
+        return $inventories;
+    }
 
     public function updateSelected()
     {
@@ -92,25 +113,11 @@ class UpdatePma extends Component
         $this->resetData();
         $this->updateCompleted = true;
     }
-    
-    public function myInventories()
-    {        
-        
-        if(auth()->user()->IAmSubrogantOf->isNotEmpty()){
-            $subrogantIds = auth()->user()->IAmSubrogantOf->pluck('id')->toArray();
-            $inventories = Inventory::whereIn('user_responsible_id', [auth()->user()->id, $subrogantIds]);
-        } else {
-            $inventories = Inventory::where('user_responsible_id', auth()->user()->id);
-        }
-        return $inventories;
-    }
-
 
     public function resetData()
     {
         $this->place_id = null;
         $this->new_place_id = null;
-        $this->inventories = [];
         $this->place = null;
         $this->placeNew = null;
         $this->selectAll = false;
