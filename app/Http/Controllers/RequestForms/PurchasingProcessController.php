@@ -164,7 +164,7 @@ class PurchasingProcessController extends Controller
         if (!$requestForm->purchasingProcess) $requestForm->purchasingProcess = $this->create($requestForm);
 
         $internalPurchaseOrder                          = new InternalPurchaseOrder();
-        $internalPurchaseOrder->date                    = Carbon::now();
+        $internalPurchaseOrder->date                    = $request->date; //Carbon::now();
         $internalPurchaseOrder->supplier_id             = $request->supplier_id;
         $internalPurchaseOrder->payment_condition       = $request->payment_condition;
         $internalPurchaseOrder->estimated_delivery_date = $request->estimated_delivery_date;

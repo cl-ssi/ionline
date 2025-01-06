@@ -7,7 +7,7 @@
           <fieldset class="form-group col-sm-2">
               <label for="for_date">Fecha</label>
               <input type="date" class="form-control form-control-sm" id="for_date" name="date"
-                  value="{{ Carbon\Carbon::now()->format('Y-m-d') }}" readonly>
+                  value="{{ Carbon\Carbon::now()->format('Y-m-d') }}">
           </fieldset>
 
           <fieldset class="form-group col-sm-6">
