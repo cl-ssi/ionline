@@ -25,10 +25,12 @@ class ListIdentifyNeeds extends ListRecords
     {
         $tabs = [];
 
-        $tabs['Todas'] = Tab::make()
-            ->modifyQueryUsing(function (Builder $query): Builder {
-                return $query; // No aplica ningún filtro
-        });
+        if (auth()->user()->can('DNC: all')) {
+            $tabs['Todas'] = Tab::make()
+                ->modifyQueryUsing(function (Builder $query): Builder {
+                    return $query; // No aplica ningún filtro
+            });
+        }
 
         $tabs['Mis Formularios'] = Tab::make()
             ->modifyQueryUsing(function (Builder $query): Builder {
