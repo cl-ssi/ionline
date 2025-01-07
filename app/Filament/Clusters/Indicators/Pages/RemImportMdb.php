@@ -28,6 +28,11 @@ class RemImportMdb extends Page
 
     protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
 
+    public static function canAccess(): bool
+    {
+        return auth()->user()->canAny(['be god','Rem: admin']);
+    }
+
     public function mount(): void
     {
         $this->form->fill();

@@ -46,7 +46,7 @@
 
     <li class="nav-item">
         <a class="nav-link {{ active('indicators.rem.import-mdb') }}" 
-            href="{{ route('indicators.rem.import-mdb') }}">
+            href="{{ App\Filament\Clusters\Indicators\Pages\RemImportMdb::getUrl() }}">
             <i class="bi bi-database"></i> Subir MDB
         </a>
     </li>
