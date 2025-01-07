@@ -3,15 +3,14 @@
 namespace App\Filament\Clusters\Indicators\Pages;
 
 use App\Filament\Clusters\Indicators;
+use App\Models\Indicators\Rem;
 use Filament\Forms;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Form;
-use Filament\Notifications\Notification;
 use Filament\Pages\Page;
+use Filament\Pages\SubNavigationPosition;
+use Illuminate\Support\HtmlString;
 use Livewire\WithFileUploads;
-use ZipArchive;
-use App\Jobs\ProcessSqlLine;
-use Illuminate\Support\Facades\DB;
 
 class RemImportMdb extends Page
 {
@@ -19,15 +18,15 @@ class RemImportMdb extends Page
 
     public ?array $data = [];
 
-    public $attachment;
-
-    public $file;
+    public $mdbfiles;
 
     protected static ?string $navigationIcon = 'heroicon-o-document-text';
 
     protected static ?string $cluster = Indicators::class;
 
     protected static string $view = 'filament.clusters.indicators.pages.rem-import-mdb';
+
+    protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
 
     public function mount(): void
     {
@@ -38,70 +37,30 @@ class RemImportMdb extends Page
     {
         return $form
             ->schema([
-                Forms\Components\FileUpload::make('attachment')
+                Forms\Components\FileUpload::make('mdbfiles')
                     ->label('Archivo MDB')
                     ->directory('rems')
-                    ->required()
+                    ->helperText(new HtmlString('
+                        <ul>
+                            <li>Seleccione el archivo desde su computador, 
+                                espere a que termine de cargar y luego presione el botón azúl para procesar.</li>
+                            <li>Un solo archivo por cada mdb.</li>
+                            <li>El archivo debe estar comprimido en zip, <b>Usar el compresor de zip de windows (enviar a > carpeta comprimida)</b></li>
+                                ej: archivo 02A21022024.mdb > comprimir en 02A21022024.zip</li>
+                            <li>El archivo debe pertenecer al año actual o al anterior</li>
+                        </ul>'))
+                    ->required(),
 
-                    ->hintAction(
-                        Forms\Components\Actions\Action::make('ImportarMbd')
-                            ->icon('heroicon-m-clipboard')
-                            ->action(function () {
-                                $this->file = reset($this->attachment);
+                Forms\Components\Actions::make([
+                    Forms\Components\Actions\Action::make('cargarMdb')
+                        ->icon('heroicon-m-star')
+                        ->action(function () {
+                            $this->validate();
+                            Rem::importMdb(reset($this->mdbfiles));
+                            $this->form->fill();
+                        }),
 
-                                $safeFilename = str_replace(' ', '_', $this->file->getClientOriginalName());
-
-                                $mdbFilename = str_replace('zip', 'mdb',$safeFilename);
-
-                                $fullpath = storage_path("app/rems/$mdbFilename");
-
-                                $this->file->storeAs('rems', $safeFilename, 'local');
-
-                                $zip = new ZipArchive;
-                                $res = $zip->open(storage_path("app/rems/$safeFilename"));
-
-                                if ($res === true) {
-                                    $zip->extractTo(storage_path('app/rems'));
-                                    $zip->close();
-                                }
-
-                                $command = "mdb-export $fullpath Registros | cut -d',' -f6 | head -n 2 | tail -n 1 | tr -d '\"'";
-                                $year = trim(shell_exec($command));
-
-                                $command = "mdb-export $fullpath Registros | cut -d',' -f3 | head -n 2 | tail -n 1 | tr -d '\"' |cut -d' ' -f2";
-                                $serie = trim(shell_exec($command));
-
-                                $tabla = "{$year}rems";
-
-                                $command = "mdb-export -I mysql $fullpath Datos | sed 's/INTO `Datos`/INTO `$tabla`/'";
-                                $sqlContent = shell_exec($command);
-                        
-                                $sqlLines = explode(";\n", $sqlContent);
-                                foreach ($sqlLines as $index => $sql) {
-                                    if (stripos($sql, 'INSERT INTO') !== false) {
-                                        $tempSqlFile = storage_path("app/rems/sql_line_$index.sql");
-                                        file_put_contents($tempSqlFile, $sql . ";\n");
-                                    }
-                                }
-
-                                $connection = DB::connection('mysql_rem');
-                                $sql = "DELETE FROM $tabla WHERE codigoprestacion IN (SELECT codigo_prestacion FROM {$year}prestaciones WHERE serie='$serie')";
-                                $connection->statement($sql);
-
-                                $files = glob(storage_path("app/rems/sql_line_*.sql"));
-
-                                foreach ($files as $file) {
-                                    $content = file_get_contents($file);
-                                    ProcessSqlLine::dispatch($content);
-                                    unlink($file); // Elimina el archivo después de despacharlo
-                                }
-
-                                Notification::make()
-                                    ->title('Saved successfully '.$year)
-                                    ->success()
-                                    ->send();
-                            })
-                    ),
+                ]),
             ]);
     }
 }
