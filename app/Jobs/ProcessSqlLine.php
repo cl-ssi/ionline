@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\DB;
 
-class ProcessSqlLine implements ShouldQueue, ShouldBeUnique 
+class ProcessSqlLine implements ShouldQueue 
 {
     use Queueable;
 
@@ -26,7 +26,7 @@ class ProcessSqlLine implements ShouldQueue, ShouldBeUnique
      *
      * @var int
      */
-    public $uniqueFor = 120;
+    // public $uniqueFor = 120;
 
     /**
      * Execute the job.
@@ -36,11 +36,11 @@ class ProcessSqlLine implements ShouldQueue, ShouldBeUnique
         DB::connection('mysql_rem')->insert($this->sql);
     }
 
-    /**
-     * Get the unique ID for the job.
-     */
-    public function uniqueId(): string
-    {
-        return $this->sql;
-    }
+    // /**
+    //  * Get the unique ID for the job.
+    //  */
+    // public function uniqueId(): string
+    // {
+    //     return $this->sql;
+    // }
 }

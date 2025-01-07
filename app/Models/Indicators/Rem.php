@@ -33,7 +33,7 @@ class Rem extends Model
         return $model;
     }
 
-    public function prestacion()
+    public function prestacion(): BelongsTo
     {
         $instance = new Prestacion();
         $instance->setYear($this->year);
@@ -41,7 +41,7 @@ class Rem extends Model
         return new BelongsTo($instance->newQuery(), $this, 'CodigoPrestacion', 'codigo_prestacion', 'prestacion');
     }
 
-    public function establecimiento()
+    public function establecimiento(): BelongsTo
     {
         $instance = new Establecimiento();
         $instance->setYear($this->year);
