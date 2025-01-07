@@ -157,7 +157,6 @@ class ImportMdb extends Component
 
         foreach ($files as $file) {
             $content = file_get_contents($file);
-            logger()->info($file);
             ProcessSqlLine::dispatch($content);
             unlink($file); // Elimina el archivo después de despacharlo
         }
