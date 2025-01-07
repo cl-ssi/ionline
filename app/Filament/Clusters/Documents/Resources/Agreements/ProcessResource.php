@@ -2,32 +2,35 @@
 
 namespace App\Filament\Clusters\Documents\Resources\Agreements;
 
-use App\Enums\Documents\Agreements\Status;
+use Filament\Forms;
+use Filament\Tables;
+use App\Models\Comment;
+use Filament\Forms\Get;
+use Filament\Forms\Set;
+use Filament\Forms\Form;
+use Filament\Tables\Table;
+use Filament\Notifications;
+use App\Models\Establishment;
+use App\Services\TextCleaner;
+use App\Services\ColorCleaner;
+use App\Services\TableCleaner;
+use Filament\Resources\Resource;
+use App\Models\Documents\Document;
+use Illuminate\Support\Collection;
 use App\Filament\Clusters\Documents;
+use Filament\Forms\Components\Hidden;
+use Filament\Support\Enums\Alignment;
+use Illuminate\Database\Eloquent\Model;
+use Filament\Pages\SubNavigationPosition;
+use Illuminate\Database\Eloquent\Builder;
+use App\Enums\Documents\Agreements\Status;
+use App\Models\Documents\Agreements\Signer;
+use App\Models\Documents\Agreements\Process;
+use App\Filament\RelationManagers\CommentsRelationManager;
+use Mohamedsabil83\FilamentFormsTinyeditor\Components\TinyEditor;
 use App\Filament\Clusters\Documents\Resources\Agreements\ProcessResource\Pages;
 use App\Filament\Clusters\Documents\Resources\Agreements\ProcessResource\Widgets;
 use App\Filament\Clusters\Documents\Resources\Agreements\ProgramResource\RelationManagers\ProcessesRelationManager;
-use App\Filament\RelationManagers\CommentsRelationManager;
-use App\Models\Comment;
-use App\Models\Documents\Agreements\Process;
-use App\Models\Documents\Agreements\Signer;
-use App\Models\Documents\Document;
-use App\Models\Establishment;
-use Filament\Forms;
-use Filament\Forms\Components\Hidden;
-use Filament\Forms\Form;
-use Filament\Forms\Get;
-use Filament\Forms\Set;
-use Filament\Notifications;
-use Filament\Pages\SubNavigationPosition;
-use Filament\Resources\Resource;
-use Filament\Support\Enums\Alignment;
-use Filament\Tables;
-use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Collection;
-use Mohamedsabil83\FilamentFormsTinyeditor\Components\TinyEditor;
 
 class ProcessResource extends Resource
 {
@@ -268,10 +271,45 @@ class ProcessResource extends Resource
                         TinyEditor::make('content')::make('document_content')
                             ->hiddenLabel()
                             ->profile('ionline')
-                            ->disabled(fn(?Process $record) => $record->status === Status::Finished),
+                            ->disabled(fn(?Process $record) => $record->status === Status::Finished)
+                            // Forms\Components\Textarea::make('text')
+                            ->hintActions(
+                                [
+                                    Forms\Components\Actions\Action::make('limpiarTabla')
+                                    ->icon('heroicon-m-clipboard')
+                                    ->requiresConfirmation()
+                                    ->action(function (Get $get, Set $set) {
+                                        $content = $get('document_content');
+                                        $cleanedContent = TableCleaner::clean($content);
+                                        $set('document_content', $cleanedContent);
+                                    })
+                                    ->disabled(fn(?Process $record) => $record->status === Status::Finished),
+
+                                    Forms\Components\Actions\Action::make('limpiarTexto')
+                                    ->icon('heroicon-m-clipboard')
+                                    ->requiresConfirmation()
+                                    ->action(function (Get $get, Set $set) {
+                                        $content = $get('document_content');
+                                        $cleanedContent = TextCleaner::clean($content);
+                                        $set('document_content', $cleanedContent);
+                                    })
+                                    ->disabled(fn(?Process $record) => $record->status === Status::Finished),
+
+                                    Forms\Components\Actions\Action::make('limpiarColor')
+                                    ->icon('heroicon-m-clipboard')
+                                    ->requiresConfirmation()
+                                    ->action(function (Get $get, Set $set) {
+                                        $content = $get('document_content');
+                                        $cleanedContent = ColorCleaner::clean($content);
+                                        $set('document_content', $cleanedContent);
+                                    })
+                                    ->disabled(fn(?Process $record) => $record->status === Status::Finished),
+
+                                ]
+                            ),
                         Forms\Components\Textarea::make('distribution')
                             ->label('Distribución')
-                            ->helperText('Sólo para resoluciones'),
+                            ->helperText('Sólo para resoluciones')
                     ])
                     ->hiddenOn('create'),
                 // ->hidden(fn (?Process $record) => $record->document_content === null)
