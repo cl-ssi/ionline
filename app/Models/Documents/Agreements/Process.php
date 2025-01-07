@@ -311,4 +311,11 @@ class Process extends Model
             get: fn (): string => $this->period + 1
         );
     }
+
+    public function dateFormat(): Attribute
+    {
+        return Attribute::make(
+            get: fn (): string => $this->date->day . ' de ' . $this->date->monthName . ' del ' . $this->date->year
+        );
+    }
 }

@@ -9,6 +9,7 @@ use App\Models\Establishment;
 use App\Models\File;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -184,5 +185,19 @@ class Program extends Model implements Auditable
         }
 
         return $programs;
+    }
+
+    public function ministerialResolutionDateFormat(): Attribute
+    {
+        return Attribute::make(
+            get: fn (): string => $this->ministerial_resolution_date->day . ' de ' . $this->ministerial_resolution_date->monthName . ' del ' . $this->ministerial_resolution_date->year
+        );
+    }
+
+    public function resourceDistributionDateFormat(): Attribute
+    {
+        return Attribute::make(
+            get: fn (): string => $this->resource_distribution_date->day . ' de ' . $this->resource_distribution_date->monthName . ' del ' . $this->resource_distribution_date->year
+        );
     }
 }

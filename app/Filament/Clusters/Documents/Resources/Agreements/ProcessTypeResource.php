@@ -81,6 +81,7 @@ class ProcessTypeResource extends Resource
                             ->required(),
                         TinyEditor::make('content')
                         // Forms\Components\RichEditor::make('content')
+                            ->profile('ionline')
                             ->label('Contenido')
                             ->required()
                             ->columnSpanFull(),
