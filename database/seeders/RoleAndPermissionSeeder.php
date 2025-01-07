@@ -56,6 +56,7 @@ class RoleAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'Documents: edit', 'description' => 'Permite editar un documento creado']);
         Permission::create(['name' => 'Documents: signatures and distribution', 'description' => 'Permite acceso al módulo de firmas y distribución']);
         Permission::create(['name' => 'Documents: signatures and distribution v2', 'description' => 'Permite acceder al crear solicitud de firma nuevo modulo v2']);
+        Permission::create(['name' => 'DNC: all', 'description' => 'Permite visualizar todos los formularios de Necesidades de Capacitación']);
         Permission::create(['name' => 'Drugs', 'description' => 'Permite acceder al menú del módulo de drogas']);
         Permission::create(['name' => 'Drugs: add protocols', 'description' => '']);
         Permission::create(['name' => 'Drugs: add results from ISP', 'description' => 'Permite poder agregar resultados de análisis realizado por el ISP']);
@@ -302,6 +303,9 @@ class RoleAndPermissionSeeder extends Seeder
         $role->givePermissionTo('Calendar: aps');
         $role->givePermissionTo('Receptions: user');
         $role->givePermissionTo('Purchase Plan: reports');
+
+        $role = Role::create(['name' => 'DNC: Todo Acceso', 'description' => 'Acceso a todos los permisos del módulo']);
+        $role->givePermissionTo('DNC: all');
         
         $role = Role::create(['name' => 'Drogas: Jefe de unidad', 'description' => 'NO ASIGNAR a funcionarios fuera de la unidad, queda el registro de ingreso.']);
         $role->givePermissionTo('Drugs: view receptions');
