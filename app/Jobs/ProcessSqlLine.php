@@ -11,7 +11,7 @@ class ProcessSqlLine implements ShouldQueue, ShouldBeUnique
 {
     use Queueable;
 
-    protected $sql;
+    public $sql;
 
     /**
      * Create a new job instance.
