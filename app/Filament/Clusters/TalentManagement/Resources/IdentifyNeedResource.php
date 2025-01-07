@@ -406,8 +406,33 @@ class IdentifyNeedResource extends Resource
     {
         return $table
             ->columns([
-                //
+                Tables\Columns\TextColumn::make('id')
+                    ->label('ID')
+                    ->sortable()
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('created_at')
+                    ->label('Fecha Creación')
+                    ->dateTime('d-m-Y H:i:s'),
+                Tables\Columns\TextColumn::make('status')
+                    ->label('Estado')
+                    ->getStateUsing(fn ($record) => $record->status_value)
+                    ->sortable()
+                    ->badge()
+                    ->color(fn (string $state): string => match ($state) {
+                        'Guardado'      => 'info',
+                        'Pendiente'     => 'warning',
+                    })
+                    ->alignment('center'),
+                Tables\Columns\TextColumn::make('user.TinyName')
+                    ->label('Funcionario'),
+                Tables\Columns\TextColumn::make('organizationalUnit.name')
+                    ->label('Unidad Organizacional'),
+                Tables\Columns\TextColumn::make('subject')
+                    ->label('Asunto'),
+                Tables\Columns\TextColumn::make('estament.name')
+                    ->label('Estamento'),
             ])
+            ->defaultSort('id', 'desc')
             ->filters([
                 //
             ])

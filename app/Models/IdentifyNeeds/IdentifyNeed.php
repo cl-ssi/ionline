@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use OwenIt\Auditing\Contracts\Auditable;
 use App\Models\User;
+use App\Models\Rrhh\OrganizationalUnit;
 use App\Models\Parameters\Estament;
 use App\Models\Trainings\StrategicAxis;
 
@@ -87,7 +88,7 @@ class IdentifyNeed extends Model implements Auditable
      */
     public function organizationalUnit(): BelongsTo
     {
-        return $this->belongsTo(OrganizationalUnit::class, 'ou_creator_id')->withTrashed();
+        return $this->belongsTo(OrganizationalUnit::class)->withTrashed();
     }
 
     /**
@@ -118,6 +119,21 @@ class IdentifyNeed extends Model implements Auditable
     public function strategicAxis(): BelongsTo 
     {
         return $this->belongsTo(StrategicAxis::class);
+    }
+
+    /**
+     * Get the status value attribute.
+     *
+     * @return string|null
+     */
+    public function getStatusValueAttribute(): ?string
+    {
+        $statuses = [
+            'saved'     => 'Guardado',
+            'pending'   => 'Pendiente',
+        ];
+
+        return $statuses[$this->status] ?? null;
     }
 
     /**
