@@ -19,10 +19,23 @@ class IdentifyNeed extends Model implements Auditable
     use \OwenIt\Auditing\Auditable;
 
     protected $fillable = [
-        'user_id',
         'status',
-        'subject',
+
+        // USUARIO
+        'user_id',
         'organizational_unit_id',
+        'organizational_unit_name',
+        'establishment_id',
+        'establishment_name',
+        'email',
+        'email_personal',
+        'position',
+
+        // JEFATURA
+        'boss_id',
+        'boss_email',
+
+        'subject',
         'estament_id',
         'family_position',
         'nature_of_the_need',
@@ -75,6 +88,16 @@ class IdentifyNeed extends Model implements Auditable
     public function organizationalUnit(): BelongsTo
     {
         return $this->belongsTo(OrganizationalUnit::class, 'ou_creator_id')->withTrashed();
+    }
+
+    /**
+     * Get the boss of the user who owns the identification need.
+     *
+     * @return BelongsTo
+     */
+    public function boss(): BelongsTo
+    {
+       return $this->belongsTo(User::class, 'boss_id')->withTrashed();
     }
 
     /**

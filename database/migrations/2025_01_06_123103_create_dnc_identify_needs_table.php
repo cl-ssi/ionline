@@ -16,9 +16,22 @@ return new class extends Migration
         Schema::create('dnc_identify_needs', function (Blueprint $table) {
             $table->id();
             $table->string('status')->nullable();
-            $table->string('subject')->nullable();
+
+            // USUARIO
             $table->foreignId('user_id')->nullable()->constrained('users');
             $table->foreignId('organizational_unit_id')->nullable()->constrained('organizational_units');
+            $table->string('organizational_unit_name')->nullable();
+            $table->foreignId('establishment_id')->constrained('establishments');
+            $table->string('establishment_name')->nullable();
+            $table->string('email')->nullable();
+            $table->string('email_personal')->nullable();
+            $table->string('position')->nullable();
+
+            // JEFATURA
+            $table->foreignId('boss_id')->nullable()->constrained('users');
+            $table->string('boss_email')->nullable();
+
+            $table->string('subject')->nullable();
             $table->foreignId('estament_id')->nullable()->constrained('cfg_estaments');
             $table->string('family_position')->nullable();
             $table->string('nature_of_the_need')->nullable();

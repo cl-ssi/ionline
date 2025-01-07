@@ -13,8 +13,11 @@ class CreateIdentifyNeed extends CreateRecord
     //AGREGA DATOS QUE NO ESTAN EN EL FORM. AL OBJETO LUEGO DE CREAR
     protected function mutateFormDataBeforeCreate(array $data): array
     {
-        $data['user_id']    = auth()->id();
-        $data['status']     = 'saved'; // Establece el valor predeterminado del campo 'status'
+        $data['status']                 = 'saved';
+        $data['organizational_unit_id'] = auth()->user()->organizational_unit_id;
+        $data['establishment_id']       = auth()->user()->establishment_id;
+        $data['establishment_name']     = auth()->user()->establishment->name;
+        $data['boss_id']                = auth()->user()->boss->id;
 
         return $data;
     }

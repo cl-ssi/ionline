@@ -46,61 +46,53 @@ class IdentifyNeedResource extends Resource
                             Forms\Components\TextInput::make('user_id')
                                 ->label('Funcionario')
                                 ->default(fn ($record) => $record ? $record->user_id : auth()->id()) // Toma el valor del registro o del usuario autenticado
-                                ->disabled() // Campo deshabilitado para edición
+                                ->readOnly()
                                 ->columnSpan(2),
                             Forms\Components\TextInput::make('dv')
                                 ->label('DV')
-                                ->disabled() // Campo deshabilitado para edición
+                                ->readOnly()
+                                ->dehydrated(false) 
                                 ->afterStateHydrated(function (callable $set, $record) {
                                     // Precarga el valor desde el usuario relacionado o el autenticado
                                     $set('dv', $record && $record->user ? $record->user->dv : auth()->user()->dv ?? '');
                                 })
                                 ->columnSpan(1),
-                            Forms\Components\TextInput::make('full_name')
+                            Forms\Components\TextInput::make('user_full_name')
                                 ->label('Funcionario')
-                                ->disabled() // Campo deshabilitado para edición
+                                ->readOnly()
                                 ->afterStateHydrated(function (callable $set, $record) {
-                                    $set('full_name', $record && $record->user ? $record->user->full_name : auth()->user()->full_name ?? '');
+                                    $set('user_full_name', $record && $record->user ? $record->user->full_name : auth()->user()->full_name ?? '');
                                 })
                                 ->columnSpan(6),
-                            Forms\Components\TextInput::make('email')
+                            Forms\Components\TextInput::make('email_personal')
                                 ->label('Correo')
-                                ->disabled() // Campo deshabilitado para edición
-                                ->afterStateHydrated(function (callable $set, $record) {
-                                    $set('email', $record && $record->user ? $record->user->email_personal : auth()->user()->email_personal ?? '');
-                                })
+                                ->default(fn ($record) => $record ? $record->email_personal : auth()->user()->email_personal) // Toma el valor del registro o del usuario autenticado
+                                ->readOnly()
                                 ->columnSpan(3),
-                            Forms\Components\TextInput::make('organizational_email')
+                            Forms\Components\TextInput::make('email')
                                 ->label('Correo Institucional')
-                                ->disabled() // Campo deshabilitado para edición
-                                ->afterStateHydrated(function (callable $set, $record) {
-                                    $set('organizational_email', $record && $record->user ? $record->user->email : auth()->user()->email ?? '');
-                                })
+                                ->default(fn ($record) => $record ? $record->email : auth()->user()->email) // Toma el valor del registro o del usuario autenticado
+                                ->readOnly()
                                 ->columnSpan(3),
                             Forms\Components\TextInput::make('organizational_unit_name')
                                 ->label('Unidad Organizacional')
-                                ->disabled() // Campo deshabilitado para edición
-                                ->afterStateHydrated(function (callable $set, $record) {
-                                    $set('organizational_unit_name', $record && $record->user ? $record->user->organizationalUnit->name : auth()->user()->organizationalUnit->name ?? '');
-                                })
+                                ->default(fn ($record) => $record ? $record->organizational_unit_name : auth()->user()->organizationalUnit->name) // Toma el valor del registro o del usuario autenticado
+                                ->readOnly()
                                 ->columnSpan(6),
                             Forms\Components\TextInput::make('position')
                                 ->label('Cargo')
-                                ->disabled() // Campo deshabilitado para edición
-                                ->afterStateHydrated(function (callable $set, $record) {
-                                    $set('position', $record && $record->user ? $record->user->position : auth()->user()->position ?? '');
-                                })
+                                ->default(fn ($record) => $record ? $record->position : auth()->user()->position) // Toma el valor del registro o del usuario autenticado
+                                ->readOnly()
                                 ->columnSpan(3),
                         ]),
                     ]),
                 
                 Forms\Components\Section::make('Jefatura')
-                    // ->description('Prevent abuse by limiting the number of requests per period')
                     ->schema([
                         Grid::make(12)->schema([
                             Forms\Components\TextInput::make('boss_full_name')
                                 ->label('Nombre Jefatura')
-                                ->disabled() // Campo deshabilitado para edición
+                                ->readOnly()
                                 ->afterStateHydrated(function (callable $set, $record) {
                                     $set('boss_full_name', $record && $record->user && $record->user->boss ? $record->user->boss->full_name : auth()->user()->boss->full_name ?? '');
                                 })
@@ -108,10 +100,8 @@ class IdentifyNeedResource extends Resource
 
                             Forms\Components\TextInput::make('boss_email')
                                 ->label('Correo')
-                                ->disabled() // Campo deshabilitado para edición
-                                ->afterStateHydrated(function (callable $set, $record) {
-                                    $set('boss_email', $record && $record->user && $record->user->boss ? $record->user->boss->email : auth()->user()->boss->email ?? '');
-                                })
+                                ->readOnly()
+                                ->default(fn ($record) => $record ? $record->boss_email : auth()->user()->boss->email)
                                 ->columnSpan(6),
                         ]),
                     ]),
@@ -158,11 +148,6 @@ class IdentifyNeedResource extends Resource
                                     'necesidad de mi equipo de trabajo' => 'A una necesidad de mi equipo de trabajo, considerando el desarrollo de habilidades colectivas.',
                                     'necesidad de otros equipos'        => 'A una necesidad de otros equipos, con los que me relaciono directamente en mi gestión u operatividad. (deberás responder las preguntas de la sección "otros equipos")',
                                 ])
-                                /*
-                                ->afterStateUpdated(function (callable $set, $state) {
-                                    $set('nature_of_the_need', json_encode($state)); // Convierte a JSON
-                                })
-                                */
                                 ->default(fn ($record) => $record ? $record->nature_of_the_need : []) // Decodifica JSON a array
                                 ->columnSpanFull()
                                 ->required(),
