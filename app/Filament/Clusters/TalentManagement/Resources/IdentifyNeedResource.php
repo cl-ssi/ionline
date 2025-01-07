@@ -20,6 +20,8 @@ use Filament\Forms\Get;
 use Filament\Forms\Set;
 use Illuminate\Support\Collection;
 use Illuminate\Support\HtmlString;
+use Filament\Forms\Components\Actions\Action;
+use Filament\Forms\Components\TextInput;
 
 class IdentifyNeedResource extends Resource
 {
@@ -43,48 +45,52 @@ class IdentifyNeedResource extends Resource
                         Grid::make(12)->schema([
                             Forms\Components\TextInput::make('user_id')
                                 ->label('Funcionario')
-                                ->default(auth()->id()) // Precarga el valor del usuario autenticado
+                                ->default(fn ($record) => $record ? $record->user_id : auth()->id()) // Toma el valor del registro o del usuario autenticado
                                 ->disabled() // Campo deshabilitado para edición
                                 ->columnSpan(2),
                             Forms\Components\TextInput::make('dv')
                                 ->label('DV')
-                                ->default(auth()->user()->dv) // Precarga el valor del usuario autenticado
                                 ->disabled() // Campo deshabilitado para edición
+                                ->afterStateHydrated(function (callable $set, $record) {
+                                    // Precarga el valor desde el usuario relacionado o el autenticado
+                                    $set('dv', $record && $record->user ? $record->user->dv : auth()->user()->dv ?? '');
+                                })
                                 ->columnSpan(1),
                             Forms\Components\TextInput::make('full_name')
                                 ->label('Funcionario')
-                                ->default(auth()->user()->full_name) // Precarga el valor del usuario autenticado
                                 ->disabled() // Campo deshabilitado para edición
+                                ->afterStateHydrated(function (callable $set, $record) {
+                                    $set('full_name', $record && $record->user ? $record->user->full_name : auth()->user()->full_name ?? '');
+                                })
                                 ->columnSpan(6),
                             Forms\Components\TextInput::make('email')
                                 ->label('Correo')
-                                ->default(auth()->user()->email_personal) // Precarga el valor del usuario autenticado
                                 ->disabled() // Campo deshabilitado para edición
+                                ->afterStateHydrated(function (callable $set, $record) {
+                                    $set('email', $record && $record->user ? $record->user->email_personal : auth()->user()->email_personal ?? '');
+                                })
                                 ->columnSpan(3),
                             Forms\Components\TextInput::make('organizational_email')
                                 ->label('Correo Institucional')
-                                ->default(auth()->user()->email) // Precarga el valor del usuario autenticado
                                 ->disabled() // Campo deshabilitado para edición
+                                ->afterStateHydrated(function (callable $set, $record) {
+                                    $set('organizational_email', $record && $record->user ? $record->user->email : auth()->user()->email ?? '');
+                                })
                                 ->columnSpan(3),
                             Forms\Components\TextInput::make('organizational_unit_name')
                                 ->label('Unidad Organizacional')
-                                ->default(auth()->user()->organizationalUnit->name) // Precarga el valor del usuario autenticado
                                 ->disabled() // Campo deshabilitado para edición
+                                ->afterStateHydrated(function (callable $set, $record) {
+                                    $set('organizational_unit_name', $record && $record->user ? $record->user->organizationalUnit->name : auth()->user()->organizationalUnit->name ?? '');
+                                })
                                 ->columnSpan(6),
                             Forms\Components\TextInput::make('position')
                                 ->label('Cargo')
-                                ->default(auth()->user()->position) // Precarga el valor del usuario autenticado
                                 ->disabled() // Campo deshabilitado para edición
+                                ->afterStateHydrated(function (callable $set, $record) {
+                                    $set('position', $record && $record->user ? $record->user->position : auth()->user()->position ?? '');
+                                })
                                 ->columnSpan(3),
-
-                                /*
-
-                            Forms\Components\Select::make('estament_id')
-                                ->label('Estamento')
-                                ->relationship('estament', 'name')
-                                ->columnSpan(3)
-                                ->required(),
-                                */
                         ]),
                     ]),
                 
@@ -94,14 +100,18 @@ class IdentifyNeedResource extends Resource
                         Grid::make(12)->schema([
                             Forms\Components\TextInput::make('boss_full_name')
                                 ->label('Nombre Jefatura')
-                                ->default(auth()->user()->boss->full_name)
                                 ->disabled() // Campo deshabilitado para edición
+                                ->afterStateHydrated(function (callable $set, $record) {
+                                    $set('boss_full_name', $record && $record->user && $record->user->boss ? $record->user->boss->full_name : auth()->user()->boss->full_name ?? '');
+                                })
                                 ->columnSpan(6),
 
                             Forms\Components\TextInput::make('boss_email')
                                 ->label('Correo')
-                                ->default(auth()->user()->boss->email)
                                 ->disabled() // Campo deshabilitado para edición
+                                ->afterStateHydrated(function (callable $set, $record) {
+                                    $set('boss_email', $record && $record->user && $record->user->boss ? $record->user->boss->email : auth()->user()->boss->email ?? '');
+                                })
                                 ->columnSpan(6),
                         ]),
                     ]),
@@ -109,6 +119,10 @@ class IdentifyNeedResource extends Resource
                 Forms\Components\Section::make('Formulario Detección Necesidades De Capacitación')
                     ->schema([
                         Grid::make(12)->schema([
+                            Forms\Components\TextInput::make('subject')
+                                ->label('Asunto')
+                                ->columnSpanFull()
+                                ->required(),
                             Forms\Components\Select::make('estament_id')
                                 ->label('Estamento')
                                 ->relationship('estament', 'name')
@@ -127,6 +141,12 @@ class IdentifyNeedResource extends Resource
                                     'auxiliar apoyo operaciones'    => 'Auxiliar de Apoyo de Operaciones',
                                     'auxiliar conductor'            => 'Auxiliar Conductor',
                                 ])
+                                ->suffixAction(
+                                    Action::make('descargar')
+                                        ->icon('heroicon-o-information-circle')
+                                        ->url('https://www.saludtarapaca.gob.cl/wp-content/uploads/2024/01/REX-N%C2%B0-5.181-DICCIONARIO-DE-COMPETENCIAS.pdf')
+                                        ->openUrlInNewTab() // Esto abre el enlace en una nueva pestaña
+                                )
                                 ->default(null)
                                 ->columnSpan(6)
                                 ->required(),
@@ -138,6 +158,12 @@ class IdentifyNeedResource extends Resource
                                     'necesidad de mi equipo de trabajo' => 'A una necesidad de mi equipo de trabajo, considerando el desarrollo de habilidades colectivas.',
                                     'necesidad de otros equipos'        => 'A una necesidad de otros equipos, con los que me relaciono directamente en mi gestión u operatividad. (deberás responder las preguntas de la sección "otros equipos")',
                                 ])
+                                /*
+                                ->afterStateUpdated(function (callable $set, $state) {
+                                    $set('nature_of_the_need', json_encode($state)); // Convierte a JSON
+                                })
+                                */
+                                ->default(fn ($record) => $record ? $record->nature_of_the_need : []) // Decodifica JSON a array
                                 ->columnSpanFull()
                                 ->required(),
 
@@ -218,15 +244,8 @@ class IdentifyNeedResource extends Resource
                                 ->preload()
                                 ->live()
                                 ->afterStateUpdated(fn (Set $set) => $set('impact_objective_id', null))
-                                ->columnSpan(8)
+                                ->columnSpanFull()
                                 ->required(),
-                            Forms\Components\Actions::make([
-                                Forms\Components\Actions\Action::make('descargar_archivo')
-                                    ->label('Descargar')
-                                    // ->url(route('descargar.archivo', ['id' => $record->id])) // Ruta para descargar
-                                    ->color('primary') // Color del botón
-                                    ->outlined()
-                            ]),
 
                             Forms\Components\Select::make('impact_objective_id')
                                 ->label('Objetivos de Impacto')
@@ -283,35 +302,34 @@ class IdentifyNeedResource extends Resource
 
                         // TIPO PRESENCIAL
                         Grid::make(12)->schema([                        
-                            Forms\Components\Select::make('coffe_break')
-                                ->label('¿Esta Actividad considera Coffe Break?')
+                            Forms\Components\Select::make('coffee_break')
+                                ->label('¿Esta Actividad considera Coffee Break?')
                                 ->options([
-                                    'si' => 'Si', 
-                                    'no' => 'No',
+                                    '1' => 'Si', 
+                                    '0' => 'No',
                                 ])
                                 ->searchable()
                                 ->preload()
                                 ->live()
                                 ->afterStateUpdated(function (Set $set) {
-                                    $set('coffe_break_price', null);
+                                    $set('coffee_break_price', null);
                                 })
                                 ->columnSpan(4)
                                 ->disabled(fn (callable $get) => $get('mechanism') !== 'presencial') // Deshabilita si no es "presencial"
                                 ->visible(fn (callable $get) => $get('mechanism') === 'presencial') // Visible solo si es "presencial"
                                 ->required(fn (callable $get) => $get('mechanism') === 'presencial'), // Requerido si es "presencial"
-                            Forms\Components\TextInput::make('coffe_break_price')
+                            Forms\Components\TextInput::make('coffee_break_price')
                                 ->label('¿Cuanto es el Valor de Coffe Break?')
                                 ->numeric()
                                 ->minValue(1)
                                 ->columnSpan(4)
-                                ->disabled(fn (callable $get) => $get('coffe_break') !== 'si') // Deshabilita si no es "si"
-                                ->visible(fn (callable $get) => $get('coffe_break') === 'si') // Visible solo si es "si"
-                                ->required(fn (callable $get) => $get('coffe_break') === 'si'), // Requerido si es "presencial"
+                                ->disabled(fn (callable $get) => $get('coffee_break') !== '1') // Deshabilita si no es "si"
+                                ->visible(fn (callable $get) => $get('coffee_break') === '1') // Visible solo si es "si"
+                                ->required(fn (callable $get) => $get('coffee_break') === '1'), // Requerido si es "presencial"
                         ]),
 
                         //TIPO ASINCRONICO
                         Grid::make(12)->schema([     
-                            
                             Forms\Components\Placeholder::make('notas')
                                 ->hiddenLabel()
                                 ->content(new HtmlString('
@@ -326,36 +344,36 @@ class IdentifyNeedResource extends Resource
                             Forms\Components\Select::make('exists')
                                 ->label('¿La actividad se encuentra dentro de la oferta?')
                                 ->options([
-                                    'si' => 'Si', 
-                                    'no' => 'No',
+                                    '1' => 'Si', 
+                                    '0' => 'No',
                                 ])
                                 ->searchable()
                                 ->preload()
                                 ->live()
                                 ->columnSpan(4)
                                 ->visible(fn (callable $get) => $get('online_type_mechanism') === 'asincronico')
-                                ->required(fn (callable $get) => $get('exists') === 'si'),
+                                ->required(fn (callable $get) => $get('exists') === '1'),
                             Forms\Components\Select::make('digital_capsule')
                                 ->label('¿El curso podría ser una Capsula Digital?')
                                 ->options([
-                                    'si' => 'Si', 
-                                    'no' => 'No',
+                                    '1' => 'Si', 
+                                    '0' => 'No',
                                 ])
                                 ->searchable()
                                 ->preload()
                                 ->live()
                                 ->columnSpan(4)
-                                ->disabled(fn (callable $get) => $get('exists') !== 'no') // Deshabilita si no es "presencial"
-                                ->visible(fn (callable $get) => $get('exists') === 'no') // Visible solo si es "presencial"
-                                ->required(fn (callable $get) => $get('exists') === 'no'), // Requerido si es "presencial"
+                                ->disabled(fn (callable $get) => $get('exists') !== '0') // Deshabilita si no es "presencial"
+                                ->visible(fn (callable $get) => $get('exists') === '0') // Visible solo si es "presencial"
+                                ->required(fn (callable $get) => $get('exists') === '0'), // Requerido si es "presencial"
                         ]),
 
                         Grid::make(12)->schema([     
                             Forms\Components\Select::make('transport')
                                 ->label('¿La Actividad considera Traslado de los (las) Relatores (as)?')
                                 ->options([
-                                    'si' => 'Si', 
-                                    'no' => 'No',
+                                    '1' => 'Si', 
+                                    '0' => 'No',
                                 ])
                                 ->searchable()
                                 ->preload()
@@ -370,14 +388,14 @@ class IdentifyNeedResource extends Resource
                                 ->numeric()
                                 ->minValue(1)
                                 ->columnSpan(4)
-                                ->disabled(fn (callable $get) => $get('transport') !== 'si') // Deshabilita si no es "si"
-                                ->required(fn (callable $get) => $get('transport') === 'si'), // Requerido si es "presencial"
+                                ->disabled(fn (callable $get) => $get('transport') !== '1') // Deshabilita si no es "si"
+                                ->required(fn (callable $get) => $get('transport') === '1'), // Requerido si es "presencial"
                             
                             Forms\Components\Select::make('accommodation')
                                 ->label('¿La Actividad considera alojamiento del o los (las) Relatores (as)?')
                                 ->options([
-                                    'si' => 'Si', 
-                                    'no' => 'No',
+                                    '1' => 'Si', 
+                                    '0' => 'No',
                                 ])
                                 ->searchable()
                                 ->preload()
@@ -392,8 +410,8 @@ class IdentifyNeedResource extends Resource
                                 ->numeric()
                                 ->minValue(1)
                                 ->columnSpan(4)
-                                ->disabled(fn (callable $get) => $get('accommodation') !== 'si')
-                                ->required(fn (callable $get) => $get('accommodation') === 'si'),
+                                ->disabled(fn (callable $get) => $get('accommodation') !== '1')
+                                ->required(fn (callable $get) => $get('accommodation') === '1'),
                         ])
                     ]),
             ]);

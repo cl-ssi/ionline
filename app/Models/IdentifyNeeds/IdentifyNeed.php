@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use OwenIt\Auditing\Contracts\Auditable;
+use App\Models\User;
 use App\Models\Parameters\Estament;
 use App\Models\Trainings\StrategicAxis;
 
@@ -19,17 +20,41 @@ class IdentifyNeed extends Model implements Auditable
 
     protected $fillable = [
         'user_id',
+        'status',
+        'subject',
         'organizational_unit_id',
         'estament_id',
+        'family_position',
+        'nature_of_the_need',
+        'question_1',
+        'question_2',
+        'question_3',
+        'question_4',
+        'law',
+        'question_5',
+        'question_6',
+        'training_type',
+        'other_training_type',
+        'strategic_axis_id',
+        'impact_objective_id',
+        'mechanism',
+        'places',
 
-        /*
-        'subject', 
-        'reason', 'behaviors', 'performance_evaluation', 'observation_of_performance', 'report_from_other_users',
-        'organizational_unit_indicators', 'other',
-        'goal', 'expected_results','longterm_impact','immediate_results','performance_goals',
-        'current_training_level','need_training_level','expertise_required',
-        'justification','can_solve_the_need', 'organizational_unit_id', 
-        */
+        // TIPO ONLINE
+        'online_type_mechanism',
+
+        // TIPO PRESENCIAL
+        'coffee_break',
+        'coffee_break_price',
+
+        // TIPO ONLINE ASINCRONICO 
+        'exists',
+        'digital_capsule',
+
+        'transport',
+        'transport_price',
+        'accommodation',
+        'accommodation_price'
     ];
 
     /**
@@ -39,7 +64,7 @@ class IdentifyNeed extends Model implements Auditable
      */
     public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'user_creator_id')->withTrashed();
+       return $this->belongsTo(User::class)->withTrashed();
     }
 
     /**
@@ -72,11 +97,32 @@ class IdentifyNeed extends Model implements Auditable
         return $this->belongsTo(StrategicAxis::class);
     }
 
-    /*
-    public function learningGoals() {
-        return $this->hasMany('App\Models\IdentifyNeeds\LearningGoal');
+    /**
+     * Define eventos del modelo.
+     */
+    protected static function booted()
+    {
+        static::saving(function ($model) {
+            // Convierte el array a JSON si es un array
+            if (is_array($model->nature_of_the_need)) {
+                $model->nature_of_the_need = json_encode($model->nature_of_the_need);
+            }
+        });
     }
-    */
+
+    public function getNatureOfTheNeedAttribute($value)
+    {
+        return json_decode($value, true); // Convierte el string JSON en un array
+    }
+
+    public function setNatureOfTheNeedAttribute($value)
+    {
+        if (is_array($value)) {
+            $this->attributes['nature_of_the_need'] = json_encode($value); // Serializa el array a JSON
+        } elseif (is_string($value)) {
+            $this->attributes['nature_of_the_need'] = $value; // Si ya es un JSON, lo guarda tal cual
+        }
+    }
 
     protected $casts = [
         'created_at' => 'datetime'
