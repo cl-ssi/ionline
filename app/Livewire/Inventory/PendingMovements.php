@@ -7,6 +7,7 @@ use App\Models\Inv\InventoryMovement;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Arr;
 use App\Models\Profile\Subrogation;
 
 class PendingMovements extends Component
@@ -30,12 +31,20 @@ class PendingMovements extends Component
 
     public function getMovements()
     {
-        $userId = Auth::id();
-
-        // TODO: Add Auth::user()->IAmSubrogantOf->AmIAuthorityFromOu == true
-        $subrogatedIds = Auth::user()->IAmSubrogantOf->pluck('id')->toArray();
-        $responsibleIds = array_unique(array_merge([$userId], $subrogatedIds));
-
+        $extraIds = [];        
+        if(Auth::user()->IAmSubrogantOf->isNotEmpty()){
+            $subrogatedIds = Auth::user()->IAmSubrogantOf->map(function ($item) {
+                $authorities = $item->AmIAuthorityFromOu;
+                return $authorities->isNotEmpty()?$authorities->pluck('user_id')->toArray():null;
+            })->all();
+            $subrogatedIds = Arr::flatten($subrogatedIds);
+            $extraIds = array_unique(array_merge($extraIds, $subrogatedIds));
+        }
+        if(Auth::user()->AmIAuthorityFromOu->isNotEmpty()){
+            $subrogatedIds = Auth::user()->IAmSubrogantOf->pluck('id')->toArray();
+            $extraIds = array_unique(array_merge($extraIds, $subrogatedIds));
+        }
+        $responsibleIds = array_unique(array_merge([Auth::id()], $extraIds));
         $movements = InventoryMovement::query()
             ->whereReceptionConfirmation(false)
             ->whereIn('user_responsible_id', $responsibleIds)

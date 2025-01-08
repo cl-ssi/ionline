@@ -7,6 +7,7 @@ use App\Models\Inv\InventoryMovement;
 use App\Models\Parameters\Place;
 
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Arr;
 
 use Livewire\WithPagination;
 use Livewire\Attributes\On; 
@@ -49,14 +50,23 @@ class UpdatePma extends Component
     public function getInventories()
     {
         $search = "%$this->search%";
-        $userId = Auth::id();
+        $extraIds = [];
         
-        // TODO: Add Auth::user()->IAmSubrogantOf->AmIAuthorityFromOu == true
-        $subrogatedIds = Auth::user()->IAmSubrogantOf->pluck('id')->toArray();
-        $responsibleIds = array_unique(array_merge([$userId], $subrogatedIds));
-        $inventoriesQuery = Inventory::whereIn('user_responsible_id', $responsibleIds);
-
-         $this->myInventories()
+        if(Auth::user()->IAmSubrogantOf->isNotEmpty()){
+            $subrogatedIds = Auth::user()->IAmSubrogantOf->map(function ($item) {
+                $authorities = $item->AmIAuthorityFromOu;
+                return $authorities->isNotEmpty()?$authorities->pluck('user_id')->toArray():null;
+            })->all();
+            $subrogatedIds = Arr::flatten($subrogatedIds);
+            $extraIds = array_unique(array_merge($extraIds, $subrogatedIds));
+        }
+        if(Auth::user()->AmIAuthorityFromOu->isNotEmpty()){
+            $subrogatedIds = Auth::user()->IAmSubrogantOf->pluck('id')->toArray();
+            $extraIds = array_unique(array_merge($extraIds, $subrogatedIds));
+        }
+        $responsibleIds = array_unique(array_merge([Auth::id()], $extraIds));
+        
+        $inventoriesQuery = Inventory::whereIn('user_responsible_id', $responsibleIds)
             ->when($this->place_id, function($q){
                 $q->where('place_id', $this->place_id);
             })
