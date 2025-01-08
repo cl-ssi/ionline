@@ -163,6 +163,14 @@ class IdentifyNeed extends Model implements Auditable
         }
     }
 
+    public function sendForm()
+    {
+        // Cambiar estado del registro
+        $this->update(['status' => 'pending']);
+
+        //AQUI LOGICA PARA APROBACIONES
+    }
+
     protected $casts = [
         'created_at' => 'datetime'
     ];

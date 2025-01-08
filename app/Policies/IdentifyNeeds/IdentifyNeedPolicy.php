@@ -37,8 +37,7 @@ class IdentifyNeedPolicy
      */
     public function update(User $user, IdentifyNeed $identifyNeed): bool
     {
-        return ($user->can('DNC: all') || $user->id === $identifyNeed->user_id)
-            && $identifyNeed->status === 'saved';
+        return ($user->can('DNC: all') || $user->id === $identifyNeed->user_id);
     }
 
     /**
