@@ -264,6 +264,10 @@ class ProcessResource extends Resource
                                $record->createComment('El proceso ha vuelto a estado de borrador, si existían visaciones, fueron reseteadas.');
                             })
                             ->hidden(fn (?Process $record) => $record->status === Status::Draft),
+                        Forms\Components\Actions\Action::make('Ver')
+                            ->icon('heroicon-m-eye')
+                            ->url(fn (Process $record) => route('documents.agreements.processes.view', [$record]))
+                            ->openUrlInNewTab(),
                     ])
                     ->footerActionsAlignment(Alignment::End)
                     ->schema([
@@ -649,7 +653,8 @@ class ProcessResource extends Resource
                     ->searchable(),
             ])
             ->actions([
-                Tables\Actions\ViewAction::make()
+                Tables\Actions\Action::make('Ver')
+                    ->icon('heroicon-m-eye')
                     ->url(fn (Process $record) => route('documents.agreements.processes.view', [$record]))
                     ->openUrlInNewTab(),
                 Tables\Actions\EditAction::make(),
