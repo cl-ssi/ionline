@@ -42,7 +42,10 @@ class ProcessPolicy
      */
     public function create(User $user): bool
     {
-        return $user->can('Agreement: edit');
+        return $user->canAny([
+            'Agreement: edit',
+            'Agreement: view',
+        ]);
     }
 
     /**
