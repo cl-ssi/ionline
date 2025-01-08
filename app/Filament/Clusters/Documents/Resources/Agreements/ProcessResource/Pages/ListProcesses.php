@@ -25,18 +25,30 @@ class ListProcesses extends ListRecords
         // Crear las pestañas dinámicamente
         $tabs = [];
 
-        /** Muestra todos los proceso por año filtrados para que vea los que perteneces solo al referente */
-        foreach ($periods as $period) {
-            $tabs[$period] = Tab::make()
-                ->label($period)
-                ->modifyQueryUsing(fn (Builder $query) => $query->where('period', $period)->whereHas('program.referers', function (Builder $query) {
-                    $query->where('user_id', auth()->id());
-                }));
+        
+        if(auth()->user()->can('Agreement: admin')) {
+            /** Muestra todos los proceso por año de todos los referentes */
+            foreach ($periods as $period) {
+                $tabs[$period] = Tab::make()
+                    ->label($period)
+                    ->modifyQueryUsing(fn (Builder $query) => $query->where('period', $period));
+            }
         }
+        else {
+            /** Muestra todos los proceso por año filtrados para que vea los que perteneces solo al referente */
+            foreach ($periods as $period) {
+                $tabs[$period] = Tab::make()
+                    ->label($period)
+                    ->modifyQueryUsing(fn (Builder $query) => $query->where('period', $period)->whereHas('program.referers', function (Builder $query) {
+                        $query->where('user_id', auth()->id());
+                    }));
+            }
+        }
+
 
         // Agregar una pestaña para todos los períodos
         $tabs['todos'] = Tab::make()
-            ->label('Todos los Periodos')
+            ->label('Todos')
             ->modifyQueryUsing(fn (Builder $query) => $query);
 
         return $tabs;
