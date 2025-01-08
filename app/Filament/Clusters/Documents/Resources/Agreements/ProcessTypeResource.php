@@ -4,16 +4,18 @@ namespace App\Filament\Clusters\Documents\Resources\Agreements;
 
 use App\Filament\Clusters\Documents;
 use App\Filament\Clusters\Documents\Resources\Agreements\ProcessTypeResource\Pages;
-use App\Filament\Clusters\Documents\Resources\Agreements\ProcessTypeResource\RelationManagers;
 use App\Models\Documents\Agreements\ProcessType;
+use App\Services\ColorCleaner;
+use App\Services\TableCleaner;
+use App\Services\TextCleaner;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Forms\Get;
+use Filament\Forms\Set;
 use Filament\Pages\SubNavigationPosition;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Mohamedsabil83\FilamentFormsTinyeditor\Components\TinyEditor;
 
 class ProcessTypeResource extends Resource
@@ -47,7 +49,7 @@ class ProcessTypeResource extends Resource
                 Forms\Components\TextInput::make('description')
                     ->label('Descripción')
                     ->maxLength(255)
-                    ->columnSpan(3)
+                    ->columnSpan(4)
                     ->default(null),
                 Forms\Components\Toggle::make('bilateral')
                     ->label('Bilateral')
@@ -55,6 +57,10 @@ class ProcessTypeResource extends Resource
                     ->required(),
                 Forms\Components\Toggle::make('has_resolution')
                     ->label('Tiene Resolución')
+                    ->inline(false)
+                    ->required(),
+                Forms\Components\Toggle::make('is_certificate')
+                    ->label('Es Certificado')
                     ->inline(false)
                     ->required(),
                 Forms\Components\Fieldset::make('Esto es para las resoluciones')
@@ -71,7 +77,7 @@ class ProcessTypeResource extends Resource
                     ->label('Activo')
                     ->inline(false)
                     ->required(),
-    
+
                 Forms\Components\Section::make('Plantilla')
                     ->relationship('template')
                     ->schema([
@@ -84,11 +90,41 @@ class ProcessTypeResource extends Resource
                             ->profile('ionline')
                             ->label('Contenido')
                             ->required()
-                            ->columnSpanFull(),
+                            ->columnSpanFull()
+                            ->hintActions(
+                                [
+                                    Forms\Components\Actions\Action::make('limpiarTabla')
+                                        ->icon('heroicon-m-clipboard')
+                                        ->requiresConfirmation()
+                                        ->action(function (Get $get, Set $set) {
+                                            $content        = $get('content');
+                                            $cleanedContent = TableCleaner::clean($content);
+                                            $set('content', $cleanedContent);
+                                        }),
+
+                                    Forms\Components\Actions\Action::make('limpiarTexto')
+                                        ->icon('heroicon-m-clipboard')
+                                        ->requiresConfirmation()
+                                        ->action(function (Get $get, Set $set) {
+                                            $content        = $get('content');
+                                            $cleanedContent = TextCleaner::clean($content);
+                                            $set('content', $cleanedContent);
+                                        }),
+
+                                    Forms\Components\Actions\Action::make('limpiarColor')
+                                        ->icon('heroicon-m-clipboard')
+                                        ->requiresConfirmation()
+                                        ->action(function (Get $get, Set $set) {
+                                            $content        = $get('content');
+                                            $cleanedContent = ColorCleaner::clean($content);
+                                            $set('content', $cleanedContent);
+                                        }),
+                                ]
+                            ),
                     ])
                     ->columnSpanFull(),
             ])
-            ->columns(5);
+            ->columns(6);
     }
 
     public static function table(Table $table): Table
@@ -152,9 +188,9 @@ class ProcessTypeResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListProcessTypes::route('/'),
+            'index'  => Pages\ListProcessTypes::route('/'),
             'create' => Pages\CreateProcessType::route('/create'),
-            'edit' => Pages\EditProcessType::route('/{record}/edit'),
+            'edit'   => Pages\EditProcessType::route('/{record}/edit'),
         ];
     }
 }

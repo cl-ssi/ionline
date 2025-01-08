@@ -20,6 +20,7 @@ class ProcessType extends Model
         'is_dependent',
         'father_process_type_id',
         'has_resolution',
+        'is_certificate',
         'active',
     ];
 
@@ -28,6 +29,7 @@ class ProcessType extends Model
         'is_dependent'   => 'boolean',
         'has_resolution' => 'boolean',
         'active'         => 'boolean',
+        'is_certificate' => 'boolean',
     ];
 
     public function fatherProcessType(): BelongsTo
