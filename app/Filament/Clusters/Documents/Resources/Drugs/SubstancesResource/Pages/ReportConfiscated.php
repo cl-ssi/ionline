@@ -24,19 +24,56 @@ class ReportConfiscated extends Page implements Tables\Contracts\HasTable
     public function table(Tables\Table $table): Tables\Table
     {
         return $table
+            /*
             ->query(function (Builder $query) {
+                /*
                 $query = ReceptionItem::query()
                     ->select('substance_id')
                     ->selectRaw('COUNT(*) as total_items, SUM(net_weight) as total_net_weight')
+                    // ->selectRaw('SUM(CASE WHEN result_substance_id IS NULL THEN 1 ELSE 0 END) as total_without_result')
                     ->groupBy('substance_id')
-                    ->with(['substance', 'resultSubstance']);
+                    ->with(['substance', 'resultSubstance', 'reception']);
+                */
 
-                // // Aplica el filtro de sustancia si está seleccionado
-                // if ($substanceId = request('tableFilters')['substance_id'] ?? null) {
-                //     $query->where('substance_id', $substanceId);
-                // }
+                /*
+                // Aplica el filtro de sustancia si está seleccionado
+                if ($substanceId = request('tableFilters')['substance_id'] ?? null) {
+                    $query->where('substance_id', $substanceId);
+                }
+                *
 
-                return $query;
+                $query = ReceptionItem::query()
+                    ->select('substance_id')
+                    ->selectRaw('COUNT(*) as total_items') // Total de ítems por sustancia
+                    ->selectRaw('SUM(net_weight) as total_net_weight') // Peso neto total
+                    ->selectRaw(
+                        'SUM(
+                            CASE 
+                                WHEN result_substance_id IS NULL AND 
+                                        (SELECT COUNT(*) FROM drg_protocols WHERE drg_protocols.reception_item_id = drg_reception_items.id) = 0 
+                                THEN 1 ELSE 0 
+                            END
+                        ) as total_without_result'
+                    ) // Total sin sustancia resultante
+                    ->groupBy('substance_id')
+                    ->with(['substance']);
+            })*/
+            ->query(function (Builder $query) {
+                return ReceptionItem::query()
+                    ->select('substance_id')
+                    ->selectRaw('COUNT(*) as total_items') // Total de ítems por sustancia
+                    ->selectRaw('SUM(net_weight) as total_net_weight') // Peso neto total
+                    ->selectRaw(
+                        'SUM(
+                            CASE 
+                                WHEN result_substance_id IS NULL AND 
+                                     (SELECT COUNT(*) FROM drg_protocols WHERE drg_protocols.reception_item_id = drg_reception_items.id) = 0 
+                                THEN 1 ELSE 0 
+                            END
+                        ) as total_without_result'
+                    ) // Total sin sustancia resultante
+                    ->groupBy('substance_id')
+                    ->with(['substance']);
             })
             ->columns([
                 Tables\Columns\TextColumn::make('substance_id')
@@ -53,6 +90,11 @@ class ReportConfiscated extends Page implements Tables\Contracts\HasTable
                 Tables\Columns\TextColumn::make('total_net_weight')
                     ->label('Recibidos')
                     ->formatStateUsing(fn (string|float $state): string => number_format($state, 2, ',', '.')) // Formato con separación de miles y 2 decimales,
+                    ->alignEnd(),
+                Tables\Columns\TextColumn::make('total_without_result')
+                    ->label('Sin Sustancia Resultante')
+                    ->sortable()
+                    ->formatStateUsing(fn (string|float $state): string => number_format($state, 0, ',', '.'))
                     ->alignEnd(),
             ])
             ->filters([
