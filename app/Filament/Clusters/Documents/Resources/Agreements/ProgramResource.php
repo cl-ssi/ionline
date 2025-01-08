@@ -152,14 +152,16 @@ class ProgramResource extends Resource
                 Tables\Columns\TextColumn::make('ministerial_resolution_date')
                     ->label('Fecha Reso Minsal')
                     ->date('Y-m-d')
-                    ->sortable(),
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('resource_distribution_number')
                     ->label('Reso Distribución')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('resource_distribution_date')
                     ->label('Fecha Reso Distribución')
                     ->date('Y-m-d')
-                    ->sortable(),
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 // Tables\Columns\TextColumn::make('establishment.name')
                 //     ->numeric()
                 //     ->sortable(),
@@ -169,7 +171,7 @@ class ProgramResource extends Resource
                     ->bulleted()
                     ->searchable(['full_name'])
                     ->sortable(['full_name'])
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->toggleable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -196,7 +198,8 @@ class ProgramResource extends Resource
                 Tables\Actions\BulkActionGroup::make([
                     // Tables\Actions\DeleteBulkAction::make(),
                 ]),
-            ]);
+            ])
+            ->paginated([10,25,50,100]);
         // ->modifyQueryUsing(function ($query) {
         //     $query->where('is_program', true);
         // });
