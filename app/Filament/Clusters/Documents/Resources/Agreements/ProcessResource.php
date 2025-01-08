@@ -2,35 +2,34 @@
 
 namespace App\Filament\Clusters\Documents\Resources\Agreements;
 
-use Filament\Forms;
-use Filament\Tables;
-use App\Models\Comment;
-use Filament\Forms\Get;
-use Filament\Forms\Set;
-use Filament\Forms\Form;
-use Filament\Tables\Table;
-use Filament\Notifications;
-use App\Models\Establishment;
-use App\Services\TextCleaner;
-use App\Services\ColorCleaner;
-use App\Services\TableCleaner;
-use Filament\Resources\Resource;
-use App\Models\Documents\Document;
-use Illuminate\Support\Collection;
-use App\Filament\Clusters\Documents;
-use Filament\Forms\Components\Hidden;
-use Filament\Support\Enums\Alignment;
-use Illuminate\Database\Eloquent\Model;
-use Filament\Pages\SubNavigationPosition;
-use Illuminate\Database\Eloquent\Builder;
 use App\Enums\Documents\Agreements\Status;
-use App\Models\Documents\Agreements\Signer;
-use App\Models\Documents\Agreements\Process;
-use App\Filament\RelationManagers\CommentsRelationManager;
-use Mohamedsabil83\FilamentFormsTinyeditor\Components\TinyEditor;
+use App\Filament\Clusters\Documents;
 use App\Filament\Clusters\Documents\Resources\Agreements\ProcessResource\Pages;
 use App\Filament\Clusters\Documents\Resources\Agreements\ProcessResource\Widgets;
 use App\Filament\Clusters\Documents\Resources\Agreements\ProgramResource\RelationManagers\ProcessesRelationManager;
+use App\Filament\RelationManagers\CommentsRelationManager;
+use App\Models\Comment;
+use App\Models\Documents\Agreements\Process;
+use App\Models\Documents\Agreements\Signer;
+use App\Models\Documents\Document;
+use App\Models\Establishment;
+use App\Services\ColorCleaner;
+use App\Services\TableCleaner;
+use App\Services\TextCleaner;
+use Filament\Forms;
+use Filament\Forms\Components\Hidden;
+use Filament\Forms\Form;
+use Filament\Forms\Get;
+use Filament\Forms\Set;
+use Filament\Notifications;
+use Filament\Pages\SubNavigationPosition;
+use Filament\Resources\Resource;
+use Filament\Support\Enums\Alignment;
+use Filament\Tables;
+use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Collection;
+use Mohamedsabil83\FilamentFormsTinyeditor\Components\TinyEditor;
 
 class ProcessResource extends Resource
 {

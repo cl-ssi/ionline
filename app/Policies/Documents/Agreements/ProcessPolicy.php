@@ -21,7 +21,12 @@ class ProcessPolicy
      */
     public function viewAny(User $user): bool
     {
-        return $user->can('Agreement: manage municipalities and signers');
+        return $user->canAny([
+            'Agreement: delete',
+            'Agreement: view',
+            'Agreement: manage municipalities and signers',
+            'Agreement: edit',
+        ]);
     }
 
     /**
@@ -29,7 +34,7 @@ class ProcessPolicy
      */
     public function view(User $user, Process $process): bool
     {
-        return $user->can('Agreement: manage municipalities and signers');
+        return $user->can('Agreement: view');
     }
 
     /**
@@ -37,7 +42,7 @@ class ProcessPolicy
      */
     public function create(User $user): bool
     {
-        return $user->can('Agreement: manage municipalities and signers');
+        return $user->can('Agreement: edit');
     }
 
     /**
@@ -45,7 +50,8 @@ class ProcessPolicy
      */
     public function update(User $user, Process $process): bool
     {
-        return $user->can('Agreement: manage municipalities and signers');
+        // can Agreement edit AND $user is in $process->program->referers
+        return $user->can('Agreement: edit') && $process->program->referers->contains($user);
     }
 
     /**

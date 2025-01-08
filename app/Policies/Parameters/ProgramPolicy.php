@@ -21,7 +21,12 @@ class ProgramPolicy
      */
     public function viewAny(User $user): bool
     {
-        return $user->can('Agreement: manage municipalities and signers');
+        return $user->canAny([
+            'Agreement: delete',
+            'Agreement: view',
+            'Agreement: manage municipalities and signers',
+            'Agreement: edit',
+        ]);
     }
 
     /**
@@ -45,7 +50,12 @@ class ProgramPolicy
      */
     public function update(User $user, Program $Program): bool
     {
-        return $user->can('Agreement: manage municipalities and signers');
+        return $user->canAny([
+            'Agreement: delete',
+            'Agreement: view',
+            'Agreement: manage municipalities and signers',
+            'Agreement: edit',
+        ]);
     }
 
     /**

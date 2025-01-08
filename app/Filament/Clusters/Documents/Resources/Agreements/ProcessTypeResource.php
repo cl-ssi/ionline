@@ -138,7 +138,8 @@ class ProcessTypeResource extends Resource
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
-            ]);
+            ])
+            ->paginated([50, 100]);
     }
 
     public static function getRelations(): array
