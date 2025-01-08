@@ -31,24 +31,10 @@ class PendingMovements extends Component
     public function getMovements()
     {
         $userId = Auth::id();
-        $isAuthority = Auth::user()->getAmIAuthorityFromOuAttribute()->isNotEmpty();
 
-        $responsibleIds = [$userId];
-
-        if ($isAuthority) {
-            $authorities = Auth::user()->getAmIAuthorityFromOuAttribute();
-            foreach ($authorities as $authority) {
-                $subrogations = Subrogation::where('level', 1)
-                    ->where('organizational_unit_id', $authority->organizational_unit_id)
-                    ->where('type', 'manager')
-                    ->get();
-
-                $subrogatedIds = $subrogations->pluck('user_id')->toArray();
-                $responsibleIds = array_merge($responsibleIds, $subrogatedIds);
-            }
-            $responsibleIds = array_unique($responsibleIds);
-        }
-
+        // TODO: Add Auth::user()->IAmSubrogantOf->AmIAuthorityFromOu == true
+        $subrogatedIds = Auth::user()->IAmSubrogantOf->pluck('id')->toArray();
+        $responsibleIds = array_unique(array_merge([$userId], $subrogatedIds));
 
         $movements = InventoryMovement::query()
             ->whereReceptionConfirmation(false)

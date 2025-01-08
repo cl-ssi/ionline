@@ -2,12 +2,15 @@
 
 namespace App\Livewire\Inventory;
 
-use Livewire\Component;
 use App\Models\Inv\Inventory;
 use App\Models\Inv\InventoryMovement;
 use App\Models\Parameters\Place;
+
+use Illuminate\Support\Facades\Auth;
+
 use Livewire\WithPagination;
 use Livewire\Attributes\On; 
+use Livewire\Component;
 
 class UpdatePma extends Component
 {
@@ -46,7 +49,14 @@ class UpdatePma extends Component
     public function getInventories()
     {
         $search = "%$this->search%";
-        $inventoriesQuery = $this->myInventories()
+        $userId = Auth::id();
+        
+        // TODO: Add Auth::user()->IAmSubrogantOf->AmIAuthorityFromOu == true
+        $subrogatedIds = Auth::user()->IAmSubrogantOf->pluck('id')->toArray();
+        $responsibleIds = array_unique(array_merge([$userId], $subrogatedIds));
+        $inventoriesQuery = Inventory::whereIn('user_responsible_id', $responsibleIds);
+
+         $this->myInventories()
             ->when($this->place_id, function($q){
                 $q->where('place_id', $this->place_id);
             })
@@ -72,18 +82,6 @@ class UpdatePma extends Component
                 });
             });
         return $inventoriesQuery->orderByDesc('id')->paginate(50);
-    }
-
-    public function myInventories()
-    {        
-        
-        if(auth()->user()->IAmSubrogantOf->isNotEmpty()){
-            $subrogantIds = auth()->user()->IAmSubrogantOf->pluck('id')->toArray();
-            $inventories = Inventory::whereIn('user_responsible_id', [auth()->user()->id, $subrogantIds]);
-        } else {
-            $inventories = Inventory::where('user_responsible_id', auth()->user()->id);
-        }
-        return $inventories;
     }
 
     public function updateSelected()
