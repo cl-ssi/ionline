@@ -209,7 +209,7 @@ class ProgramResource extends Resource
     {
         return [
             RelationManagers\ProcessesRelationManager::class,
-            RelationManagers\CdpsRelationManager::class,
+            // RelationManagers\CdpsRelationManager::class,
             RelationManagers\ComponentsRelationManager::class,
             RelationManagers\ReferersRelationManager::class,
         ];
