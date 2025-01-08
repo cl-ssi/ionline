@@ -64,7 +64,7 @@ class ProcessResource extends Resource
                     ->schema([
                         Forms\Components\Select::make('process_type_id')
                             ->label('Tipo de proceso')
-                            ->relationship('processType', 'name', fn (Builder $query) => $query->where('is_dependent', false))
+                            ->relationship('processType', 'name', fn (Builder $query) => $query->where('is_dependent', false)->where('is_certificate', false))
                             ->required()
                             ->columnSpanFull()
                             ->disabledOn('edit'),
