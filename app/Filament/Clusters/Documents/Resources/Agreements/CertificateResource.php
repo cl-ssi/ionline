@@ -133,7 +133,8 @@ class CertificateResource extends Resource
                                 ]
                             )
                             ->columnSpanFull(),
-                    ]),
+                    ])
+                    ->hiddenOn('create'),
 
                 Forms\Components\Section::make('Visaciones')
                     ->headerActions([
