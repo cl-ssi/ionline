@@ -187,17 +187,24 @@ class Program extends Model implements Auditable
         return $programs;
     }
 
+    protected function formatDateSafely($date): string 
+    {
+        return $date 
+            ? "{$date->day} de {$date->monthName} del {$date->year}"
+            : 'XXX de XXX del XXX';
+    }
+    
     public function ministerialResolutionDateFormat(): Attribute
     {
         return Attribute::make(
-            get: fn (): string => $this->ministerial_resolution_date->day . ' de ' . $this->ministerial_resolution_date->monthName . ' del ' . $this->ministerial_resolution_date->year
+            get: fn (): string => $this->formatDateSafely($this->ministerial_resolution_date)
         );
     }
-
+    
     public function resourceDistributionDateFormat(): Attribute
     {
         return Attribute::make(
-            get: fn (): string => $this->resource_distribution_date->day . ' de ' . $this->resource_distribution_date->monthName . ' del ' . $this->resource_distribution_date->year
+            get: fn (): string => $this->formatDateSafely($this->resource_distribution_date)
         );
     }
 }
