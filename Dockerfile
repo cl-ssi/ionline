@@ -8,6 +8,7 @@ RUN apk add --no-cache nginx wget \
         freetype-dev \
         libxml2-dev \
         icu-dev \
+        icu-data-full \
         libzip-dev \
         mdbtools-utils \
         poppler-utils \
