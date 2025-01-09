@@ -511,7 +511,8 @@ class ProcessResource extends Resource
                             ->columnSpan(3),
                     ])
                     ->columns(5)
-                    ->hiddenOn('create'),
+                    ->hiddenOn('create')
+                    ->visible(fn (?Process $record): bool => !$record->processType->has_resolution),
 
                 Forms\Components\Section::make('Siguiente Proceso')
                     ->headerActions([
