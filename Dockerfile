@@ -28,6 +28,11 @@ RUN apk add --no-cache nginx wget \
     && mkdir -p /run/nginx /app \
     && chown -R www-data:www-data /app
 
+# Set default locale to es_ES.UTF-8
+ENV LANG=es_ES.UTF-8 \
+    LANGUAGE=es_ES.UTF-8 \
+    LC_ALL=es_ES.UTF-8
+
 # Copy configuration files
 COPY docker/php.ini /usr/local/etc/php/conf.d/docker-php.ini
 COPY docker/nginx.conf /etc/nginx/nginx.conf
