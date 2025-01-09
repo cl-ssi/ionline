@@ -312,10 +312,17 @@ class Process extends Model
         );
     }
 
+    protected function formatDateSafely($date): string 
+    {
+        return $date 
+            ? "{$date->day} de {$date->monthName} del {$date->year}"
+            : 'XXX de XXX del XXX';
+    }
+
     public function dateFormat(): Attribute
     {
         return Attribute::make(
-            get: fn (): string => $this->date->day . ' de ' . $this->date->monthName . ' del ' . $this->date->year
+            get: fn (): string => $this->formatDateSafely($this->date)
         );
     }
 }

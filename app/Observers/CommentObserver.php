@@ -2,7 +2,11 @@
 
 namespace App\Observers;
 
+use App\Filament\Clusters\Documents\Resources\Agreements\ProcessResource;
 use App\Models\Comment;
+use App\Models\User;
+use Filament\Notifications\Actions\Action;
+use Filament\Notifications\Notification;
 
 class CommentObserver
 {
@@ -22,7 +26,24 @@ class CommentObserver
      */
     public function created(Comment $comment): void
     {
-        //
+        // Si el comentario es de un modelo Process entonces enviar una notificación a 
+        // todos los usuarios que tengan el permiso 'Agreement: admin'
+        if ($comment->commentable_type === 'App\Models\Documents\Agreements\Process') {
+    
+            $recipients = User::permission('Agreement: admin')
+                ->where('establishment_id', $comment->establishment_id)
+                ->get();
+
+            Notification::make()
+                ->title('Nuevo comentario registrado en un proceso')
+                ->actions([
+                    Action::make('IrAlProceso')
+                        ->button()
+                        ->url(ProcessResource::getUrl('edit', [$comment->commentable_id]))
+                        ->markAsRead(),
+                ])
+                ->sendToDatabase($recipients);
+        } 
     }
 
     /**
