@@ -47,9 +47,11 @@ class ListProcesses extends ListRecords
 
 
         // Agregar una pestaña para todos los períodos
-        $tabs['todos'] = Tab::make()
-            ->label('Todos')
-            ->modifyQueryUsing(fn (Builder $query) => $query);
+        if(auth()->user()->can('Agreement: admin')) {
+            $tabs['todos'] = Tab::make()
+                ->label('Todos')
+                ->modifyQueryUsing(fn (Builder $query) => $query);
+        }
 
         return $tabs;
     }
