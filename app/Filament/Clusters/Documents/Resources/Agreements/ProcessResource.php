@@ -2,6 +2,7 @@
 
 namespace App\Filament\Clusters\Documents\Resources\Agreements;
 
+use App\Models\User;
 use Filament\Forms;
 use Filament\Tables;
 use App\Models\Comment;
@@ -52,17 +53,13 @@ class ProcessResource extends Resource
 
     public static function form(Form $form): Form
     {
-        return $form
-            ->schema(static::getFormSchema())->columns(4);
-    }
-
-    protected static function getFormSchema(): array
-    {
-        if (Auth::user()->can('Agreement: legally')) {
-            return static::legallyFormSchema();
+        if (auth()->user()->can('Agreement: legally')) {
+            return $form
+                ->schema(static::legallyFormSchema())->columns(4);
+        } else {
+            return $form
+                ->schema(static::basicFormSchema())->columns(4);
         }
-
-        return static::basicFormSchema();
     }
 
     protected static function basicFormSchema(): array
@@ -344,15 +341,17 @@ class ProcessResource extends Resource
                                 ->title('Solicitud de revisión enviada (sin implementar aún)')
                                 ->success()
                                 ->send();
-                        }),
+                        })
+                        ->disabled(fn(?Process $record) => $record->revision_by_lawyer_user_id !== null),
                 ])
                 ->schema([
                     Forms\Components\Fieldset::make('Jurídico')
                         ->schema([
                             Forms\Components\DatePicker::make('revision_by_lawyer_at')
-                                ->label('Fecha de revisión'),
+                                ->label('Fecha de revisión')
+                                ->disabled(),
                             Forms\Components\Placeholder::make('Revisado por')
-                                ->content(fn(?Process $record) => $record->revisionByLawyerUser?->full_name),
+                                ->content(fn(?Process $record) => $record->revisionByLawyerUser?->shortName),
                         ])
                         ->columnSpan(1)
                         ->columns(2),
@@ -569,37 +568,10 @@ class ProcessResource extends Resource
     {
         return [
             Forms\Components\Section::make('Documento')
-                ->headerActions([
-                    Forms\Components\Actions\Action::make('CrearDocumento')
-                        ->label('Crear documento del proceso')
-                        ->icon('heroicon-m-document')
-                        ->requiresConfirmation()
-                        ->action(function (Process $record, Set $set) {
-                            $set('document_content', $record->processType->template->parseTemplate($record));
-                        })
-                        ->disabled(fn(?Process $record) => $record->status === Status::Finished),
-                ])
                 ->footerActions([
                     Forms\Components\Actions\Action::make('guardar_cambios')
                         ->icon('bi-save')
                         ->action('save'),
-                    Forms\Components\Actions\Action::make('Finalizar')
-                        ->icon('heroicon-m-check')
-                        ->requiresConfirmation()
-                        ->action(function (Process $record) {
-                            $record->update(['status' => Status::Finished]);
-                        })
-                        ->hidden(fn (?Process $record) => $record->status === Status::Finished),
-                    Forms\Components\Actions\Action::make('Volver a editar')
-                        ->icon('heroicon-m-pencil-square')
-                        ->requiresConfirmation()
-                        ->modalDescription('Atención, si el documento ya está visado, deberá volver a visarse.')
-                        ->action(function (Process $record) {
-                            $record->update(['status' => Status::Draft]);
-                            $record->resetEndorsesStatus();
-                            $record->createComment('El proceso ha vuelto a estado de borrador, si existían visaciones, fueron reseteadas.');
-                        })
-                        ->hidden(fn (?Process $record) => $record->status === Status::Draft),
                     Forms\Components\Actions\Action::make('Ver')
                         ->icon('heroicon-m-eye')
                         ->url(fn (Process $record) => route('documents.agreements.processes.view', [$record]))
@@ -610,58 +582,40 @@ class ProcessResource extends Resource
                     TinyEditor::make('content')::make('document_content')
                         ->hiddenLabel()
                         ->profile('ionline')
-                        ->disabled(fn(?Process $record) => $record->status === Status::Finished)
-                        // Forms\Components\Textarea::make('text')
-                        ->hintActions(
-                            [
-                                Forms\Components\Actions\Action::make('limpiarTabla')
-                                ->icon('heroicon-m-clipboard')
-                                ->requiresConfirmation()
-                                ->action(function (Get $get, Set $set) {
-                                    $content = $get('document_content');
-                                    $cleanedContent = TableCleaner::clean($content);
-                                    $set('document_content', $cleanedContent);
-                                })
-                                ->disabled(fn(?Process $record) => $record->status === Status::Finished),
-
-                                Forms\Components\Actions\Action::make('limpiarTexto')
-                                ->icon('heroicon-m-clipboard')
-                                ->requiresConfirmation()
-                                ->action(function (Get $get, Set $set) {
-                                    $content = $get('document_content');
-                                    $cleanedContent = TextCleaner::clean($content);
-                                    $set('document_content', $cleanedContent);
-                                })
-                                ->disabled(fn(?Process $record) => $record->status === Status::Finished),
-
-                                Forms\Components\Actions\Action::make('limpiarColor')
-                                ->icon('heroicon-m-clipboard')
-                                ->requiresConfirmation()
-                                ->action(function (Get $get, Set $set) {
-                                    $content = $get('document_content');
-                                    $cleanedContent = ColorCleaner::clean($content);
-                                    $set('document_content', $cleanedContent);
-                                })
-                                ->disabled(fn(?Process $record) => $record->status === Status::Finished),
-
-                            ]
-                        ),
-                    Forms\Components\Textarea::make('distribution')
-                        ->label('Distribución')
-                        ->helperText('Sólo para resoluciones')
+                        ->disabled(fn(?Process $record): bool => $record->revision_by_lawyer_user_id !== null),
                 ])
                 ->hiddenOn('create'),
 
             Forms\Components\Section::make('Revisiones')
                 ->headerActions([
-                    Forms\Components\Actions\Action::make('Solicitar Revisión')
-                        ->label('Solicitar Revisión')
+                    Forms\Components\Actions\Action::make('approbe')
+                        ->label('Aprobar Revisión')
                         ->icon('heroicon-m-check-circle')
                         ->requiresConfirmation()
-                        ->action(function (Process $record, array $data): void {
-                            // $record->createApprovals($data['referer_id']);
+                        ->action(function (Process $record, Get $get): void {
+                            // Guardar cambios del documento
+                            $record->update(['content' => $get('document_content')]);
+                            
+                            // establecer fecha de aprobacion y usuario que aprobó
+                            $record->update(['revision_by_lawyer_at' => now(), 'revision_by_lawyer_user_id' => auth()->id()]);
+
+                            // Notificar a referente y administradores del módulo
+                            $recipients = User::permission('Agreement: admin')
+                                ->where('establishment_id', $record->establishment_id)
+                                ->get();
+            
                             Notifications\Notification::make()
-                                ->title('Solicitud de revisión enviada (sin implementar aún)')
+                                ->title('Nuevo proceso aprobado por jurídico')
+                                ->actions([
+                                    Forms\Components\Actions\Action::make('IrAlProceso')
+                                        ->button()
+                                        ->url(ProcessResource::getUrl('edit', [$record->id]))
+                                        ->markAsRead(),
+                                ])
+                                ->sendToDatabase($recipients);
+
+                            Notifications\Notification::make()
+                                ->title('Documento aprobado por jurídico')
                                 ->success()
                                 ->send();
                         }),
@@ -670,22 +624,14 @@ class ProcessResource extends Resource
                     Forms\Components\Fieldset::make('Jurídico')
                         ->schema([
                             Forms\Components\DatePicker::make('revision_by_lawyer_at')
-                                ->label('Fecha de revisión'),
+                                ->label('Fecha de revisión')
+                                ->disabled(),
                             Forms\Components\Placeholder::make('Revisado por')
-                                ->content(fn(?Process $record) => $record->revisionByLawyerUser?->full_name),
+                                ->content(fn(?Process $record) => $record->revisionByLawyerUser?->shortName),
                         ])
                         ->columnSpan(1)
                         ->columns(2),
-                    Forms\Components\Fieldset::make('Comuna')
-                        ->schema([
-                            Forms\Components\DatePicker::make('revision_by_commune_at')
-                                ->label('Fecha de revisión'),
-                            Forms\Components\Placeholder::make('Revisado por')
-                            ->content(fn(?Process $record) => $record->revisionByCommuneUser?->full_name),
-                        ])
-                        ->columnSpan(1)
-                        ->columns(2)
-                        ->visible(fn (?Process $record) => $record->processType->bilateral),
+                   
 
                 ])
                 ->columns(2)
