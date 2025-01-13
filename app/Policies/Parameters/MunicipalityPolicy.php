@@ -21,7 +21,7 @@ class MunicipalityPolicy
      */
     public function viewAny(User $user): bool
     {
-        return $user->can('Agreement: manage municipalities and signers');
+        return $user->can('Agreement: admin');
     }
 
     /**
@@ -37,7 +37,7 @@ class MunicipalityPolicy
      */
     public function create(User $user): bool
     {
-        return false;
+        return $user->can('Agreement: admin');
     }
 
     /**
@@ -45,7 +45,7 @@ class MunicipalityPolicy
      */
     public function update(User $user, Municipality $municipality): bool
     {
-        return false;
+        return $user->can('Agreement: admin');
     }
 
     /**
@@ -53,7 +53,7 @@ class MunicipalityPolicy
      */
     public function delete(User $user, Municipality $municipality): bool
     {
-        return false;
+        return $user->can('Agreement: admin');
     }
 
     /**
