@@ -144,7 +144,7 @@ class ProcessResource extends Resource
                         ->multiple()
                         ->columnSpanFull()
                         ->options(
-                            options: fn (Get $get): Collection => Establishment::where('cl_commune_id', $get('commune_id'))->pluck('name', 'id')
+                            options: fn (Get $get): Collection => Establishment::where('cl_commune_id', $get('commune_id'))->pluck('official_name', 'id')
                         ),
 
                     Forms\Components\Select::make('signer_id')
