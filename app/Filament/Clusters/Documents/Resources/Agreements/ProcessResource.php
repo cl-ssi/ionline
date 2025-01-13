@@ -603,6 +603,8 @@ class ProcessResource extends Resource
                             $recipients = User::permission('Agreement: admin')
                                 ->where('establishment_id', $record->establishment_id)
                                 ->get();
+
+                            // Notificar al referente.
             
                             Notifications\Notification::make()
                                 ->title('Nuevo proceso aprobado por jurídico')
