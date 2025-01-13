@@ -25,7 +25,7 @@ class UploadPdf extends Component
     public $approval = true;
 
     protected $rules = [
-        'pdf' => 'required|mimes:pdf|max:10240'
+        'pdf' => 'required|mimes:pdf|max:30720'
     ];
 
     public function mount($dteId, $type)
