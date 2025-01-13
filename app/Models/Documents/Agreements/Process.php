@@ -325,4 +325,13 @@ class Process extends Model
             get: fn (): string => $this->formatDateSafely($this->date)
         );
     }
+
+    public function establishmentsList(): Attribute
+    {
+        $establishments = Establishment::whereIn('id', $this->establishments)->pluck('official_name')->toArray();
+        // Muestrame todos lo establecimientos separados por coma
+        return Attribute::make(
+            get: fn (): string => implode(', ', $establishments)
+        );
+    }
 }

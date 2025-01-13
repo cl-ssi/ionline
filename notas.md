@@ -277,6 +277,10 @@ TODO:
 [ ] Una visaciónes de CDP del Referente Tecnico y firma es de el Departamento de Gestión Financiera
 [ ] Notificar: cuando esté finalizado a los admin del modulo
 
+[ ] Certificados, una vez firmados, poner boton de descarga.
+[ ] Revisar que pasò con el caso de huara.
+[ ] Mostrar los establecimientos en el documento.
+
 [-] Notificar cuando referente terminó de hacer el convenio
 [X] Cuando se fue a la comuna, ya no se puede editar
 [X] Mostrar si se reinició el proceso de firma, en comentario
