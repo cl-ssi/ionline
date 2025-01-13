@@ -322,9 +322,9 @@ class ProcessResource extends Resource
 
                             ]
                         ),
-                    Forms\Components\Textarea::make('distribution')
-                        ->label('Distribución')
-                        ->helperText('Sólo para resoluciones')
+                    // Forms\Components\Textarea::make('distribution')
+                    //     ->label('Distribución')
+                    //     ->helperText('Sólo para resoluciones')
                 ])
                 ->hiddenOn('create'),
             // ->hidden(fn (?Process $record) => $record->document_content === null)
