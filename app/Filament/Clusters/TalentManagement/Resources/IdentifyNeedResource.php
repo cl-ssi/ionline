@@ -204,7 +204,6 @@ class IdentifyNeedResource extends Resource
 
                                     $set('law', $laws->unique()->toArray()); // Actualiza el estado eliminando duplicados
                                 })
-                                // ->dehydrated() // Deshidrata sólo si hay datos seleccionados
                                 ->columnSpanFull()
                                 ->required(),
 
@@ -265,7 +264,7 @@ class IdentifyNeedResource extends Resource
                                 ->preload()
                                 ->columnSpanFull()
                                 ->required(),
-                            
+
                             Forms\Components\Select::make('mechanism')
                                 ->label('¿Qué modalidad prefiere?')
                                 ->options([
@@ -274,25 +273,59 @@ class IdentifyNeedResource extends Resource
                                     'semipresencial'    => 'Semipresencial',
                                 ])
                                 ->searchable()
-                                ->preload()
                                 ->live()
-                                ->afterStateUpdated(function (Set $set) {
-                                    $set('online_type_mechanism', null);
-                                    $set('coffe_break', null);
-                                    $set('coffe_break_price', null);
+                                ->afterStateUpdated(function (callable $set, $state) {
+                                    if (is_null($state) || $state === 'presencial') {
+                                        $set('coffee_break', null);
+                                        $set('coffee_break_price', null);
+                                        $set('online_type_mechanism', null);
+                                        $set('exists', null);
+                                        $set('digital_capsule', null);
+                                    }
                                 })
                                 ->columnSpan(4)
                                 ->required(),
+
                             Forms\Components\TextInput::make('places')
                                 ->label('¿Cuantas cupos considera esta actividad?')
                                 ->numeric()
                                 ->minValue(1)
                                 ->columnSpan(4)
                                 ->required(),
-                        ]),
+                        ]), 
+
+                        // TIPO PRESENCIAL
+                        Grid::make(12)->schema([          
+                            Forms\Components\Select::make('coffee_break')
+                                ->label('¿Esta Actividad considera Coffee Break?')
+                                ->options([
+                                    '1' => 'Si', 
+                                    '0' => 'No',
+                                ])
+                                ->searchable()
+                                ->live()
+                                ->columnSpan(4)
+                                ->afterStateUpdated(function (callable $set, $state) {
+                                    if (is_null($state) || $state === '0') {
+                                        $set('coffee_break_price', null); // Limpia el valor del campo
+                                    }
+                                })
+                                ->disabled(fn (callable $get) => $get('mechanism') !== 'presencial') // Deshabilita si no es "si",
+                                ->dehydrated()
+                                ->required(fn (callable $get) => $get('mechanism') === 'presencial'),
                             
+                            Forms\Components\TextInput::make('coffee_break_price')
+                                ->label('¿Cuanto es el Valor de Coffe Break?')
+                                ->numeric()
+                                ->minValue(1)
+                                ->columnSpan(4)
+                                ->disabled(fn (callable $get) => $get('coffee_break') !== '1')
+                                ->dehydrated()
+                                ->required(fn (callable $get) => $get('coffee_break') === '1'),
+                        ]),
+
                         // TIPO ONLINE
-                        Grid::make(12)->schema([   
+                        Grid::make(12)->schema([
                             Forms\Components\Select::make('online_type_mechanism')
                                 ->label('Modalidad Online')
                                 ->options([
@@ -301,40 +334,11 @@ class IdentifyNeedResource extends Resource
                                     'mixta'         => 'Mixta',
                                 ])
                                 ->searchable()
-                                ->preload()
                                 ->live()
                                 ->columnSpan(4)
-                                ->disabled(fn (callable $get) => $get('mechanism') !== 'online')  // Deshabilita si no es "online"
-                                ->visible(fn (callable $get) => $get('mechanism') === 'online')  // Visible si no es "online"
-                                ->required(fn (callable $get) => $get('mechanism') === 'online'), // Requerido si es "online"
-                        ]), 
-
-                        // TIPO PRESENCIAL
-                        Grid::make(12)->schema([                        
-                            Forms\Components\Select::make('coffee_break')
-                                ->label('¿Esta Actividad considera Coffee Break?')
-                                ->options([
-                                    '1' => 'Si', 
-                                    '0' => 'No',
-                                ])
-                                ->searchable()
-                                ->preload()
-                                ->live()
-                                ->afterStateUpdated(function (Set $set) {
-                                    $set('coffee_break_price', null);
-                                })
-                                ->columnSpan(4)
-                                ->disabled(fn (callable $get) => $get('mechanism') !== 'presencial') // Deshabilita si no es "presencial"
-                                ->visible(fn (callable $get) => $get('mechanism') === 'presencial') // Visible solo si es "presencial"
-                                ->required(fn (callable $get) => $get('mechanism') === 'presencial'), // Requerido si es "presencial"
-                            Forms\Components\TextInput::make('coffee_break_price')
-                                ->label('¿Cuanto es el Valor de Coffe Break?')
-                                ->numeric()
-                                ->minValue(1)
-                                ->columnSpan(4)
-                                ->disabled(fn (callable $get) => $get('coffee_break') !== '1') // Deshabilita si no es "si"
-                                ->visible(fn (callable $get) => $get('coffee_break') === '1') // Visible solo si es "si"
-                                ->required(fn (callable $get) => $get('coffee_break') === '1'), // Requerido si es "presencial"
+                                ->disabled(fn (callable $get) => $get('mechanism') !== 'online')
+                                ->dehydrated()
+                                ->required(fn (callable $get) => $get('mechanism') === 'online'),
                         ]),
 
                         //TIPO ASINCRONICO
@@ -348,7 +352,6 @@ class IdentifyNeedResource extends Resource
                                     2) Dirección Nacional del Servicio Civil: <a href="https://campus.serviciocivil.cl/"  target="_blank">https://campus.serviciocivil.cl/</a> <br>
                                     ')
                                 )
-                                ->visible(fn (callable $get) => $get('online_type_mechanism') === 'asincronico')  // Visible si es "asincronico"
                                 ->columnSpanFull(),
                             Forms\Components\Select::make('exists')
                                 ->label('¿La actividad se encuentra dentro de la oferta?')
@@ -357,11 +360,12 @@ class IdentifyNeedResource extends Resource
                                     '0' => 'No',
                                 ])
                                 ->searchable()
-                                ->preload()
                                 ->live()
                                 ->columnSpan(4)
-                                ->visible(fn (callable $get) => $get('online_type_mechanism') === 'asincronico')
-                                ->required(fn (callable $get) => $get('exists') === '1'),
+                                ->disabled(fn (callable $get) => $get('online_type_mechanism') !== 'asincronico')
+                                ->dehydrated()
+                                ->required(fn (callable $get) => $get('online_type_mechanism') === 'asincronico'),
+
                             Forms\Components\Select::make('digital_capsule')
                                 ->label('¿El curso podría ser una Capsula Digital?')
                                 ->options([
@@ -369,12 +373,10 @@ class IdentifyNeedResource extends Resource
                                     '0' => 'No',
                                 ])
                                 ->searchable()
-                                ->preload()
-                                ->live()
                                 ->columnSpan(4)
-                                ->disabled(fn (callable $get) => $get('exists') !== '0') // Deshabilita si no es "presencial"
-                                ->visible(fn (callable $get) => $get('exists') === '0') // Visible solo si es "presencial"
-                                ->required(fn (callable $get) => $get('exists') === '0'), // Requerido si es "presencial"
+                                ->disabled(fn (callable $get) => $get('exists') !== '1')
+                                ->dehydrated()
+                                ->required(fn (callable $get) => $get('exists') === '1'),
                         ]),
 
                         Grid::make(12)->schema([     
@@ -385,7 +387,6 @@ class IdentifyNeedResource extends Resource
                                     '0' => 'No',
                                 ])
                                 ->searchable()
-                                ->preload()
                                 ->live()
                                 ->afterStateUpdated(function (Set $set) {
                                     $set('transport_price', null);
@@ -407,7 +408,6 @@ class IdentifyNeedResource extends Resource
                                     '0' => 'No',
                                 ])
                                 ->searchable()
-                                ->preload()
                                 ->live()
                                 ->afterStateUpdated(function (Set $set) {
                                     $set('accommodation_price', null);
