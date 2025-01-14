@@ -192,26 +192,19 @@ class Process extends Model
     {
         $this->document_content = $this->processType->template->parseTemplate($this);
         $this->save();
-        // $documentData = [
-        //     'type_id'                => 6,
-        //     'subject'                => $this->program->name.' - '.$this->period.' - '.$this->commune->name,
-        //     'content'                => $this->processType->template->parseTemplate($this),
-        //     'user_id'                => auth()->id(),
-        //     'organizational_unit_id' => auth()->user()->organizational_unit_id,
-        //     'establishment_id'       => auth()->user()->establishment_id,
-        //     'greater_hierarchy'      => 'from',
-        // ];
-
-        // if ($this->document_id) {
-        //     $this->document->update($documentData);
-        // } else {
-        //     $this->document()->associate(Document::create($documentData));
-        //     $this->save();
-        // }
     }
 
     public function createNextProcess(): void
     {
+        // tiene childProcessType?
+        if (! $this->processType->childProcessType) {
+            // Notificacion
+            Notification::make()
+                ->danger()
+                ->title('El tipo de proceso, no tiene asignado un siguiente proceso, contacte al administrador del módulo');
+
+            return;
+        }
         $nextProcess = $this->nextProcess()->create([
             'process_type_id' => $this->processType->childProcessType->id,
             'period'          => $this->period,
