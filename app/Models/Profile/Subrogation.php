@@ -5,11 +5,14 @@ namespace App\Models\Profile;
 use App\Enums\Rrhh\AuthorityType;
 use App\Models\Rrhh\OrganizationalUnit;
 use App\Models\User;
+use App\Observers\Profile\SubrogationObserver;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+#[ObservedBy([SubrogationObserver::class])]
 class Subrogation extends Model
 {
     use HasFactory;
