@@ -17,6 +17,7 @@ use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Support\Str;
 
 #[ObservedBy([CertificateObserver::class])]
@@ -72,6 +73,11 @@ class Certificate extends Model
     public function endorses(): MorphMany
     {
         return $this->morphMany(Approval::class, 'approvable')->where('endorse', operator: true);
+    }
+
+    public function signer(): MorphOne
+    {
+        return $this->morphOne(Approval::class, 'approvable')->where('endorse', operator: false);
     }
 
     public function approvalCallback(): void
@@ -132,8 +138,8 @@ class Certificate extends Model
             ]),
             'sent_to_ou_id'       => $lastStep->organizational_unit_id,
             'digital_signature'   => true,
-            'position'            => 'left',
-            'start_y'             => 80,
+            'position'            => 'right',
+            'start_y'             => 60,
             'filename'            => 'ionline/agreements/certificates/'.Str::random(30).'.pdf',
             'approvable_callback' => true,
         ]);

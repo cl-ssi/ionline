@@ -19,6 +19,7 @@ use Filament\Support\Enums\Alignment;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Storage;
 use Mohamedsabil83\FilamentFormsTinyeditor\Components\TinyEditor;
 
 class CertificateResource extends Resource
@@ -92,6 +93,11 @@ class CertificateResource extends Resource
                             }),
                         // ->disabled(fn (?Certificate $record) => $record->status === Status::Finished),
                     ])
+                    ->footerActions([
+                        Forms\Components\Actions\Action::make('guardar_cambios')
+                            ->icon('bi-save')
+                            ->action('save'),
+                    ])
                     ->footerActionsAlignment(Alignment::End)
                     ->schema([
                         TinyEditor::make('content')::make('document_content')
@@ -159,6 +165,12 @@ class CertificateResource extends Resource
                                     ->send();
                             })
                             ->disabled(fn (?Certificate $record) => $record->approvals->isNotEmpty()),
+                        Forms\Components\Actions\Action::make('download_certificate')
+                            ->label('Descargar Certificado')
+                            ->icon('heroicon-o-arrow-down-tray')
+                            ->url(fn (Certificate $record) => Storage::url($record->signer->filename))
+                            ->openUrlInNewTab()
+                            ->visible(fn (Certificate $record) => $record->status->value === 'finished'),
                     ])
                     ->schema([
                         Forms\Components\Repeater::make('approvals')
