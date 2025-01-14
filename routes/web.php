@@ -1479,6 +1479,11 @@ Route::prefix('documents')->as('documents.')->middleware(['auth', 'must.change.p
                 return Pdf::loadView('documents.agreements.show',['record' => $record])->stream();
             })->name('view');//->middleware('can:view,record');
         });
+        Route::prefix('certificates')->as('certificates.')->group(function () {
+            Route::get('{record}', function (App\Models\Documents\Agreements\Certificate $record) {
+                return Pdf::loadView('documents.agreements.certificates.view',['record' => $record])->stream();
+            })->name('view');//->middleware('can:view,record');
+        });
     });
 });
 

@@ -109,7 +109,8 @@ class Approval extends Model
                 "no_attendance_record_id" => "2863"
             ]),
 
-            /* (Opcional) Ruta al archivo pdf que se va a mostrar y firmar, al setear esta variable se ignoran lass dos de arriba*/
+            /* (Opcional) Ruta al archivo pdf que se va a mostrar y firmar, 
+             * al setear esta variable se ignoran lass dos de arriba */
             "document_pdf_path" => "ionline/samples/dummy.pdf",
 
             /** Quien firma: Utilizar uno de los dos */

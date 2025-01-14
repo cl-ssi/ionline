@@ -138,8 +138,8 @@ class CertificateResource extends Resource
 
                 Forms\Components\Section::make('Visaciones')
                     ->headerActions([
-                        Forms\Components\Actions\Action::make('SolicitarVisado')
-                            ->label('Solicitar visado')
+                        Forms\Components\Actions\Action::make('endorseAndApprovalRequest')
+                            ->label('Visar y solicitar firma')
                             ->icon('heroicon-m-check-circle')
                             ->requiresConfirmation()
                             ->form([
@@ -149,16 +149,19 @@ class CertificateResource extends Resource
                                     ->required(),
                             ])
                             ->action(function (Certificate $record, array $data): void {
-                                $record->createEndorses($data['referer_id']);
+                                $record->createApprovals($data['referer_id']);
+                                // $this->refreshFormData([
+                                //     'status',
+                                // ]);
                                 Notification::make()
                                     ->title('Visado solicitado')
                                     ->success()
                                     ->send();
-                            })
-                            ->disabled(fn (?Certificate $record) => $record->endorses->isNotEmpty()),
+                            }),
+                            // ->disabled(fn (?Certificate $record) => $record->endorses->isNotEmpty()),
                     ])
                     ->schema([
-                        Forms\Components\Repeater::make('endorses')
+                        Forms\Components\Repeater::make('approvals')
                             ->relationship()
                             ->addActionLabel('Agregar visación')
                             ->hiddenLabel()

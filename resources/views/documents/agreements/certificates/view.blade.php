@@ -1,6 +1,6 @@
 @extends('layouts.record')
 
-@section('title', 'Processo')
+@section('title', 'Certificado')
 
 @section('linea1', 'ID: ' . $record->id)
 

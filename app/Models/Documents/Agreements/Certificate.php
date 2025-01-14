@@ -13,7 +13,6 @@ use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
-use Illuminate\Database\Eloquent\Relations\MorphOne;
 
 #[ObservedBy([CertificateObserver::class])]
 class Certificate extends Model
@@ -59,9 +58,9 @@ class Certificate extends Model
     /**
      * Get all of the approvations of a model.
      */
-    public function approval(): MorphOne
+    public function approvals(): MorphMany
     {
-        return $this->morphOne(Approval::class, 'approvable')->where('endorse',false);
+        return $this->morphMany(Approval::class, 'approvable');
     }
 
     public function endorses(): MorphMany
@@ -69,7 +68,7 @@ class Certificate extends Model
         return $this->morphMany(Approval::class, 'approvable')->where('endorse',operator: true);
     }
 
-    public function createEndorses($referer_id): void
+    public function createApprovals($referer_id): void
     {
         // no hacer nada si ya tiene visadores
         if ($this->endorses->isNotEmpty()) {
@@ -77,11 +76,11 @@ class Certificate extends Model
         }
 
         // Visación del Referente
-        $this->endorses()->create([
+        $this->approvals()->create([
             "module" => "Convenios",
             "module_icon" => "bi bi-file-earmark-text",
-            "subject" => "Visar convenio",
-            "document_route_name" => "documents.agreements.processes.view",
+            "subject" => "Visar Certificado",
+            "document_route_name" => "documents.agreements.certificates.view",
             "document_route_params" => json_encode([
                 "record" => $this->id
             ]),
@@ -91,24 +90,28 @@ class Certificate extends Model
             "approver_ou_id" => User::find($referer_id)->organizational_unit_id ?? null,
             "approver_id" => $referer_id,
             "approver_at" => now(),
+            "endorse" => true,
             "status" => true,
         ]);
 
-        // El resto de los visadores de obtienen del Flujo de aprobación
-        $steps = ApprovalFlow::getByObject($this);
-        foreach($steps as $step) {
-            $this->endorses()->create([
-                "module" => "Convenios",
-                "module_icon" => "bi bi-file-earmark-text",
-                "subject" => "Visar convenio",
-                "document_route_name" => "documents.agreements.processes.view",
-                "document_route_params" => json_encode([
-                    "record" => $this->id
-                ]),
-                "endorse" => true,
-                "sent_to_ou_id" => $step->organizational_unit_id,
-            ]);
-        }
 
+        // Solo obtengo el último paso para mandar a firmar
+        // En caso que a futuro sea una cadena de visación, se debe modificar
+        $steps = ApprovalFlow::getByObject($this);
+        $lastStep = $steps->last();
+
+        $this->approvals()->create([
+            "module" => "Convenios",
+            "module_icon" => "bi bi-file-earmark-text",
+            "subject" => "Firmar Certificado",
+            "document_route_name" => "documents.agreements.certificates.view",
+            "document_route_params" => json_encode([
+                "record" => $this->id
+            ]),
+            "sent_to_ou_id" => $lastStep->organizational_unit_id,
+            "digital_signature" => true,
+            "position" => 'left',
+            "start_y" => 80,
+        ]);
     }
 }
