@@ -162,7 +162,7 @@
                         @include('finance.payments.partials.dte-info')
                     </td>
                     <td class="small">
-                        @livewire('finance.get-purchase-order', ['dte' => $dte], key($loop->index))
+                        @livewire('finance.get-purchase-order', ['dte' => $dte], key($loop->index . '-' . $dte->id))
                     </td>
                     <td class="small">
                         @include('finance.payments.partials.fr-info')
