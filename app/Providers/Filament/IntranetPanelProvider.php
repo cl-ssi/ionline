@@ -33,6 +33,10 @@ class IntranetPanelProvider extends PanelProvider
             ->path('intranet')
             ->brandLogo(fn () => view('filament.logo'))
             ->login(CustomLogin::class)
+            ->renderHook( 
+                'panels::auth.login.form.after',
+                fn () => view('auth.socialite.claveunica')
+            )
             ->colors([
                 'primary' => Color::Blue,
             ])

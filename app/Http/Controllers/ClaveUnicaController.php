@@ -246,7 +246,10 @@ class ClaveUnicaController extends Controller
                 /** Store login type */
                 session(['loginType' => 'clave_unica']);
 
-                $route = 'home';
+                if(auth()->user()->external === true)
+                    $route = 'filament.extranet.pages.dashboard';
+                else
+                    $route = 'home';
             } else {
                 session()->flash('danger', 'No existe el usuario registrado en el sistema');
                 $route = 'login';
