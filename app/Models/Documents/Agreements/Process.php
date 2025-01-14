@@ -3,18 +3,21 @@
 namespace App\Models\Documents\Agreements;
 
 use App\Enums\Documents\Agreements\Status;
+use App\Filament\Clusters\Documents\Resources\Agreements\ProcessResource;
 use App\Models\ClCommune;
 use App\Models\Comment;
 use App\Models\Documents\Approval;
 use App\Models\Documents\Document;
 use App\Models\Establishment;
+use App\Models\File;
 use App\Models\Parameters\ApprovalFlow;
 use App\Models\Parameters\Mayor;
 use App\Models\Parameters\Municipality;
 use App\Models\Parameters\Program;
 use App\Models\User;
 use App\Observers\Documents\Agreements\ProcessObserver;
-use App\Models\File;
+use Filament\Forms\Components\Actions\Action;
+use Filament\Notifications\Notification;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -26,6 +29,7 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Number;
+use Illuminate\Support\Str;
 
 #[ObservedBy([ProcessObserver::class])]
 class Process extends Model
@@ -52,7 +56,7 @@ class Process extends Model
         'total_amount',
         'quotas_qty',
         'establishments',
-        
+
         'signer_id',
         'signer_appellative',
         'signer_decree',
@@ -65,7 +69,7 @@ class Process extends Model
         // 'document_id',
         'document_content',
         'next_process_id',
-        
+
         'revision_by_lawyer_at',
         'revision_by_lawyer_user_id',
         'revision_by_commune_at',
@@ -160,12 +164,12 @@ class Process extends Model
      */
     public function approval(): MorphOne
     {
-        return $this->morphOne(Approval::class, 'approvable')->where('endorse',false);
+        return $this->morphOne(Approval::class, 'approvable')->where('endorse', false);
     }
 
     public function endorses(): MorphMany
     {
-        return $this->morphMany(Approval::class, 'approvable')->where('endorse',operator: true);
+        return $this->morphMany(Approval::class, 'approvable')->where('endorse', operator: true);
     }
 
     /**
@@ -234,42 +238,42 @@ class Process extends Model
 
         // Visación del Referente
         $this->endorses()->create([
-            "module" => "Convenios",
-            "module_icon" => "bi bi-file-earmark-text",
-            "subject" => "Visar convenio",
-            "document_route_name" => "documents.agreements.processes.view",
-            "document_route_params" => json_encode([
-                "record" => $this->id
+            'module'                => 'Convenios',
+            'module_icon'           => 'bi bi-file-earmark-text',
+            'subject'               => 'Visar convenio',
+            'document_route_name'   => 'documents.agreements.processes.view',
+            'document_route_params' => json_encode([
+                'record' => $this->id,
             ]),
-            "sent_to_user_id" => $referer_id,
+            'sent_to_user_id' => $referer_id,
 
             /* Aprobado por defecto */
-            "approver_ou_id" => User::find($referer_id)->organizational_unit_id ?? null,
-            "approver_id" => $referer_id,
-            "approver_at" => now(),
-            "status" => true,
+            'approver_ou_id' => User::find($referer_id)->organizational_unit_id ?? null,
+            'approver_id'    => $referer_id,
+            'approver_at'    => now(),
+            'status'         => true,
         ]);
 
         // El resto de los visadores de obtienen del Flujo de aprobación
         $steps = ApprovalFlow::getByObject($this);
-        foreach($steps as $step) {
+        foreach ($steps as $step) {
             $this->endorses()->create([
-                "module" => "Convenios",
-                "module_icon" => "bi bi-file-earmark-text",
-                "subject" => "Visar convenio",
-                "document_route_name" => "documents.agreements.processes.view",
-                "document_route_params" => json_encode([
-                    "record" => $this->id
+                'module'                => 'Convenios',
+                'module_icon'           => 'bi bi-file-earmark-text',
+                'subject'               => 'Visar convenio',
+                'document_route_name'   => 'documents.agreements.processes.view',
+                'document_route_params' => json_encode([
+                    'record' => $this->id,
                 ]),
-                "endorse" => true,
-                "sent_to_ou_id" => $step->organizational_unit_id,
+                'endorse'       => true,
+                'sent_to_ou_id' => $step->organizational_unit_id,
             ]);
         }
     }
 
     public function resetEndorsesStatus(): void
     {
-        foreach($this->endorses as $endorse) {
+        foreach ($this->endorses as $endorse) {
             $endorse->resetStatus();
         }
     }
@@ -278,15 +282,19 @@ class Process extends Model
     {
         // Solicitud de firma del director
         $this->approval()->create([
-            "module" => "Convenios",
-            "module_icon" => "bi bi-file-earmark-text",
-            "subject" => "Firmar convenio",
-            "document_route_name" => "documents.agreements.processes.view",
-            "document_route_params" => json_encode([
-                "record" => $this->id
+            'module'                => 'Convenios',
+            'module_icon'           => 'bi bi-file-earmark-text',
+            'subject'               => 'Firmar convenio',
+            'document_route_name'   => 'documents.agreements.processes.view',
+            'document_route_params' => json_encode([
+                'record' => $this->id,
             ]),
-            "digital_signature" => true,
-            "sent_to_ou_id" => $this->signer->user->organizational_unit_id,
+            'sent_to_ou_id'       => $this->signer->user->organizational_unit_id,
+            'digital_signature'   => true,
+            'position'            => 'right',
+            'start_y'             => 150,
+            'filename'            => 'ionline/agreements/processes/'.Str::random(30).'.pdf',
+            'approvable_callback' => true,
         ]);
     }
 
@@ -297,11 +305,11 @@ class Process extends Model
         ]);
     }
 
-    //attribute to convert amount to Number::spell($this->total_amount,locale:'es')
+    // attribute to convert amount to Number::spell($this->total_amount,locale:'es')
     public function totalAmountInWords(): Attribute
     {
         return Attribute::make(
-            get: fn (): string => Number::spell($this->total_amount,locale:'es')
+            get: fn (): string => Number::spell($this->total_amount, locale: 'es')
         );
     }
 
@@ -310,13 +318,6 @@ class Process extends Model
         return Attribute::make(
             get: fn (): string => $this->period + 1
         );
-    }
-
-    protected function formatDateSafely($date): string 
-    {
-        return $date 
-            ? "{$date->day} de {$date->monthName} del {$date->year}"
-            : 'XXX de XXX del XXX';
     }
 
     public function dateFormat(): Attribute
@@ -329,9 +330,34 @@ class Process extends Model
     public function establishmentsList(): Attribute
     {
         $establishments = Establishment::whereIn('id', $this->establishments)->pluck('official_name')->toArray();
+
         // Muestrame todos lo establecimientos separados por coma
         return Attribute::make(
             get: fn (): string => implode(', ', $establishments)
         );
+    }
+
+    protected function formatDateSafely($date): string
+    {
+        return $date
+            ? "{$date->day} de {$date->monthName} del {$date->year}"
+            : 'XXX de XXX del XXX';
+    }
+
+    public function approvalCallback(): void
+    {
+        $this->update(['status' => 'finished']);
+
+        // Notificar a los referentes
+        Notification::make()
+            ->title('Proceso Firmado por el Director')
+            ->actions([
+                Action::make('IrAlProceso')
+                    ->button()
+                    ->url(ProcessResource::getUrl('edit', [$this->id]))
+                    ->markAsRead(),
+            ])
+            ->sendToDatabase($this->program->referers);
+
     }
 }

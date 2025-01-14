@@ -53,8 +53,8 @@ class ProcessPolicy
     public function update(User $user, Process $process): bool
     {
         // can Agreement edit AND $user is in $process->program->referers
-        return $user->can('Agreement: admin') || 
-        ($user->can('Agreement: edit') && $process->program->referers->contains($user));
+        return $user->canAny(['Agreement: admin', 'Agreement: legally']) || 
+            ($user->can('Agreement: edit') && $process->program->referers->contains($user));
     }
 
     /**
