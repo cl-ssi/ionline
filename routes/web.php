@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Documents\Agreements\CertificateController;
+use App\Http\Controllers\Documents\Agreements\ProcessController;
 use Illuminate\Http\Request;
 use App\Livewire\TicResources;
 use App\Livewire\Rem\ImportMdb;
@@ -1475,14 +1477,10 @@ Route::prefix('documents')->as('documents.')->middleware(['auth', 'must.change.p
     // Convenios: Nuevo show
     Route::prefix('agreements')->as('agreements.')->group(function () {
         Route::prefix('processes')->as('processes.')->group(function () {
-            Route::get('{record}', function (App\Models\Documents\Agreements\Process $record) {
-                return Pdf::loadView('documents.agreements.show',['record' => $record])->stream();
-            })->name('view');//->middleware('can:view,record');
+            Route::get('{record}', [ProcessController::class, 'view'])->name('view');
         });
         Route::prefix('certificates')->as('certificates.')->group(function () {
-            Route::get('{record}', function (App\Models\Documents\Agreements\Certificate $record) {
-                return Pdf::loadView('documents.agreements.certificates.view',['record' => $record])->stream();
-            })->name('view');//->middleware('can:view,record');
+            Route::get('{record}', [CertificateController::class, 'view'])->name('view');
         });
     });
 });

@@ -604,8 +604,6 @@ class ProcessResource extends Resource
                                 ->where('establishment_id', $record->establishment_id)
                                 ->get();
 
-                            // Notificar al referente.
-            
                             Notifications\Notification::make()
                                 ->title('Nuevo proceso aprobado por jurídico')
                                 ->actions([
@@ -615,6 +613,17 @@ class ProcessResource extends Resource
                                         ->markAsRead(),
                                 ])
                                 ->sendToDatabase($recipients);
+
+                            // Notificar al referente.
+                            Notifications\Notification::make()
+                                ->title('Nuevo proceso aprobado por jurídico')
+                                ->actions([
+                                    Forms\Components\Actions\Action::make('IrAlProceso')
+                                        ->button()
+                                        ->url(ProcessResource::getUrl('edit', [$record->id]))
+                                        ->markAsRead(),
+                                ])
+                                ->sendToDatabase($record->program->referers);
 
                             Notifications\Notification::make()
                                 ->title('Documento aprobado por jurídico')

@@ -157,8 +157,8 @@ class CertificateResource extends Resource
                                     ->title('Visado solicitado')
                                     ->success()
                                     ->send();
-                            }),
-                            // ->disabled(fn (?Certificate $record) => $record->endorses->isNotEmpty()),
+                            })
+                            ->disabled(fn (?Certificate $record) => $record->approvals->isNotEmpty()),
                     ])
                     ->schema([
                         Forms\Components\Repeater::make('approvals')
@@ -192,13 +192,15 @@ class CertificateResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('processType.name')
-                    ->numeric()
+                    ->label('Tipo de Certificado')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('period')
+                    ->label('Periodo')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('program.name')
-                    ->numeric()
+                    ->label('Programa')
+                    ->wrap()
                     ->sortable(),
                 // Tables\Columns\TextColumn::make('commune.name')
                 //     ->numeric()
@@ -213,6 +215,14 @@ class CertificateResource extends Resource
                 // Tables\Columns\TextColumn::make('establishment.name')
                 //     ->numeric()
                 //     ->sortable(),
+                Tables\Columns\ImageColumn::make('approvals.avatar')
+                    ->label('Aprobaciones')
+                    ->circular()
+                    ->stacked(),
+                Tables\Columns\TextColumn::make('status')
+                    ->label('Estado')
+                    ->badge()
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
