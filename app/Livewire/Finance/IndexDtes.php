@@ -3,6 +3,7 @@
 namespace App\Livewire\Finance;
 
 use App\Models\Establishment;
+use App\Helpers;
 use App\Models\Finance\Dte;
 use App\Models\Finance\Receptions\Reception;
 use App\Notifications\Finance\DteConfirmation;
@@ -52,138 +53,110 @@ class IndexDtes extends Component
 
     public function searchDtes($paginate = true)
     {
-        $query = Dte::query();
-
-        // app('debugbar')->log($this->filter);
-
-        foreach ($this->filter as $filter => $value) {
-            if ($value) {
-                // app('debugbar')->log($filter);
-                switch ($filter) {
-                    case 'id':
-                        $query->where('id', $value);
-                        break;
-                    case 'emisor':
-                        /** 
-                         * Algoritmo para obtener convertir $value que tiene XXXXXXXXX  
-                         * en formato rut chileno XX.XXX.XXX-X 
-                         **/
-                        $value = preg_replace('/[^0-9K]/', '', strtoupper(trim($value)));
-                        $dv = substr($value, -1);
-                        $id = substr($value, 0, -1);
-                        $value = $this->filter['emisor'] = number_format($id, 0, '', '.').'-'.$dv;
-
-                        $query->where('emisor', $value);
-                        break;
-                    case 'folio':
-                        $query->where('folio', $value);
-                        break;
-                    case 'folio_oc':
-                        $query->where('folio_oc', 'like', '%' . $value. '%');
-                        break;
-                    case 'oc':
-                        switch ($value) {
-                            case 'Con OC':
-                                $query->whereNotNull('folio_oc');
-                                break;
-                            case 'Sin OC':
-                                $query->whereNull('folio_oc');
-                                break;
-                            case 'Sin OC de MP':
-                                // Donde folio_oc no sea nulo ni vacio
-                                $query->whereNotNull('folio_oc')->where('folio_oc', '<>', '');
-                                $query->doesntHave('purchaseOrder');
-                                break;
-                        }
-                        break;
-                    case 'reception':
-                        switch ($value) {
-                            case 'Con Recepción':
-                                $query->has('receptions');
-                                break;
-                            case 'Sin Recepción':
-                                $query->doesntHave('receptions');
-                                break;
-                        }
-                        break;
-                    case 'folio_sigfe':
-                        switch ($value) {
-                            case 'Con SIGFE':
-                                $query->whereNotNull('folio_sigfe');
-                                break;
-                            case 'Sin SIGFE':
-                                $query->whereNull('folio_sigfe');
-                                break;
-                        }
-                        break;
-                    case 'establishment':
-                        if ($value == '?') {
-                            $query->whereNull('establishment_id');
-                        } else {
-                            $query->where('establishment_id', $value);
-                        }
-                        break;
-                    case 'tipo_documento':
-                        if ($value === 'facturas') {
-                            $query->whereIn('tipo_documento', ['factura_electronica', 'factura_exenta']);
-                        } else {
-                            $query->where('tipo_documento', $value);
-                        }
-                        break;
-                    case 'fecha_desde_sii':
-                        $query->where('fecha_recepcion_sii', '>=', $value);
-                        break;
-                    case 'fecha_hasta_sii':
-                        $query->where('fecha_recepcion_sii', '<=', $value);
-                        break;
-                    case 'estado':
-                        switch ($value) {
-                            case 'sin_estado':
-                                $query->where('all_receptions', 0);
-                                break;
-                            case 'revision':
-                                $query->where('all_receptions',1);
-                                break;
-                            case 'listo_para_pago':
-                                $query->where('payment_ready',1);
-                                break;
-                        }
-                        break;
-                    case 'subtitulo':
-                        $query->whereHas('requestForm', function ($query) use ($value) {
-                            $query->whereHas('associateProgram', function ($query) use ($value) {
-                                $query->whereHas('Subtitle', function ($query) use ($value) {
-                                    $query->where('id', $value);
-                                });
-                            });
+        $query = Dte::query()
+            ->when(isset($this->filter['id']), function($q){
+                $q->where('id', $this->filter['id']);
+            })
+            ->when(isset($this->filter['emisor']), function($q){
+                $value = preg_replace('/[^0-9K]/', '', strtoupper(trim($this->filter['emisor'])));
+                $dv = substr($value, -1);
+                $id = substr($value, 0, -1);
+                $value = $this->filter['emisor'] = number_format($id, 0, '', '.').'-'.$dv;
+                $q->where('emisor', $value);
+            })
+            ->when(isset($this->filter['folio']), function($q){
+                $q->where('folio', $this->filter['folio']);
+            })
+            ->when(isset($this->filter['folio_oc']), function($q){
+                $q->where('folio_oc', 'like', '%' . $this->filter['folio_oc'] . '%');
+            })
+            ->when(isset($this->filter['oc']), function($q){  
+                $q->when($this->filter['oc'] == 'Con OC', function($q){
+                    $q->whereNotNull('folio_oc');
+                })
+                ->when($this->filter['oc'] == 'Sin OC',  function($q){
+                        $q->whereNull('folio_oc');
+                })
+                ->when($this->filter['oc'] == 'Sin OC de MP', function($q){
+                    $q->whereNotNull('folio_oc')->where('folio_oc', '<>', '');
+                    $q->doesntHave('purchaseOrder');
+                });
+            })
+            ->when(isset($this->filter['reception']), function($q){                   
+                $q->when($this->filter['reception'] == 'Con Recepción',  function($q){
+                    $q->has('receptions');
+                })
+                ->when($this->filter['reception'] == 'Sin Recepción',  function($q){
+                    $q->doesntHave('receptions');   
+                });
+            })
+            ->when(isset($this->filter['folio_sigfe']), function($q){                   
+                $q->when($this->filter['folio_sigfe'] == 'Con SIGFE',  function($q){
+                    $q->whereNotNull('folio_sigfe');
+                })
+                ->when($this->filter['folio_sigfe'] == 'Sin SIGFE',  function($q){
+                    $q->whereNull('folio_sigfe');
+                });
+            })
+            ->when(isset($this->filter['establishment']), function($q){                   
+                $q->when($this->filter['establishment'] == '?',  function($q){
+                    $q->whereNull('establishment_id');
+                }, function($q){
+                    $q->where('establishment_id', $this->filter['establishment']);
+                });
+            })
+            ->when(isset($this->filter['tipo_documento']), function($q){
+                $q->when($this->filter['tipo_documento'] == 'facturas',  function($q){
+                    $q->whereIn('tipo_documento', ['factura_electronica', 'factura_exenta']);
+                }, function($q){
+                    $q->where('tipo_documento', $this->filter['tipo_documento']);
+                });
+            })
+            ->when(isset($this->filter['fecha_desde_sii']), function($q){
+                $q->where('fecha_recepcion_sii', '>=', $this->filter['fecha_desde_sii']);
+            })
+            ->when(isset($this->filter['fecha_hasta_sii']), function($q){
+                $q->where('fecha_recepcion_sii', '<=', $this->filter['fecha_hasta_sii']);
+            })
+            ->when(isset($this->filter['estado']), function($q){  
+                $q->when($this->filter['estado'] == 'sin_estado', function($q){
+                    $q->where('all_receptions', 0);
+                })
+                ->when($this->filter['estado'] == 'revision',  function($q){
+                    $q->where('all_receptions',1);
+                })
+                ->when($this->filter['estado'] == 'listo_para_pago', function($q){
+                    $q->where('payment_ready',1);
+                });
+            })
+            ->when(isset($this->filter['subtitulo']), function($q){
+                $value = $this->filter['subtitulo'];
+                $q->whereHas('requestForm', function ($q) use ($value) {
+                    $q->whereHas('associateProgram', function ($q) use ($value) {
+                        $q->whereHas('Subtitle', function ($q) use ($value) {
+                            $q->where('id', $value);
                         });
-                        break;
-                    case 'fecha_desde_revision':                        
-                        $query->where('all_receptions_at', '>=', $value);
-                        break;
-                    case 'fecha_hasta_revision':
-                        $query->where('all_receptions_at', '<=', $value);
-                        break;
-
-                }
-            }
-        }
-
-
-
-        // Aplicar relaciones y ordenamiento
-        $query->with([
-            'purchaseOrder',
-            'purchaseOrder.receptions',
-            'purchaseOrder.rejections',
-            'establishment',
-            'controls',
-            'requestForm',
-            'requestForm.contractManager',
-            'dtes',
-            'invoices',            
-            'contractManager'
-        ])
+                    });
+                });
+            })
+            ->when(isset($this->filter['fecha_desde_revision']), function($q){
+                $q->where('all_receptions_at', '>=', $this->filter['fecha_desde_revision']);
+            })
+            ->when(isset($this->filter['fecha_hasta_revision']), function($q){
+                $q->where('all_receptions_at', '<=', $this->filter['fecha_hasta_revision']);
+            })
+            ->with([ // Aplicar relaciones y ordenamiento
+                'purchaseOrder',
+                'purchaseOrder.receptions',
+                'purchaseOrder.rejections',
+                'establishment',
+                'controls',
+                'requestForm',
+                'requestForm.contractManager',
+                'dtes',
+                'invoices',            
+                'contractManager'
+            ])
             ->whereNull('rejected')
             ->orderByDesc('fecha_recepcion_sii');
         if ($paginate) {
@@ -191,13 +164,11 @@ class IndexDtes extends Component
         } else {
             return $query->get();
         }
-        //return $query->paginate(50);
     }
 
 
     public function refresh()
     {
-
         //$this->dtes = $this->searchDtes();
         $this->resetPage();
     }
@@ -209,14 +180,9 @@ class IndexDtes extends Component
         $this->filter['folio_sigfe'] = 'Sin Folio SIGFE';
         $this->filter['sender_status'] = 'Todas';
         $this->filter['establishment'] = auth()->user()->organizationalUnit->establishment_id;
-
         $establishments_ids = explode(',', env('APP_SS_ESTABLISHMENTS'));
-
         $this->establishments = Establishment::whereIn('id', $establishments_ids)->pluck('alias', 'id');
-
         $this->subtitles = Subtitle::all();
-
-
     }
 
     /**
@@ -340,10 +306,8 @@ class IndexDtes extends Component
 
     public function render()
     {
-        $dtes = $this->searchDtes();
-
         return view('livewire.finance.index-dtes', [
-            'dtes' => $dtes,
+            'dtes' => $this->searchDtes(),
             //'establishments' => $establishments,
         ]);
     }
