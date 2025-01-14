@@ -455,6 +455,15 @@ class IdentifyNeedResource extends Resource
                     ->label('Asunto'),
                 Tables\Columns\TextColumn::make('estament.name')
                     ->label('Estamento'),
+                Tables\Columns\TextColumn::make('approvals.status')
+                    ->label('Firmas')
+                    ->bulleted()
+                    ->getStateUsing(function ($record) {
+                        return $record->approvals->map(function ($approval) {
+                            return $approval->initials. ' - ' .$approval->status_in_words;
+                        });
+                    })
+                    ->sortable(),
             ])
             ->defaultSort('id', 'desc')
             ->filters([

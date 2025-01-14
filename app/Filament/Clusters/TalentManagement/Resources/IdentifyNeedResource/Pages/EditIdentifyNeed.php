@@ -50,7 +50,7 @@ class EditIdentifyNeed extends EditRecord
                     $this->record->establishment_name       = $user->establishment->name;
                     $this->record->boss_id                  = $user->boss->id;
                     $this->record->boss_email               = $user->boss->email;
-                    $this->record->save();
+                    $this->save();
 
                     $this->record->sendForm(); // Llama al método en el modelo
                     
