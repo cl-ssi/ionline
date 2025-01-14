@@ -644,9 +644,6 @@ class ProcessResource extends Resource
                                         ->markAsRead(),
                                 ])
                                 ->sendToDatabase($record->program->referers);
-                            
-                            $this->record = $record;
-                            $this->form->refresh();
 
                             Notifications\Notification::make()
                                 ->title('Documento aprobado por jurídico')
