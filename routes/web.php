@@ -230,7 +230,7 @@ use App\Livewire\Welfare\Benefits\Benefits as BenefitLw;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use App\Http\Controllers\Finance\PurchaseOrderController;
 use App\Http\Controllers\HealthPlan\HealthPlanController;
-use App\Http\Controllers\IdentifyNeeds\ProjectController;
+// use App\Http\Controllers\IdentifyNeeds\ProjectController;
 use App\Http\Controllers\Indicators\HealthGoalController;
 use App\Http\Controllers\Indicators\ProgramApsController;
 use App\Http\Controllers\Parameters\BudgetItemController;
@@ -2918,9 +2918,9 @@ Route::prefix('identify_need')->as('identify_need.')->middleware(['auth', 'must.
     Route::get('/own_index', [IdentifyNeedController::class, 'own_index'])->name('own_index')->middleware(['permission:Identify Need: create']);
     Route::get('/create', [IdentifyNeedController::class, 'create'])->name('create')->middleware(['permission:Identify Need: create']);
     Route::get('/{identifyNeed}/edit', [IdentifyNeedController::class, 'edit'])->name('edit')->middleware(['permission:Identify Need: create']);
-    Route::prefix('project')->as('project.')->group(function () {
-        Route::get('/{identifyNeed}/create', [ProjectController::class, 'create'])->name('create')->middleware(['permission:Identify Need: create']);
-    });
+    // Route::prefix('project')->as('project.')->group(function () {
+    //     Route::get('/{identifyNeed}/create', [ProjectController::class, 'create'])->name('create')->middleware(['permission:Identify Need: create']);
+    // });
 });
 
 /** RUTAS PARA EXTERNAL  */

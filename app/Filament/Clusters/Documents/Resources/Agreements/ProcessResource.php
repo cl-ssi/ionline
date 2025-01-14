@@ -14,6 +14,7 @@ use App\Models\Documents\Agreements\Signer;
 use App\Models\Documents\Document;
 use App\Models\Establishment;
 use App\Models\User;
+use App\Notifications\Documents\Agreeements\NewProcessLegallyNotification;
 use App\Services\ColorCleaner;
 use App\Services\TableCleaner;
 use App\Services\TextCleaner;
@@ -335,7 +336,9 @@ class ProcessResource extends Resource
                         ->icon('heroicon-m-check-circle')
                         ->requiresConfirmation()
                         ->action(function (Process $record, array $data): void {
-                            
+                            /**
+                             * Notificar a Jurídico de la solicitud de revisión
+                             */
                             $recipients = User::permission('Agreement: legally')->get();
                             
                             Notifications\Notification::make()
@@ -347,11 +350,17 @@ class ProcessResource extends Resource
                                         ->markAsRead(),
                                 ])
                                 ->sendToDatabase($recipients);
-        
+
+                            // También enviar por mail cada persona que tenga el permiso Agreement: legally
+                            foreach($recipients as $recipient) {
+                                $recipient->notify(new NewProcessLegallyNotification($record));
+                            }
+
                             Notifications\Notification::make()
                                 ->title('Solicitud de revisión enviada a jurídico')
                                 ->success()
                                 ->send();
+
                         })
                         ->disabled(fn(?Process $record) => $record->revision_by_lawyer_user_id !== null),
                 ])
@@ -603,7 +612,7 @@ class ProcessResource extends Resource
                         ->label('Aprobar Revisión')
                         ->icon('heroicon-m-check-circle')
                         ->requiresConfirmation()
-                        ->action(function (Process $record, Get $get): void {
+                        ->action(function (Process $record, Get $get, $livewire): void {
                             // Guardar cambios del documento
                             $record->update(['content' => $get('document_content')]);
                             
@@ -635,6 +644,9 @@ class ProcessResource extends Resource
                                         ->markAsRead(),
                                 ])
                                 ->sendToDatabase($record->program->referers);
+                            
+                            $this->record = $record;
+                            $this->form->refresh();
 
                             Notifications\Notification::make()
                                 ->title('Documento aprobado por jurídico')
