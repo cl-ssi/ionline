@@ -112,6 +112,7 @@ class IdentifyNeedResource extends Resource
                             Forms\Components\TextInput::make('subject')
                                 ->label('Asunto')
                                 ->columnSpanFull()
+                                ->disabledOn('edit')
                                 ->required(),
                             Forms\Components\Select::make('estament_id')
                                 ->label('Estamento')
@@ -174,13 +175,36 @@ class IdentifyNeedResource extends Resource
                                 ->columnSpanFull()
                                 ->required(),
 
-                            Forms\Components\Radio::make('law')
-                                ->label('¿Cuál es el tema específico que debería abordar esta capacitación?')
+                            Forms\Components\CheckboxList::make('law')
+                                ->label('Esta actividad esta dirigida para funcionarios o funcionarias de la Ley')
                                 ->options([
                                     '18834' => 'Ley 18.834',
                                     '19664' => 'Ley 19.664',
                                     '15076' => 'Ley 15.076',
                                 ])
+                                ->default(fn ($record) => $record ? $record->law : []) // Decodifica JSON a array
+                                ->reactive() // Hace que el campo sea reactivo a los cambios
+                                ->afterStateUpdated(function (callable $get, callable $set, $state) {
+                                    $laws = collect($state);
+
+                                    // Si se selecciona '15076', agrega '19664' si no está ya en la lista
+                                    if ($laws->contains('15076') && !$laws->contains('19664')) {
+                                        $laws->push('19664');
+                                    }
+
+                                    // Si se desmarca '15076', no elimina '19664' si este fue seleccionado manualmente
+                                    if (!$laws->contains('15076') && $laws->contains('19664')) {
+                                        $originalState = collect($get('law')); // Estado original antes de la actualización
+
+                                        // Si '19664' no estaba agregado automáticamente por '15076', lo mantenemos
+                                        if (!$originalState->contains('15076')) {
+                                            $laws = $laws->reject(fn ($item) => $item === '15076'); // Solo elimina '15076'
+                                        }
+                                    }
+
+                                    $set('law', $laws->unique()->toArray()); // Actualiza el estado eliminando duplicados
+                                })
+                                // ->dehydrated() // Deshidrata sólo si hay datos seleccionados
                                 ->columnSpanFull()
                                 ->required(),
 
@@ -391,7 +415,7 @@ class IdentifyNeedResource extends Resource
                                 ->columnSpan(8)
                                 ->required(),
                             Forms\Components\TextInput::make('accommodation_price')
-                                ->label('¿Cuánto es el valor de traslado?')
+                                ->label('¿Cuánto es el valor de alojamiento?')
                                 ->numeric()
                                 ->minValue(1)
                                 ->columnSpan(4)

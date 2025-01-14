@@ -12,14 +12,12 @@ class ListIdentifyNeeds extends ListRecords
 {
     protected static string $resource = IdentifyNeedResource::class;
 
-    /*
     protected function getHeaderActions(): array
     {
         return [
             Actions\CreateAction::make(),
         ];
     }
-    */
 
     public function getTabs(): array
     {
