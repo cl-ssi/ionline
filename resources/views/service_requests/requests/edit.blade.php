@@ -275,16 +275,15 @@
 				<option value="TERCER TURNO - MODIFICADO" @if($serviceRequest->working_day_type == 'TERCER TURNO - MODIFICADO') selected @endif >TERCER TURNO - MODIFICADO</option>
 				<option value="CUARTO TURNO" @if($serviceRequest->working_day_type == 'CUARTO TURNO') selected @endif >CUARTO TURNO</option>
 				<option value="CUARTO TURNO - MODIFICADO" @if($serviceRequest->working_day_type == 'CUARTO TURNO - MODIFICADO') selected @endif >CUARTO TURNO - MODIFICADO</option>
-
 				<option value="DIURNO PASADO A TURNO" @if($serviceRequest->working_day_type == 'DIURNO PASADO A TURNO') selected @endif >DIURNO PASADO A TURNO</option>
 				<option value="HORA MÉDICA" @if($serviceRequest->working_day_type == 'HORA MÉDICA') selected @endif >HORA MÉDICA</option>
-				<option value="HORA EXTRA" @if($serviceRequest->working_day_type == 'HORA EXTRA') selected @endif>HORA EXTRA</option>
+				<!-- 13/01/2025: juan carlos solicita restricción para febrero -->
+                @if(now()->month != 2)
+                    <option value="HORA EXTRA" @if($serviceRequest->working_day_type == 'HORA EXTRA') selected @endif>HORA EXTRA</option>
+                @endif
 				<option value="TURNO EXTRA" @if($serviceRequest->working_day_type == 'TURNO EXTRA') selected @endif>TURNO EXTRA</option>
-
 				<option value="TURNO DE REEMPLAZO" @if($serviceRequest->working_day_type == 'TURNO DE REEMPLAZO') selected @endif>TURNO DE REEMPLAZO</option>
-
 				<option value="OTRO" @if($serviceRequest->working_day_type == 'OTRO') selected @endif >OTRO</option>
-
 				<option value=""></option>
 				<option value="DIARIO" @if($serviceRequest->working_day_type == 'DIARIO') selected @endif>DIARIO</option>
         	</select>
@@ -325,48 +324,46 @@
 				<option value=""></option>
 
 				@if(auth()->user()->organizationalUnit->establishment_id == 1)
-                <option value="Covid19-APS No Médicos" disabled @if($serviceRequest->programm_name == 'Covid19-APS No Médicos') selected @endif >Covid19-APS No Médicos</option>
-				<option value="Covid19-APS Médicos" disabled @if($serviceRequest->programm_name == 'Covid19-APS Médicos') selected @endif>Covid19-APS Médicos</option>
-				<option value="Covid19 No Médicos" disabled @if($serviceRequest->programm_name == 'Covid19 No Médicos') selected @endif>Covid19 No Médicos</option>
-				<option value="Covid19 Médicos" disabled @if($serviceRequest->programm_name == 'Covid19 Médicos') selected @endif>Covid19 Médicos</option>
-				<option value="Covid 2022" disabled @if($serviceRequest->programm_name == 'Covid 2022') selected @endif>Covid 2022</option>
-				
-                <option value="CONSULTORIO DE LLAMADA" @if($serviceRequest->programm_name == 'CONSULTORIO DE LLAMADA') selected @endif>CONSULTORIO DE LLAMADA</option>
-				<option value="33 MIL HORAS" @if($serviceRequest->programm_name == '33 MIL HORAS') selected @endif>33 MIL HORAS</option>
-				<option value="DFL" @if($serviceRequest->programm_name == 'DFL') selected @endif>DFL</option>
-				<option value="TURNOS VACANTES" @if($serviceRequest->programm_name == 'TURNOS VACANTES') selected @endif>TURNOS VACANTES</option>
-				<option value="OTROS PROGRAMAS HETG" @if($serviceRequest->programm_name == 'OTROS PROGRAMAS HETG') selected @endif>OTROS PROGRAMAS HETG</option>
-				<option value="LEQ Fonasa" @if($serviceRequest->programm_name == 'LEQ Fonasa') selected @endif>LEQ Fonasa</option>
-				<option value="CAMPAÑA INVIERNO" disabled @if($serviceRequest->programm_name == 'CAMPAÑA INVIERNO') selected @endif>CAMPAÑA INVIERNO</option>
-				<option value="CONTINGENCIA RESPIRATORIA" @if($serviceRequest->programm_name == 'CONTINGENCIA RESPIRATORIA') selected @endif>CONTINGENCIA RESPIRATORIA</option>
-				<option value="PABELLON TARDE" @if($serviceRequest->programm_name == 'PABELLON TARDE') selected @endif>PABELLON TARDE</option>
-				<option value="PABELLON GINE" @if($serviceRequest->programm_name == 'PABELLON GINE') selected @endif>PABELLON GINE</option>
-				<option value="TURNO DE RESIDENCIA" @if($serviceRequest->programm_name == 'TURNO DE RESIDENCIA') selected @endif>TURNO DE RESIDENCIA</option>
-				<option value="SENDA" @if($serviceRequest->programm_name == 'SENDA') selected @endif>SENDA</option>
-
+                    <option value="Covid19-APS No Médicos" disabled @if($serviceRequest->programm_name == 'Covid19-APS No Médicos') selected @endif >Covid19-APS No Médicos</option>
+                    <option value="Covid19-APS Médicos" disabled @if($serviceRequest->programm_name == 'Covid19-APS Médicos') selected @endif>Covid19-APS Médicos</option>
+                    <option value="Covid19 No Médicos" disabled @if($serviceRequest->programm_name == 'Covid19 No Médicos') selected @endif>Covid19 No Médicos</option>
+                    <option value="Covid19 Médicos" disabled @if($serviceRequest->programm_name == 'Covid19 Médicos') selected @endif>Covid19 Médicos</option>
+                    <option value="Covid 2022" disabled @if($serviceRequest->programm_name == 'Covid 2022') selected @endif>Covid 2022</option>
+                    <option value="CONSULTORIO DE LLAMADA" @if($serviceRequest->programm_name == 'CONSULTORIO DE LLAMADA') selected @endif>CONSULTORIO DE LLAMADA</option>
+                    <option value="33 MIL HORAS" @if($serviceRequest->programm_name == '33 MIL HORAS') selected @endif>33 MIL HORAS</option>
+                    <option value="DFL" @if($serviceRequest->programm_name == 'DFL') selected @endif>DFL</option>
+                    <option value="TURNOS VACANTES" @if($serviceRequest->programm_name == 'TURNOS VACANTES') selected @endif>TURNOS VACANTES</option>
+                    <option value="OTROS PROGRAMAS HETG" @if($serviceRequest->programm_name == 'OTROS PROGRAMAS HETG') selected @endif>OTROS PROGRAMAS HETG</option>
+                    <!-- 13/01/2025: juan carlos solicita restricción para febrero -->
+                    @if(now()->month != 2)
+                        <option value="LEQ Fonasa" @if($serviceRequest->programm_name == 'LEQ Fonasa') selected @endif>LEQ Fonasa</option>
+                        <option value="PABELLON TARDE" @if($serviceRequest->programm_name == 'PABELLON TARDE') selected @endif>PABELLON TARDE</option>
+                        <option value="PABELLON GINE" @if($serviceRequest->programm_name == 'PABELLON GINE') selected @endif>PABELLON GINE</option>
+                    @endif
+                    <option value="CAMPAÑA INVIERNO" disabled @if($serviceRequest->programm_name == 'CAMPAÑA INVIERNO') selected @endif>CAMPAÑA INVIERNO</option>
+                    <option value="CONTINGENCIA RESPIRATORIA" @if($serviceRequest->programm_name == 'CONTINGENCIA RESPIRATORIA') selected @endif>CONTINGENCIA RESPIRATORIA</option>
+                    <option value="TURNO DE RESIDENCIA" @if($serviceRequest->programm_name == 'TURNO DE RESIDENCIA') selected @endif>TURNO DE RESIDENCIA</option>
+                    <option value="SENDA" @if($serviceRequest->programm_name == 'SENDA') selected @endif>SENDA</option>
 				@else
-
-                <option value="Covid19-APS No Médicos" @if($serviceRequest->programm_name == 'Covid19-APS No Médicos') selected @endif >Covid19-APS No Médicos</option>
-				<option value="Covid19-APS Médicos" @if($serviceRequest->programm_name == 'Covid19-APS Médicos') selected @endif>Covid19-APS Médicos</option>
-				<option value="Covid19 No Médicos" @if($serviceRequest->programm_name == 'Covid19 No Médicos') selected @endif>Covid19 No Médicos</option>
-				<option value="Covid19 Médicos" @if($serviceRequest->programm_name == 'Covid19 Médicos') selected @endif>Covid19 Médicos</option>
-
-				<option value="PRAPS" @if($serviceRequest->programm_name == 'PRAPS') selected @endif>PRAPS</option>
-				<option value="PESPI" @if($serviceRequest->programm_name == 'PESPI') selected @endif>PESPI</option>
-				<option value="CHILE CRECE CONTIGO" @if($serviceRequest->programm_name == 'CHILE CRECE CONTIGO') selected @endif>CHILE CRECE CONTIGO</option>
-				<option value="OTROS PROGRAMAS SSI" @if($serviceRequest->programm_name == 'OTROS PROGRAMAS SSI') selected @endif>OTROS PROGRAMAS SSI</option>
-				<option value="LISTA ESPERA" @if($serviceRequest->programm_name == 'LISTA ESPERA') selected @endif>LISTA ESPERA</option>
-				<option value="CAMPAÑA INVIERNO" @if($serviceRequest->programm_name == 'CAMPAÑA INVIERNO') selected @endif>CAMPAÑA INVIERNO</option>
-				<option value="CONTINGENCIA RESPIRATORIA" @if($serviceRequest->programm_name == 'CONTINGENCIA RESPIRATORIA') selected @endif>CONTINGENCIA RESPIRATORIA</option>
-
-				<option value="ADP DIRECTOR" @if($serviceRequest->programm_name == 'ADP DIRECTOR') selected @endif>ADP DIRECTOR</option>
-				<option value="SENDA" @if($serviceRequest->programm_name == 'SENDA') selected @endif>SENDA</option>
-				<option value="LEY DE ALCOHOL" @if($serviceRequest->programm_name == 'LEY DE ALCOHOL') selected @endif>LEY DE ALCOHOL</option>
-				<option value="SENDA UHCIP" @if($serviceRequest->programm_name == 'SENDA UHCIP') selected @endif>SENDA UHCIP</option>
-				<option value="SENDA PSIQUIATRIA ADULTO" @if($serviceRequest->programm_name == 'SENDA PSIQUIATRIA ADULTO') selected @endif>SENDA PSIQUIATRIA ADULTO</option>
-				<option value="SENADIS" @if($serviceRequest->programm_name == 'SENADIS') selected @endif>SENADIS</option>
-				<option value="SUBT.31" @if($serviceRequest->programm_name == 'SUBT.31') selected @endif>SUBT.31</option>
-                <option value="GUATITA DELANTAL" @if($serviceRequest->programm_name == 'GUATITA DELANTAL') selected @endif>GUATITA DELANTAL</option>
+                    <option value="Covid19-APS No Médicos" @if($serviceRequest->programm_name == 'Covid19-APS No Médicos') selected @endif >Covid19-APS No Médicos</option>
+                    <option value="Covid19-APS Médicos" @if($serviceRequest->programm_name == 'Covid19-APS Médicos') selected @endif>Covid19-APS Médicos</option>
+                    <option value="Covid19 No Médicos" @if($serviceRequest->programm_name == 'Covid19 No Médicos') selected @endif>Covid19 No Médicos</option>
+                    <option value="Covid19 Médicos" @if($serviceRequest->programm_name == 'Covid19 Médicos') selected @endif>Covid19 Médicos</option>
+                    <option value="PRAPS" @if($serviceRequest->programm_name == 'PRAPS') selected @endif>PRAPS</option>
+                    <option value="PESPI" @if($serviceRequest->programm_name == 'PESPI') selected @endif>PESPI</option>
+                    <option value="CHILE CRECE CONTIGO" @if($serviceRequest->programm_name == 'CHILE CRECE CONTIGO') selected @endif>CHILE CRECE CONTIGO</option>
+                    <option value="OTROS PROGRAMAS SSI" @if($serviceRequest->programm_name == 'OTROS PROGRAMAS SSI') selected @endif>OTROS PROGRAMAS SSI</option>
+                    <option value="LISTA ESPERA" @if($serviceRequest->programm_name == 'LISTA ESPERA') selected @endif>LISTA ESPERA</option>
+                    <option value="CAMPAÑA INVIERNO" @if($serviceRequest->programm_name == 'CAMPAÑA INVIERNO') selected @endif>CAMPAÑA INVIERNO</option>
+                    <option value="CONTINGENCIA RESPIRATORIA" @if($serviceRequest->programm_name == 'CONTINGENCIA RESPIRATORIA') selected @endif>CONTINGENCIA RESPIRATORIA</option>
+                    <option value="ADP DIRECTOR" @if($serviceRequest->programm_name == 'ADP DIRECTOR') selected @endif>ADP DIRECTOR</option>
+                    <option value="SENDA" @if($serviceRequest->programm_name == 'SENDA') selected @endif>SENDA</option>
+                    <option value="LEY DE ALCOHOL" @if($serviceRequest->programm_name == 'LEY DE ALCOHOL') selected @endif>LEY DE ALCOHOL</option>
+                    <option value="SENDA UHCIP" @if($serviceRequest->programm_name == 'SENDA UHCIP') selected @endif>SENDA UHCIP</option>
+                    <option value="SENDA PSIQUIATRIA ADULTO" @if($serviceRequest->programm_name == 'SENDA PSIQUIATRIA ADULTO') selected @endif>SENDA PSIQUIATRIA ADULTO</option>
+                    <option value="SENADIS" @if($serviceRequest->programm_name == 'SENADIS') selected @endif>SENADIS</option>
+                    <option value="SUBT.31" @if($serviceRequest->programm_name == 'SUBT.31') selected @endif>SUBT.31</option>
+                    <option value="GUATITA DELANTAL" @if($serviceRequest->programm_name == 'GUATITA DELANTAL') selected @endif>GUATITA DELANTAL</option>
 				@endif
 
         	</select>

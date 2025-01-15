@@ -118,13 +118,13 @@
 				<option value="TERCER TURNO - MODIFICADO">TERCER TURNO - MODIFICADO</option>
 				<option value="CUARTO TURNO">CUARTO TURNO</option>
 				<option value="CUARTO TURNO - MODIFICADO">CUARTO TURNO - MODIFICADO</option>
-				<!-- <option value="DIURNO PASADO A TURNO">DIURNO PASADO A TURNO</option> -->
 				<option value="HORA MÉDICA">HORA MÉDICA</option>
-				<option value="HORA EXTRA">HORA EXTRA</option>
-				<!-- <option value="TURNO EXTRA">TURNO EXTRA</option> -->
+                <!-- 13/01/2025: juan carlos solicita restricción para febrero -->
+                @if(now()->month != 2)
+                    <option value="HORA EXTRA">HORA EXTRA</option>
+                @endif
 				<option value="TURNO DE REEMPLAZO">TURNO DE REEMPLAZO</option>
 				<option value="QUIRURGICO">QUIRÚRGICO</option>
-				<!-- <option value="OTRO">OTRO</option> -->
 				<option value="DIARIO">DIARIO</option>
 			</select>
 		</fieldset>
@@ -237,11 +237,13 @@
                     <option value="DFL" disabled>DFL</option>
                     <option value="TURNOS VACANTES" disabled>TURNOS VACANTES</option>
                     <option value="OTROS PROGRAMAS HETG">OTROS PROGRAMAS HETG</option>
-                    <option value="LEQ Fonasa">LEQ Fonasa</option>
-                    <!-- <option value="CAMPAÑA INVIERNO">CAMPAÑA INVIERNO</option> -->
+                    <!-- 13/01/2025: juan carlos solicita restricción para febrero -->
+                    @if(now()->month != 2)
+                        <option value="LEQ Fonasa">LEQ Fonasa</option>
+                        <option value="PABELLON TARDE" disabled>PABELLON TARDE</option>
+                        <option value="PABELLON GINE">PABELLON GINE</option>
+                    @endif
                     <option value="CONTINGENCIA RESPIRATORIA">CONTINGENCIA RESPIRATORIA</option>
-                    <option value="PABELLON TARDE" disabled>PABELLON TARDE</option>
-                    <option value="PABELLON GINE">PABELLON GINE</option>
                     <option value="TURNO DE RESIDENCIA" disabled>TURNO DE RESIDENCIA</option>
                     <option value="SENDA">SENDA</option>
                 @else
