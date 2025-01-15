@@ -10,6 +10,7 @@ use App\Filament\Clusters\Documents\Resources\Agreements\ProgramResource\Relatio
 use App\Filament\RelationManagers\CommentsRelationManager;
 use App\Models\Comment;
 use App\Models\Documents\Agreements\Process;
+use App\Models\Documents\Agreements\ProcessType;
 use App\Models\Documents\Agreements\Signer;
 use App\Models\Documents\Document;
 use App\Models\Establishment;
@@ -79,7 +80,14 @@ class ProcessResource extends Resource
                         ->relationship('processType', 'name', fn (Builder $query) => $query->where('is_dependent', false)->where('is_certificate', false))
                         ->required()
                         ->columnSpanFull()
-                        ->disabledOn('edit'),
+                        ->visibleOn('create'),
+                    Forms\Components\Select::make('process_type_id')
+                        ->label('Tipo de proceso')
+                        ->relationship('processType', 'name')
+                        ->required()
+                        ->columnSpanFull()
+                        ->disabledOn('edit')
+                        ->visibleOn('edit'),
                     Forms\Components\Select::make('period')
                         ->label('Periodo')
                         ->required()
@@ -93,12 +101,21 @@ class ProcessResource extends Resource
                             return $years;
                         })
                         ->default(now()->year)
+                        ->disabledOn('edit')
                         ->hiddenOn(ProcessesRelationManager::class),
                     Forms\Components\Select::make('program_id')
                         ->label('Programa')
-                        ->relationship('program', 'name', fn (Builder $query, callable $get) => $query->where('is_program', true)->where('period', $get('period')))
+                        ->relationship('program', 'name', function (Builder $query, callable $get) {
+                            $query->where('is_program', true)
+                                ->where('period', $get('period'))
+                                ->whereHas('referers', function ($query) {
+                                    $query->where('user_id', auth()->id());
+                                });
+                        })
+                        ->helperText('Solo programas en los que eres referente')
                         ->hiddenOn(ProcessesRelationManager::class)
                         ->required()
+                        ->disabledOn('edit')
                         ->columnSpan(2)
                         ->suffixAction(
                             Forms\Components\Actions\Action::make('ir_al_programa')
@@ -106,7 +123,6 @@ class ProcessResource extends Resource
                                 ->icon('bi-link')
                                 ->action(fn(Get $get) => redirect()->to(ProgramResource::getUrl('edit', ['record' => $get('program_id')])))
                         ),
-
                     Forms\Components\Select::make('commune_id')
                         ->label('Comuna')
                         ->relationship('commune', 'name')
@@ -548,39 +564,58 @@ class ProcessResource extends Resource
                 ->hiddenOn('create')
                 ->visible(fn (?Process $record): bool => !$record->processType->has_resolution),
 
-            Forms\Components\Section::make('Siguiente Proceso')
+            Forms\Components\Section::make('Procesos Dependientes')
                 ->headerActions([
                     Forms\Components\Actions\Action::make('Crear proceso dependiente')
                         ->icon('heroicon-m-plus-circle')
                         ->requiresConfirmation()
-                        ->action(function (Process $record): void {
-                            $record->createNextProcess();
+                        ->form([
+                            Forms\Components\Select::make('process_type_id')
+                                ->label('Tipo de proceso')
+                                ->options(function (Process $record) {
+                                    return ProcessType::where(function($query) use ($record) {
+                                        $query->whereIn('id', $record->processType->childsProcessType->pluck('id'))
+                                            ->orWhere(function($query) {
+                                                $query->where('is_dependent', true)
+                                                      ->doesntHave('fatherProcessType');
+                                            });
+                                    })
+                                    ->pluck('name', 'id');
+                                })
+                                ->required(),
+                        ])
+                        ->action(function (Process $record, array $data): void {
+                            $record->createNextProcess($data['process_type_id']);
+                            // Refresh record reload relation nextProcesses
+                            $record->refresh();
+
                             Notifications\Notification::make()
                                 ->title('Proceso dependiente creado')
                                 ->success()
                                 ->send();
-                        })
-                        ->hidden(fn(?Process $record): bool => (bool) $record->next_process_id),
-                    Forms\Components\Actions\Action::make('Ir al siguiente proceso')
-                        ->label('Ir al proceso')
-                        ->icon('heroicon-m-arrow-right')
-                        ->url(fn(?Process $record) => ProcessResource::getUrl('edit', ['record' => $record->next_process_id]))
-                        ->hidden(fn(?Process $record): bool => !(bool) $record->next_process_id),
+                        }),
                 ])
                 ->schema([
-                    Forms\Components\Placeholder::make('childProcessType.name')
-                        ->content(fn(?Process $record) => $record->processType->childProcessType?->name)
-                        ->label('Nombre del proceso'),
-
+                    Forms\Components\Repeater::make('nextProcesses')
+                        ->hiddenLabel(true)
+                        ->relationship('nextProcesses')
+                        ->simple(
+                            Forms\Components\TextInput::make('process_type_id')
+                                ->label('Nombre del proceso')
+                                ->disabled()
+                                ->suffixAction(
+                                    Forms\Components\Actions\Action::make('ir_al_proceso')
+                                        ->label('Ir al proceso')
+                                        ->icon('bi-link')
+                                        ->action(fn(Get $get) => redirect()->to(ProcessResource::getUrl('edit', ['record' => $get('id')])))
+                                ),
+                        )
+                        ->deletable(false)
+                        ->addable(false),
                 ])
                 ->columns(2)
-                ->visible(fn (?Process $record) => $record->processType->has_resolution)
                 ->hiddenOn('create')
                 ->columnSpanFull(),
-
-            // Forms\Components\Select::make('status')
-            //     ->label('Estado')
-            //     ->options(Status::class),
         ];
     }
 
@@ -667,6 +702,7 @@ class ProcessResource extends Resource
                 ])
                 ->columns(2)
                 ->hiddenOn('create'),
+                
         ];
     }
 
@@ -780,10 +816,11 @@ class ProcessResource extends Resource
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
-            ]);
+                // Tables\Actions\BulkActionGroup::make([
+                //     Tables\Actions\DeleteBulkAction::make(),
+                // ]),
+            ])
+            ->paginated([25, 50, 100]);
     }
 
     public static function getRelations(): array

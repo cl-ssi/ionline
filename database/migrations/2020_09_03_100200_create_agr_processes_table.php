@@ -49,7 +49,7 @@ return new class extends Migration
 
             // $table->foreignId('document_id')->nullable()->constrained('documents');
             $table->text('document_content')->nullable();
-            $table->foreignId('next_process_id')->nullable()->constrained('agr_processes')->nullOnDelete();
+            $table->foreignId('previous_process_id')->nullable()->constrained('agr_processes')->nullOnDelete();
 
             $table->datetime('revision_by_lawyer_at')->nullable();
             $table->foreignId('revision_by_lawyer_user_id')->nullable()->constrained('users')->nullOnDelete();

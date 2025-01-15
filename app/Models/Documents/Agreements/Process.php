@@ -24,7 +24,6 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -68,7 +67,7 @@ class Process extends Model
 
         // 'document_id',
         'document_content',
-        'next_process_id',
+        'previous_process_id',
 
         'revision_by_lawyer_at',
         'revision_by_lawyer_user_id',
@@ -131,14 +130,14 @@ class Process extends Model
         return $this->belongsTo(User::class, 'revision_by_commune_user_id')->withTrashed();
     }
 
-    public function nextProcess(): BelongsTo
+    public function previousProcess(): BelongsTo
     {
-        return $this->belongsTo(Process::class, 'next_process_id');
+        return $this->belongsTo(Process::class, 'previous_process_id');
     }
 
-    public function previousProcess(): HasOne
+    public function nextProcesses(): HasMany
     {
-        return $this->hasOne(Process::class, 'next_process_id', 'id');
+        return $this->hasMany(Process::class, 'previous_process_id', 'id');
     }
 
     public function establishment(): BelongsTo
@@ -194,19 +193,10 @@ class Process extends Model
         $this->save();
     }
 
-    public function createNextProcess(): void
+    public function createNextProcess($process_type_id): void
     {
-        // tiene childProcessType?
-        if (! $this->processType->childProcessType) {
-            // Notificacion
-            Notification::make()
-                ->danger()
-                ->title('El tipo de proceso, no tiene asignado un siguiente proceso, contacte al administrador del módulo');
-
-            return;
-        }
-        $nextProcess = $this->nextProcess()->create([
-            'process_type_id' => $this->processType->childProcessType->id,
+        $nextProcess = $this->nextProcesses()->create([
+            'process_type_id' => $this->process_type_id,
             'period'          => $this->period,
             'program_id'      => $this->program_id,
             'commune_id'      => $this->commune_id,
@@ -218,8 +208,6 @@ class Process extends Model
             'signer_id'       => $this->signer_id,
             // 'quotas'          => $this->quotas,
         ]);
-
-        $this->update(['next_process_id' => $nextProcess->id]);
     }
 
     public function createEndorses($referer_id): void
@@ -330,13 +318,6 @@ class Process extends Model
         );
     }
 
-    protected function formatDateSafely($date): string
-    {
-        return $date
-            ? "{$date->day} de {$date->monthName} del {$date->year}"
-            : 'XXX de XXX del XXX';
-    }
-
     public function approvalCallback(): void
     {
         $this->update(['status' => 'finished']);
@@ -352,5 +333,12 @@ class Process extends Model
             ])
             ->sendToDatabase($this->program->referers);
 
+    }
+
+    protected function formatDateSafely($date): string
+    {
+        return $date
+            ? "{$date->day} de {$date->monthName} del {$date->year}"
+            : 'XXX de XXX del XXX';
     }
 }
