@@ -70,6 +70,7 @@ class ServiceRequest extends Model implements Auditable
         'budget_date',
         'contract_number',
         'month_of_payment',
+        'policy_establishment_id',
         'establishment_id',
         'profession_id',
         'objectives',

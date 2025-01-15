@@ -582,6 +582,7 @@ class ServiceRequestController extends Controller
     $serviceRequest = new ServiceRequest($request->All());
     $serviceRequest->user_id = $user->id;
     $serviceRequest->creator_id = Auth::id();
+    $serviceRequest->policy_establishment_id = auth()->user()->organizationalUnit->establishment->id;
     if (isset($request->hsa_schedule_detail)) {
       $serviceRequest->schedule_detail = $request->hsa_schedule_detail;
     }
@@ -796,7 +797,6 @@ class ServiceRequestController extends Controller
     $establishments = Establishment::orderBy('name', 'ASC')->get();
     $professions = Profession::orderBy('name', 'ASC')->get();
     $establishment_id = auth()->user()->organizationalUnit->establishment->id;
-    //dd($establishment_id);
 
     $subdirections = OrganizationalUnit::where('name', 'LIKE', '%direc%')->where('establishment_id', $establishment_id)->orderBy('name', 'ASC')->get();
     $responsabilityCenters = OrganizationalUnit::orderBy('name', 'ASC')->get();
