@@ -112,12 +112,13 @@ class IdentifyNeedResource extends Resource
                             Forms\Components\TextInput::make('subject')
                                 ->label('Asunto')
                                 ->columnSpanFull()
-                                ->disabledOn('edit')
+                                ->disabled(fn (callable $get) => $get('status') !== 'saved')
                                 ->required(),
                             Forms\Components\Select::make('estament_id')
                                 ->label('Estamento')
                                 ->relationship('estament', 'name')
                                 ->columnSpan(6)
+                                ->disabled(fn (callable $get) => $get('status') !== 'saved')
                                 ->required(),
                             Forms\Components\Select::make('family_position')
                                 ->label('Familia de Cargo')
@@ -132,6 +133,7 @@ class IdentifyNeedResource extends Resource
                                     'auxiliar apoyo operaciones'    => 'Auxiliar de Apoyo de Operaciones',
                                     'auxiliar conductor'            => 'Auxiliar Conductor',
                                 ])
+                                ->searchable()
                                 ->suffixAction(
                                     Action::make('descargar')
                                         ->icon('heroicon-o-information-circle')
@@ -140,6 +142,7 @@ class IdentifyNeedResource extends Resource
                                 )
                                 ->default(null)
                                 ->columnSpan(6)
+                                ->disabled(fn (callable $get) => $get('status') !== 'saved')
                                 ->required(),
 
                             Forms\Components\CheckboxList::make('nature_of_the_need')
@@ -151,28 +154,33 @@ class IdentifyNeedResource extends Resource
                                 ])
                                 ->default(fn ($record) => $record ? $record->nature_of_the_need : []) // Decodifica JSON a array
                                 ->columnSpanFull()
+                                ->disabled(fn (callable $get) => $get('status') !== 'saved')
                                 ->required(),
 
                             Forms\Components\Textarea::make('question_1')
                                 ->label('¿Cuál es el principal desafío o problema que enfrenta y que podría resolverse a través de una capacitación?')
                                 ->placeholder('Ejemplo: Falta de conocimiento técnico, cumplimiento de normativas, falta desarrollo de habilidades transversales, entre otros.')
                                 ->columnSpanFull()
+                                ->disabled(fn (callable $get) => $get('status') !== 'saved')
                                 ->required(),
 
                             Forms\Components\Textarea::make('question_2')
                                 ->label('¿Esta necesidad de capacitación afecta el cumplimiento de algún objetivo estratégico, meta o compromiso de gestión en su área o en la institución?')
                                 ->columnSpanFull()
+                                ->disabled(fn (callable $get) => $get('status') !== 'saved')
                                 ->required(),
 
                             Forms\Components\Textarea::make('question_3')
                                 ->label('¿Qué habilidades o conocimientos específicos considera que se necesita mejorar para un mejor desempeño?.')
                                 ->columnSpanFull()
+                                ->disabled(fn (callable $get) => $get('status') !== 'saved')
                                 ->required(),
 
                             Forms\Components\Textarea::make('question_4')
                                 ->label('¿Cuál es el tema específico que debería abordar esta capacitación?')
                                 ->placeholder('Ejemplo: Liderazgo, manejo de conflictos, herramientas tecnológicas, normativas específicas.')
                                 ->columnSpanFull()
+                                ->disabled(fn (callable $get) => $get('status') !== 'saved')
                                 ->required(),
 
                             Forms\Components\CheckboxList::make('law')
@@ -205,18 +213,21 @@ class IdentifyNeedResource extends Resource
                                     $set('law', $laws->unique()->toArray()); // Actualiza el estado eliminando duplicados
                                 })
                                 ->columnSpanFull()
+                                ->disabled(fn (callable $get) => $get('status') !== 'saved')
                                 ->required(),
 
                             Forms\Components\Textarea::make('question_5')
                                 ->label('¿Qué objetivo se espera alcanzar con esta capacitación?')
                                 ->placeholder('Ejemplo: Desarrollar habilidades de liderazgo inclusivo, mejorar la comunicación interna, reforzar el conocimiento técnico.')
                                 ->columnSpanFull()
+                                ->disabled(fn (callable $get) => $get('status') !== 'saved')
                                 ->required(),
 
                             Forms\Components\Textarea::make('question_6')
                                 ->label('¿Qué resultados inmediatos espera lograr después de esta capacitación?')
                                 ->placeholder('Ejemplo: Desarrollar habilidades de liderazgo inclusivo, mejorar la comunicación interna, reforzar el conocimiento técnico.')
                                 ->columnSpanFull()
+                                ->disabled(fn (callable $get) => $get('status') !== 'saved')
                                 ->required(),
                             
                             Forms\Components\Select::make('training_type')
@@ -229,20 +240,25 @@ class IdentifyNeedResource extends Resource
                                     'perfeccionamiento diplomado'   => 'Perfeccionamiento Diplomado',
                                     'otro'                          => 'Otro',
                                 ])
-                                ->default(null)
-                                ->reactive() // Permite que el cambio de estado actualice other_training_type
+                                ->searchable()
+                                ->live()
                                 ->afterStateUpdated(function (callable $set, $state) {
                                     if ($state !== 'otro') {
                                         $set('other_training_type', null); // Limpia el campo cuando el valor no es "otro"
                                     }
                                 })
                                 ->columnSpan(8)
+                                ->disabled(fn (callable $get) => $get('status') !== 'saved')
                                 ->required(),
                             Forms\Components\TextInput::make('other_training_type')
                                 ->label('Otro tipo de capacitación')
                                 ->reactive() // Reactivo al cambio de otros campos
-                                ->disabled(fn (callable $get) => $get('training_type') !== 'otro') // Deshabilita si no es "otro"
                                 ->columnSpan(4)
+                                ->disabled(fn (callable $get) => 
+                                    $get('training_type') !== 'otro' || 
+                                    $get('status') !== 'saved'
+                                )
+                                ->dehydrated()
                                 ->required(fn (callable $get) => $get('training_type') === 'otro'), // Obligatorio si es "otro"
 
                             Forms\Components\Select::make('strategic_axis_id')
@@ -253,6 +269,7 @@ class IdentifyNeedResource extends Resource
                                 ->live()
                                 ->afterStateUpdated(fn (Set $set) => $set('impact_objective_id', null))
                                 ->columnSpanFull()
+                                ->disabled(fn (callable $get) => $get('status') !== 'saved')
                                 ->required(),
 
                             Forms\Components\Select::make('impact_objective_id')
@@ -263,6 +280,7 @@ class IdentifyNeedResource extends Resource
                                 ->searchable()
                                 ->preload()
                                 ->columnSpanFull()
+                                ->disabled(fn (callable $get) => $get('status') !== 'saved')
                                 ->required(),
 
                             Forms\Components\Select::make('mechanism')
@@ -284,6 +302,7 @@ class IdentifyNeedResource extends Resource
                                     }
                                 })
                                 ->columnSpan(4)
+                                ->disabled(fn (callable $get) => $get('status') !== 'saved')
                                 ->required(),
 
                             Forms\Components\TextInput::make('places')
@@ -291,6 +310,7 @@ class IdentifyNeedResource extends Resource
                                 ->numeric()
                                 ->minValue(1)
                                 ->columnSpan(4)
+                                ->disabled(fn (callable $get) => $get('status') !== 'saved')
                                 ->required(),
                         ]), 
 
@@ -310,7 +330,10 @@ class IdentifyNeedResource extends Resource
                                         $set('coffee_break_price', null); // Limpia el valor del campo
                                     }
                                 })
-                                ->disabled(fn (callable $get) => $get('mechanism') !== 'presencial') // Deshabilita si no es "si",
+                                ->disabled(fn (callable $get) => 
+                                    $get('mechanism') !== 'presencial' || 
+                                    $get('status') !== 'saved'
+                                )
                                 ->dehydrated()
                                 ->required(fn (callable $get) => $get('mechanism') === 'presencial'),
                             
@@ -319,7 +342,10 @@ class IdentifyNeedResource extends Resource
                                 ->numeric()
                                 ->minValue(1)
                                 ->columnSpan(4)
-                                ->disabled(fn (callable $get) => $get('coffee_break') !== '1')
+                                ->disabled(fn (callable $get) => 
+                                    $get('coffee_break') !== '1' || 
+                                    $get('status') !== 'saved'
+                                )
                                 ->dehydrated()
                                 ->required(fn (callable $get) => $get('coffee_break') === '1'),
                         ]),
@@ -336,7 +362,10 @@ class IdentifyNeedResource extends Resource
                                 ->searchable()
                                 ->live()
                                 ->columnSpan(4)
-                                ->disabled(fn (callable $get) => $get('mechanism') !== 'online')
+                                ->disabled(fn (callable $get) => 
+                                    $get('mechanism') !== 'online' || 
+                                    $get('status') !== 'saved'
+                                )
                                 ->dehydrated()
                                 ->required(fn (callable $get) => $get('mechanism') === 'online'),
                         ]),
@@ -362,7 +391,10 @@ class IdentifyNeedResource extends Resource
                                 ->searchable()
                                 ->live()
                                 ->columnSpan(4)
-                                ->disabled(fn (callable $get) => $get('online_type_mechanism') !== 'asincronico')
+                                ->disabled(fn (callable $get) => 
+                                    $get('online_type_mechanism') !== 'asincronico' || 
+                                    $get('status') !== 'saved'
+                                )
                                 ->dehydrated()
                                 ->required(fn (callable $get) => $get('online_type_mechanism') === 'asincronico'),
 
@@ -374,7 +406,10 @@ class IdentifyNeedResource extends Resource
                                 ])
                                 ->searchable()
                                 ->columnSpan(4)
-                                ->disabled(fn (callable $get) => $get('exists') !== '1')
+                                ->disabled(fn (callable $get) => 
+                                    $get('exists') !== '1' || 
+                                    $get('status') !== 'saved'
+                                )
                                 ->dehydrated()
                                 ->required(fn (callable $get) => $get('exists') === '1'),
                         ]),
@@ -392,13 +427,17 @@ class IdentifyNeedResource extends Resource
                                     $set('transport_price', null);
                                 })
                                 ->columnSpan(8)
+                                ->disabled(fn (callable $get) => $get('status') !== 'saved')
                                 ->required(),
                             Forms\Components\TextInput::make('transport_price')
                                 ->label('¿Cuánto es el valor de traslado?')
                                 ->numeric()
                                 ->minValue(1)
                                 ->columnSpan(4)
-                                ->disabled(fn (callable $get) => $get('transport') !== '1') // Deshabilita si no es "si"
+                                ->disabled(fn (callable $get) => 
+                                    $get('transport') !== '1' || 
+                                    $get('status') !== 'saved'
+                                )
                                 ->required(fn (callable $get) => $get('transport') === '1'), // Requerido si es "presencial"
                             
                             Forms\Components\Select::make('accommodation')
@@ -413,13 +452,17 @@ class IdentifyNeedResource extends Resource
                                     $set('accommodation_price', null);
                                 })
                                 ->columnSpan(8)
+                                ->disabled(fn (callable $get) => $get('status') !== 'saved')
                                 ->required(),
                             Forms\Components\TextInput::make('accommodation_price')
                                 ->label('¿Cuánto es el valor de alojamiento?')
                                 ->numeric()
                                 ->minValue(1)
                                 ->columnSpan(4)
-                                ->disabled(fn (callable $get) => $get('accommodation') !== '1')
+                                ->disabled(fn (callable $get) => 
+                                    $get('accommodation') !== '1' || 
+                                    $get('status') !== 'saved'
+                                )
                                 ->required(fn (callable $get) => $get('accommodation') === '1'),
                         ])
                     ]),
