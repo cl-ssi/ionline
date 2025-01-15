@@ -27,7 +27,7 @@ return new class extends Migration
             $table->foreignId('commune_id')->constrained('communes');
             $table->string('dependency')->nullable();
             $table->foreignId('health_service_id')->nullable()->constrained('health_services');
-            $table->string('official_name')->nullable();
+            $table->string('official_name');
             $table->string('administrative_dependency')->nullable();
             $table->string('level_of_care')->nullable();
             $table->string('street_type')->nullable();

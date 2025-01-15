@@ -114,8 +114,24 @@ class ProcessResource extends Resource
                         })
                         ->helperText('Solo programas en los que eres referente')
                         ->hiddenOn(ProcessesRelationManager::class)
+                        ->visibleOn('create')
                         ->required()
                         ->disabledOn('edit')
+                        ->columnSpan(2)
+                        ->suffixAction(
+                            Forms\Components\Actions\Action::make('ir_al_programa')
+                                ->label('Ir al programa')
+                                ->icon('bi-link')
+                                ->action(fn(Get $get) => redirect()->to(ProgramResource::getUrl('edit', ['record' => $get('program_id')])))
+                        ),
+                    Forms\Components\Select::make('program_id')
+                        ->label('Programa')
+                        ->relationship('program', 'name')
+                        ->helperText('Solo programas en los que eres referente')
+                        ->hiddenOn(ProcessesRelationManager::class)
+                        ->required()
+                        ->disabledOn('edit')
+                        ->visibleOn('edit')
                         ->columnSpan(2)
                         ->suffixAction(
                             Forms\Components\Actions\Action::make('ir_al_programa')
@@ -603,6 +619,7 @@ class ProcessResource extends Resource
                             Forms\Components\TextInput::make('process_type_name')
                                 ->label('Nombre del proceso')
                                 ->disabled()
+                                /** No encontré mejor forma para que me muestre el nombre del proceso, ya que processType.name no me funcionó */
                                 ->afterStateHydrated(function (Get $get, Set $set) {
                                     $set('process_type_name',ProcessType::find($get('process_type_id'))->name);
                                 })
