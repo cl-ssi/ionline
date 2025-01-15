@@ -37,9 +37,11 @@
             </strong>
         </div>
 
+        {{--
         <div style="padding-top:5px; padding-left: 2px;">
             Iquique, {{ $identifyNeed->created_at->format('d-m-Y H:i') }}
         </div>
+        --}}
     </div>
 
     <div style="clear: both; padding-bottom: 35px"></div>

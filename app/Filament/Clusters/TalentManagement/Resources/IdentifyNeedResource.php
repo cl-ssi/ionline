@@ -490,6 +490,7 @@ class IdentifyNeedResource extends Resource
                     ->color(fn (string $state): string => match ($state) {
                         'Guardado'      => 'info',
                         'Pendiente'     => 'warning',
+                        'Finalizado'    => 'success',
                     })
                     ->alignment('center'),
                 Tables\Columns\TextColumn::make('user.TinyName')

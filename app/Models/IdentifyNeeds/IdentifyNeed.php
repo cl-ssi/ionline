@@ -148,19 +148,7 @@ class IdentifyNeed extends Model implements Auditable
 
     public function approvalCallback(): void
     {
-        /*
-        if($this->approvals->last()){
-            dd('es el ultimo');
-        }
-        */
-
-        $lastApproval = $this->approvals()->latest()->first();
-
-        if ($lastApproval) {
-            dd('hola');
-        } else {
-            dd('chao');
-        }
+        $this->update(['status' => 'completed']);
     }
 
     /**
@@ -173,6 +161,7 @@ class IdentifyNeed extends Model implements Auditable
         $statuses = [
             'saved'     => 'Guardado',
             'pending'   => 'Pendiente',
+            'completed' => 'Finalizado',
         ];
 
         return $statuses[$this->status] ?? null;
@@ -365,12 +354,42 @@ class IdentifyNeed extends Model implements Auditable
     }
 
     public function sendForm()
-    {
-        if(Authority::getAmIAuthorityOfMyOu(now(), 'manager', $this->user_id) === true){
-            dd('soy jefe', Authority::getAmIAuthorityOfMyOu(now(), 'manager', $this->user_id));
+    {   
+        $authority = Authority::getAuthorityFromDate($this->organizational_unit_id, now(), 'manager');
+        /**
+         *  Si soy autoridad de nivel 2, mandó directamente a dirección
+         */ 
+        if($authority->organizationalUnit->level == 2){
+            // Se crea PDF
+            $pdfContent = $this->generatePdf(); // Método que genera el contenido del PDF
+            $name = Str::random(40);
+            $path = "ionline/identify_needs/sin_firmar/" . $name . ".pdf";
+            // Almacenar en GCS con un hashName
+            Storage::disk('gcs')->put($path, $pdfContent);
+
+            $filename = $path;
+
+            $approval = $this->approvals()->create([
+                "module"                            => "Detección de Necesidades de Capacitación",
+                "module_icon"                       => "bi bi-person-video",
+                "subject"                           => 'DNC: ID '.$this->id.'<br>
+                                                        Funcionario: '.$this->user->TinyName,
+                "sent_to_ou_id"                     =>  1,
+                "document_pdf_path"                 => $filename,
+                "active"                            => true,
+                "previous_approval_id"              => null,
+                "status"                            => null,
+                'approvable_callback'               => true,
+                "digital_signature"                 => true,
+                "position"                          => "center",
+                "start_y"                           => 82,
+                "filename"                          => 'ionline/identify_needs/firmados/' . $name .'.pdf',
+            ]);
         }
+        /**
+         *  Si no mandó aprobaciones según orden jerarquíco
+         */ 
         else{
-            //NO SOY JEFATURA, POR LO TANTO JEFATURA DE U.O. DEBE APROBAR
             $lastApproval = null;
             $count = 1;
 
