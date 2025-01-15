@@ -108,7 +108,7 @@
         </tr>
         <tr align="center">
             <td>{{ $identifyNeed->estament->name }}</td>
-            <td>{{ $identifyNeed->family_position }}</td>
+            <td>{{ $identifyNeed->family_position_value }}</td>
         </tr>
     </table>
 
@@ -246,7 +246,7 @@
             <th style="width: 50%; background-color: #EEEEEE;">Otro tipo de capacitación</th>
         </tr>
         <tr align="center">
-            <td>{{ $identifyNeed->training_type }}</td>
+            <td>{{ $identifyNeed->training_type_value }}</td>
             <td>{{ $identifyNeed->other_training_type }}</td>
         </tr>
     </table>
@@ -258,7 +258,7 @@
             <th style="background-color: #EEEEEE;" colspan="2">¿Con qué Objetivo Estratégico se relaciona esta Actividad?</th>
         </tr>
         <tr align="center">
-            <td colspan="2">{{ $identifyNeed->strategicAxis->name }}</td>
+            <td colspan="2">{{ $identifyNeed->strategic_axis_value }}</td>
         </tr>
     </table>
 
@@ -269,7 +269,7 @@
             <th style="background-color: #EEEEEE;" colspan="2">Objetivos de Impacto</th>
         </tr>
         <tr align="center">
-            <td colspan="2">{{ $identifyNeed->impactObjective->description }}</td>
+            <td colspan="2">{{ $identifyNeed->impact_objective_value }}</td>
         </tr>
     </table>
 
@@ -281,7 +281,7 @@
             <th style="width: 50%; background-color: #EEEEEE;">¿Cuantas cupos considera esta actividad?</th>
         </tr>
         <tr align="center">
-            <td>{{ $identifyNeed->mechanism }}</td>
+            <td>{{ $identifyNeed->mechanism_value }}</td>
             <td>{{ $identifyNeed->places }}</td>
         </tr>
     </table>
@@ -294,7 +294,7 @@
             <th style="width: 50%;"></th>
         </tr>
         <tr align="center">
-            <td>{{ $identifyNeed->online_type_mechanism }}</td>
+            <td>{{ $identifyNeed->online_type_mechanism_value }}</td>
             <td></td>
         </tr>
         <tr>
@@ -302,8 +302,8 @@
             <th style="width: 50%; background-color: #EEEEEE;">¿El curso podría ser una Capsula Digital?</th>
         </tr>
         <tr align="center">
-            <td>{{ $identifyNeed->exists_label }}</td>
-            <td>{{ $identifyNeed->digital_capsule_label }}</td>
+            <td>{{ $identifyNeed->exists_value }}</td>
+            <td>{{ $identifyNeed->digital_capsule_value }}</td>
         </tr>
     </table>
 
@@ -315,7 +315,7 @@
             <th style="width: 50%; background-color: #EEEEEE;">¿Cuanto es el Valor de Coffe Break?</th>
         </tr>
         <tr align="center">
-            <td>{{ $identifyNeed->coffee_break_label }}</td>
+            <td>{{ $identifyNeed->coffee_break_value }}</td>
             <td>{{ $identifyNeed->coffee_break_price }}</td>
         </tr>
     </table>
@@ -343,6 +343,7 @@
         <tr align="center">
             <td>{{ $identifyNeed->accommodation ? 'Sí' : 'No' }}</td>
             <td>{{ $identifyNeed->accommodation_price }}</td>
+            <td>{{ dd('hola') }}</td>
         </tr>
     </table>
 

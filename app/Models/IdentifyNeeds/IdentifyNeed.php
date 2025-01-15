@@ -162,36 +162,130 @@ class IdentifyNeed extends Model implements Auditable
     }
 
     /**
-     * Get the exists boolean value attribute.
+     * Get the family position value attribute.
      *
+     * @return string|null
      */
-    public function getExistsLabelAttribute()
+    public function getFamilyPositionValueAttribute(): ?string
     {
-        return $this->exists === null 
-            ? '' 
-            : ($this->exists ? 'Sí' : 'No');
+        $familyPositions = [
+            'profesional directivo'         => 'Profesional Directivo', 
+            'profesional gestion'           => 'Profesional de Gestión',
+            'profesional asistencial'       => 'Profesional Asistencial',
+            'tecnico de apoyo a la gestion' => 'Técnico de Apoyo a la Gestión',
+            'tecnico asistencial'           => 'Técnico Asistencial',
+            'administrativo apoyo gestion'  => 'Administrativo(a) de Apoyo a la Gestión',
+            'administrativo asistencial'    => 'Administrativo(a) Asistencial',
+            'auxiliar apoyo operaciones'    => 'Auxiliar de Apoyo de Operaciones',
+            'auxiliar conductor'            => 'Auxiliar Conductor',
+        ];
+
+        return $familyPositions[$this->family_position] ?? null;
     }
 
     /**
-     * Get the digital capsule boolean value attribute.
+     * Get the training type value attribute.
      *
+     * @return string|null
      */
-    public function getDigitalCapsuleLabelAttribute()
+    public function getTrainingTypeValueAttribute(): ?string
     {
-        return $this->digital_capsule === null 
-            ? '' 
-            : ($this->digital_capsule ? 'Sí' : 'No');
+        $trainingTypes = [
+            'curso'                         => 'Curso', 
+            'taller'                        => 'Taller',
+            'jornada'                       => 'Jornada',
+            'estadia pasantia'              => 'Estadía Pasantía',
+            'perfeccionamiento diplomado'   => 'Perfeccionamiento Diplomado',
+            'otro'                          => 'Otro',
+        ];
+
+        return $trainingTypes[$this->training_type] ?? null;
     }
 
     /**
-     * Get the digital capsule boolean value attribute.
+     * Get the strategic axis value attribute.
      *
+     * @return string|null
      */
-    public function getCoffeeBreakLabelAttribute()
+    public function getStrategicAxisValueAttribute(): ?string
     {
-        return $this->coffee_break === null 
-            ? 'No' 
-            : ($this->coffee_break ? 'Sí' : 'No');
+        return $this->strategicAxis 
+            ? ucfirst(strtolower($this->strategicAxis->name)) 
+            : null;
+    }
+
+    /**
+     * Get the impact objective value attribute.
+     *
+     * @return string|null
+     */
+    public function getImpactObjectiveValueAttribute(): ?string
+    {
+        return $this->impactObjective 
+            ? ucfirst($this->impactObjective->description) 
+            : null;
+    }
+
+    /**
+     * Get the mechanism value attribute.
+     *
+     * @return string|null
+     */
+    public function getMechanismValueAttribute(): ?string
+    {
+        $mechanisms = [
+            'online'        => 'Online',
+            'presencial'    => 'Presencial',
+            'semipresencial'=> 'Semipresencial',
+        ];
+
+        return $mechanisms[$this->mechanism] ?? null;
+    }
+
+    /**
+     * Get the online type mechanism value attribute.
+     *
+     * @return string|null
+     */
+    public function getOnlineTypeMechanismValueAttribute(): ?string
+    {
+        $mechanisms = [
+            'sincronico'    => 'Sincrónico',
+            'asincronico'   => 'Asincrónico',
+            'mixta'         => 'Mixta',
+        ];
+
+        return $mechanisms[$this->online_type_mechanism] ?? null;
+    }
+
+    /**
+     * Get the formatted value for the `exists` boolean attribute.
+     */
+    public function getExistsValueAttribute(): string
+    {
+        return $this->exists !== null
+            ? ($this->exists ? 'Sí' : 'No')
+            : '';
+    }
+
+    /**
+     * Get the formatted value for the `digital_capsule` boolean attribute.
+     */
+    public function getDigitalCapsuleValueAttribute(): string
+    {
+        return $this->digital_capsule !== null
+            ? ($this->digital_capsule ? 'Sí' : 'No')
+            : '';
+    }
+
+    /**
+     * Get the formatted value for the `coffee_break` boolean attribute.
+     */
+    public function getCoffeeBreakValueAttribute(): string
+    {
+        return $this->coffee_break !== null
+            ? ($this->coffee_break ? 'Sí' : 'No')
+            : '';
     }
 
     /**
