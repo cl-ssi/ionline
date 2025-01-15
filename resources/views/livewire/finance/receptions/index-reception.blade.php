@@ -126,6 +126,8 @@
                         <td>
                             @if($reception->purchaseOrder)
                                 {{ $reception->purchaseOrder?->json->Listado[0]->Proveedor->Nombre }}
+                            @elseif($reception->dte_type == 'guias_despacho')
+                                {{$reception->guia?->razon_social_emisor}}
                             @else
                                 {{ $reception->dte?->razon_social_emisor }}
                             @endif

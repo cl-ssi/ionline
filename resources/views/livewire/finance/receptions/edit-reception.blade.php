@@ -163,11 +163,17 @@
 
             <tr>
                 <td nowrap>
-                    {{ $reception->purchase_order }}
+                    @if ($reception->purchaseOrder)
+                        {{ $reception->purchase_order }}
+                    @else
+                        N/A
+                    @endif
                 </td>
                 <td>
                     @if ($reception->purchaseOrder)
                         {{ $reception->purchaseOrder?->json->Listado[0]->Proveedor->Nombre }}
+                    @elseif($reception->dte_type == 'guias_despacho')
+                        {{$reception->guia?->razon_social_emisor}}
                     @else
                         {{ $reception->dte?->razon_social_emisor }}
                     @endif
