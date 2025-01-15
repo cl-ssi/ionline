@@ -176,7 +176,7 @@
                             @if($file['id'] != '')
                                 <a class="btn btn-secondary btn-sm" 
                                     title="Abrir" 
-                                    wire:click="showFile({{ $key }})" 
+                                    wire:click="showFile({{ $file['id'] }})" 
                                     target="_blank">
                                     <i class="fas fa-file"></i>
                                 </a>

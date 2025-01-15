@@ -325,8 +325,9 @@ class CreatePurchasePlan extends Component
         ];
     }
 
-    public function showFile($key){
+    public function showFile($fileId){
         $file = File::where('id', $fileId)->first();
+        dd($file);
         return Storage::response($file->storage_path);
     }
 
