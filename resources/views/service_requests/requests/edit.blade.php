@@ -221,7 +221,7 @@
 			<select name="establishment_id" class="form-control" required>
 			<option value=""></option>
 			@foreach($establishments as $key => $establishment)
-				<option value="{{$establishment->id}}" @if($serviceRequest->establishment_id == $establishment->id) selected @endif>{{$establishment->type}} - {{$establishment->name}}</option>
+				<option value="{{$establishment->id}}" @if($serviceRequest->establishment_id == $establishment->id) selected @endif>{{$establishment->official_name}}</option>
 			@endforeach
 			</select>
 		</fieldset>
