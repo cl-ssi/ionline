@@ -37,6 +37,11 @@ class ProcessType extends Model
         return $this->belongsTo(ProcessType::class);
     }
 
+    public function childsProcessType(): HasMany
+    {
+        return $this->hasMany(ProcessType::class, 'father_process_type_id', 'id');
+    }
+
     public function childProcessType(): HasOne
     {
         return $this->hasOne(ProcessType::class,'father_process_type_id');

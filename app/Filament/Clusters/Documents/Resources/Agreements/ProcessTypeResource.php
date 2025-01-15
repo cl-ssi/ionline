@@ -49,34 +49,49 @@ class ProcessTypeResource extends Resource
                 Forms\Components\TextInput::make('description')
                     ->label('Descripción')
                     ->maxLength(255)
-                    ->columnSpan(4)
+                    ->columnSpan(3)
                     ->default(null),
                 Forms\Components\Toggle::make('bilateral')
                     ->label('Bilateral')
                     ->inline(false)
+                    ->helperText('Para los que el proceso interviene la comuna y el servicio')
                     ->required(),
                 Forms\Components\Toggle::make('has_resolution')
                     ->label('Tiene Resolución')
                     ->inline(false)
+                    ->helperText('El proceso tiene una resolución después de completarse')
                     ->required(),
                 Forms\Components\Toggle::make('is_certificate')
                     ->label('Es Certificado')
                     ->inline(false)
+                    ->helperText('Aparecerá en el listado de certificados en vez de en el de procesos')
                     ->required(),
-                Forms\Components\Fieldset::make('Esto es para las resoluciones')
+                 Forms\Components\Toggle::make('active')
+                    ->label('Activo')
+                    ->inline(false)
+                    ->helperText('Si está desactivado no aparecerá en el listado de procesos/certificdos')
+                    ->required(),
+                Forms\Components\Fieldset::make('Esto es los procesos que tienen un paso anterior')
                     ->schema([
                         Forms\Components\Toggle::make('is_dependent')
                             ->label('Es Dependiente')
-                            ->inline(false),
+                            ->inline(false)
+                            ->columns(1),
                         Forms\Components\Select::make('father_process_type_id')
-                            ->relationship('fatherProcessType', 'name')
-                            ->label('Tipo de Proceso Padre'),
+                            ->relationship(
+                                'fatherProcessType', 
+                                'name',
+                                fn ($query, $record) => $query->when(
+                                    $record,
+                                    fn ($q) => $q->where('id', '!=', $record->id)
+                                )
+                            )
+                            ->label('Tipo de Proceso Padre')
+                            ->helperText('El proceso padre que se debe completar antes de este')
+                            ->columnSpan(2),
                     ])
-                    ->columnSpan(2),
-                Forms\Components\Toggle::make('active')
-                    ->label('Activo')
-                    ->inline(false)
-                    ->required(),
+                    ->columns(3)
+                    ->columnSpanFull(),
 
                 Forms\Components\Section::make('Plantilla')
                     ->relationship('template')
@@ -86,7 +101,6 @@ class ProcessTypeResource extends Resource
                             ->maxLength(255)
                             ->required(),
                         TinyEditor::make('content')
-                        // Forms\Components\RichEditor::make('content')
                             ->profile('ionline')
                             ->label('Contenido')
                             ->required()
@@ -124,7 +138,7 @@ class ProcessTypeResource extends Resource
                     ])
                     ->columnSpanFull(),
             ])
-            ->columns(6);
+            ->columns(5);
     }
 
     public static function table(Table $table): Table
@@ -133,6 +147,7 @@ class ProcessTypeResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('name')
                     ->label('Nombre')
+                    ->wrap()
                     ->searchable(),
                 Tables\Columns\TextColumn::make('description')
                     ->label('Descripción')
@@ -140,16 +155,23 @@ class ProcessTypeResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\IconColumn::make('bilateral')
                     ->label('Bilateral')
-                    ->boolean(),
+                    ->boolean()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\IconColumn::make('is_dependent')
                     ->label('Dependiente')
                     ->boolean(),
                 Tables\Columns\IconColumn::make('has_resolution')
                     ->label('Resolución')
-                    ->boolean(),
-                Tables\Columns\TextColumn::make('childProcessType.name')
-                    ->label('Sigiente Proceso')
+                    ->boolean()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('fatherProcessType.name')
+                    ->label('Proceso Padre')
                     ->wrap()
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('childsProcessType.name')
+                    ->label('Procesos Hijos')
+                    ->wrap()
+                    ->bulleted()
                     ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
@@ -171,9 +193,9 @@ class ProcessTypeResource extends Resource
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
+                // Tables\Actions\BulkActionGroup::make([
+                //     Tables\Actions\DeleteBulkAction::make(),
+                // ]),
             ])
             ->paginated([50, 100]);
     }
