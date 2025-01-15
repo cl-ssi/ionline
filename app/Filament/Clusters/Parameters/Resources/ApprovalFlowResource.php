@@ -33,6 +33,9 @@ class ApprovalFlowResource extends Resource
                 Forms\Components\TextInput::make('class')
                     ->required()
                     ->maxLength(255),
+                Forms\Components\TextInput::make('parameter')
+                    ->required()
+                    ->maxLength(255),
                 Forms\Components\Select::make('establishment_id')
                     ->relationship('establishment', 'name')
                     ->required(),
@@ -75,6 +78,8 @@ class ApprovalFlowResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('class')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('parameter')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('establishment.name')
                     ->numeric()

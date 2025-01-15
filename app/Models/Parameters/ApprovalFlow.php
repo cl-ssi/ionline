@@ -14,6 +14,7 @@ class ApprovalFlow extends Model
 
     protected $fillable = [
         'class',
+        'parameter',
         'establishment_id',
     ];
 
