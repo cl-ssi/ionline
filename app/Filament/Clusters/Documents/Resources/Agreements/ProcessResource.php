@@ -600,9 +600,12 @@ class ProcessResource extends Resource
                         ->hiddenLabel(true)
                         ->relationship('nextProcesses')
                         ->simple(
-                            Forms\Components\TextInput::make('process_type_id')
+                            Forms\Components\TextInput::make('process_type_name')
                                 ->label('Nombre del proceso')
                                 ->disabled()
+                                ->afterStateHydrated(function (Get $get, Set $set) {
+                                    $set('process_type_name',ProcessType::find($get('process_type_id'))->name);
+                                })
                                 ->suffixAction(
                                     Forms\Components\Actions\Action::make('ir_al_proceso')
                                         ->label('Ir al proceso')
