@@ -71,7 +71,8 @@
             <td>{{ $identifyNeed->user->position }}</td>
         </tr>
     </table>
-
+    
+    {{--
     <div style="clear: both; padding-bottom: 15px"></div>
 
     <div class="left"><b>II. Jefatura</b></div>
@@ -88,6 +89,7 @@
             <td>{{ $user->boss ? $user->boss->email : '' }}</td>
         </tr>
     </table>
+    --}}
 
     <div style="clear: both; padding-bottom: 15px"></div>
 
@@ -127,15 +129,15 @@
             <td style="width: 90%;" align="left">A una necesidad propia, relacionada con las funciones específicas que desempeño.</td>
         </tr>
         <tr>
-            <td style="width: 10%;">
+            <td style="width: 10%;" align="center">
                 @if (in_array('necesidad de mi equipo de trabajo', $identifyNeed->nature_of_the_need))
                     X
                 @endif
             </td>
             <td style="width: 90%;" align="left">A una necesidad de mi equipo de trabajo, considerando el desarrollo de habilidades colectivas.</td>
         </tr>
-        <tr align="center">
-            <td style="width: 10%;">
+        <tr>
+            <td style="width: 10%;" align="center">
                 @if (in_array('necesidad de otros equipos', $identifyNeed->nature_of_the_need))
                     X
                 @endif
@@ -343,41 +345,20 @@
         <tr align="center">
             <td>{{ $identifyNeed->accommodation ? 'Sí' : 'No' }}</td>
             <td>{{ $identifyNeed->accommodation_price }}</td>
-            <td>{{ dd('hola') }}</td>
         </tr>
     </table>
 
     <!-- Sección de las aprobaciones -->
     <div class="signature-container">
         <div class="signature" style="padding-left: 32px;">
-            {{--
-            @include('sign.approvation', [
-                'approval' => $allowance->approvalLegacy,
-            ])
-            --}}
+            {{ $identifyNeed->user->initials }}
         </div>
         
         <div class="signature" style="padding-left: 6px; padding-right: 6px;">
-            {{--
-            @if($approvals = $allowance->approvals->where('position', 'center'))
-                @foreach($approvals as $approval)
-                    @include('sign.approvation', [
-                        'approval' => $approval,
-                    ])
-                @endforeach
-            @endif
-            --}}
+
         </div>
         <div class="signature">
-            {{--
-            @if($approvals = $allowance->approvals->where('position', 'right'))
-                @foreach($approvals as $approval)
-                    @include('sign.approvation', [
-                        'approval' => $approval,
-                    ])
-                @endforeach
-            @endif
-            --}}
+
         </div>
     </div>
 @endsection

@@ -24,7 +24,7 @@ class ListIdentifyNeeds extends ListRecords
         $tabs = [];
 
         if (auth()->user()->can('DNC: all')) {
-            $tabs['Todas'] = Tab::make()
+            $tabs['Todos'] = Tab::make()
                 ->modifyQueryUsing(function (Builder $query): Builder {
                     return $query; // No aplica ningún filtro
             });

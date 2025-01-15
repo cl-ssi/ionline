@@ -146,6 +146,23 @@ class IdentifyNeed extends Model implements Auditable
         return $this->morphMany(Approval::class, 'approvable');
     }
 
+    public function approvalCallback(): void
+    {
+        /*
+        if($this->approvals->last()){
+            dd('es el ultimo');
+        }
+        */
+
+        $lastApproval = $this->approvals()->latest()->first();
+
+        if ($lastApproval) {
+            dd('hola');
+        } else {
+            dd('chao');
+        }
+    }
+
     /**
      * Get the status value attribute.
      *
@@ -350,14 +367,19 @@ class IdentifyNeed extends Model implements Auditable
     public function sendForm()
     {
         if(Authority::getAmIAuthorityOfMyOu(now(), 'manager', $this->user_id) === true){
-            dd('soy jefe');
+            dd('soy jefe', Authority::getAmIAuthorityOfMyOu(now(), 'manager', $this->user_id));
         }
         else{
             //NO SOY JEFATURA, POR LO TANTO JEFATURA DE U.O. DEBE APROBAR
             $lastApproval = null;
             $count = 1;
 
+            $hierarchicalUnits = $this->organizationalUnit->getHierarchicalUnits($this->user);
+            $lastUnit = end($hierarchicalUnits); // Obtiene el último elemento del arreglo
+
             foreach($this->organizationalUnit->getHierarchicalUnits($this->user) as $hierarchicalUnit){
+                $isLastIteration = ($hierarchicalUnit === $lastUnit); // Verifica si es la última iteración
+
                 if($lastApproval == null){
                     $pdfContent = $this->generatePdf(); // Método que genera el contenido del PDF
                     $name = Str::random(40);
@@ -392,11 +414,8 @@ class IdentifyNeed extends Model implements Auditable
                     "document_pdf_path"                 => ($lastApproval == null) ? $filename : $lastApproval->filename,
                     "active"                            => ($lastApproval == null) ? true : false,
                     "previous_approval_id"              => ($lastApproval == null) ? null : $lastApproval->id,
-                    "status"                            =>  null,
-                    "callback_controller_method"        => "App\Http\Controllers\IdentifyNeeds\IdentifyNeedController@approvalCallback",
-                    "callback_controller_params"        => json_encode([
-                        'identify_need_id'  => $this->id
-                    ]),
+                    "status"                            => null,
+                    'approvable_callback'               => ($isLastIteration) ? true : false,
                     "digital_signature"                 => true,
                     "position"                          => ($lastApproval == null) ? "center" : "right",
                     "start_y"                           => ($lastApproval == null) ? 82 : $start, //FALTA LA UBICACIÓN DE LA FIRMA PARA CADA CASO

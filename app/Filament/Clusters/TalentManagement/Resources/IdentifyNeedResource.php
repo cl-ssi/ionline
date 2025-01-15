@@ -96,13 +96,15 @@ class IdentifyNeedResource extends Resource
                                 ->afterStateHydrated(function (callable $set, $record) {
                                     $set('boss_full_name', $record && $record->user && $record->user->boss ? $record->user->boss->full_name : auth()->user()->boss->full_name ?? '');
                                 })
-                                ->columnSpan(6),
+                                ->columnSpan(6)
+                                ->required(),
 
                             Forms\Components\TextInput::make('boss_email')
                                 ->label('Correo')
                                 ->readOnly()
-                                ->default(fn ($record) => $record ? $record->boss_email : auth()->user()->boss->email)
-                                ->columnSpan(6),
+                                ->default(fn ($record) => $record ? $record->boss_email : (auth()->user()->boss ? auth()->user()->boss->email : null))
+                                ->columnSpan(6)
+                                ->required(),
                         ]),
                     ]),
                 
@@ -112,13 +114,13 @@ class IdentifyNeedResource extends Resource
                             Forms\Components\TextInput::make('subject')
                                 ->label('Asunto')
                                 ->columnSpanFull()
-                                ->disabled(fn (callable $get) => $get('status') !== 'saved')
+                                ->disabled(fn (callable $get) => in_array($get('status'), ['pending']))
                                 ->required(),
                             Forms\Components\Select::make('estament_id')
                                 ->label('Estamento')
                                 ->relationship('estament', 'name')
                                 ->columnSpan(6)
-                                ->disabled(fn (callable $get) => $get('status') !== 'saved')
+                                ->disabled(fn (callable $get) => in_array($get('status'), ['pending']))
                                 ->required(),
                             Forms\Components\Select::make('family_position')
                                 ->label('Familia de Cargo')
@@ -142,7 +144,7 @@ class IdentifyNeedResource extends Resource
                                 )
                                 ->default(null)
                                 ->columnSpan(6)
-                                ->disabled(fn (callable $get) => $get('status') !== 'saved')
+                                ->disabled(fn (callable $get) => in_array($get('status'), ['pending']))
                                 ->required(),
 
                             Forms\Components\CheckboxList::make('nature_of_the_need')
@@ -154,33 +156,33 @@ class IdentifyNeedResource extends Resource
                                 ])
                                 ->default(fn ($record) => $record ? $record->nature_of_the_need : []) // Decodifica JSON a array
                                 ->columnSpanFull()
-                                ->disabled(fn (callable $get) => $get('status') !== 'saved')
+                                ->disabled(fn (callable $get) => in_array($get('status'), ['pending']))
                                 ->required(),
 
                             Forms\Components\Textarea::make('question_1')
                                 ->label('¿Cuál es el principal desafío o problema que enfrenta y que podría resolverse a través de una capacitación?')
                                 ->placeholder('Ejemplo: Falta de conocimiento técnico, cumplimiento de normativas, falta desarrollo de habilidades transversales, entre otros.')
                                 ->columnSpanFull()
-                                ->disabled(fn (callable $get) => $get('status') !== 'saved')
+                                ->disabled(fn (callable $get) => in_array($get('status'), ['pending']))
                                 ->required(),
 
                             Forms\Components\Textarea::make('question_2')
                                 ->label('¿Esta necesidad de capacitación afecta el cumplimiento de algún objetivo estratégico, meta o compromiso de gestión en su área o en la institución?')
                                 ->columnSpanFull()
-                                ->disabled(fn (callable $get) => $get('status') !== 'saved')
+                                ->disabled(fn (callable $get) => in_array($get('status'), ['pending']))
                                 ->required(),
 
                             Forms\Components\Textarea::make('question_3')
                                 ->label('¿Qué habilidades o conocimientos específicos considera que se necesita mejorar para un mejor desempeño?.')
                                 ->columnSpanFull()
-                                ->disabled(fn (callable $get) => $get('status') !== 'saved')
+                                ->disabled(fn (callable $get) => in_array($get('status'), ['pending']))
                                 ->required(),
 
                             Forms\Components\Textarea::make('question_4')
                                 ->label('¿Cuál es el tema específico que debería abordar esta capacitación?')
                                 ->placeholder('Ejemplo: Liderazgo, manejo de conflictos, herramientas tecnológicas, normativas específicas.')
                                 ->columnSpanFull()
-                                ->disabled(fn (callable $get) => $get('status') !== 'saved')
+                                ->disabled(fn (callable $get) => in_array($get('status'), ['pending']))
                                 ->required(),
 
                             Forms\Components\CheckboxList::make('law')
@@ -213,21 +215,21 @@ class IdentifyNeedResource extends Resource
                                     $set('law', $laws->unique()->toArray()); // Actualiza el estado eliminando duplicados
                                 })
                                 ->columnSpanFull()
-                                ->disabled(fn (callable $get) => $get('status') !== 'saved')
+                                ->disabled(fn (callable $get) => in_array($get('status'), ['pending']))
                                 ->required(),
 
                             Forms\Components\Textarea::make('question_5')
                                 ->label('¿Qué objetivo se espera alcanzar con esta capacitación?')
                                 ->placeholder('Ejemplo: Desarrollar habilidades de liderazgo inclusivo, mejorar la comunicación interna, reforzar el conocimiento técnico.')
                                 ->columnSpanFull()
-                                ->disabled(fn (callable $get) => $get('status') !== 'saved')
+                                ->disabled(fn (callable $get) => in_array($get('status'), ['pending']))
                                 ->required(),
 
                             Forms\Components\Textarea::make('question_6')
                                 ->label('¿Qué resultados inmediatos espera lograr después de esta capacitación?')
                                 ->placeholder('Ejemplo: Desarrollar habilidades de liderazgo inclusivo, mejorar la comunicación interna, reforzar el conocimiento técnico.')
                                 ->columnSpanFull()
-                                ->disabled(fn (callable $get) => $get('status') !== 'saved')
+                                ->disabled(fn (callable $get) => in_array($get('status'), ['pending']))
                                 ->required(),
                             
                             Forms\Components\Select::make('training_type')
@@ -248,7 +250,7 @@ class IdentifyNeedResource extends Resource
                                     }
                                 })
                                 ->columnSpan(8)
-                                ->disabled(fn (callable $get) => $get('status') !== 'saved')
+                                ->disabled(fn (callable $get) => in_array($get('status'), ['pending']))
                                 ->required(),
                             Forms\Components\TextInput::make('other_training_type')
                                 ->label('Otro tipo de capacitación')
@@ -256,7 +258,7 @@ class IdentifyNeedResource extends Resource
                                 ->columnSpan(4)
                                 ->disabled(fn (callable $get) => 
                                     $get('training_type') !== 'otro' || 
-                                    $get('status') !== 'saved'
+                                    in_array($get('status'), ['pending'])
                                 )
                                 ->dehydrated()
                                 ->required(fn (callable $get) => $get('training_type') === 'otro'), // Obligatorio si es "otro"
@@ -269,7 +271,7 @@ class IdentifyNeedResource extends Resource
                                 ->live()
                                 ->afterStateUpdated(fn (Set $set) => $set('impact_objective_id', null))
                                 ->columnSpanFull()
-                                ->disabled(fn (callable $get) => $get('status') !== 'saved')
+                                ->disabled(fn (callable $get) => in_array($get('status'), ['pending']))
                                 ->required(),
 
                             Forms\Components\Select::make('impact_objective_id')
@@ -280,7 +282,7 @@ class IdentifyNeedResource extends Resource
                                 ->searchable()
                                 ->preload()
                                 ->columnSpanFull()
-                                ->disabled(fn (callable $get) => $get('status') !== 'saved')
+                                ->disabled(fn (callable $get) => in_array($get('status'), ['pending']))
                                 ->required(),
 
                             Forms\Components\Select::make('mechanism')
@@ -302,7 +304,7 @@ class IdentifyNeedResource extends Resource
                                     }
                                 })
                                 ->columnSpan(4)
-                                ->disabled(fn (callable $get) => $get('status') !== 'saved')
+                                ->disabled(fn (callable $get) => in_array($get('status'), ['pending']))
                                 ->required(),
 
                             Forms\Components\TextInput::make('places')
@@ -310,7 +312,7 @@ class IdentifyNeedResource extends Resource
                                 ->numeric()
                                 ->minValue(1)
                                 ->columnSpan(4)
-                                ->disabled(fn (callable $get) => $get('status') !== 'saved')
+                                ->disabled(fn (callable $get) => in_array($get('status'), ['pending']))
                                 ->required(),
                         ]), 
 
@@ -332,7 +334,7 @@ class IdentifyNeedResource extends Resource
                                 })
                                 ->disabled(fn (callable $get) => 
                                     $get('mechanism') !== 'presencial' || 
-                                    $get('status') !== 'saved'
+                                    in_array($get('status'), ['pending'])
                                 )
                                 ->dehydrated()
                                 ->required(fn (callable $get) => $get('mechanism') === 'presencial'),
@@ -344,7 +346,7 @@ class IdentifyNeedResource extends Resource
                                 ->columnSpan(4)
                                 ->disabled(fn (callable $get) => 
                                     $get('coffee_break') !== '1' || 
-                                    $get('status') !== 'saved'
+                                    in_array($get('status'), ['pending'])
                                 )
                                 ->dehydrated()
                                 ->required(fn (callable $get) => $get('coffee_break') === '1'),
@@ -364,7 +366,7 @@ class IdentifyNeedResource extends Resource
                                 ->columnSpan(4)
                                 ->disabled(fn (callable $get) => 
                                     $get('mechanism') !== 'online' || 
-                                    $get('status') !== 'saved'
+                                    in_array($get('status'), ['pending'])
                                 )
                                 ->dehydrated()
                                 ->required(fn (callable $get) => $get('mechanism') === 'online'),
@@ -393,7 +395,7 @@ class IdentifyNeedResource extends Resource
                                 ->columnSpan(4)
                                 ->disabled(fn (callable $get) => 
                                     $get('online_type_mechanism') !== 'asincronico' || 
-                                    $get('status') !== 'saved'
+                                    in_array($get('status'), ['pending'])
                                 )
                                 ->dehydrated()
                                 ->required(fn (callable $get) => $get('online_type_mechanism') === 'asincronico'),
@@ -408,7 +410,7 @@ class IdentifyNeedResource extends Resource
                                 ->columnSpan(4)
                                 ->disabled(fn (callable $get) => 
                                     $get('exists') !== '1' || 
-                                    $get('status') !== 'saved'
+                                    in_array($get('status'), ['pending'])
                                 )
                                 ->dehydrated()
                                 ->required(fn (callable $get) => $get('exists') === '1'),
@@ -427,7 +429,7 @@ class IdentifyNeedResource extends Resource
                                     $set('transport_price', null);
                                 })
                                 ->columnSpan(8)
-                                ->disabled(fn (callable $get) => $get('status') !== 'saved')
+                                ->disabled(fn (callable $get) => in_array($get('status'), ['pending']))
                                 ->required(),
                             Forms\Components\TextInput::make('transport_price')
                                 ->label('¿Cuánto es el valor de traslado?')
@@ -436,7 +438,7 @@ class IdentifyNeedResource extends Resource
                                 ->columnSpan(4)
                                 ->disabled(fn (callable $get) => 
                                     $get('transport') !== '1' || 
-                                    $get('status') !== 'saved'
+                                    in_array($get('status'), ['pending'])
                                 )
                                 ->required(fn (callable $get) => $get('transport') === '1'), // Requerido si es "presencial"
                             
@@ -452,7 +454,7 @@ class IdentifyNeedResource extends Resource
                                     $set('accommodation_price', null);
                                 })
                                 ->columnSpan(8)
-                                ->disabled(fn (callable $get) => $get('status') !== 'saved')
+                                ->disabled(fn (callable $get) => in_array($get('status'), ['pending']))
                                 ->required(),
                             Forms\Components\TextInput::make('accommodation_price')
                                 ->label('¿Cuánto es el valor de alojamiento?')
@@ -461,7 +463,7 @@ class IdentifyNeedResource extends Resource
                                 ->columnSpan(4)
                                 ->disabled(fn (callable $get) => 
                                     $get('accommodation') !== '1' || 
-                                    $get('status') !== 'saved'
+                                    in_array($get('status'), ['pending'])
                                 )
                                 ->required(fn (callable $get) => $get('accommodation') === '1'),
                         ])
