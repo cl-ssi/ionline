@@ -361,7 +361,7 @@ class ProcessResource extends Resource
                 ->hiddenOn('create'),
             // ->hidden(fn (?Process $record) => $record->document_content === null)
 
-            Forms\Components\Section::make('Revisiones')
+            Forms\Components\Section::make('Revisión Jurídico')
                 ->headerActions([
                     Forms\Components\Actions\Action::make('Solicitar Revisión')
                         ->label('Solicitar Revisión')
@@ -397,28 +397,63 @@ class ProcessResource extends Resource
                         ->disabled(fn(?Process $record) => $record->revision_by_lawyer_user_id !== null),
                 ])
                 ->schema([
-                    Forms\Components\Fieldset::make('Jurídico')
-                        ->schema([
                             Forms\Components\DatePicker::make('revision_by_lawyer_at')
                                 ->label('Fecha de revisión')
                                 ->disabled(),
                             Forms\Components\Placeholder::make('Revisado por')
                                 ->content(fn(?Process $record) => $record->revisionByLawyerUser?->shortName),
-                        ])
-                        ->columnSpan(1)
-                        ->columns(2),
-                    Forms\Components\Fieldset::make('Comuna')
-                        ->schema([
+
+                ])
+                ->columnSpan(2)
+                ->columns(2)
+                ->hiddenOn('create'),
+
+
+            Forms\Components\Section::make('Revision Comuna')
+                ->headerActions([
+                    Forms\Components\Actions\Action::make('Solicitar Revisión')
+                        ->label('Solicitar Revisión')
+                        ->icon('heroicon-m-check-circle')
+                        ->requiresConfirmation()
+                        ->action(function (Process $record, array $data): void {
+                            /**
+                             * Notificar a Jurídico de la solicitud de revisión
+                             */
+                            $recipients = User::permission('Agreement: legally')->get();
+                            
+                            Notifications\Notification::make()
+                                ->title('Solicitud de revisión de proceso')
+                                ->actions([
+                                    Notifications\Actions\Action::make('IrAlProceso')
+                                        ->button()
+                                        ->url(ProcessResource::getUrl('edit', [$record->id]))
+                                        ->markAsRead(),
+                                ])
+                                ->sendToDatabase($recipients);
+
+                            // También enviar por mail cada persona que tenga el permiso Agreement: legally
+                            foreach($recipients as $recipient) {
+                                $recipient->notify(new NewProcessLegallyNotification($record));
+                            }
+
+                            Notifications\Notification::make()
+                                ->title('Solicitud de revisión enviada a jurídico')
+                                ->success()
+                                ->send();
+
+                        })
+                        ->disabled(fn(?Process $record) => $record->revision_by_lawyer_user_id !== null),
+                ])
+                ->schema([
+                    
                             Forms\Components\DatePicker::make('revision_by_commune_at')
                                 ->label('Fecha de revisión'),
                             Forms\Components\Placeholder::make('Revisado por')
                             ->content(fn(?Process $record) => $record->revisionByCommuneUser?->full_name),
-                        ])
-                        ->columnSpan(1)
-                        ->columns(2)
-                        ->visible(fn (?Process $record) => $record->processType->bilateral),
-
+                      
                 ])
+                ->columnSpan(2)
+                ->visible(fn (?Process $record) => $record->processType->bilateral)
                 ->columns(2)
                 ->hiddenOn('create'),
 
@@ -621,7 +656,7 @@ class ProcessResource extends Resource
                                 ->disabled()
                                 /** No encontré mejor forma para que me muestre el nombre del proceso, ya que processType.name no me funcionó */
                                 ->afterStateHydrated(function (Get $get, Set $set) {
-                                    $set('process_type_name',ProcessType::find($get('process_type_id'))?->name);
+                                    $set('process_type_name',ProcessType::find($get('process_type_id'))->name);
                                 })
                                 ->suffixAction(
                                     Forms\Components\Actions\Action::make('ir_al_proceso')
