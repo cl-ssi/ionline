@@ -1,7 +1,7 @@
 <hr>
 <link href="css/cu.min.css" rel="stylesheet">
 @if (app()->environment('production'))
-    <x-filament::button :href="route('socialite.auth.redirect', 'claveunica')" tag="a" color="info" class="btn-cu btn-s btn-fw btn-color-estandar"
+    <x-filament::button :href="route('claveunica.autenticar')" tag="a" color="info" class="btn-cu btn-s btn-fw btn-color-estandar"
         title="Este es el botón Iniciar sesión de ClaveÚnica">
         <span class="cl-claveunica"></span>
         <span class="texto">Iniciar sesión</span>
