@@ -296,6 +296,9 @@ class ProcessResource extends Resource
                         ->requiresConfirmation()
                         ->action(function (Process $record) {
                             $record->update(['status' => Status::Finished]);
+
+                            // Redireccionar a la misma página para forzar recarga
+                            return redirect()->to(ProcessResource::getUrl('edit', ['record' => $record->id]));
                         })
                         ->hidden(fn (?Process $record) => $record->status === Status::Finished),
                     Forms\Components\Actions\Action::make('Volver a editar')
@@ -306,6 +309,9 @@ class ProcessResource extends Resource
                             $record->update(['status' => Status::Draft]);
                             $record->resetEndorsesStatus();
                             $record->createComment('El proceso ha vuelto a estado de borrador, si existían visaciones, fueron reseteadas.');
+
+                            // Redireccionar a la misma página para forzar recarga
+                            return redirect()->to(ProcessResource::getUrl('edit', ['record' => $record->id]));
                         })
                         ->hidden(fn (?Process $record) => $record->status === Status::Draft),
                     Forms\Components\Actions\Action::make('Ver')
@@ -715,6 +721,9 @@ class ProcessResource extends Resource
                                 ->title('Documento aprobado por jurídico')
                                 ->success()
                                 ->send();
+
+                            // Refresh the page
+                            $livewire->redirect(request()->header('Referer'));
                         }),
                 ])
                 ->schema([
