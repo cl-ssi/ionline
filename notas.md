@@ -289,7 +289,7 @@ Revisión 16-01-2025
 [ ] Implementar en Editar un Proceso el boton "agregar visación"
 [ ] Diferencias circuito de apobación de resoluciones vs convenios
 [ ] En la sección firma director, implementar botón descargar (pra descargar convenio firmado)
-[ ] Se debe refrescar el content una vez se guarde o modifique el proceso.
+[X] Se debe refrescar el content una vez se guarde o modifique el proceso.
 [ ] Implementar switch "Activo" en el Tipo de Proceso
 
 
