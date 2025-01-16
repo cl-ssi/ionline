@@ -621,7 +621,7 @@ class ProcessResource extends Resource
                                 ->disabled()
                                 /** No encontré mejor forma para que me muestre el nombre del proceso, ya que processType.name no me funcionó */
                                 ->afterStateHydrated(function (Get $get, Set $set) {
-                                    $set('process_type_name',ProcessType::find($get('process_type_id'))->name);
+                                    $set('process_type_name',ProcessType::find($get('process_type_id'))?->name);
                                 })
                                 ->suffixAction(
                                     Forms\Components\Actions\Action::make('ir_al_proceso')
