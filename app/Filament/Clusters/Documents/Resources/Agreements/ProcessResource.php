@@ -397,12 +397,11 @@ class ProcessResource extends Resource
                         ->disabled(fn(?Process $record) => $record->revision_by_lawyer_user_id !== null),
                 ])
                 ->schema([
-                            Forms\Components\DatePicker::make('revision_by_lawyer_at')
-                                ->label('Fecha de revisión')
-                                ->disabled(),
-                            Forms\Components\Placeholder::make('Revisado por')
-                                ->content(fn(?Process $record) => $record->revisionByLawyerUser?->shortName),
-
+                    Forms\Components\DatePicker::make('revision_by_lawyer_at')
+                        ->label('Fecha de revisión')
+                        ->disabled(),
+                    Forms\Components\Placeholder::make('Revisado por')
+                        ->content(fn(?Process $record) => $record->revisionByLawyerUser?->shortName),
                 ])
                 ->columnSpan(2)
                 ->columns(2)
@@ -417,27 +416,11 @@ class ProcessResource extends Resource
                         ->requiresConfirmation()
                         ->action(function (Process $record, array $data): void {
                             /**
-                             * Notificar a Jurídico de la solicitud de revisión
+                             * Notificar a referentes externos del programa o los correos almacenados en municipalidad?
                              */
-                            $recipients = User::permission('Agreement: legally')->get();
-                            
-                            Notifications\Notification::make()
-                                ->title('Solicitud de revisión de proceso')
-                                ->actions([
-                                    Notifications\Actions\Action::make('IrAlProceso')
-                                        ->button()
-                                        ->url(ProcessResource::getUrl('edit', [$record->id]))
-                                        ->markAsRead(),
-                                ])
-                                ->sendToDatabase($recipients);
-
-                            // También enviar por mail cada persona que tenga el permiso Agreement: legally
-                            foreach($recipients as $recipient) {
-                                $recipient->notify(new NewProcessLegallyNotification($record));
-                            }
 
                             Notifications\Notification::make()
-                                ->title('Solicitud de revisión enviada a jurídico')
+                                ->title('PENDIENTE DEFINIR A QUIEN NOTIFICAR')
                                 ->success()
                                 ->send();
 
@@ -445,11 +428,10 @@ class ProcessResource extends Resource
                         ->disabled(fn(?Process $record) => $record->revision_by_lawyer_user_id !== null),
                 ])
                 ->schema([
-                    
-                            Forms\Components\DatePicker::make('revision_by_commune_at')
-                                ->label('Fecha de revisión'),
-                            Forms\Components\Placeholder::make('Revisado por')
-                            ->content(fn(?Process $record) => $record->revisionByCommuneUser?->full_name),
+                    Forms\Components\DatePicker::make('revision_by_commune_at')
+                        ->label('Fecha de revisión'),
+                    Forms\Components\Placeholder::make('Revisado por')
+                        ->content(fn(?Process $record) => $record->revisionByCommuneUser?->full_name),
                       
                 ])
                 ->columnSpan(2)
@@ -635,15 +617,9 @@ class ProcessResource extends Resource
                                 })
                                 ->required(),
                         ])
-                        ->action(function (Process $record, array $data): void {
-                            $record->createNextProcess($data['process_type_id']);
-                            // Refresh record reload relation nextProcesses
-                            $record->refresh();
-
-                            Notifications\Notification::make()
-                                ->title('Proceso dependiente creado')
-                                ->success()
-                                ->send();
+                        ->action(function (Process $record, array $data) {
+                            $process_id = $record->createNextProcess($data['process_type_id']);
+                            return redirect()->to(static::getUrl('edit', ['record' => $process_id]));
                         }),
                 ])
                 ->schema([

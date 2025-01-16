@@ -193,10 +193,10 @@ class Process extends Model
         $this->save();
     }
 
-    public function createNextProcess($process_type_id): void
+    public function createNextProcess($process_type_id): int
     {
         $nextProcess = $this->nextProcesses()->create([
-            'process_type_id' => $this->process_type_id,
+            'process_type_id' => $process_type_id,
             'period'          => $this->period,
             'program_id'      => $this->program_id,
             'commune_id'      => $this->commune_id,
@@ -208,6 +208,8 @@ class Process extends Model
             'signer_id'       => $this->signer_id,
             // 'quotas'          => $this->quotas,
         ]);
+
+        return $nextProcess->id;
     }
 
     public function createEndorses($referer_id): void
