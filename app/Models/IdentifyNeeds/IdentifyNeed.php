@@ -18,6 +18,8 @@ use App\Models\Documents\Approval;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use App\Models\Parameters\Parameter;
+use Illuminate\Support\Facades\Auth;
 
 
 class IdentifyNeed extends Model implements Auditable
@@ -444,6 +446,37 @@ class IdentifyNeed extends Model implements Auditable
                 $count++;
             }
         }
+
+        // Cambiar estado del registro
+        $this->update(['status' => 'pending']);
+    }
+
+    public function sendFormForExternal()
+    {   
+        $pdfContent = $this->generatePdf(); // Método que genera el contenido del PDF
+        $name = Str::random(40);
+        $path = "ionline/identify_needs/sin_firmar/" . $name . ".pdf";
+        // Almacenar en GCS con un hashName
+        Storage::disk('gcs')->put($path, $pdfContent);
+
+        $filename = $path;
+
+        $approval = $this->approvals()->create([
+            "module"                            => "Detección de Necesidades de Capacitación",
+            "module_icon"                       => "bi bi-person-video",
+            "subject"                           => 'DNC: ID '.$this->id.'<br>
+                                                    Funcionario: '.$this->user->TinyName,
+            "sent_to_ou_id"                     => Parameter::get('ou', 'DireccionAPS', Auth::user()->establishment_id),
+            "document_pdf_path"                 => $filename,
+            "active"                            => true,
+            "previous_approval_id"              => null,
+            "status"                            => null,
+            'approvable_callback'               => true,
+            "digital_signature"                 => true,
+            "position"                          => "center",
+            "start_y"                           => 82,
+            "filename"                          => 'ionline/identify_needs/firmados/' . $name .'.pdf',
+        ]);
 
         // Cambiar estado del registro
         $this->update(['status' => 'pending']);

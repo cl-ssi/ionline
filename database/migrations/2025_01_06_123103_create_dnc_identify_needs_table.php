@@ -21,7 +21,7 @@ return new class extends Migration
             $table->foreignId('user_id')->nullable()->constrained('users');
             $table->foreignId('organizational_unit_id')->nullable()->constrained('organizational_units');
             $table->string('organizational_unit_name')->nullable();
-            $table->foreignId('establishment_id')->constrained('establishments');
+            $table->foreignId('establishment_id')->nullable()->constrained('establishments');
             $table->string('establishment_name')->nullable();
             $table->string('email')->nullable();
             $table->string('email_personal')->nullable();

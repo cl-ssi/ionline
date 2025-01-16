@@ -1,10 +1,9 @@
 <?php
 
-namespace App\Filament\Clusters\TalentManagement\Resources;
+namespace App\Filament\Extranet\Resources;
 
-use App\Filament\Clusters\TalentManagement;
-use App\Filament\Clusters\TalentManagement\Resources\IdentifyNeedResource\Pages;
-use App\Filament\Clusters\TalentManagement\Resources\IdentifyNeedResource\RelationManagers;
+use App\Filament\Extranet\Resources\IdentifyNeedResource\Pages;
+use App\Filament\Extranet\Resources\IdentifyNeedResource\RelationManagers;
 use App\Models\IdentifyNeeds\IdentifyNeed;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -30,8 +29,6 @@ class IdentifyNeedResource extends Resource
     protected static ?string $modelLabel = 'Necesidades de Capacitaciones';
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
-
-    protected static ?string $cluster = TalentManagement::class;
 
     protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
 
@@ -65,12 +62,12 @@ class IdentifyNeedResource extends Resource
                                 ->columnSpan(6),
                             Forms\Components\TextInput::make('email_personal')
                                 ->label('Correo')
-                                ->default(fn ($record) => $record ? $record->email_personal : auth()->user()->email_personal) // Toma el valor del registro o del usuario autenticado
+                                ->default(fn ($record) => $record ? $record->email_personal : auth()->user()->email_personal)
                                 ->readOnly()
                                 ->columnSpan(3),
                             Forms\Components\TextInput::make('email')
                                 ->label('Correo Institucional')
-                                ->default(fn ($record) => $record ? $record->email : auth()->user()->email) // Toma el valor del registro o del usuario autenticado
+                                ->default(fn ($record) => $record ? $record->email : ((auth()->user()->external === true) ? '' : auth()->user()->email))
                                 ->readOnly()
                                 ->columnSpan(3),
                             Forms\Components\TextInput::make('organizational_unit_name')
@@ -83,27 +80,6 @@ class IdentifyNeedResource extends Resource
                                 ->default(fn ($record) => $record ? $record->position : auth()->user()->position) // Toma el valor del registro o del usuario autenticado
                                 ->readOnly()
                                 ->columnSpan(3),
-                        ]),
-                    ]),
-                
-                Forms\Components\Section::make('Jefatura')
-                    ->schema([
-                        Grid::make(12)->schema([
-                            Forms\Components\TextInput::make('boss_full_name')
-                                ->label('Nombre Jefatura')
-                                ->readOnly()
-                                ->afterStateHydrated(function (callable $set, $record) {
-                                    $set('boss_full_name', $record ? $record->bossUser->full_name : ((auth()->user()->boss) ? auth()->user()->boss->full_name : 'Sin jefatura asignada'));
-                                })
-                                ->columnSpan(6)
-                                ->required(),
-
-                            Forms\Components\TextInput::make('boss_email')
-                                ->label('Correo')
-                                ->readOnly()
-                                ->default(fn ($record) => $record ? $record->boss_email : (auth()->user()->boss ? auth()->user()->boss->email : null))
-                                ->columnSpan(6)
-                                ->required(),
                         ]),
                     ]),
                 
@@ -466,7 +442,7 @@ class IdentifyNeedResource extends Resource
                                 )
                                 ->required(fn (callable $get) => $get('accommodation') === '1'),
                         ])
-                    ]),
+                    ]),   
             ]);
     }
 
@@ -510,7 +486,6 @@ class IdentifyNeedResource extends Resource
                     })
                     ->sortable(),
             ])
-            ->defaultSort('id', 'desc')
             ->filters([
                 //
             ])
