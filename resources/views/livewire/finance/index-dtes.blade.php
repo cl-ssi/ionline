@@ -8,7 +8,7 @@
         <div class="col-md-1">
             <label for="for-establishment" class="form-label">Estab.</label>
             <select class="form-select" wire:model="filter.establishment">
-                <option value="">Todos</option>
+                <option value="all">Todos</option>
                 @foreach ($establishments as $name => $id)
                     <option value="{{ $name }}">{{ $id }}</option>
                 @endforeach

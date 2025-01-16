@@ -135,7 +135,8 @@ class IndexDtes extends Component
         ->when(isset($this->filter['establishment']), function($q){                   
             $q->when($this->filter['establishment'] == '?',  function($q){
                 $q->whereNull('establishment_id');
-            }, function($q){
+            })
+            ->when($this->filter['establishment'] != 'all', function($q){
                 $q->where('establishment_id', $this->filter['establishment']);
             });
         })
