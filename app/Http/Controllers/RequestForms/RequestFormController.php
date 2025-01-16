@@ -661,6 +661,7 @@ class RequestFormController extends Controller {
         $newRequestForm->signatures_file_id = null;
         $newRequestForm->old_signatures_file_id = null;
         $newRequestForm->approved_at = null;
+        if($requestForm->program_id == 0) $newRequestForm->program_id = null;
         $newRequestForm->push();
 
         $total = 0;

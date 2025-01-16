@@ -148,11 +148,11 @@ class RequestFormCreate extends Component
             $this->contractManagerOuId=   $this->requestForm->contract_manager_ou_id;
             $this->contractManager    =   $this->requestForm->contractManager;
             $this->superiorChief      =   $this->requestForm->superior_chief;
-            $this->period             =   $this->requestForm->associateProgram->period;
+            $this->period             =   ($this->requestForm->associateProgram) ? $this->requestForm->associateProgram->period : null;
             $this->program            =   $this->requestForm->program;
             $this->searchedProgram    =   $this->requestForm->associateProgram;
 
-            $this->program_id         =   $this->requestForm->associateProgram->id;
+            $this->program_id         =   ($this->requestForm->associateProgram) ? $this->requestForm->associateProgram->id : null;
             $this->justify            =   $this->requestForm->justification;
             $this->purchaseMechanism  =   $this->requestForm->purchase_mechanism_id;
             $this->typeOfCurrency     =   $this->requestForm->type_of_currency;
