@@ -3,6 +3,7 @@
 namespace App\Filament\Extranet\Resources;
 
 use App\Enums\Documents\Agreements\Status;
+use App\Filament\Clusters\Documents\Resources\Agreements\ProgramResource\RelationManagers\ProcessesRelationManager;
 use App\Filament\Extranet\Resources\ProcessResource\Pages;
 use App\Filament\Extranet\Resources\ProcessResource\RelationManagers;
 use App\Models\Documents\Agreements\Process;

@@ -761,6 +761,29 @@ class ProcessResource extends Resource
                 ->columns(2)
                 ->hiddenOn('create')
                 ->columnSpanFull(),
+
+            Forms\Components\Section::make('Archivos adjuntos')
+                ->schema([
+                    Forms\Components\Repeater::make('files')
+                        ->hiddenLabel(true)
+                        ->label('Archivos')
+                        ->relationship()
+                        ->schema([
+                            Forms\Components\TextInput::make('name')
+                                ->label('Nombre')
+                                ->required(),
+                            Forms\Components\FileUpload::make('storage_path')
+                                ->label('Archivo')
+                                ->directory('ionline/documents/agreements/processes-files')
+                                ->acceptedFileTypes(['application/pdf'])
+                                ->downloadable()
+                                ->required(),
+                        ])
+                        ->columns(2)
+                        ->hiddenOn('create')
+                        ->columnSpanFull(),
+                ]),
+
         ];
     }
 

@@ -277,9 +277,9 @@ TODO:
 
 Revisión 16-01-2025
 - [X] Corregir error en generación de siguiente proceso
-- [ ] Revisar plantilla porque no aparecen las cuotas.
+- [X] Revisar plantilla porque no aparecen las cuotas.
 - [X] En la distribución tenemos que poner los correos de las comunas.
-- [ ] Adjuntar archivos en los procesos.
+- [X] Adjuntar archivos en los procesos.
 - [ ] La notificacion de aprobacion de juridico debe llegarle al referente del programa.
 - [ ] En municipalidades, en alcaldes, agregar en la tabla el decreto
 - [ ] Quitar boton eliminar comuna

@@ -187,6 +187,14 @@ class Process extends Model
         return $this->morphOne(File::class, 'fileable')->where('type', 'final_process_file');
     }
 
+    /**
+     * Get all of the files of a model.
+     */
+    public function files(): MorphMany
+    {
+        return $this->morphMany(File::class, 'fileable')->whereNull('type');
+    }
+
     public function createOrUpdateDocument(): void
     {
         $this->document_content = $this->processType->template->parseTemplate($this);
