@@ -283,7 +283,7 @@ Revisión 16-01-2025
 [ ] La notificacion de aprobacion de juridico debe llegarle al referente del programa.
 [ ] En municipalidades, en alcaldes, agregar en la tabla el decreto
 [ ] Quitar boton eliminar comuna
-[ ] Editar tipo de proceso: quitar boton borrar
+[X] Editar tipo de proceso: quitar boton borrar
 [ ] Envio de correo automatico a la comuna.
 [ ] Revisar que hacer con las cuotas en los convenios de 12 cuotas (SAPU)
 [ ] Implementar en Editar un Proceso el boton "agregar visación"
