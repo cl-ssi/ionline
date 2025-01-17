@@ -207,4 +207,13 @@ class Program extends Model implements Auditable
             get: fn (): string => $this->formatDateSafely($this->resource_distribution_date)
         );
     }
+
+    public function referersEmailList(): Attribute
+    {
+        return Attribute::make(
+            get: fn (): string => $this->referers()->pluck('email')->map(function ($email) {
+                return "<li>{$email}</li>";
+            })->implode('')
+        );
+    }
 }

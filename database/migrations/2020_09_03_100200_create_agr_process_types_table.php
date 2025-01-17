@@ -19,6 +19,7 @@ return new class extends Migration
             $table->boolean('is_dependent')->default(false);
             // Aqui va father_process_type_id
             $table->boolean('has_resolution')->default(false);
+            $table->boolean('is_certificate')->default(false);
             $table->boolean('active')->default(true);
             $table->timestamps();
             $table->softDeletes();
