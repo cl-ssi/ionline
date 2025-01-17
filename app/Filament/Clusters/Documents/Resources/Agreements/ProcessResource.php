@@ -12,7 +12,6 @@ use App\Models\Comment;
 use App\Models\Documents\Agreements\Process;
 use App\Models\Documents\Agreements\ProcessType;
 use App\Models\Documents\Agreements\Signer;
-use App\Models\Documents\Document;
 use App\Models\Establishment;
 use App\Models\User;
 use App\Notifications\Documents\Agreeements\NewProcessLegallyNotification;
@@ -32,6 +31,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Storage;
 use Mohamedsabil83\FilamentFormsTinyeditor\Components\TinyEditor;
 
 class ProcessResource extends Resource
@@ -643,6 +643,12 @@ class ProcessResource extends Resource
 
             Forms\Components\Section::make('Firma Director')
                 ->headerActions([
+                    Forms\Components\Actions\Action::make('Descargar')
+                        ->label('Descargar')
+                        ->icon('heroicon-o-arrow-down-on-square')
+                        ->url(fn (Process $record) => Storage::url($record->approval->filename))
+                        ->openUrlInNewTab()
+                        ->visible(condition: fn (?Process $record) => $record->approval?->status === true),
                     Forms\Components\Actions\Action::make('SolicitarFirmaDirector')
                         ->label('Solicitar Firma Director/a')
                         ->icon('heroicon-m-check-circle')
@@ -650,7 +656,7 @@ class ProcessResource extends Resource
                         ->action(function (Process $record, array $data): void {
                             $record->createApproval();
                             Notifications\Notification::make()
-                                ->title('Solicitud de firma a dirección')
+                                ->title('Solicitud de firma a dirección enviada')
                                 ->success()
                                 ->send();
                         }),
@@ -664,10 +670,10 @@ class ProcessResource extends Resource
                         ->required()
                         ->columnSpan(2),
                     Forms\Components\Group::make()
-                        ->relationship('signer')
+                        ->relationship('approval')
                         ->schema([
-                            Forms\Components\TextInput::make('appellative')
-                                ->label('Nombre')
+                            Forms\Components\TextInput::make('initials')
+                                ->label('Iniciales')
                                 ->disabled()
                                 ->suffixIcon('heroicon-m-check-circle')
                                 ->suffixIconColor(fn ($record) => match ($record['status']) {
@@ -675,7 +681,10 @@ class ProcessResource extends Resource
                                     false   => 'danger',
                                     default => 'gray',
                                 }),
-                        ]),
+                        ])
+                        ->columns(2)
+                        ->columnSpan(2)
+                        ->visible(fn (?Process $record) => $record->approval()->exists()),
                 ])
                 ->columns(7)
                 ->hiddenOn('create'),
@@ -708,7 +717,7 @@ class ProcessResource extends Resource
                 ])
                 ->columns(5)
                 ->hiddenOn('create')
-                ->visible(fn (?Process $record): bool => ! $record->processType->has_resolution),
+                ->visible(fn (?Process $record): bool => ! $record->processType->is_resolution),
 
             Forms\Components\Section::make('Procesos Dependientes')
                 ->headerActions([

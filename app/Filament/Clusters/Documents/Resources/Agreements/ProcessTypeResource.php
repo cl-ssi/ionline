@@ -56,10 +56,10 @@ class ProcessTypeResource extends Resource
                     ->inline(false)
                     ->helperText('Para los que el proceso interviene la comuna y el servicio')
                     ->required(),
-                Forms\Components\Toggle::make('has_resolution')
-                    ->label('Tiene Resolución')
+                Forms\Components\Toggle::make('is_resolution')
+                    ->label('Es Resolución')
                     ->inline(false)
-                    ->helperText('El proceso tiene una resolución después de completarse')
+                    ->helperText('El proceso es una resolución, hace que la firma del director/a salga antes de la distribución')
                     ->required(),
                 Forms\Components\Toggle::make('is_certificate')
                     ->label('Es Certificado')
@@ -160,7 +160,7 @@ class ProcessTypeResource extends Resource
                 Tables\Columns\IconColumn::make('is_dependent')
                     ->label('Dependiente')
                     ->boolean(),
-                Tables\Columns\IconColumn::make('has_resolution')
+                Tables\Columns\IconColumn::make('is_resolution')
                     ->label('Resolución')
                     ->boolean()
                     ->toggleable(isToggledHiddenByDefault: true),

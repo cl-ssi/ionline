@@ -19,7 +19,7 @@ class ProcessType extends Model
         'bilateral',
         'is_dependent',
         'father_process_type_id',
-        'has_resolution',
+        'is_resolution',
         'is_certificate',
         'active',
     ];
@@ -27,7 +27,7 @@ class ProcessType extends Model
     protected $casts = [
         'bilateral'      => 'boolean',
         'is_dependent'   => 'boolean',
-        'has_resolution' => 'boolean',
+        'is_resolution'  => 'boolean',
         'active'         => 'boolean',
         'is_certificate' => 'boolean',
     ];

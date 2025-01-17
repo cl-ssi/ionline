@@ -15,7 +15,7 @@
 --
 # DTE
 ## Database
-[X] Marcar como CNB las OC, y eliminar la columna "cenabast" de fin_dte, usando el criterio de OC 621 (no recuerdo el numero)
+- [X] Marcar como CNB las OC, y eliminar la columna "cenabast" de fin_dte, usando el criterio de OC 621 (no recuerdo el numero)
 [X] Agregar columna "all_receptions" default (false) sin nullable a fin_dte (esta columna indica que la Factura tiene todas sus actas asociadas)
 [X] Setear all_receptions en true, con todas las dtes que tenga confirmation_status true
 [X] Setear rejected (default 0) en true con todos los confirmation_status false
@@ -287,78 +287,71 @@ Revisión 16-01-2025
 - [ ] Revisar que hacer con las cuotas en los convenios de 12 cuotas (SAPU)
 - [ ] Implementar en Editar un Proceso el boton "agregar visación"
 - [ ] Diferencias circuito de apobación de resoluciones vs convenios
-- [ ] En la sección firma director, implementar botón descargar (pra descargar convenio firmado)
+- [X] En la sección firma director, implementar botón descargar (pra descargar convenio firmado)
 - [X] Se debe refrescar el content una vez se guarde o modifique el proceso.
 - [X] Implementar switch "Activo" en el Tipo de Proceso
+- [ ] Notificar cuando el convenio fue firmado por la directora a referente y admins
 
 
 lunes 10am reunión (corrovorar a referentes comunales).-
 
+- [X] Una visaciónes de CDP del Referente Tecnico y firma es de el Departamento de Gestión Financiera
+- [X] Notificar: cuando esté finalizado a los admin del modulo
+
+- [ ] Certificados, una vez firmados, poner boton de descarga.
+- [ ] Revisar que pasò con el caso de huara.
+- [ ] Mostrar los establecimientos en el documento.
+
+- [-] Notificar cuando referente terminó de hacer el convenio
+- [X] Cuando se fue a la comuna, ya no se puede editar
+- [X] Mostrar si se reinició el proceso de firma, en comentario
+- [X] Aprobación o comentarios por comuna.
+- [X] Botón siguiente proceso en el index
+- [X] Firma de directora con su propio circulo en el index
+- [X] Indentificar que procesos van a la comuna para firma, para mostrar o no el cuadro
+- [+] Poder cargar documento numerado de OF Partes, donde corresponda
+- [ ] Distribución queda al final (solo para reso)
+- [X] Visaciones debajo de la distribución
+- [X] En programa: Adjuntar archivos para ambas reso (Aprobatoria y Distribución de recursos)
+- [ ] En aprobaciones que se vean los adjuntos
+- [X] Auto aprobar la visacion del referente
+- [X] Certificado De no fraccionamiento y de rendiciones, se crea por convenio
+- [ ] Escoger no enviar a la comuna (caso observaciones de contraloría, ya que visto bueno de comuna es técnico y no jurídico)
+
+- [X] Desbloquear listado de programas, filtrado por boolean is_program
+- [X] Poblar tabla alcaldes (mayors)
+- [X] En crear proceso filtrar por los que se puede empezar
+- [X] En crear proceso filtrar por los programas del periodo seleccionado en el campo anterior
+- [X] Correr la migracion de process
+- [X] Estado, desabilitar los botones, buscar otro lugar para poner el estado
+- [X] Crear Proceso - Crear documento del proceso en la misma ventana
+- [X] Crear Proceso - Solicitar visado
+- [X] Crear Proceso - Eliminar visado
+- [X] Action crear siguiente proceso
+- [X] Mostrar las aprobaciones (etapa en la que va)
+- [X] Una vez estado es "enviado a visación bloquear los campos o mostrar un view"
+- [X] Traducir boton en relation manager de crear componentes
+- [X] Crear vista del process para poder mostrar el documento y para las aprobaciones
+- [X] Crear Proceso - Auto calcular las cuotas
+- [-] Crear Proceso - Comentarios dejar fijos los que ya se ingresaron
+- [-] Mostrar vinculo al siguiente proceso
+- [-] Poblar approval flow
+- [-] Agregar archivo adjunto, resolución firmada por alcalde
+- [ ] Mostrar section con datos del programa y sus componentes
+- [X] Parametrizar abogado // Permiso Legally
+- [ ] Permitir edición abogado
+- [X] Agregar otros archivos adjunto
+- [X] Eliminar document_id
+- [X] Approvals permitir poner vizaciones
+- [ ] Auto solicitar firma de directora despues de la visación
+- [ ] Agregar descargar documento firmado por directora
+- [X] Comentario marcar como del sistema
+- [X] Eliminar boton para borrar en masa
 
 
+- [X] Fixear busqueda por nombre en asociar un referente
+- [X] Poblar convenios 2025
 
-
-[ ] Una visaciónes de CDP del Referente Tecnico y firma es de el Departamento de Gestión Financiera
-[ ] Notificar: cuando esté finalizado a los admin del modulo
-
-[ ] Certificados, una vez firmados, poner boton de descarga.
-[ ] Revisar que pasò con el caso de huara.
-[ ] Mostrar los establecimientos en el documento.
-
-[-] Notificar cuando referente terminó de hacer el convenio
-[X] Cuando se fue a la comuna, ya no se puede editar
-[X] Mostrar si se reinició el proceso de firma, en comentario
-[ ] Aprobación o indicación de aceptación o rechazo de cambio solicitado por comuna.
-[X] Botón siguiente proceso en el index
-[X] Firma de directora con su propio circulo en el index
-[X] Indentificar que procesos van a la comuna para firma, para mostrar o no el cuadro
-[+] Poder cargar documento numerado de OF Partes, donde corresponda
-[ ] Distribución queda al final (solo para reso)
-[X] Visaciones debajo de la distribución
-[X] En programa: Adjuntar archivos para ambas reso (Aprobatoria y Distribución de recursos)
-[ ] En aprobaciones que se vean los adjuntos
-[X] Auto aprobar la visacion del referente
-[ ] Certificado De no fraccionamiento y de rendiciones, se crea por convenio
-[ ] Escoger no enviar a la comuna (caso observaciones de contraloría, ya que visto bueno de comuna es técnico y no jurídico)
-
-[X] Desbloquear listado de programas, filtrado por boolean is_program
-[X] Poblar tabla alcaldes (mayors)
-[X] En crear proceso filtrar por los que se puede empezar
-[X] En crear proceso filtrar por los programas del periodo seleccionado en el campo anterior
-[X] Correr la migracion de process
-[X] Estado, desabilitar los botones, buscar otro lugar para poner el estado
-[X] Crear Proceso - Crear documento del proceso en la misma ventana
-[X] Crear Proceso - Solicitar visado
-[X] Crear Proceso - Eliminar visado
-[X] Action crear siguiente proceso
-[X] Mostrar las aprobaciones (etapa en la que va)
-[X] Una vez estado es "enviado a visación bloquear los campos o mostrar un view"
-[X] Traducir boton en relation manager de crear componentes
-[X] Crear vista del process para poder mostrar el documento y para las aprobaciones
-[X] Crear Proceso - Auto calcular las cuotas
-[-] Crear Proceso - Comentarios dejar fijos los que ya se ingresaron
-[-] Mostrar vinculo al siguiente proceso
-[-] Poblar approval flow
-[-] Agregar archivo adjunto, resolución firmada por alcalde
-[ ] Mostrar section con datos del programa y sus componentes
-[ ] Parametrizar abogado
-[ ] Permitir edición abogado
-[ ] Agregar otros archivos adjunto
-[ ] Eliminar document_id
-[ ] Approvals permitir poner vizaciones
-[ ] Auto solicitar firma de directora despues de la visación
-[ ] Agregar descargar documento firmado por directora
-[ ] Comentario marcar como del sistema
-[ ] Eliminar boton para borrar en masa
-
-
-[X] Fixear busqueda por nombre en asociar un referente
-[ ] Poblar convenios 2025
-
-
-[ ] Pendiente formato CDP
-[ ] Pendiente formato Certificado de rendiciones
-[ ] Pendiente certificado de no fraccionamiento
 
 ## Tareas al finalizar
 [ ] Eliminar tabla munipalities

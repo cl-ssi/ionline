@@ -271,22 +271,28 @@ class Process extends Model
 
     public function createApproval(): void
     {
-        // Solicitud de firma del director
-        $this->approval()->create([
+        $approvalData = [
             'module'                => 'Convenios',
             'module_icon'           => 'bi bi-file-earmark-text',
-            'subject'               => 'Firmar convenio',
+            'subject'               => $this->processType->name,
             'document_route_name'   => 'documents.agreements.processes.view',
             'document_route_params' => json_encode([
                 'record' => $this->id,
             ]),
-            'sent_to_ou_id'       => $this->signer->user->organizational_unit_id,
+            'sent_to_user_id'     => $this->signer->user->id,
             'digital_signature'   => true,
             'position'            => 'right',
-            'start_y'             => 150,
+            // el start_y depende de si el ProcessType es una resolución u otro
+            'start_y'             =>  $this->processType->is_resolution ? 110 : 35,
             'filename'            => 'ionline/agreements/processes/'.Str::random(30).'.pdf',
             'approvable_callback' => true,
-        ]);
+        ];
+
+        if($this->approval()->exists()) {
+            $this->approval()->update($approvalData);
+        } else {
+            $this->approval()->create($approvalData);
+        }
     }
 
     public function createComment($comment): void

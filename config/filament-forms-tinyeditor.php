@@ -13,7 +13,7 @@ return [
     'profiles' => [
 
         'ionline' => [
-            'plugins' => 'advlist autoresize preview directionality emoticons fullscreen hr image imagetools link lists media table code visualblocks',
+            'plugins' => 'advlist autoresize pagebreak preview directionality emoticons fullscreen hr image imagetools link lists media table code visualblocks',
             'toolbar' => 'undo redo removeformat | formatselect fontsizeselect | bold italic | alignjustify alignright aligncenter alignleft | rtl ltr | numlist bullist | table | forecolor backcolor tableclass | image | preview fullscreen about',
             'upload_directory' => null,
             'language'=> 'es_MX',
@@ -21,7 +21,7 @@ return [
                 'menu' => [
                     'tools' => [
                         'title' => 'Herramientas',
-                        'items' => 'code visualblocks removeformat'
+                        'items' => 'code pagebreak visualblocks removeformat'
                     ],
                 ],
                 'menubar' => 'file edit views insert format tools table',

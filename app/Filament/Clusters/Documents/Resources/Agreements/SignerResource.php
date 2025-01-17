@@ -43,8 +43,8 @@ class SignerResource extends Resource
                     ->maxLength(255),
                 Forms\Components\Select::make('user_id')
                     ->label('Usuario')
-                    ->relationship('user', 'short_name')
-                    ->searchable()
+                    ->relationship('user', 'full_name')
+                    ->searchable(['full_name'])
                     ->required(),
                 Forms\Components\Textarea::make('decree')
                     ->label('Decreto')

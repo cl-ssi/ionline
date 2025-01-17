@@ -22,26 +22,21 @@
         @endforeach
     </div>
 
-    @if($record->approval)
+    
+    @if($record->processType->bilateral)
         <div class="signature-footer">
-            <div class="signature" style="padding-left: 6px;"></div>
-            <div class="signature" style="padding-left: 6px;">
-                @include('sign.approvation', [
-                    'approval' => $record->approval,
-                ])
+            <div class="signature" style="padding-left: 50px; text-align: center;">
+                ______________________________<br>
+                {{ $record->municipality->name }}<br>
+                &nbsp;
+                <br>
+            </div>
+            <div class="signature" style="padding-left: 170px; text-align: center;">
+                ______________________________<br>
+                {{ mb_strtoupper(env('APP_SS')) }}<br>
+                &nbsp;
+                <br>
             </div>
         </div>
-
-
-        <div class="signature-footer">
-            {{-- <div class="signature" style="padding-left: 6px;"></div> --}}
-            <div class="signature" style="padding-left: 6px;"></div>
-            <div class="signature" style="padding-left: 6px;">
-                @include('sign.approvation', [
-                    'approval' => $record->approval,
-                ])
-            </div>
-        </div>
-
-    @endif
+    @endif 
 @endsection
