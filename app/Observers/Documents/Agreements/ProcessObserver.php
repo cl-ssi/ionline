@@ -67,6 +67,21 @@ class ProcessObserver
     /**
      * Handle the Process "deleted" event.
      */
+    public function deleting(Process $process): void
+    {
+        // Borrar todos los apprvals
+        $process->quotas()->delete();
+        $process->comments()->delete();
+        $process->approval()->delete();
+        $process->endorses()->delete();
+        $process->signedCommuneFile()->delete();
+        $process->finalProcessFile()->delete();
+        $process->files()->delete();
+    }
+
+    /**
+     * Handle the Process "deleted" event.
+     */
     public function deleted(Process $process): void
     {
         //
