@@ -283,7 +283,7 @@ Revisión 16-01-2025
 - [X] La notificacion de aprobacion de juridico debe llegarle al referente del programa.
 - [X] En municipalidades, en alcaldes, agregar en la tabla el decreto
 - [X] Editar tipo de proceso: quitar boton borrar
-- [ ] Envio de correo automatico a la comuna.
+- [X] Envio de correo automatico a la comuna.
 - [ ] Revisar que hacer con las cuotas en los convenios de 12 cuotas (SAPU)
 - [ ] Implementar en Editar un Proceso el boton "agregar visación"
 - [ ] Diferencias circuito de apobación de resoluciones vs convenios

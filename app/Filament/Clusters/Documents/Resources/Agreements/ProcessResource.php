@@ -2,37 +2,40 @@
 
 namespace App\Filament\Clusters\Documents\Resources\Agreements;
 
-use App\Enums\Documents\Agreements\Status;
+use Filament\Forms;
+use App\Models\User;
+use Filament\Tables;
+use App\Models\Comment;
+use Filament\Forms\Get;
+use Filament\Forms\Set;
+use Filament\Forms\Form;
+use Filament\Tables\Table;
+use Filament\Notifications;
+use App\Models\Establishment;
+use App\Services\TextCleaner;
+use App\Services\ColorCleaner;
+use App\Services\TableCleaner;
+use Filament\Resources\Resource;
+use Illuminate\Support\Collection;
 use App\Filament\Clusters\Documents;
+use Filament\Forms\Components\Hidden;
+use Filament\Support\Enums\Alignment;
+use Illuminate\Support\Facades\Storage;
+use Filament\Pages\SubNavigationPosition;
+use Illuminate\Database\Eloquent\Builder;
+use App\Enums\Documents\Agreements\Status;
+use App\Models\Documents\Agreements\Signer;
+use App\Models\Documents\Agreements\Process;
+use Illuminate\Support\Facades\Notification;
+use App\Models\Documents\Agreements\ProcessType;
+use App\Filament\RelationManagers\CommentsRelationManager;
+use App\Notifications\Documents\Agreeements\ProcessCommunePdf;
+use Mohamedsabil83\FilamentFormsTinyeditor\Components\TinyEditor;
+use App\Notifications\Documents\Agreeements\NewProcessCommuneNotification;
+use App\Notifications\Documents\Agreeements\NewProcessLegallyNotification;
 use App\Filament\Clusters\Documents\Resources\Agreements\ProcessResource\Pages;
 use App\Filament\Clusters\Documents\Resources\Agreements\ProcessResource\Widgets;
 use App\Filament\Clusters\Documents\Resources\Agreements\ProgramResource\RelationManagers\ProcessesRelationManager;
-use App\Filament\RelationManagers\CommentsRelationManager;
-use App\Models\Comment;
-use App\Models\Documents\Agreements\Process;
-use App\Models\Documents\Agreements\ProcessType;
-use App\Models\Documents\Agreements\Signer;
-use App\Models\Establishment;
-use App\Models\User;
-use App\Notifications\Documents\Agreeements\NewProcessLegallyNotification;
-use App\Services\ColorCleaner;
-use App\Services\TableCleaner;
-use App\Services\TextCleaner;
-use Filament\Forms;
-use Filament\Forms\Components\Hidden;
-use Filament\Forms\Form;
-use Filament\Forms\Get;
-use Filament\Forms\Set;
-use Filament\Notifications;
-use Filament\Pages\SubNavigationPosition;
-use Filament\Resources\Resource;
-use Filament\Support\Enums\Alignment;
-use Filament\Tables;
-use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Storage;
-use Mohamedsabil83\FilamentFormsTinyeditor\Components\TinyEditor;
 
 class ProcessResource extends Resource
 {
@@ -530,15 +533,21 @@ class ProcessResource extends Resource
                         ->requiresConfirmation()
                         ->action(function (Process $record, array $data): void {
                             /**
-                             * Notificar a referentes externos del programa o los correos almacenados en municipalidad?
+                             * Notificar a Comunas de la solicitud de revisión
                              */
+
+                            $recipients = $record->municipality->emails;
+                            
+                            foreach ($recipients as $recipient) {
+                                Notification::route('mail', $recipient)->notify(new NewProcessCommuneNotification($record));
+                            }
+
                             Notifications\Notification::make()
-                                ->title('PENDIENTE DEFINIR A QUIEN NOTIFICAR')
+                                ->title('Solicitud de revisión enviada a comunas')
                                 ->success()
                                 ->send();
-
                         })
-                        ->disabled(fn (?Process $record) => $record->revision_by_lawyer_user_id !== null),
+                        ->disabled(fn (?Process $record) => $record->revision_by_commune_user_id !== null),
                 ])
                 ->schema([
                     Forms\Components\DatePicker::make('revision_by_commune_at')
@@ -634,6 +643,30 @@ class ProcessResource extends Resource
                     Forms\Components\Actions\Action::make('guardar_cambios')
                         ->icon('bi-save')
                         ->action('save'),
+
+                    Forms\Components\Actions\Action::make('Enviar Proceso')
+                        ->icon('heroicon-m-paper-airplane')
+                        ->requiresConfirmation()
+                        ->action(function (Process $record, Get $get, $livewire): void {
+                            $recipients = $record->municipality->emails;
+                            
+                            foreach ($recipients as $recipient) {
+                                Notification::route('mail', $recipient)->notify(new ProcessCommunePdf($record));
+                            }
+
+                            Notifications\Notification::make()
+                                ->title('PDF enviado a la comuna')
+                                ->success()
+                                ->send();
+
+                            // establecer fecha de aprobacion y usuario que aprobó
+                            $record->update(['sended_to_commune_at' => now()]);
+
+                            // Refresh the page
+                            $livewire->redirect(request()->header('Referer'));
+                        })
+                        // ->hidden(fn (?Process $record) => $record->status !== Status::Finished),
+
                 ])
                 ->footerActionsAlignment(Alignment::End)
                 ->columns(2)
@@ -864,6 +897,7 @@ class ProcessResource extends Resource
 
                             // Refresh the page
                             $livewire->redirect(request()->header('Referer'));
+
                         }),
                 ])
                 ->schema([

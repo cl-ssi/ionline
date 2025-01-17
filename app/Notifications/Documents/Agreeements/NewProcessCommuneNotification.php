@@ -2,53 +2,60 @@
 
 namespace App\Notifications\Documents\Agreeements;
 
+use App\Filament\Clusters\Documents\Resources\Agreements\ProcessResource;
+use App\Models\Documents\Agreements\Process;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
-use Barryvdh\DomPDF\Facade\Pdf;
 
 class NewProcessCommuneNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 
-    protected $record;
+    public Process $process;
 
-    public function __construct($record)
+    /**
+     * Create a new notification instance.
+     */
+    public function __construct(Process $process)
     {
-        $this->record = $record;
+        $this->process = $process;
     }
 
-    public function via($notifiable)
+    /**
+     * Get the notification's delivery channels.
+     *
+     * @return array<int, string>
+     */
+    public function via(object $notifiable): array
     {
         return ['mail'];
     }
 
-    public function toMail($notifiable)
+    /**
+     * Get the mail representation of the notification.
+     */
+    public function toMail(object $notifiable): MailMessage
     {
-        // Generar el PDF usando la misma vista que usas para visualizar
-        $pdf = Pdf::loadView('documents.agreements.processes.view', [
-            'record' => $this->record,
-            // Aquí puedes agregar más variables que necesites en la vista
-        ]);
-
         return (new MailMessage)
-                    ->subject('Nuevo Proceso Comunal')
-                    ->greeting('Hola!')
-                    ->line('Se ha creado un nuevo proceso comunal.')
-                    ->line('Adjunto al correo va el PDF en referencia.')
-                    // ->action('Ver Proceso', route('documents.agreements.processes.view', [$this->record]))
-                    // ->line('Gracias por usar nuestra aplicación!')
-                    ->attachData($pdf->output(), 'proceso_' . $this->record->id . '.pdf', [
-                        'mime' => 'application/pdf',
-                    ]);
+            ->level('info')
+            ->subject('Proceso para revisión ' . $this->process->id)
+            ->greeting('Estimado/a')
+            ->line('Nuevo proceso para revisión Nº: ' . $this->process->id)
+            ->action('Ver Proceso ' . $this->process->id, ProcessResource::getUrl('edit', [$this->process->id]) )
+            ->salutation('Saludos cordiales.');
     }
 
-    public function toArray($notifiable)
+    /**
+     * Get the array representation of the notification.
+     *
+     * @return array<string, mixed>
+     */
+    public function toArray(object $notifiable): array
     {
         return [
-            'record_id' => $this->record->id,
-            'message' => 'Se ha creado un nuevo proceso comunal.',
+            //
         ];
     }
 }
