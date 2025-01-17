@@ -73,9 +73,14 @@ class MunicipalityResource extends Resource
                     ->label('Alcaldes')
                     ->bulleted()
                     ->searchable(),
+                Tables\Columns\TextColumn::make('mayors.decree')
+                    ->label('Alcaldes')
+                    ->bulleted()
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('commune.name')
                     ->label('Comuna')
-                    ->sortable(),
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

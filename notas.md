@@ -281,7 +281,7 @@ Revisión 16-01-2025
 - [X] En la distribución tenemos que poner los correos de las comunas.
 - [X] Adjuntar archivos en los procesos.
 - [ ] La notificacion de aprobacion de juridico debe llegarle al referente del programa.
-- [ ] En municipalidades, en alcaldes, agregar en la tabla el decreto
+- [X] En municipalidades, en alcaldes, agregar en la tabla el decreto
 - [ ] Quitar boton eliminar comuna
 - [X] Editar tipo de proceso: quitar boton borrar
 - [ ] Envio de correo automatico a la comuna.
