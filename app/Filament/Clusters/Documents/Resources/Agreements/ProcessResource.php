@@ -486,7 +486,7 @@ class ProcessResource extends Resource
             Forms\Components\Section::make('Revisión Jurídico')
                 ->headerActions([
                     Forms\Components\Actions\Action::make('Solicitar Revisión')
-                        ->label('Solicitar Revisión')
+                        ->label('Solicitar revisión jurídico')
                         ->icon('heroicon-m-check-circle')
                         ->requiresConfirmation()
                         ->action(function (Process $record, array $data): void {
@@ -531,7 +531,7 @@ class ProcessResource extends Resource
 
             Forms\Components\Section::make('Revision Comuna')
                 ->headerActions([
-                    Forms\Components\Actions\Action::make('Solicitar Revisión')
+                    Forms\Components\Actions\Action::make('Solicitar revisión comuna')
                         ->label('Solicitar Revisión')
                         ->icon('heroicon-m-check-circle')
                         ->requiresConfirmation()
@@ -828,7 +828,8 @@ class ProcessResource extends Resource
                         ->columns(2)
                         ->hiddenOn('create')
                         ->columnSpanFull(),
-                ]),
+                ])
+                ->hiddenOn('create'),
 
         ];
     }
@@ -838,9 +839,9 @@ class ProcessResource extends Resource
         return [
             Forms\Components\Section::make('Documento')
                 ->footerActions([
-                    Forms\Components\Actions\Action::make('guardar_cambios')
-                        ->icon('bi-save')
-                        ->action('save'),
+                    // Forms\Components\Actions\Action::make('guardar_cambios')
+                    //     ->icon('bi-save')
+                    //     ->action('save'),
                     Forms\Components\Actions\Action::make('Ver')
                         ->icon('heroicon-m-eye')
                         ->url(fn (Process $record) => route('documents.agreements.processes.view', [$record]))
@@ -851,7 +852,8 @@ class ProcessResource extends Resource
                     TinyEditor::make('document_content')
                         ->hiddenLabel()
                         ->profile('ionline')
-                        ->disabled(fn (?Process $record): bool => $record->revision_by_lawyer_user_id !== null),
+                        ->disabled(),
+                        // ->disabled(fn (?Process $record): bool => $record->revision_by_lawyer_user_id !== null),
                 ])
                 ->hiddenOn('create'),
 
@@ -863,7 +865,7 @@ class ProcessResource extends Resource
                         ->requiresConfirmation()
                         ->action(function (Process $record, Get $get, $livewire): void {
                             // Guardar cambios del documento
-                            $record->update(['content' => $get('document_content')]);
+                            // $record->update(['content' => $get('document_content')]);
 
                             // establecer fecha de aprobacion y usuario que aprobó
                             $record->update(['revision_by_lawyer_at' => now(), 'revision_by_lawyer_user_id' => auth()->id()]);

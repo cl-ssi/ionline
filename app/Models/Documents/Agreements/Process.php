@@ -245,6 +245,7 @@ class Process extends Model
             'sent_to_user_id' => $referer_id,
 
             /* Aprobado por defecto */
+            'endorse'        => true,
             'approver_ou_id' => User::find($referer_id)->organizational_unit_id ?? null,
             'approver_id'    => $referer_id,
             'approver_at'    => now(),

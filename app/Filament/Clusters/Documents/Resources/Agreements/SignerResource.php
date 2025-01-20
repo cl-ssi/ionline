@@ -67,6 +67,11 @@ class SignerResource extends Resource
                     ->label('Decreto')
                     ->wrap()
                     ->searchable(),
+                // Show icon if is trashed
+                Tables\Columns\BooleanColumn::make('deleted_at')
+                    ->trueIcon('heroicon-o-trash')
+                    ->trueColor('danger')
+                    ->label('Eliminado'),
             ])
             ->filters([
                 //
@@ -95,5 +100,13 @@ class SignerResource extends Resource
             'create' => Pages\CreateSigner::route('/create'),
             'edit' => Pages\EditSigner::route('/{record}/edit'),
         ];
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()
+            ->withoutGlobalScopes([
+                SoftDeletingScope::class,
+            ]);
     }
 }
