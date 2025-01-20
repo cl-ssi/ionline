@@ -17,6 +17,7 @@ return new class extends Migration
             $table->text('decree'); // DECRETO DIRECTOR
             $table->foreignId('user_id')->constrained('users'); // DIRECTOR USER ID
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
