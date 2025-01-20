@@ -220,6 +220,12 @@ class Process extends Model
         return $nextProcess->id;
     }
 
+    /**
+     * 
+     * Crea las visaciones, depende del flujo de aprobación
+     * @param mixed $referer_id
+     * @return void
+     */
     public function createEndorses($referer_id): void
     {
         // no hacer nada si ya tiene visadores
@@ -246,7 +252,7 @@ class Process extends Model
         ]);
 
         // El resto de los visadores de obtienen del Flujo de aprobación
-        $steps = ApprovalFlow::getByObject($this);
+        $steps = ApprovalFlow::getByObject($this, $this->processType->is_resolution ? 'resolution' : 'other');
         foreach ($steps as $step) {
             $this->endorses()->create([
                 'module'                => 'Convenios',
@@ -348,6 +354,20 @@ class Process extends Model
                     ->markAsRead(),
             ])
             ->sendToDatabase($this->program->referers);
+
+        // Notificar a los admin del modulo
+        $recipients = User::permission('Agreement: admin')
+            ->where('establishment_id', $this->establishment_id)
+            ->get();
+        Notification::make()
+            ->title('Proceso Firmado por el Director')
+            ->actions([
+                Action::make('IrAlProceso')
+                    ->button()
+                    ->url(ProcessResource::getUrl('edit', [$this->id]))
+                    ->markAsRead(),
+            ])
+            ->sendToDatabase($recipients);
 
     }
 

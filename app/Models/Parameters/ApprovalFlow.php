@@ -38,21 +38,31 @@ class ApprovalFlow extends Model
     /**
      *  Obtiene el flujo de aprobación a través de una clase
      */
-    public static function getByClass($class): Collection
+    public static function getByClass($class, $parameter = null): Collection
     {
-        $approvalFlow = ApprovalFlow::where('class', $class)->first();
-    
-        return $approvalFlow ? $approvalFlow->steps()->get() : collect();
+        return self::getApprovalFlow($class, $parameter);
     }
 
     /**
      *  Obtiene el flujo de aprobación a través de un objeto
      */
-    public static function getByObject($object): Collection
+    public static function getByObject($object, $parameter = null): Collection
     {
-        $class = get_class(object: $object);
-        $approvalFlow = ApprovalFlow::where('class', $class)->first();
-    
+        $class = get_class($object);
+        return self::getApprovalFlow($class, $parameter);
+    }
+
+    /**
+     *  Método privado para obtener el flujo de aprobación
+     */
+    private static function getApprovalFlow($class, $parameter = null): Collection
+    {
+        $approvalFlow = ApprovalFlow::where('class', $class)
+            ->when($parameter, function ($query, $parameter) {
+                return $query->where('parameter', $parameter);
+            })
+            ->first();
+
         return $approvalFlow ? $approvalFlow->steps()->get() : collect();
     }
 }

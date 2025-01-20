@@ -70,6 +70,10 @@ class ProcessResource extends Resource
     {
         return $table
             ->columns([
+                Tables\Columns\TextColumn::make('id')
+                    ->label('Id')
+                    ->searchable()
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('processType.name')
                     ->label('Tipo de proceso')
                     ->wrap()
@@ -679,7 +683,7 @@ class ProcessResource extends Resource
                     Forms\Components\Actions\Action::make('Descargar')
                         ->label('Descargar')
                         ->icon('heroicon-o-arrow-down-on-square')
-                        ->url(fn (Process $record) => Storage::url($record->approval->filename))
+                        ->url(fn (Process $record) => Storage::url($record->approval?->filename ?? ''))
                         ->openUrlInNewTab()
                         ->visible(condition: fn (?Process $record) => $record->approval?->status === true),
                     Forms\Components\Actions\Action::make('SolicitarFirmaDirector')
@@ -709,7 +713,7 @@ class ProcessResource extends Resource
                                 ->label('Iniciales')
                                 ->disabled()
                                 ->suffixIcon('heroicon-m-check-circle')
-                                ->suffixIconColor(fn ($record) => match ($record['status']) {
+                                ->suffixIconColor(fn ($record) => match ($record['status'] ?? null) {
                                     true    => 'success',
                                     false   => 'danger',
                                     default => 'gray',

@@ -286,11 +286,11 @@ Revisión 16-01-2025
 - [X] Envio de correo automatico a la comuna.
 - [ ] Revisar que hacer con las cuotas en los convenios de 12 cuotas (SAPU)
 - [ ] Implementar en Editar un Proceso el boton "agregar visación"
-- [ ] Diferencias circuito de apobación de resoluciones vs convenios
+- [X] Diferencias circuito de apobación de resoluciones vs convenios
 - [X] En la sección firma director, implementar botón descargar (pra descargar convenio firmado)
 - [X] Se debe refrescar el content una vez se guarde o modifique el proceso.
 - [X] Implementar switch "Activo" en el Tipo de Proceso
-- [ ] Notificar cuando el convenio fue firmado por la directora a referente y admins
+- [X] Notificar cuando el convenio fue firmado por la directora a referente y admins
 
 
 lunes 10am reunión (corrovorar a referentes comunales).-
