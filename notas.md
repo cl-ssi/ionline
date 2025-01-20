@@ -299,8 +299,8 @@ lunes 10am reunión (corrovorar a referentes comunales).-
 - [X] Notificar: cuando esté finalizado a los admin del modulo
 
 - [ ] Certificados, una vez firmados, poner boton de descarga.
-- [ ] Revisar que pasò con el caso de huara.
-- [ ] Mostrar los establecimientos en el documento.
+- [ ] Revisar que pasó con el caso de huara.
+- [X] Mostrar los establecimientos en el documento.
 
 - [-] Notificar cuando referente terminó de hacer el convenio
 - [X] Cuando se fue a la comuna, ya no se puede editar
@@ -310,7 +310,7 @@ lunes 10am reunión (corrovorar a referentes comunales).-
 - [X] Firma de directora con su propio circulo en el index
 - [X] Indentificar que procesos van a la comuna para firma, para mostrar o no el cuadro
 - [+] Poder cargar documento numerado de OF Partes, donde corresponda
-- [ ] Distribución queda al final (solo para reso)
+- [X] Distribución queda al final (solo para reso)
 - [X] Visaciones debajo de la distribución
 - [X] En programa: Adjuntar archivos para ambas reso (Aprobatoria y Distribución de recursos)
 - [ ] En aprobaciones que se vean los adjuntos
@@ -344,7 +344,7 @@ lunes 10am reunión (corrovorar a referentes comunales).-
 - [X] Eliminar document_id
 - [X] Approvals permitir poner vizaciones
 - [ ] Auto solicitar firma de directora despues de la visación
-- [ ] Agregar descargar documento firmado por directora
+- [X] Agregar descargar documento firmado por directora
 - [X] Comentario marcar como del sistema
 - [X] Eliminar boton para borrar en masa
 
@@ -365,6 +365,24 @@ lunes 10am reunión (corrovorar a referentes comunales).-
 - ¿Los componentes de programas tienen los subtitulos?
 - ¿la distribucion de presupuesto es una por cdp o una por programa?
 - programa de anticipo de aporte estatal, cuotas diferentes a los demás? 20.919 id:1148
+
+
+Visadores de convenios y addendum 
+1. Referente
+2. Jurídica
+3. Directora APS
+4. Subdirector gestión asistencial 
+5. Departamento de gestión financiera 
+
+
+Para visaciones de Resolución son:
+1. Referente
+2. Jefe directo de Referente (aun no lo dejan claro, naty debe decidir)
+3. Jurídica 
+4. Directora APS 
+5. Subdirector de gestión asistencial 
+6. Subdirectora de administrativo
+
 
 El sistema no hará:
 - Paginas horizontales y verticales
@@ -401,15 +419,6 @@ Modulo
 - Migrar y Eliminar - agr_program_components
 
 
-
-- Descargas en Word
-- Formato con el editor de documentos
-- Dificultades en dos áreas
-  - Cambios de formato Jurídicos
-  - 
-
-Flexibilidad en los formatos.
-
 Procesos de convenios, son 5
  Convenio nuevo
    - modificación
@@ -433,14 +442,21 @@ Formatos:
 
 Reunión Lupa:
 - No aparece nuevo addendum si no está terminado la resolución del convenio
-- Ley 20919 es diferente en la cuotas
+- Ley 20.919 es diferente en la cuotas
 - Dejar de trabajar con word
 - Caso hoja horizontal
 - Municipalidad y sus subrogantes y alcaldes
 
 
-Articulado 
-Subtitulo 24 presupuesto de las municipalidades (casi todo tiene el 24)
+Dificultades actuales:
+- Descargas en Word
+- Formato con el editor de documentos
+- Dificultades en dos áreas
+  - Cambios de formato Jurídicos
+  - 
+
+### Requerimientos 1ra Reunión:
+====================================================
 
 La plataforma si permite hacer la 21 y 22. 
 Se puede generar una resolución de los convenios en otra opción. (Natalia)
@@ -451,27 +467,22 @@ Se puede generar una resolución de los convenios en otra opción. (Natalia)
 - Trabajar en el visto bueno de la comuna. (como hacer para dos cambios al mismo tiempo, comuna y sst)
 - Seguimiento del proceso del convenio. (ej 3 meses)
 - No tanta pestaña
+- No reutilizar el sistema anterior
+- Flexibilidad en los formatos, poder incorporar nuevos formatos
 
-### Solo para convenios nuevos (todo lo que vaya a contraloría)
-- CDP (Finanzas)
-- Certificado de rendiciones (Finanzas) Requiere ingreso de información
-- Certificado de no fraccionamiento (Finanzas) Tenemos los datos
-
-### Requerimientos:
-====================================================
 Primer hito (adjuntar) con fecha de anexamiento 
 - Resolución aprobatoria del programa
 - Resolución de distribución de recursos del programa
 
-Planear distribución local que es igual al CDP.
+Articulado 
+Subtitulo 24 presupuesto de las municipalidades (casi todo tiene el 24)
+
+### Certificados. Solo para convenios nuevos (todo lo que vaya a contraloría)
+- CDP (Finanzas)
+- Certificado de rendiciones (Finanzas) Requiere ingreso de información
+- Certificado de no fraccionamiento (Finanzas) Tenemos los datos
 
 (40 días corridos COMGES)
-
-Distribución local
----
-La distribución local debe ser ingresada en algún lugar, y que luego
-Revisión de Natalia respecto de la distribución.
-Justificación técnica si es monto de ejecución es menor.
 
 Convenios con comunas y sub 21 y 22.
 - Convenio nuevo (Sub 24 tranf a terceros)
@@ -512,14 +523,17 @@ Resolución modificatoria
 - Informe de las platas (Ej, cuanto plata se le entregó a Pica por programa)
 - Finanzas incorporar transferencias realizadas.
 
-
 - Fecha de partida: Enero 2025.
-
-Word.
 
 Perfiles. (Comuna, Referente, Admin de convenios (eliminar))
 Alertas de que necesitan realizar una acción
 
+Distribución local
+------------
+Planear distribución local que es igual al CDP.
+La distribución local debe ser ingresada en algún lugar, y que luego
+Revisión de Natalia respecto de la distribución.
+Justificación técnica si es monto de ejecución es menor.
 
 
 
