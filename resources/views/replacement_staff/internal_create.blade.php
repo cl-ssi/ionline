@@ -34,7 +34,7 @@
         </fieldset>
         <fieldset class="form-group col-3">
             <label for="for_name">Apellido Materno</label>
-            <input type="text" class="form-control" name="mothers_family" id="for_mothers_family" value="{{ old('mothers_family') }}">
+            <input type="text" class="form-control" name="mothers_family" id="for_mothers_family" value="{{ old('mothers_family', 'S/A') }}">
         </fieldset>
         <fieldset class="form-group col-3">
             <label for="for_gender" >Género</label>
