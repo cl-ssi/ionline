@@ -17,7 +17,7 @@ class ProcessObserver
 
         $process->municipality_name = $process->municipality->name;
         $process->municipality_rut = $process->municipality->rut;
-        $process->municipality_adress = $process->municipality->adress;
+        $process->municipality_address = $process->municipality->address;
 
         $process->mayor_name = $process->mayor->name;
         $process->mayor_run = $process->mayor->run;
@@ -47,7 +47,7 @@ class ProcessObserver
 
         $process->municipality_name = $process->municipality->name;
         $process->municipality_rut = $process->municipality->rut;
-        $process->municipality_adress = $process->municipality->adress;
+        $process->municipality_address = $process->municipality->address;
 
         $process->mayor_name = $process->mayor->name;
         $process->mayor_run = $process->mayor->run;

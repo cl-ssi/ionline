@@ -126,7 +126,7 @@ class ProcessResource extends Resource
                 //     ->searchable(),
                 // Tables\Columns\TextColumn::make('municipality_rut')
                 //     ->searchable(),
-                // Tables\Columns\TextColumn::make('municipality_adress')
+                // Tables\Columns\TextColumn::make('municipality_address')
                 //     ->searchable(),
                 // Tables\Columns\TextColumn::make('mayor.name')
                 //     ->numeric()

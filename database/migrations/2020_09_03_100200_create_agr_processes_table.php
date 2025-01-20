@@ -22,7 +22,7 @@ return new class extends Migration
             $table->foreignId('municipality_id')->constrained('cfg_municipalities');
             $table->string('municipality_name')->nullable();
             $table->string('municipality_rut')->nullable();
-            $table->string('municipality_adress')->nullable();
+            $table->string('municipality_address')->nullable();
 
             $table->foreignId('mayor_id')->constrained('cfg_mayors');
             $table->string('mayor_name')->nullable();

@@ -45,7 +45,7 @@ class Process extends Model
         'municipality_id',
         'municipality_name',
         'municipality_rut',
-        'municipality_adress',
+        'municipality_address',
         'mayor_id',
         'mayor_name',
         'mayor_run',
