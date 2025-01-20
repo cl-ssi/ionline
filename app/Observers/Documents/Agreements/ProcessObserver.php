@@ -53,7 +53,7 @@ class ProcessObserver
         $process->mayor_run = $process->mayor->run;
         $process->mayor_appellative = $process->mayor->appellative;
         $process->mayor_decree = $process->mayor->decree;
-        $process->establishment_id = auth()->user()->establishment_id;
+        // $process->establishment_id = auth()->user()->establishment_id;
     }
 
     /**

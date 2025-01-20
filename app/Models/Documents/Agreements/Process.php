@@ -16,7 +16,6 @@ use App\Models\Parameters\Municipality;
 use App\Models\Parameters\Program;
 use App\Models\User;
 use App\Observers\Documents\Agreements\ProcessObserver;
-use Filament\Forms\Components\Actions\Action;
 use Filament\Notifications\Notification;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Builder;
@@ -29,6 +28,7 @@ use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Number;
 use Illuminate\Support\Str;
+use Filament\Notifications;
 
 #[ObservedBy([ProcessObserver::class])]
 class Process extends Model
@@ -349,7 +349,7 @@ class Process extends Model
         Notification::make()
             ->title('Proceso Firmado por el Director')
             ->actions([
-                Action::make('IrAlProceso')
+                Notifications\Actions\Action::make('IrAlProceso')
                     ->button()
                     ->url(ProcessResource::getUrl('edit', [$this->id]))
                     ->markAsRead(),
@@ -363,7 +363,7 @@ class Process extends Model
         Notification::make()
             ->title('Proceso Firmado por el Director')
             ->actions([
-                Action::make('IrAlProceso')
+                Notifications\Actions\Action::make('IrAlProceso')
                     ->button()
                     ->url(ProcessResource::getUrl('edit', [$this->id]))
                     ->markAsRead(),
