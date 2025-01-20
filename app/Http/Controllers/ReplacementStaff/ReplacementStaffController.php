@@ -103,10 +103,15 @@ class ReplacementStaffController extends Controller
     public function store(Request $request)
     {
         if ($request->hasFile('cv_file') && $request->hasFile('file')) {
+
+            $data = $request->all();
+            $data['fathers_family'] = $request->input('fathers_family', '');
+            $data['mothers_family'] = $request->input('mothers_family', '');
+
             // SE GUARDA O ACTUALIZA STAFF
             $replacementStaff = ReplacementStaff::updateOrCreate(
                 ['run' => $request->run], // Condición para identificar si ya existe
-                $request->all() // Datos para insertar o actualizar
+                $data // Datos para insertar o actualizar
             );
 
             $now = Carbon::now()->format('Y_m_d_H_i_s');
