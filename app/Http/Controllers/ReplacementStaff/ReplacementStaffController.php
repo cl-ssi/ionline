@@ -106,7 +106,7 @@ class ReplacementStaffController extends Controller
 
             $data = $request->all();
             $data['fathers_family'] = $request->input('fathers_family', '');
-            $data['mothers_family'] = $request->input('mothers_family', '');
+            $data['mothers_family'] = $request->input('mothers_family', 'S/A');
 
             // SE GUARDA O ACTUALIZA STAFF
             $replacementStaff = ReplacementStaff::updateOrCreate(
