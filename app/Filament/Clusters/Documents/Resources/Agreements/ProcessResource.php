@@ -135,7 +135,7 @@ class ProcessResource extends Resource
                 //     ->searchable(),
                 // Tables\Columns\TextColumn::make('mayor_run')
                 //     ->searchable(),
-                // Tables\Columns\TextColumn::make('mayor_appelative')
+                // Tables\Columns\TextColumn::make('mayor_appellative')
                 //     ->searchable(),
                 // Tables\Columns\TextColumn::make('mayor_decree')
                 //     ->searchable(),
@@ -754,7 +754,7 @@ class ProcessResource extends Resource
                 ])
                 ->columns(5)
                 ->hiddenOn('create')
-                ->visible(fn (?Process $record): bool => ! $record->processType->is_resolution),
+                ->visible(fn (?Process $record): bool => $record->processType->is_resolution),
 
             Forms\Components\Section::make('Procesos Dependientes')
                 ->headerActions([

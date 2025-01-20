@@ -27,7 +27,7 @@ return new class extends Migration
             $table->foreignId('mayor_id')->constrained('cfg_mayors');
             $table->string('mayor_name')->nullable();
             $table->string('mayor_run')->nullable();
-            $table->string('mayor_appelative')->nullable();
+            $table->string('mayor_appellative')->nullable();
             $table->string('mayor_decree')->nullable();
 
             $table->integer('total_amount')->nullable();

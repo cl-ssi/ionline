@@ -49,7 +49,7 @@ class Process extends Model
         'mayor_id',
         'mayor_name',
         'mayor_run',
-        'mayor_appelative',
+        'mayor_appellative',
         'mayor_decree',
 
         'total_amount',
