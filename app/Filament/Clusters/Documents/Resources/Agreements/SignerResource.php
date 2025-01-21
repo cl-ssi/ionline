@@ -49,6 +49,7 @@ class SignerResource extends Resource
                     ->searchable(['full_name'])
                     ->required(),
                 TinyEditor::make('decree')
+                    ->profile('ionline')
                     ->label('Decreto')
                     ->required()
                     ->columnSpanFull(),
