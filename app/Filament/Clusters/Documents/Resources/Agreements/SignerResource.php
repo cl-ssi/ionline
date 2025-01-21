@@ -59,21 +59,22 @@ class SignerResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('appellative')
-                    ->label('Tratamiento')
-                    ->searchable(),
+                // Tables\Columns\TextColumn::make('appellative')
+                //     ->label('Tratamiento')
+                //     ->searchable(),
                 Tables\Columns\TextColumn::make('user.short_name')
-                    ->label('Usuario'),
+                    ->label('Usuario')
+                    ->description(fn (Signer $record): string => $record->appellative, position: 'above'),
                 Tables\Columns\TextColumn::make('decree')
                     ->label('Decreto')
                     ->html()
                     ->wrap()
                     ->searchable(),
                 // Show icon if is trashed
-                Tables\Columns\BooleanColumn::make('deleted_at')
-                    ->trueIcon('heroicon-o-trash')
-                    ->trueColor('danger')
-                    ->label('Eliminado'),
+                // Tables\Columns\BooleanColumn::make('deleted_at')
+                //     ->trueIcon('heroicon-o-trash')
+                //     ->trueColor('danger')
+                //     ->label('Eliminado'),
             ])
             ->filters([
                 Filters\TrashedFilter::make(),
