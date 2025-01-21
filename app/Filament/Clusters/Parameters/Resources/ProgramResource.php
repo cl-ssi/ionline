@@ -9,6 +9,7 @@ use App\Models\Parameters\Program;
 use Filament\Forms;
 use Filament\Forms\Components\Group;
 use Filament\Forms\Form;
+use Filament\Forms\Get;
 use Filament\Pages\SubNavigationPosition;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -148,7 +149,8 @@ class ProgramResource extends Resource
             ])
             ->filters([
                 Tables\Filters\SelectFilter::make('period')
-                    ->options(range(now()->year - 4, now()->year + 1))
+                    ->options(
+                    array_combine(range(now()->year - 4, now()->year + 1), range(now()->year - 4, now()->year + 1)))
                     ->label('Periodo'),
             ])
             ->actions([
