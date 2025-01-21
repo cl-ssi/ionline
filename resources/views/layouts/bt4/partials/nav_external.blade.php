@@ -114,9 +114,11 @@
 </ul> -->
 
 @can('Suitability: admin')
-@php
-$schools = App\Models\Suitability\SchoolUser::where('user_external_id',Auth::guard('external')->user()->id)->get();
-@endphp
+@if(Auth::guard('external')->user())
+    @php
+        $schools = App\Models\Suitability\SchoolUser::where('user_external_id',Auth::guard('external')->user()->id)->get();
+    @endphp
+@endif
 <a class="nav-link" href="{{ route('idoneidad.downloadManualAdministrator') }}" target="_blank">Descargar Manual Administrador</a>
 @foreach($schools as $school)
 <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-1 mb-1 text-muted">
@@ -142,12 +144,13 @@ $schools = App\Models\Suitability\SchoolUser::where('user_external_id',Auth::gua
 </ul>
 @endcan
 
+@if(Auth::guard('external')->user())
+    @php
+        $psirequests = App\Models\Suitability\PsiRequest::where('user_external_id',Auth::guard('external')->user()->id)->where('status','Esperando Test')->get();
+    @endphp
+@endif
 
-@php
-$psirequests = App\Models\Suitability\PsiRequest::where('user_external_id',Auth::guard('external')->user()->id)->where('status','Esperando Test')->get();
-@endphp
-
-@if($psirequests->isNotEmpty())
+@if(isset($psirequests) && $psirequests->isNotEmpty())
 <a class="nav-link" href="{{ route('idoneidad.downloadManualUser') }}" target="_blank">Descargar Manual Usuario</a>
 
 <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-1 mb-1 text-muted">
