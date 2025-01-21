@@ -59,6 +59,50 @@ class ProcessResource extends Resource
                             ->disabled(fn(?Process $record) => $record->status === Status::Finished),
                     ])
                     ->hiddenOn('create'),
+
+            Forms\Components\Section::make('Comuna')
+                ->schema([
+                    Forms\Components\Fieldset::make('Devolución de la comuna')
+                        ->schema([
+                            Forms\Components\DatePicker::make('returned_from_commune_at')
+                                ->label('Fecha de devolución')
+                                ->columnSpanFull(),
+                            /**
+                             * Ejemplo completo de uso de relación file
+                             */
+                            Forms\Components\Group::make()
+                                ->relationship(
+                                    'signedCommuneFile',
+                                    condition: fn (?array $state): bool => filled($state['storage_path']),
+                                ) // Nombre de la relación que está con MorphOne
+                                ->schema([
+                                    Forms\Components\FileUpload::make('storage_path') // Ruta donde quedará almacenado el archivo
+                                        ->label('Archivo firmado por comuna')
+                                        ->directory('ionline/documents/agreements/signed-commune-files')
+                                        ->storeFileNamesIn('name')
+                                        ->acceptedFileTypes(['application/pdf'])
+                                        ->maxSize(5120) // Tamaño máximo de archivo en KB (5MB)
+                                        ->helperText('El tamaño máximo del archivo es de 5MB.'),
+                                    Forms\Components\Hidden::make('type') // Campo oculto para almacenar el tipo de archivo dentro del modelo File
+                                        ->default('signed_commune_file')
+                                        ->columnSpanFull(),
+                                ])
+                                ->columnSpanFull(),
+                            /* Fin del uso de relacion MorphOne de File */
+
+                        ])
+                        ->columnSpan(1),
+                ])
+                ->footerActions([
+                    Forms\Components\Actions\Action::make('guardar_cambios')
+                        ->icon('bi-save')
+                        ->action('save'),
+                ])
+                ->footerActionsAlignment(Alignment::End)
+                ->columns(2)
+                ->hiddenOn('create')
+                ->columnSpanFull()
+                ->visible(fn (?Process $record) => $record->processType->bilateral),
             ])
             ->columns(4);
     }
