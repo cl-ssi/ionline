@@ -2,40 +2,40 @@
 
 namespace App\Filament\Clusters\Documents\Resources\Agreements;
 
-use Filament\Forms;
-use App\Models\User;
-use Filament\Tables;
-use App\Models\Comment;
-use Filament\Forms\Get;
-use Filament\Forms\Set;
-use Filament\Forms\Form;
-use Filament\Tables\Table;
-use Filament\Notifications;
-use App\Models\Establishment;
-use App\Services\TextCleaner;
-use App\Services\ColorCleaner;
-use App\Services\TableCleaner;
-use Filament\Resources\Resource;
-use Illuminate\Support\Collection;
-use App\Filament\Clusters\Documents;
-use Filament\Forms\Components\Hidden;
-use Filament\Support\Enums\Alignment;
-use Illuminate\Support\Facades\Storage;
-use Filament\Pages\SubNavigationPosition;
-use Illuminate\Database\Eloquent\Builder;
 use App\Enums\Documents\Agreements\Status;
-use App\Models\Documents\Agreements\Signer;
-use App\Models\Documents\Agreements\Process;
-use Illuminate\Support\Facades\Notification;
-use App\Models\Documents\Agreements\ProcessType;
-use App\Filament\RelationManagers\CommentsRelationManager;
-use App\Notifications\Documents\Agreeements\ProcessCommunePdf;
-use Mohamedsabil83\FilamentFormsTinyeditor\Components\TinyEditor;
-use App\Notifications\Documents\Agreeements\NewProcessCommuneNotification;
-use App\Notifications\Documents\Agreeements\NewProcessLegallyNotification;
+use App\Filament\Clusters\Documents;
 use App\Filament\Clusters\Documents\Resources\Agreements\ProcessResource\Pages;
 use App\Filament\Clusters\Documents\Resources\Agreements\ProcessResource\Widgets;
 use App\Filament\Clusters\Documents\Resources\Agreements\ProgramResource\RelationManagers\ProcessesRelationManager;
+use App\Filament\RelationManagers\CommentsRelationManager;
+use App\Models\Comment;
+use App\Models\Documents\Agreements\Process;
+use App\Models\Documents\Agreements\ProcessType;
+use App\Models\Documents\Agreements\Signer;
+use App\Models\Establishment;
+use App\Models\User;
+use App\Notifications\Documents\Agreeements\NewProcessCommuneNotification;
+use App\Notifications\Documents\Agreeements\NewProcessLegallyNotification;
+use App\Notifications\Documents\Agreeements\ProcessCommunePdf;
+use App\Services\ColorCleaner;
+use App\Services\TableCleaner;
+use App\Services\TextCleaner;
+use Filament\Forms;
+use Filament\Forms\Components\Hidden;
+use Filament\Forms\Form;
+use Filament\Forms\Get;
+use Filament\Forms\Set;
+use Filament\Notifications;
+use Filament\Pages\SubNavigationPosition;
+use Filament\Resources\Resource;
+use Filament\Support\Enums\Alignment;
+use Filament\Tables;
+use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\Storage;
+use Mohamedsabil83\FilamentFormsTinyeditor\Components\TinyEditor;
 
 class ProcessResource extends Resource
 {
@@ -539,9 +539,8 @@ class ProcessResource extends Resource
                             /**
                              * Notificar a Comunas de la solicitud de revisión
                              */
-
                             $recipients = $record->municipality->emails;
-                            
+
                             foreach ($recipients as $recipient) {
                                 Notification::route('mail', $recipient)->notify(new NewProcessCommuneNotification($record));
                             }
@@ -653,7 +652,7 @@ class ProcessResource extends Resource
                         ->requiresConfirmation()
                         ->action(function (Process $record, Get $get, $livewire): void {
                             $recipients = $record->municipality->emails;
-                            
+
                             foreach ($recipients as $recipient) {
                                 Notification::route('mail', $recipient)->notify(new ProcessCommunePdf($record));
                             }
@@ -668,8 +667,8 @@ class ProcessResource extends Resource
 
                             // Refresh the page
                             $livewire->redirect(request()->header('Referer'));
-                        })
-                        // ->hidden(fn (?Process $record) => $record->status !== Status::Finished),
+                        }),
+                    // ->hidden(fn (?Process $record) => $record->status !== Status::Finished),
 
                 ])
                 ->footerActionsAlignment(Alignment::End)
@@ -853,7 +852,7 @@ class ProcessResource extends Resource
                         ->hiddenLabel()
                         ->profile('ionline')
                         ->disabled(),
-                        // ->disabled(fn (?Process $record): bool => $record->revision_by_lawyer_user_id !== null),
+                    // ->disabled(fn (?Process $record): bool => $record->revision_by_lawyer_user_id !== null),
                 ])
                 ->hiddenOn('create'),
 

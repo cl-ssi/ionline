@@ -14,6 +14,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Mohamedsabil83\FilamentFormsTinyeditor\Components\TinyEditor;
 
 class SignerResource extends Resource
 {
@@ -46,10 +47,9 @@ class SignerResource extends Resource
                     ->relationship('user', 'full_name')
                     ->searchable(['full_name'])
                     ->required(),
-                Forms\Components\Textarea::make('decree')
+                TinyEditor::make('decree')
                     ->label('Decreto')
                     ->required()
-                    ->rows(5)
                     ->columnSpanFull(),
             ]);
     }
@@ -65,6 +65,7 @@ class SignerResource extends Resource
                     ->label('Usuario'),
                 Tables\Columns\TextColumn::make('decree')
                     ->label('Decreto')
+                    ->html()
                     ->wrap()
                     ->searchable(),
                 // Show icon if is trashed

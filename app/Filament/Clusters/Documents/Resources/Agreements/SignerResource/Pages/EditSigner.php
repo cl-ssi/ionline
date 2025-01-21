@@ -16,4 +16,11 @@ class EditSigner extends EditRecord
             Actions\DeleteAction::make(),
         ];
     }
+    protected function mutateFormDataBeforeSave(array $data): array
+    {
+        // Eliminar todas las etiquetas y dejas solo los <li>
+        $data['decree'] = strip_tags($data['decree'], '<li>');
+    
+        return $data;
+    }
 }
