@@ -81,6 +81,12 @@
                 </td>
                 <td>
                     {!! $approval->subject !!}
+                    <br>
+                    @foreach($approval->attachments as $attachment)
+                    <a href="{{ Storage::url($attachment->storage_path) }}">
+                        <i class="fas fa-fw fa-paperclip" title="{{ $attachment->name }}"></i>
+                    </a>
+                    @endforeach
                 </td>
                 <td class="small">
                     {{ $approval->approver_at }}

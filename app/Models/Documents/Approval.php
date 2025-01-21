@@ -2,9 +2,11 @@
 
 namespace App\Models\Documents;
 
+use App\Models\File;
 use App\Observers\Documents\ApprovalObserver;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -302,6 +304,14 @@ class Approval extends Model
     public function approver()
     {
         return $this->belongsTo(User::class,'approver_id')->withTrashed();
+    }
+
+    /**
+     * Get all of the files of a model. Adjuntos
+     */
+    public function attachments(): MorphMany
+    {
+        return $this->morphMany(File::class, 'fileable');
     }
 
     /**

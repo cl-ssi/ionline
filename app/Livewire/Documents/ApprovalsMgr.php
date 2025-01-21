@@ -2,6 +2,8 @@
 
 namespace App\Livewire\Documents;
 
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Contracts\View\View;
 use Livewire\Component;
 use Illuminate\Support\Facades\Route;
 use App\Traits\SingleSignature;
@@ -66,12 +68,14 @@ class ApprovalsMgr extends Component
      *
      * @return void
      */
-    public function getApprovals()
+    public function getApprovals(): LengthAwarePaginator
     {
         /** Soy manager de alguna OU hoy? */
         $ous = auth()->user()->amIAuthorityFromOu->pluck('organizational_unit_id')->toArray();
 
         $query = Approval::query();
+
+        $query->with(['attachments']);
 
         /** Sólo mostrar los activos */
         $query->whereActive(true);
@@ -97,9 +101,9 @@ class ApprovalsMgr extends Component
     }
 
     /**
-     * @return \Illuminate\Contracts\Support\Arrayable|array
+     * @return \Illuminate\Contracts\View\View
      */
-    public function render()
+    public function render(): View
     {
         $approvals = $this->getApprovals();
 
