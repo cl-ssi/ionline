@@ -275,6 +275,18 @@ Factor
 
 TODO:
 
+Presentación: 20-01-2025
+- [ ] En aprobacion, que esten los dos documentos.
+- [ ] En certificados - Filtrar programas de los referentes.
+- [ ] Ver como cambiar el visto de la directora.
+- [ ] Auto actualizar al creas visaciones.
+- [ ] Montos separar las centenas y miles.
+- [ ] Notificar al referente y administradores al terminar la visación de un proceso.
+- [ ] Listado de certificados, filtar por los del referente.
+- [ ] Previsualizar Certificado.
+- [ ] Auto guardar el proceso al eliminar una visación.
+
+
 Revisión 16-01-2025
 - [X] Corregir error en generación de siguiente proceso
 - [X] Revisar plantilla porque no aparecen las cuotas.
