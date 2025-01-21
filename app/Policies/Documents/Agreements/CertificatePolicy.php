@@ -54,10 +54,8 @@ class CertificatePolicy
      */
     public function update(User $user, Certificate $certificate): bool
     {
-        return $user->canAny([
-            'Agreement: edit',
-            'Agreement: admin',
-        ]);
+        return $user->can('Agreement: admin') || 
+            ($user->can('Agreement: edit') && $certificate->program->referers->contains($user));
     }
 
     /**

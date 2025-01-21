@@ -51,7 +51,15 @@ class CertificateResource extends Resource
                         'name',
                         fn (Builder $query, callable $get) => $query->where('is_certificate', true))
                     ->required()
-                    ->columnSpanFull(),
+                    ->columnSpanFull()
+                    ->visibleOn('create'),
+                Forms\Components\Select::make('process_type_id')
+                    ->label('Tipo de proceso')
+                    ->relationship('processType', 'name')
+                    ->required()
+                    ->columnSpanFull()
+                    ->disabledOn('edit')
+                    ->visibleOn('edit'),
                 Forms\Components\Select::make('period')
                     ->label('Periodo')
                     ->required()
@@ -64,12 +72,29 @@ class CertificateResource extends Resource
                         }
                         return $years;
                     })
-                    ->default(now()->year),
+                    ->default(now()->year)
+                    ->disabledOn('edit'),
                 Forms\Components\Select::make('program_id')
                     ->label('Programa')
-                    ->relationship('program', 'name', fn (Builder $query, callable $get) => $query->where('is_program', true)->where('period', $get('period')))
+                    ->relationship('program', 'name', function (Builder $query, callable $get) {
+                        $query->where('is_program', true)
+                            ->where('period', $get('period'))
+                            ->whereHas('referers', function ($query) {
+                                $query->where('user_id', auth()->id());
+                            });
+                    })
+                    ->helperText('Solo programas en los que eres referente')
                 // ->hiddenOn(CertificateesRelationManager::class)
                     ->required()
+                    ->visibleOn('create')
+                    ->columnSpan(2),
+                Forms\Components\Select::make('program_id')
+                    ->label('Programa')
+                    ->relationship('program', 'name')
+                // ->hiddenOn(CertificateesRelationManager::class)
+                    ->required()
+                    ->visibleOn('edit')
+                    ->disabled()
                     ->columnSpan(2),
                 Forms\Components\Select::make('commune_id')
                     ->label('Comuna')
