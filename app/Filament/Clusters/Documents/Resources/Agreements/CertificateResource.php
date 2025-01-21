@@ -122,6 +122,10 @@ class CertificateResource extends Resource
                         Forms\Components\Actions\Action::make('guardar_cambios')
                             ->icon('bi-save')
                             ->action('save'),
+                        Forms\Components\Actions\Action::make('Ver')
+                            ->icon('heroicon-m-eye')
+                            ->url(fn (Certificate $record) => route('documents.agreements.certificates.view', [$record]))
+                            ->openUrlInNewTab(),
                     ])
                     ->footerActionsAlignment(Alignment::End)
                     ->schema([
@@ -277,12 +281,16 @@ class CertificateResource extends Resource
                 //
             ])
             ->actions([
+                Tables\Actions\Action::make('Ver')
+                    ->icon('heroicon-m-eye')
+                    ->url(fn (Certificate $record) => route('documents.agreements.certificates.view', [$record]))
+                    ->openUrlInNewTab(),
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
+                // Tables\Actions\BulkActionGroup::make([
+                //     Tables\Actions\DeleteBulkAction::make(),
+                // ]),
             ]);
     }
 
