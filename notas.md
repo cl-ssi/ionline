@@ -276,7 +276,7 @@ Factor
 TODO:
 
 Presentación: 20-01-2025
-- [ ] En aprobacion, que esten los dos documentos.
+- [X] En aprobacion, que esten los dos documentos.
 - [ ] En certificados - Filtrar programas de los referentes.
 - [ ] Ver como cambiar el visto de la directora.
 - [ ] Auto actualizar al creas visaciones.

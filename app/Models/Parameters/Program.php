@@ -4,10 +4,13 @@ namespace App\Models\Parameters;
 
 use App\Models\Agreements\BudgetAvailability;
 use App\Models\Documents\Agreements\Cdp;
+use App\Models\Documents\Agreements\Certificate;
 use App\Models\Documents\Agreements\Process;
 use App\Models\Establishment;
 use App\Models\File;
 use App\Models\User;
+use App\Observers\Parameters\ProgramObserver;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -19,6 +22,7 @@ use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use OwenIt\Auditing\Contracts\Auditable;
 
+#[ObservedBy([ProgramObserver::class])]
 class Program extends Model implements Auditable
 {
     use HasFactory, \OwenIt\Auditing\Auditable, SoftDeletes;
@@ -81,10 +85,13 @@ class Program extends Model implements Auditable
             ->withTrashed();
     }
 
-    public function cdps(): HasMany
-    {
-        return $this->hasMany(Cdp::class);
-    }
+    /**
+     * Sin uso
+     */
+    // public function cdps(): HasMany
+    // {
+    //     return $this->hasMany(Cdp::class);
+    // }
 
     /**
      * Get the components for the program.
@@ -97,6 +104,11 @@ class Program extends Model implements Auditable
     public function processes(): HasMany
     {
         return $this->hasMany(Process::class);
+    }
+
+    public function certificates(): HasMany
+    {
+        return $this->hasMany(Certificate::class);
     }
 
     /**

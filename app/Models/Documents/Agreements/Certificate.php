@@ -84,6 +84,12 @@ class Certificate extends Model
     {
         $this->update(['status' => 'finished']);
 
+        foreach($this->program->processes as $process) {
+            $process->createOrUpdateAttachmentsToApprovals();
+        }
+
+        $this->createOrUpdateAttachmentsToApprovals();
+
         // Notificar a los administradores 'Agreement: admin'
         Notifications\Notification::make()
             ->title('Nuevo certificado aprobado por Gestión Financiera')
@@ -143,5 +149,37 @@ class Certificate extends Model
             'filename'            => 'ionline/agreements/certificates/'.Str::random(30).'.pdf',
             'approvable_callback' => true,
         ]);
+
+        $this->createOrUpdateAttachmentsToApprovals();
+    }
+
+    public function createOrUpdateAttachmentsToApprovals(): void {
+        /** 
+         * Listado de adjuntos que debería tener cada aprobacion
+         * - Resolucion que aprueba el programa
+         * - Resolucion que distribuye los recursos
+        */
+
+        $files = [];
+
+        if ($this->program->ministerial_resolution_file) {
+            $files['Resolución aprobatoria'] = $this->program->ministerial_resolution_file;
+        }
+        if ($this->program->resource_distribution_file) {
+            $files['Ditribución de recursos'] = $this->program->resource_distribution_file;
+        }
+
+        // Crear o actualizar los adjuntos para cada endorses
+        foreach($this->approvals as $approval) {
+            foreach($files as $name => $storage_path) {
+                $approval->attachments()->updateOrCreate(
+                    ['name' => $name],
+                    [
+                        'storage_path' => $storage_path,
+                        'stored' => true,
+                    ]
+                );
+            }
+        }
     }
 }

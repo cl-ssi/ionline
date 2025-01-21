@@ -378,4 +378,52 @@ class Process extends Model
             ? "{$date->day} de {$date->monthName} del {$date->year}"
             : 'XXX de XXX del XXX';
     }
+
+    public function createOrUpdateAttachmentsToApprovals(): void {
+        /** 
+         * Listado de adjuntos que debería tener cada aprobacion
+         * - Resolucion que aprueba el programa
+         * - Resolucion que distribuye los recursos
+         * - Todos los certificados que tenga el programa
+        */
+
+        $files = [];
+
+        if ($this->program->ministerial_resolution_file) {
+            $files['Resolución aprobatoria'] = $this->program->ministerial_resolution_file;
+        }
+        if ($this->program->resource_distribution_file) {
+            $files['Ditribución de recursos'] = $this->program->resource_distribution_file;
+        }
+
+        foreach($this->program->certificates as $certificate) {
+            if($certificate->signer and $certificate->signer->status === true) {
+                $files[$certificate->processType->name] = $certificate->signer->filename;
+            }
+        }
+
+        // Crear o actualizar los adjuntos para cada endorses
+        foreach($this->endorses as $endorse) {
+            foreach($files as $name => $storage_path) {
+                $endorse->attachments()->updateOrCreate(
+                    ['name' => $name],
+                    [
+                        'storage_path' => $storage_path,
+                        'stored' => true,
+                    ]
+                );
+            }
+        }
+
+        // Crear o actualizar los adjuntos para el firmante (approval)
+        foreach($files as $name => $storage_path) {
+            $this->approval?->attachments()->updateOrCreate(
+                ['name' => $name],
+                [
+                    'storage_path' => $storage_path,
+                    'stored' => true,
+                ]
+            );
+        }
+    }
 }
