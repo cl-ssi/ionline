@@ -15,6 +15,10 @@ return [
 
     'sets' => [
 
+        'fix' => [
+            'path' => 'public/icon', # Relative path to the new directory
+            'prefix' => 'icon',
+        ],
         // 'default' => [
         //
         //     /*
@@ -139,7 +143,7 @@ return [
     |
     */
 
-    'fallback' => '',
+    'fallback' => 'icon-image-missing',
 
     /*
     |--------------------------------------------------------------------------
