@@ -30,6 +30,8 @@ use Illuminate\Support\Number;
 use Illuminate\Support\Str;
 use Filament\Notifications;
 
+use App\Models\Rrhh\OrganizationalUnit;
+
 #[ObservedBy([ProcessObserver::class])]
 class Process extends Model
 {
@@ -195,6 +197,16 @@ class Process extends Model
         return $this->morphMany(File::class, 'fileable')->whereNull('type');
     }
 
+    public function sentToOu()
+    {
+        return $this->belongsTo(OrganizationalUnit::class, 'sent_to_ou_id');
+    }
+
+    public function sentToUser()
+    {
+        return $this->belongsTo(User::class, 'sent_to_user_id');
+    }
+
     public function createOrUpdateDocument(): void
     {
         $this->document_content = $this->processType->template->parseTemplate($this);
@@ -267,6 +279,22 @@ class Process extends Model
                 'sent_to_ou_id' => $step->organizational_unit_id,
             ]);
         }
+    }
+
+    public function addNewEndorse($data): void
+    {
+        $this->endorses()->create([
+            'module'                => 'Convenios',
+            'module_icon'           => 'bi bi-file-earmark-text',
+            'subject'               => 'Visar convenio',
+            'document_route_name'   => 'documents.agreements.processes.view',
+            'document_route_params' => json_encode([
+                'record' => $this->id,
+            ]),
+            'endorse'       => true,
+            'sent_to_user_id' => $data['sent_to_user_id'],
+            'sent_to_ou_id' => $data['sent_to_ou_id'],
+        ]);
     }
 
     public function resetEndorsesStatus(): void
