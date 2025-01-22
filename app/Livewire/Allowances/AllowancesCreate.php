@@ -88,9 +88,10 @@ class AllowancesCreate extends Component
     // VARIABLE DE MENSAJE MEDIO DE TRANSPORTE 
     public $messageMeansOfTransport = NULL;
 
-    //SELECCION DE LEY MEDICA
+    //VARIABLES LEY MEDICA 19664
     public $disabledAllowanceValueId = '';
     public $disabledGrade = '';
+    public $lawAllowanceValueId = 14;
 
     public $iterationFileClean = 0;
 
@@ -838,7 +839,7 @@ class AllowancesCreate extends Component
             //OPCION HONORARIOS: INHABILITO CAMPO LEY, GRADO Y DETALLE DE GRADO
             $this->disabledLaw = 'disabled';
             $this->disabledAllowanceValueId = 'disabled';
-            $this->allowanceValueId = 9;
+            $this->allowanceValueId = $this->lawAllowanceValueId;
             $this->grade = null;
             $this->disabledGrade = 'disabled';
 
@@ -1020,8 +1021,9 @@ class AllowancesCreate extends Component
             $this->allowanceValueId         =   $this->allowanceToEdit->allowance_value_id;
             $this->grade                    =   $this->allowanceToEdit->grade;
             $this->law                      =   $this->allowanceToEdit->law;
+
             $this->reason                   =   $this->allowanceToEdit->reason;
-            $this->originCommune            =   $this->allowanceToEdit->origin_commune_id;
+            $this->originCommune            =   $this->allowanceToEdit->origin_commune_id;            
             foreach($this->allowanceToEdit->destinationCommune as $destination){
                 $this->setDestination($destination);
             }
@@ -1090,6 +1092,7 @@ class AllowancesCreate extends Component
     }
 
     public function mount($allowanceToEdit, $allowanceToReplicate){
+        $this->lawAllowanceValueId = AllowanceValue::where('year', Carbon::now()->year)->where('name', 'GRADO 11 AL 31')->first()->id?? $this->lawAllowanceValueId;
         if(!is_null($allowanceToEdit)){
             $this->allowanceToEdit = $allowanceToEdit;
             $this->setAllowance();
@@ -1098,7 +1101,7 @@ class AllowancesCreate extends Component
                 //OPCION HONORARIOS: INHABILITO CAMPO LEY, GRADO Y DETALLE DE GRADO
                 $this->disabledLaw = 'disabled';
                 $this->disabledAllowanceValueId = 'disabled';
-                $this->allowanceValueId = 9;
+                $this->allowanceValueId = $this->lawAllowanceValueId;
                 $this->grade = null;
                 $this->disabledGrade = 'disabled';
     
@@ -1111,7 +1114,11 @@ class AllowancesCreate extends Component
             $this->allowanceToReplicate = $allowanceToReplicate;
             $this->setAllowanceToReplicate();
         }
-
+        if($this->law == '19664'){
+            $this->disabledAllowanceValueId = 'disabled';
+            $this->disabledGrade = 'disabled';
+        }
+        
         //UNIDADES ORGANIZACIONALES RESTRINGIDAS PARA VIATICOS
         $this->restrict[] = Parameter::get('ou', 'Externos');
         $this->restrict[] = Parameter::get('ou', 'ExternosAPS');
@@ -1164,7 +1171,7 @@ class AllowancesCreate extends Component
     public function updatedLaw($lawId){
         if($lawId == "19664"){
             $this->disabledAllowanceValueId = 'disabled';
-            $this->allowanceValueId = 9;
+            $this->allowanceValueId = $this->lawAllowanceValueId;
             $this->grade = null;
             $this->disabledGrade = 'disabled';
         }
