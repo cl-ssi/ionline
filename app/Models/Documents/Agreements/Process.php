@@ -16,6 +16,7 @@ use App\Models\Parameters\Municipality;
 use App\Models\Parameters\Program;
 use App\Models\User;
 use App\Observers\Documents\Agreements\ProcessObserver;
+use Filament\Notifications;
 use Filament\Notifications\Notification;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Builder;
@@ -28,7 +29,6 @@ use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Number;
 use Illuminate\Support\Str;
-use Filament\Notifications;
 
 use App\Models\Rrhh\OrganizationalUnit;
 
@@ -233,10 +233,9 @@ class Process extends Model
     }
 
     /**
-     * 
      * Crea las visaciones, depende del flujo de aprobación
-     * @param mixed $referer_id
-     * @return void
+     *
+     * @param  mixed  $referer_id
      */
     public function createEndorses($referer_id): void
     {
@@ -275,8 +274,9 @@ class Process extends Model
                 'document_route_params' => json_encode([
                     'record' => $this->id,
                 ]),
-                'endorse'       => true,
-                'sent_to_ou_id' => $step->organizational_unit_id,
+                'endorse'             => true,
+                'sent_to_ou_id'       => $step->organizational_unit_id,
+                'approvable_callback' => true,
             ]);
         }
     }
@@ -314,16 +314,16 @@ class Process extends Model
             'document_route_params' => json_encode([
                 'record' => $this->id,
             ]),
-            'sent_to_user_id'     => $this->signer->user->id,
-            'digital_signature'   => true,
-            'position'            => 'right',
+            'sent_to_user_id'   => $this->signer->user->id,
+            'digital_signature' => true,
+            'position'          => 'right',
             // el start_y depende de si el ProcessType es una resolución u otro
-            'start_y'             =>  $this->processType->is_resolution ? 110 : 35,
+            'start_y'             => $this->processType->is_resolution ? 110 : 35,
             'filename'            => 'ionline/agreements/processes/'.Str::random(30).'.pdf',
             'approvable_callback' => true,
         ];
 
-        if($this->approval()->exists()) {
+        if ($this->approval()->exists()) {
             $this->approval()->update($approvalData);
         } else {
             $this->approval()->create($approvalData);
@@ -400,21 +400,14 @@ class Process extends Model
 
     }
 
-    protected function formatDateSafely($date): string
+    public function createOrUpdateAttachmentsToApprovals(): void
     {
-        return $date
-            ? "{$date->day} de {$date->monthName} del {$date->year}"
-            : 'XXX de XXX del XXX';
-    }
-
-    public function createOrUpdateAttachmentsToApprovals(): void {
-        /** 
+        /**
          * Listado de adjuntos que debería tener cada aprobacion
          * - Resolucion que aprueba el programa
          * - Resolucion que distribuye los recursos
          * - Todos los certificados que tenga el programa
-        */
-
+         */
         $files = [];
 
         if ($this->program->ministerial_resolution_file) {
@@ -424,34 +417,41 @@ class Process extends Model
             $files['Ditribución de recursos'] = $this->program->resource_distribution_file;
         }
 
-        foreach($this->program->certificates as $certificate) {
-            if($certificate->signer and $certificate->signer->status === true) {
+        foreach ($this->program->certificates as $certificate) {
+            if ($certificate->signer and $certificate->signer->status === true) {
                 $files[$certificate->processType->name] = $certificate->signer->filename;
             }
         }
 
         // Crear o actualizar los adjuntos para cada endorses
-        foreach($this->endorses as $endorse) {
-            foreach($files as $name => $storage_path) {
+        foreach ($this->endorses as $endorse) {
+            foreach ($files as $name => $storage_path) {
                 $endorse->attachments()->updateOrCreate(
                     ['name' => $name],
                     [
                         'storage_path' => $storage_path,
-                        'stored' => true,
+                        'stored'       => true,
                     ]
                 );
             }
         }
 
         // Crear o actualizar los adjuntos para el firmante (approval)
-        foreach($files as $name => $storage_path) {
+        foreach ($files as $name => $storage_path) {
             $this->approval?->attachments()->updateOrCreate(
                 ['name' => $name],
                 [
                     'storage_path' => $storage_path,
-                    'stored' => true,
+                    'stored'       => true,
                 ]
             );
         }
+    }
+
+    protected function formatDateSafely($date): string
+    {
+        return $date
+            ? "{$date->day} de {$date->monthName} del {$date->year}"
+            : 'XXX de XXX del XXX';
     }
 }

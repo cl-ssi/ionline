@@ -279,12 +279,17 @@ Presentación: 20-01-2025
 - [X] En aprobacion, que esten los dos documentos.
 - [X] En certificados - Filtrar programas de los referentes.
 - [ ] Ver como cambiar el visto de la directora.
-- [ ] Auto actualizar al creas visaciones.
+- [ ] Auto actualizar al crear visaciones.
 - [ ] Montos separar las centenas y miles.
 - [ ] Notificar al referente y administradores al terminar la visación de un proceso.
 - [X] Listado de certificados, filtar por los del referente.
 - [X] Previsualizar Certificado.
 - [ ] Auto guardar el proceso al eliminar una visación.
+- [ ] Ver que juridico no pueda aprobar dos veces.
+
+Correo de Natalia
+- [ ] Notificar cuando se suba el convenio firmado por las comunas
+- [ ] Habilitar filtros por tipo de proceso, programa, periodo, comuna, año (procesos)
 
 
 Revisión 16-01-2025
