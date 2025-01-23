@@ -4,6 +4,7 @@ namespace App\Models\Documents\Agreements;
 
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -37,5 +38,12 @@ class Signer extends Model
     public function user(): BelongsTo|Builder
     {
         return $this->belongsTo(User::class)->withTrashed();
+    }
+
+    public function decreeParragraph(): Attribute
+    {
+        return Attribute::make(
+            get: fn (): string => strip_tags($this->decree)
+        );
     }
 }
