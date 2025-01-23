@@ -692,7 +692,7 @@ class ProcessResource extends Resource
                 ->columnSpanFull()
                 ->visibleOn('edit'),
 
-            Forms\Components\Section::make('Comuna')
+            Forms\Components\Section::make('Firma de Comuna')
                 ->schema([
                     Forms\Components\DatePicker::make('sended_to_commune_at')
                         ->label('Fecha de envío a la comuna'),

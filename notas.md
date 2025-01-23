@@ -277,17 +277,33 @@ User::whereHas('programs.referers')->get()->each(function ($user) { if (!$user->
 
 TODO:
 
+Presentación: 23-01-2025
+- [ ] Plantilla agrandar texto de la plantilla en doc_templates (content)
+- [ ] Aumentar tamaño del total_amount y ver si a las cuotas también necesitan agrandar el tamaño del en la BD. 
+- [ ] Monto total (total_amount) que sea obligatorio
+- [ ] Incoporar fecha del proceso document_date.
+- [ ] Boolean en tipo de proceso, si va o no a la comuna, caso prorroga, debajo de bilateral crear booleans revision_commune sign_commune.
+- [*] Revisión de juridico debería reinciar si se vuelve a editar el documento.
+- [ ] en certificados: quitar boton agregar visacion (del repeater, addeable(false))
+- [ ] calculo de cuotas (decimales)
+
+- [X] Permitir enviar varias veces el envio del proceso a la comuna, varias veces enviar el email con el pdf.
+- [ ] Solicitar firma directora en las que no son reso, debería firmar el archivo subido y no el que se firma en la reso
+- [ ] Fix decreeParagraph, porque no están saliendo los decretos de la dire.
+- [ ] Presionó dos veces el confirmar al crear un Procesos Dependientes (está peludo fixear eso).
+
 Presentación: 20-01-2025
 - [X] En aprobacion, que esten los dos documentos.
 - [X] En certificados - Filtrar programas de los referentes.
 - [ ] Ver como cambiar el visto de la directora.
 - [X] Auto actualizar al crear visaciones.
-- [ ] Montos separar las centenas y miles.
+- [ ] Montos separar las miles y millones.
 - [X] Notificar al referente y administradores al terminar la visación de un proceso.
 - [X] Listado de certificados, filtar por los del referente.
 - [X] Previsualizar Certificado.
 - [X] Boton guardar el proceso al eliminar una visación.
-- [ ] Ver que juridico no pueda aprobar dos veces.
+- [ ] Ver que juridico no pueda aprobar dos veces, o que no notifique dos veces.
+
 
 Correo de Natalia
 - [ ] Notificar cuando se suba el convenio firmado por las comunas
