@@ -5,9 +5,12 @@ namespace App\Models\Parameters;
 use App\Models\Rrhh\OrganizationalUnit;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class ApprovalStep extends Model
 {
+    use SoftDeletes;
+
     protected $table = 'cfg_approval_steps';
 
     protected $fillable = [

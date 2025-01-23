@@ -17,6 +17,7 @@ return new class extends Migration
             $table->unsignedSmallInteger('order');
             $table->foreignId('organizational_unit_id')->constrained();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
