@@ -2,42 +2,42 @@
 
 namespace App\Filament\Clusters\Documents\Resources\Agreements;
 
-use Filament\Forms;
-use App\Models\User;
-use Filament\Tables;
-use App\Models\Comment;
-use Filament\Forms\Get;
-use Filament\Forms\Set;
-use Filament\Forms\Form;
-use Filament\Tables\Table;
-use Filament\Notifications;
-use App\Models\Establishment;
-use App\Services\TextCleaner;
-use App\Services\ColorCleaner;
-use App\Services\TableCleaner;
-use Filament\Resources\Resource;
-use Illuminate\Support\Collection;
-use App\Filament\Clusters\Documents;
-use Filament\Forms\Components\Hidden;
-use Filament\Support\Enums\Alignment;
-use Illuminate\Support\Facades\Storage;
-use Filament\Pages\SubNavigationPosition;
-use Illuminate\Database\Eloquent\Builder;
-use App\Models\Rrhh\OrganizationalUnit;
-use CodeWithDennis\FilamentSelectTree\SelectTree;
 use App\Enums\Documents\Agreements\Status;
-use App\Models\Documents\Agreements\Signer;
-use App\Models\Documents\Agreements\Process;
-use Illuminate\Support\Facades\Notification;
-use App\Models\Documents\Agreements\ProcessType;
-use App\Filament\RelationManagers\CommentsRelationManager;
-use App\Notifications\Documents\Agreeements\ProcessCommunePdf;
-use Mohamedsabil83\FilamentFormsTinyeditor\Components\TinyEditor;
-use App\Notifications\Documents\Agreeements\NewProcessCommuneNotification;
-use App\Notifications\Documents\Agreeements\NewProcessLegallyNotification;
+use App\Filament\Clusters\Documents;
 use App\Filament\Clusters\Documents\Resources\Agreements\ProcessResource\Pages;
 use App\Filament\Clusters\Documents\Resources\Agreements\ProcessResource\Widgets;
 use App\Filament\Clusters\Documents\Resources\Agreements\ProgramResource\RelationManagers\ProcessesRelationManager;
+use App\Filament\RelationManagers\CommentsRelationManager;
+use App\Models\Comment;
+use App\Models\Documents\Agreements\Process;
+use App\Models\Documents\Agreements\ProcessType;
+use App\Models\Documents\Agreements\Signer;
+use App\Models\Establishment;
+use App\Models\Rrhh\OrganizationalUnit;
+use App\Models\User;
+use App\Notifications\Documents\Agreeements\NewProcessCommuneNotification;
+use App\Notifications\Documents\Agreeements\NewProcessLegallyNotification;
+use App\Notifications\Documents\Agreeements\ProcessCommunePdf;
+use App\Services\ColorCleaner;
+use App\Services\TableCleaner;
+use App\Services\TextCleaner;
+use CodeWithDennis\FilamentSelectTree\SelectTree;
+use Filament\Forms;
+use Filament\Forms\Components\Hidden;
+use Filament\Forms\Form;
+use Filament\Forms\Get;
+use Filament\Forms\Set;
+use Filament\Notifications;
+use Filament\Pages\SubNavigationPosition;
+use Filament\Resources\Resource;
+use Filament\Support\Enums\Alignment;
+use Filament\Tables;
+use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\Storage;
+use Mohamedsabil83\FilamentFormsTinyeditor\Components\TinyEditor;
 
 class ProcessResource extends Resource
 {
@@ -159,15 +159,28 @@ class ProcessResource extends Resource
             ])
             ->filters([
                 Tables\Filters\SelectFilter::make('Tipo de proceso')
-                    ->relationship('processType', 'name'),
-                // Tables\Filters\SelectFilter::make('programa')
-                //     ->relationship(
-                //         name: 'program',
-                //         titleAttribute: 'name',
-                //         modifyQueryUsing: fn (Builder $query):
-                //             Builder => $query->where('period', 2024)
-                //     ),
+                    ->relationship('processType', 'name',
+                        fn (Builder $query) => $query->where('is_certificate', false)->where('active', true))
+                    ->label('Tipo de proceso'),
+
+                Tables\Filters\SelectFilter::make('period')
+                    ->label('Periodo')
+                    ->options(array_combine(range(date('Y'), date('Y') - 5), range(date('Y'), date('Y') - 5)))
+                    ->default(now()->year),
+                Tables\Filters\SelectFilter::make('program_id')
+                    ->label('Programa')
+                    /**
+                     * No pude hacer el filtro dependiente del año para solo mostrar los programas
+                     * del periodo seleccionado arriba, te toca resolver Rojas
+                     */
+                    ->relationship(
+                        name: 'program',
+                        titleAttribute: 'name',
+                        modifyQueryUsing: // que tengan procesos
+                        fn (Builder $query, Get $get): Builder => $query->whereHas('processes'),
+                    ),
                 Tables\Filters\SelectFilter::make('comuna')
+                    ->label('Comuna')
                     ->relationship(
                         name: 'commune',
                         titleAttribute: 'name',
@@ -541,9 +554,8 @@ class ProcessResource extends Resource
                             /**
                              * Notificar a Comunas de la solicitud de revisión
                              */
-
                             $recipients = $record->municipality->emails;
-                            
+
                             foreach ($recipients as $recipient) {
                                 Notification::route('mail', $recipient)->notify(new NewProcessCommuneNotification($record));
                             }
@@ -603,8 +615,8 @@ class ProcessResource extends Resource
                                     relationship: 'sentToOu',
                                     titleAttribute: 'name',
                                     parentAttribute: 'organizational_unit_id',
-                                    modifyQueryUsing: fn($query, $get) => $query->where('establishment_id', $get('establishment_id'))->orderBy('name'),
-                                    modifyChildQueryUsing: fn($query, $get) => $query->where('establishment_id', $get('establishment_id'))->orderBy('name')
+                                    modifyQueryUsing: fn ($query, $get) => $query->where('establishment_id', $get('establishment_id'))->orderBy('name'),
+                                    modifyChildQueryUsing: fn ($query, $get) => $query->where('establishment_id', $get('establishment_id'))->orderBy('name')
                                 )
                                 ->searchable()
                                 ->parentNullValue(null)
@@ -622,7 +634,7 @@ class ProcessResource extends Resource
                                         ->columnSpanFull(),
                                 ])
                                 ->collapsed()
-                                ->compact()
+                                ->compact(),
                         ])
                         ->action(function (Process $record, array $data): void {
                             $record->addNewEndorse($data);
@@ -631,7 +643,7 @@ class ProcessResource extends Resource
                                 ->success()
                                 ->send();
                             redirect(request()->header('Referer')); // Redirige al usuario a la misma página
-                        })
+                        }),
                 ])
                 ->schema([
                     Forms\Components\Repeater::make('endorses')
@@ -651,11 +663,12 @@ class ProcessResource extends Resource
                         )
                         ->columnSpanFull()
                         ->grid(7)
-                        ->itemLabel(fn(array $state): ?string => 'Visador: ' . OrganizationalUnit::find($state['sent_to_ou_id'])?->name ?? null)
+                        ->itemLabel(fn (array $state): ?string => 'Visador: '.OrganizationalUnit::find($state['sent_to_ou_id'])?->name ?? null),
                 ])
-                ->hidden(fn(Get $get) => $get('endorse_type') == 'without')
+                ->hidden(fn (Get $get) => $get('endorse_type') == 'without')
                 ->mutateRelationshipDataBeforeFillUsing(function (array $data): array {
                     $data['establishment_id'] = OrganizationalUnit::find($data['sent_to_ou_id'])?->establishment_id;
+
                     return $data;
                 })
                 ->mutateRelationshipDataBeforeCreateUsing(function (array $data): array {
@@ -664,6 +677,7 @@ class ProcessResource extends Resource
                     $data['document_route_name'] = 'route';
                     $data['digital_signature']   = true;
                     $data['endorse']             = true;
+
                     return $data;
                 })
                 // ->maxItems(8)
@@ -713,7 +727,7 @@ class ProcessResource extends Resource
                         ->requiresConfirmation()
                         ->action(function (Process $record, Get $get, $livewire): void {
                             $recipients = $record->municipality->emails;
-                            
+
                             foreach ($recipients as $recipient) {
                                 Notification::route('mail', $recipient)->notify(new ProcessCommunePdf($record));
                             }
@@ -728,8 +742,8 @@ class ProcessResource extends Resource
 
                             // Refresh the page
                             $livewire->redirect(request()->header('Referer'));
-                        })
-                        // ->hidden(fn (?Process $record) => $record->status !== Status::Finished),
+                        }),
+                    // ->hidden(fn (?Process $record) => $record->status !== Status::Finished),
 
                 ])
                 ->footerActionsAlignment(Alignment::End)
@@ -913,7 +927,7 @@ class ProcessResource extends Resource
                         ->hiddenLabel()
                         ->profile('ionline')
                         ->disabled(),
-                        // ->disabled(fn (?Process $record): bool => $record->revision_by_lawyer_user_id !== null),
+                    // ->disabled(fn (?Process $record): bool => $record->revision_by_lawyer_user_id !== null),
                 ])
                 ->hiddenOn('create'),
 

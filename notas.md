@@ -289,7 +289,7 @@ Presentación: 20-01-2025
 
 Correo de Natalia
 - [ ] Notificar cuando se suba el convenio firmado por las comunas
-- [ ] Habilitar filtros por tipo de proceso, programa, periodo, comuna, año (procesos)
+- [X] Habilitar filtros por tipo de proceso, programa, periodo, comuna, año (procesos)
 
 
 Revisión 16-01-2025
@@ -316,7 +316,7 @@ lunes 10am reunión (corrovorar a referentes comunales).-
 - [X] Notificar: cuando esté finalizado a los admin del modulo
 
 - [ ] Certificados, una vez firmados, poner boton de descarga.
-- [ ] Revisar que pasó con el caso de huara.
+- [+] Revisar que pasó con el caso de huara.
 - [X] Mostrar los establecimientos en el documento.
 
 - [-] Notificar cuando referente terminó de hacer el convenio
@@ -330,7 +330,7 @@ lunes 10am reunión (corrovorar a referentes comunales).-
 - [X] Distribución queda al final (solo para reso)
 - [X] Visaciones debajo de la distribución
 - [X] En programa: Adjuntar archivos para ambas reso (Aprobatoria y Distribución de recursos)
-- [ ] En aprobaciones que se vean los adjuntos
+- [X] En aprobaciones que se vean los adjuntos
 - [X] Auto aprobar la visacion del referente
 - [X] Certificado De no fraccionamiento y de rendiciones, se crea por convenio
 - [ ] Escoger no enviar a la comuna (caso observaciones de contraloría, ya que visto bueno de comuna es técnico y no jurídico)
@@ -351,16 +351,16 @@ lunes 10am reunión (corrovorar a referentes comunales).-
 - [X] Crear vista del process para poder mostrar el documento y para las aprobaciones
 - [X] Crear Proceso - Auto calcular las cuotas
 - [-] Crear Proceso - Comentarios dejar fijos los que ya se ingresaron
-- [-] Mostrar vinculo al siguiente proceso
+- [X] Mostrar vinculo al siguiente proceso
 - [-] Poblar approval flow
 - [-] Agregar archivo adjunto, resolución firmada por alcalde
 - [ ] Mostrar section con datos del programa y sus componentes
 - [X] Parametrizar abogado // Permiso Legally
-- [ ] Permitir edición abogado
+- [*] Permitir edición abogado
 - [X] Agregar otros archivos adjunto
 - [X] Eliminar document_id
 - [X] Approvals permitir poner vizaciones
-- [ ] Auto solicitar firma de directora despues de la visación
+- [*] Auto solicitar firma de directora despues de la visación (no hacer porque depende del flujo)
 - [X] Agregar descargar documento firmado por directora
 - [X] Comentario marcar como del sistema
 - [X] Eliminar boton para borrar en masa
