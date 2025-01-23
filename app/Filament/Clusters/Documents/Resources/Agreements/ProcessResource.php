@@ -599,7 +599,7 @@ class ProcessResource extends Resource
                                 ->send();
                             redirect(request()->header('Referer')); // Redirige al usuario a la misma página
                         })
-                        ->disabled(fn (?Process $record) => $record->endorses->isNotEmpty()),
+                        ->disabled(fn (?Process $record) => $record?->endorses?->isNotEmpty()),
                     Forms\Components\Actions\Action::make('NuevoVisador')
                         ->label('Nuevo visador')
                         ->icon('heroicon-m-plus-circle')
@@ -689,7 +689,8 @@ class ProcessResource extends Resource
                 })
                 // ->maxItems(8)
                 // ->defaultItems(1)
-                ->columnSpanFull(),
+                ->columnSpanFull()
+                ->visibleOn('edit'),
 
             Forms\Components\Section::make('Comuna')
                 ->schema([
