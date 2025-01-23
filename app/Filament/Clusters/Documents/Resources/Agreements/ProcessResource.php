@@ -597,6 +597,7 @@ class ProcessResource extends Resource
                                 ->title('Visado solicitado')
                                 ->success()
                                 ->send();
+                            redirect(request()->header('Referer')); // Redirige al usuario a la misma página
                         })
                         ->disabled(fn (?Process $record) => $record->endorses->isNotEmpty()),
                     Forms\Components\Actions\Action::make('NuevoVisador')
@@ -622,7 +623,6 @@ class ProcessResource extends Resource
                                 ->parentNullValue(null)
                                 ->enableBranchNode()
                                 ->defaultOpenLevel(1)
-                                ->columnSpan(2)
                                 ->live(),
                             Forms\Components\Section::make()
                                 ->description('O enviar a un usuario específico')
@@ -645,11 +645,18 @@ class ProcessResource extends Resource
                             redirect(request()->header('Referer')); // Redirige al usuario a la misma página
                         }),
                 ])
+                ->footerActions([
+                    Forms\Components\Actions\Action::make('guardar_cambios')
+                        ->icon('bi-save')
+                        ->action('save'),
+                ])
+                ->footerActionsAlignment(Alignment::End)
                 ->schema([
                     Forms\Components\Repeater::make('endorses')
                         ->relationship()
                         ->disableItemCreation()
                         ->hiddenLabel()
+                        ->live()
                         ->simple(
                             Forms\Components\TextInput::make('initials')
                                 ->label('Nombre')

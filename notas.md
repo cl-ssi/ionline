@@ -272,6 +272,8 @@ Factor
 
 ---
 # Convenios
+// Asignar el rol Convenios: Usuario a todos los referentes
+User::whereHas('programs.referers')->get()->each(function ($user) { if (!$user->hasRole('Convenios: Usuario')) { $user->assignRole('Convenios: Usuario'); }});
 
 TODO:
 
@@ -279,12 +281,12 @@ Presentación: 20-01-2025
 - [X] En aprobacion, que esten los dos documentos.
 - [X] En certificados - Filtrar programas de los referentes.
 - [ ] Ver como cambiar el visto de la directora.
-- [ ] Auto actualizar al crear visaciones.
+- [X] Auto actualizar al crear visaciones.
 - [ ] Montos separar las centenas y miles.
-- [ ] Notificar al referente y administradores al terminar la visación de un proceso.
+- [X] Notificar al referente y administradores al terminar la visación de un proceso.
 - [X] Listado de certificados, filtar por los del referente.
 - [X] Previsualizar Certificado.
-- [ ] Auto guardar el proceso al eliminar una visación.
+- [X] Boton guardar el proceso al eliminar una visación.
 - [ ] Ver que juridico no pueda aprobar dos veces.
 
 Correo de Natalia
@@ -302,7 +304,7 @@ Revisión 16-01-2025
 - [X] Editar tipo de proceso: quitar boton borrar
 - [X] Envio de correo automatico a la comuna.
 - [ ] Revisar que hacer con las cuotas en los convenios de 12 cuotas (SAPU)
-- [ ] Implementar en Editar un Proceso el boton "agregar visación"
+X [X] Implementar en Editar un Proceso el boton "agregar visación"
 - [X] Diferencias circuito de apobación de resoluciones vs convenios
 - [X] En la sección firma director, implementar botón descargar (pra descargar convenio firmado)
 - [X] Se debe refrescar el content una vez se guarde o modifique el proceso.

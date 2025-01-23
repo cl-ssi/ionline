@@ -213,6 +213,7 @@ class Process extends Model
         $this->save();
     }
 
+    // Esto no se ocupa
     public function createNextProcess($process_type_id): int
     {
         $nextProcess = $this->nextProcesses()->create([
@@ -254,14 +255,42 @@ class Process extends Model
                 'record' => $this->id,
             ]),
             'sent_to_user_id' => $referer_id,
+            'endorse'        => true,
 
             /* Aprobado por defecto */
-            'endorse'        => true,
             'approver_ou_id' => User::find($referer_id)->organizational_unit_id ?? null,
             'approver_id'    => $referer_id,
             'approver_at'    => now(),
             'status'         => true,
         ]);
+
+        // Visación de juridico, esta vez no es a una unidad sino que a un usuario que tenga el permiso Agreement: legally
+        $recipients = User::permission('Agreement: legally')->get();
+        foreach ($recipients as $recipient) {
+            $endorseData = [
+                'module' => 'Convenios',
+                'module_icon' => 'bi bi-file-earmark-text',
+                'subject' => 'Visar convenio',
+                'document_route_name' => 'documents.agreements.processes.view',
+                'document_route_params' => json_encode([
+                    'record' => $this->id,
+                ]),
+                'sent_to_user_id' => $recipient->id,
+                'endorse' => true,
+                'approvable_callback' => true,
+            ];
+            
+            if ($this->processType->is_resolution) {
+                $endorseData = array_merge($endorseData, [
+                    'approver_ou_id' => $recipient->organizational_unit_id,
+                    'approver_id' => $recipient->id,
+                    'approver_at' => $this->revision_by_lawyer_at,
+                    'status' => true,
+                ]);
+            }
+            
+            $this->endorses()->create($endorseData);
+        }
 
         // El resto de los visadores de obtienen del Flujo de aprobación
         $steps = ApprovalFlow::getByObject($this, $this->processType->is_resolution ? 'resolution' : 'other');
@@ -294,6 +323,7 @@ class Process extends Model
             'endorse'       => true,
             'sent_to_user_id' => $data['sent_to_user_id'],
             'sent_to_ou_id' => $data['sent_to_ou_id'],
+            'approvable_callback' => true,
         ]);
     }
 
@@ -371,32 +401,77 @@ class Process extends Model
 
     public function approvalCallback(): void
     {
-        $this->update(['status' => 'finished']);
+        // Initialize variables with default values
+        $allEndorsesApproved = false;
+        $directorApproved = false;
 
-        // Notificar a los referentes
-        Notification::make()
-            ->title('Proceso Firmado por el Director')
-            ->actions([
-                Notifications\Actions\Action::make('IrAlProceso')
-                    ->button()
-                    ->url(ProcessResource::getUrl('edit', [$this->id]))
-                    ->markAsRead(),
-            ])
-            ->sendToDatabase($this->program->referers);
+        //Primero ver si todos los endorses están aprobados
+        if ($this->endorses->where('status', false)->isEmpty()) {
+            $allEndorsesApproved = true;
+        }
 
-        // Notificar a los admin del modulo
-        $recipients = User::permission('Agreement: admin')
-            ->where('establishment_id', $this->establishment_id)
-            ->get();
-        Notification::make()
-            ->title('Proceso Firmado por el Director')
-            ->actions([
-                Notifications\Actions\Action::make('IrAlProceso')
-                    ->button()
-                    ->url(ProcessResource::getUrl('edit', [$this->id]))
-                    ->markAsRead(),
-            ])
-            ->sendToDatabase($recipients);
+        // Ver si la firma de la directora está aprobada
+        if ($this->approval?->status === true) {
+            $directorApproved = true;
+        }
+
+        // Si todos los endorses están aprobados y la firma de la directora no
+        if ($allEndorsesApproved && !$directorApproved) {
+            Notification::make()
+                ->title('El proceso fue visado por todos')
+                ->actions([
+                    Notifications\Actions\Action::make('IrAlProceso')
+                        ->button()
+                        ->url(ProcessResource::getUrl('edit', [$this->id]))
+                        ->markAsRead(),
+                ])
+                ->sendToDatabase($this->program->referers);
+
+            // Notificar a los admin del modulo
+            $recipients = User::permission('Agreement: admin')
+                ->where('establishment_id', $this->establishment_id)
+                ->get();
+            Notification::make()
+                ->title('El proceso fue visado por todos')
+                ->actions([
+                    Notifications\Actions\Action::make('IrAlProceso')
+                        ->button()
+                        ->url(ProcessResource::getUrl('edit', [$this->id]))
+                        ->markAsRead(),
+                ])
+                ->sendToDatabase($recipients);
+        }
+
+        // Si todos los endorses están aprobados y la firma de la directora también
+        if ($allEndorsesApproved && $directorApproved) {
+            $this->update(['status' => 'finished']);
+
+            // Notificar a los referentes
+            Notification::make()
+                ->title('Proceso firmado por el Director/a')
+                ->actions([
+                    Notifications\Actions\Action::make('IrAlProceso')
+                        ->button()
+                        ->url(ProcessResource::getUrl('edit', [$this->id]))
+                        ->markAsRead(),
+                ])
+                ->sendToDatabase($this->program->referers);
+    
+            // Notificar a los admin del modulo
+            $recipients = User::permission('Agreement: admin')
+                ->where('establishment_id', $this->establishment_id)
+                ->get();
+            Notification::make()
+                ->title('Proceso firmado por el Director/a')
+                ->actions([
+                    Notifications\Actions\Action::make('IrAlProceso')
+                        ->button()
+                        ->url(ProcessResource::getUrl('edit', [$this->id]))
+                        ->markAsRead(),
+                ])
+                ->sendToDatabase($recipients);
+        }
+
 
     }
 
