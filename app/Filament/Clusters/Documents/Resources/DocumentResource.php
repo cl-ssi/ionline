@@ -235,7 +235,8 @@ class DocumentResource extends Resource
                 //     ->searchable(),
                 Tables\Columns\TextColumn::make('user.short_name')
                     ->numeric()
-                    ->sortable()
+                    ->sortable(['full_name'])
+                    ->searchable(['full_name'])
                     ->wrap()
                     ->label('Creador'),
                 // Tables\Columns\TextColumn::make('organizationalUnit.name')
