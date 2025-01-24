@@ -220,10 +220,12 @@ class DocumentResource extends Resource
                     ->label('De')
                     // ->description(fn (Document $record): string => $record->for?? '', position: 'above')
                     ->wrap()
+                    ->sortable()
                     ->searchable(),
                 Tables\Columns\TextColumn::make('for')
                     ->label('Para')
                     ->wrap()
+                    ->sortable()
                     ->searchable(),
                 // Tables\Columns\IconColumn::make('reserved')
                 //     ->translateLabel()
