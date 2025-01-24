@@ -20,7 +20,7 @@ class DocumentPolicy
      */
     public function viewAny(User $user): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -52,7 +52,8 @@ class DocumentPolicy
      */
     public function delete(User $user, Document $document): bool
     {
-        return $user->id === $document->user_id;
+        /** que sea del usuario y no mayor a 15 días desde la creación */
+        return $user->id === $document->user_id && $document->created_at->diffInDays(now()) <= 15;
     }
 
     /**

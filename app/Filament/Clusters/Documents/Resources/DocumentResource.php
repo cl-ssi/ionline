@@ -7,8 +7,13 @@ use App\Filament\Clusters\Documents;
 use App\Filament\Clusters\Documents\Resources\DocumentResource\Pages;
 use App\Filament\Clusters\Documents\Resources\DocumentResource\RelationManagers;
 use App\Models\Documents\Document;
+use App\Services\ColorCleaner;
+use App\Services\TableCleaner;
+use App\Services\TextCleaner;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Forms\Get;
+use Filament\Forms\Set;
 use Filament\Pages\SubNavigationPosition;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -44,33 +49,45 @@ class DocumentResource extends Resource
                 //    ->disabled()
                 //    ->columnSpan(2),
                 Forms\Components\DatePicker::make('date')
+                    ->label(('Fecha'))
+                    ->required()
                     ->columnSpan(2),
                 Forms\Components\Select::make('type_id')
+                    ->label('Tipo de documento')
                     ->relationship('type', 'name', function ($query) {
                         return $query->where('doc_digital', true);
                     })
                     ->default(null)
+                    ->required()
                     ->columnSpan(3),
                 Forms\Components\Toggle::make('reserved')
+                    ->label('Reservado')
                     ->inline(false)
                     ->columnSpan(1),
                 Forms\Components\Textarea::make('antecedent')
+                    ->label('Antecedentes')
                     ->rows(3)
                     ->columnSpan(5),
                 Forms\Components\TextInput::make('subject')
+                    ->label('Asunto')
+                    ->required()
                     ->maxLength(255)
-                    ->translateLabel()
                     ->default(null)
                     ->columnSpanFull(),
                 Forms\Components\TextInput::make('from')
+                    ->label('De')
+                    ->helperText('Nombre/Funcion')
                     ->maxLength(255)
                     ->default(null)
                     ->columnSpanFull(),
                 Forms\Components\TextInput::make('for')
+                    ->label('Para')
+                    ->helperText('Nombre/Funcion')
                     ->maxLength(255)
                     ->default(null)
                     ->columnSpanFull(),
                 Forms\Components\Radio::make('greater_hierarchy')
+                    ->label('Mayor jerarquía')
                     ->options([
                         'from' => 'De',
                         'for' => 'Para',
@@ -94,26 +111,58 @@ class DocumentResource extends Resource
                 //     ->required()
                 //     ->minHeight(940)
                 //     ->columnSpanFull(),
-                Forms\Components\RichEditor::make('content')
-                    ->translateLabel()
+                \Mohamedsabil83\FilamentFormsTinyeditor\Components\TinyEditor::make('content')
+                    ->profile('ionline')
+                    ->hintActions(
+                        [
+                            Forms\Components\Actions\Action::make('limpiarTabla')
+                                ->icon('heroicon-m-clipboard')
+                                ->requiresConfirmation()
+                                ->action(function (Get $get, Set $set) {
+                                    $content        = $get('content');
+                                    $cleanedContent = TableCleaner::clean($content);
+                                    $set('content', $cleanedContent);
+                                }),
+
+                            Forms\Components\Actions\Action::make('limpiarTexto')
+                                ->icon('heroicon-m-clipboard')
+                                ->requiresConfirmation()
+                                ->action(function (Get $get, Set $set) {
+                                    $content        = $get('content');
+                                    $cleanedContent = TextCleaner::clean($content);
+                                    $set('content', $cleanedContent);
+                                }),
+
+                            Forms\Components\Actions\Action::make('limpiarColor')
+                                ->icon('heroicon-m-clipboard')
+                                ->requiresConfirmation()
+                                ->action(function (Get $get, Set $set) {
+                                    $content        = $get('content');
+                                    $cleanedContent = ColorCleaner::clean($content);
+                                    $set('content', $cleanedContent);
+                                })
+                        ]
+                    )
+                    ->hiddenLabel()
                     ->required()
                     ->columnSpanFull(),
                 Forms\Components\Textarea::make('distribution')
-                    ->translateLabel()
+                    ->label('Distribución')
                     ->rows(5)
                     ->columnSpan(6),
                 Forms\Components\Textarea::make('responsible')
-                    ->translateLabel()
+                    ->label('Responsable')
                     ->rows(5)
                     ->columnSpan(6),
                 Forms\Components\FileUpload::make('file')
-                    ->translateLabel()
+                    ->label('Archivo')
                     ->directory('ionline/documents/documents/')
                     ->deleteUploadedFileUsing(function ($record) {
                         \Illuminate\Support\Facades\Storage::delete($record->file);
                     })
                     ->columnSpanFull(),
                 Forms\Components\TextInput::make('internal_number')
+                    ->label('Número interno')
                     ->numeric()
                     ->default(null)
                     ->columnSpan(2),
@@ -144,34 +193,38 @@ class DocumentResource extends Resource
                 Tables\Columns\TextColumn::make('id')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('type.name')
-                    ->numeric()
+                    ->label('Tipo')
                     ->sortable()
-                    ->translateLabel(),
-                Tables\Columns\TextColumn::make('number')
-                    ->translateLabel()
                     ->searchable(),
+                Tables\Columns\TextColumn::make('number')
+                    ->label('Número')
+                    ->searchable()
+                    ->sortable(),
                 // Tables\Columns\TextColumn::make('internal_number')
                 //     ->numeric()
                 //     ->sortable(),
                 Tables\Columns\TextColumn::make('date')
                     ->date('Y-m-d')
-                    ->translateLabel()
+                    ->label('Fecha')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('antecedent')
                     ->searchable()
                     ->wrap()
-                    ->translateLabel(),
+                    ->label('Antecedentes')
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('subject')
                     ->searchable()
                     ->wrap()
-                    ->translateLabel(),
+                    ->label('Asunto'),
                 Tables\Columns\TextColumn::make('from')
-                    ->label('De / Para')
-                    ->description(fn (Document $record): string => $record->for?? '', position: 'above')
+                    ->label('De')
+                    // ->description(fn (Document $record): string => $record->for?? '', position: 'above')
                     ->wrap()
                     ->searchable(),
-                // Tables\Columns\TextColumn::make('for')
-                //     ->searchable(),
+                Tables\Columns\TextColumn::make('for')
+                    ->label('Para')
+                    ->wrap()
+                    ->searchable(),
                 // Tables\Columns\IconColumn::make('reserved')
                 //     ->translateLabel()
                 //     ->boolean()
@@ -184,7 +237,7 @@ class DocumentResource extends Resource
                     ->numeric()
                     ->sortable()
                     ->wrap()
-                    ->translateLabel(),
+                    ->label('Creador'),
                 // Tables\Columns\TextColumn::make('organizationalUnit.name')
                 //     ->numeric()
                 //     ->sortable(),
@@ -211,7 +264,7 @@ class DocumentResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
+                Tables\Filters\TrashedFilter::make(),
             ])
             ->actions([
                 // Tables\Actions\ViewAction::make(),
@@ -224,9 +277,9 @@ class DocumentResource extends Resource
                     ->openUrlInNewTab(), 
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
+                // Tables\Actions\BulkActionGroup::make([
+                //     Tables\Actions\DeleteBulkAction::make(),
+                // ]),
             ])
             ->defaultSort('id', 'desc');
     }
@@ -245,5 +298,13 @@ class DocumentResource extends Resource
             'create' => Pages\CreateDocument::route('/create'),
             'edit' => Pages\EditDocument::route('/{record}/edit'),
         ];
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()
+            ->withoutGlobalScopes([
+                SoftDeletingScope::class,
+            ]);
     }
 }
