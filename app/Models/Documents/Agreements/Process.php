@@ -68,6 +68,7 @@ class Process extends Model
         'status',
 
         // 'document_id',
+        'document_date',
         'document_content',
         'previous_process_id',
 

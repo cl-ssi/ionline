@@ -17,6 +17,8 @@ class ProcessType extends Model
         'name',
         'description',
         'bilateral',
+        'revision_commune',
+        'sign_commune',
         'is_dependent',
         'father_process_type_id',
         'is_resolution',

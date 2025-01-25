@@ -56,6 +56,16 @@ class ProcessTypeResource extends Resource
                     ->inline(false)
                     ->helperText('Para los que el proceso interviene la comuna y el servicio')
                     ->required(),
+                Forms\Components\Toggle::make('revision_commune')
+                    ->label('Revisión Comuna')
+                    ->inline(false)
+                    ->default(false)
+                    ->helperText('Indica si el proceso requiere revisión por la comuna'),
+                Forms\Components\Toggle::make('sign_commune')
+                    ->label('Firma Comuna')
+                    ->inline(false)
+                    ->default(false)
+                    ->helperText('Indica si el proceso requiere firma por la comuna'),
                 Forms\Components\Toggle::make('is_resolution')
                     ->label('Es Resolución')
                     ->inline(false)

@@ -38,6 +38,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Storage;
 use Mohamedsabil83\FilamentFormsTinyeditor\Components\TinyEditor;
+use Filament\Forms\Components\DatePicker;
 
 class ProcessResource extends Resource
 {
@@ -243,6 +244,9 @@ class ProcessResource extends Resource
                         ->required()
                         ->columnSpanFull()
                         ->visibleOn('create'),
+                    Forms\Components\DatePicker::make('document_date')
+                        ->label('Fecha del documento')
+                        ->required(),
                     Forms\Components\Select::make('process_type_id')
                         ->label('Tipo de proceso')
                         ->relationship('processType', 'name')
@@ -328,6 +332,7 @@ class ProcessResource extends Resource
                     Forms\Components\TextInput::make('total_amount')
                         ->label('Monto total')
                         ->numeric()
+                        ->required()
                         ->default(null),
                     Forms\Components\TextInput::make('quotas_qty')
                         ->label('Cuotas')

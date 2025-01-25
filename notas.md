@@ -278,11 +278,11 @@ User::whereHas('programs.referers')->get()->each(function ($user) { if (!$user->
 TODO:
 
 Presentación: 23-01-2025
-- [ ] Plantilla agrandar texto de la plantilla en doc_templates (content)
-- [ ] Aumentar tamaño del total_amount y ver si a las cuotas también necesitan agrandar el tamaño del en la BD. 
-- [ ] Monto total (total_amount) que sea obligatorio
-- [ ] Incoporar fecha del proceso document_date.
-- [ ] Boolean en tipo de proceso, si va o no a la comuna, caso prorroga, debajo de bilateral crear booleans revision_commune sign_commune.
+- [X] Plantilla agrandar texto de la plantilla en doc_templates (content)
+- [X] Aumentar tamaño del total_amount y ver si a las cuotas también necesitan agrandar el tamaño del en la BD. 
+- [X] Monto total (total_amount) que sea obligatorio
+- [X] Incoporar fecha del proceso document_date.
+- [X] Boolean en tipo de proceso, si va o no a la comuna, caso prorroga, debajo de bilateral crear booleans revision_commune sign_commune.
 - [*] Revisión de juridico debería reinciar si se vuelve a editar el documento.
 - [ ] en certificados: quitar boton agregar visacion (del repeater, addeable(false))
 - [ ] calculo de cuotas (decimales)
