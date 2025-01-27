@@ -877,8 +877,10 @@ class ProcessResource extends Resource
                                 ->required(),
                             Forms\Components\Select::make('period')
                                 ->label('Periodo')
+                                ->required()
+                                ->live()
                                 ->options(function () {
-                                    $currentYear = now()->year;
+                                    $currentYear = now()->addYear()->year;
                                     $years       = [];
                                     for ($i = 0; $i < 6; $i++) {
                                         $years[$currentYear - $i] = $currentYear - $i;
@@ -886,10 +888,22 @@ class ProcessResource extends Resource
         
                                     return $years;
                                 })
+                                ->default(now()->year),
+                            Forms\Components\Select::make('program_id')
+                                ->label('Programa')
+                                ->relationship('program', 'name', function (Builder $query, callable $get) {
+                                    $query->where('is_program', true)
+                                        ->where('period', $get('period'))
+                                        ->whereHas('referers', function ($query) {
+                                            $query->where('user_id', auth()->id());
+                                        });
+                                })
+                                ->helperText('Solo programas en los que eres referente')
                                 ->required(),
+
                         ])
                         ->action(function (Process $record, array $data) {
-                            $process_id = $record->createNextProcess($data['process_type_id'], $data['period']);
+                            $process_id = $record->createNextProcess($data['process_type_id'], $data['period'], $data['program_id']);
 
                             return redirect()->to(static::getUrl('edit', ['record' => $process_id]));
                         }),
