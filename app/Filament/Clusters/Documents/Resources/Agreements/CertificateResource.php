@@ -2,6 +2,7 @@
 
 namespace App\Filament\Clusters\Documents\Resources\Agreements;
 
+use App\Enums\Documents\Agreements\Status;
 use App\Filament\Clusters\Documents;
 use App\Filament\Clusters\Documents\Resources\Agreements\CertificateResource\Pages;
 use App\Models\Documents\Agreements\Certificate;
@@ -47,7 +48,7 @@ class CertificateResource extends Resource
                 Forms\Components\Select::make('process_type_id')
                     ->label('Tipo de Certificado')
                     ->relationship(
-                        'processType', 
+                        'processType',
                         'name',
                         fn (Builder $query, callable $get) => $query->where('is_certificate', true))
                     ->required()
@@ -70,6 +71,7 @@ class CertificateResource extends Resource
                         for ($i = 0; $i < 6; $i++) {
                             $years[$currentYear - $i] = $currentYear - $i;
                         }
+
                         return $years;
                     })
                     ->default(now()->year)
@@ -115,13 +117,14 @@ class CertificateResource extends Resource
                             ->requiresConfirmation()
                             ->action(function (Certificate $record, Set $set) {
                                 $set('document_content', $record->processType->template->parseTemplate($record));
-                            }),
-                        // ->disabled(fn (?Certificate $record) => $record->status === Status::Finished),
+                            })
+                            ->disabled(fn (?Certificate $record) => $record->status === Status::Finished),
                     ])
                     ->footerActions([
                         Forms\Components\Actions\Action::make('guardar_cambios')
                             ->icon('bi-save')
-                            ->action('save'),
+                            ->action('save')
+                            ->disabled(fn (?Certificate $record) => $record->status === Status::Finished),
                         Forms\Components\Actions\Action::make('Ver')
                             ->icon('heroicon-m-eye')
                             ->url(fn (Certificate $record) => route('documents.agreements.certificates.view', [$record]))
@@ -132,7 +135,7 @@ class CertificateResource extends Resource
                         TinyEditor::make('content')::make('document_content')
                             ->hiddenLabel()
                             ->profile('ionline')
-                        // ->disabled(fn(?Certificate $record) => $record->status === Status::Finished)
+                            ->disabled(fn (?Certificate $record) => $record->status === Status::Finished)
                         // Forms\Components\Textarea::make('text')
                             ->hintActions(
                                 [
@@ -143,8 +146,8 @@ class CertificateResource extends Resource
                                             $content        = $get('document_content');
                                             $cleanedContent = TableCleaner::clean($content);
                                             $set('document_content', $cleanedContent);
-                                        }),
-                                    // ->disabled(fn(?Certificate $record) => $record->status === Status::Finished),
+                                        })
+                                        ->disabled(fn (?Certificate $record) => $record->status === Status::Finished),
 
                                     Forms\Components\Actions\Action::make('limpiarTexto')
                                         ->icon('heroicon-m-clipboard')
@@ -153,8 +156,8 @@ class CertificateResource extends Resource
                                             $content        = $get('document_content');
                                             $cleanedContent = TextCleaner::clean($content);
                                             $set('document_content', $cleanedContent);
-                                        }),
-                                    // ->disabled(fn(?Certificate $record) => $record->status === Status::Finished),
+                                        })
+                                        ->disabled(fn (?Certificate $record) => $record->status === Status::Finished),
 
                                     Forms\Components\Actions\Action::make('limpiarColor')
                                         ->icon('heroicon-m-clipboard')
@@ -163,8 +166,8 @@ class CertificateResource extends Resource
                                             $content        = $get('document_content');
                                             $cleanedContent = ColorCleaner::clean($content);
                                             $set('document_content', $cleanedContent);
-                                        }),
-                                    // ->disabled(fn(?Certificate $record) => $record->status === Status::Finished),
+                                        })
+                                        ->disabled(fn (?Certificate $record) => $record->status === Status::Finished),
                                 ]
                             )
                             ->columnSpanFull(),
@@ -206,7 +209,8 @@ class CertificateResource extends Resource
                             ->relationship()
                             ->addActionLabel('Agregar visación')
                             ->hiddenLabel()
-                            // ->addable(false)
+                            ->addable(false)
+                            ->deletable(false)
                             ->simple(
                                 Forms\Components\TextInput::make('initials')
                                     ->label('Nombre')

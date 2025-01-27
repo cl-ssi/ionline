@@ -284,8 +284,8 @@ Presentación: 23-01-2025
 - [X] Incoporar fecha del proceso document_date.
 - [X] Boolean en tipo de proceso, si va o no a la comuna, caso prorroga, debajo de bilateral crear booleans revision_commune sign_commune.
 - [*] Revisión de juridico debería reinciar si se vuelve a editar el documento.
-- [ ] en certificados: quitar boton agregar visacion (del repeater, addeable(false))
-- [ ] calculo de cuotas (decimales)
+- [ ] En certificados: quitar boton agregar visacion (del repeater, addeable(false))
+- [ ] Calculo de cuotas (decimales)
 
 - [X] Permitir enviar varias veces el envio del proceso a la comuna, varias veces enviar el email con el pdf.
 - [X] Solicitar firma directora en las que no son reso, debería firmar el archivo subido y no el que se firma en la reso
@@ -302,7 +302,7 @@ Presentación: 20-01-2025
 - [X] Listado de certificados, filtar por los del referente.
 - [X] Previsualizar Certificado.
 - [X] Boton guardar el proceso al eliminar una visación.
-- [ ] Ver que juridico no pueda aprobar dos veces, o que no notifique dos veces.
+- [X] Ver que juridico no pueda aprobar dos veces, o que no notifique dos veces.
 
 
 Correo de Natalia
@@ -320,7 +320,7 @@ Revisión 16-01-2025
 - [X] Editar tipo de proceso: quitar boton borrar
 - [X] Envio de correo automatico a la comuna.
 - [ ] Revisar que hacer con las cuotas en los convenios de 12 cuotas (SAPU)
-X [X] Implementar en Editar un Proceso el boton "agregar visación"
+- [X] Implementar en Editar un Proceso el boton "agregar visación"
 - [X] Diferencias circuito de apobación de resoluciones vs convenios
 - [X] En la sección firma director, implementar botón descargar (pra descargar convenio firmado)
 - [X] Se debe refrescar el content una vez se guarde o modifique el proceso.
@@ -333,7 +333,7 @@ lunes 10am reunión (corrovorar a referentes comunales).-
 - [X] Una visaciónes de CDP del Referente Tecnico y firma es de el Departamento de Gestión Financiera
 - [X] Notificar: cuando esté finalizado a los admin del modulo
 
-- [ ] Certificados, una vez firmados, poner boton de descarga.
+- [X] Certificados, una vez firmados, poner boton de descarga.
 - [+] Revisar que pasó con el caso de huara.
 - [X] Mostrar los establecimientos en el documento.
 
@@ -351,7 +351,7 @@ lunes 10am reunión (corrovorar a referentes comunales).-
 - [X] En aprobaciones que se vean los adjuntos
 - [X] Auto aprobar la visacion del referente
 - [X] Certificado De no fraccionamiento y de rendiciones, se crea por convenio
-- [ ] Escoger no enviar a la comuna (caso observaciones de contraloría, ya que visto bueno de comuna es técnico y no jurídico)
+- [X] Escoger no enviar a la comuna (caso observaciones de contraloría, ya que visto bueno de comuna es técnico y no jurídico)
 
 - [X] Desbloquear listado de programas, filtrado por boolean is_program
 - [X] Poblar tabla alcaldes (mayors)
@@ -370,15 +370,15 @@ lunes 10am reunión (corrovorar a referentes comunales).-
 - [X] Crear Proceso - Auto calcular las cuotas
 - [-] Crear Proceso - Comentarios dejar fijos los que ya se ingresaron
 - [X] Mostrar vinculo al siguiente proceso
-- [-] Poblar approval flow
-- [-] Agregar archivo adjunto, resolución firmada por alcalde
+- [X] Poblar approval flow
+- [X] Agregar archivo adjunto, resolución firmada por alcalde
 - [ ] Mostrar section con datos del programa y sus componentes
 - [X] Parametrizar abogado // Permiso Legally
-- [*] Permitir edición abogado
+- [*] Permitir edición abogado // cambiado a no permitir, solo dejar comentarios
 - [X] Agregar otros archivos adjunto
 - [X] Eliminar document_id
 - [X] Approvals permitir poner vizaciones
-- [*] Auto solicitar firma de directora despues de la visación (no hacer porque depende del flujo)
+- [X] Auto solicitar firma de directora despues de la visación (no hacer porque depende del flujo)
 - [X] Agregar descargar documento firmado por directora
 - [X] Comentario marcar como del sistema
 - [X] Eliminar boton para borrar en masa
