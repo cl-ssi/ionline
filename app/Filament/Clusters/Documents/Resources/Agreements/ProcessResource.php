@@ -164,8 +164,7 @@ class ProcessResource extends Resource
 
                 Tables\Filters\SelectFilter::make('period')
                     ->label('Periodo')
-                    ->options(array_combine(range(date('Y'), date('Y') - 5), range(date('Y'), date('Y') - 5)))
-                    ->default(now()->year),
+                    ->options(array_combine(range(date('Y'), date('Y') - 5), range(date('Y'), date('Y') - 5))),
                 Tables\Filters\SelectFilter::make('program_id')
                     ->label('Programa')
                     /**

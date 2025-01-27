@@ -292,6 +292,9 @@ Presentación: 23-01-2025
 - [X] Fix decreeParagraph, porque no están saliendo los decretos de la dire.
 - [ ] Presionó dos veces el confirmar al crear un Procesos Dependientes (está peludo fixear eso).
 
+Correo: 22-01-2025
+- [ ] Implementar seguimiento
+
 Presentación: 20-01-2025
 - [X] En aprobacion, que esten los dos documentos.
 - [X] En certificados - Filtrar programas de los referentes.
