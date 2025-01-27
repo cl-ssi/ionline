@@ -218,11 +218,11 @@ class Process extends Model
     }
 
     // Esto no se ocupa
-    public function createNextProcess($process_type_id): int
+    public function createNextProcess($process_type_id, $period): int
     {
         $nextProcess = $this->nextProcesses()->create([
             'process_type_id' => $process_type_id,
-            'period'          => $this->period,
+            'period'          => $period,
             'program_id'      => $this->program_id,
             'commune_id'      => $this->commune_id,
             'municipality_id' => $this->municipality_id,

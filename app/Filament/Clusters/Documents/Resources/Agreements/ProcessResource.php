@@ -235,11 +235,12 @@ class ProcessResource extends Resource
             //     ->disabled(),
 
             Forms\Components\Section::make()
-                ->footerActions([
-                    Forms\Components\Actions\Action::make('guardar_cambios')
-                        ->icon('bi-save')
-                        ->action('save'),
-                ])
+                // ->footerActions([
+                //     Forms\Components\Actions\Action::make('guardar_cambios')
+                //         ->icon('bi-save')
+                //         ->action('save'),
+
+                // ])
                 // ->footerActionsAlignment(Alignment::End)
                 ->schema([
                     Forms\Components\Select::make('process_type_id')
@@ -874,9 +875,21 @@ class ProcessResource extends Resource
                                         ->pluck('name', 'id');
                                 })
                                 ->required(),
+                            Forms\Components\Select::make('period')
+                                ->label('Periodo')
+                                ->options(function () {
+                                    $currentYear = now()->year;
+                                    $years       = [];
+                                    for ($i = 0; $i < 6; $i++) {
+                                        $years[$currentYear - $i] = $currentYear - $i;
+                                    }
+        
+                                    return $years;
+                                })
+                                ->required(),
                         ])
                         ->action(function (Process $record, array $data) {
-                            $process_id = $record->createNextProcess($data['process_type_id']);
+                            $process_id = $record->createNextProcess($data['process_type_id'], $data['period']);
 
                             return redirect()->to(static::getUrl('edit', ['record' => $process_id]));
                         }),
