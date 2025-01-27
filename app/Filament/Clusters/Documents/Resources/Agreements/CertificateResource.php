@@ -284,7 +284,15 @@ class CertificateResource extends Resource
                 Tables\Actions\Action::make('Ver')
                     ->icon('heroicon-m-eye')
                     ->url(fn (Certificate $record) => route('documents.agreements.certificates.view', [$record]))
-                    ->openUrlInNewTab(),
+                    ->color('secondary')
+                    ->openUrlInNewTab()
+                    ->hidden(fn (Certificate $record) => $record->status->value === 'finished'),
+                Tables\Actions\Action::make('Ver')
+                    ->icon('heroicon-m-eye')
+                    ->color('success')
+                    ->url(fn (Certificate $record) => Storage::url($record->signer->filename))
+                    ->openUrlInNewTab()
+                    ->hidden(fn (Certificate $record) => $record->status->value === 'draft'),
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
