@@ -23,7 +23,6 @@ use App\Services\TableCleaner;
 use App\Services\TextCleaner;
 use CodeWithDennis\FilamentSelectTree\SelectTree;
 use Filament\Forms;
-use Filament\Forms\Components\Hidden;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
 use Filament\Forms\Set;
@@ -38,7 +37,6 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Storage;
 use Mohamedsabil83\FilamentFormsTinyeditor\Components\TinyEditor;
-use Filament\Forms\Components\DatePicker;
 
 class ProcessResource extends Resource
 {
@@ -237,6 +235,12 @@ class ProcessResource extends Resource
             //     ->disabled(),
 
             Forms\Components\Section::make()
+                ->footerActions([
+                    Forms\Components\Actions\Action::make('guardar_cambios')
+                        ->icon('bi-save')
+                        ->action('save'),
+                ])
+                ->footerActionsAlignment(Alignment::End)
                 ->schema([
                     Forms\Components\Select::make('process_type_id')
                         ->label('Tipo de proceso')

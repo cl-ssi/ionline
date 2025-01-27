@@ -54,4 +54,11 @@ class Quota extends Model
             get: fn (): string => Number::spell($this->amount,locale:'es')
         );
     }
+
+    public function amountFormat(): Attribute
+    {
+        return Attribute::make(
+            get: fn (): string => number_format($this->amount, 0, '', '.')
+        );
+    }
 }

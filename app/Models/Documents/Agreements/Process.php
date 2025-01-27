@@ -14,6 +14,7 @@ use App\Models\Parameters\ApprovalFlow;
 use App\Models\Parameters\Mayor;
 use App\Models\Parameters\Municipality;
 use App\Models\Parameters\Program;
+use App\Models\Rrhh\OrganizationalUnit;
 use App\Models\User;
 use App\Observers\Documents\Agreements\ProcessObserver;
 use Filament\Notifications;
@@ -29,8 +30,6 @@ use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Number;
 use Illuminate\Support\Str;
-
-use App\Models\Rrhh\OrganizationalUnit;
 
 #[ObservedBy([ProcessObserver::class])]
 class Process extends Model
@@ -83,6 +82,7 @@ class Process extends Model
     ];
 
     protected $casts = [
+        'document_date'  => 'date',
         'date'           => 'date',
         'establishments' => 'array',
         'status'         => Status::class,
@@ -198,6 +198,9 @@ class Process extends Model
         return $this->morphMany(File::class, 'fileable')->whereNull('type');
     }
 
+    // @sickiqq Parq que es esto?
+    // Le falta el tipo de retorno
+    // no existen esas foreign key en el modelo
     public function sentToOu()
     {
         return $this->belongsTo(OrganizationalUnit::class, 'sent_to_ou_id');
@@ -256,7 +259,7 @@ class Process extends Model
                 'record' => $this->id,
             ]),
             'sent_to_user_id' => $referer_id,
-            'endorse'        => true,
+            'endorse'         => true,
 
             /* Aprobado por defecto */
             'approver_ou_id' => User::find($referer_id)->organizational_unit_id ?? null,
@@ -269,27 +272,27 @@ class Process extends Model
         $recipients = User::permission('Agreement: legally')->get();
         foreach ($recipients as $recipient) {
             $endorseData = [
-                'module' => 'Convenios',
-                'module_icon' => 'bi bi-file-earmark-text',
-                'subject' => 'Visar convenio',
-                'document_route_name' => 'documents.agreements.processes.view',
+                'module'                => 'Convenios',
+                'module_icon'           => 'bi bi-file-earmark-text',
+                'subject'               => 'Visar convenio',
+                'document_route_name'   => 'documents.agreements.processes.view',
                 'document_route_params' => json_encode([
                     'record' => $this->id,
                 ]),
-                'sent_to_user_id' => $recipient->id,
-                'endorse' => true,
+                'sent_to_user_id'     => $recipient->id,
+                'endorse'             => true,
                 'approvable_callback' => true,
             ];
-            
+
             if ($this->processType->is_resolution) {
                 $endorseData = array_merge($endorseData, [
                     'approver_ou_id' => $recipient->organizational_unit_id,
-                    'approver_id' => $recipient->id,
-                    'approver_at' => $this->revision_by_lawyer_at,
-                    'status' => true,
+                    'approver_id'    => $recipient->id,
+                    'approver_at'    => $this->revision_by_lawyer_at,
+                    'status'         => true,
                 ]);
             }
-            
+
             $this->endorses()->create($endorseData);
         }
 
@@ -321,9 +324,9 @@ class Process extends Model
             'document_route_params' => json_encode([
                 'record' => $this->id,
             ]),
-            'endorse'       => true,
-            'sent_to_user_id' => $data['sent_to_user_id'],
-            'sent_to_ou_id' => $data['sent_to_ou_id'],
+            'endorse'             => true,
+            'sent_to_user_id'     => $data['sent_to_user_id'],
+            'sent_to_ou_id'       => $data['sent_to_ou_id'],
             'approvable_callback' => true,
         ]);
     }
@@ -383,10 +386,24 @@ class Process extends Model
         );
     }
 
+    public function documentDateFormat(): Attribute
+    {
+        return Attribute::make(
+            get: fn (): string => $this->formatDateSafely($this->document_date)
+        );
+    }
+
     public function dateFormat(): Attribute
     {
         return Attribute::make(
             get: fn (): string => $this->formatDateSafely($this->date)
+        );
+    }
+
+    public function totalAmountFormat(): Attribute
+    {
+        return Attribute::make(
+            get: fn (): string => number_format($this->total_amount, 0, '', '.')
         );
     }
 
@@ -404,9 +421,9 @@ class Process extends Model
     {
         // Initialize variables with default values
         $allEndorsesApproved = false;
-        $directorApproved = false;
+        $directorApproved    = false;
 
-        //Primero ver si todos los endorses están aprobados
+        // Primero ver si todos los endorses están aprobados
         if ($this->endorses->where('status', false)->isEmpty()) {
             $allEndorsesApproved = true;
         }
@@ -417,7 +434,7 @@ class Process extends Model
         }
 
         // Si todos los endorses están aprobados y la firma de la directora no
-        if ($allEndorsesApproved && !$directorApproved) {
+        if ($allEndorsesApproved && ! $directorApproved) {
             Notification::make()
                 ->title('El proceso fue visado por todos')
                 ->actions([
@@ -457,7 +474,7 @@ class Process extends Model
                         ->markAsRead(),
                 ])
                 ->sendToDatabase($this->program->referers);
-    
+
             // Notificar a los admin del modulo
             $recipients = User::permission('Agreement: admin')
                 ->where('establishment_id', $this->establishment_id)
@@ -472,7 +489,6 @@ class Process extends Model
                 ])
                 ->sendToDatabase($recipients);
         }
-
 
     }
 
