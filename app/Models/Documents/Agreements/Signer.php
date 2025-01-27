@@ -40,10 +40,13 @@ class Signer extends Model
         return $this->belongsTo(User::class)->withTrashed();
     }
 
-    public function decreeParragraph(): Attribute
+    public function decreeParagraph(): Attribute
     {
         return Attribute::make(
-            get: fn (): string => strip_tags($this->decree)
+            get: fn (): string => collect(preg_split('/<\/li>/', $this->decree)) // Divide por </li>
+                ->map(fn ($item) => strip_tags(preg_replace('/\.\s*$/', '', trim($item)))) // Elimina etiquetas HTML y espacios extra
+                ->filter() // Elimina elementos vacíos
+                ->implode('; ') // Une con "; "
         );
     }
 }
