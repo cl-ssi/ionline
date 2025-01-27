@@ -12,6 +12,7 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Builder;
 
 class AttendanceRecordResource extends Resource
 {
@@ -136,6 +137,24 @@ class AttendanceRecordResource extends Resource
                         ]
                     )
                     ->visible(fn () => auth()->user()->canAny(['be god', 'Attendance records: admin'])),
+                Tables\Filters\Filter::make('record_at')
+                    ->form([
+                        Forms\Components\DatePicker::make('created_from')->label('Desde'),
+                        Forms\Components\DatePicker::make('created_until')->label('Hasta'),
+                    ])
+                    ->query(function (Builder $query, array $data): Builder {
+                        return $query
+                            ->when(
+                                $data['created_from'],
+                                fn (Builder $query, $date): Builder => $query->whereDate('record_at', '>=', $date),
+                            )
+                            ->when(
+                                $data['created_until'],
+                                fn (Builder $query, $date): Builder => $query->whereDate('record_at', '<=', $date),
+                            );
+                    })
+                
+                
             ])
             ->actions([
                 Tables\Actions\Action::make('markAsProcessed')
