@@ -84,7 +84,12 @@ class UserResource extends Resource
                     ->schema([
                         Forms\Components\Select::make('establishment_id')
                             ->label('Establecimiento')
-                            ->options(Establishment::whereIn('id', explode(',', env('APP_SS_ESTABLISHMENTS')))->pluck('name', 'id'))
+                            ->options(Establishment::whereIn('id', array_unique(
+                                array_merge(
+                                    explode(',', env('APP_SS_ESTABLISHMENTS')), 
+                                    ['54'] // incluir los externos TODO: ver una opcipon mejor que no sea código duro
+                                )
+                            ))->pluck('name', 'id'))
                             ->default(auth()->user()->organizationalUnit->establishment_id)
                             ->live(),
                         SelectTree::make('organizational_unit_id')
