@@ -341,21 +341,34 @@ class Process extends Model
     public function createApproval(): void
     {
         $approvalData = [
-            'module'                => 'Convenios',
-            'module_icon'           => 'bi bi-file-earmark-text',
-            'subject'               => $this->processType->name,
-            'document_route_name'   => 'documents.agreements.processes.view',
-            'document_route_params' => json_encode([
-                'record' => $this->id,
-            ]),
-            'sent_to_user_id'   => $this->signer->user->id,
-            'digital_signature' => true,
-            'position'          => 'right',
-            // el start_y depende de si el ProcessType es una resolución u otro
-            'start_y'             => $this->processType->is_resolution ? 110 : 35,
+            'module'              => 'Convenios',
+            'module_icon'         => 'bi bi-file-earmark-text',
+            'subject'             => $this->processType->name,
+            'sent_to_user_id'     => $this->signer->user->id,
+            'digital_signature'   => true,
+            'position'            => 'right',
             'filename'            => 'ionline/agreements/processes/'.Str::random(30).'.pdf',
             'approvable_callback' => true,
         ];
+
+        // Si el tipo de proceso es resolución, la firma se hace utilizando la vista y parametro de la vista
+        if ($this->processType->is_resolution) {
+            $approvalData['start_y']               = 110;
+            $approvalData['document_route_name']   = 'documents.agreements.processes.view';
+            $approvalData['document_route_params'] = json_encode([
+                'record' => $this->id,
+            ]);
+        }
+        // Si el tipo de proceso es otro, entonces se utiliza el archivo almacenado el signedCommuneFile
+        else {
+            // Si no existe el archivo subido, no se crea la aprobación
+            // TODO: Pendiente notificar al usuario que pasó esto
+            if (! $this->signedCommuneFile) {
+                return;
+            }
+            $approvalData['start_y']           = 35;
+            $approvalData['document_pdf_path'] = $this->signedCommuneFile->filename;
+        }
 
         if ($this->approval()->exists()) {
             $this->approval()->update($approvalData);

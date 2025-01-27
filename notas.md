@@ -288,8 +288,8 @@ Presentación: 23-01-2025
 - [ ] calculo de cuotas (decimales)
 
 - [X] Permitir enviar varias veces el envio del proceso a la comuna, varias veces enviar el email con el pdf.
-- [ ] Solicitar firma directora en las que no son reso, debería firmar el archivo subido y no el que se firma en la reso
-- [ ] Fix decreeParagraph, porque no están saliendo los decretos de la dire.
+- [X] Solicitar firma directora en las que no son reso, debería firmar el archivo subido y no el que se firma en la reso
+- [X] Fix decreeParagraph, porque no están saliendo los decretos de la dire.
 - [ ] Presionó dos veces el confirmar al crear un Procesos Dependientes (está peludo fixear eso).
 
 Presentación: 20-01-2025
@@ -297,7 +297,7 @@ Presentación: 20-01-2025
 - [X] En certificados - Filtrar programas de los referentes.
 - [ ] Ver como cambiar el visto de la directora.
 - [X] Auto actualizar al crear visaciones.
-- [ ] Montos separar las miles y millones.
+- [X] Montos separar las miles y millones.
 - [X] Notificar al referente y administradores al terminar la visación de un proceso.
 - [X] Listado de certificados, filtar por los del referente.
 - [X] Previsualizar Certificado.
