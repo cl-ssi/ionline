@@ -338,6 +338,13 @@ class Process extends Model
         }
     }
 
+    public function resetLegallyStatus(): void
+    {
+        $this->revision_by_lawyer_at = null;
+        $this->revision_by_lawyer_user_id = null;
+        $this->save();
+    }
+
     public function createApproval(): void
     {
         $approvalData = [

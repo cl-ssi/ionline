@@ -933,6 +933,9 @@ class ProcessResource extends Resource
         ];
     }
 
+    /**
+     *  Formulario par Jurídico
+     */
     protected static function legallyFormSchema(): array
     {
         return [
@@ -946,7 +949,6 @@ class ProcessResource extends Resource
                         ->url(fn (Process $record) => route('documents.agreements.processes.view', [$record]))
                         ->openUrlInNewTab(),
                 ])
-                // ->footerActionsAlignment(Alignment::End)
                 ->schema([
                     TinyEditor::make('document_content')
                         ->hiddenLabel()
@@ -966,7 +968,7 @@ class ProcessResource extends Resource
                             // Guardar cambios del documento
                             // $record->update(['content' => $get('document_content')]);
 
-                            // establecer fecha de aprobacion y usuario que aprobó
+                            // Establecer fecha de aprobacion y usuario que aprobó
                             $record->update(['revision_by_lawyer_at' => now(), 'revision_by_lawyer_user_id' => auth()->id()]);
 
                             // Notificar a referente y administradores del módulo
@@ -1002,8 +1004,8 @@ class ProcessResource extends Resource
 
                             // Refresh the page
                             $livewire->redirect(request()->header('Referer'));
-
-                        }),
+                        })
+                        ->disabled(fn (?Process $record): bool => $record->revision_by_lawyer_at !== null),
                 ])
                 ->schema([
                     Forms\Components\Fieldset::make('Jurídico')
