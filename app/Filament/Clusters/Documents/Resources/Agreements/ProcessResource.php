@@ -580,7 +580,7 @@ class ProcessResource extends Resource
 
                 ])
                 ->columnSpan(2)
-                ->visible(fn (?Process $record) => $record->processType->bilateral)
+                ->visible(fn (?Process $record) => $record->processType->revision_commune)
                 ->columns(2)
                 ->hiddenOn('create'),
 
@@ -763,7 +763,7 @@ class ProcessResource extends Resource
                 ->columns(2)
                 ->hiddenOn('create')
                 ->columnSpanFull()
-                ->visible(fn (?Process $record) => $record->processType->bilateral),
+                ->visible(fn (?Process $record) => $record->processType->sign_commune),
 
             Forms\Components\Section::make('Firma Director')
                 ->headerActions([

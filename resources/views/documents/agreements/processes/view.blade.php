@@ -23,7 +23,7 @@
     </div>
 
     
-    @if($record->processType->bilateral)
+    @if($record->processType->sign_commune)
         <div class="signature-footer">
             <div class="signature" style="padding-left: 50px; text-align: center;">
                 ______________________________<br>

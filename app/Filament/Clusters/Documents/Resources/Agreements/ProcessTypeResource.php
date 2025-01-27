@@ -51,11 +51,6 @@ class ProcessTypeResource extends Resource
                     ->maxLength(255)
                     ->columnSpan(3)
                     ->default(null),
-                Forms\Components\Toggle::make('bilateral')
-                    ->label('Bilateral')
-                    ->inline(false)
-                    ->helperText('Para los que el proceso interviene la comuna y el servicio')
-                    ->required(),
                 Forms\Components\Toggle::make('revision_commune')
                     ->label('Revisión Comuna')
                     ->inline(false)
@@ -163,8 +158,12 @@ class ProcessTypeResource extends Resource
                     ->label('Descripción')
                     ->searchable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\IconColumn::make('bilateral')
-                    ->label('Bilateral')
+                Tables\Columns\IconColumn::make('revision_commune')
+                    ->label('Revisión Comuna')
+                    ->boolean()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\IconColumn::make('sign_commune')
+                    ->label('Firma Comuna')
                     ->boolean()
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\IconColumn::make('is_dependent')

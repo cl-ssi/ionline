@@ -102,7 +102,7 @@ class ProcessResource extends Resource
                 ->columns(2)
                 ->hiddenOn('create')
                 ->columnSpanFull()
-                ->visible(fn (?Process $record) => $record->processType->bilateral),
+                ->visible(fn (?Process $record) => $record->processType->sign_commune),
             ])
             ->columns(4);
     }

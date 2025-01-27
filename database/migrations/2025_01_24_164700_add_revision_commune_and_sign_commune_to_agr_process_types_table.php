@@ -15,6 +15,9 @@ return new class extends Migration
             $table->boolean('revision_commune')->default(false)->after('bilateral');
             $table->boolean('sign_commune')->default(false)->after('bilateral');
         });
+        Schema::table('agr_process_types', function (Blueprint $table) {
+            $table->dropColumn('bilateral');
+        });
     }
 
     /**
@@ -22,6 +25,9 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::table('agr_process_types', function (Blueprint $table) {
+            $table->boolean('bilateral')->default(false)->after('sign_commune');
+        });
         Schema::table('agr_process_types', function (Blueprint $table) {
             $table->dropColumn('revision_commune');
             $table->dropColumn('sign_commune');
