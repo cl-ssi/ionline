@@ -888,7 +888,8 @@ class ProcessResource extends Resource
         
                                     return $years;
                                 })
-                                ->default(now()->year),
+                                ->default(now()->year)
+                                ->helperText('Una vez seleccionaro el periodo, espere unos segundos para que se carguen los programas'),
                             Forms\Components\Select::make('program_id')
                                 ->label('Programa')
                                 ->relationship('program', 'name', function (Builder $query, callable $get) {
