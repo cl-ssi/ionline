@@ -240,7 +240,7 @@ class ProcessResource extends Resource
                         ->icon('bi-save')
                         ->action('save'),
                 ])
-                ->footerActionsAlignment(Alignment::End)
+                // ->footerActionsAlignment(Alignment::End)
                 ->schema([
                     Forms\Components\Select::make('process_type_id')
                         ->label('Tipo de proceso')
@@ -450,6 +450,7 @@ class ProcessResource extends Resource
                         ->action(function (Process $record) {
                             $record->update(['status' => Status::Draft]);
                             $record->resetEndorsesStatus();
+                            $record->resetLegallyStatus();
                             $record->createComment('El proceso ha vuelto a estado de borrador, si existían visaciones, fueron reseteadas.');
 
                             // Redireccionar a la misma página para forzar recarga
@@ -461,7 +462,7 @@ class ProcessResource extends Resource
                         ->url(fn (Process $record) => route('documents.agreements.processes.view', [$record]))
                         ->openUrlInNewTab(),
                 ])
-                ->footerActionsAlignment(Alignment::End)
+                // ->footerActionsAlignment(Alignment::End)
                 ->schema([
                     TinyEditor::make('document_content')
                         ->hiddenLabel()
@@ -659,7 +660,7 @@ class ProcessResource extends Resource
                         ->icon('bi-save')
                         ->action('save'),
                 ])
-                ->footerActionsAlignment(Alignment::End)
+                // ->footerActionsAlignment(Alignment::End)
                 ->schema([
                     Forms\Components\Repeater::make('endorses')
                         ->relationship()
@@ -702,6 +703,29 @@ class ProcessResource extends Resource
                 ->visibleOn('edit'),
 
             Forms\Components\Section::make('Firma de Comuna')
+                ->headerActions([
+                    Forms\Components\Actions\Action::make('Enviar Proceso')
+                        ->icon('heroicon-m-paper-airplane')
+                        ->requiresConfirmation()
+                        ->action(function (Process $record, Get $get, $livewire): void {
+                            $recipients = $record->municipality->emails;
+
+                            foreach ($recipients as $recipient) {
+                                Notification::route('mail', $recipient)->notify(new ProcessCommunePdf($record));
+                            }
+
+                            Notifications\Notification::make()
+                                ->title('PDF enviado a la comuna')
+                                ->success()
+                                ->send();
+
+                            // establecer fecha de aprobacion y usuario que aprobó
+                            $record->update(['sended_to_commune_at' => now()]);
+
+                            // Refresh the page
+                            $livewire->redirect(request()->header('Referer'));
+                        }),
+                ])
                 ->schema([
                     Forms\Components\DatePicker::make('sended_to_commune_at')
                         ->label('Fecha de envío a la comuna'),
@@ -738,32 +762,10 @@ class ProcessResource extends Resource
                     Forms\Components\Actions\Action::make('guardar_cambios')
                         ->icon('bi-save')
                         ->action('save'),
-
-                    Forms\Components\Actions\Action::make('Enviar Proceso')
-                        ->icon('heroicon-m-paper-airplane')
-                        ->requiresConfirmation()
-                        ->action(function (Process $record, Get $get, $livewire): void {
-                            $recipients = $record->municipality->emails;
-
-                            foreach ($recipients as $recipient) {
-                                Notification::route('mail', $recipient)->notify(new ProcessCommunePdf($record));
-                            }
-
-                            Notifications\Notification::make()
-                                ->title('PDF enviado a la comuna')
-                                ->success()
-                                ->send();
-
-                            // establecer fecha de aprobacion y usuario que aprobó
-                            $record->update(['sended_to_commune_at' => now()]);
-
-                            // Refresh the page
-                            $livewire->redirect(request()->header('Referer'));
-                        }),
                     // ->hidden(fn (?Process $record) => $record->status !== Status::Finished),
 
                 ])
-                ->footerActionsAlignment(Alignment::End)
+                // ->footerActionsAlignment(Alignment::End)
                 ->columns(2)
                 ->hiddenOn('create')
                 ->columnSpanFull()
@@ -814,6 +816,12 @@ class ProcessResource extends Resource
                         ->columnSpan(2)
                         ->visible(fn (?Process $record) => $record->approval()->exists()),
                 ])
+                ->footerActions([
+                    Forms\Components\Actions\Action::make('guardar_cambios')
+                        ->icon('bi-save')
+                        ->action('save'),
+                ])
+                // ->footerActionsAlignment(Alignment::End)
                 ->columns(7)
                 ->hiddenOn('create'),
 
@@ -938,7 +946,7 @@ class ProcessResource extends Resource
                         ->url(fn (Process $record) => route('documents.agreements.processes.view', [$record]))
                         ->openUrlInNewTab(),
                 ])
-                ->footerActionsAlignment(Alignment::End)
+                // ->footerActionsAlignment(Alignment::End)
                 ->schema([
                     TinyEditor::make('document_content')
                         ->hiddenLabel()
