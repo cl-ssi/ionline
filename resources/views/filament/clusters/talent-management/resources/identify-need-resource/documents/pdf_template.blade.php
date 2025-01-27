@@ -101,7 +101,7 @@
 
     <table class="tabla">
         <tr>
-            <th style="background-color: #EEEEEE;" colspan="2">Asunto</th>
+            <th style="background-color: #EEEEEE;" colspan="2">Nombre de Actividad</th>
         </tr>
         <tr align="center">
             <td colspan="2">{{ $identifyNeed->subject }}</td>

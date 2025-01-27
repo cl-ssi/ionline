@@ -111,8 +111,8 @@ class IdentifyNeedResource extends Resource
                     ->schema([
                         Grid::make(12)->schema([
                             Forms\Components\TextInput::make('subject')
-                                ->label('Asunto')
-                                ->columnSpanFull()
+                                ->label('Nombre de Actividad')
+                                ->columnSpan(8)
                                 ->disabled(fn (callable $get) => in_array($get('status'), ['pending']))
                                 ->required(),
                             Forms\Components\Select::make('estament_id')
@@ -497,7 +497,7 @@ class IdentifyNeedResource extends Resource
                 Tables\Columns\TextColumn::make('organizationalUnit.name')
                     ->label('Unidad Organizacional'),
                 Tables\Columns\TextColumn::make('subject')
-                    ->label('Asunto'),
+                    ->label('Nombre de Actividad'),
                 Tables\Columns\TextColumn::make('estament.name')
                     ->label('Estamento'),
                 Tables\Columns\TextColumn::make('approvals.status')
