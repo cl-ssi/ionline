@@ -271,6 +271,7 @@ class UserResource extends Resource
                     ->searchable()
                     ->preload()
                     ->visible(auth()->user()->can('be god')),
+                Tables\Filters\TrashedFilter::make(),
                 // SelectTree::make('sent_to_ou_id')
                 //     ->label('Unidad Organizacional')
                 //     ->relationship(
@@ -287,8 +288,9 @@ class UserResource extends Resource
                 //     ->columnSpan(2)
                 //     ,
             ], layout: FiltersLayout::AboveContent)
-            ->filtersFormColumns(4)
+            ->filtersFormColumns(5)
             ->actions([
+                Tables\Actions\RestoreAction::make(),
                 Tables\Actions\EditAction::make(),
                 Impersonate::make()
                     ->redirectTo(route('filament.intranet.pages.dashboard')),

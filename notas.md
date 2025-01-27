@@ -295,7 +295,7 @@ Presentación: 23-01-2025
 Presentación: 20-01-2025
 - [X] En aprobacion, que esten los dos documentos.
 - [X] En certificados - Filtrar programas de los referentes.
-- [ ] Ver como cambiar el visto de la directora.
+- [ ] Ver como cambiar los vistos al cambiar de director, también para los alcaldes y la fecha del documento.
 - [X] Auto actualizar al crear visaciones.
 - [X] Montos separar las miles y millones.
 - [X] Notificar al referente y administradores al terminar la visación de un proceso.
