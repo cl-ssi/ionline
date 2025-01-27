@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('agr_processes', function (Blueprint $table) {
-            $table->date('document_date')->nullable()->after('document_content');
+            $table->date('document_date')->nullable()->after('status');
         });
     }
 

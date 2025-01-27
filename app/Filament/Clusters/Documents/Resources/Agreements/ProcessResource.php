@@ -244,9 +244,6 @@ class ProcessResource extends Resource
                         ->required()
                         ->columnSpanFull()
                         ->visibleOn('create'),
-                    Forms\Components\DatePicker::make('document_date')
-                        ->label('Fecha del documento')
-                        ->required(),
                     Forms\Components\Select::make('process_type_id')
                         ->label('Tipo de proceso')
                         ->relationship('processType', 'name')
@@ -339,6 +336,9 @@ class ProcessResource extends Resource
                         ->numeric()
                         ->default(null)
                         ->helperText('Solo para programa de anticipo de aporte estatal'),
+                    Forms\Components\DatePicker::make('document_date')
+                        ->label('Fecha del documento')
+                        ->helperText('Para procesos que llevan fecha en el documento, convenios, adendums, etc.'),
                     Forms\Components\Select::make('establishments')
                         ->label('Establecimientos')
                         ->multiple()
