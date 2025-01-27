@@ -284,7 +284,7 @@ Presentación: 23-01-2025
 - [X] Incoporar fecha del proceso document_date.
 - [X] Boolean en tipo de proceso, si va o no a la comuna, caso prorroga, debajo de bilateral crear booleans revision_commune sign_commune.
 - [*] Revisión de juridico debería reinciar si se vuelve a editar el documento.
-- [ ] En certificados: quitar boton agregar visacion (del repeater, addeable(false))
+- [X] En certificados: quitar boton agregar visacion (del repeater, addeable(false))
 - [ ] Calculo de cuotas (decimales)
 
 - [X] Permitir enviar varias veces el envio del proceso a la comuna, varias veces enviar el email con el pdf.
