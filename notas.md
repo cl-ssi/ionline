@@ -286,13 +286,11 @@ Presentación: 23-01-2025
 - [*] Revisión de juridico debería reinciar si se vuelve a editar el documento.
 - [X] En certificados: quitar boton agregar visacion (del repeater, addeable(false))
 - [ ] Calculo de cuotas (decimales)
-- [ ] En ProcessResourse del external al subir el archivo firmado por el alcalde, notificar a referente y admin del módulo.
 
 
 - [X] Permitir enviar varias veces el envio del proceso a la comuna, varias veces enviar el email con el pdf.
-- [X] Solicitar firma directora en las que no son reso, debería firmar el archivo subido y no el que se firma en la reso
-- [X] Fix decreeParagraph, porque no están saliendo los decretos de la dire.
-- [ ] Presionó dos veces el confirmar al crear un Procesos Dependientes (está peludo fixear eso).
+- [X] Solicitar firma directora en las que no son reso, debería firmar el archivo subido y no el que se firma en la reso.
+- [ ] Usuario presionó dos veces el confirmar al crear un Procesos Dependientes y se duplicaron (está complejo controlar eso, si el usuario presiona dos veces).
 
 Correo: 22-01-2025
 - [ ] Implementar seguimiento. Reporte Proceso (En desarrollo)
@@ -300,7 +298,7 @@ Correo: 22-01-2025
 Presentación: 20-01-2025
 - [X] En aprobacion, que esten los dos documentos.
 - [X] En certificados - Filtrar programas de los referentes.
-- [ ] Ver como cambiar los vistos al cambiar de director, también para los alcaldes y la fecha del documento.
+- [ ] Ver como cambiar los vistos al cambiar de director, también para los alcaldes y la fecha del documento (en desarrollo).
 - [X] Auto actualizar al crear visaciones.
 - [X] Montos separar las miles y millones.
 - [X] Notificar al referente y administradores al terminar la visación de un proceso.
@@ -311,7 +309,7 @@ Presentación: 20-01-2025
 
 
 Correo de Natalia
-- [ ] Notificar cuando se suba el convenio firmado por las comunas
+- [ ] Interfaz de comuna, al subir el archivo firmado por el alcalde, notificar a referente y admin del módulo (external process resource).
 - [X] Habilitar filtros por tipo de proceso, programa, periodo, comuna, año (procesos)
 
 
@@ -342,7 +340,7 @@ lunes 10am reunión (corrovorar a referentes comunales).-
 - [+] Revisar que pasó con el caso de huara.
 - [X] Mostrar los establecimientos en el documento.
 
-- [-] Notificar cuando referente terminó de hacer el convenio
+- [X] Notificar cuando referente terminó de hacer el convenio
 - [X] Cuando se fue a la comuna, ya no se puede editar
 - [X] Mostrar si se reinició el proceso de firma, en comentario
 - [X] Aprobación o comentarios por comuna.
@@ -373,7 +371,7 @@ lunes 10am reunión (corrovorar a referentes comunales).-
 - [X] Traducir boton en relation manager de crear componentes
 - [X] Crear vista del process para poder mostrar el documento y para las aprobaciones
 - [X] Crear Proceso - Auto calcular las cuotas
-- [-] Crear Proceso - Comentarios dejar fijos los que ya se ingresaron
+- [X] Crear Proceso - Comentarios dejar fijos los que ya se ingresaron
 - [X] Mostrar vinculo al siguiente proceso
 - [X] Poblar approval flow
 - [X] Agregar archivo adjunto, resolución firmada por alcalde
@@ -389,8 +387,8 @@ lunes 10am reunión (corrovorar a referentes comunales).-
 - [X] Eliminar boton para borrar en masa
 
 
-- [X] Fixear busqueda por nombre en asociar un referente
-- [X] Poblar convenios 2025
+- [X] Corregir busqueda por nombre en asociar un referente
+- [X] Poblar programas 2025
 
 
 ## Tareas al finalizar
@@ -544,7 +542,7 @@ Resolución modificatoria
 - Avanzar con la resolución.
 - Toda se gestiona a través de DocDigital.
 
-- Oficina de partes, numeración resolución.
+- Oficina de partes, numeración resolución (descartado, lo hará por DocDigital y no por el módulo de convenios).
 - Resolución Final se va a la dipres. (ingresar fecha de carga a dipres)
 - Un mismo programa tiene distribuido los montos por item, podría salir un convenio y resoluciones de 21 y 22
 - en el seguimiento puede ser comuna o establecimiento, con eso se sabe si es sub 21 o 22 para el caso de establecimiento.
