@@ -96,9 +96,11 @@ class ProcessResource extends Resource
                     ->label('Comuna')
                     ->searchable()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('establishment.name')
-                    ->label('Establecimiento')
+                Tables\Columns\TextColumn::make('establishmentsList')
+                    ->label('Establecimientos')
                     ->searchable()
+                    ->width('sm')
+                    ->wrap()
                     ->sortable(),
                 Tables\Columns\ImageColumn::make('endorses.avatar')
                     ->label('Visaciones')
