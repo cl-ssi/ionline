@@ -5,6 +5,7 @@ namespace App\Models\IdentifyNeeds;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use OwenIt\Auditing\Contracts\Auditable;
@@ -20,6 +21,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use App\Models\Parameters\Parameter;
 use Illuminate\Support\Facades\Auth;
+use App\Models\IdentifyNeeds\AvailablePlace;
 
 
 class IdentifyNeed extends Model implements Auditable
@@ -40,6 +42,8 @@ class IdentifyNeed extends Model implements Auditable
         'email',
         'email_personal',
         'position',
+        'telephone',
+        'mobile',
 
         // JEFATURA
         'boss_id',
@@ -121,6 +125,16 @@ class IdentifyNeed extends Model implements Auditable
     public function estament(): BelongsTo
     {
         return $this->belongsTo(Estament::class);
+    }
+
+    /**
+     * Get the available places for the identify need.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function availablePlaces(): HasMany
+    {
+        return $this->hasMany(AvailablePlace::class, 'identify_need_id');
     }
 
     /**
@@ -317,6 +331,7 @@ class IdentifyNeed extends Model implements Auditable
         });
     }
 
+    /*
     public function getNatureOfTheNeedAttribute($value)
     {
         return json_decode($value, true); // Convierte el string JSON en un array
@@ -344,7 +359,7 @@ class IdentifyNeed extends Model implements Auditable
             $this->attributes['law'] = $value; // Si ya es un JSON, lo guarda tal cual
         }
     }
-
+    */
 
     protected function generatePdf()
     {
@@ -365,6 +380,7 @@ class IdentifyNeed extends Model implements Auditable
          *  Si soy autoridad de nivel 2, mandó directamente a dirección
          */ 
         if($authority->organizationalUnit->level == 2){
+            /*
             // Se crea PDF
             $pdfContent = $this->generatePdf(); // Método que genera el contenido del PDF
             $name = Str::random(40);
@@ -373,6 +389,7 @@ class IdentifyNeed extends Model implements Auditable
             Storage::disk('gcs')->put($path, $pdfContent);
 
             $filename = $path;
+            */
 
             $approval = $this->approvals()->create([
                 "module"                            => "Detección de Necesidades de Capacitación",
@@ -380,15 +397,19 @@ class IdentifyNeed extends Model implements Auditable
                 "subject"                           => 'DNC: ID '.$this->id.'<br>
                                                         Funcionario: '.$this->user->TinyName,
                 "sent_to_ou_id"                     =>  1,
-                "document_pdf_path"                 => $filename,
+                // "document_pdf_path"                 => $filename,
+                "document_route_name"               => "identify_need.show_approval",
+                "document_route_params"             => json_encode([
+                    "identify_need_id" => $this->id,
+                ]),
                 "active"                            => true,
                 "previous_approval_id"              => null,
                 "status"                            => null,
                 'approvable_callback'               => true,
-                "digital_signature"                 => true,
-                "position"                          => "center",
-                "start_y"                           => 82,
-                "filename"                          => 'ionline/identify_needs/firmados/' . $name .'.pdf',
+                // "digital_signature"                 => true,
+                //"position"                          => "center",
+                //"start_y"                           => 82,
+                //"filename"                          => 'ionline/identify_needs/firmados/' . $name .'.pdf',
             ]);
         }
         /**
@@ -403,7 +424,7 @@ class IdentifyNeed extends Model implements Auditable
 
             foreach($this->organizationalUnit->getHierarchicalUnits($this->user) as $hierarchicalUnit){
                 $isLastIteration = ($hierarchicalUnit === $lastUnit); // Verifica si es la última iteración
-
+                /*
                 if($lastApproval == null){
                     $pdfContent = $this->generatePdf(); // Método que genera el contenido del PDF
                     $name = Str::random(40);
@@ -428,6 +449,7 @@ class IdentifyNeed extends Model implements Auditable
                 if($count == 5){
                     $start = -26;
                 }
+                */
 
                 $approval = $this->approvals()->create([
                     "module"                            => "Detección de Necesidades de Capacitación",
@@ -435,15 +457,19 @@ class IdentifyNeed extends Model implements Auditable
                     "subject"                           => 'DNC: ID '.$this->id.'<br>
                                                             Funcionario: '.$this->user->TinyName,
                     "sent_to_ou_id"                     =>  $hierarchicalUnit['id'],
-                    "document_pdf_path"                 => ($lastApproval == null) ? $filename : $lastApproval->filename,
+                    // "document_pdf_path"                 => ($lastApproval == null) ? $filename : $lastApproval->filename,
+                    "document_route_name"               => "identify_need.show_approval",
+                    "document_route_params"             => json_encode([
+                        "identify_need_id" => $this->id,
+                    ]),
                     "active"                            => ($lastApproval == null) ? true : false,
                     "previous_approval_id"              => ($lastApproval == null) ? null : $lastApproval->id,
                     "status"                            => null,
                     'approvable_callback'               => ($isLastIteration) ? true : false,
-                    "digital_signature"                 => true,
-                    "position"                          => ($lastApproval == null) ? "center" : "right",
-                    "start_y"                           => ($lastApproval == null) ? 82 : $start, //FALTA LA UBICACIÓN DE LA FIRMA PARA CADA CASO
-                    "filename"                          => 'ionline/identify_needs/firmados/' . $name . '_'. $count .'.pdf',
+                    // "digital_signature"                 => true,
+                    // "position"                          => ($lastApproval == null) ? "center" : "right",
+                    // "start_y"                           => ($lastApproval == null) ? 82 : $start, //FALTA LA UBICACIÓN DE LA FIRMA PARA CADA CASO
+                    // "filename"                          => 'ionline/identify_needs/firmados/' . $name . '_'. $count .'.pdf',
                 ]);
                 $lastApproval = $approval;
                 $count++;

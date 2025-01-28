@@ -56,6 +56,12 @@ class IdentifyNeedController extends Controller
         //
     }
 
+    public function show_approval($identify_need_id)
+    {
+        $identifyNeed = IdentifyNeed::find($identify_need_id);
+        return view('identify_needs.show_approval', compact('identifyNeed'));
+    }
+
     /**
      * Show the form for editing the specified resource.
      *

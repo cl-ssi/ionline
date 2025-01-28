@@ -2921,6 +2921,7 @@ Route::prefix('identify_need')->as('identify_need.')->middleware(['auth', 'must.
     // Route::prefix('project')->as('project.')->group(function () {
     //     Route::get('/{identifyNeed}/create', [ProjectController::class, 'create'])->name('create')->middleware(['permission:Identify Need: create']);
     // });
+    Route::get('/{identify_need_id}/show_approval', [IdentifyNeedController::class, 'show_approval'])->name('show_approval');
 });
 
 /** RUTAS PARA EXTERNAL  */

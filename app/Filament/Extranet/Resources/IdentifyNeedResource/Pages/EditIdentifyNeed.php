@@ -49,6 +49,16 @@ class EditIdentifyNeed extends EditRecord
                         abort(403, 'No tienes permiso para enviar este formulario.');
                     }
 
+                    //  Verificar si hay al menos un AvailablePlace
+                    if ($this->record->availablePlaces()->count() === 0) {
+                        Notification::make()
+                            ->title('Error')
+                            ->danger()
+                            ->body('Debe agregar al menos un Cupo por Estamento antes de enviar el formulario.')
+                            ->send();
+                        return;
+                    }
+
                     $bossUser = Authority::getAuthorityFromDate(Parameter::get('ou', 'DireccionAPS', Auth::user()->establishment_id), now(), 'manager');
 
                     // Guardar los cambios en la base de datos

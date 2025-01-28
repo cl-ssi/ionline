@@ -4,6 +4,7 @@ namespace App\Filament\Extranet\Resources;
 
 use App\Filament\Extranet\Resources\IdentifyNeedResource\Pages;
 use App\Filament\Extranet\Resources\IdentifyNeedResource\RelationManagers;
+use App\Filament\Clusters\TalentManagement\Resources\IdentifyNeedResource\RelationManagers\AvailablePlacesRelationManager;
 use App\Models\IdentifyNeeds\IdentifyNeed;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -80,6 +81,17 @@ class IdentifyNeedResource extends Resource
                                 ->default(fn ($record) => $record ? $record->position : auth()->user()->position) // Toma el valor del registro o del usuario autenticado
                                 ->readOnly()
                                 ->columnSpan(3),
+                            Forms\Components\TextInput::make('telephone')
+                                ->label('Teléfono (MINSAL)')
+                                ->default(fn ($record) => $record ? $record->telephone : ((auth()->user()->external === true) ? '' : '')) // Toma el valor del registro o del usuario autenticado
+                                ->readOnly()
+                                ->columnSpan(3),
+                            Forms\Components\TextInput::make('mobile')
+                                ->label('Teléfono Móvil')
+                                ->prefix('+56 9')
+                                ->default(fn ($record) => $record ? $record->mobile : (auth()->user()->mobile ? auth()->user()->mobile->first()->number : '')) // Toma el valor del registro o del usuario autenticado
+                                ->disabled(fn (callable $get) => in_array($get('status'), ['pending']))
+                                ->columnSpan(3),
                         ]),
                     ]),
                 
@@ -98,6 +110,7 @@ class IdentifyNeedResource extends Resource
                                 ->columnSpan(4)
                                 ->disabled(fn (callable $get) => in_array($get('status'), ['pending']))
                                 ->required(),
+                            /*
                             Forms\Components\Select::make('estament_id')
                                 ->label('Estamento')
                                 ->relationship('estament', 'name')
@@ -128,15 +141,13 @@ class IdentifyNeedResource extends Resource
                                 ->columnSpan(6)
                                 ->disabled(fn (callable $get) => in_array($get('status'), ['pending']))
                                 ->required(),
-
-                            Forms\Components\CheckboxList::make('nature_of_the_need')
+                            */
+                            Forms\Components\Radio::make('nature_of_the_need')
                                 ->label('Naturaleza de la Necesidad')
                                 ->options([
-                                    'necesidad propia'                  => 'A una necesidad propia, relacionada con las funciones específicas que desempeño.',
-                                    'necesidad de mi equipo de trabajo' => 'A una necesidad de mi equipo de trabajo, considerando el desarrollo de habilidades colectivas.',
-                                    'necesidad de otros equipos'        => 'A una necesidad de otros equipos, con los que me relaciono directamente en mi gestión u operatividad. (deberás responder las preguntas de la sección "otros equipos")',
+                                    'red asistencial'   => 'Red Asistencial.',
+                                    'dss'               => 'Dirección Servicio de Salud.',
                                 ])
-                                ->default(fn ($record) => $record ? $record->nature_of_the_need : []) // Decodifica JSON a array
                                 ->columnSpanFull()
                                 ->disabled(fn (callable $get) => in_array($get('status'), ['pending']))
                                 ->required(),
@@ -166,7 +177,8 @@ class IdentifyNeedResource extends Resource
                                 ->columnSpanFull()
                                 ->disabled(fn (callable $get) => in_array($get('status'), ['pending']))
                                 ->required(),
-
+                            
+                            /*
                             Forms\Components\CheckboxList::make('law')
                                 ->label('Esta actividad esta dirigida para funcionarios o funcionarias de la Ley')
                                 ->options([
@@ -199,7 +211,18 @@ class IdentifyNeedResource extends Resource
                                 ->columnSpanFull()
                                 ->disabled(fn (callable $get) => in_array($get('status'), ['pending']))
                                 ->required(),
+                            */
 
+                            Forms\Components\Radio::make('law')
+                                ->label('Esta actividad está dirigida para funcionarios o funcionarias de la Ley')
+                                ->options([
+                                    '18834' => 'Ley 18.834',
+                                    '19664' => 'Ley 19.664 (o Ley 15.076)',
+                                ])
+                                ->columnSpanFull()
+                                ->disabled(fn (callable $get) => in_array($get('status'), ['pending']))
+                                ->required(),
+                                
                             Forms\Components\Textarea::make('question_5')
                                 ->label('¿Qué objetivo se espera alcanzar con esta capacitación?')
                                 ->placeholder('Ejemplo: Desarrollar habilidades de liderazgo inclusivo, mejorar la comunicación interna, reforzar el conocimiento técnico.')
@@ -288,7 +311,7 @@ class IdentifyNeedResource extends Resource
                                 ->columnSpan(4)
                                 ->disabled(fn (callable $get) => in_array($get('status'), ['pending']))
                                 ->required(),
-
+                            /*
                             Forms\Components\TextInput::make('places')
                                 ->label('¿Cuantas cupos considera esta actividad?')
                                 ->numeric()
@@ -296,6 +319,7 @@ class IdentifyNeedResource extends Resource
                                 ->columnSpan(4)
                                 ->disabled(fn (callable $get) => in_array($get('status'), ['pending']))
                                 ->required(),
+                                */
                         ]), 
 
                         // TIPO PRESENCIAL
@@ -422,6 +446,7 @@ class IdentifyNeedResource extends Resource
                                     $get('transport') !== '1' || 
                                     in_array($get('status'), ['pending'])
                                 )
+                                ->dehydrated()
                                 ->required(fn (callable $get) => $get('transport') === '1'), // Requerido si es "presencial"
                             
                             Forms\Components\Select::make('accommodation')
@@ -447,6 +472,7 @@ class IdentifyNeedResource extends Resource
                                     $get('accommodation') !== '1' || 
                                     in_array($get('status'), ['pending'])
                                 )
+                                ->dehydrated()
                                 ->required(fn (callable $get) => $get('accommodation') === '1'),
                             Forms\Components\TextInput::make('activity_value')
                                 ->label('¿Valor de la actividad? (Excluye Coffee, Traslado y Alojamiento)')
@@ -491,8 +517,10 @@ class IdentifyNeedResource extends Resource
                     ->getStateUsing(fn ($record) => number_format($record->total_value, 0, ',', '.') . ' CLP')
                     ->sortable()
                     ->alignment('right'),
+                /*
                 Tables\Columns\TextColumn::make('estament.name')
                     ->label('Estamento'),
+                */
                 Tables\Columns\TextColumn::make('approvals.status')
                     ->label('Firmas')
                     ->bulleted()
@@ -519,7 +547,7 @@ class IdentifyNeedResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            AvailablePlacesRelationManager::class,
         ];
     }
 
