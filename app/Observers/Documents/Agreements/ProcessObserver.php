@@ -61,7 +61,26 @@ class ProcessObserver
      */
     public function updated(Process $process): void
     {
-        //
+        // buscar la fecha en el document_content y reemplara por la fecha del document_date $process->documentDateFormat contiene a fecha en format xx de xx de xxxx
+        // if($process->isDirty('document_date'))
+        // {
+            // dd($process->isDirty('document_date'), $process->getOriginal('document_date'), $process->document_date);
+        // }
+
+        /* Al actualizar el alcalde, cambiar estos datos */
+        // if($process->isDirty('mayor_id'))
+            // mayor.appellative
+            // mayor.name
+            // mayor.run
+            // mayor.decree
+
+
+        /* Al actualizar el firmante cambiar estos datos, pruebalo con una resolucion exenta */
+        // if($process->isDirty('signer_id'))
+            // signer.appellative
+            // signer.decree
+            // signer.decreeParagraph
+            // signer.name
     }
 
     /**
