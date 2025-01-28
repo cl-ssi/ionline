@@ -29,8 +29,7 @@ class IdentifyNeedPolicy
      */
     public function create(User $user): bool
     {
-        // return true;
-        return false;
+        return true;
     }
 
     /**
@@ -38,8 +37,7 @@ class IdentifyNeedPolicy
      */
     public function update(User $user, IdentifyNeed $identifyNeed): bool
     {
-        // return ($user->can('DNC: all') || $user->id === $identifyNeed->user_id);
-        return false;
+        return ($user->can('DNC: all') || $user->id === $identifyNeed->user_id);
     }
 
     /**
