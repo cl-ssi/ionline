@@ -88,7 +88,14 @@ class IdentifyNeedResource extends Resource
                         Grid::make(12)->schema([
                             Forms\Components\TextInput::make('subject')
                                 ->label('Nombre de Actividad')
-                                ->columnSpanFull()
+                                ->columnSpan(8)
+                                ->disabled(fn (callable $get) => in_array($get('status'), ['pending']))
+                                ->required(),
+                            Forms\Components\TextInput::make('total_hours')
+                                ->label('Horas Pedagógicas')
+                                ->numeric()
+                                ->minValue(20)
+                                ->columnSpan(4)
                                 ->disabled(fn (callable $get) => in_array($get('status'), ['pending']))
                                 ->required(),
                             Forms\Components\Select::make('estament_id')
@@ -441,6 +448,13 @@ class IdentifyNeedResource extends Resource
                                     in_array($get('status'), ['pending'])
                                 )
                                 ->required(fn (callable $get) => $get('accommodation') === '1'),
+                            Forms\Components\TextInput::make('activity_value')
+                                ->label('¿Valor de la actividad? (Excluye Coffee, Traslado y Alojamiento)')
+                                ->numeric()
+                                ->minValue(1)
+                                ->columnSpan(8)
+                                ->disabled(fn (callable $get) => in_array($get('status'), ['pending']))
+                                ->required(),
                         ])
                     ]),   
             ]);
@@ -472,8 +486,11 @@ class IdentifyNeedResource extends Resource
                     ->label('Funcionario'),
                 Tables\Columns\TextColumn::make('organizationalUnit.name')
                     ->label('Unidad Organizacional'),
-                Tables\Columns\TextColumn::make('subject')
-                    ->label('Nombre de Actividad'),
+                Tables\Columns\TextColumn::make('total_value')
+                    ->label('$')
+                    ->getStateUsing(fn ($record) => number_format($record->total_value, 0, ',', '.') . ' CLP')
+                    ->sortable()
+                    ->alignment('right'),
                 Tables\Columns\TextColumn::make('estament.name')
                     ->label('Estamento'),
                 Tables\Columns\TextColumn::make('approvals.status')

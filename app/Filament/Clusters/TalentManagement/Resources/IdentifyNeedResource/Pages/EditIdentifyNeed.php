@@ -25,6 +25,9 @@ class EditIdentifyNeed extends EditRecord
             Actions\Action::make('save')
                 ->label('Guardar cambios')
                 ->action(function () {
+                    // CALCULAR EL TOTAL
+                    $this->record->total_value = $this->data['coffee_break_price'] + $this->data['transport_price'] + $this->data['accommodation_price'] + $this->data['activity_value'];
+
                     // Guardar cambios en el registro
                     $this->save();
                 })
@@ -50,6 +53,9 @@ class EditIdentifyNeed extends EditRecord
                     $this->record->establishment_name       = $user->establishment->name;
                     $this->record->boss_id                  = $user->boss->id;
                     $this->record->boss_email               = $user->boss->email;
+
+                    // CALCULAR EL TOTAL
+                    $this->record->total_value              = $this->data['coffee_break_price'] + $this->data['transport_price'] + $this->data['accommodation_price'] + $this->data['activity_value'];
                     $this->save();
 
                     $this->record->sendForm(); // Llama al método en el modelo

@@ -46,6 +46,7 @@ class IdentifyNeed extends Model implements Auditable
         'boss_email',
 
         'subject',
+        'total_hours',
         'estament_id',
         'family_position',
         'nature_of_the_need',
@@ -77,7 +78,9 @@ class IdentifyNeed extends Model implements Auditable
         'transport',
         'transport_price',
         'accommodation',
-        'accommodation_price'
+        'accommodation_price',
+        'activity_value',
+        'total_value'
     ];
 
     /**

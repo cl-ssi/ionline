@@ -24,6 +24,10 @@ class CreateIdentifyNeed extends CreateRecord
         $data['establishment_name']     = auth()->user()->establishment->name;
         $data['boss_id']                = $bossUser->user_id;
         $data['boss_email']             = $bossUser->user->email;
+
+        // CALCULAR EL TOTAL
+        $data['total_value']            = $data['coffee_break_price'] + $data['transport_price'] + $data['accommodation_price'] + $data['activity_value'];
+        
         return $data;
     }
 }

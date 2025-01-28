@@ -320,7 +320,7 @@
         </tr>
         <tr align="center">
             <td>{{ $identifyNeed->coffee_break_value }}</td>
-            <td>{{ $identifyNeed->coffee_break_price }}</td>
+            <td>${{ $identifyNeed->coffee_break_price ? number_format($identifyNeed->coffee_break_price, 0, ',', '.') : '' }}</td>
         </tr>
     </table>
 
@@ -333,7 +333,8 @@
         </tr>
         <tr align="center">
             <td>{{ $identifyNeed->transport ? 'Sí' : 'No' }}</td>
-            <td>{{ $identifyNeed->transport_price }}</td>
+            <td>${{ $identifyNeed->transport_price ? number_format($identifyNeed->transport_price, 0, ',', '.') : ''}}
+            </td>
         </tr>
     </table>
 
@@ -346,7 +347,18 @@
         </tr>
         <tr align="center">
             <td>{{ $identifyNeed->accommodation ? 'Sí' : 'No' }}</td>
-            <td>{{ $identifyNeed->accommodation_price }}</td>
+            <td>${{ $identifyNeed->accommodation_price ? number_format($identifyNeed->accommodation_price, 0, ',', '.') : ''}}</td>
+        </tr>
+    </table>
+
+    <table class="tabla">
+        <tr>
+            <th style="width: 50%; background-color: #EEEEEE;">Valor de la Actividad (Excluye Coffee, Traslado y Alojamiento)</th>
+            <th style="width: 50%; background-color: #EEEEEE;">Valor Total</th>
+        </tr>
+        <tr align="center">
+            <td>${{ number_format($identifyNeed->activity_value, 0, ',', '.') }}</td>
+            <td>${{ number_format($identifyNeed->total_value, 0, ',', '.') }}</td>
         </tr>
     </table>
 

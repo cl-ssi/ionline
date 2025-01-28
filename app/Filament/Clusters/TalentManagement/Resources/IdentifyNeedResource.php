@@ -115,6 +115,13 @@ class IdentifyNeedResource extends Resource
                                 ->columnSpan(8)
                                 ->disabled(fn (callable $get) => in_array($get('status'), ['pending']))
                                 ->required(),
+                            Forms\Components\TextInput::make('total_hours')
+                                ->label('Horas Pedagógicas')
+                                ->numeric()
+                                ->minValue(20)
+                                ->columnSpan(4)
+                                ->disabled(fn (callable $get) => in_array($get('status'), ['pending']))
+                                ->required(),
                             Forms\Components\Select::make('estament_id')
                                 ->label('Estamento')
                                 ->relationship('estament', 'name')
@@ -424,8 +431,10 @@ class IdentifyNeedResource extends Resource
                                 ])
                                 ->searchable()
                                 ->live()
-                                ->afterStateUpdated(function (Set $set) {
-                                    $set('transport_price', null);
+                                ->afterStateUpdated(function (callable $set, $state) {
+                                    if (is_null($state) || $state === '0') {
+                                        $set('transport_price', null);
+                                    }
                                 })
                                 ->columnSpan(8)
                                 ->disabled(fn (callable $get) => in_array($get('status'), ['pending']))
@@ -439,6 +448,7 @@ class IdentifyNeedResource extends Resource
                                     $get('transport') !== '1' || 
                                     in_array($get('status'), ['pending'])
                                 )
+                                ->dehydrated()
                                 ->required(fn (callable $get) => $get('transport') === '1'), // Requerido si es "presencial"
                             
                             Forms\Components\Select::make('accommodation')
@@ -449,8 +459,10 @@ class IdentifyNeedResource extends Resource
                                 ])
                                 ->searchable()
                                 ->live()
-                                ->afterStateUpdated(function (Set $set) {
-                                    $set('accommodation_price', null);
+                                ->afterStateUpdated(function (callable $set, $state) {
+                                    if (is_null($state) || $state === '0') {
+                                        $set('accommodation_price', null);
+                                    }
                                 })
                                 ->columnSpan(8)
                                 ->disabled(fn (callable $get) => in_array($get('status'), ['pending']))
@@ -464,7 +476,16 @@ class IdentifyNeedResource extends Resource
                                     $get('accommodation') !== '1' || 
                                     in_array($get('status'), ['pending'])
                                 )
+                                ->dehydrated()
                                 ->required(fn (callable $get) => $get('accommodation') === '1'),
+                            Forms\Components\TextInput::make('activity_value')
+                                ->label('¿Valor de la actividad? (Excluye Coffee, Traslado y Alojamiento)')
+                                ->numeric()
+                                ->minValue(0)
+                                ->columnSpan(8)
+                                ->disabled(fn (callable $get) => in_array($get('status'), ['pending']))
+
+                                ->required(),
                         ])
                     ]),
             ]);
@@ -498,6 +519,11 @@ class IdentifyNeedResource extends Resource
                     ->label('Unidad Organizacional'),
                 Tables\Columns\TextColumn::make('subject')
                     ->label('Nombre de Actividad'),
+                Tables\Columns\TextColumn::make('total_value')
+                    ->label('$')
+                    ->getStateUsing(fn ($record) => number_format($record->total_value, 0, ',', '.') . ' CLP')
+                    ->sortable()
+                    ->alignment('right'),
                 Tables\Columns\TextColumn::make('estament.name')
                     ->label('Estamento'),
                 Tables\Columns\TextColumn::make('approvals.status')
