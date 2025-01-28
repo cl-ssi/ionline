@@ -33,7 +33,10 @@ class ProcessReportResource extends Resource
 
     public static function canAccess(): bool
     {
-        return auth()->user()->can('be god');
+        return auth()->user()->canAny([
+            'be god',
+            'Agreement: admin',
+        ]);
     }
 
     public static function table(Table $table): Table
@@ -49,76 +52,109 @@ class ProcessReportResource extends Resource
                     ->label('Id')
                     ->searchable()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('processType.name')
-                    ->label('Tipo de proceso')
-                    ->wrap()
-                    ->searchable()
-                    ->sortable(),
+                Tables\Columns\TextColumn::make('period')
+                    ->label('Periodo')
+                    ->sortable()
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('program.name')
                     ->label('Programa')
                     ->wrap()
                     ->sortable()
                     ->searchable(),
-                Tables\Columns\TextColumn::make('period')
-                    ->label('Periodo')
-                    // ->numeric()
-                    ->sortable()
-                    ->searchable(),
+                /** Comuna o Establecimiento, ver como implementar eso, quizá con un atributo */
                 Tables\Columns\TextColumn::make('commune.name')
                     ->label('Comuna')
                     ->searchable()
                     ->sortable(),
+                // Tables\Columns\TextColumn::make('establishments')
+                //     ->label('Establecimientos')
+                //     ->searchable()
+                //     ->sortable(),
+                Tables\Columns\TextColumn::make('program.resource_distribution_number')
+                    ->label('Nº resolución de distribución de recursos')
+                    ->wrapHeader()
+                    ->wrap()
+                    ->sortable()
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('program.resource_distribution_date')
+                    ->label('Fecha resolución de distribución de recursos')
+                    ->wrapHeader()
+                    ->wrap()
+                    ->date('Y-m-d')
+                    ->sortable()
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('days_elapsed')
+                    ->label('Días transcurridos')
+                    ->wrapHeader()
+                    ->wrap(),
+                Tables\Columns\TextColumn::make('created_at')
+                    ->label('Fecha de creación')
+                    ->dateTime('Y-m-d H:i')
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('total_amount')
+                    ->label('Monto total')
+                    ->sortable()
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('processType.name')
+                    ->label('Tipo de proceso')
+                    ->wrap()
+                    ->searchable()
+                    ->sortable(),
+                // Tables\Columns\TextColumn::make('sent_to_lawyer_at')
+                //     ->label('Fecha de envío a revisión jurídico')
+                //     ->wrapHeader()
+                //     ->sortable()
+                //     ->searchable(),
+                Tables\Columns\TextColumn::make('revision_by_lawyer_at')
+                    ->label('Revisión por jurídico')
+                    ->dateTime('Y-m-d H:i')
+                    ->sortable()
+                    ->searchable(),
+                // Tables\Columns\TextColumn::make('sent_to_revision_by_commune_at')
+                //     ->label('Fecha de envío a revisión por comuna')
+                //     ->dateTime('Y-m-d H:i')
+                //     ->sortable()
+                //     ->searchable(),
+                Tables\Columns\TextColumn::make('revision_by_commune_at')
+                    ->label('Fecha revisión por comuna')
+                    ->dateTime('Y-m-d H:i')
+                    ->sortable()
+                    ->searchable(),
+
                 Tables\Columns\ImageColumn::make('endorses.avatar')
                     ->label('Visaciones')
                     ->circular()
                     ->stacked(),
-                Tables\Columns\ImageColumn::make('approval.avatar')
-                    ->label('Firma Director')
-                    ->circular()
-                    ->sortable(),
-                // Tables\Columns\TextColumn::make('number')
-                //     ->numeric()
-                //     ->sortable(),
-                // Tables\Columns\TextColumn::make('date')
-                //     ->date()
-                //     ->sortable(),
-                // Tables\Columns\TextColumn::make('quotas')
-                //     ->numeric()
-                //     ->sortable(),
-                // Tables\Columns\TextColumn::make('signer.id')
-                //     ->numeric()
-                //     ->sortable(),
-                // Tables\Columns\TextColumn::make('signer_appellative')
-                //     ->searchable(),
-                Tables\Columns\TextColumn::make('signer_name')
-                    ->searchable(),
-                // Tables\Columns\TextColumn::make('municipality.name')
-                //     ->numeric()
-                //     ->sortable(),
-                // Tables\Columns\TextColumn::make('municipality_name')
-                //     ->searchable(),
-                // Tables\Columns\TextColumn::make('municipality_rut')
-                //     ->searchable(),
-                // Tables\Columns\TextColumn::make('municipality_address')
-                //     ->searchable(),
-                // Tables\Columns\TextColumn::make('mayor.name')
-                //     ->numeric()
-                //     ->sortable(),
-                // Tables\Columns\TextColumn::make('mayor_name')
-                //     ->searchable(),
-                // Tables\Columns\TextColumn::make('mayor_run')
-                //     ->searchable(),
-                // Tables\Columns\TextColumn::make('mayor_appellative')
-                //     ->searchable(),
-                // Tables\Columns\TextColumn::make('mayor_decree')
-                //     ->searchable(),
-                // Tables\Columns\TextColumn::make('process.id')
-                //     ->numeric()
-                //     ->sortable(),
-                Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
+                Tables\Columns\TextColumn::make('endorses.approver_at')
+                    ->label('Fecha visaciones')
+                    ->bulleted(),
+                Tables\Columns\TextColumn::make('sended_to_commune_at')
+                    ->label('Fecha de envío a comuna')
+                    ->wrapHeader()
                     ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('returned_from_commune_at')
+                    ->label('Fecha de recepción de comuna')
+                    ->wrapHeader()
+                    ->sortable()
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('approval.created_at')
+                    ->label('Fecha envío a firma Director')
+                    ->wrapHeader()
+                    ->date('Y-m-d'),
+                Tables\Columns\TextColumn::make('approval.approver_at')
+                    ->label('Fecha firma Director')
+                    ->wrapHeader()
+                    ->date('Y-m-d'),
+
+                Tables\Columns\TextColumn::make('number')
+                    ->label('Número of partes')
+                    ->numeric()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('date')
+                    ->label('Fecha de of partes')
+                    ->date('Y-m-d')
+                    ->sortable(),
             ])
             ->filters([
                 Tables\Filters\SelectFilter::make('Tipo de proceso')
@@ -155,7 +191,7 @@ class ProcessReportResource extends Resource
             ->bulkActions([
                 //
             ])
-            ->paginated([25, 50, 100]);
+            ->paginated([50, 100]);
     }
 
     public static function getRelations(): array

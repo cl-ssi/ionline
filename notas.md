@@ -286,6 +286,8 @@ Presentación: 23-01-2025
 - [*] Revisión de juridico debería reinciar si se vuelve a editar el documento.
 - [X] En certificados: quitar boton agregar visacion (del repeater, addeable(false))
 - [ ] Calculo de cuotas (decimales)
+- [ ] En ProcessResourse del external al subir el archivo firmado por el alcalde, notificar a referente y admin del módulo.
+
 
 - [X] Permitir enviar varias veces el envio del proceso a la comuna, varias veces enviar el email con el pdf.
 - [X] Solicitar firma directora en las que no son reso, debería firmar el archivo subido y no el que se firma en la reso
@@ -293,7 +295,7 @@ Presentación: 23-01-2025
 - [ ] Presionó dos veces el confirmar al crear un Procesos Dependientes (está peludo fixear eso).
 
 Correo: 22-01-2025
-- [ ] Implementar seguimiento
+- [ ] Implementar seguimiento. Reporte Proceso (En desarrollo)
 
 Presentación: 20-01-2025
 - [X] En aprobacion, que esten los dos documentos.
@@ -375,7 +377,7 @@ lunes 10am reunión (corrovorar a referentes comunales).-
 - [X] Mostrar vinculo al siguiente proceso
 - [X] Poblar approval flow
 - [X] Agregar archivo adjunto, resolución firmada por alcalde
-- [ ] Mostrar section con datos del programa y sus componentes
+- [ ] Mostrar una sección con datos del programa como sus resoluciones, componentes y referentes (mejora que podría ser útil)
 - [X] Parametrizar abogado // Permiso Legally
 - [*] Permitir edición abogado // cambiado a no permitir, solo dejar comentarios
 - [X] Agregar otros archivos adjunto

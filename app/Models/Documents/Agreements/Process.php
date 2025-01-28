@@ -82,10 +82,14 @@ class Process extends Model
     ];
 
     protected $casts = [
-        'document_date'  => 'date',
-        'date'           => 'date',
-        'establishments' => 'array',
-        'status'         => Status::class,
+        'document_date'            => 'date',
+        'revision_by_lawyer_at'    => 'date',
+        'revision_by_commune_at'   => 'date',
+        'sended_to_commune_at'     => 'date',
+        'returned_from_commune_at' => 'date',
+        'date'                     => 'date',
+        'establishments'           => 'array',
+        'status'                   => Status::class,
     ];
 
     public function program(): BelongsTo
@@ -340,7 +344,7 @@ class Process extends Model
 
     public function resetLegallyStatus(): void
     {
-        $this->revision_by_lawyer_at = null;
+        $this->revision_by_lawyer_at      = null;
         $this->revision_by_lawyer_user_id = null;
         $this->save();
     }
@@ -424,6 +428,14 @@ class Process extends Model
     {
         return Attribute::make(
             get: fn (): string => number_format($this->total_amount, 0, '', '.')
+        );
+    }
+
+    // Attibute con los dias transcurridos desde la creación del proceso
+    public function daysElapsed(): Attribute
+    {
+        return Attribute::make(
+            get: fn (): string => round($this->created_at->diffInDays())
         );
     }
 

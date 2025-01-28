@@ -7,7 +7,6 @@ use App\Models\Documents\Agreements\Cdp;
 use App\Models\Documents\Agreements\Certificate;
 use App\Models\Documents\Agreements\Process;
 use App\Models\Establishment;
-use App\Models\File;
 use App\Models\User;
 use App\Observers\Parameters\ProgramObserver;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
@@ -18,7 +17,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use OwenIt\Auditing\Contracts\Auditable;
 
@@ -67,11 +65,11 @@ class Program extends Model implements Auditable
      * @var array
      */
     protected $casts = [
-        'start_date' => 'date',
-        'end_date' => 'date',
+        'start_date'                  => 'date',
+        'end_date'                    => 'date',
         'ministerial_resolution_date' => 'date',
-        'resource_distribution_date' => 'date',
-        'is_program' => 'boolean',
+        'resource_distribution_date'  => 'date',
+        'is_program'                  => 'boolean',
     ];
 
     /**
@@ -127,8 +125,8 @@ class Program extends Model implements Auditable
         return $this->belongsTo(Establishment::class);
     }
 
+    //FIXME: pasar a minusculas (legacy del modulo anterior)
     /**
-     * // FIXME: pasar a minusculas
      * Get the subtitle that owns the program.
      */
     public function Subtitle(): BelongsTo
@@ -136,7 +134,7 @@ class Program extends Model implements Auditable
         return $this->belongsTo(Subtitle::class);
     }
 
-    // FIXME: pasar a minusculas
+    // FIXME: pasar a minusculas (legacy del modulo anterior)
     /**
      * Get the budgets for the program.
      */
@@ -145,8 +143,8 @@ class Program extends Model implements Auditable
         return $this->hasMany(ProgramBudget::class);
     }
 
-
     /**
+     * Legacy del módulo anterior
      * Get the formatted start date attribute.
      */
     public function getStartDateFormatAttribute(): string
@@ -155,6 +153,7 @@ class Program extends Model implements Auditable
     }
 
     /**
+     * Legacy del módulo anterior
      * Get the formatted end date attribute.
      */
     public function getEndDateFormatAttribute(): string
@@ -163,6 +162,7 @@ class Program extends Model implements Auditable
     }
 
     /**
+     * Legacy del módulo anterior
      * Get the financing attribute.
      */
     public function getFinancingAttribute(): string
@@ -188,7 +188,7 @@ class Program extends Model implements Auditable
      */
     public static function getProgramsBySearch(string $searchText)
     {
-        $programs = Program::query();
+        $programs     = Program::query();
         $array_search = explode(' ', $searchText);
         foreach ($array_search as $word) {
             $programs->where(function ($q) use ($word) {
@@ -199,20 +199,13 @@ class Program extends Model implements Auditable
         return $programs;
     }
 
-    protected function formatDateSafely($date): string 
-    {
-        return $date 
-            ? "{$date->day} de {$date->monthName} del {$date->year}"
-            : 'XXX de XXX del XXX';
-    }
-    
     public function ministerialResolutionDateFormat(): Attribute
     {
         return Attribute::make(
             get: fn (): string => $this->formatDateSafely($this->ministerial_resolution_date)
         );
     }
-    
+
     public function resourceDistributionDateFormat(): Attribute
     {
         return Attribute::make(
@@ -227,5 +220,12 @@ class Program extends Model implements Auditable
                 return "<li>{$email}</li>";
             })->implode('')
         );
+    }
+
+    protected function formatDateSafely($date): string
+    {
+        return $date
+            ? "{$date->day} de {$date->monthName} del {$date->year}"
+            : 'XXX de XXX del XXX';
     }
 }

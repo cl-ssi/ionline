@@ -11,47 +11,64 @@ class ProcessExporter extends Exporter
 {
     protected static ?string $model = Process::class;
 
+    // public $tries = 1;
+
+    // public $maxExceptions = 1;
+
     public static function getColumns(): array
     {
         return [
             ExportColumn::make('id')
-                ->label('ID'),
-            ExportColumn::make('process_type_id'),
-            ExportColumn::make('period'),
-            ExportColumn::make('program.name'),
-            ExportColumn::make('commune.name'),
-            ExportColumn::make('municipality.name'),
-            ExportColumn::make('municipality_name'),
-            ExportColumn::make('municipality_rut'),
-            ExportColumn::make('municipality_address'),
-            ExportColumn::make('mayor.name'),
-            ExportColumn::make('mayor_name'),
-            ExportColumn::make('mayor_run'),
-            ExportColumn::make('mayor_appellative'),
-            ExportColumn::make('mayor_decree'),
-            ExportColumn::make('total_amount'),
-            ExportColumn::make('quotas_qty'),
-            ExportColumn::make('establishments'),
-            ExportColumn::make('signer.id'),
-            ExportColumn::make('signer_appellative'),
-            ExportColumn::make('signer_decree'),
-            ExportColumn::make('signer_name'),
-            ExportColumn::make('number'),
-            ExportColumn::make('date'),
-            ExportColumn::make('status'),
-            ExportColumn::make('document_content'),
-            ExportColumn::make('document_date'),
-            ExportColumn::make('previousProcess.id'),
-            ExportColumn::make('revision_by_lawyer_at'),
-            ExportColumn::make('revision_by_lawyer_user_id'),
-            ExportColumn::make('revision_by_commune_at'),
-            ExportColumn::make('revision_by_commune_user_id'),
-            ExportColumn::make('sended_to_commune_at'),
-            ExportColumn::make('returned_from_commune_at'),
-            ExportColumn::make('establishment.name'),
-            ExportColumn::make('created_at'),
-            ExportColumn::make('updated_at'),
-            ExportColumn::make('deleted_at'),
+                ->label('Id'),
+            ExportColumn::make('period')
+                ->label('Periodo'),
+            ExportColumn::make('program.name')
+                ->label('Programa'),
+            ExportColumn::make('commune.name')
+                ->label('Comuna'),
+            ExportColumn::make('program.resource_distribution_number')
+                ->label('Nº resolución de distribución de recursos'),
+            ExportColumn::make('program.resource_distribution_date')
+                ->label('Fecha resolución de distribución de recursos')
+                ->state(fn ($record) => $record->program?->resource_distribution_date?->format('Y-m-d')),
+            ExportColumn::make('days_elapsed')
+                ->label('Días transcurridos'),
+            ExportColumn::make('created_at')
+                ->label('Fecha de creación')
+                ->state(fn ($record) => $record->created_at->format('Y-m-d H:i')),
+            ExportColumn::make('total_amount')
+                ->label('Monto total'),
+            ExportColumn::make('processType.name')
+                ->label('Tipo de proceso'),
+            ExportColumn::make('revision_by_lawyer_at')
+                ->label('Revisión por jurídico')
+                ->state(fn ($record) => $record->revision_by_lawyer_at?->format('Y-m-d H:i')),
+            ExportColumn::make('revision_by_commune_at')
+                ->label('Fecha revisión por comuna')
+                ->state(fn ($record) => $record->revision_by_commune_at?->format('Y-m-d H:i')),
+
+            ExportColumn::make('endorses.initials')
+                ->label('Visaciones'),
+            ExportColumn::make('endorses.approver_at')
+                ->label('Fecha visaciones'),
+
+            ExportColumn::make('sended_to_commune_at')
+                ->label('Fecha de envío a comuna')
+                ->state(fn ($record) => $record->sended_to_commune_at?->format('Y-m-d H:i')),
+            ExportColumn::make('returned_from_commune_at')
+                ->label('Fecha de recepción de comuna')
+                ->state(fn ($record) => $record->returned_from_commune_at?->format('Y-m-d H:i')),
+            ExportColumn::make('approval.created_at')
+                ->label('Fecha envío a firma Director')
+                ->state(fn ($record) => $record->approval?->created_at?->format('Y-m-d')),
+            ExportColumn::make('approval.approver_at')
+                ->label('Fecha firma Director')
+                ->state(fn ($record) => $record->approval?->approver_at?->format('Y-m-d')),
+            ExportColumn::make('number')
+                ->label('Número of partes'),
+            ExportColumn::make('date')
+                ->label('Fecha de of partes')
+                ->state(fn ($record) => $record->date?->format('Y-m-d')),
         ];
     }
 
