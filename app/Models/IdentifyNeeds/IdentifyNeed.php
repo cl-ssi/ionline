@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use OwenIt\Auditing\Contracts\Auditable;
 use App\Models\User;
@@ -22,7 +23,7 @@ use Illuminate\Support\Str;
 use App\Models\Parameters\Parameter;
 use Illuminate\Support\Facades\Auth;
 use App\Models\IdentifyNeeds\AvailablePlace;
-
+use App\Models\IdentifyNeeds\AuthorizeAmount;
 
 class IdentifyNeed extends Model implements Auditable
 {
@@ -163,6 +164,14 @@ class IdentifyNeed extends Model implements Auditable
     public function approvals(): MorphMany
     {
         return $this->morphMany(Approval::class, 'approvable');
+    }
+
+    /**
+     * Get the authorize amount for the identify need.
+     */
+    public function authorizeAmount(): HasOne
+    {
+        return $this->hasOne(AuthorizeAmount::class);
     }
 
     /*
@@ -314,6 +323,16 @@ class IdentifyNeed extends Model implements Auditable
         return $this->coffee_break !== null
             ? ($this->coffee_break ? 'Sí' : 'No')
             : '';
+    }
+
+    /**
+     * Get the item value attribute.
+     *
+     * @return string|null
+     */
+    public function getNatureOfTheNeedValueAttribute(): ?string
+    {
+        return ucfirst(strtolower($this->nature_of_the_need));
     }
 
     /**
@@ -470,6 +489,19 @@ class IdentifyNeed extends Model implements Auditable
 
         // Cambiar estado del registro
         $this->update(['status' => 'pending']);
+    }
+
+    public function createAuthorizeAmount()
+    {
+        if($this->authorizeAmount){
+            dd('sí');
+        }
+        else{
+            $this->authorizeAmount()->create([
+                'identify_need_id'  => $this->id,
+                'status'            => 'pending', 
+            ]);
+        }
     }
 
     protected $casts = [

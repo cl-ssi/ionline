@@ -509,7 +509,6 @@ class IdentifyNeedResource extends Resource
                                 ->minValue(0)
                                 ->columnSpan(8)
                                 ->disabled(fn (callable $get) => in_array($get('status'), ['pending', 'completed']))
-
                                 ->required(),
                         ])
                     ]),
@@ -566,6 +565,15 @@ class IdentifyNeedResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                /*
+                Tables\Actions\Action::make('createAuthorizeAmount')
+                    ->label('Autorizar Monto')
+                    ->icon('heroicon-o-check-circle')
+                    ->color('success')
+                    ->visible(fn ($record) => $record->status_value === 'Finalizado') // Solo mostrar si el estado es pendiente
+                    ->requiresConfirmation()
+                    ->action(fn ($record) => $record->createAuthorizeAmount()),
+                */
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
