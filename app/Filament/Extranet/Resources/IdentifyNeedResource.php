@@ -506,6 +506,7 @@ class IdentifyNeedResource extends Resource
                         'Guardado'      => 'info',
                         'Pendiente'     => 'warning',
                         'Finalizado'    => 'success',
+                        'Rechazado'     => 'danger',
                     })
                     ->alignment('center'),
                 Tables\Columns\TextColumn::make('user.TinyName')

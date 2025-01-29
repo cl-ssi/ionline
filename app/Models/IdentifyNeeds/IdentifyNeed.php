@@ -165,10 +165,12 @@ class IdentifyNeed extends Model implements Auditable
         return $this->morphMany(Approval::class, 'approvable');
     }
 
+    /*
     public function approvalCallback(): void
     {
         $this->update(['status' => 'completed']);
     }
+    */
 
     /**
      * Get the status value attribute.
@@ -181,6 +183,7 @@ class IdentifyNeed extends Model implements Auditable
             'saved'     => 'Guardado',
             'pending'   => 'Pendiente',
             'completed' => 'Finalizado',
+            'rejected'  => 'Rechazado',
         ];
 
         return $statuses[$this->status] ?? null;
@@ -316,6 +319,8 @@ class IdentifyNeed extends Model implements Auditable
     /**
      * Define eventos del modelo.
      */
+
+     /*
     protected static function booted()
     {
         static::saving(function ($model) {
@@ -330,6 +335,7 @@ class IdentifyNeed extends Model implements Auditable
             }
         });
     }
+    */
 
     /*
     public function getNatureOfTheNeedAttribute($value)
@@ -380,24 +386,12 @@ class IdentifyNeed extends Model implements Auditable
          *  Si soy autoridad de nivel 2, mandó directamente a dirección
          */ 
         if($authority->organizationalUnit->level == 2){
-            /*
-            // Se crea PDF
-            $pdfContent = $this->generatePdf(); // Método que genera el contenido del PDF
-            $name = Str::random(40);
-            $path = "ionline/identify_needs/sin_firmar/" . $name . ".pdf";
-            // Almacenar en GCS con un hashName
-            Storage::disk('gcs')->put($path, $pdfContent);
-
-            $filename = $path;
-            */
-
             $approval = $this->approvals()->create([
                 "module"                            => "Detección de Necesidades de Capacitación",
                 "module_icon"                       => "bi bi-person-video",
                 "subject"                           => 'DNC: ID '.$this->id.'<br>
                                                         Funcionario: '.$this->user->TinyName,
                 "sent_to_ou_id"                     =>  1,
-                // "document_pdf_path"                 => $filename,
                 "document_route_name"               => "identify_need.show_approval",
                 "document_route_params"             => json_encode([
                     "identify_need_id" => $this->id,
@@ -405,11 +399,11 @@ class IdentifyNeed extends Model implements Auditable
                 "active"                            => true,
                 "previous_approval_id"              => null,
                 "status"                            => null,
-                'approvable_callback'               => true,
-                // "digital_signature"                 => true,
-                //"position"                          => "center",
-                //"start_y"                           => 82,
-                //"filename"                          => 'ionline/identify_needs/firmados/' . $name .'.pdf',
+                "callback_controller_method"        => "App\Http\Controllers\IdentifyNeeds\IdentifyNeedController@approvalCallback",
+                "callback_controller_params"        => json_encode([
+                    'identify_need_id'  => $this->id,
+                    'process'           => 'end'
+                ])
             ]);
         }
         /**
@@ -424,40 +418,12 @@ class IdentifyNeed extends Model implements Auditable
 
             foreach($this->organizationalUnit->getHierarchicalUnits($this->user) as $hierarchicalUnit){
                 $isLastIteration = ($hierarchicalUnit === $lastUnit); // Verifica si es la última iteración
-                /*
-                if($lastApproval == null){
-                    $pdfContent = $this->generatePdf(); // Método que genera el contenido del PDF
-                    $name = Str::random(40);
-                    $path = "ionline/identify_needs/sin_firmar/" . $name . ".pdf";
-                    // Almacenar en GCS con un hashName
-                    Storage::disk('gcs')->put($path, $pdfContent);
-                }
-
-                // Aquí usamos $path directamente para guardar la ruta relativa
-                $filename = $path;
-
-                // Valores para ubicar firma en dcto.
-                if($count == 2){
-                    $start = 82;
-                }
-                if($count == 3){
-                    $start = 46;
-                }
-                if($count == 4){
-                    $start = 10;
-                }
-                if($count == 5){
-                    $start = -26;
-                }
-                */
-
                 $approval = $this->approvals()->create([
                     "module"                            => "Detección de Necesidades de Capacitación",
                     "module_icon"                       => "bi bi-person-video",
                     "subject"                           => 'DNC: ID '.$this->id.'<br>
                                                             Funcionario: '.$this->user->TinyName,
                     "sent_to_ou_id"                     =>  $hierarchicalUnit['id'],
-                    // "document_pdf_path"                 => ($lastApproval == null) ? $filename : $lastApproval->filename,
                     "document_route_name"               => "identify_need.show_approval",
                     "document_route_params"             => json_encode([
                         "identify_need_id" => $this->id,
@@ -465,11 +431,11 @@ class IdentifyNeed extends Model implements Auditable
                     "active"                            => ($lastApproval == null) ? true : false,
                     "previous_approval_id"              => ($lastApproval == null) ? null : $lastApproval->id,
                     "status"                            => null,
-                    'approvable_callback'               => ($isLastIteration) ? true : false,
-                    // "digital_signature"                 => true,
-                    // "position"                          => ($lastApproval == null) ? "center" : "right",
-                    // "start_y"                           => ($lastApproval == null) ? 82 : $start, //FALTA LA UBICACIÓN DE LA FIRMA PARA CADA CASO
-                    // "filename"                          => 'ionline/identify_needs/firmados/' . $name . '_'. $count .'.pdf',
+                    "callback_controller_method"        => "App\Http\Controllers\IdentifyNeeds\IdentifyNeedController@approvalCallback",
+                    "callback_controller_params"        => json_encode([
+                        'identify_need_id'  => $this->id,
+                        'process'           => ($isLastIteration) ? 'end' : null,
+                    ])
                 ]);
                 $lastApproval = $approval;
                 $count++;
@@ -482,29 +448,24 @@ class IdentifyNeed extends Model implements Auditable
 
     public function sendFormForExternal()
     {   
-        $pdfContent = $this->generatePdf(); // Método que genera el contenido del PDF
-        $name = Str::random(40);
-        $path = "ionline/identify_needs/sin_firmar/" . $name . ".pdf";
-        // Almacenar en GCS con un hashName
-        Storage::disk('gcs')->put($path, $pdfContent);
-
-        $filename = $path;
-
         $approval = $this->approvals()->create([
             "module"                            => "Detección de Necesidades de Capacitación",
             "module_icon"                       => "bi bi-person-video",
             "subject"                           => 'DNC: ID '.$this->id.'<br>
                                                     Funcionario: '.$this->user->TinyName,
             "sent_to_ou_id"                     => Parameter::get('ou', 'DireccionAPS', Auth::user()->establishment_id),
-            "document_pdf_path"                 => $filename,
+            "document_route_name"               => "identify_need.show_approval",
+            "document_route_params"             => json_encode([
+                "identify_need_id" => $this->id,
+            ]),
             "active"                            => true,
             "previous_approval_id"              => null,
             "status"                            => null,
-            'approvable_callback'               => true,
-            "digital_signature"                 => true,
-            "position"                          => "center",
-            "start_y"                           => 82,
-            "filename"                          => 'ionline/identify_needs/firmados/' . $name .'.pdf',
+            "callback_controller_method"        => "App\Http\Controllers\IdentifyNeeds\IdentifyNeedController@approvalCallback",
+            "callback_controller_params"        => json_encode([
+                'identify_need_id'  => $this->id,
+                'process'           => 'end'
+            ])
         ]);
 
         // Cambiar estado del registro

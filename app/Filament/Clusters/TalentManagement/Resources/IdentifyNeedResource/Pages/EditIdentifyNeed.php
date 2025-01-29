@@ -29,9 +29,10 @@ class EditIdentifyNeed extends EditRecord
                     $this->record->total_value = $this->data['coffee_break_price'] + $this->data['transport_price'] + $this->data['accommodation_price'] + $this->data['activity_value'];
 
                     // Guardar cambios en el registro
+                    $this->record->status = 'saved';
                     $this->save();
                 })
-                ->visible(fn () => $this->record->status_value === 'Guardado'), // Solo visible si el estado es 'Guardado',
+                ->visible(fn () => in_array($this->record->status_value, ['Guardado', 'Rechazado'])), // Permite cuando el estado es Guardado o Rechazado
             Actions\Action::make('cancelar')
                 ->label('Cancelar')
                 ->color('gray')
@@ -42,7 +43,7 @@ class EditIdentifyNeed extends EditRecord
                 ->icon('heroicon-o-paper-airplane')
                 ->color('success')
                 ->action(function () {
-                    if ($this->record->status_value !== 'Guardado') {
+                    if (in_array($this->record->status_value, ['Pendiente','Finalizado'])) {
                         abort(403, 'No tienes permiso para enviar este formulario.');
                     }
 
@@ -68,6 +69,10 @@ class EditIdentifyNeed extends EditRecord
                     $this->record->total_value              = $this->data['coffee_break_price'] + $this->data['transport_price'] + $this->data['accommodation_price'] + $this->data['activity_value'];
                     $this->save();
 
+                    if($this->record->approvals){
+                        $this->record->approvals()->delete();
+                    }
+
                     $this->record->sendForm(); // Llama al método en el modelo
                     
                     // Mostrar notificación
@@ -81,7 +86,7 @@ class EditIdentifyNeed extends EditRecord
                 ->modalHeading('Confirmar Envío')
                 ->modalSubheading('¿Está seguro de enviar a firmar este formulario?')
                 ->modalButton('Confirmar')
-                ->visible(fn () => $this->record->status_value === 'Guardado'), // Solo visible si el estado es 'Guardado'
+                ->visible(fn () => in_array($this->record->status_value, ['Guardado', 'Rechazado'])), // Permite cuando el estado es Guardado o Rechazado
         ];
     }
 }

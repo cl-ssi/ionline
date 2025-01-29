@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 
 use App\Models\IdentifyNeeds\IdentifyNeed;
 use Illuminate\Http\Request;
+use App\Models\Documents\Approval;
 
 class IdentifyNeedController extends Controller
 {
@@ -94,5 +95,27 @@ class IdentifyNeedController extends Controller
     public function destroy(IdentifyNeed $identifyNeed)
     {
         //
+    }
+
+     /**
+     * Función callback para aprobaciones 
+     */
+    public function approvalCallback($approval_id, $identify_need_id, $process){
+        $approval = Approval::find($approval_id);
+        $identifyNeed = IdentifyNeed::find($identify_need_id);
+
+        /* Aprueba */
+        if($approval->status == 1){
+            if($process == 'end'){
+                $identifyNeed->status = 'completed';
+                $identifyNeed->save();
+            }
+        }   
+
+        /* Rechaza */
+        if($approval->status == 0){
+            $identifyNeed->status = 'rejected';
+            $identifyNeed->save();
+        }
     }
 }

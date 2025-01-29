@@ -534,6 +534,7 @@ class IdentifyNeedResource extends Resource
                         'Guardado'      => 'info',
                         'Pendiente'     => 'warning',
                         'Finalizado'    => 'success',
+                        'Rechazado'     => 'danger',
                     })
                     ->alignment('center'),
                 Tables\Columns\TextColumn::make('user.TinyName')
@@ -547,10 +548,6 @@ class IdentifyNeedResource extends Resource
                     ->getStateUsing(fn ($record) => number_format($record->total_value, 0, ',', '.') . ' CLP')
                     ->sortable()
                     ->alignment('right'),
-                /*
-                Tables\Columns\TextColumn::make('estament.name')
-                    ->label('Estamento'),
-                */
                 Tables\Columns\TextColumn::make('approvals.status')
                     ->label('Firmas')
                     ->bulleted()
