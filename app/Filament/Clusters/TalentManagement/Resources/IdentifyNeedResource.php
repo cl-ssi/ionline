@@ -22,6 +22,8 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\HtmlString;
 use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\TextInput;
+use Filament\Tables\Enums\FiltersLayout;
+use App\Models\Establishment;
 
 class IdentifyNeedResource extends Resource
 {
@@ -561,20 +563,26 @@ class IdentifyNeedResource extends Resource
             ])
             ->defaultSort('id', 'desc')
             ->filters([
-                //
-            ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
-                /*
-                Tables\Actions\Action::make('createAuthorizeAmount')
-                    ->label('Autorizar Monto')
-                    ->icon('heroicon-o-check-circle')
-                    ->color('success')
-                    ->visible(fn ($record) => $record->status_value === 'Finalizado') // Solo mostrar si el estado es pendiente
-                    ->requiresConfirmation()
-                    ->action(fn ($record) => $record->createAuthorizeAmount()),
-                */
-            ])
+                // Filtro por Estado
+                Tables\Filters\SelectFilter::make('status')
+                    ->label('Estado')
+                    ->options([
+                        'saved'     => 'Guardado',
+                        'completed' => 'Finalizado',
+                        'rejected'  => 'Rechazado',
+                    ])
+                    ->multiple()
+                    ->searchable(),
+
+                // Filtro por Unidad Organizacional
+                Tables\Filters\SelectFilter::make('organizational_unit_id')
+                    ->label('Unidad Organizacional')
+                    ->relationship('organizationalUnit', 'name', fn (Builder $query) => $query->where('establishment_id', 38))
+                    ->searchable()
+                    ->preload()
+                    ->multiple(),
+            ], layout: FiltersLayout::AboveContent)
+            ->filtersFormColumns(5)
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
