@@ -831,7 +831,14 @@ class ProcessResource extends Resource
                 ->footerActions([
                     Forms\Components\Actions\Action::make('guardar_cambios')
                         ->icon('bi-save')
-                        ->action('save'),
+                        // ->action('save'),
+                        ->action(function (Process $record, $livewire) {
+                            // Save using the livewire form component
+                            $livewire->save();
+                            
+                            // Redirect to refresh the page
+                            return redirect()->to(ProcessResource::getUrl('edit', ['record' => $record->id]));
+                        }),
                 ])
                 // ->footerActionsAlignment(Alignment::End)
                 ->columns(7)
