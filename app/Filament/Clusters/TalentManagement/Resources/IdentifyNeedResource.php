@@ -33,6 +33,8 @@ class IdentifyNeedResource extends Resource
 
     protected static ?string $cluster = TalentManagement::class;
 
+    protected static ?string $navigationGroup = 'DNC';
+
     protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
 
     public static function form(Form $form): Form

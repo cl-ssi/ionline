@@ -57,6 +57,7 @@ class RoleAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'Documents: signatures and distribution', 'description' => 'Permite acceso al módulo de firmas y distribución']);
         Permission::create(['name' => 'Documents: signatures and distribution v2', 'description' => 'Permite acceder al crear solicitud de firma nuevo modulo v2']);
         Permission::create(['name' => 'DNC: all', 'description' => 'Permite visualizar todos los formularios de Necesidades de Capacitación']);
+        Permission::create(['name' => 'DNC: annual budget', 'description' => 'Permite ingresar el presupuesto anual de capacitaciones']);
         Permission::create(['name' => 'Drugs', 'description' => 'Permite acceder al menú del módulo de drogas']);
         Permission::create(['name' => 'Drugs: add protocols', 'description' => '']);
         Permission::create(['name' => 'Drugs: add results from ISP', 'description' => 'Permite poder agregar resultados de análisis realizado por el ISP']);
