@@ -271,7 +271,7 @@ class Approval extends Model
     ];
 
     //append avatar
-    protected $appends = ['avatar'];
+    protected $appends = ['avatar','initialsapproverat'];
 
     /**
     * The attributes that should be cast.
@@ -360,6 +360,13 @@ class Approval extends Model
     
         return Attribute::make(
             get: fn () => $url . '?' . http_build_query($params)
+        );
+    }
+
+    protected function initialsapproverat(): Attribute
+    {
+        return Attribute::make(
+            get: fn (): string => str_pad($this->initials, 5, '.'). ' ' . $this->approver_at?->format('Y-m-d H:i')
         );
     }
 

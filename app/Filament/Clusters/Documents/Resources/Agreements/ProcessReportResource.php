@@ -6,9 +6,12 @@ use App\Filament\Clusters\Documents;
 use App\Filament\Clusters\Documents\Resources\Agreements\ProcessReportResource\Pages;
 use App\Filament\Exports\Documents\Agreements\ProcessExporter;
 use App\Models\Documents\Agreements\Process;
+use App\Models\Documents\Approval;
+use Carbon\Carbon;
 use Filament\Forms\Get;
 use Filament\Pages\SubNavigationPosition;
 use Filament\Resources\Resource;
+use Filament\Support\Enums\FontFamily;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
@@ -96,6 +99,7 @@ class ProcessReportResource extends Resource
                     ->wrap()
                     ->searchable()
                     ->sortable()
+                    ->placeholder('Sin fecha de distribución de recursos.')
                     ->toggleable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->label('Fecha de creación')
@@ -149,16 +153,18 @@ class ProcessReportResource extends Resource
                     ->searchable()
                     ->sortable()
                     ->toggleable(),
-                Tables\Columns\TextColumn::make('endorses.initials')
+                Tables\Columns\TextColumn::make('endorses.initialsapproverat')
                     ->label('Visaciones')
                     ->listWithLineBreaks()
                     ->bulleted()
-                    ->toggleable(),
-                Tables\Columns\TextColumn::make('endorses.approver_at')
-                    ->label('Fecha visaciones')
-                    ->listWithLineBreaks()
-                    ->bulleted()
-                    ->toggleable(),
+                    ->toggleable()
+                    ->fontFamily(FontFamily::Mono),
+                // Tables\Columns\TextColumn::make('endorses.approver_at')
+                //     ->label('Fecha visaciones')
+                //     ->listWithLineBreaks()
+                //     ->bulleted()
+                //     ->placeholder('No description.')
+                //     ->toggleable(),
                 Tables\Columns\TextColumn::make('sended_to_commune_at')
                     ->label('Fecha de envío a comuna')
                     ->wrapHeader()
@@ -172,14 +178,14 @@ class ProcessReportResource extends Resource
                     ->searchable()
                     ->toggleable(),
                 Tables\Columns\TextColumn::make('approval.created_at')
-                    ->label('Fecha envío a firma Director')
+                    ->label('Fecha envío a firma director')
                     ->wrapHeader()
                     ->date('Y-m-d')
                     ->searchable()
                     ->sortable()
                     ->toggleable(),
                 Tables\Columns\TextColumn::make('approval.approver_at')
-                    ->label('Fecha firma Director')
+                    ->label('Fecha firma director')
                     ->wrapHeader()
                     ->date('Y-m-d')
                     ->searchable()
