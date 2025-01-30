@@ -552,6 +552,9 @@ class ProcessResource extends Resource
                                 ->success()
                                 ->send();
 
+                            // establecer fecha de solicitud de revisión
+                            $record->update(['sended_revision_lawyer_at' => now()]);
+
                         })
                         ->disabled(fn (?Process $record) => $record->revision_by_lawyer_user_id !== null),
                 ])
@@ -586,6 +589,9 @@ class ProcessResource extends Resource
                                 ->title('Solicitud de revisión enviada a comunas')
                                 ->success()
                                 ->send();
+
+                            // establecer fecha de solicitud de revisión
+                            $record->update(['sended_revision_commune_at' => now()]);
                         })
                         ->disabled(fn (?Process $record) => $record->revision_by_commune_user_id !== null),
                 ])
@@ -615,10 +621,14 @@ class ProcessResource extends Resource
                         ])
                         ->action(function (Process $record, array $data): void {
                             $record->createEndorses($data['referer_id']);
+                            // set the date of the endorsement request
+                            $record->update(['sended_endorses_at' => now()]);
+
                             Notifications\Notification::make()
                                 ->title('Visado solicitado')
                                 ->success()
                                 ->send();
+
                             redirect(request()->header('Referer')); // Redirige al usuario a la misma página
                         })
                         ->disabled(fn (?Process $record) => $record?->endorses?->isNotEmpty()),
