@@ -103,6 +103,11 @@ class ProcessReportResource extends Resource
                     ->searchable()
                     ->sortable()
                     ->toggleable(),
+                Tables\Columns\TextColumn::make('program.subtitle.name')
+                    ->label('Subtitulo')
+                    ->searchable()
+                    ->sortable()
+                    ->toggleable(),
                 Tables\Columns\TextColumn::make('total_amount')
                     ->label('Monto total')
                     ->searchable()

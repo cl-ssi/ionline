@@ -446,11 +446,13 @@ class Process extends Model
         );
     }
 
-    // Attibute con los dias transcurridos desde la creación del proceso
+    // Attibute con los dias transcurridos desde $this->program->resource_distribution_date
     public function daysElapsed(): Attribute
     {
         return Attribute::make(
-            get: fn (): string => round($this->created_at->diffInDays())
+            get: fn (): ?string => $this->program?->resource_distribution_date 
+            ? round($this->program->resource_distribution_date->diffInDays()) 
+            : null
         );
     }
 

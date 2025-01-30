@@ -36,22 +36,31 @@ class ProcessExporter extends Exporter
             ExportColumn::make('created_at')
                 ->label('Fecha de creación')
                 ->state(fn ($record) => $record->created_at->format('Y-m-d H:i')),
+            ExportColumn::make('program.subtitle.name')
+                ->label('Subtitulo'),
             ExportColumn::make('total_amount')
                 ->label('Monto total'),
             ExportColumn::make('processType.name')
                 ->label('Tipo de proceso'),
+            ExportColumn::make('sended_revision_lawyer_at')
+                ->label('Fecha de envío a revisión jurídico')
+                ->state(fn ($record) => $record->sended_revision_lawyer_at?->format('Y-m-d H:i')),
             ExportColumn::make('revision_by_lawyer_at')
                 ->label('Revisión por jurídico')
                 ->state(fn ($record) => $record->revision_by_lawyer_at?->format('Y-m-d H:i')),
+            ExportColumn::make('sended_revision_commune_at')
+                ->label('Fecha de envío a revisión por comuna')
+                ->state(fn ($record) => $record->sended_revision_commune_at?->format('Y-m-d H:i')),
             ExportColumn::make('revision_by_commune_at')
                 ->label('Fecha revisión por comuna')
                 ->state(fn ($record) => $record->revision_by_commune_at?->format('Y-m-d H:i')),
-
+            ExportColumn::make('sended_endorses_at')
+                ->label('Fecha de envío a vización')
+                ->state(fn ($record) => $record->sended_endorses_at?->format('Y-m-d H:i')),
             ExportColumn::make('endorses.initials')
                 ->label('Visaciones'),
             ExportColumn::make('endorses.approver_at')
                 ->label('Fecha visaciones'),
-
             ExportColumn::make('sended_to_commune_at')
                 ->label('Fecha de envío a comuna')
                 ->state(fn ($record) => $record->sended_to_commune_at?->format('Y-m-d H:i')),
@@ -59,7 +68,7 @@ class ProcessExporter extends Exporter
                 ->label('Fecha de recepción de comuna')
                 ->state(fn ($record) => $record->returned_from_commune_at?->format('Y-m-d H:i')),
             ExportColumn::make('approval.created_at')
-                ->label('Fecha envío a firma Director')
+                ->label('Fecha envío a firma Director')  
                 ->state(fn ($record) => $record->approval?->created_at?->format('Y-m-d')),
             ExportColumn::make('approval.approver_at')
                 ->label('Fecha firma Director')
