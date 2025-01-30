@@ -51,110 +51,147 @@ class ProcessReportResource extends Resource
                 Tables\Columns\TextColumn::make('id')
                     ->label('Id')
                     ->searchable()
-                    ->sortable(),
+                    ->sortable()
+                    ->toggleable(),
                 Tables\Columns\TextColumn::make('period')
                     ->label('Periodo')
+                    ->searchable()
                     ->sortable()
-                    ->searchable(),
+                    ->toggleable(),
                 Tables\Columns\TextColumn::make('program.name')
                     ->label('Programa')
                     ->wrap()
+                    ->searchable()
                     ->sortable()
-                    ->searchable(),
+                    ->toggleable(),
                 /** Comuna o Establecimiento, ver como implementar eso, quizá con un atributo */
                 Tables\Columns\TextColumn::make('commune.name')
                     ->label('Comuna')
                     ->searchable()
-                    ->sortable(),
+                    ->sortable()
+                    ->toggleable(),
                 // Tables\Columns\TextColumn::make('establishments')
                 //     ->label('Establecimientos')
                 //     ->searchable()
+                //     ->toggleable()
                 //     ->sortable(),
                 Tables\Columns\TextColumn::make('program.resource_distribution_number')
                     ->label('Nº resolución de distribución de recursos')
                     ->wrapHeader()
                     ->wrap()
+                    ->searchable()
                     ->sortable()
-                    ->searchable(),
+                    ->toggleable(),
                 Tables\Columns\TextColumn::make('program.resource_distribution_date')
                     ->label('Fecha resolución de distribución de recursos')
                     ->wrapHeader()
                     ->wrap()
                     ->date('Y-m-d')
+                    ->searchable()
                     ->sortable()
-                    ->searchable(),
+                    ->toggleable(),
                 Tables\Columns\TextColumn::make('days_elapsed')
                     ->label('Días transcurridos')
                     ->wrapHeader()
-                    ->wrap(),
+                    ->wrap()
+                    ->searchable()
+                    ->sortable()
+                    ->toggleable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->label('Fecha de creación')
                     ->dateTime('Y-m-d H:i')
-                    ->sortable(),
+                    ->searchable()
+                    ->sortable()
+                    ->toggleable(),
                 Tables\Columns\TextColumn::make('total_amount')
                     ->label('Monto total')
+                    ->searchable()
                     ->sortable()
-                    ->searchable(),
+                    ->toggleable(),
                 Tables\Columns\TextColumn::make('processType.name')
                     ->label('Tipo de proceso')
                     ->wrap()
                     ->searchable()
-                    ->sortable(),
-                // Tables\Columns\TextColumn::make('sent_to_lawyer_at')
-                //     ->label('Fecha de envío a revisión jurídico')
-                //     ->wrapHeader()
-                //     ->sortable()
-                //     ->searchable(),
+                    ->sortable()
+                    ->toggleable(),
+                Tables\Columns\TextColumn::make('sended_revision_lawyer_at')
+                    ->label('Fecha de envío a revisión jurídico')
+                    ->wrapHeader()
+                    ->searchable()
+                    ->sortable()
+                    ->toggleable(),
                 Tables\Columns\TextColumn::make('revision_by_lawyer_at')
                     ->label('Revisión por jurídico')
                     ->dateTime('Y-m-d H:i')
+                    ->searchable()
                     ->sortable()
-                    ->searchable(),
-                // Tables\Columns\TextColumn::make('sent_to_revision_by_commune_at')
-                //     ->label('Fecha de envío a revisión por comuna')
-                //     ->dateTime('Y-m-d H:i')
-                //     ->sortable()
-                //     ->searchable(),
+                    ->toggleable(),
+                Tables\Columns\TextColumn::make('sended_revision_commune_at')
+                    ->label('Fecha de envío a revisión por comuna')
+                    ->dateTime('Y-m-d H:i')
+                    ->searchable()
+                    ->sortable()
+                    ->toggleable(),
                 Tables\Columns\TextColumn::make('revision_by_commune_at')
                     ->label('Fecha revisión por comuna')
                     ->dateTime('Y-m-d H:i')
+                    ->searchable()
                     ->sortable()
-                    ->searchable(),
-
-                Tables\Columns\ImageColumn::make('endorses.avatar')
+                    ->toggleable(),
+                Tables\Columns\TextColumn::make('sended_endorses_at')
+                    ->label('Fecha de envío a vización')
+                    ->dateTime('Y-m-d H:i')
+                    ->searchable()
+                    ->sortable()
+                    ->toggleable(),
+                Tables\Columns\TextColumn::make('endorses.initials')
                     ->label('Visaciones')
-                    ->circular()
-                    ->stacked(),
+                    ->listWithLineBreaks()
+                    ->bulleted()
+                    ->toggleable(),
                 Tables\Columns\TextColumn::make('endorses.approver_at')
                     ->label('Fecha visaciones')
-                    ->bulleted(),
+                    ->listWithLineBreaks()
+                    ->bulleted()
+                    ->toggleable(),
                 Tables\Columns\TextColumn::make('sended_to_commune_at')
                     ->label('Fecha de envío a comuna')
                     ->wrapHeader()
+                    ->searchable()
                     ->sortable()
-                    ->searchable(),
+                    ->toggleable(),
                 Tables\Columns\TextColumn::make('returned_from_commune_at')
                     ->label('Fecha de recepción de comuna')
                     ->wrapHeader()
                     ->sortable()
-                    ->searchable(),
+                    ->searchable()
+                    ->toggleable(),
                 Tables\Columns\TextColumn::make('approval.created_at')
                     ->label('Fecha envío a firma Director')
                     ->wrapHeader()
-                    ->date('Y-m-d'),
+                    ->date('Y-m-d')
+                    ->searchable()
+                    ->sortable()
+                    ->toggleable(),
                 Tables\Columns\TextColumn::make('approval.approver_at')
                     ->label('Fecha firma Director')
                     ->wrapHeader()
-                    ->date('Y-m-d'),
-
+                    ->date('Y-m-d')
+                    ->searchable()
+                    ->sortable()
+                    ->toggleable(),
                 Tables\Columns\TextColumn::make('number')
                     ->label('Número of partes')
                     ->numeric()
-                    ->sortable(),
+                    ->searchable()
+                    ->sortable()
+                    ->toggleable(),
                 Tables\Columns\TextColumn::make('date')
                     ->label('Fecha de of partes')
                     ->date('Y-m-d')
-                    ->sortable(),
+                    ->searchable()
+                    ->sortable()
+                    ->toggleable(),
             ])
             ->filters([
                 Tables\Filters\SelectFilter::make('Tipo de proceso')
