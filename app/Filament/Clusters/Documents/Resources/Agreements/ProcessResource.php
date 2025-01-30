@@ -569,7 +569,7 @@ class ProcessResource extends Resource
                 ->columns(2)
                 ->hiddenOn('create'),
 
-            Forms\Components\Section::make('Revision Comuna')
+            Forms\Components\Section::make('Revision de Comuna')
                 ->headerActions([
                     Forms\Components\Actions\Action::make('Solicitar revisión comuna')
                         ->label('Solicitar Revisión')

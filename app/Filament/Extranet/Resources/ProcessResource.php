@@ -64,7 +64,7 @@ class ProcessResource extends Resource
                     ->hiddenOn('create'),
 
             //crear section donde se muestren revision_by_commune_at y revision_by_commune_user_id. debe tener un boton para aprobar y modificar esos valores.
-            Forms\Components\Section::make('Revision de la comuna')
+            Forms\Components\Section::make('Revision de Comuna')
                 ->schema([
                     Forms\Components\Fieldset::make('Revisión de la comuna')
                         ->schema([
@@ -102,7 +102,7 @@ class ProcessResource extends Resource
                 ->hiddenOn('create')
                 ->columnSpanFull(),
 
-            Forms\Components\Section::make('Firma del alcalde')
+            Forms\Components\Section::make('Firma de Comuna')
                 ->schema([
                     Forms\Components\Fieldset::make('Devolución de la comuna')
                         ->schema([
