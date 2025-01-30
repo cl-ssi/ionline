@@ -33,10 +33,11 @@ class ProcessCommunePdf extends Notification implements ShouldQueue
         ]);
 
         return (new MailMessage)
-                    ->subject('Nuevo Proceso Comunal')
+                    ->subject('Solicita firma de comuna - proceso comunal')
                     ->greeting('Hola!')
-                    ->line('Se ha creado un nuevo proceso comunal.')
+                    ->line('Se solicita firma de documento por parte de la autoridad comunal.')
                     ->line('Adjunto al correo va el PDF en referencia.')
+                    ->line('Una vez firmado debe ser cargado en la plataforma.')
                     // ->action('Ver Proceso', route('documents.agreements.processes.view', [$this->record]))
                     // ->line('Gracias por usar nuestra aplicación!')
                     ->attachData($pdf->output(), 'proceso_' . $this->record->id . '.pdf', [

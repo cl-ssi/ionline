@@ -2,7 +2,8 @@
 
 namespace App\Notifications\Documents\Agreeements;
 
-use App\Filament\Clusters\Documents\Resources\Agreements\ProcessResource;
+// use App\Filament\Clusters\Documents\Resources\Agreements\ProcessResource;
+use App\Filament\Extranet\Resources\ProcessResource;
 use App\Models\Documents\Agreements\Process;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -38,12 +39,15 @@ class NewProcessCommuneNotification extends Notification implements ShouldQueue
      */
     public function toMail(object $notifiable): MailMessage
     {
+        // Use the correct panel ID (extranet) in the URL generation
+        $url = ProcessResource::getUrl('edit', ['record' => $this->process], panel: 'extranet');
+        
         return (new MailMessage)
             ->level('info')
             ->subject('Proceso para revisión ' . $this->process->id)
             ->greeting('Estimado/a')
             ->line('Nuevo proceso para revisión Nº: ' . $this->process->id)
-            ->action('Ver Proceso ' . $this->process->id, ProcessResource::getUrl('edit', [$this->process->id]) )
+            ->action('Ver Proceso ' . $this->process->id, $url)
             ->salutation('Saludos cordiales.');
     }
 
