@@ -239,7 +239,7 @@ class ProcessReportResource extends Resource
             ->bulkActions([
                 //
             ])
-            ->paginated([50, 100]);
+            ->paginated([100,250,500]);
     }
 
     public static function getRelations(): array
