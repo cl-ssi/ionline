@@ -53,8 +53,10 @@ return new class extends Migration
 
             $table->datetime('revision_by_lawyer_at')->nullable();
             $table->foreignId('revision_by_lawyer_user_id')->nullable()->constrained('users')->nullOnDelete();
+
             $table->datetime('revision_by_commune_at')->nullable();
             $table->foreignId('revision_by_commune_user_id')->nullable()->constrained('users')->nullOnDelete();
+
             $table->datetime('sended_to_commune_at')->nullable();
             $table->datetime('returned_from_commune_at')->nullable();
 

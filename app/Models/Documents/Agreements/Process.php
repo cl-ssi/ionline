@@ -66,17 +66,24 @@ class Process extends Model
         'date',
         'status',
 
-        // 'document_id',
         'document_date',
         'document_content',
         'previous_process_id',
 
+        'sended_revision_lawyer_at',
         'revision_by_lawyer_at',
         'revision_by_lawyer_user_id',
+
+        'sended_revision_commune_at',
         'revision_by_commune_at',
         'revision_by_commune_user_id',
+
+        'sended_endorses_at',
+    
         'sended_to_commune_at',
         'returned_from_commune_at',
+
+        'resolution_id',
 
         'establishment_id',
     ];
@@ -88,6 +95,9 @@ class Process extends Model
         'sended_to_commune_at'     => 'date',
         'returned_from_commune_at' => 'date',
         'date'                     => 'date',
+        'sended_revision_lawyer_at' => 'date',
+        'sended_revision_commune_at' => 'date',
+        'sended_endorses_at'        => 'date',
         'establishments'           => 'array',
         'status'                   => Status::class,
     ];
@@ -192,6 +202,11 @@ class Process extends Model
     public function finalProcessFile(): MorphOne
     {
         return $this->morphOne(File::class, 'fileable')->where('type', 'final_process_file');
+    }
+
+    public function resolution(): BelongsTo
+    {
+        return $this->belongsTo(Process::class, 'resolution_id');
     }
 
     /**
