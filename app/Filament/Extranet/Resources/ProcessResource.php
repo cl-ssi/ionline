@@ -2,26 +2,28 @@
 
 namespace App\Filament\Extranet\Resources;
 
-use App\Enums\Documents\Agreements\Status;
-use App\Filament\Clusters\Documents\Resources\Agreements\ProgramResource\RelationManagers\ProcessesRelationManager;
-use App\Filament\Extranet\Resources\ProcessResource\Pages;
-use App\Filament\Extranet\Resources\ProcessResource\RelationManagers;
-use App\Models\Documents\Agreements\Process;
-use App\Models\Documents\Agreements\Signer;
-use App\Models\Establishment;
+use Carbon\Carbon;
 use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
 use Filament\Tables;
-use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
-use App\Filament\RelationManagers\CommentsRelationManager;
-use Filament\Support\Enums\Alignment;
 use Filament\Forms\Get;
 use Filament\Forms\Set;
+use Filament\Forms\Form;
+use Filament\Tables\Table;
+use App\Models\Establishment;
+use Notifications\Notification;
+use Filament\Resources\Resource;
 use Illuminate\Support\Collection;
+use Filament\Support\Enums\Alignment;
+use Illuminate\Database\Eloquent\Builder;
+use App\Enums\Documents\Agreements\Status;
+use App\Models\Documents\Agreements\Signer;
+use App\Models\Documents\Agreements\Process;
+use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\Filament\Extranet\Resources\ProcessResource\Pages;
+use App\Filament\RelationManagers\CommentsRelationManager;
 use Mohamedsabil83\FilamentFormsTinyeditor\Components\TinyEditor;
+use App\Filament\Extranet\Resources\ProcessResource\RelationManagers;
+use App\Filament\Clusters\Documents\Resources\Agreements\ProgramResource\RelationManagers\ProcessesRelationManager;
 
 class ProcessResource extends Resource
 {
@@ -47,9 +49,10 @@ class ProcessResource extends Resource
                     ->headerActions([
                     ])
                     ->footerActions([
-                        Forms\Components\Actions\Action::make('aprobar_cambios')
-                            ->icon('bi-save')
-                            ->action('save'),
+                        Forms\Components\Actions\Action::make('Ver')
+                            ->icon('heroicon-m-eye')
+                            ->url(fn (Process $record) => route('documents.agreements.processes.view', [$record]))
+                            ->openUrlInNewTab(),
                     ])
                     ->footerActionsAlignment(Alignment::End)
                     ->schema([
@@ -60,7 +63,46 @@ class ProcessResource extends Resource
                     ])
                     ->hiddenOn('create'),
 
-            Forms\Components\Section::make('Comuna')
+            //crear section donde se muestren revision_by_commune_at y revision_by_commune_user_id. debe tener un boton para aprobar y modificar esos valores.
+            Forms\Components\Section::make('Revision de la comuna')
+                ->schema([
+                    Forms\Components\Fieldset::make('Revisión de la comuna')
+                        ->schema([
+                            Forms\Components\TextInput::make('revision_by_commune_at')
+                                ->label('Fecha de revisión')
+                                ->type('datetime-local')
+                                ->columnSpanFull()
+                                ->formatStateUsing(fn ($state) => $state ? Carbon::parse($state)->format('Y-m-d H:i') : null)
+                                ->disabled(),
+                            Forms\Components\Select::make('revision_by_commune_user_id')
+                                ->label('Revisado por')
+                                ->relationship('revisionByCommuneUser', 'full_name')
+                                ->columnSpanFull()
+                                ->disabled(),
+                        ])
+                        ->columnSpan(1),
+                ])
+                ->footerActions([
+                    Forms\Components\Actions\Action::make('aprobar')
+                        ->label('Aprobar')
+                        ->icon('bi-save')
+                        ->action(function (Process $record) {
+                            $record->revision_by_commune_at = now();
+                            $record->revision_by_commune_user_id = auth()->id();
+                            $record->save();
+                            Notification::make()
+                                ->title('Revisión aprobada')
+                                ->success()
+                                ->send();
+                        })
+                        ->disabled(fn (?Process $record) => $record?->revision_by_commune_at !== null),
+                ])
+                ->footerActionsAlignment(Alignment::End)
+                ->columns(2)
+                ->hiddenOn('create')
+                ->columnSpanFull(),
+
+            Forms\Components\Section::make('Firma del alcalde')
                 ->schema([
                     Forms\Components\Fieldset::make('Devolución de la comuna')
                         ->schema([
@@ -102,7 +144,8 @@ class ProcessResource extends Resource
                 ->columns(2)
                 ->hiddenOn('create')
                 ->columnSpanFull()
-                ->visible(fn (?Process $record) => $record->processType->sign_commune),
+                //solo se permite si el tipo de proceso es para firma de comuna, y además, si tiene todas las firmas aprobadas.
+                ->visible(fn (?Process $record) => $record->processType->sign_commune && $record->endorses->every(fn ($endorse) => $endorse->status == 1)),
             ])
             ->columns(4);
     }
@@ -164,9 +207,10 @@ class ProcessResource extends Resource
                     ->searchable(),
             ])
             ->actions([
-                // Tables\Actions\ViewAction::make()
-                    // ->url(fn (Process $record) => route('documents.agreements.processes.view', [$record]))
-                    // ->openUrlInNewTab(),
+                Tables\Actions\Action::make('Ver')
+                    ->icon('heroicon-m-eye')
+                    ->url(fn (Process $record) => route('documents.agreements.processes.view', [$record]))
+                    ->openUrlInNewTab(),
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
