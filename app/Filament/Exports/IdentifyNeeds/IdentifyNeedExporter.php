@@ -22,12 +22,16 @@ class IdentifyNeedExporter extends Exporter
                 ->label('Objetivo Estrategico'),
             ExportColumn::make('impactObjective.description')
                 ->label('Objetivo de Impacto'),
+            ExportColumn::make('law')
+                ->label('Ley'),
             ExportColumn::make('availablePlaces.estament.name')
                 ->label('Estamentos asociados a la actividad'),
+            ExportColumn::make('availablePlaces.family_position')
+                ->label('Familia de Cargo'),
             ExportColumn::make('availablePlaces.places_number')
                 ->label('Cupos asociados a la actividad'),
             ExportColumn::make('nature_of_the_need_value')
-                ->label('Cupos asociados a la actividad'),
+                ->label('Naturaleza de la Necesidad'),
             ExportColumn::make('total_hours')
                 ->label('Horas asociadas'),
             ExportColumn::make('mechanism_value')

@@ -133,11 +133,28 @@ class AuthorizeAmountResource extends Resource
                     ->label('Objetivo de Impacto')
                     ->sortable()
                     ->searchable(),
+                Tables\Columns\TextColumn::make('identifyNeed.law')
+                    ->label('Ley N°')
+                    ->getStateUsing(fn ($record) => $record->identifyNeed->law ? number_format($record->identifyNeed->law , 0, ',', '.') : 'Monto no ingresado')
+                    ->sortable()
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('identifyNeed.availablePlaces.estament.name')
                     ->label('Estamentos asociados a la actividad')
                     ->sortable()
                     ->searchable()
                     ->bulleted(),
+                Tables\Columns\TextColumn::make('identifyNeed.availablePlaces')
+                    ->label('Familia de Cargo')
+                    ->getStateUsing(fn ($record) => 
+                        '<ul>' . $record->identifyNeed->availablePlaces
+                            ->pluck('family_position_value')
+                            ->filter()
+                            ->map(fn ($value) => "<li>{$value}</li>")
+                            ->implode('') . '</ul>'
+                    )
+                    ->html() // Esto permite interpretar el HTML
+                    ->sortable()
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('identifyNeed.availablePlaces.places_number')
                     ->label('Cupos asociados a la actividad')
                     ->sortable()
