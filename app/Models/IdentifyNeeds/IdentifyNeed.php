@@ -332,7 +332,12 @@ class IdentifyNeed extends Model implements Auditable
      */
     public function getNatureOfTheNeedValueAttribute(): ?string
     {
-        return ucfirst(strtolower($this->nature_of_the_need));
+        $natureOfTheNeed = [
+            'red asistencial'   => 'Red Asistencial',
+            'dss'               => 'Dirección Servicio de Salud',
+        ];
+
+        return $natureOfTheNeed[$this->nature_of_the_need] ?? null;
     }
 
     /**

@@ -24,6 +24,8 @@ use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\TextInput;
 use Filament\Tables\Enums\FiltersLayout;
 use App\Models\Establishment;
+use Filament\Tables\Actions\ExportAction;
+use App\Filament\Exports\IdentifyNeeds\IdentifyNeedExporter;
 
 class IdentifyNeedResource extends Resource
 {
@@ -520,6 +522,15 @@ class IdentifyNeedResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->headerActions([
+                ExportAction::make()
+                    ->exporter(IdentifyNeedExporter::class)
+                    ->label('Exportar')
+                    ->color('success')
+                    ->icon('heroicon-o-table-cells')
+                    ->modalHeading('Exportar Listado DNC')
+                    ->columnMapping(false),
+            ])
             ->columns([
                 Tables\Columns\TextColumn::make('id')
                     ->label('ID')
@@ -583,6 +594,16 @@ class IdentifyNeedResource extends Resource
                     ->multiple(),
             ], layout: FiltersLayout::AboveContent)
             ->filtersFormColumns(5)
+            ->actions([
+                Tables\Actions\EditAction::make(),
+                Tables\Actions\Action::make('createAuthorizeAmount')
+                    ->label('Autorizar Monto')
+                    ->icon('heroicon-o-check-circle')
+                    ->color('success')
+                    ->visible(fn ($record) => $record->status_value === 'Finalizado') // Solo mostrar si el estado es pendiente
+                    ->requiresConfirmation()
+                    ->action(fn ($record) => $record->createAuthorizeAmount()),
+            ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
