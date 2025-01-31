@@ -557,6 +557,15 @@ class IdentifyNeedResource extends Resource
                     ->label('Unidad Organizacional'),
                 Tables\Columns\TextColumn::make('subject')
                     ->label('Nombre de Actividad'),
+                Tables\Columns\TextColumn::make('law')
+                    ->label('Ley N°')
+                    ->getStateUsing(fn ($record) => $record->law ? number_format($record->law , 0, ',', '.') : '')
+                    ->sortable()
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('nature_of_the_need_value')
+                    ->label('Naturaleza de la Necesidad')
+                    ->sortable()
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('total_value')
                     ->label('$')
                     ->getStateUsing(fn ($record) => number_format($record->total_value, 0, ',', '.') . ' CLP')
@@ -574,7 +583,6 @@ class IdentifyNeedResource extends Resource
             ])
             ->defaultSort('id', 'desc')
             ->filters([
-                // Filtro por Estado
                 Tables\Filters\SelectFilter::make('status')
                     ->label('Estado')
                     ->options([
@@ -585,15 +593,30 @@ class IdentifyNeedResource extends Resource
                     ->multiple()
                     ->searchable(),
 
-                // Filtro por Unidad Organizacional
                 Tables\Filters\SelectFilter::make('organizational_unit_id')
                     ->label('Unidad Organizacional')
                     ->relationship('organizationalUnit', 'name', fn (Builder $query) => $query->where('establishment_id', 38))
                     ->searchable()
                     ->preload()
                     ->multiple(),
+
+                Tables\Filters\SelectFilter::make('law')
+                    ->label('Ley N°')
+                    ->options([
+                        '19664' => '19664',
+                        '18834' => '18834',
+                    ])
+                    ->searchable(),
+                
+                Tables\Filters\SelectFilter::make('nature_of_the_need')
+                    ->label('Naturaleza de la Necesidad')
+                    ->options([
+                        'red asistencial'   => 'Red Asistencial',
+                        'dss'               => 'Dirección Servicio de Salud',
+                    ])
+                    ->searchable(),
             ], layout: FiltersLayout::AboveContent)
-            ->filtersFormColumns(5)
+            ->filtersFormColumns(4)
             ->actions([
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\Action::make('createAuthorizeAmount')
