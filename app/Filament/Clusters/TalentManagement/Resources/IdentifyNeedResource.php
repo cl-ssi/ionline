@@ -31,13 +31,13 @@ class IdentifyNeedResource extends Resource
 {
     protected static ?string $model = IdentifyNeed::class;
 
-    protected static ?string $modelLabel = 'Necesidades de Capacitaciones';
+    protected static ?string $modelLabel = 'Detección de Necesidades';
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     protected static ?string $cluster = TalentManagement::class;
 
-    protected static ?string $navigationGroup = 'DNC';
+    protected static ?string $navigationGroup = 'Ciclo de Capacitación';
 
     protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
 

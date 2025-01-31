@@ -20,13 +20,15 @@ class AnnualBudgetResource extends Resource
 {
     protected static ?string $model = AnnualBudget::class;
 
-    protected static ?string $modelLabel = 'Presupuestos';
+    protected static ?string $modelLabel = 'Presupuesto';
+
+    protected static ?string $pluralModelLabel = 'Presupuestos';
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     protected static ?string $cluster = TalentManagement::class;
 
-    protected static ?string $navigationGroup = 'DNC';
+    protected static ?string $navigationGroup = 'Ciclo de Capacitación';
 
     protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
 

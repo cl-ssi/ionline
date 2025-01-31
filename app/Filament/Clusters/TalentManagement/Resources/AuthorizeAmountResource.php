@@ -21,13 +21,15 @@ class AuthorizeAmountResource extends Resource
 {
     protected static ?string $model = AuthorizeAmount::class;
 
-    protected static ?string $modelLabel = 'Montos Autorizados';
+    protected static ?string $modelLabel = 'Planificación';
+
+    protected static ?string $pluralModelLabel = 'Planificaciones';
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     protected static ?string $cluster = TalentManagement::class;
 
-    protected static ?string $navigationGroup = 'DNC';
+    protected static ?string $navigationGroup = 'Ciclo de Capacitación';
 
     protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
 
@@ -135,7 +137,7 @@ class AuthorizeAmountResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('identifyNeed.law')
                     ->label('Ley N°')
-                    ->getStateUsing(fn ($record) => $record->identifyNeed->law ? number_format($record->identifyNeed->law , 0, ',', '.') : 'Monto no ingresado')
+                    ->getStateUsing(fn ($record) => $record->identifyNeed->law ? number_format($record->identifyNeed->law , 0, ',', '.') : '')
                     ->sortable()
                     ->searchable(),
                 Tables\Columns\TextColumn::make('identifyNeed.availablePlaces.estament.name')
