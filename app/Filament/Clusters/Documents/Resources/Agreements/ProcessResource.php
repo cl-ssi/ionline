@@ -478,6 +478,7 @@ class ProcessResource extends Resource
                 ->schema([
                     TinyEditor::make('document_content')
                         ->hiddenLabel()
+                        ->maxHeight(1200)
                         ->profile('ionline')
                         ->disabled(fn (?Process $record) => $record->status === Status::Finished)
                         ->hintActions(
