@@ -13,7 +13,7 @@ class AuthorizeAmountPolicy
      */
     public function viewAny(User $user): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -21,7 +21,7 @@ class AuthorizeAmountPolicy
      */
     public function view(User $user, AuthorizeAmount $authorizeAmount): bool
     {
-        return false;
+        return true;
     }
 
     /**

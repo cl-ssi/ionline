@@ -499,12 +499,18 @@ class IdentifyNeed extends Model implements Auditable
     public function createAuthorizeAmount()
     {
         if($this->authorizeAmount){
-            dd('sí');
+            return redirect()->route('filament.intranet.talent-management.resources.authorize-amounts.edit', [
+                'record' => $this->authorizeAmount
+            ]);
         }
-        else{
-            $this->authorizeAmount()->create([
+        else{ 
+            $authorizeAmount = $this->authorizeAmount()->create([
                 'identify_need_id'  => $this->id,
                 'status'            => 'pending', 
+            ]);
+
+            return redirect()->route('filament.intranet.talent-management.resources.authorize-amounts.edit', [
+                'record' => $authorizeAmount->id
             ]);
         }
     }
