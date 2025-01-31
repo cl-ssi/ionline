@@ -53,7 +53,7 @@ class AnnualBudgetResource extends Resource
                     Forms\Components\Select::make('law')
                         ->label('Ley N°')
                         ->options([
-                            '18843'  => '18.843',
+                            '18834'  => '18.834',
                             '19664'  => '19.664', 
                         ])
                         ->preload()
