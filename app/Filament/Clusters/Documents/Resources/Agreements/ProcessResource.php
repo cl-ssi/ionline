@@ -345,7 +345,7 @@ class ProcessResource extends Resource
                         ->label('Cuotas')
                         ->numeric()
                         ->default(null)
-                        ->helperText('Solo para programa de anticipo de aporte estatal'),
+                        ->helperText('Solo para programa de anticipo de aporte estatal y por cuotas'),
                     Forms\Components\DatePicker::make('document_date')
                         ->label('Fecha del documento')
                         ->helperText('Para procesos que llevan fecha en el documento, convenios, adendums, etc.'),

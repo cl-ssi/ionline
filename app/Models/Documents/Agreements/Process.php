@@ -167,6 +167,45 @@ class Process extends Model
         return $this->hasMany(Quota::class, 'process_id');
     }
 
+    protected function quotasCount(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->quotas_qty ?? $this->quotas()->count(),
+        );
+    }
+
+    // public function monthsArray(): Attribute 
+    // {
+    //     return Attribute::make(
+    //         get: fn () => array_slice([
+    //             'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+    //             'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+    //         ], 0, $this->quotasCount)
+    //     );
+    // }
+
+    public function monthsArray(): Attribute 
+{
+    return Attribute::make(
+        get: fn () => collect(
+            array_slice([
+                'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+                'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+            ], 0, $this->quotasCount)
+        )->map(fn ($month) => (object)[
+            'month' => $month,
+            'amount' => number_format($this->quotasDivision, 2, ',', '.')
+        ])
+    );
+}
+
+    protected function quotasDivision(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->quotas_qty ? $this->total_amount / $this->quotasCount : null,
+        );
+    }
+
     /**
      * Get all of the comments of a model.
      */
