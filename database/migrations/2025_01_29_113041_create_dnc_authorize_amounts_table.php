@@ -15,9 +15,10 @@ return new class extends Migration
             $table->id();
 
             $table->foreignId('identify_need_id')->nullable()->constrained('dnc_identify_needs');
-            $table->float('authorize_amount', 15, 2)->nullable();
             $table->string('status')->nullable();
+            $table->float('authorize_amount', 15, 2)->nullable();
             $table->float('executed_amount', 15, 2)->nullable();
+            $table->text('observation')->nullable();
 
             $table->timestamps();
             $table->softDeletes();

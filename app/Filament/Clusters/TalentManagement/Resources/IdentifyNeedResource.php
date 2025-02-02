@@ -564,7 +564,6 @@ class IdentifyNeedResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('nature_of_the_need_value')
                     ->label('Naturaleza de la Necesidad')
-                    ->sortable()
                     ->searchable(),
                 Tables\Columns\TextColumn::make('total_value')
                     ->label('$')
@@ -580,11 +579,23 @@ class IdentifyNeedResource extends Resource
                         });
                     })
                     ->sortable(),
+                Tables\Columns\TextColumn::make('authorizeAmount.status')
+                    ->label('Estado Planificación')
+                    ->getStateUsing(fn ($record) => $record->authorizeAmount ? $record->authorizeAmount->status_value : '')
+                    ->sortable()
+                    ->badge()
+                    ->color(fn (string $state): string => match ($state) {
+                        'Pendiente'         => 'info',
+                        'Lista de Espera'   => 'warning',
+                        'Aceptada'          => 'success',
+                        'Rechazada'         => 'danger',
+                    })
+                    ->alignment('center'),
             ])
             ->defaultSort('id', 'desc')
             ->filters([
                 Tables\Filters\SelectFilter::make('status')
-                    ->label('Estado')
+                    ->label('Estado Aprobaciones')
                     ->options([
                         'saved'     => 'Guardado',
                         'completed' => 'Finalizado',
@@ -603,20 +614,37 @@ class IdentifyNeedResource extends Resource
                 Tables\Filters\SelectFilter::make('law')
                     ->label('Ley N°')
                     ->options([
-                        '19664' => '19664',
-                        '18834' => '18834',
+                        '19664' => '19.664',
+                        '18834' => '18.834',
                     ])
                     ->searchable(),
                 
                 Tables\Filters\SelectFilter::make('nature_of_the_need')
-                    ->label('Naturaleza de la Necesidad')
+                    ->label('Nat. de la Necesidad')
                     ->options([
                         'red asistencial'   => 'Red Asistencial',
                         'dss'               => 'Dirección Servicio de Salud',
                     ])
                     ->searchable(),
+                
+                Tables\Filters\SelectFilter::make('authorize_amount_status')
+                    ->label('Estado Planificación')
+                    ->options([
+                        'waitlist'  => 'Lista de Espera',
+                        'accepted'  => 'Aceptada',
+                        'rejected'  => 'Rechazada',
+                    ])
+                    ->query(function (Builder $query, array $data) {
+                        if (!empty($data['values'])) {
+                            $query->whereHas('authorizeAmount', function (Builder $subQuery) use ($data) {
+                                $subQuery->whereIn('status', $data['values']);
+                            });
+                        }
+                    })
+                    ->multiple()
+                    ->searchable(),
             ], layout: FiltersLayout::AboveContent)
-            ->filtersFormColumns(4)
+            ->filtersFormColumns(5)
             ->actions([
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\Action::make('createAuthorizeAmount')

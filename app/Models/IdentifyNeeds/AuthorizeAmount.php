@@ -16,8 +16,10 @@ class AuthorizeAmount extends Model implements Auditable
 
     protected $fillable = [
         'identify_need_id',
-        'authorize_amount',
         'status',
+        'authorize_amount',
+        'executed_amount',
+        'observation',
     ];
 
     public function identifyNeed(): BelongsTo

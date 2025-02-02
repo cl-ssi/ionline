@@ -498,7 +498,7 @@ class IdentifyNeedResource extends Resource
                     ->label('Fecha Creación')
                     ->dateTime('d-m-Y H:i:s'),
                 Tables\Columns\TextColumn::make('status')
-                    ->label('Estado')
+                    ->label('Estado Aprobaciones')
                     ->getStateUsing(fn ($record) => $record->status_value)
                     ->sortable()
                     ->badge()
@@ -531,6 +531,18 @@ class IdentifyNeedResource extends Resource
                         });
                     })
                     ->sortable(),
+                Tables\Columns\TextColumn::make('authorizeAmount.status')
+                    ->label('Estado PLanificación')
+                    ->getStateUsing(fn ($record) => $record->status_value)
+                    ->sortable()
+                    ->badge()
+                    ->color(fn (string $state): string => match ($state) {
+                        'Pendiente'         => 'info',
+                        'Lista de Espera'   => 'warning',
+                        'Aceptada'          => 'success',
+                        'Rechazada'         => 'danger',
+                    })
+                    ->alignment('center'),
             ])
             ->filters([
                 //

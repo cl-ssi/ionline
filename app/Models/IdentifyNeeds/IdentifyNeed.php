@@ -171,7 +171,7 @@ class IdentifyNeed extends Model implements Auditable
      */
     public function authorizeAmount(): HasOne
     {
-        return $this->hasOne(AuthorizeAmount::class);
+        return $this->hasOne(AuthorizeAmount::class, 'identify_need_id');
     }
 
     /*

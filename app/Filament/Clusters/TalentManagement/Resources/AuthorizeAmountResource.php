@@ -61,9 +61,8 @@ class AuthorizeAmountResource extends Resource
                                 ])
                                 ->preload()
                                 ->columnSpan(6)
-                                ->disabled()
-                                ->required()
-                                ->dehydrated(),
+                                ->live()
+                                ->required(),
                             Forms\Components\TextInput::make('subject')
                                 ->label('Nombre de la actividad')
                                 ->afterStateHydrated(function (callable $set, $record) {
@@ -91,13 +90,26 @@ class AuthorizeAmountResource extends Resource
                                 })
                                 ->disabled()
                                 ->columnSpan(6),
+                            Forms\Components\TextInput::make('requested_amount')
+                                ->label('Monto Solicitado')
+                                ->afterStateHydrated(function (callable $set, $record) {
+                                    if ($record && $record->identifyNeed) {
+                                        $set('requested_amount', $record->identifyNeed->total_value);
+                                    }
+                                })
+                                ->numeric()
+                                ->columnSpan(6)
+                                ->disabled(),
                             Forms\Components\TextInput::make('authorize_amount')
                                 ->label('Monto Autorizado')
                                 ->numeric()
-                                ->minValue(1)
+                                ->minValue(0)
                                 ->columnSpan(6)
-                                ->disabled(fn ($record) => $record->authorize_amount != null)
-                                ->required(),
+                                ->required(fn ($get) => !in_array($get('status'), ['waitlist', 'rejected'])),
+                            Forms\Components\Textarea::make('observation')
+                                ->label('Observaciones')
+                                ->rows(3)
+                                ->columnSpanFull(),
                         ]),
                     ]),
             ]);
@@ -112,7 +124,7 @@ class AuthorizeAmountResource extends Resource
                     ->sortable()
                     ->searchable(),
                 Tables\Columns\TextColumn::make('status')
-                    ->label('Estado')
+                    ->label('Estado Planificación')
                     ->getStateUsing(fn ($record) => $record->status_value)
                     ->sortable()
                     ->badge()
