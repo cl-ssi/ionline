@@ -33,8 +33,8 @@ class EditAuthorizeAmount extends EditRecord
                         ->send();
                     
                     return;
-                })
-                ->visible(fn () => $this->record->authorize_amount == null && !in_array($this->record['status'], ['rejected', 'completed'])), // Permite cuando el estado es Guardado o Rechazado
+                }),
+                // ->visible(fn () => $this->record->authorize_amount == null && !in_array($this->record['status'], ['rejected', 'completed'])), // Permite cuando el estado es Guardado o Rechazado
             Actions\Action::make('cancelar')
                 ->label('Cancelar')
                 ->color('gray')

@@ -16,6 +16,10 @@ class IdentifyNeedExporter extends Exporter
         return [
             ExportColumn::make('id')
                 ->label('ID DNC'),
+            ExportColumn::make('user.full_name')
+                ->label('Funcionario'),
+            ExportColumn::make('organizationalUnit.name')
+                ->label('Unidad Organizacional'),
             ExportColumn::make('subject')
                 ->label('Nombre de la actividad'),
             ExportColumn::make('strategicAxis.name')
@@ -24,6 +28,10 @@ class IdentifyNeedExporter extends Exporter
                 ->label('Objetivo de Impacto'),
             ExportColumn::make('law')
                 ->label('Ley'),
+            ExportColumn::make('question_5')
+                ->label('¿Qué objetivo se espera alcanzar con esta capacitación?'),
+            ExportColumn::make('question_6')
+                ->label('¿Qué resultados inmediatos espera lograr después de esta capacitación?'),
             ExportColumn::make('availablePlaces.estament.name')
                 ->label('Estamentos asociados a la actividad'),
             ExportColumn::make('availablePlaces.family_position')

@@ -20,6 +20,7 @@ class StatsAuthorizeAmountOverview extends BaseWidget
                 $query->where('law', '18834')
                     ->where('nature_of_the_need', 'red asistencial');
             })
+            ->where('status', 'accepted')
             ->sum('authorize_amount');
         
         // PRESUPUESTO ANUAL LEY 18.834 DSS
@@ -31,6 +32,7 @@ class StatsAuthorizeAmountOverview extends BaseWidget
                 $query->where('law', '18834')
                     ->where('nature_of_the_need', 'dss');
             })
+            ->where('status', 'accepted')
             ->sum('authorize_amount');
         
         // PRESUPUESTO ANUAL LEY 19.664 RED ASISTENCIAL
@@ -42,6 +44,7 @@ class StatsAuthorizeAmountOverview extends BaseWidget
                 $query->where('law', '19664')
                     ->where('nature_of_the_need', 'red asistencial');
             })
+            ->where('status', 'accepted')
             ->sum('authorize_amount');
         
         // PRESUPUESTO ANUAL LEY 19.664 DSS
@@ -53,6 +56,7 @@ class StatsAuthorizeAmountOverview extends BaseWidget
                 $query->where('law', '19664')
                     ->where('nature_of_the_need', 'dss');
             })
+            ->where('status', 'accepted')
             ->sum('authorize_amount');
 
         return [
