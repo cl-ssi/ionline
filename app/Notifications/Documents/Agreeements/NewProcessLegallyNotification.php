@@ -40,9 +40,9 @@ class NewProcessLegallyNotification extends Notification
     {
         return (new MailMessage)
             ->level('info')
-            ->subject('Proceso para revisión ' . $this->process->id)
+            ->subject('Revisión para proceso N° ' . $this->process->id)
             ->greeting('Estimado/a')
-            ->line('Nuevo proceso para revisión Nº: ' . $this->process->id)
+            ->line('Nueva revisión para proceso Nº: ' . $this->process->id)
             ->action('Ver Proceso ' . $this->process->id, ProcessResource::getUrl('edit', [$this->process->id]) )
             ->salutation('Saludos cordiales.');
     }

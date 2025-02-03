@@ -35,7 +35,7 @@ class CommentObserver
                 ->get();
 
             Notification::make()
-                ->title('Nuevo comentario registrado en un proceso')
+                ->title('Nuevo comentario registrado en proceso ' . $comment->commentable_id)
                 ->actions([
                     Action::make('IrAlProceso')
                         ->button()

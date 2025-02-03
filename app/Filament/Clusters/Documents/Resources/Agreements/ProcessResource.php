@@ -534,7 +534,7 @@ class ProcessResource extends Resource
                             $recipients = User::permission('Agreement: legally')->get();
 
                             Notifications\Notification::make()
-                                ->title('Solicitud de revisión de proceso')
+                                ->title('Solicitud de revisión de proceso N°'. $record->id)
                                 ->actions([
                                     Notifications\Actions\Action::make('IrAlProceso')
                                         ->button()
@@ -549,7 +549,7 @@ class ProcessResource extends Resource
                             }
 
                             Notifications\Notification::make()
-                                ->title('Solicitud de revisión enviada a jurídico')
+                                ->title('Solicitud de revisión N°' . $record->id . ' enviada a jurídico')
                                 ->success()
                                 ->send();
 
@@ -1034,7 +1034,7 @@ class ProcessResource extends Resource
                                 ->get();
 
                             Notifications\Notification::make()
-                                ->title('Nuevo proceso aprobado por jurídico')
+                                ->title('Nuevo proceso N°' . $record->id . ' aprobado por jurídico')
                                 ->actions([
                                     Notifications\Actions\Action::make('IrAlProceso')
                                         ->button()
@@ -1045,7 +1045,7 @@ class ProcessResource extends Resource
 
                             // Notificar al referente.
                             Notifications\Notification::make()
-                                ->title('Nuevo proceso aprobado por jurídico')
+                                ->title('Nuevo proceso N°' . $record->id . ' aprobado por jurídico')
                                 ->actions([
                                     Notifications\Actions\Action::make('IrAlProceso')
                                         ->button()
