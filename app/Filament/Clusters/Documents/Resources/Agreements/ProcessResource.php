@@ -581,17 +581,19 @@ class ProcessResource extends Resource
                                 ->send();
 
                             // establecer fecha de solicitud de revisión
-                            $record->update(['sended_revision_lawyer_at' => now()]);
+                            $record->update(['sended_revision_lawyer_at' => now(), 'sended_revision_lawyer_user_id' => auth()->id()]);
 
                         })
                         ->disabled(fn (?Process $record) => $record->revision_by_lawyer_user_id !== null),
                 ])
                 ->schema([
-                    Forms\Components\Grid::make(3)
+                    Forms\Components\Grid::make(2)
                         ->schema([
                             Forms\Components\DatePicker::make('sended_revision_lawyer_at')
-                                ->label('Fecha de envío')
+                                ->label('Fecha de solicitud')
                                 ->disabled(),
+                            Forms\Components\Placeholder::make('Solicitado por')
+                                ->content(fn (?Process $record) => $record->lawyerRevisionSenderUser?->shortName),
                             Forms\Components\DatePicker::make('revision_by_lawyer_at')
                                 ->label('Fecha de revisión')
                                 ->disabled(),
@@ -625,16 +627,18 @@ class ProcessResource extends Resource
                                 ->send();
 
                             // establecer fecha de solicitud de revisión
-                            $record->update(['sended_revision_commune_at' => now()]);
+                            $record->update(['sended_revision_commune_at' => now(), 'sended_revision_commune_user_id' => auth()->id()]);
                         })
                         ->disabled(fn (?Process $record) => $record->revision_by_commune_user_id !== null),
                 ])
                 ->schema([
-                    Forms\Components\Grid::make(3)
+                    Forms\Components\Grid::make(2)
                         ->schema([
                             Forms\Components\DatePicker::make('sended_revision_commune_at')
-                                ->label('Fecha de envío')
+                                ->label('Fecha de solicitud')
                                 ->disabled(),
+                            Forms\Components\Placeholder::make('Solicitado por')
+                                ->content(fn (?Process $record) => $record->communeRevisionSenderUser?->full_name),
                             Forms\Components\DatePicker::make('revision_by_commune_at')
                                 ->label('Fecha de revisión'),
                             Forms\Components\Placeholder::make('Revisado por')

@@ -71,10 +71,12 @@ class Process extends Model
         'previous_process_id',
 
         'sended_revision_lawyer_at',
+        'sended_revision_lawyer_user_id',
         'revision_by_lawyer_at',
         'revision_by_lawyer_user_id',
 
         'sended_revision_commune_at',
+        'sended_revision_commune_user_id',
         'revision_by_commune_at',
         'revision_by_commune_user_id',
 
@@ -137,9 +139,19 @@ class Process extends Model
         return $this->belongsTo(Document::class, 'document_id');
     }
 
+    public function lawyerRevisionSenderUser(): BelongsTo|Builder
+    {
+        return $this->belongsTo(User::class, 'sended_revision_lawyer_user_id')->withTrashed();
+    }
+
     public function revisionByLawyerUser(): BelongsTo|Builder
     {
         return $this->belongsTo(User::class, 'revision_by_lawyer_user_id')->withTrashed();
+    }
+
+    public function communeRevisionSenderUser(): BelongsTo|Builder
+    {
+        return $this->belongsTo(User::class, 'sended_revision_commune_user_id')->withTrashed();
     }
 
     public function revisionByCommuneUser(): BelongsTo|Builder
