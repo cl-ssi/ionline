@@ -587,11 +587,17 @@ class ProcessResource extends Resource
                         ->disabled(fn (?Process $record) => $record->revision_by_lawyer_user_id !== null),
                 ])
                 ->schema([
-                    Forms\Components\DatePicker::make('revision_by_lawyer_at')
-                        ->label('Fecha de revisión')
-                        ->disabled(),
-                    Forms\Components\Placeholder::make('Revisado por')
-                        ->content(fn (?Process $record) => $record->revisionByLawyerUser?->shortName),
+                    Forms\Components\Grid::make(3)
+                        ->schema([
+                            Forms\Components\DatePicker::make('sended_revision_lawyer_at')
+                                ->label('Fecha de envío')
+                                ->disabled(),
+                            Forms\Components\DatePicker::make('revision_by_lawyer_at')
+                                ->label('Fecha de revisión')
+                                ->disabled(),
+                            Forms\Components\Placeholder::make('Revisado por')
+                                ->content(fn (?Process $record) => $record->revisionByLawyerUser?->shortName),
+                        ]),
                 ])
                 ->columnSpan(2)
                 ->columns(2)
@@ -624,11 +630,16 @@ class ProcessResource extends Resource
                         ->disabled(fn (?Process $record) => $record->revision_by_commune_user_id !== null),
                 ])
                 ->schema([
-                    Forms\Components\DatePicker::make('revision_by_commune_at')
-                        ->label('Fecha de revisión'),
-                    Forms\Components\Placeholder::make('Revisado por')
-                        ->content(fn (?Process $record) => $record->revisionByCommuneUser?->full_name),
-
+                    Forms\Components\Grid::make(3)
+                        ->schema([
+                            Forms\Components\DatePicker::make('sended_revision_commune_at')
+                                ->label('Fecha de envío')
+                                ->disabled(),
+                            Forms\Components\DatePicker::make('revision_by_commune_at')
+                                ->label('Fecha de revisión'),
+                            Forms\Components\Placeholder::make('Revisado por')
+                                ->content(fn (?Process $record) => $record->revisionByCommuneUser?->full_name),
+                        ]),
                 ])
                 ->columnSpan(2)
                 ->visible(fn (?Process $record) => $record->processType->revision_commune)
