@@ -426,6 +426,33 @@ class ProcessResource extends Resource
 
             Forms\Components\Section::make('Documento')
                 ->headerActions([
+                    Forms\Components\Actions\Action::make('CopiarDocumento')
+                        ->label('Copiar documento de otro proceso')
+                        ->icon('heroicon-m-copy')
+                        ->modalHeading('Copiar documento de otro proceso')
+                        ->modalDescription('Ingrese el ID del proceso del cual desea copiar el contenido del documento. El contenido del documento del proceso actual será completamente reemplazado por el contenido del documento del proceso fuente. Deberá modificar manualmente los campos que necesite.')
+                        ->modalButton('Copiar')
+                        ->form([
+                            Forms\Components\TextInput::make('source_process_id')
+                                ->label('ID del proceso fuente')
+                                ->numeric()
+                                ->required(),
+                        ])
+                        ->action(function (Process $record, array $data) {
+                            $sourceProcess = Process::find($data['source_process_id']);
+                            if ($sourceProcess) {
+                                $record->update(['document_content' => $sourceProcess->document_content]);
+                                Notifications\Notification::make()
+                                    ->title('Documento copiado')
+                                    ->success()
+                                    ->send();
+                            } else {
+                                Notifications\Notification::make()
+                                    ->title('Proceso no encontrado')
+                                    ->danger()
+                                    ->send();
+                            }
+                        }),
                     Forms\Components\Actions\Action::make('CrearDocumento')
                         ->label('Crear documento del proceso')
                         ->icon('heroicon-m-document')
