@@ -703,9 +703,26 @@ class ProcessResource extends Resource
                                 ->description('O enviar a un usuario específico')
                                 ->schema([
                                     Forms\Components\Select::make('sent_to_user_id')
-                                        ->relationship('sentToUser', 'full_name')
                                         ->label('Usuario (solo para casos en no sea una jefatura)')
                                         ->searchable()
+                                        ->getSearchResultsUsing(function (string $search) {
+                                            $terms = explode(' ', $search);
+                                            return User::query()
+                                                ->where(function ($query) use ($terms) {
+                                                    foreach ($terms as $term) {
+                                                        $query->where(function ($subQuery) use ($term) {
+                                                            $subQuery->where('name', 'like', "%{$term}%")
+                                                                ->orWhere('fathers_family', 'like', "%{$term}%")
+                                                                ->orWhere('mothers_family', 'like', "%{$term}%")
+                                                                ->orWhere('id', 'like', "%{$term}%");
+                                                        });
+                                                    }
+                                                })
+                                                ->get()
+                                                ->mapWithKeys(fn ($user) => [$user->id => "{$user->name} {$user->fathers_family}"])
+                                                ->toArray();
+                                        })
+                                        ->getOptionLabelUsing(fn ($value) => User::find($value) ? User::find($value)->name . ' ' . User::find($value)->fathers_family . ' ' . User::find($value)->mothers_family : 'N/A')
                                         ->columnSpanFull(),
                                 ])
                                 ->collapsed()

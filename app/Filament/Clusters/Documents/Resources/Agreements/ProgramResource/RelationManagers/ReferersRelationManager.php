@@ -52,7 +52,7 @@ class ReferersRelationManager extends RelationManager
                                     ->mapWithKeys(fn ($user) => [$user->id => "{$user->name} {$user->fathers_family}"])
                                     ->toArray();
                             })
-                            ->getOptionLabelUsing(fn ($value) => User::find($value) ? User::find($value)->name . ' ' . User::find($value)->fathers_family : 'N/A'),
+                            ->getOptionLabelUsing(fn ($value) => User::find($value) ? User::find($value)->name . ' ' . User::find($value)->fathers_family . ' ' . User::find($value)->mothers_family : 'N/A'),
                         Forms\Components\Toggle::make('external')->required(),
                     ])
             ])
