@@ -92,11 +92,13 @@ class IndexDtes extends Component
             $q->where('id', $this->filter['id']);
         })
         ->when(isset($this->filter['emisor']), function($q){
-            $value = preg_replace('/[^0-9K]/', '', strtoupper(trim($this->filter['emisor'])));
-            $dv = substr($value, -1);
-            $id = substr($value, 0, -1);
-            $value = $this->filter['emisor'] = number_format($id, 0, '', '.').'-'.$dv;
-            $q->where('emisor', $value);
+            if(trim($this->filter['emisor']) == ''){
+                $value = preg_replace('/[^0-9K]/', '', strtoupper(trim($this->filter['emisor'])));
+                $dv = substr($value, -1);
+                $id = substr($value, 0, -1);
+                $value = $this->filter['emisor'] = number_format($id, 0, '', '.').'-'.$dv;
+                $q->where('emisor', $value);
+            }
         })
         ->when(isset($this->filter['folio']), function($q){
             $q->where('folio', $this->filter['folio']);
