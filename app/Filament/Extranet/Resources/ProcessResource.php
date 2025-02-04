@@ -90,7 +90,7 @@ class ProcessResource extends Resource
                             $record->revision_by_commune_at = now();
                             $record->revision_by_commune_user_id = auth()->id();
                             $record->save();
-                            Notification::make()
+                            Notifications\Notification::make()
                                 ->title('Revisión aprobada')
                                 ->success()
                                 ->send();
