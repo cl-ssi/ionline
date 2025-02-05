@@ -87,6 +87,27 @@
                         <i class="fas fa-fw fa-paperclip" title="{{ $attachment->name }}"></i>
                     </a>
                     @endforeach
+
+                    @if($approval->module == 'Convenios')
+                        @if($approval->approvable->program->ministerial_resolution_file)
+                            <a
+                                class="btn btn-sm btn-outline-success"
+                                target="_blank"
+                                href="{{ Storage::url($approval->approvable->program->ministerial_resolution_file) }}"
+                            >
+                                Resolución ministerial <i class="fas fa-fw fa-file-pdf text-success"></i>
+                            </a>
+                        @endif
+                        @if($approval->approvable->program->resource_distribution_file)
+                            <a
+                                class="btn btn-sm btn-outline-success"
+                                target="_blank"
+                                href="{{ Storage::url($approval->approvable->program->resource_distribution_file) }}"
+                            >
+                                Resolución de Distribución de Recursos <i class="fas fa-fw fa-file-pdf text-success"></i>
+                            </a>
+                        @endif
+                    @endif
                 </td>
                 <td class="small">
                     {{ $approval->approver_at }}
