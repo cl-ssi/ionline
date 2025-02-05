@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\Filament\Clusters\Documents\Resources\Agreements\ProcessResource;
+use App\Filament\Extranet\Resources\ProcessResource as ExternalProcessResource;
 use App\Models\Comment;
 use App\Models\User;
 use Filament\Notifications\Actions\Action;
@@ -34,7 +35,18 @@ class CommentObserver
                 ->where('establishment_id', $comment->establishment_id)
                 ->get();
 
-            Notification::make()
+            if(auth()->user()->external){
+                Notification::make()
+                ->title('Nuevo comentario registrado en proceso ' . $comment->commentable_id)
+                ->actions([
+                    Action::make('IrAlProceso')
+                        ->button()
+                        ->url(ExternalProcessResource::getUrl('edit', [$comment->commentable_id]))
+                        ->markAsRead(),
+                ])
+                ->sendToDatabase($recipients);
+            }else{
+                Notification::make()
                 ->title('Nuevo comentario registrado en proceso ' . $comment->commentable_id)
                 ->actions([
                     Action::make('IrAlProceso')
@@ -43,6 +55,8 @@ class CommentObserver
                         ->markAsRead(),
                 ])
                 ->sendToDatabase($recipients);
+            }
+            
         } 
     }
 
