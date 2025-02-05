@@ -96,12 +96,18 @@ class ProcessResource extends Resource
                     ->label('Comuna')
                     ->searchable()
                     ->sortable(),
+                // Tables\Columns\TextColumn::make('establishmentsList')
+                //     ->label('Establecimientos')
+                //     ->searchable()
+                //     ->width('sm')
+                //     ->wrap()
+                //     ->sortable(),
                 Tables\Columns\TextColumn::make('establishmentsList')
                     ->label('Establecimientos')
-                    ->searchable()
+                    ->getStateUsing(fn (Process $record) => $record->establishmentsList)
                     ->width('sm')
                     ->wrap()
-                    ->sortable(),
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\ImageColumn::make('endorses.avatar')
                     ->label('Visaciones')
                     ->circular()
