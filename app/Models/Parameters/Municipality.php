@@ -2,12 +2,15 @@
 
 namespace App\Models\Parameters;
 
-use App\Models\ClCommune;
+use App\Models\User;
 use App\Models\Commune;
-use Illuminate\Database\Eloquent\Casts\Attribute;
+use App\Models\ClCommune;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Municipality extends Model
 {
@@ -34,6 +37,16 @@ class Municipality extends Model
     public function mayors(): HasMany
     {
         return $this->hasMany(Mayor::class);
+    }
+
+    /**
+     * The user that belong to the municipality.
+     */
+    public function users(): BelongsToMany|Builder
+    {
+        return $this->belongsToMany(User::class, 'cfg_municipality_users')
+            ->withTimestamps()
+            ->withTrashed();
     }
 
     public function emailList(): Attribute

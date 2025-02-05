@@ -593,12 +593,12 @@ class ProcessResource extends Resource
                                 ->label('Fecha de solicitud')
                                 ->disabled(),
                             Forms\Components\Placeholder::make('Solicitado por')
-                                ->content(fn (?Process $record) => $record->lawyerRevisionSenderUser?->shortName),
+                                ->content(fn (?Process $record) => $record->lawyerRevisionSenderUser?->shortName ?? 'N/A'),
                             Forms\Components\DatePicker::make('revision_by_lawyer_at')
                                 ->label('Fecha de revisión')
                                 ->disabled(),
                             Forms\Components\Placeholder::make('Revisado por')
-                                ->content(fn (?Process $record) => $record->revisionByLawyerUser?->shortName),
+                                ->content(fn (?Process $record) => $record->revisionByLawyerUser?->shortName ?? 'N/A'),
                         ]),
                 ])
                 ->columnSpan(2)
@@ -638,11 +638,11 @@ class ProcessResource extends Resource
                                 ->label('Fecha de solicitud')
                                 ->disabled(),
                             Forms\Components\Placeholder::make('Solicitado por')
-                                ->content(fn (?Process $record) => $record->communeRevisionSenderUser?->full_name),
+                                ->content(fn (?Process $record) => $record->communeRevisionSenderUser?->full_name ?? 'N/A'),
                             Forms\Components\DatePicker::make('revision_by_commune_at')
                                 ->label('Fecha de revisión'),
                             Forms\Components\Placeholder::make('Revisado por')
-                                ->content(fn (?Process $record) => $record->revisionByCommuneUser?->full_name),
+                                ->content(fn (?Process $record) => $record->revisionByCommuneUser?->full_name ?? 'N/A'),
                         ]),
                 ])
                 ->columnSpan(2)

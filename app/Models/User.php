@@ -562,6 +562,14 @@ class User extends Authenticatable implements Auditable, FilamentUser
     }
 
     /**
+     * The programas that user is referer.
+     */
+    public function municipalities(): BelongsToMany
+    {
+        return $this->belongsToMany(Municipality::class,'cfg_municipality_users');
+    }
+
+    /**
      * Get the requests for the user.
      */
     public function requests(): HasMany

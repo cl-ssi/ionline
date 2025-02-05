@@ -30,9 +30,13 @@ class ListProcesses extends ListRecords
             $tabs[$period] = Tab::make()
                 ->label($period)
                 ->modifyQueryUsing(fn (Builder $query) => $query->where('period', $period)->where('status','finished')
-                ->whereHas('program.referers', function (Builder $query) {
+                // ->whereHas('program.referers', function (Builder $query) {
+                //     $query->where('user_id', auth()->id());
+                // })
+                ->whereHas('municipality.users', function (Builder $query) {
                     $query->where('user_id', auth()->id());
-                }));
+                })
+            );
         }
 
         return $tabs;

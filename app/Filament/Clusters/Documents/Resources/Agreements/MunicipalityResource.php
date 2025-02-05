@@ -107,6 +107,7 @@ class MunicipalityResource extends Resource
     {
         return [
             RelationManagers\MayorsRelationManager::class,
+            RelationManagers\MunicipalityUsersRelationManager::class,
         ];
     }
 

@@ -54,7 +54,7 @@ class ProcessPolicy
     {
         // can Agreement edit AND $user is in $process->program->referers
         return $user->canAny(['Agreement: admin', 'Agreement: legally']) || 
-            ($user->can('Agreement: edit') && $process->program->referers->contains($user));
+            ($user->can('Agreement: edit') && ($process->program->referers->contains($user) || $process->municipality->users->contains($user)));
     }
 
     /**

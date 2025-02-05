@@ -10,7 +10,7 @@ use Filament\Forms\Set;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use App\Models\Establishment;
-use Notifications\Notification;
+use Filament\Notifications;
 use Filament\Resources\Resource;
 use Illuminate\Support\Collection;
 use Filament\Support\Enums\Alignment;
@@ -24,6 +24,7 @@ use App\Filament\RelationManagers\CommentsRelationManager;
 use Mohamedsabil83\FilamentFormsTinyeditor\Components\TinyEditor;
 use App\Filament\Extranet\Resources\ProcessResource\RelationManagers;
 use App\Filament\Clusters\Documents\Resources\Agreements\ProgramResource\RelationManagers\ProcessesRelationManager;
+use Illuminate\Support\Facades\Notification;
 
 class ProcessResource extends Resource
 {
@@ -68,17 +69,19 @@ class ProcessResource extends Resource
                 ->schema([
                     Forms\Components\Fieldset::make('Revisión de la comuna')
                         ->schema([
-                            Forms\Components\TextInput::make('revision_by_commune_at')
-                                ->label('Fecha de revisión')
-                                ->type('datetime-local')
-                                ->columnSpanFull()
-                                ->formatStateUsing(fn ($state) => $state ? Carbon::parse($state)->format('Y-m-d H:i') : null)
-                                ->disabled(),
-                            Forms\Components\Select::make('revision_by_commune_user_id')
-                                ->label('Revisado por')
-                                ->relationship('revisionByCommuneUser', 'full_name')
-                                ->columnSpanFull()
-                                ->disabled(),
+                            Forms\Components\Grid::make(2)
+                                ->schema([
+                                    Forms\Components\DatePicker::make('sended_revision_commune_at')
+                                        ->label('Fecha de solicitud')
+                                        ->disabled(),
+                                    Forms\Components\Placeholder::make('Solicitado por')
+                                        ->content(fn (?Process $record) => $record->communeRevisionSenderUser?->full_name ?? 'N/A'),
+                                    Forms\Components\DatePicker::make('revision_by_commune_at')
+                                        ->label('Fecha de revisión')
+                                        ->disabled(),
+                                    Forms\Components\Placeholder::make('Revisado por')
+                                        ->content(fn (?Process $record) => $record->revisionByCommuneUser?->full_name ?? 'N/A'),
+                                ]),
                         ])
                         ->columnSpan(1),
                 ])
