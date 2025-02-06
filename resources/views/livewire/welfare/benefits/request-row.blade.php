@@ -1,4 +1,11 @@
 <tr>
+    <style>
+        .disabled-row * {
+            pointer-events: none;
+            opacity: 0.6;
+        }
+    </style>
+
     <td colspan="8">
     <table class="table table-bordered table-sm mb-0" style="table-layout: fixed; width: 100%;">
             <!-- Colgroup para igualar anchos -->
@@ -13,8 +20,13 @@
                 <col style="width: 15%;">
             </colgroup>
             <tbody>
-            <tr>
-                <td>{{ $request->id }}</td>
+            <tr class="{{ $request->status_update_responsable_id && $request->status_update_responsable_id != auth()->id() ? 'disabled-row' : '' }}">
+                <td>
+                    <input type="checkbox" @checked($request->status_update_responsable_id) 
+                                           @disabled($request->status_update_responsable_id && $request->status_update_responsable_id != auth()->id())
+                                           wire:change="toggleResponsable">
+                    {{ $request->id }}
+                </td>
                 <td>{{ $request->created_at->format('Y-m-d') }}</td>
                 <td>
                     {{ $request->applicant->shortName }}

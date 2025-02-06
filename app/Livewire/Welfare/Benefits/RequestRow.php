@@ -138,6 +138,24 @@ class RequestRow extends Component
         session()->flash('message', 'Se registró la transferencia exitosamente.');
     }
 
+    public function toggleResponsable()
+    {
+        if ($this->request->status_update_responsable_id == auth()->id()) {
+            $this->request->update([
+                'status_update_responsable_id' => null,
+                'status_update_date' => now(),
+            ]);
+        } else {
+            $this->request->update([
+                'status_update_responsable_id' => auth()->id(),
+                'status_update_date' => now(),
+            ]);
+        }
+
+        //actualizar pagina
+        $this->mount($this->request->id);
+    }
+
 
     public function render()
     {
