@@ -29,6 +29,12 @@ class RequestRow extends Component
 
     public function accept()
     {
+        // verifica si soy el responsable de la solicitud
+        if (!$this->allowEditing()) {
+            $this->mount($this->request->id);
+            return null;
+        }
+
         $this->request->update([
             'status' => 'Aceptado',
             'status_update_date' => now(),
@@ -44,17 +50,35 @@ class RequestRow extends Component
 
     public function reject()
     {
+        // verifica si soy el responsable de la solicitud
+        if (!$this->allowEditing()) {
+            $this->mount($this->request->id);
+            return null;
+        }
+
         $this->showTextarea = 1;
     }
 
     public function cancel()
     {
+        // verifica si soy el responsable de la solicitud
+        if (!$this->allowEditing()) {
+            $this->mount($this->request->id);
+            return null;
+        }
+
         $this->showTextarea = 0;
         $this->observation = '';
     }
 
     public function saveObservation()
     {
+        // verifica si soy el responsable de la solicitud
+        if (!$this->allowEditing()) {
+            $this->mount($this->request->id);
+            return null;
+        }
+
         $this->validate([
             'observation' => 'required|string|max:255', // Validar que la observación no esté vacía
         ]);
@@ -70,6 +94,12 @@ class RequestRow extends Component
 
     public function saveCancelObservation()
     {
+        // verifica si soy el responsable de la solicitud
+        if (!$this->allowEditing()) {
+            $this->mount($this->request->id);
+            return null;
+        }
+
         $this->validate([
             'observation' => 'required|string|max:255', // Validar la observación para rechazar
         ]);
@@ -90,6 +120,12 @@ class RequestRow extends Component
 
     public function saveAcceptedAmount()
     {
+        // verifica si soy el responsable de la solicitud
+        if (!$this->allowEditing()) {
+            $this->mount($this->request->id);
+            return null;
+        }
+
         $this->request->update([
             'accepted_amount' => $this->acceptedAmount,
             'accepted_amount_date' => now(),
@@ -101,6 +137,12 @@ class RequestRow extends Component
 
     public function saveFolio()
     {
+        // verifica si soy el responsable de la solicitud
+        if (!$this->allowEditing()) {
+            $this->mount($this->request->id);
+            return null;
+        }
+
         $this->request->update([
             'folio_number' => $this->folioNumber,
         ]);
@@ -110,6 +152,12 @@ class RequestRow extends Component
 
     public function saveInstallmentsNumber()
     {
+        // verifica si soy el responsable de la solicitud
+        if (!$this->allowEditing()) {
+            $this->mount($this->request->id);
+            return null;
+        }
+
         $this->request->update([
             'installments_number' => $this->installmentsNumber,
         ]);
@@ -119,6 +167,12 @@ class RequestRow extends Component
 
     public function saveTransfer()
     {
+        // verifica si soy el responsable de la solicitud
+        if (!$this->allowEditing()) {
+            $this->mount($this->request->id);
+            return null;
+        }
+
         if (!$this->request->accepted_amount || $this->request->accepted_amount <= 0) {
             session()->flash('message', 'No se puede realizar la transferencia. Registre un monto aprobado primero.');
             return;
@@ -140,6 +194,12 @@ class RequestRow extends Component
 
     public function toggleResponsable()
     {
+        // verifica si soy el responsable de la solicitud
+        if (!$this->allowEditing()) {
+            $this->mount($this->request->id);
+            return null;
+        }
+
         if ($this->request->status_update_responsable_id == auth()->id()) {
             $this->request->update([
                 'status_update_responsable_id' => null,
@@ -156,6 +216,19 @@ class RequestRow extends Component
         $this->mount($this->request->id);
     }
 
+    public function allowEditing()
+    {
+        if($this->request->status_update_responsable_id){
+            if($this->request->status_update_responsable_id == auth()->id()){
+                return true;
+            }else{
+                session()->flash('message', 'Esta solicitud ya fue asignada por otro funcionario.');
+                return false;
+            }
+        }
+        //no hay responsable, por lo cual si me permite editar
+        return true;
+    }
 
     public function render()
     {
