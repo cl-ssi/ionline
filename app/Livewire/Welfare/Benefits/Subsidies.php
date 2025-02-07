@@ -19,8 +19,8 @@ class Subsidies extends Component
     public $description;
     public $annual_cap;
     public $recipient;
-    public $status;
-    public $payment_in_installments;
+    public $status = 1;
+    public $payment_in_installments = 1; 
     public $documents = [];
 
     public $showCreateDocumentForm = false; // Agrega una propiedad para controlar la visibilidad del formulario de creación
@@ -113,6 +113,7 @@ class Subsidies extends Component
                 'payment_in_installments' => $this->payment_in_installments,
             ]);
         } else {
+            dd($this->payment_in_installments, $this->status);
             Subsidy::create([
                 'name' => $this->newSubsidyName,
                 'benefit_id' => $this->selectedBenefitId,
