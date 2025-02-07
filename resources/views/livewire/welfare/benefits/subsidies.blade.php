@@ -151,7 +151,7 @@
                     <td>{{ $subsidy->id }}</td>
                     <td>{{ $subsidy->name }}</td>
                     <td>@if($subsidy->benefit) {{ $subsidy->benefit->name }} @endif</td>
-                    <td>{{ $subsidy->description }}</td>
+                    <td style="white-space: pre;">{{ $subsidy->description }}</td>
                     <td>{{ $subsidy->annual_cap }}</td>
                     <td>
                         @if($subsidy->payment_in_installments == 1) Con cuotas @else Sin cuotas @endif

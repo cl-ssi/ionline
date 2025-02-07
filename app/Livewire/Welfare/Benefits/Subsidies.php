@@ -113,7 +113,6 @@ class Subsidies extends Component
                 'payment_in_installments' => $this->payment_in_installments,
             ]);
         } else {
-            dd($this->payment_in_installments, $this->status);
             Subsidy::create([
                 'name' => $this->newSubsidyName,
                 'benefit_id' => $this->selectedBenefitId,
