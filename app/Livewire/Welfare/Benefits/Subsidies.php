@@ -27,7 +27,7 @@ class Subsidies extends Component
     public $newDocumentName = '';
 
     // Método para mostrar el formulario de creación de documento
-    public function showCreateDocumentForm()
+    public function showCreateDocumentFormView()
     {
         $this->showCreateDocumentForm = true;
     }

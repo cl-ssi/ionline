@@ -70,7 +70,7 @@
         <!-- Botón "Crear" -->
         <br>
         <h4>
-            Documentos <button wire:click="showCreateDocumentForm" class="btn btn-primary btn-sm">Crear</button>
+            Documentos <button wire:click="showCreateDocumentFormView" class="btn btn-primary btn-sm">Crear</button>
         </h4>
 
         <!-- Formulario de creación de documento -->
