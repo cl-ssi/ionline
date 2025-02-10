@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Filament\Clusters\TalentManagement\Resources\JobPositionProfileResource\Pages;
+namespace App\Filament\Clusters\TalentManagement\Resources\JobPositionProfiles\JobPositionProfileResource\Pages;
 
-use App\Filament\Clusters\TalentManagement\Resources\JobPositionProfileResource;
+use App\Filament\Clusters\TalentManagement\Resources\JobPositionProfiles\JobPositionProfileResource;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
 
@@ -17,7 +17,7 @@ class ListJobPositionProfiles extends ListRecords
             Actions\Action::make('report_by_organizational_unit')
             ->label('Reporte por U.O.')
             ->icon('heroicon-o-chart-bar')
-            ->url(route('filament.intranet.talent-management.resources.job-position-profiles.report-by-organizational-unit')),
+            ->url(route('filament.intranet.talent-management.resources.job-position-profiles.job-position-profiles.report-by-organizational-unit')),
         ];
     }
 }

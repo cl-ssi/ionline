@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Filament\Clusters\TalentManagement\Resources;
+namespace App\Filament\Clusters\TalentManagement\Resources\JobPositionProfiles;
 
 use App\Filament\Clusters\TalentManagement;
-use App\Filament\Clusters\TalentManagement\Resources\JobPositionProfileResource\Pages;
-use App\Filament\Clusters\TalentManagement\Resources\JobPositionProfileResource\RelationManagers;
+use App\Filament\Clusters\TalentManagement\Resources\JobPositionProfiles\JobPositionProfileResource\Pages;
+use App\Filament\Clusters\TalentManagement\Resources\JobPositionProfiles\JobPositionProfileResource\RelationManagers;
 use App\Models\JobPositionProfiles\JobPositionProfile;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -24,6 +24,8 @@ class JobPositionProfileResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     protected static ?string $cluster = TalentManagement::class;
+
+    protected static ?string $navigationGroup = 'Perfiles de Cargo';
 
     protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
 

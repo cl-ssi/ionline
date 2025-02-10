@@ -35,7 +35,7 @@
 
         <div class="dropdown-menu">
             <a class="dropdown-item" 
-                href="{{ route('filament.intranet.talent-management.resources.job-position-profiles.report-by-organizational-unit') }}"
+                href="{{ route('filament.intranet.talent-management.resources.job-position-profiles.job-position-profiles.report-by-organizational-unit') }}"
                 target="_blank">
                 <i class="fas fa-chart-bar fa-fw"></i> Reporte por Unidad Organizacional
             </a>          

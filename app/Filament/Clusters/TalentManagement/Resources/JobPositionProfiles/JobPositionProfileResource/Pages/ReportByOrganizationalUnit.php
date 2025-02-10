@@ -1,8 +1,8 @@
 <?php
-namespace App\Filament\Clusters\TalentManagement\Resources\JobPositionProfileResource\Pages;
+namespace App\Filament\Clusters\TalentManagement\Resources\JobPositionProfiles\JobPositionProfileResource\Pages;
 
 use App\Filament\Clusters\TalentManagement;
-use App\Filament\Clusters\TalentManagement\Resources\JobPositionProfileResource;
+use App\Filament\Clusters\TalentManagement\Resources\JobPositionProfiles\JobPositionProfileResource;
 use App\Filament\Clusters\TalentManagement\Resources\TalentManagementResource;
 use App\Models\Parameters\Parameter;
 use Illuminate\Support\Facades\Auth;

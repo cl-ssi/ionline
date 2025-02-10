@@ -95,6 +95,7 @@ class RoleAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'Inventory: place maintainer', 'description' => 'Permite acceder al mantenedor de lugares']);
         Permission::create(['name' => 'Job Position Profile: all', 'description' => 'Permite acceder a todo el listado de perfiles de cargo']);
         Permission::create(['name' => 'Job Position Profile: audit', 'description' => 'Permite acceder al registro de auditoría del módulo']);
+        Permission::create(['name' => 'Job Position Profile: config', 'description' => 'Permite editar configuraciones del módulo']);
         Permission::create(['name' => 'Job Position Profile: create', 'description' => 'Permite crear la creación de perfiles de cargo']);
         Permission::create(['name' => 'Job Position Profile: edit', 'description' => 'Permite editar cualquier perfil de cargo']);
         Permission::create(['name' => 'Job Position Profile: review', 'description' => 'Permite realizar la revisión del perfil de cargo para aprobación']);

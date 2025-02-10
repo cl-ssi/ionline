@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Filament\Clusters\TalentManagement\Resources\JobPositionProfileResource\Pages;
+namespace App\Filament\Clusters\TalentManagement\Resources\JobPositionProfiles\JobPositionProfileResource\Pages;
 
-use App\Filament\Clusters\TalentManagement\Resources\JobPositionProfileResource;
+use App\Filament\Clusters\TalentManagement\Resources\JobPositionProfiles\JobPositionProfileResource;
 use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
 
