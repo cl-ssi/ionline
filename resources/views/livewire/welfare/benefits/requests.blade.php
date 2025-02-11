@@ -173,7 +173,11 @@
                     <td>{{ $request->id }}</td>
                     <td>{{ $request->created_at->format('Y-m-d') }}</td>
                     <td>
-                        @if($request->subsidy->benefit) {{ $request->subsidy->benefit->name }} - {{ $request->subsidy->name }} @endif
+                        @if($request->subsidy && $request->subsidy->benefit) 
+                            {{ $request->subsidy->benefit->name }} - {{ $request->subsidy->name }} 
+                        @else
+                            <i>Subsidio no existe</i>
+                        @endif
                         @if($request->accepted_amount)
                         <br><b>MONTO APROBADO: </b> ${{ money($request->accepted_amount) }}
                         @endif
