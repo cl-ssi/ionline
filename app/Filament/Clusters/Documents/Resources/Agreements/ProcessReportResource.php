@@ -78,6 +78,21 @@ class ProcessReportResource extends Resource
                 //     ->searchable()
                 //     ->toggleable()
                 //     ->sortable(),
+                Tables\Columns\TextColumn::make('program.ministerial_resolution_number')
+                    ->label('Nº resolución de programa')
+                    ->wrapHeader()
+                    ->wrap()
+                    ->searchable()
+                    ->sortable()
+                    ->toggleable(),
+                Tables\Columns\TextColumn::make('program.ministerial_resolution_date')
+                    ->label('Fecha resolución de programa')
+                    ->wrapHeader()
+                    ->wrap()
+                    ->date('Y-m-d')
+                    ->searchable()
+                    ->sortable()
+                    ->toggleable(),
                 Tables\Columns\TextColumn::make('program.resource_distribution_number')
                     ->label('Nº resolución de distribución de recursos')
                     ->wrapHeader()
@@ -91,6 +106,13 @@ class ProcessReportResource extends Resource
                     ->wrap()
                     ->date('Y-m-d')
                     ->searchable()
+                    ->sortable()
+                    ->toggleable(),
+                Tables\Columns\TextColumn::make('has_processes')
+                    ->label('Tiene Procesos')
+                    ->getStateUsing(function ($record) {
+                        return $record->program->processes()->count() > 0 ? 'Sí' : 'No';
+                    })
                     ->sortable()
                     ->toggleable(),
                 Tables\Columns\TextColumn::make('days_elapsed')
