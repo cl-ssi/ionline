@@ -236,6 +236,11 @@ class CertificateResource extends Resource
     {
         return $table
             ->columns([
+                Tables\Columns\TextColumn::make('id')
+                    ->label('Id')
+                    ->searchable()
+                    ->sortable()
+                    ->toggleable(),
                 Tables\Columns\TextColumn::make('processType.name')
                     ->label('Tipo de Certificado')
                     ->sortable(),

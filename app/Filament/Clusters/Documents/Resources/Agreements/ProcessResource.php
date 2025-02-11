@@ -555,6 +555,7 @@ class ProcessResource extends Resource
                 ->hiddenOn('create'),
 
             Forms\Components\Section::make('Revisión Jurídico')
+                ->description(fn (?Process $record) => $record->status === Status::Finished ? '' : 'El botón estará disponible cuando el formato esté finalizado.') 
                 ->headerActions([
                     Forms\Components\Actions\Action::make('Solicitar Revisión')
                         ->label('Solicitar revisión jurídico')
@@ -590,7 +591,7 @@ class ProcessResource extends Resource
                             $record->update(['sended_revision_lawyer_at' => now(), 'sended_revision_lawyer_user_id' => auth()->id()]);
 
                         })
-                        ->disabled(fn (?Process $record) => $record->revision_by_lawyer_user_id !== null),
+                        ->disabled(fn (?Process $record) => $record->revision_by_lawyer_user_id !== null || $record->status != Status::Finished),
                 ])
                 ->schema([
                     Forms\Components\Grid::make(2)
@@ -612,6 +613,7 @@ class ProcessResource extends Resource
                 ->hiddenOn('create'),
 
             Forms\Components\Section::make('Revision de Comuna')
+                ->description(fn (?Process $record) => $record->status === Status::Finished ? '' : 'El botón estará disponible cuando el formato esté finalizado.') 
                 ->headerActions([
                     Forms\Components\Actions\Action::make('Solicitar revisión comuna')
                         ->label('Solicitar Revisión')
@@ -635,7 +637,7 @@ class ProcessResource extends Resource
                             // establecer fecha de solicitud de revisión
                             $record->update(['sended_revision_commune_at' => now(), 'sended_revision_commune_user_id' => auth()->id()]);
                         })
-                        ->disabled(fn (?Process $record) => $record->revision_by_commune_user_id !== null),
+                        ->disabled(fn (?Process $record) => $record->revision_by_commune_user_id !== null || $record->status != Status::Finished),
                 ])
                 ->schema([
                     Forms\Components\Grid::make(2)
