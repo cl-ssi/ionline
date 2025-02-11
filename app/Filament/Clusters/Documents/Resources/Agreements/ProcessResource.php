@@ -495,7 +495,7 @@ class ProcessResource extends Resource
                         ->action(function (Process $record) {
                             $record->update(['status' => Status::Draft]);
                             $record->resetEndorsesStatus();
-                            $record->resetLegallyStatus();
+                            // $record->resetLegallyStatus();
                             $record->createComment('El proceso ha vuelto a estado de borrador, si existían visaciones, fueron reseteadas.');
 
                             // Redireccionar a la misma página para forzar recarga
