@@ -31,6 +31,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Number;
 use Illuminate\Support\Str;
 use OwenIt\Auditing\Contracts\Auditable;
+use OwenIt\Auditing\Models\Audit;
 
 #[ObservedBy([ProcessObserver::class])]
 class Process extends Model implements Auditable
@@ -281,6 +282,11 @@ class Process extends Model implements Auditable
     public function sentToUser()
     {
         return $this->belongsTo(User::class, 'sent_to_user_id');
+    }
+
+    public function audits(): MorphMany
+    {
+        return $this->morphMany(Audit::class, 'auditable');
     }
 
     public function createOrUpdateDocument(): void
