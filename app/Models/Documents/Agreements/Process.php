@@ -30,11 +30,13 @@ use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Number;
 use Illuminate\Support\Str;
+use OwenIt\Auditing\Contracts\Auditable;
 
 #[ObservedBy([ProcessObserver::class])]
-class Process extends Model
+class Process extends Model implements Auditable
 {
     use SoftDeletes;
+    use \OwenIt\Auditing\Auditable;
 
     protected $table = 'agr_processes';
 
