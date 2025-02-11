@@ -474,7 +474,8 @@
                             auth()->user()->can('Job Position Profile: create') ||
                             auth()->user()->can('Job Position Profile: edit') ||
                             auth()->user()->can('Job Position Profile: review')) &&
-                            auth()->user()->establishment_id == App\Models\Parameters\Parameter::get('establishment', 'SSTarapaca')
+                            in_array(auth()->user()->establishment_id, [App\Models\Parameters\Parameter::get('establishment', 'SSTarapaca'), 
+                            App\Models\Parameters\Parameter::get('establishment', 'HospitalAltoHospicio')])
                         )
                         <div class="dropdown-divider"></div>
                         <h6 class="dropdown-header">Depto. Desarrollo y Gestión del Talento</h6>
