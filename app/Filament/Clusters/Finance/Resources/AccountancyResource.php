@@ -65,18 +65,81 @@ class AccountancyResource extends Resource
                 Forms\Components\TextInput::make('resolution_folio')
                     ->maxLength(255),
                 Forms\Components\DateTimePicker::make('resolution_date'),
-                Forms\Components\TextInput::make('resolution_file')
-                    ->maxLength(255),
+                Forms\Components\Group::make()
+                    ->relationship('resolutionFile')
+                    ->columnSpan('full')
+                    ->schema([
+                        Forms\Components\Select::make('type')
+                            ->label('Tipo')
+                            ->options(['resolution_file' => 'Resolucion'])
+                            ->default('resolution_file')
+                            // ->hidden()
+                            ->required(),
+                        Forms\Components\FileUpload::make('storage_path')
+                            ->label('Archivo')
+                            ->directory('ionline/finances/accountancy/support_documents')
+                            ->storeFileNamesIn('name')
+                            ->acceptedFileTypes(['application/pdf'])
+                            ->afterStateUpdated(function ($state, $set) {
+                                if ($state) {
+                                    $set('resolutionFile.type', 'resolution_file');
+                                }
+                            }),
+                    ])
+                    ->columns(2)
+                    ->columnSpanFull(),
                 Forms\Components\TextInput::make('commitment_folio_sigfe')
                     ->maxLength(255),
                 Forms\Components\DateTimePicker::make('commitment_date_sigfe'),
-                Forms\Components\TextInput::make('commitment_file_sigfe')
-                    ->maxLength(255),
+                Forms\Components\Group::make()
+                    ->relationship('commitmentSigfeFile')
+                    ->columnSpan('full')                    
+                    ->schema([
+                        Forms\Components\Select::make('type')
+                            ->label('Tipo')
+                            ->options(['resolution_file' => 'Resolucion'])
+                            ->default('resolution_file')
+                            ->hidden()
+                            ->required(),
+                        Forms\Components\FileUpload::make('storage_path')
+                            ->label('Archivo')
+                            ->directory('ionline/finances/treasuries/support_documents')
+                            ->storeFileNamesIn('name')
+                            ->acceptedFileTypes(['application/pdf'])
+                            ->afterStateUpdated(function ($state, $set) {
+                                if ($state) {
+                                    $set('supportFile.type', 'support_file');
+                                }
+                            }),
+                    ])
+                    ->columns(2)
+                    ->columnSpanFull(),
                 Forms\Components\TextInput::make('accrual_folio_sigfe')
                     ->maxLength(255),
                 Forms\Components\DateTimePicker::make('accrual_date_sigfe'),
-                Forms\Components\TextInput::make('accrual_file_sigfe')
-                    ->maxLength(255),
+                Forms\Components\Group::make()
+                    ->relationship('accrualSigfeFile')
+                    ->columnSpan('full')
+                    ->schema([
+                        Forms\Components\Select::make('type')
+                            ->label('Tipo')
+                            ->options(['resolution_file' => 'Resolucion'])
+                            ->default('resolution_file')
+                            ->hidden()
+                            ->required(),
+                        Forms\Components\FileUpload::make('storage_path')
+                            ->label('Archivo')
+                            ->directory('ionline/finances/treasuries/support_documents')
+                            ->storeFileNamesIn('name')
+                            ->acceptedFileTypes(['application/pdf'])
+                            ->afterStateUpdated(function ($state, $set) {
+                                if ($state) {
+                                    $set('supportFile.type', 'support_file');
+                                }
+                            }),
+                    ])
+                    ->columns(2)
+                    ->columnSpanFull(),
                 Forms\Components\TextInput::make('accountable_type')
                     ->required()
                     ->maxLength(255),
@@ -111,8 +174,8 @@ class AccountancyResource extends Resource
                 Tables\Columns\TextColumn::make('accrual_date_sigfe')
                     ->dateTime()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('accrual_file_sigfe')
-                    ->searchable(),
+                Tables\Columns\TextColumn::make('accrualSigfeFile.name')
+                    ->url(fn(Model $record) => $record->storage_path),
                 Tables\Columns\TextColumn::make('accountable_type')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('accountable_id')
@@ -158,7 +221,7 @@ class AccountancyResource extends Resource
     {
         return [
             'index' => Pages\ListAccountancies::route('/'),
-            'create' => Pages\CreateAccountancy::route('/create'),
+            // 'create' => Pages\CreateAccountancy::route('/create'),
             'edit' => Pages\EditAccountancy::route('/{record}/edit'),
         ];
     }
