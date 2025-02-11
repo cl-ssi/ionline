@@ -1131,12 +1131,24 @@ class ProcessResource extends Resource
                 ])
                 ->schema([
                     Forms\Components\Fieldset::make('Jurídico')
+                        // ->schema([
+                        //     Forms\Components\DatePicker::make('revision_by_lawyer_at')
+                        //         ->label('Fecha de revisión')
+                        //         ->disabled(),
+                        //     Forms\Components\Placeholder::make('Revisado por')
+                        //         ->content(fn (?Process $record) => $record->revisionByLawyerUser?->shortName),
+                        // ])
                         ->schema([
+                            Forms\Components\DatePicker::make('sended_revision_lawyer_at')
+                                ->label('Fecha de solicitud')
+                                ->disabled(),
+                            Forms\Components\Placeholder::make('Solicitado por')
+                                ->content(fn (?Process $record) => $record->lawyerRevisionSenderUser?->shortName ?? 'N/A'),
                             Forms\Components\DatePicker::make('revision_by_lawyer_at')
                                 ->label('Fecha de revisión')
                                 ->disabled(),
                             Forms\Components\Placeholder::make('Revisado por')
-                                ->content(fn (?Process $record) => $record->revisionByLawyerUser?->shortName),
+                                ->content(fn (?Process $record) => $record->revisionByLawyerUser?->shortName ?? 'N/A'),
                         ])
                         ->columnSpan(1)
                         ->columns(2),

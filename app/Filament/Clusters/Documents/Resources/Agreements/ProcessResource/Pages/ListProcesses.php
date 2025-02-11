@@ -26,7 +26,7 @@ class ListProcesses extends ListRecords
         $tabs = [];
 
         
-        if(auth()->user()->can('Agreement: admin')) {
+        if(auth()->user()->can('Agreement: admin') || auth()->user()->can('Agreement: legally')) {
             /** Muestra todos los proceso por año de todos los referentes */
             foreach ($periods as $period) {
                 $tabs[$period] = Tab::make()
