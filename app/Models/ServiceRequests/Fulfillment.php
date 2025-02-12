@@ -408,18 +408,18 @@ class Fulfillment extends Model implements AuditableContract
                     case 'Inasistencia Injustificada':
                     case 'Licencia no covid':
                         $mes_completo = false;
-                        $dias_descuento += (int)$item->end_date->diffInDays($item->start_date) + 1;
+                        $dias_descuento += (int)$item->start_date->diffInDays($item->end_date) + 1;
                         break;
                     case 'Licencia media jornada no covid':
                         $mes_completo = false;
-                        $dias_descuento_t = (int)$item->end_date->diffInDays($item->start_date) + 1;
+                        $dias_descuento_t = (int)$item->start_date->diffInDays($item->end_date) + 1;
                         $dias_descuento += ($dias_descuento_t / 2);
                         break;
                     case 'Abandono de funciones':
                     case 'Renuncia voluntaria':
                     case 'Término de contrato anticipado':
                         $mes_completo = false;
-                        $dias_descuento += (int)$item->end_date->diffInDays($item->start_date) + 1;
+                        $dias_descuento += (int)$item->start_date->diffInDays($item->end_date) + 1;
                         $dias_trabajado_antes_retiro = ((int)$item->end_date->format("d")) - (int)$fulfillment->start_date->format("d");
                         break;
                     case 'Atraso':
