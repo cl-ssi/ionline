@@ -457,6 +457,13 @@ class Process extends Model implements Auditable
 
         if ($this->approval()->exists()) {
             $this->approval()->update($approvalData);
+            // si estado es rechazado, se agrega comentario con historial de rechazo, y luego se rezetea estado.
+            if($this->approval?->status === false){
+                $this->createComment('Historial rechazo de director/a del día ' . 
+                    $this->approval?->approver_at->format('d-m-Y') . ': ' . 
+                    $this->approval?->approver_observation);
+                $this->approval?->resetStatus();
+            }
         } else {
             $this->approval()->create($approvalData);
         }

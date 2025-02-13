@@ -521,7 +521,8 @@ class ProcessResource extends Resource
                             $record->update(['status' => Status::Draft]);
                             // $record->resetEndorsesStatus();
                             // $record->resetLegallyStatus();
-                            $record->createComment('El proceso ha vuelto a estado de borrador, si existían visaciones, fueron reseteadas.');
+                            // $record->createComment('El proceso ha vuelto a estado de borrador, si existían visaciones, fueron reseteadas.');
+                            $record->createComment('El proceso ha vuelto a estado de borrador.');
 
                             // Redireccionar a la misma página para forzar recarga
                             return redirect()->to(ProcessResource::getUrl('edit', ['record' => $record->id]));
