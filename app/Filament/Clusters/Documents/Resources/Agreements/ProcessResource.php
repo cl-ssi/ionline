@@ -516,10 +516,10 @@ class ProcessResource extends Resource
                     Forms\Components\Actions\Action::make('Volver a editar')
                         ->icon('heroicon-m-pencil-square')
                         ->requiresConfirmation()
-                        ->modalDescription('Atención, si el documento ya está visado, deberá volver a visarse.')
+                        // ->modalDescription('Atención, si el documento ya está visado, deberá volver a visarse.')
                         ->action(function (Process $record) {
                             $record->update(['status' => Status::Draft]);
-                            $record->resetEndorsesStatus();
+                            // $record->resetEndorsesStatus();
                             // $record->resetLegallyStatus();
                             $record->createComment('El proceso ha vuelto a estado de borrador, si existían visaciones, fueron reseteadas.');
 
