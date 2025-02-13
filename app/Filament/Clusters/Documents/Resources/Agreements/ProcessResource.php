@@ -796,6 +796,28 @@ class ProcessResource extends Resource
                         ->columnSpanFull()
                         ->grid(7)
                         ->itemLabel(fn (array $state): ?string => 'Visador: '.OrganizationalUnit::find($state['sent_to_ou_id'])?->name ?? null),
+
+                    Forms\Components\Section::make('Observaciones')
+                        ->schema([
+                            Forms\Components\Placeholder::make('observations')
+                                ->content(function ($record) {
+                                    $observations = collect($record['endorses'] ?? [])
+                                        ->filter(fn ($endorse) => $endorse['status'] === false)
+                                        ->map(fn ($endorse) => 
+                                            "{$endorse['initials']}: " . 
+                                            ($endorse['approver_observation'] ?? 'Sin observaciones')
+                                        )
+                                        ->join("\n\n");
+                                    
+                                    return $observations ?: 'No hay observaciones';
+                                })
+                        ])
+                        ->visible(fn ($record) => 
+                            collect($record['endorses'] ?? [])->contains(fn ($endorse) => 
+                                $endorse['status'] === false
+                            )
+                        )
+                        ->columnSpanFull(),
                 ])
                 ->hidden(fn (Get $get) => $get('endorse_type') == 'without')
                 ->mutateRelationshipDataBeforeFillUsing(function (array $data): array {
@@ -927,6 +949,10 @@ class ProcessResource extends Resource
                                     false   => 'danger',
                                     default => 'gray',
                                 }),
+                            Forms\Components\Placeholder::make('approver_observation')
+                                ->label('Observaciones')
+                                ->content(fn ($record) => $record['approver_observation'] ?? 'Sin observaciones')
+                                ->visible(fn ($record) => $record['status'] === false),
                         ])
                         ->columns(2)
                         ->columnSpan(2)
