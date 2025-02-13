@@ -176,7 +176,7 @@
                                 <b>Funcionarios SST:</b>
                                 <br>
                                 Dirigir su requerimiento a Miguel Soto.<br>
-                                Correo: <a href="mailto:miguel.sotor@redsalud.gob.cl">miguel.sotor@redsalud.gob.cl</a>
+                                Correo: <a href="mailto:dtic.sst@redsalud.gob.cl">dtic.sst@redsalud.gob.cl</a>
                             </p>
 
                             <p>
