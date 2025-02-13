@@ -911,6 +911,7 @@ class ProcessResource extends Resource
                 ->visible(fn (?Process $record) => $record->processType->sign_commune),
 
             Forms\Components\Section::make('Firma Director')
+                ->description(fn (?Process $record) => $record->endorses->contains(fn ($endorse) => $endorse->status !== true) ? 'Debe esperar a que todos los visadores aprueben el documento.' : '') 
                 ->headerActions([
                     Forms\Components\Actions\Action::make('Descargar')
                         ->label('Descargar')
@@ -928,6 +929,12 @@ class ProcessResource extends Resource
                                 ->title('Solicitud de firma a dirección enviada')
                                 ->success()
                                 ->send();
+                        })
+                        ->disabled(function (Process $record): bool {
+                            // Verifica si hay algún endorse que no esté aprobado (status != true)
+                            return $record->endorses->contains(function ($endorse) {
+                                return $endorse->status !== true;
+                            });
                         }),
                 ])
                 ->schema([
