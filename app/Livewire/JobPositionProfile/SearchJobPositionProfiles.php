@@ -97,6 +97,7 @@ class SearchJobPositionProfiles extends Component
         if($this->index == 'all'){
             $subParams = Parameter::select('value')
                 ->whereIn('parameter', ['SubRRHH', 'SDASSI', 'SubSDGA'])
+                ->where('establishment_id', auth()->user()->establishment_id)
                 ->get()
                 ->toArray();
 
