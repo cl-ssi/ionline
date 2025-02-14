@@ -430,6 +430,7 @@ class Process extends Model implements Auditable
             'module_icon'         => 'bi bi-file-earmark-text',
             'subject'             => $this->processType->name,
             'sent_to_user_id'     => $this->signer->user->id,
+            'initials'            => $this->signer->user->initials,
             'digital_signature'   => true,
             'position'            => 'right',
             'filename'            => 'ionline/agreements/processes/'.Str::random(30).'.pdf',
@@ -466,6 +467,18 @@ class Process extends Model implements Auditable
             }
         } else {
             $this->approval()->create($approvalData);
+        }
+    }
+
+    public function updateApprovalSignerInitials(): void
+    {
+        $approvalData = [
+            'sent_to_user_id'     => $this->signer->user->id,
+            'initials'            => $this->signer->user->initials,
+        ];
+
+        if ($this->approval()->exists()) {
+            $this->approval()->update($approvalData);
         }
     }
 

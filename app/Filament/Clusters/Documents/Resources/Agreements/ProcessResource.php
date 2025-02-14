@@ -971,8 +971,12 @@ class ProcessResource extends Resource
                         ->icon('bi-save')
                         // ->action('save'),
                         ->action(function (Process $record, $livewire) {
+                            
                             // Save using the livewire form component
                             $livewire->save();
+
+                            // update the approval signer initials
+                            $record->updateApprovalSignerInitials();
                             
                             // Redirect to refresh the page
                             return redirect()->to(ProcessResource::getUrl('edit', ['record' => $record->id]));
