@@ -70,15 +70,6 @@ class ApprovalObserver
                 }
             }
         }
-
-        /**
-         * Obtener las iniciales para cada sent_to_ou_id o sent_to_user_id
-         */
-        if ($approval->sentToOu) {
-            $approval->initials = $approval->sentToOu->initials;
-        } elseif ($approval->sentToUser) {
-            $approval->initials = $approval->sentToUser->initials;
-        }
     }
 
     /**
