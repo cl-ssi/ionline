@@ -185,11 +185,15 @@
 
         <!-- PDF -->
         @if(count($allowance->approvals) > 0 && $allowance->approvals->last()->status == 1)
-        <div class="list-group mt-3">
-            <a href="{{ route('allowances.download_resol_pdf', $allowance) }}" class="list-group-item list-group-item-action py-2 active small" target="_blank">
-                <i class="fas fa-file-pdf"></i> Viático Firmado <br>
-            </a>
-        </div>
+            <div class="list-group mt-3">
+                <a href="{{ route('allowances.download_resol_pdf', $allowance) }}" class="list-group-item list-group-item-action py-2 active small" target="_blank">
+                    <i class="fas fa-file-pdf"></i> Viático Firmado <br>
+                </a>
+            </div>
+        @endif
+
+        @if(in_array($allowance->status, ['complete','rejected','manual']) && (auth()->user()->hasPermissionTo('Allowances: sirh') || auth()->user()->hasPermissionTo('Allowances: contabilidad')))
+            @livewire('allowances.archive-allowance', ['allowance' => $allowance])
         @endif
     </div>
 </div>

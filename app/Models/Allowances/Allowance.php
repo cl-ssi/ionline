@@ -237,6 +237,13 @@ class Allowance extends Model implements Auditable
         return $this->morphOne(Archive::class, 'archive');
     }
 
+    public function isArchived()
+    {
+        return Archive::where('archive_type', self::class)
+            ->where('archive_id', $this->id)
+            ->exists();
+    }
+
     public function getStatusValueAttribute()
     {
         switch ($this->status) {

@@ -471,4 +471,28 @@ class AllowanceController extends Controller
 
         }
     }
+
+    /*
+     * Archivar un viático
+     *
+    public function archive($id)
+    {
+        $allowance = Allowance::findOrFail($id);
+        $this->archive(get_class($allowance), $allowance->id);
+
+
+        return back()->with('success', 'Viático archivado correctamente.');
+    }
+
+    /**
+     * Desarchivar un viático
+     *
+    public function unarchive($id)
+    {
+        $allowance = Allowance::findOrFail($id);
+        $this->unarchive(get_class($allowance), $allowance->id);
+
+        return back()->with('success', 'Viático desarchivado correctamente.');
+    }
+    */
 }
