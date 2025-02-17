@@ -21,7 +21,7 @@ class MeetingPolicy
      */
     public function view(User $user, Meeting $meeting): bool
     {
-        return true;
+        return $user->id === $meeting->user_creator_id || $user->canany(['Meetings: all meetings', 'be god']);
     }
 
     /**
@@ -29,7 +29,7 @@ class MeetingPolicy
      */
     public function create(User $user): bool
     {
-        return true;
+        return false;
     }
 
     /**
@@ -38,6 +38,7 @@ class MeetingPolicy
     public function update(User $user, Meeting $meeting): bool
     {
         return false;
+        // return $user->id === $meeting->user_creator_id || $user->canany(['Meetings: all meetings', 'be god']);
     }
     
     
