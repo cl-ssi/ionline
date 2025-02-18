@@ -992,6 +992,19 @@ class ProcessResource extends Resource
                                 ->send();
                         })
                         ->disabled(fn (?Process $record) => $record->processType->sign_commune && $record->returned_from_commune_at === null ? true : false),
+                    Forms\Components\Actions\Action::make('EliminarFirmaDirector')
+                        ->label('Eliminar Firma Director/a')
+                        ->icon('heroicon-m-trash')
+                        ->color('danger')
+                        ->requiresConfirmation()
+                        ->action(function (Process $record, array $data): void {
+                            $record->resetApproval();
+                            Notifications\Notification::make()
+                                ->title('Se eliminó firma de director(a)')
+                                ->success()
+                                ->send();
+                        })
+                        ->visible(condition: fn (?Process $record) => $record->approval?->status === true),
                 ])
                 ->schema([
                     Forms\Components\Select::make('signer_id')
@@ -1004,6 +1017,10 @@ class ProcessResource extends Resource
                     Forms\Components\Group::make()
                         ->relationship('approval')
                         ->schema([
+                            Forms\Components\Placeholder::make('approver_at')
+                                ->label('Fecha de aprobación')
+                                ->content(fn ($record) => $record['approver_at'] ?? '')
+                                ->visible(fn ($record) => $record['status'] === true),
                             Forms\Components\TextInput::make('initials')
                                 ->label('Iniciales')
                                 ->disabled()

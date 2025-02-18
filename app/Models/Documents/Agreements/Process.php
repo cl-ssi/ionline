@@ -470,6 +470,15 @@ class Process extends Model implements Auditable
         }
     }
 
+    public function resetApproval(){
+        if ($this->approval()->exists()) {
+            $this->createComment('Se eliminó aprobación de director/a del día ' . 
+                    $this->approval?->approver_at->format('d-m-Y') . ': ' . 
+                    $this->approval?->approver_observation);
+            $this->approval?->resetStatus();
+        }
+    }
+
     public function updateApprovalSignerInitials(): void
     {
         $approvalData = [
