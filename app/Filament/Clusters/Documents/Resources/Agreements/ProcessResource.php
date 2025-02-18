@@ -954,9 +954,9 @@ class ProcessResource extends Resource
                             // Save using the livewire form component
                             $livewire->save();
                             
-                            // Update returned_from_commune_at with current date
+                            // Update returned_from_commune_at only if there's a file
                             $record->update([
-                                'returned_from_commune_at' => now(),
+                                'returned_from_commune_at' => $record->signedCommuneFile?->exists() ? now() : null,
                             ]);
                             
                             // Redirect to refresh the page
