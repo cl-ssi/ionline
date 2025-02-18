@@ -198,10 +198,48 @@ class ProcessResource extends Resource
                     ->searchable(),
             ])
             ->actions([
+                // Tables\Actions\Action::make('Ver')
+                //     ->icon('heroicon-m-eye')
+                //     ->url(fn (Process $record) => route('documents.agreements.processes.view', [$record]))
+                //     ->openUrlInNewTab(),
                 Tables\Actions\Action::make('Ver')
                     ->icon('heroicon-m-eye')
-                    ->url(fn (Process $record) => route('documents.agreements.processes.view', [$record]))
-                    ->openUrlInNewTab(),
+                    ->url(function (Process $record) {
+                        
+                        // Case 1: If the process is fully approved by the director
+                        if ($record->approval?->status === true) {
+                            return route('documents.signed.approval.pdf', ['approval' => $record->approval->id]);
+                        }
+
+                        // Case 2: If there's a signed file from the commune
+                        if ($record->signedCommuneFile && $record->signedCommuneFile->storage_path) {
+                            // For FileUpload fields, storage_path might be just the filename
+                            // or it might include the directory - we need to handle both cases
+                            return $path = $record->signedCommuneFile->storage_path;
+                        }
+                        
+                        // Case 3: Default - show the process view
+                        return route('documents.agreements.processes.view', [$record]);
+                    })
+                    ->openUrlInNewTab()
+                    ->color(function (Process $record) {
+                        if ($record->approval?->status === true) {
+                            return 'success'; // Green for director signed
+                        }
+                        if ($record->signedCommuneFile) {
+                            return 'warning'; // Yellow for commune signed
+                        }
+                        return 'gray'; // Gray for draft
+                    })
+                    ->tooltip(function (Process $record) {
+                        if ($record->approval?->status === true) {
+                            return 'Documento finalizado firmado por director';
+                        }
+                        if ($record->signedCommuneFile?->exists()) {
+                            return 'Documento firmado por comuna';
+                        }
+                        return 'Documento sin firmas';
+                    }),
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
