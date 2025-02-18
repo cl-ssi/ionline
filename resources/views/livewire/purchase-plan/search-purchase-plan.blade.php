@@ -156,7 +156,7 @@
                                 <td class="text-center">
                                     <a href="{{ route('purchase_plan.show', $purchasePlan) }}"
                                         class="btn btn-outline-secondary btn-sm mb-1"><i class="fas fa-eye fa-fw"></i></a>
-                                    @if(in_array($index, ['own', 'all']))
+                                    @if(in_array($index, ['own', 'all']) && !$purchasePlan->trashed())
                                         <a href="{{ route('purchase_plan.edit', $purchasePlan) }}"
                                             class="btn btn-outline-secondary btn-sm mb-1"><i class="fas fa-edit fa-fw"></i> </a>
                                     @endif
