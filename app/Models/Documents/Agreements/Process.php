@@ -453,7 +453,7 @@ class Process extends Model implements Auditable
                 return;
             }
             $approvalData['start_y']           = 35;
-            $approvalData['document_pdf_path'] = $this->signedCommuneFile->filename;
+            $approvalData['document_pdf_path'] = $this->signedCommuneFile->storage_path;
         }
 
         if ($this->approval()->exists()) {
