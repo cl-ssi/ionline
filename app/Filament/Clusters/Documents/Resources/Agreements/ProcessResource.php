@@ -1028,8 +1028,8 @@ class ProcessResource extends Resource
                         ->schema([
                             Forms\Components\Placeholder::make('approver_at')
                                 ->label('Fecha de aprobación')
-                                ->content(fn ($record) => $record['approver_at'] ?? '')
-                                ->visible(fn ($record) => $record['status'] ?  $record['status'] : false),
+                                ->content(fn ($record) => $record['approver_at'] ?? ''),
+                                // ->visible(fn ($record) => $record['status'] ?  $record['status'] : false),
                             Forms\Components\TextInput::make('initials')
                                 ->label('Iniciales')
                                 ->disabled()
