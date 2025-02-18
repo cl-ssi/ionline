@@ -935,7 +935,7 @@ class ProcessResource extends Resource
 
                 
             Forms\Components\Section::make('Firma Director')
-                ->description(fn (?Process $record) => $record->returned_from_commune_at === null ? 'Debe esperar que la comuna suba archivo firmado por alcaldía para solicitar firma del director.' : '') 
+                ->description(fn (?Process $record) => $record->processType->sign_commune && $record->returned_from_commune_at === null ? 'Debe esperar que la comuna suba archivo firmado por alcaldía para solicitar firma del director.' : '') 
                 ->headerActions([
                     Forms\Components\Actions\Action::make('Descargar')
                         ->label('Descargar')
@@ -954,7 +954,7 @@ class ProcessResource extends Resource
                                 ->success()
                                 ->send();
                         })
-                        ->disabled(fn (?Process $record) => $record->returned_from_commune_at === null ? true : false),
+                        ->disabled(fn (?Process $record) => $record->processType->sign_commune && $record->returned_from_commune_at === null ? true : false),
                 ])
                 ->schema([
                     Forms\Components\Select::make('signer_id')
