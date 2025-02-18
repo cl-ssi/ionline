@@ -840,7 +840,10 @@ class ProcessResource extends Resource
                 ->columnSpanFull()
                 ->visibleOn('edit'),
 
+            
+
             Forms\Components\Section::make('Firma de Comuna')
+                ->description(fn (?Process $record) => $record->endorses->contains(fn ($endorse) => $endorse->status !== true) ? 'Debe esperar la visación completa del convenio para solicitar la firma del alcalde.' : '') 
                 ->headerActions([
                     Forms\Components\Actions\Action::make('Enviar Proceso')
                         ->icon('heroicon-m-paper-airplane')
@@ -862,16 +865,19 @@ class ProcessResource extends Resource
 
                             // Refresh the page
                             $livewire->redirect(request()->header('Referer'));
-                        }),
+                        })
+                        ->disabled(fn (?Process $record) => $record->endorses->contains(fn ($endorse) => $endorse->status !== true) ? true : false),
                 ])
                 ->schema([
                     Forms\Components\DatePicker::make('sended_to_commune_at')
-                        ->label('Fecha de envío a la comuna'),
+                        ->label('Fecha de envío a la comuna')
+                        ->disabled(),
                     Forms\Components\Fieldset::make('Devolución de la comuna')
                         ->schema([
                             Forms\Components\DatePicker::make('returned_from_commune_at')
                                 ->label('Fecha de devolución')
-                                ->columnSpanFull(),
+                                ->columnSpanFull()
+                                ->disabled(),
                             /**
                              * Ejemplo completo de uso de relación file
                              */
@@ -897,12 +903,29 @@ class ProcessResource extends Resource
                         ])
                         ->columnSpan(1),
                 ])
+                // ->footerActions([
+                //     Forms\Components\Actions\Action::make('guardar_cambios')
+                //         ->icon('bi-save')
+                //         ->action('save'),
+                //     // ->hidden(fn (?Process $record) => $record->status !== Status::Finished),
+
+                // ])
                 ->footerActions([
                     Forms\Components\Actions\Action::make('guardar_cambios')
                         ->icon('bi-save')
-                        ->action('save'),
-                    // ->hidden(fn (?Process $record) => $record->status !== Status::Finished),
-
+                        ->action(function (Process $record, $livewire) {
+                            // Save using the livewire form component
+                            $livewire->save();
+                            
+                            // Update returned_from_commune_at with current date
+                            $record->update([
+                                'returned_from_commune_at' => now(),
+                            ]);
+                            
+                            // Redirect to refresh the page
+                            return redirect()->to(ProcessResource::getUrl('edit', ['record' => $record->id]));
+                        })
+                    ->disabled(fn (?Process $record) => $record->endorses->contains(fn ($endorse) => $endorse->status !== true) ? true : false),
                 ])
                 // ->footerActionsAlignment(Alignment::End)
                 ->columns(2)
@@ -910,8 +933,9 @@ class ProcessResource extends Resource
                 ->columnSpanFull()
                 ->visible(fn (?Process $record) => $record->processType->sign_commune),
 
+                
             Forms\Components\Section::make('Firma Director')
-                ->description(fn (?Process $record) => $record->endorses->contains(fn ($endorse) => $endorse->status !== true) ? 'Debe esperar a que todos los visadores aprueben el documento.' : '') 
+                ->description(fn (?Process $record) => $record->returned_from_commune_at === null ? 'Debe esperar que la comuna suba archivo firmado por alcaldía para solicitar firma del director.' : '') 
                 ->headerActions([
                     Forms\Components\Actions\Action::make('Descargar')
                         ->label('Descargar')
@@ -930,12 +954,7 @@ class ProcessResource extends Resource
                                 ->success()
                                 ->send();
                         })
-                        ->disabled(function (Process $record): bool {
-                            // Verifica si hay algún endorse que no esté aprobado (status != true)
-                            return $record->endorses->contains(function ($endorse) {
-                                return $endorse->status !== true;
-                            });
-                        }),
+                        ->disabled(fn (?Process $record) => $record->returned_from_commune_at === null ? true : false),
                 ])
                 ->schema([
                     Forms\Components\Select::make('signer_id')

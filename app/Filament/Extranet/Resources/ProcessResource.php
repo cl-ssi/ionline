@@ -178,10 +178,10 @@ class ProcessResource extends Resource
                     ->label('Comuna')
                     ->searchable()
                     ->sortable(),
-                Tables\Columns\ImageColumn::make('endorses.avatar')
-                    ->label('Visaciones')
-                    ->circular()
-                    ->stacked(),
+                // Tables\Columns\ImageColumn::make('endorses.avatar')
+                //     ->label('Visaciones')
+                //     ->circular()
+                //     ->stacked(),
                 Tables\Columns\ImageColumn::make('approval.avatar')
                     ->label('Firma Director')
                     ->circular()
