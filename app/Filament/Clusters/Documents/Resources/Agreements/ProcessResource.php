@@ -208,14 +208,13 @@ class ProcessResource extends Resource
                         
                         // Case 1: If the process is fully approved by the director
                         if ($record->approval?->status === true) {
-                            return route('documents.signed.approval.pdf', ['approval' => $record->approval->id]);
+                            return Storage::url($record->approval?->filename ?? '');
                         }
 
                         // Case 2: If there's a signed file from the commune
                         if ($record->signedCommuneFile && $record->signedCommuneFile->storage_path) {
-                            // For FileUpload fields, storage_path might be just the filename
-                            // or it might include the directory - we need to handle both cases
-                            return $path = $record->signedCommuneFile->storage_path;
+                            return Storage::url($record->signedCommuneFile->storage_path ?? '');
+                            // return $path = $record->signedCommuneFile->storage_path;
                         }
                         
                         // Case 3: Default - show the process view
