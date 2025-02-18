@@ -16,12 +16,12 @@ class SearchPurchasePlan extends Component
     protected $paginationTheme = 'bootstrap';
 
     public $selectedId, $selectedStatus, $selectedSubject, $selectedStartDate, $selectedEndDate, $selectedUserCreator, $selectedUserResponsible,
-        $selectedResponsibleOuName, $selectedProgram;
+        $selectedResponsibleOuName, $selectedProgram, $selectedDeleted;
 
     public $index;
 
     protected $queryString = ['selectedId', 'selectedStatus', 'selectedSubject', 'selectedStartDate', 'selectedEndDate', 'selectedUserCreator',
-        'selectedUserResponsible', 'selectedResponsibleOuName', 'selectedProgram'];
+        'selectedUserResponsible', 'selectedResponsibleOuName', 'selectedProgram', 'selectedDeleted'];
 
     public function delete(PurchasePlan $purchasePlan)
     {
@@ -76,7 +76,8 @@ class SearchPurchasePlan extends Component
                     $this->selectedUserCreator,
                     $this->selectedUserResponsible,
                     $this->selectedResponsibleOuName,
-                    $this->selectedProgram)
+                    $this->selectedProgram,
+                    $this->selectedDeleted)
                 /*
                 ->search($this->selectedStatus,
                     $this->selectedId,
@@ -104,8 +105,16 @@ class SearchPurchasePlan extends Component
                     $this->selectedUserCreator,
                     $this->selectedUserResponsible,
                     $this->selectedResponsibleOuName,
-                    $this->selectedProgram)
-                ->paginate(30);
+                    $this->selectedProgram,
+                    $this->selectedDeleted)
+                ->withTrashed();
+            
+            // Si el filtro es "deleted", solo mostrar eliminados
+            if($this->selectedDeleted == 'deleted') {
+                $purchasePlans->onlyTrashed();
+            }
+
+            $purchasePlans = $purchasePlans->paginate(30);
         }
 
         if($this->index == 'pending'){
@@ -123,7 +132,8 @@ class SearchPurchasePlan extends Component
                     $this->selectedUserCreator,
                     $this->selectedUserResponsible,
                     $this->selectedResponsibleOuName,
-                    $this->selectedProgram)
+                    $this->selectedProgram,
+                    $this->selectedDeleted)
                 ->paginate(30);
         }
 
@@ -210,6 +220,10 @@ class SearchPurchasePlan extends Component
     }
 
     public function updatingSelectedProgram(){
+        $this->resetPage();
+    }
+
+    public function updatingSelectedDeleted(){
         $this->resetPage();
     }
 }

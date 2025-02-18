@@ -63,6 +63,16 @@
                     <label for="for_program">Programa</label>
                     <input class="form-control form-control-sm" type="text" autocomplete="off" name="program_search" wire:model.live.debounce.500ms="selectedProgram">
                 </fieldset>
+                
+                @if($index == 'all')
+                    <fieldset class="form-group col-12 col-md-3">
+                        <label for="for_status_search">Estado Registro</label>
+                        <select name="deleted_search" class="form-select form-select-sm" wire:model.live.debounce.500ms="selectedDeleted">
+                            <option value="">Seleccione...</option>
+                            <option value="deleted">Eliminado</option>
+                        </select>
+                    </fieldset>
+                @endif
             </div>
         </div>
     @endif
@@ -136,7 +146,12 @@
                                         @endforeach
                                     @endif
                                     <br>
-                                    <span class="badge bg-{{$purchasePlan->getColorStatus()}} badge-sm">{{ $purchasePlan->getStatus() }}</span>
+                                    @if($purchasePlan->trashed())
+                                        <span class="badge bg-danger">Eliminado</span> <br>
+                                        {{ $purchasePlan->deleted_at }}
+                                    @else
+                                        <span class="badge bg-{{$purchasePlan->getColorStatus()}} badge-sm">{{ $purchasePlan->getStatus() }}</span>
+                                    @endif
                                 </td>
                                 <td class="text-center">
                                     <a href="{{ route('purchase_plan.show', $purchasePlan) }}"
@@ -145,7 +160,7 @@
                                         <a href="{{ route('purchase_plan.edit', $purchasePlan) }}"
                                             class="btn btn-outline-secondary btn-sm mb-1"><i class="fas fa-edit fa-fw"></i> </a>
                                     @endif
-                                    @if($purchasePlan->canDelete() && ($index == 'all' || $index == 'own'))
+                                    @if($purchasePlan->canDelete() && ($index == 'all' || $index == 'own') && !$purchasePlan->trashed())
                                         <button type="button" class="btn btn-outline-secondary btn-sm text-danger mb-1"
                                             onclick="confirm('¿Está seguro que desea borrar el plan de compra ID {{ $purchasePlan->id }}?') || event.stopImmediatePropagation()"
                                             wire:click="delete({{ $purchasePlan }})"><i class="fas fa-trash fa-fw"></i>

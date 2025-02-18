@@ -82,8 +82,9 @@ class PurchasePlanController extends Controller
      * @param  \App\Models\PurchasePlan\PurchasePlan  $purchasePlan
      * @return \Illuminate\Http\Response
      */
-    public function show(PurchasePlan $purchasePlan)
+    public function show($id)
     {
+        $purchasePlan = PurchasePlan::withTrashed()->findOrFail($id);
         return view('purchase_plan.show', compact('purchasePlan'));
     }
 
