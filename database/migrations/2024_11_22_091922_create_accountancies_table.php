@@ -15,14 +15,11 @@ return new class extends Migration
             $table->id();
             $table->string('resolution_folio')->nullable();
             $table->datetime('resolution_date')->nullable();
-            $table->string('resolution_file')->nullable();
             $table->string('commitment_folio_sigfe')->nullable();
             $table->datetime('commitment_date_sigfe')->nullable();
-            $table->string('commitment_file_sigfe')->nullable();
             $table->string('accrual_folio_sigfe')->nullable();
             $table->datetime('accrual_date_sigfe')->nullable();
-            $table->string('accrual_file_sigfe')->nullable();
-            $table->nullableMorphs('accountable');
+            $table->morphs('accountable');
             $table->foreignId('user_id')->nullable()->constrained('users');
             $table->timestamps();
             $table->softDeletes();
