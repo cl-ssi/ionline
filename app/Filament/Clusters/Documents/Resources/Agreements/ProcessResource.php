@@ -999,8 +999,8 @@ class ProcessResource extends Resource
                                 ->success()
                                 ->send();
                         })
-                        ->disabled(fn (?Process $record) => ($record->processType->sign_commune === true && $record->returned_from_commune_at === null))
-                        ->visible(fn (?Process $record) => !$record->processType->is_resolution),
+                        ->disabled(fn (?Process $record) => ($record->processType->sign_commune === true && $record->returned_from_commune_at === null)),
+                        // ->visible(fn (?Process $record) => !$record->processType->is_resolution),
                     Forms\Components\Actions\Action::make('EliminarFirmaDirector')
                         ->label('Eliminar Firma Director/a')
                         ->icon('heroicon-m-trash')
