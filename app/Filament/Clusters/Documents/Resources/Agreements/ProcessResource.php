@@ -976,9 +976,9 @@ class ProcessResource extends Resource
                 if ($record->processType->sign_commune === true && $record->returned_from_commune_at === null) {
                     return 'Debe esperar que la comuna suba archivo firmado por alcaldía para solicitar firma del director.';
                 }
-                if ($record->processType->is_resolution) {
-                    return 'Temporalmente no es posible enviar solicitud de firma para la dirección si es una resolución.';
-                }
+                // if ($record->processType->is_resolution) {
+                //     return 'Temporalmente no es posible enviar solicitud de firma para la dirección si es una resolución.';
+                // }
                 return '';
             })
                 ->headerActions([
