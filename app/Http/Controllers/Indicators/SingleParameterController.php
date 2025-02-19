@@ -191,7 +191,11 @@ class SingleParameterController extends Controller
 
                 if(in_array('>=100', $new_etario)){
                     $max_edad = $total_pob = PercapitaOficial::year($year)
-                    ->max('Edad');
+                        ->pluck('Edad')
+                        ->filter(fn($edad) => is_numeric($edad)) // Filtra solo números
+                        ->map(fn($edad) => (int) $edad) // Convierte a entero
+                        ->max(); // Obtiene el máximo valor
+
                     array_pop($new_etario);
 
                     foreach (range(100, $max_edad) as $edad) {
