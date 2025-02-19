@@ -22,13 +22,10 @@ class Accountancy extends Model
 
         'resolution_folio',
         'resolution_date',
-        'resolution_file',
         'commitment_folio_sigfe',
         'commitment_date_sigfe',
-        'commitment_file_sigfe',
         'accrual_folio_sigfe',
         'accrual_date_sigfe',
-        'accrual_file_sigfe',
         'accountable_type',
         'accountable_id',
         'user_id',

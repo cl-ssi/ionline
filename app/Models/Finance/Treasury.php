@@ -21,9 +21,7 @@ class Treasury extends Model
     protected $fillable = [
         'name',
         'bank_receipt_date',
-        // 'bank_receipt_file',
         'third_parties_date',
-        // 'third_parties_file',
         'treasureable_type',
         'treasureable_id',
         'user_id',
@@ -40,18 +38,18 @@ class Treasury extends Model
     }
 
     /**
-     * Get third Parties file.
-     */
-    public function thirdPartiesFile(): MorphOne
-    {
-        return $this->morphOne(File::class, 'fileable')->where('type', 'third_parties_file');
-    }
- 
-    /**
      * Get bank receipt file.
      */
     public function bankReceiptFile(): MorphOne
     {
         return $this->morphOne(File::class, 'fileable')->where('type', 'bank_receipt_file');
+    }
+
+    /**
+     * Get third Parties file.
+     */
+    public function thirdPartiesFile(): MorphOne
+    {
+        return $this->morphOne(File::class, 'fileable')->where('type', 'third_parties_file');
     }
 }
