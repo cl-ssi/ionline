@@ -587,7 +587,7 @@ class Process extends Model implements Auditable
                 ->where('establishment_id', $this->establishment_id)
                 ->get();
             Notification::make()
-                ->title('El proceso fue visado por todos')
+                ->title('El proceso ' . $this->id . ' fue visado por todos')
                 ->actions([
                     Notifications\Actions\Action::make('IrAlProceso')
                         ->button()
