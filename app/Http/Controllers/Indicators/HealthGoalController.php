@@ -63,6 +63,7 @@ class HealthGoalController extends Controller
         return view('indicators.health_goals.show', compact($law == '19813' ? 'indicator' : 'healthGoal'));
     }
 
+    /*
     private function loadValuesWithRemSource($healthGoal)
     {
         foreach($healthGoal->indicators as $indicator){
@@ -115,6 +116,79 @@ class HealthGoalController extends Controller
             }
         }
     }
+    */
+
+    private function loadValuesWithRemSource($healthGoal)
+    {
+        foreach ($healthGoal->indicators as $indicator) {
+            $establishment_cods = $indicator->establishment_cods != null
+                ? array_map('trim', explode(',', $indicator->establishment_cods))
+                : null;
+
+            foreach (['numerador', 'denominador'] as $factor) {
+                $factor_cods = $factor == 'numerador' ? $indicator->numerator_cods : $indicator->denominator_cods;
+                $factor_cols = $factor == 'numerador' ? $indicator->numerator_cols : $indicator->denominator_cols;
+
+                if ($factor_cods != null && $factor_cols != null) {
+                    $cods_array = array_map('trim', explode(';', $factor_cods));
+                    $cols_array = array_map('trim', explode(';', $factor_cols));
+
+                    for ($i = 0; $i < count($cods_array); $i++) {
+                        $cods = array_map('trim', explode(',', $cods_array[$i]));
+                        $cols = array_map('trim', explode(',', $cols_array[$i]));
+
+                        // 🔹 Detectamos códigos negativos (resta)
+                        $cods2 = [];
+                        foreach ($cods as $key => $value) {
+                            if (strpos($value, "-") !== false) {
+                                $cods2[] = substr($value, 1); // Eliminamos el signo negativo
+                                unset($cods[$key]); // Eliminamos del array principal
+                            }
+                        }
+
+                        $raws = implode(' + ', array_map(fn($col) => "SUM(COALESCE($col, 0))", $cols)) . ' AS valor, Mes';
+
+                        // 🔹 Primera consulta (Suma de valores normales)
+                        $result = Rem::year($healthGoal->year)
+                            ->selectRaw($raws)
+                            ->when($establishment_cods, fn($query) => $query->whereIn('IdEstablecimiento', $establishment_cods))
+                            ->whereIn('CodigoPrestacion', $cods)
+                            ->groupBy('Mes')
+                            ->orderBy('Mes')
+                            ->get();
+
+                        foreach ($result as $item) {
+                            $indicator->values->add(new Value([
+                                'month' => $item->Mes,
+                                'factor' => $factor,
+                                'value' => $item->valor,
+                            ]));
+                        }
+
+                        // 🔹 Segunda consulta (Resta de valores con códigos negativos)
+                        if (!empty($cods2)) {
+                            $result = Rem::year($healthGoal->year)
+                                ->selectRaw($raws)
+                                ->when($establishment_cods, fn($query) => $query->whereIn('IdEstablecimiento', $establishment_cods))
+                                ->whereIn('CodigoPrestacion', $cods2)
+                                ->groupBy('Mes')
+                                ->orderBy('Mes')
+                                ->get();
+
+                            foreach ($result as $item) {
+                                $indicator->values->add(new Value([
+                                    'month' => $item->Mes,
+                                    'factor' => $factor,
+                                    'value' => -$item->valor, // 🔹 Aquí aplicamos la resta
+                                ]));
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
 
     private function loadValuesWithRemSourceLaw19813($year, $indicator)
     {
