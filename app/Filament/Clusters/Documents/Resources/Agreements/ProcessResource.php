@@ -893,7 +893,7 @@ class ProcessResource extends Resource
                             }
 
                             Notifications\Notification::make()
-                                ->title('PDF enviado a la comuna')
+                                ->title('PDF de proceso ' . $record->id . ' enviado a la comuna')
                                 ->success()
                                 ->send();
 
@@ -998,7 +998,7 @@ class ProcessResource extends Resource
                         ->action(function (Process $record, array $data): void {
                             $record->createApproval();
                             Notifications\Notification::make()
-                                ->title('Solicitud de firma a dirección enviada')
+                                ->title('Solicitud de firma de proceso ' . $record->id . ' a dirección enviada')
                                 ->success()
                                 ->send();
                         })
@@ -1012,7 +1012,7 @@ class ProcessResource extends Resource
                         ->action(function (Process $record, array $data): void {
                             $record->deleteApproval();
                             Notifications\Notification::make()
-                                ->title('Se eliminó firma de director(a)')
+                                ->title('En proceso ' . $record->id . ' se eliminó firma de director(a)')
                                 ->success()
                                 ->send();
                         })
@@ -1264,7 +1264,7 @@ class ProcessResource extends Resource
 
                             // Notificar al referente.
                             Notifications\Notification::make()
-                                ->title('Nuevo proceso N°' . $record->id . ' aprobado por jurídico')
+                                ->title('Proceso N°' . $record->id . ' aprobado por jurídico')
                                 ->actions([
                                     Notifications\Actions\Action::make('IrAlProceso')
                                         ->button()
@@ -1274,7 +1274,7 @@ class ProcessResource extends Resource
                                 ->sendToDatabase($record->program->referers);
 
                             Notifications\Notification::make()
-                                ->title('Documento aprobado por jurídico')
+                                ->title('Proceso N°' . $record->id . ' aprobado por jurídico')
                                 ->success()
                                 ->send();
 
