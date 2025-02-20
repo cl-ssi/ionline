@@ -113,6 +113,23 @@ class RequestFormCreate extends Component
             if(!is_null($purchasePlan)){
                 $this->purchasePlan = $purchasePlan;
                 $this->setRequestFormFromPurchasePlan();
+
+                // Cargar los items desde la base de datos si existen
+                if ($this->isRFItems && $this->purchasePlan->purchasePlanItems) {
+                    foreach ($this->purchasePlan->purchasePlanItems as $item) {
+                        $this->items[] = [
+                            'id' => $item->id,
+                            'product_id' => $item->product_id,
+                            'unitOfMeasurement' => $item->unit_of_measurement,
+                            'technicalSpecifications' => $item->specification,
+                            'quantity' => $item->quantity,
+                            'unitValue' => $item->unit_value,
+                            'taxes' => $item->tax,
+                            'totalValue' => $item->expense,
+                            'articleFile' => $item->article_file
+                        ];
+                    }
+                }
             }
         }
 
