@@ -106,6 +106,7 @@ class ProcessResource extends Resource
                 ->columnSpanFull(),
 
             Forms\Components\Section::make('Firma de Comuna')
+                ->description("Si necesita reducir el tamaño del archivo, sugerimos utilizar la herramienta gratuita <a href='https://www.ilovepdf.com/compress_pdf' target='_blank'>ilovepdf</a>") 
                 ->schema([
                     Forms\Components\Fieldset::make('Devolución de la comuna')
                         ->schema([
