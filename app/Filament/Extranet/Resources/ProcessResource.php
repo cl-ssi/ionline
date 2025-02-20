@@ -89,14 +89,18 @@ class ProcessResource extends Resource
                     Forms\Components\Actions\Action::make('aprobar')
                         ->label('Aprobar')
                         ->icon('bi-save')
-                        ->action(function (Process $record) {
+                        ->action(function (Process $record, $livewire) {
                             $record->revision_by_commune_at = now();
                             $record->revision_by_commune_user_id = auth()->id();
                             $record->save();
+                            
                             Notifications\Notification::make()
                                 ->title('Revisión aprobada')
                                 ->success()
                                 ->send();
+                    
+                            // Redireccionar para refrescar la página
+                            return redirect()->to(ProcessResource::getUrl('edit', ['record' => $record->id]));
                         })
                         ->disabled(fn (?Process $record) => $record?->revision_by_commune_at !== null),
                 ])
@@ -106,7 +110,7 @@ class ProcessResource extends Resource
                 ->columnSpanFull(),
 
             Forms\Components\Section::make('Firma de Comuna')
-                ->description("Si necesita reducir el tamaño del archivo, sugerimos utilizar la herramienta gratuita <a href='https://www.ilovepdf.com/compress_pdf' target='_blank'>ilovepdf</a>") 
+                ->description("Si necesita reducir el tamaño del archivo, sugerimos utilizar la herramienta gratuita ilovepdf") 
                 ->schema([
                     Forms\Components\Fieldset::make('Devolución de la comuna')
                         ->schema([
@@ -142,7 +146,13 @@ class ProcessResource extends Resource
                 ->footerActions([
                     Forms\Components\Actions\Action::make('guardar_cambios')
                         ->icon('bi-save')
-                        ->action('save'),
+                        ->action(function (Process $record, $livewire) {
+                            // Save using the livewire form component
+                            $livewire->save();
+                            
+                            // Redirect to refresh the page
+                            return redirect()->to(ProcessResource::getUrl('edit', ['record' => $record->id]));
+                        }),
                 ])
                 ->footerActionsAlignment(Alignment::End)
                 ->columns(2)

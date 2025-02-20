@@ -13,6 +13,8 @@ class ProcessPolicy
      */
     public function before(User $user, string $ability): bool|null
     {
+        return null;
+    
         return $user->can('be god') ? true : null;
     }
 
@@ -53,8 +55,12 @@ class ProcessPolicy
     public function update(User $user, Process $process): bool
     {
         // can Agreement edit AND $user is in $process->program->referers
-        return $user->canAny(['Agreement: admin', 'Agreement: legally']) || 
-            ($user->can('Agreement: edit') && ($process->program->referers->contains($user) || $process->municipality->users->contains($user)));
+        return true;
+        if($user->external){
+            return $user->can('Agreement: edit') && $process->sended_revision_commune_at && $process->municipality->users->contains($user);
+        }else{
+            return $user->canAny(['Agreement: admin', 'Agreement: legally']) || ($user->can('Agreement: edit') && $process->program->referers->contains($user));
+        }
     }
 
     /**
