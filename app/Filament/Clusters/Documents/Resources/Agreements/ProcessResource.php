@@ -992,6 +992,9 @@ class ProcessResource extends Resource
                         ->label('Solicitar Firma Director/a')
                         ->icon('heroicon-m-check-circle')
                         ->requiresConfirmation()
+                        ->modalHeading('Solicitar Firma Director/a')
+                        ->modalDescription('Si ya existe una firma del director/a, esta será reiniciada y el proceso deberá ser firmado nuevamente.')
+                        ->modalSubmitActionLabel('Aceptar')
                         ->action(function (Process $record, array $data): void {
                             $record->createApproval();
                             Notifications\Notification::make()
@@ -1007,13 +1010,16 @@ class ProcessResource extends Resource
                         ->color('danger')
                         ->requiresConfirmation()
                         ->action(function (Process $record, array $data): void {
-                            $record->resetApproval();
+                            $record->deleteApproval();
                             Notifications\Notification::make()
                                 ->title('Se eliminó firma de director(a)')
                                 ->success()
                                 ->send();
                         })
-                        ->visible(condition: fn (?Process $record) => $record->approval?->status === true),
+                        ->visible(fn (?Process $record): bool => 
+                            auth()->user()?->can('Agreement: admin') && 
+                            $record->approval()->exists()
+                        ),
                 ])
                 ->schema([
                     Forms\Components\Select::make('signer_id')
@@ -1028,8 +1034,8 @@ class ProcessResource extends Resource
                         ->schema([
                             Forms\Components\Placeholder::make('approver_at')
                                 ->label('Fecha de aprobación')
-                                ->content(fn ($record) => $record['approver_at'] ?? ''),
-                                // ->visible(fn ($record) => $record['status'] ?  $record['status'] : false),
+                                ->content(fn ($record) => $record['approver_at'] ?? '')
+                                ->visible(fn ($record) => $record->status === false),
                             Forms\Components\TextInput::make('initials')
                                 ->label('Iniciales')
                                 ->disabled()
@@ -1042,7 +1048,7 @@ class ProcessResource extends Resource
                             Forms\Components\Placeholder::make('approver_observation')
                                 ->label('Observaciones')
                                 ->content(fn ($record) => $record['approver_observation'] ?? 'Sin observaciones')
-                                ->visible(fn ($record) => $record['status'] === false),
+                                ->visible(fn ($record) => $record->status === false),
                         ])
                         ->columns(2)
                         ->columnSpan(2)

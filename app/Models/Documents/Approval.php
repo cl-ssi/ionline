@@ -438,6 +438,18 @@ class Approval extends Model
         $this->save();
     }
 
+    // Delete approval
+    public function deleteApproval()
+    {
+        if($this->filename) {
+            if(Storage::exists($this->filename)) {
+                Storage::delete($this->filename);
+            }
+        }
+
+        $this->delete();
+    }
+
 
     public function getFilenameLinkAttribute()
     {
