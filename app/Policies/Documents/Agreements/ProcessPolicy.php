@@ -13,8 +13,6 @@ class ProcessPolicy
      */
     public function before(User $user, string $ability): bool|null
     {
-        return null;
-    
         return $user->can('be god') ? true : null;
     }
 
