@@ -574,7 +574,7 @@ class Process extends Model implements Auditable
         // Si todos los endorses están aprobados y la firma de la directora no
         if ($allEndorsesApproved && ! $directorApproved) {
             Notification::make()
-                ->title('El proceso fue visado por todos')
+                ->title('El proceso ' . $this->id . ' fue visado por todos')
                 ->actions([
                     Notifications\Actions\Action::make('IrAlProceso')
                         ->button()
@@ -604,7 +604,7 @@ class Process extends Model implements Auditable
 
             // Notificar a los referentes
             Notification::make()
-                ->title('Proceso firmado por el Director/a')
+                ->title('Proceso' . $this->id . 'firmado por el Director/a')
                 ->actions([
                     Notifications\Actions\Action::make('IrAlProceso')
                         ->button()
@@ -618,7 +618,7 @@ class Process extends Model implements Auditable
                 ->where('establishment_id', $this->establishment_id)
                 ->get();
             Notification::make()
-                ->title('Proceso firmado por el Director/a')
+                ->title('Proceso ' . $this->id . ' firmado por el Director/a')
                 ->actions([
                     Notifications\Actions\Action::make('IrAlProceso')
                         ->button()
