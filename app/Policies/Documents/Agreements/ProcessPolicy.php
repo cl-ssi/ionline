@@ -55,7 +55,6 @@ class ProcessPolicy
     public function update(User $user, Process $process): bool
     {
         // can Agreement edit AND $user is in $process->program->referers
-        return true;
         if($user->external){
             return $user->can('Agreement: edit') && $process->sended_revision_commune_at && $process->municipality->users->contains($user);
         }else{
