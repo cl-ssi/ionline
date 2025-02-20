@@ -126,8 +126,8 @@ class ProcessResource extends Resource
                                         ->directory('ionline/documents/agreements/signed-commune-files')
                                         ->storeFileNamesIn('name')
                                         ->acceptedFileTypes(['application/pdf'])
-                                        ->maxSize(5120) // Tamaño máximo de archivo en KB (5MB)
-                                        ->helperText('El tamaño máximo del archivo es de 5MB.'),
+                                        ->maxSize(3072) // Tamaño máximo de archivo en KB (3MB)
+                                        ->helperText('El tamaño máximo del archivo es de 3MB.'),
                                     Forms\Components\Hidden::make('type') // Campo oculto para almacenar el tipo de archivo dentro del modelo File
                                         ->default('signed_commune_file')
                                         ->columnSpanFull(),
