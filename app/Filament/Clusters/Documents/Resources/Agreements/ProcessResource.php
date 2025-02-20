@@ -1034,8 +1034,8 @@ class ProcessResource extends Resource
                         ->schema([
                             Forms\Components\Placeholder::make('approver_at')
                                 ->label('Fecha de aprobación')
-                                ->content(fn ($record) => $record['approver_at'] ?? '')
-                                ->visible(fn ($record) => $record->status === false),
+                                ->content(fn ($record) => $record['approver_at'] ?? ''),
+                                // ->visible(fn ($record) => $record->status === false),
                             Forms\Components\TextInput::make('initials')
                                 ->label('Iniciales')
                                 ->disabled()
@@ -1047,8 +1047,8 @@ class ProcessResource extends Resource
                                 }),
                             Forms\Components\Placeholder::make('approver_observation')
                                 ->label('Observaciones')
-                                ->content(fn ($record) => $record['approver_observation'] ?? 'Sin observaciones')
-                                ->visible(fn ($record) => $record->status === false),
+                                ->content(fn ($record) => $record['approver_observation'] ?? 'Sin observaciones'),
+                                // ->visible(fn ($record) => $record->status === false),
                         ])
                         ->columns(2)
                         ->columnSpan(2)
