@@ -842,6 +842,7 @@ class ProcessResource extends Resource
                                     $observations = collect($record['endorses'] ?? [])
                                         ->filter(fn ($endorse) => $endorse['status'] === false)
                                         ->map(fn ($endorse) => 
+                                            "{$endorse['approver_at']} - " .
                                             "{$endorse['initials']}: " . 
                                             ($endorse['approver_observation'] ?? 'Sin observaciones')
                                         )

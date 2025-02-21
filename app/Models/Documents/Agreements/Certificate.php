@@ -2,23 +2,24 @@
 
 namespace App\Models\Documents\Agreements;
 
-use App\Enums\Documents\Agreements\Status;
-use App\Filament\Clusters\Documents\Resources\Agreements\CertificateResource;
-use App\Models\Commune;
-use App\Models\Documents\Approval;
-use App\Models\Establishment;
-use App\Models\Parameters\ApprovalFlow;
-use App\Models\Parameters\Program;
-use App\Models\User;
-use App\Observers\Documents\Agreements\CertificateObserver;
 use Filament\Forms;
+use App\Models\User;
+use App\Models\Commune;
 use Filament\Notifications;
-use Illuminate\Database\Eloquent\Attributes\ObservedBy;
+use Illuminate\Support\Str;
+use App\Models\Establishment;
+use App\Models\Documents\Approval;
+use App\Models\Parameters\Program;
+use App\Models\Parameters\ApprovalFlow;
+use App\Models\Rrhh\OrganizationalUnit;
 use Illuminate\Database\Eloquent\Model;
+use App\Enums\Documents\Agreements\Status;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
-use Illuminate\Database\Eloquent\Relations\MorphOne;
-use Illuminate\Support\Str;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
+use App\Observers\Documents\Agreements\CertificateObserver;
+use App\Filament\Clusters\Documents\Resources\Agreements\CertificateResource;
 
 #[ObservedBy([CertificateObserver::class])]
 class Certificate extends Model
@@ -181,5 +182,27 @@ class Certificate extends Model
                 );
             }
         }
+    }
+
+    public function sentToOu()
+    {
+        return $this->belongsTo(OrganizationalUnit::class, 'sent_to_ou_id');
+    }
+
+    public function addNewEndorse($data): void
+    {
+        $this->endorses()->create([
+            'module'                => 'Convenios',
+            'module_icon'           => 'bi bi-file-earmark-text',
+            'subject'               => 'Visar convenio',
+            'document_route_name'   => 'documents.agreements.processes.view',
+            'document_route_params' => json_encode([
+                'record' => $this->id,
+            ]),
+            'endorse'             => true,
+            'sent_to_user_id'     => $data['sent_to_user_id'],
+            'sent_to_ou_id'       => $data['sent_to_ou_id'],
+            'approvable_callback' => true,
+        ]);
     }
 }

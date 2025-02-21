@@ -2,26 +2,29 @@
 
 namespace App\Filament\Clusters\Documents\Resources\Agreements;
 
-use App\Enums\Documents\Agreements\Status;
-use App\Filament\Clusters\Documents;
-use App\Filament\Clusters\Documents\Resources\Agreements\CertificateResource\Pages;
-use App\Models\Documents\Agreements\Certificate;
-use App\Services\ColorCleaner;
-use App\Services\TableCleaner;
-use App\Services\TextCleaner;
 use Filament\Forms;
-use Filament\Forms\Form;
+use App\Models\User;
+use Filament\Tables;
 use Filament\Forms\Get;
 use Filament\Forms\Set;
+use Filament\Forms\Form;
+use Filament\Tables\Table;
+use App\Models\Establishment;
+use App\Services\TextCleaner;
+use App\Services\ColorCleaner;
+use App\Services\TableCleaner;
+use Filament\Resources\Resource;
+use App\Filament\Clusters\Documents;
+use Filament\Support\Enums\Alignment;
+use Illuminate\Support\Facades\Storage;
 use Filament\Notifications\Notification;
 use Filament\Pages\SubNavigationPosition;
-use Filament\Resources\Resource;
-use Filament\Support\Enums\Alignment;
-use Filament\Tables;
-use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Facades\Storage;
+use App\Enums\Documents\Agreements\Status;
+use App\Models\Documents\Agreements\Certificate;
+use CodeWithDennis\FilamentSelectTree\SelectTree;
 use Mohamedsabil83\FilamentFormsTinyeditor\Components\TinyEditor;
+use App\Filament\Clusters\Documents\Resources\Agreements\CertificateResource\Pages;
 
 class CertificateResource extends Resource
 {
@@ -121,14 +124,28 @@ class CertificateResource extends Resource
                             ->disabled(fn (?Certificate $record) => $record->status === Status::Finished),
                     ])
                     ->footerActions([
+                        Forms\Components\Actions\Action::make('Volver a editar')
+                            ->icon('heroicon-m-pencil-square')
+                            ->requiresConfirmation()
+                            ->action(function (Certificate $record) {
+                                $record->update(['status' => Status::Draft]);
+                                // $record->createComment('El certificado ha vuelto a estado de borrador.');
+                                return redirect()->to(CertificateResource::getUrl('edit', ['record' => $record->id]));
+                            })
+                            ->disabled(fn (?Certificate $record) => $record->status === Status::Draft),
                         Forms\Components\Actions\Action::make('guardar_cambios')
                             ->icon('bi-save')
-                            ->action('save')
+                            // ->action('save')
+                            ->action(function (Certificate $record) {
+                                $record->update(['status' => Status::Finished]);
+                                return redirect()->to(CertificateResource::getUrl('edit', ['record' => $record->id]));
+                            })
                             ->disabled(fn (?Certificate $record) => $record->status === Status::Finished),
                         Forms\Components\Actions\Action::make('Ver')
                             ->icon('heroicon-m-eye')
                             ->url(fn (Certificate $record) => route('documents.agreements.certificates.view', [$record]))
-                            ->openUrlInNewTab(),
+                            ->openUrlInNewTab()
+                            ->disabled(fn (?Certificate $record) => $record->status === Status::Draft),
                     ])
                     ->footerActionsAlignment(Alignment::End)
                     ->schema([
@@ -203,14 +220,97 @@ class CertificateResource extends Resource
                             ->url(fn (Certificate $record) => Storage::url($record->signer->filename))
                             ->openUrlInNewTab()
                             ->visible(fn (Certificate $record) => $record->status->value === 'finished'),
+
+                        Forms\Components\Actions\Action::make('NuevoVisador')
+                            ->label('Nuevo visador')
+                            ->icon('heroicon-m-plus-circle')
+                            ->requiresConfirmation()
+                            ->form([
+                                Forms\Components\Select::make('establishment_id')
+                                    ->label('Establecimiento')
+                                    ->options(Establishment::whereIn('id', explode(',', env('APP_SS_ESTABLISHMENTS')))->pluck('name', 'id'))
+                                    ->default(auth()->user()->establishment_id)
+                                    ->live(),
+                                SelectTree::make('sent_to_ou_id')
+                                    ->label('Unidad Organizacional')
+                                    ->relationship(
+                                        relationship: 'sentToOu',
+                                        titleAttribute: 'name',
+                                        parentAttribute: 'organizational_unit_id',
+                                        modifyQueryUsing: fn ($query, $get) => $query->where('establishment_id', $get('establishment_id'))->orderBy('name'),
+                                        modifyChildQueryUsing: fn ($query, $get) => $query->where('establishment_id', $get('establishment_id'))->orderBy('name')
+                                    )
+                                    ->searchable()
+                                    ->parentNullValue(null)
+                                    ->enableBranchNode()
+                                    ->defaultOpenLevel(1)
+                                    ->live(),
+                                Forms\Components\Section::make()
+                                    ->description('O enviar a un usuario específico')
+                                    ->schema([
+                                        Forms\Components\Select::make('sent_to_user_id')
+                                            ->label('Usuario (solo para casos en no sea una jefatura)')
+                                            ->searchable()
+                                            ->getSearchResultsUsing(function (string $search) {
+                                                $terms = explode(' ', $search);
+                                                return User::query()
+                                                    ->where(function ($query) use ($terms) {
+                                                        foreach ($terms as $term) {
+                                                            $query->where(function ($subQuery) use ($term) {
+                                                                $subQuery->where('name', 'like', "%{$term}%")
+                                                                    ->orWhere('fathers_family', 'like', "%{$term}%")
+                                                                    ->orWhere('mothers_family', 'like', "%{$term}%")
+                                                                    ->orWhere('id', 'like', "%{$term}%");
+                                                            });
+                                                        }
+                                                    })
+                                                    ->get()
+                                                    ->mapWithKeys(fn ($user) => [$user->id => "{$user->name} {$user->fathers_family}"])
+                                                    ->toArray();
+                                            })
+                                            ->getOptionLabelUsing(fn ($value) => User::find($value) ? User::find($value)->name . ' ' . User::find($value)->fathers_family . ' ' . User::find($value)->mothers_family : 'N/A')
+                                            ->columnSpanFull(),
+                                    ])
+                                    ->collapsed()
+                                    ->compact(),
+                            ])
+                            ->action(function (Certificate $record, array $data): void {
+                                $record->addNewEndorse($data);
+                                // Notifications\Notification::make()
+                                //     ->title('Visado solicitado')
+                                //     ->success()
+                                //     ->send();
+                                redirect(request()->header('Referer')); // Redirige al usuario a la misma página
+                            }),
                     ])
+                    // ->schema([
+                    //     Forms\Components\Repeater::make('approvals')
+                    //         ->relationship()
+                    //         ->addActionLabel('Agregar visación')
+                    //         ->hiddenLabel()
+                    //         ->addable(false)
+                    //         ->deletable(false)
+                    //         ->simple(
+                    //             Forms\Components\TextInput::make('initials')
+                    //                 ->label('Nombre')
+                    //                 ->disabled()
+                    //                 ->suffixIcon('heroicon-m-check-circle')
+                    //                 ->suffixIconColor(fn ($record) => match ($record['status'] ?? null) {
+                    //                     true    => 'success',
+                    //                     false   => 'danger',
+                    //                     default => 'gray',
+                    //                 }),
+                    //         )
+                    //         ->columnSpanFull()
+                    //         ->grid(7),
+
+                    // ])
                     ->schema([
-                        Forms\Components\Repeater::make('approvals')
+                        Forms\Components\Repeater::make('endorses')
                             ->relationship()
-                            ->addActionLabel('Agregar visación')
+                            ->disableItemCreation()
                             ->hiddenLabel()
-                            ->addable(false)
-                            ->deletable(false)
+                            ->live()
                             ->simple(
                                 Forms\Components\TextInput::make('initials')
                                     ->label('Nombre')
@@ -223,8 +323,31 @@ class CertificateResource extends Resource
                                     }),
                             )
                             ->columnSpanFull()
-                            ->grid(7),
-
+                            ->grid(7)
+                            ->itemLabel(fn (array $state): ?string => 'Visador: '.OrganizationalUnit::find($state['sent_to_ou_id'])?->name ?? null),
+    
+                        Forms\Components\Section::make('Observaciones')
+                            ->schema([
+                                Forms\Components\Placeholder::make('observations')
+                                    ->content(function ($record) {
+                                        $observations = collect($record['endorses'] ?? [])
+                                            ->filter(fn ($endorse) => $endorse['status'] === false)
+                                            ->map(fn ($endorse) => 
+                                                "{$endorse['approver_at']} - " . 
+                                                "{$endorse['initials']}: " . 
+                                                ($endorse['approver_observation'] ?? 'Sin observaciones')
+                                            )
+                                            ->join("\n\n");
+                                        
+                                        return $observations ?: 'No hay observaciones';
+                                    })
+                            ])
+                            ->visible(fn ($record) => 
+                                collect($record['endorses'] ?? [])->contains(fn ($endorse) => 
+                                    $endorse['status'] === false
+                                )
+                            )
+                            ->columnSpanFull(),
                     ])
                     ->hiddenOn('create')
                     ->columnSpanFull(),
