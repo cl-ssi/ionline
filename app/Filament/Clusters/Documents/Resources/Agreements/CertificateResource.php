@@ -424,7 +424,7 @@ class CertificateResource extends Resource
                     ->color('success')
                     ->url(fn (Certificate $record) => Storage::url($record->signer->filename))
                     ->openUrlInNewTab()
-                    ->hidden(fn (Certificate $record) => $record->status->value === 'draft'),
+                    ->hidden(fn (Certificate $record) => !$record->signer || $record->status->value === 'draft'),
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
