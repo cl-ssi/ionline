@@ -217,9 +217,9 @@ class CertificateResource extends Resource
                         Forms\Components\Actions\Action::make('download_certificate')
                             ->label('Descargar Certificado')
                             ->icon('heroicon-o-arrow-down-tray')
-                            ->url(fn (Certificate $record) => Storage::url($record->signer->filename))
+                            ->url(fn (Certificate $record) => $record->signer ? Storage::url($record->signer->filename) : '#')
                             ->openUrlInNewTab()
-                            ->visible(fn (Certificate $record) => $record->status->value === 'finished'),
+                            ->visible(fn (Certificate $record) => $record->status->value === 'finished' && $record->signer),
 
                         Forms\Components\Actions\Action::make('NuevoVisador')
                             ->label('Nuevo visador')
