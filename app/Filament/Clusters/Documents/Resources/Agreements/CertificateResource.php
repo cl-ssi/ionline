@@ -136,8 +136,18 @@ class CertificateResource extends Resource
                         Forms\Components\Actions\Action::make('guardar_cambios')
                             ->icon('bi-save')
                             // ->action('save')
-                            ->action(function (Certificate $record) {
+                            // ->action(function (Certificate $record) {
+                            //     $record->save();
+                            //     $record->update(['status' => Status::Finished]);
+                            //     return redirect()->to(CertificateResource::getUrl('edit', ['record' => $record->id]));
+                            // })
+                            ->action(function (Certificate $record, $livewire) {
+                                // Save using the livewire form component
+                                $livewire->save();
+
                                 $record->update(['status' => Status::Finished]);
+                                
+                                // Redirect to refresh the page
                                 return redirect()->to(CertificateResource::getUrl('edit', ['record' => $record->id]));
                             })
                             ->disabled(fn (?Certificate $record) => $record->status === Status::Finished),
