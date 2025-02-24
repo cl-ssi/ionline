@@ -346,33 +346,33 @@ class Process extends Model implements Auditable
             'status'         => true,
         ]);
 
-        // Visación de juridico, esta vez no es a una unidad sino que a un usuario que tenga el permiso Agreement: legally
-        $recipients = User::permission('Agreement: legally')->get();
-        foreach ($recipients as $recipient) {
-            $endorseData = [
-                'module'                => 'Convenios',
-                'module_icon'           => 'bi bi-file-earmark-text',
-                'subject'               => 'Visar convenio',
-                'document_route_name'   => 'documents.agreements.processes.view',
-                'document_route_params' => json_encode([
-                    'record' => $this->id,
-                ]),
-                'sent_to_user_id'     => $recipient->id,
-                'endorse'             => true,
-                'approvable_callback' => true,
-            ];
+        // // Visación de juridico, esta vez no es a una unidad sino que a un usuario que tenga el permiso Agreement: legally
+        // $recipients = User::permission('Agreement: legally')->get();
+        // foreach ($recipients as $recipient) {
+        //     $endorseData = [
+        //         'module'                => 'Convenios',
+        //         'module_icon'           => 'bi bi-file-earmark-text',
+        //         'subject'               => 'Visar convenio',
+        //         'document_route_name'   => 'documents.agreements.processes.view',
+        //         'document_route_params' => json_encode([
+        //             'record' => $this->id,
+        //         ]),
+        //         'sent_to_user_id'     => $recipient->id,
+        //         'endorse'             => true,
+        //         'approvable_callback' => true,
+        //     ];
 
-            if ($this->processType->is_resolution) {
-                $endorseData = array_merge($endorseData, [
-                    'approver_ou_id' => $recipient->organizational_unit_id,
-                    'approver_id'    => $recipient->id,
-                    'approver_at'    => $this->revision_by_lawyer_at,
-                    'status'         => true,
-                ]);
-            }
+        //     if ($this->processType->is_resolution) {
+        //         $endorseData = array_merge($endorseData, [
+        //             'approver_ou_id' => $recipient->organizational_unit_id,
+        //             'approver_id'    => $recipient->id,
+        //             'approver_at'    => $this->revision_by_lawyer_at,
+        //             'status'         => true,
+        //         ]);
+        //     }
 
-            $this->endorses()->create($endorseData);
-        }
+        //     $this->endorses()->create($endorseData);
+        // }
 
         // El resto de los visadores de obtienen del Flujo de aprobación
         $steps = ApprovalFlow::getByObject($this, $this->processType->is_resolution ? 'resolution' : 'other');
