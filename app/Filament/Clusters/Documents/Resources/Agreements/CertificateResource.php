@@ -306,7 +306,7 @@ class CertificateResource extends Resource
 
                     // ])
                     ->schema([
-                        Forms\Components\Repeater::make('endorses')
+                        Forms\Components\Repeater::make('approvals')
                             ->relationship()
                             ->disableItemCreation()
                             ->hiddenLabel()
@@ -330,7 +330,7 @@ class CertificateResource extends Resource
                             ->schema([
                                 Forms\Components\Placeholder::make('observations')
                                     ->content(function ($record) {
-                                        $observations = collect($record['endorses'] ?? [])
+                                        $observations = collect($record['approvals'] ?? [])
                                             ->filter(fn ($endorse) => $endorse['status'] === false)
                                             ->map(fn ($endorse) => 
                                                 "{$endorse['approver_at']} - " . 
@@ -343,7 +343,7 @@ class CertificateResource extends Resource
                                     })
                             ])
                             ->visible(fn ($record) => 
-                                collect($record['endorses'] ?? [])->contains(fn ($endorse) => 
+                                collect($record['approvals'] ?? [])->contains(fn ($endorse) => 
                                     $endorse['status'] === false
                                 )
                             )
@@ -392,10 +392,10 @@ class CertificateResource extends Resource
                     ->label('Aprobaciones')
                     ->circular()
                     ->stacked(),
-                Tables\Columns\TextColumn::make('status')
-                    ->label('Estado')
-                    ->badge()
-                    ->sortable(),
+                // Tables\Columns\TextColumn::make('status')
+                //     ->label('Estado')
+                //     ->badge()
+                //     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
