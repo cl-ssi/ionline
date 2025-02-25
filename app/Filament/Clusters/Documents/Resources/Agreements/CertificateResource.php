@@ -213,15 +213,16 @@ class CertificateResource extends Resource
                                     ->options(fn (Certificate $record) => $record->program->referers->pluck('full_name', 'id'))
                                     ->required(),
                             ])
-                            ->action(function (Certificate $record, array $data): void {
+                            ->action(function (Certificate $record, array $data, $livewire) {
                                 $record->createApprovals($data['referer_id']);
-                                // $this->refreshFormData([
-                                //     'status',
-                                // ]);
+                                
                                 Notification::make()
                                     ->title('Visado solicitado')
                                     ->success()
                                     ->send();
+                        
+                                // Redireccionar para refrescar la página
+                                return redirect()->to(CertificateResource::getUrl('edit', ['record' => $record->id]));
                             })
                             ->disabled(fn (?Certificate $record) => $record->approvals->isNotEmpty()),
                         Forms\Components\Actions\Action::make('download_certificate')
