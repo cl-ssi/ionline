@@ -89,7 +89,7 @@
                     @endforeach
 
                     @if($approval->module == 'Convenios')
-                        @if($approval->approvable->program->ministerial_resolution_file)
+                        @if($approval->approvable && $approval->approvable->program->ministerial_resolution_file)
                             <a
                                 class="btn btn-sm btn-outline-success"
                                 target="_blank"
@@ -98,7 +98,7 @@
                                 Resolución ministerial <i class="fas fa-fw fa-file-pdf text-success"></i>
                             </a>
                         @endif
-                        @if($approval->approvable->program->resource_distribution_file)
+                        @if($approval->approvable && $approval->approvable->program->resource_distribution_file)
                             <a
                                 class="btn btn-sm btn-outline-success"
                                 target="_blank"
