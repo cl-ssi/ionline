@@ -17,12 +17,12 @@ use App\Models\Rrhh\OrganizationalUnit;
 use App\Models\Finance\Dte; // Sólo para el ejemplo, no tiene uso
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Storage;
+use OwenIt\Auditing\Contracts\Auditable;
 
 #[ObservedBy([ApprovalObserver::class])]
-class Approval extends Model
+class Approval extends Model implements Auditable
 {
-    use HasFactory;
-    use SoftDeletes;
+    use HasFactory, SoftDeletes, \OwenIt\Auditing\Auditable;
 
     /**
      * Funcion de ejemplo de creación de un approval, se puede correr en tinker:
