@@ -129,7 +129,9 @@ class ShowTotalHours extends Component
                     $this->totalHoursNight = $this->totalHoursNight + $hoursNightString;
                 }
 
-                $this->totalHours = round($this->totalHoursDay + $this->totalHoursNight, 0, PHP_ROUND_HALF_UP);
+                //26-02-2025: solicitado por daniel, que quite el redondeo hacia arriba.
+                // $this->totalHours = round($this->totalHoursDay + $this->totalHoursNight, 0, PHP_ROUND_HALF_UP);
+                $this->totalHours = $this->totalHoursDay + $this->totalHoursNight;
                 $this->totalHoursContab = floor($this->totalHours);
                 $this->totalAmount = $this->totalHoursContab * $this->fulfillment->serviceRequest->gross_amount;
 
