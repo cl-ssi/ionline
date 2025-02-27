@@ -20,7 +20,7 @@
     'purchasePlanToEdit'    => $purchasePlan
 ])
 
-@if(auth()->user()->hasPermissionTo('Request Forms: audit'))
+@if(auth()->user()->hasPermissionTo('Purchase Plan: audit'))
     <hr/>
     <h6><i class="fas fa-info-circle"></i> Auditoría Interna</h6>
 

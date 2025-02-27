@@ -168,6 +168,7 @@ class RoleAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'ProgrammingItem: evaluate', 'description' => '']);
         Permission::create(['name' => 'ProgrammingItem: view', 'description' => '']);
         Permission::create(['name' => 'Purchase Plan: all', 'description' => 'Permite visualizar todos los planes de compras']);
+        Permission::create(['name' => 'Purchase Plan: audit', 'description' => 'Permite acceder al registro de auditoría del módulo']);
         Permission::create(['name' => 'Purchase Plan: create', 'description' => 'Permite crear planes de compras']);
         Permission::create(['name' => 'Purchase Plan: reports', 'description' => 'Permite acceder a los reportes del módulo de plan de compras']);
         Permission::create(['name' => 'Receptions: admin', 'description' => 'Usuario administrador']);
