@@ -28,9 +28,13 @@ class ArchiveAllowance extends Component
             $this->archive(Allowance::class, $this->allowance->id);
         }
 
-        // Actualizar la vista sin recargar
+        // Redirigir después de actualizar el estado
+        return redirect()->route('allowances.sign_index');
+
+        /* Actualizar la vista sin recargar
         $this->isArchived = !$this->isArchived;
         $this->dispatch('refreshComponent');
+        */
     }
 
     public function render()
