@@ -8,6 +8,8 @@ use App\Models\Documents\Agreements\ProcessType;
 use App\Models\Documents\Template;
 use Carbon\Carbon;
 
+use function PHPUnit\Framework\isNull;
+
 class UpdateProcessContent extends Command
 {
     /**
@@ -68,17 +70,50 @@ class UpdateProcessContent extends Command
         @$dom->loadHTML(mb_convert_encoding($template->content, 'HTML-ENTITIES', 'UTF-8'), LIBXML_HTML_NODEFDTD);
         $replacements = [
             'document_date_format',
-            'signer.appellative',
-            'signer.decree',
             'signer.user.full_name',
+            'signer.user.runFormat',
+            'signer.decree_paragraph',
+            'signer.appellative',
+            'mayor.decree',
+            'mayor.appellative',
             'mayor.name',
             'mayor.run',
-            'mayor.appellative',
-            'mayor.decree'
+            'municipality.name',
+            'municipality.rut',
+            'municipality.emailList',
+            'municipality.decree',
+            'municipality.address',
+            'commune.name',
+            'program.ministerial_resolution_number',
+            'program.ministerialResolutionDateFormat',
+            'program.resource_distribution_number',
+            'program.resourceDistributionDateFormat',
+            'program.referersEmailList',
+            'program.components',
+            'program.name',
+            'previousProcess.date',
+            'previousProcess.period',
+            'previousProcess.document_content',
+            'previousProcess.dateFormat',
+            'period',
+            'total_amount_format',
+            'total_amount_in_words',
+            'nextPeriod',
+            'quotas_qty',
+            'monthsArray',
+            'quotas',
+            'description',
+            'amount_format',
+            'amount_in_words',
+            'percentage',
+            'establishmentsList',
+            'establishments', // TODO: WTF ????
         ];
         foreach($replacements as $ref){
             $val = '{{'. $ref . '}}';
-            $this->replaceTextInNode($dom, $ref, $val);            
+            if(str_contains($template->content, $val)){
+                $this->replaceTextInNode($dom, $ref, $val);            
+            }
         }
         $template->content = htmlspecialchars_decode($dom->saveHTML());
         $template->saveQuietly();
@@ -98,12 +133,143 @@ class UpdateProcessContent extends Command
         foreach($proceses as $process){
             $this->info('Process ID:' . $process->id . ' - ' . $process->processType->name);
             if($process->document_content){                
-                $this->replaceDateInDocumentContent($process);                
+                $this->replaceDateInDocumentContent($process);
+                $replacement = array();
+                $replacements['period'] = array(
+                    'reference' => 'period',
+                    'value' => $process->period,
+                    'prefix' => 'A&Ntilde;O ',
+                    'affix' => '&rdquo;',
+                );
+                $replacements['total_amount_format'] = array(
+                    'reference' => 'total_amount_format',
+                    'value' => $process->total_amount_format,
+                    'prefix' => 'la suma anual y &uacute;nica de $',
+                    'affix' => ' (' . $process->total_amount_in_words . ' pesos) para alcanzar el prop&oacute',
+                );
+                $replacements['total_amount_in_words'] = array(
+                    'reference' => 'total_amount_in_words',
+                    'value' => $process->total_amount_in_words,
+                    'prefix' => 'la suma anual y &uacute;nica de $' . $process->total_amount_format . ' (',
+                    'affix' => ' pesos) para alcanzar el prop&oacute',
+                );
+                $replacements['nextPeriod'] = array(
+                    'reference' => 'nextPeriod',
+                    'value' => $process->nextPeriod,
+                    'prefix' => 'El periodo a rendir del mes de enero ',
+                    'affix' => ', corresponde',
+                );
+                $replacements = [
+                    'establishmentsList' => $process->establishmentsList,
+                ];
+                $this->replaceInDocumentContent($process, $replacements);
+
                 if(!is_null($process->signer)){
-                    $this->replaceSignerInDocumentContent($process);                    
+                    $replacement = array();
+                    $replacements = [
+                        'signer.user.full_name' => $process->signer->user->full_name,
+                        'signer.user.runFormat' => $process->signer->user->runFormat,
+                        'signer.decree_paragraph' => $process->signer->decree_paragraph,
+                        'signer.appellative' => $process->signer->appellative,
+                    ];
+                    $this->replaceInDocumentContent($process, $replacements);
                 }
                 if(!is_null($process->mayor)){
-                    $this->replaceMayorInDocumentContent($process);                    
+                    $replacement = array();
+                    $replacements = [
+                        'mayor.name' => $process->mayor->name,
+                        'mayor.run' => $process->mayor->run,
+                        'mayor.appellative' => $process->mayor->appellative,
+                        'mayor.decree' => $process->mayor->decree,
+                    ];
+                    $this->replaceInDocumentContent($process, $replacements);
+                }
+                if(!is_null($process->municipality)){
+                    $replacement = array();
+                    $replacements = [
+                        'municipality.name' => $process->municipality->name,
+                        'municipality.rut' => $process->municipality->rut,
+                        'municipality.emailList' => $process->municipality->emailList,
+                        'municipality.decree' => $process->municipality->decree,
+                        'municipality.address' => $process->municipality->address,
+                    ];
+                    $this->replaceInDocumentContent($process, $replacements);
+                }
+                if(!is_null($process->program)){
+                    $replacement = array();
+                    $replacements = [
+                        // 'program.ministerial_resolution_number' => $process->program->ministerial_resolution_number,
+                        // 'program.ministerialResolutionDateFormat' => $process->program->ministerialResolutionDateFormat,
+                        // 'program.resource_distribution_number' => $process->program->resource_distribution_number,
+                        // 'program.resourceDistributionDateFormat' => $process->program->resourceDistributionDateFormat,
+                        'program.referersEmailList' => $process->program->referersEmailList,
+                        'program.components' => $process->program->components,
+                        'program.name' => $process->program->name, 
+                    ];
+                    $this->replaceInDocumentContent($process, $replacements);
+                }
+                if(!is_null($process->previousProcess)){
+                    $replacement = array();
+                    $replacements = [
+                        // 'previousProcess.date' => $process->previousProcess->date,
+                        //'previousProcess.period' => $process->previousProcess->period, //manual
+                        // 'previousProcess.document_content' => $process->previousProcess->document_content,
+                        // 'previousProcess.dateFormat' => $process->previousProcess->dateFormat,
+                    ];
+                    $this->replaceInDocumentContent($process, $replacements);
+                }
+                if(!is_null($process->commune)){
+                    $replacement = array();
+                    $replacements = [
+                        // 'commune.name' => $process->commune->name,
+                    ];
+                    $this->replaceInDocumentContent($process, $replacements);
+                }
+                if(!is_null($process->quotas_qty)){
+                    // WARNING: How to change in observer inside foreach
+                    $replacement = array();
+                    foreach($process->monthsArray as $month => $amount){
+                        $replacements[$month] = array(
+                            'reference' => 'month',
+                            'value' => $amount,                            
+                            'affix' => ': $ ' . $amount . '.',
+                        );
+                        $replacements[$month] = array(
+                            'reference' => 'month',
+                            'value' => $amount,                            
+                            'affix' => ': $ ' . $amount . '.',
+                        );
+                    }
+                    $this->replaceInDocumentContent($process, $replacements);
+                }else if(!is_null($process->quotas)) {
+                    // WARNING: How to change in observer inside foreach
+                    $replacement = array();
+                    foreach($process->quotas as $quota){
+                        $replacements['description'] = array(
+                            'reference' => 'description',
+                            'value' => $quota->description,
+                            'prefix' => 'La ',
+                            'affix' => ', de $  (' . $quota->amountInWords . ' pesos), correspondiente al ',
+                        );
+                        $replacements['total_amount_format'] = array(
+                            'reference' => 'total_amount_format',
+                            'value' => $quota->amount_format,
+                            'prefix' => 'La ' . $quota->description . ' de $ ',
+                            'affix' => ' (' . $quota->amountInWords . ' pesos), correspondiente al ',
+                        );
+                        $replacements['total_amount_in_words'] = array(
+                            'reference' => 'total_amount_in_words',
+                            'value' => $quota->amountInWords,
+                            'prefix' => '$ ' . $quota->amountFormat . ' (',
+                            'affix' => ' pesos), correspondiente al '. $quota->percentage . '% del total de los recursos',
+                        );
+                        $replacements['percentage'] = array(
+                            'reference' => 'percentage',
+                            'value' => $quota->percentage,
+                            'prefix' => $quota->amountInWords . ' pesos), correspondiente al ',
+                            'affix' => '% del total de los recursos',
+                        );
+                    }                
                 }
             }
             $bar->advance();
@@ -129,34 +295,13 @@ class UpdateProcessContent extends Command
         }
     }
 
-    private function replaceSignerInDocumentContent(Process $process): void
-    {
-        $replacements = [
-            'signer.appellative' => $process->signer->appellative,
-            'signer.decree' => $process->signer->decree,
-            'signer.user.full_name' =>  $process->signer->user->full_name
-        ];
-        $this->replaceInDocumentContent($process, $replacements);
-        
-    }
-
-    private function replaceMayorInDocumentContent(Process $process): void
-    {
-        $replacements = [
-            'mayor.name' => $process->mayor->name,
-            'mayor.run' => $process->mayor->run,
-            'mayor.appellative' => $process->mayor->appellative,
-            'mayor.decree' => $process->mayor->decree,
-        ];
-        $this->replaceInDocumentContent($process, $replacements);
-    }
-
     private function replaceInDocumentContent(Process $process, array $replacements): void
     {
         $dom = new \DOMDocument();
         @$dom->loadHTML(mb_convert_encoding($process->document_content, 'HTML-ENTITIES', 'UTF-8'), LIBXML_HTML_NODEFDTD);
 
         foreach ($replacements as $ref => $val) {
+            if(!is_null($val))
             $this->replaceTextInNode($dom, $ref, $val);
         }
 
@@ -166,12 +311,12 @@ class UpdateProcessContent extends Command
         $process->saveQuietly();
     }
 
-    private function replaceTextInNode(\DOMNode $node, string $ref, string $val): void
+    private function replaceTextInNode(\DOMNode $node, string $ref, string $val, string $prefix = '', string $affix = ''): void
     {
         if ($node->nodeType === XML_TEXT_NODE && str_contains($node->nodeValue, $val)) {
             $pass = true;
             foreach($node->parentNode->attributes as $attr){
-                if($attr->name=='data-lw'){
+                if($attr->name=='data-lw' && $node->nodeValue == $val){
                     $pass = false;
                     $this->line('   - ' . $ref . ' Skipped');
                 }
