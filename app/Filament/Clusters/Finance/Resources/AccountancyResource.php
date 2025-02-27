@@ -155,20 +155,25 @@ class AccountancyResource extends Resource
     {
         return $table
             ->columns([
+                Tables\Columns\TextColumn::make('accountable_type')
+                    ->label('Tipo'),
+                Tables\Columns\TextColumn::make('accountable_id')
+                    ->numeric()
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('resolution_folio')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('resolution_date')
                     ->dateTime()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('resolution_file')
-                    ->searchable(),
+                Tables\Columns\TextColumn::make('resolutionFile.name')
+                    ->url(fn(Model $record) => $record->storage_path),
                 Tables\Columns\TextColumn::make('commitment_folio_sigfe')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('commitment_date_sigfe')
                     ->dateTime()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('commitment_file_sigfe')
-                    ->searchable(),
+                Tables\Columns\TextColumn::make('commitmentSigfeFile.name')
+                    ->url('commitmentSigfeFile.storage_path'),
                 Tables\Columns\TextColumn::make('accrual_folio_sigfe')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('accrual_date_sigfe')
@@ -176,11 +181,6 @@ class AccountancyResource extends Resource
                     ->sortable(),
                 Tables\Columns\TextColumn::make('accrualSigfeFile.name')
                     ->url(fn(Model $record) => $record->storage_path),
-                Tables\Columns\TextColumn::make('accountable_type')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('accountable_id')
-                    ->numeric()
-                    ->sortable(),
                 Tables\Columns\TextColumn::make('user_id')
                     ->numeric()
                     ->sortable(),
