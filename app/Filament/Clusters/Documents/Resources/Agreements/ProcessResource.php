@@ -809,9 +809,45 @@ class ProcessResource extends Resource
                         }),
                 ])
                 ->footerActions([
+                    // Forms\Components\Actions\Action::make('guardar_cambios')
+                    //     ->icon('bi-save')
+                    //     ->action('save'),
                     Forms\Components\Actions\Action::make('guardar_cambios')
                         ->icon('bi-save')
-                        ->action('save'),
+                        ->action(function (Process $record, $livewire) {
+                            // Get original endorses with names before saving
+                            $originalEndorses = $record->endorses->map(function($endorse) {
+                                return [
+                                    'id' => $endorse->id,
+                                    'initials' => $endorse->initials,
+                                    'ou_name' => $endorse->sent_to_ou?->name ?? 'N/A'
+                                ];
+                            })->keyBy('id')->toArray();
+                            
+                            // Save using the livewire form component
+                            $livewire->save();
+                            
+                            // Get current endorses after saving
+                            $record->refresh();
+                            $currentEndorseIds = $record->endorses->pluck('id')->toArray();
+                            
+                            // Find removed endorses
+                            $removedEndorses = collect($originalEndorses)->filter(function($endorse, $id) use ($currentEndorseIds) {
+                                return !in_array($id, $currentEndorseIds);
+                            });
+                            
+                            // Create comment if any endorses were removed
+                            if ($removedEndorses->isNotEmpty()) {
+                                $removedVisadores = $removedEndorses->map(function($endorse) {
+                                    return "{$endorse['initials']} ({$endorse['ou_name']})";
+                                })->implode(', ');
+                                
+                                $record->createComment("Se ha eliminado el/los visador(es): {$removedVisadores} del proceso #{$record->id}");
+                            }
+                            
+                            // Redirect to refresh the page
+                            return redirect()->to(ProcessResource::getUrl('edit', ['record' => $record->id]));
+                        }),
                 ])
                 // ->footerActionsAlignment(Alignment::End)
                 ->schema([
