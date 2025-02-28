@@ -56,6 +56,11 @@ class ProcessResource extends Resource
 
     protected static ?int $navigationSort = 2;
 
+    protected static function isProcessSigned(?Process $record): bool
+    {
+        return $record?->approval?->status === true;
+    }
+
     public static function form(Form $form): Form
     {
         if (auth()->user()->can('Agreement: legally')) {
@@ -520,7 +525,8 @@ class ProcessResource extends Resource
                                     ->danger()
                                     ->send();
                             }
-                        }),
+                        })
+                        ->disabled(fn (?Process $record) => static::isProcessSigned($record)),
                     Forms\Components\Actions\Action::make('CrearDocumento')
                         ->label('Crear documento del proceso')
                         ->icon('heroicon-m-document')
@@ -528,7 +534,10 @@ class ProcessResource extends Resource
                         ->action(function (Process $record, Set $set) {
                             $set('document_content', $record->processType->template->parseTemplate($record));
                         })
-                        ->disabled(fn (?Process $record) => $record->status === Status::Finished),
+                        ->disabled(fn (?Process $record) => 
+                            static::isProcessSigned($record) || 
+                            $record->status === Status::Finished
+                        ),
                 ])
                 ->footerActions([
                     Forms\Components\Actions\Action::make('guardar_cambios')
@@ -539,7 +548,8 @@ class ProcessResource extends Resource
                             
                             // Redirect to refresh the page
                             return redirect()->to(ProcessResource::getUrl('edit', ['record' => $record->id]));
-                        }),
+                        })
+                        ->disabled(fn (?Process $record) => static::isProcessSigned($record)),
                     Forms\Components\Actions\Action::make('Finalizar')
                         ->icon('heroicon-m-check')
                         ->requiresConfirmation()
@@ -549,7 +559,8 @@ class ProcessResource extends Resource
                             // Redireccionar a la misma página para forzar recarga
                             return redirect()->to(ProcessResource::getUrl('edit', ['record' => $record->id]));
                         })
-                        ->hidden(fn (?Process $record) => $record->status === Status::Finished),
+                        ->hidden(fn (?Process $record) => $record->status === Status::Finished)
+                        ->disabled(fn (?Process $record) => static::isProcessSigned($record)),
                     Forms\Components\Actions\Action::make('Volver a editar')
                         ->icon('heroicon-m-pencil-square')
                         ->requiresConfirmation()
@@ -564,7 +575,8 @@ class ProcessResource extends Resource
                             // Redireccionar a la misma página para forzar recarga
                             return redirect()->to(ProcessResource::getUrl('edit', ['record' => $record->id]));
                         })
-                        ->hidden(fn (?Process $record) => $record->status === Status::Draft),
+                        ->hidden(fn (?Process $record) => $record->status === Status::Draft)
+                        ->disabled(fn (?Process $record) => static::isProcessSigned($record)),
                     Forms\Components\Actions\Action::make('Ver')
                         ->icon('heroicon-m-eye')
                         ->url(fn (Process $record) => route('documents.agreements.processes.view', [$record]))
@@ -576,7 +588,10 @@ class ProcessResource extends Resource
                         ->hiddenLabel()
                         ->maxHeight(1200)
                         ->profile('ionline')
-                        ->disabled(fn (?Process $record) => $record->status === Status::Finished)
+                        ->disabled(fn (?Process $record) => 
+                            static::isProcessSigned($record) || 
+                            $record->status === Status::Finished
+                        )
                         ->hintActions(
                             [
                                 Forms\Components\Actions\Action::make('limpiarTabla')
@@ -654,7 +669,7 @@ class ProcessResource extends Resource
                             $record->update(['sended_revision_lawyer_at' => now(), 'sended_revision_lawyer_user_id' => auth()->id()]);
 
                         })
-                        ->disabled(fn (?Process $record) => $record->revision_by_lawyer_user_id !== null || $record->status != Status::Finished),
+                        ->disabled(fn (?Process $record) => static::isProcessSigned($record) || $record->revision_by_lawyer_user_id !== null || $record->status != Status::Finished),
                 ])
                 ->schema([
                     Forms\Components\Grid::make(2)
@@ -700,7 +715,12 @@ class ProcessResource extends Resource
                             // establecer fecha de solicitud de revisión
                             $record->update(['sended_revision_commune_at' => now(), 'sended_revision_commune_user_id' => auth()->id()]);
                         })
-                        ->disabled(fn (?Process $record) => $record->revision_by_commune_user_id !== null || $record->status != Status::Finished),
+                        ->disabled(fn (?Process $record) => 
+                            static::isProcessSigned($record) || 
+                            $record->revision_by_commune_user_id !== null || 
+                            $record->status != Status::Finished ||
+                            $record->endorses->contains(fn ($endorse) => $endorse->status !== true)
+                        ),
                 ])
                 ->schema([
                     Forms\Components\Grid::make(2)
@@ -806,7 +826,8 @@ class ProcessResource extends Resource
                                 ->success()
                                 ->send();
                             redirect(request()->header('Referer')); // Redirige al usuario a la misma página
-                        }),
+                        })
+                        ->disabled(fn (?Process $record) => static::isProcessSigned($record)),
                 ])
                 ->footerActions([
                     // Forms\Components\Actions\Action::make('guardar_cambios')
@@ -847,7 +868,8 @@ class ProcessResource extends Resource
                             
                             // Redirect to refresh the page
                             return redirect()->to(ProcessResource::getUrl('edit', ['record' => $record->id]));
-                        }),
+                        })
+                        ->disabled(fn (?Process $record) => static::isProcessSigned($record)),
                 ])
                 // ->footerActionsAlignment(Alignment::End)
                 ->schema([
@@ -856,6 +878,7 @@ class ProcessResource extends Resource
                         ->disableItemCreation()
                         ->hiddenLabel()
                         ->live()
+                        ->deletable(fn (?Process $record) => !static::isProcessSigned($record))
                         ->simple(
                             Forms\Components\TextInput::make('initials')
                                 ->label('Nombre')
@@ -1167,7 +1190,7 @@ class ProcessResource extends Resource
                                 ->options(function () {
                                     $currentYear = now()->addYear()->year;
                                     $years       = [];
-                                    for ($i = 0; $i < 6; $i++) {
+                                    for ($i = 0; i < 6; $i++) {
                                         $years[$currentYear - $i] = $currentYear - $i;
                                     }
         
