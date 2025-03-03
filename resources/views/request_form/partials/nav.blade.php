@@ -11,8 +11,7 @@
       <i class="fas fa-file-alt"></i> Formularios
     </a>
     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-      <a class="dropdown-item" href="{{ route('request_forms.my_forms') }}"><i class="fas fa-fw fa-inbox"></i> Mis Formularios</a>
-      <a class="dropdown-item" href="{{ route('request_forms.own_index') }}"><i class="fas fa-fw fa-inbox"></i> Mis Formularios <span class="badge badge-secondary">Nueva</span></a>
+      <a class="dropdown-item" href="{{ route('request_forms.own_index') }}"><i class="fas fa-fw fa-inbox"></i> Mis Formularios</a>
       {{--@php($ouSearch = App\Models\Parameters\Parameter::where('module', 'ou')->whereIn('parameter', ['FinanzasSSI','RefrendacionHAH','FinanzasHAH'])->pluck('value')->toArray())--}}
       @php($ouSearch = App\Models\Parameters\Parameter::get('Abastecimiento',['prefinance_ou_id', 'finance_ou_id']))
       @if(auth()->user()->hasPermissionTo('Request Forms: all') || in_array(auth()->user()->organizational_unit_id, $ouSearch))
@@ -24,8 +23,7 @@
         @endif --}}
         Pendientes por firmar
       </a>
-      <a class="dropdown-item" href="{{ route('request_forms.contract_manager_forms') }}"><i class="fas fa-fw fa-inbox"></i> Admin. de contratos</a>
-      <a class="dropdown-item" href="{{ route('request_forms.contract_manager_index') }}"><i class="fas fa-fw fa-inbox"></i> Admin. de contratos <span class="badge badge-secondary">Nueva</span></a>
+      <a class="dropdown-item" href="{{ route('request_forms.contract_manager_index') }}"><i class="fas fa-fw fa-inbox"></i> Admin. de contratos</a>
       <div class="dropdown-divider"></div>
       <a class="dropdown-item" href="{{ route('request_forms.items.create') }}"><i class="fas fa-fw fa-file-alt"></i> Bienes y/o Servicios</a>
       <a class="dropdown-item" href="{{ route('request_forms.passengers.create') }}"><i class="fas fa-fw fa-ticket-alt"></i> Pasajes Aéreos</a>
