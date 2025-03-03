@@ -172,7 +172,7 @@ class PurchasePlan extends Model implements Auditable
                 return 'Aprobado';
                 break;
             case "published":
-                return 'Publicado';
+                return 'Aprobado y Publicado';
                 break;
         }
     }
