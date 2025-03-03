@@ -21,8 +21,9 @@
                     href="{{ route('documents.partes.numeration.show_numerated', $reception->numeration) }}"
                     title="Recepcion Numerada">
                     <i class="bi bi-file-earmark-ruled"></i>
-                    {{ $reception->id }}
+                    {{ $reception->id }}                    
                 </a>
+                {{$reception->numeration->number}}
             @else
                 <a class="btn btn-sm btn-outline-primary" target="_blank"
                     href="{{ route('finance.receptions.show', $reception->id) }}"
