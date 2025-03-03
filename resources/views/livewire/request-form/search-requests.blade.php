@@ -5,7 +5,7 @@
             <fieldset class="form-group col-12 col-md-2">
                 <label for="for_status_search">Estado Formulario</label>
                 <select name="status_search" class="form-control form-control-sm" wire:model.live.debounce.500ms="selectedStatus" @if($inbox == 'purchase') disabled @endif>
-                    <option value="">Seleccione...</option>
+                    <option value="">Todos</option>
                     <option value="saved">Guardado</option>
                     <option value="pending">Pendiente</option>
                     <option value="approved">Aprobado</option>
@@ -16,7 +16,7 @@
             <fieldset class="form-group col-12 col-md-2">
                 <label for="for_status_purchase_search">Estado Proceso Compra</label>
                 <select name="status_purchase_search" class="form-control form-control-sm" wire:model.live.debounce.500ms="selectedStatusPurchase">
-                    <option value="">Seleccione...</option>
+                    <option value="">Todos</option>
                     <option value="canceled">Anulado</option>
                     <option value="finalized">Finalizado</option>
                     <option value="in_process">En proceso</option>
