@@ -174,10 +174,6 @@
                             </a>
                         @endif
 
-                        <a class="dropdown-item {{ active('prof_agenda.home') }}" href="{{ route('prof_agenda.home') }}">
-                            <i class="fas fa-fw fa-user"></i> Agenda UST
-                        </a>
-
                         @canany([
                             'Payments',
                             'be god',
@@ -429,6 +425,10 @@
                         @endcanany
 
                         <div class="dropdown-divider"></div>
+
+                        <a class="dropdown-item {{ active('prof_agenda.home') }}" href="{{ route('prof_agenda.home') }}">
+                            <i class="fas fa-fw fa-user"></i> Agenda UST
+                        </a>
 
                         @can('Suitability: ssi')
                         <a class="dropdown-item {{ active('suitability.*') }}" href="{{ route('suitability.own') }}">
