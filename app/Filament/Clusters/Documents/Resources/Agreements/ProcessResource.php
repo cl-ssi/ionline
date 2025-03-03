@@ -1220,11 +1220,11 @@ class ProcessResource extends Resource
                                 ->live()
                                 ->options(function () {
                                     $currentYear = now()->addYear()->year;
-                                    $years       = [];
-                                    for ($i = 0; i < 6; $i++) {
+                                    $years = [];
+                                    for ($i = 0; $i < 6; $i++) {  // Corregido: $i en lugar de i
                                         $years[$currentYear - $i] = $currentYear - $i;
                                     }
-        
+                            
                                     return $years;
                                 })
                                 ->default(now()->year)
