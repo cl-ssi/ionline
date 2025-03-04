@@ -177,6 +177,24 @@ class PurchasePlan extends Model implements Auditable
         }
     }
 
+    /**
+     * Get the status value attribute.
+     *
+     * @return string|null
+     */
+    public function getStatusValueAttribute(): ?string
+    {
+        $statuses = [
+            'save'      => 'Guardado',
+            'sent'      => 'Enviado',
+            'approved'  => 'Aprobado',
+            'rejected'  => 'Rechazado',
+            'published' => 'Aprobado y Publicado'
+        ];
+
+        return $statuses[$this->status] ?? null;
+    }
+
     public function getColorStatus()
     {
         switch ($this->status) {
