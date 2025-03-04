@@ -161,36 +161,17 @@ class ProcessResource extends Resource
                 //     ->numeric()
                 //     ->sortable(),
                 Tables\Columns\IconColumn::make('finalProcessFile')
-                    ->label('PDF Final')
-                    ->icon('heroicon-s-document')
-                    ->size('xl')
-                    ->color(function (?Process $record): string {
-                        if (!$record) return 'gray';
-                        
-                        // Verde si tiene número, fecha y archivo
-                        if ($record->number && $record->date && $record->finalProcessFile?->exists()) {
-                            return 'success';
+                    ->label('Proceso Firmado')
+                    ->icon('heroicon-o-document-text')
+                    ->color('danger')
+                    ->url(function (?Process $record) {
+                        if ($record && $record->processType && $record->processType->is_resolution && $record->finalProcessFile) {
+                            return Storage::url($record->finalProcessFile->storage_path);
                         }
-                        
-                        // Amarillo si solo tiene archivo
-                        if ($record->finalProcessFile?->exists()) {
-                            return 'warning';
-                        }
-                        
-                        // Rojo si no tiene archivo
-                        return 'danger';
+                        return null;
                     })
-                    ->alignCenter()
-                    ->visible(fn (?Process $record): bool => 
-                        $record && 
-                        $record->processType->is_resolution && 
-                        $record->finalProcessFile?->exists()
-                    )
-                    ->action(function (?Process $record): void {
-                        if ($record?->finalProcessFile?->storage_path) {
-                            redirect(Storage::url($record->finalProcessFile->storage_path));
-                        }
-                    }),
+                    ->openUrlInNewTab()
+                    ,
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
