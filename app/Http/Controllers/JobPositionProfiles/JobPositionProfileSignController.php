@@ -85,8 +85,8 @@ class JobPositionProfileSignController extends Controller
             $dgt_approval = $jobPositionProfile->approvals()->create([
                 "module"                => "Perfil de Cargos",
                 "module_icon"           => "bi bi-person-badge",
-                "subject"               => "Solicitud de Aprobación Depto. Gestión del Talento",
-                "sent_to_ou_id"         => Parameter::get('ou','GestionDesarrolloDelTalento'),
+                "subject"               => "Solicitud de Aprobación Unidad de Reclutamiento y Selección de Personas",
+                "sent_to_ou_id"         => Parameter::get('ou','Reclutamiento', auth()->user()->establishment_id),
                 "document_route_name"   => "job_position_profile.show_approval",
                 "document_route_params" => json_encode(["job_position_profile_id" => $jobPositionProfile->id]),
                 "active"                => ($previousApprovalId == null) ? true : false,
@@ -137,7 +137,7 @@ class JobPositionProfileSignController extends Controller
             ]);
         }    
         
-        if($jobPositionProfile->approvals->first()->sent_to_ou_id == Parameter::get('ou','GestionDesarrolloDelTalento')){
+        if($jobPositionProfile->approvals->first()->sent_to_ou_id == Parameter::get('ou','Reclutamiento', auth()->user()->establishment_id)){
             $jobPositionProfile->status = 'review';
         }
         else{
@@ -220,7 +220,7 @@ class JobPositionProfileSignController extends Controller
                 */
 
                 /* SE NOTIFICACA AL DEPTO. DESARROLLO Y GESTION DEL TALENTO PARA INFORMANDO EL FIN DE PROCESO DE FIRMAS */
-                $notification_ou_manager = Authority::getAuthorityFromDate(Parameter::where('module', 'ou')->where('parameter', 'GestionDesarrolloDelTalento')->first()->value, today(), 'manager');
+                $notification_ou_manager = Authority::getAuthorityFromDate(Parameter::where('module', 'ou')->where('parameter', 'Reclutamiento')->first()->value, today(), 'manager');
                 if($notification_ou_manager){
                     $notification_ou_manager->user->notify(new EndSigningProcess($jobPositionProfile));
                 }
