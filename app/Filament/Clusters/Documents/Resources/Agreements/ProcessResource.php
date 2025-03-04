@@ -600,6 +600,7 @@ class ProcessResource extends Resource
                         ->hiddenLabel()
                         ->maxHeight(1200)
                         ->profile('ionline')
+                        ->live(false) // Desactiva la reactividad
                         ->disabled(fn (?Process $record) => 
                             static::isProcessSigned($record) || 
                             $record->status === Status::Finished
