@@ -13,7 +13,7 @@ class PurchasePlanPolicy
      */
     public function viewAny(User $user): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -30,6 +30,7 @@ class PurchasePlanPolicy
     public function create(User $user): bool
     {
         return false;
+        // return ($user->can('DNC: all') || $user->id === $identifyNeed->user_id);
     }
 
     /**
