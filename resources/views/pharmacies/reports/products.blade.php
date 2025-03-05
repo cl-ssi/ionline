@@ -40,6 +40,7 @@
                 <th scope="col">PROGRAMA</th>
 				<th scope="col">S.CRÍTICO</th> 
                 <th scope="col">CANTIDAD</th>
+                <th scope="col">ÚLTIMO PRECIO</th>
                 <th>
                     <button type="button" class="btn btn-sm btn-outline-primary"
                         onclick="tableToExcel('tabla_last', 'Hoja 1')">
@@ -50,15 +51,34 @@
 		</thead>
 		<tbody>
 
-        @foreach ($products_data as $key => $product)
-            @if($product->stock <= $product->critic_stock) <tr class="table-danger">
-            @else <tr> @endif
-                <td>{{$product->name}}</td>
-                <td>{{$product->program->name}}</td>
-                <td>{{$product->critic_stock}}</td>
-                <td>{{$product->stock}}</td>
-            </tr>
-        @endforeach
+            @foreach ($products_data as $key => $product)
+                @if ($product->stock <= $product->critic_stock)
+                    <tr class="table-danger">
+                @else
+                    <tr>
+                @endif
+                    <td>{{ $product->name }}</td>
+                    <td>{{ $product->program->name }}</td>
+                    <td>{{ $product->critic_stock }}</td>
+                    <td>{{ $product->stock }}</td>
+                    <td>
+                        {{ 
+                            $product->purchaseItems()
+                                ->orderBy('created_at', 'desc')
+                                ->first()?->unit_cost 
+                                ? number_format(
+                                    $product->purchaseItems()
+                                        ->orderBy('created_at', 'desc')
+                                        ->first()->unit_cost, 
+                                    0, 
+                                    ',', 
+                                    '.'
+                                ) 
+                                : 'Sin compras' 
+                        }}
+                    </td>
+                </tr>
+            @endforeach
 
 		</tbody>
 	</table>
