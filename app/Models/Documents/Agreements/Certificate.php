@@ -194,8 +194,8 @@ class Certificate extends Model
         $this->endorses()->create([
             'module'                => 'Convenios',
             'module_icon'           => 'bi bi-file-earmark-text',
-            'subject'               => 'Visar convenio',
-            'document_route_name'   => 'documents.agreements.processes.view',
+            'subject'               => 'Visar Certificado',
+            'document_route_name'   => 'documents.agreements.certificates.view',
             'document_route_params' => json_encode([
                 'record' => $this->id,
             ]),
