@@ -341,26 +341,6 @@
                 <!-- Fin del menú SDA -->
                 @endif
 
-
-                @canany([
-                    'Users: create', 'Users: edit','Users: delete',
-                    'OrganizationalUnits: create',
-                    'OrganizationalUnits: edit',
-                    'OrganizationalUnits: delete',
-                    'Authorities: view',
-                    'Authorities: create',
-                    'Service Request',
-                    'welfare: amipass',
-                    'welfare: balance',
-                    'welfare: benefits',
-                    'welfare: hotel booking administrator',
-                    'Replacement Staff: create request',
-                    'Replacement Staff: view requests',
-                    'Job Position Profile: create',
-                    'Job Position Profile: all',
-                    'Job Position Profile: review',
-                    'Trainings: create'
-                ])
                 <li class="nav-item dropdown
                     {{ active(['rrhh.users.*','rrhh.organizational-units.*','rrhh.authorities.*','suitability.*','replacement_staff.request.*']) }}">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -371,153 +351,175 @@
 
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
 
-                        @canany(['Users: create', 'Users: edit','Users: delete'])
-                        <a class="dropdown-item {{ active(['rrhh.users.index']) }}" href="{{ route('rrhh.users.index') }}">
-                            <i class="fas fa-user fa-fw"></i> Usuarios
-                        </a>
-                        @endcan
-
-                        @canany(['OrganizationalUnits: create', 'OrganizationalUnits: edit', 'OrganizationalUnits: delete'])
-                        <a class="dropdown-item {{ active('rrhh.organizational-units.*') }}" href="{{ route('rrhh.organizational-units.index') }}">
-                            <i class="fas fa-sitemap fa-fw"></i> Unidades organizacionales
-                        </a>
-                        @endcan
-
-                        @canany(['Authorities: view', 'Authorities: create'])
-                        <a class="dropdown-item {{ active('rrhh.new-authorities.*') }}" href="{{ route('rrhh.new-authorities.index') }}">
-                            <i class="fas fa-chess-king fa-fw"></i> Autoridades
-                        </a>
-                        @endcan
-
-                        @can('Users: no attendance record manager')
-                        <a class="dropdown-item {{ active('rrhh.attendance.no-records.index') }}"
-                            href="{{ route('rrhh.attendance.no-records.index') }}">
-                            <i class="fas fa-clock fa-fw"></i> Justificaciones de asistencia
-                        </a>
-                        @endcan
-
-                        @canany(['Users: absenteeism user','Users: absenteeism admin'])
-                        <a class="dropdown-item {{ active('rrhh.absenteeisms.index') }}"
-                            href="{{ route('rrhh.absenteeisms.index') }}">
-                            <i class="fas fa-clock fa-fw"></i> Ausentismos
-                        </a>
-                        @endcanany
-
-                        @canany(['Rrhh: birthday'])
-                        <a class="dropdown-item {{ active('rrhh.users.birthdayGrettings') }}" href="{{ route('rrhh.users.birthdayGrettings') }}">
-                            <i class="fas fa-fw fa-birthday-cake"></i> Correo cumpleaños
-                        </a>
-                        @endcanany
-
-                        @if(auth()->user()->welfare || auth()->user()->can('be god') || auth()->user()->can('welfare: amipass') || auth()->user()->can('welfare: balance') || 
-                            auth()->user()->can('welfare: benefits') || auth()->user()->can('welfare: hotel booking administrator'))
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="{{ route('welfare.index') }}">
-                                <i class="fas fa-money-check"></i> Bienestar
+                        @if(auth()->user()->organizationalUnit)
+                            <a class="dropdown-item {{ active('prof_agenda.home') }}" href="{{ route('prof_agenda.home') }}">
+                                <i class="fas fa-fw fa-user"></i> Agenda UST
                             </a>
+                            
+                            <div class="dropdown-divider"></div>
                         @endif
 
-                        @canany(['Summary: user', 'Summary: admin', 'Summary: admin viewer'])
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="{{ route('summary.index') }}">
-                            <i class="fas fa-balance-scale"></i> Sumario
-                        </a>
-                        @endcanany
+                        @canany([
+                            'Users: create', 'Users: edit','Users: delete',
+                            'OrganizationalUnits: create',
+                            'OrganizationalUnits: edit',
+                            'OrganizationalUnits: delete',
+                            'Authorities: view',
+                            'Authorities: create',
+                            'Service Request',
+                            'welfare: amipass',
+                            'welfare: balance',
+                            'welfare: benefits',
+                            'welfare: hotel booking administrator',
+                            'Replacement Staff: create request',
+                            'Replacement Staff: view requests',
+                            'Job Position Profile: create',
+                            'Job Position Profile: all',
+                            'Job Position Profile: review',
+                            'Trainings: create'
+                        ])
 
-                        <div class="dropdown-divider"></div>
+                            @canany(['Users: create', 'Users: edit','Users: delete'])
+                            <a class="dropdown-item {{ active(['rrhh.users.index']) }}" href="{{ route('rrhh.users.index') }}">
+                                <i class="fas fa-user fa-fw"></i> Usuarios
+                            </a>
+                            @endcan
 
-                        <a class="dropdown-item {{ active('prof_agenda.home') }}" href="{{ route('prof_agenda.home') }}">
-                            <i class="fas fa-fw fa-user"></i> Agenda UST
-                        </a>
+                            @canany(['OrganizationalUnits: create', 'OrganizationalUnits: edit', 'OrganizationalUnits: delete'])
+                            <a class="dropdown-item {{ active('rrhh.organizational-units.*') }}" href="{{ route('rrhh.organizational-units.index') }}">
+                                <i class="fas fa-sitemap fa-fw"></i> Unidades organizacionales
+                            </a>
+                            @endcan
 
-                        @can('Suitability: ssi')
-                        <a class="dropdown-item {{ active('suitability.*') }}" href="{{ route('suitability.own') }}">
-                            <i class="fas fa-chalkboard-teacher"></i> Idoneidad
-                        </a>
-                        @endcan
+                            @canany(['Authorities: view', 'Authorities: create'])
+                            <a class="dropdown-item {{ active('rrhh.new-authorities.*') }}" href="{{ route('rrhh.new-authorities.index') }}">
+                                <i class="fas fa-chess-king fa-fw"></i> Autoridades
+                            </a>
+                            @endcan
+
+                            @can('Users: no attendance record manager')
+                            <a class="dropdown-item {{ active('rrhh.attendance.no-records.index') }}"
+                                href="{{ route('rrhh.attendance.no-records.index') }}">
+                                <i class="fas fa-clock fa-fw"></i> Justificaciones de asistencia
+                            </a>
+                            @endcan
+
+                            @canany(['Users: absenteeism user','Users: absenteeism admin'])
+                            <a class="dropdown-item {{ active('rrhh.absenteeisms.index') }}"
+                                href="{{ route('rrhh.absenteeisms.index') }}">
+                                <i class="fas fa-clock fa-fw"></i> Ausentismos
+                            </a>
+                            @endcanany
+
+                            @canany(['Rrhh: birthday'])
+                            <a class="dropdown-item {{ active('rrhh.users.birthdayGrettings') }}" href="{{ route('rrhh.users.birthdayGrettings') }}">
+                                <i class="fas fa-fw fa-birthday-cake"></i> Correo cumpleaños
+                            </a>
+                            @endcanany
+
+                            @if(auth()->user()->welfare || auth()->user()->can('be god') || auth()->user()->can('welfare: amipass') || auth()->user()->can('welfare: balance') || 
+                                auth()->user()->can('welfare: benefits') || auth()->user()->can('welfare: hotel booking administrator'))
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="{{ route('welfare.index') }}">
+                                    <i class="fas fa-money-check"></i> Bienestar
+                                </a>
+                            @endif
+
+                            @canany(['Summary: user', 'Summary: admin', 'Summary: admin viewer'])
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="{{ route('summary.index') }}">
+                                <i class="fas fa-balance-scale"></i> Sumario
+                            </a>
+                            @endcanany
+
+                            @can('Suitability: ssi')
+                            <a class="dropdown-item {{ active('suitability.*') }}" href="{{ route('suitability.own') }}">
+                                <i class="fas fa-chalkboard-teacher"></i> Idoneidad
+                            </a>
+                            @endcan
 
 
-                        @can('Service Request')
-                        <a class="dropdown-item {{ active('rrhh.service-request.*') }}" href="{{ route('rrhh.service-request.home') }}">
-                            <i class="fas fa-child fa-fw"></i> Contratación Honorarios
-                        </a>
-                        @endcan
+                            @can('Service Request')
+                            <a class="dropdown-item {{ active('rrhh.service-request.*') }}" href="{{ route('rrhh.service-request.home') }}">
+                                <i class="fas fa-child fa-fw"></i> Contratación Honorarios
+                            </a>
+                            @endcan
 
-                        @canany(['Service Request: export sirh mantenedores'])
-                        <a class="dropdown-item {{ active('parameters.professions.index') }}" href="{{ route('parameters.professions.index') }}">
-                            <i class="fas fa-child fa-chevron-right"></i> Mantenedor de profesiones
-                        </a>
+                            @canany(['Service Request: export sirh mantenedores'])
+                            <a class="dropdown-item {{ active('parameters.professions.index') }}" href="{{ route('parameters.professions.index') }}">
+                                <i class="fas fa-child fa-chevron-right"></i> Mantenedor de profesiones
+                            </a>
 
-                        <a class="dropdown-item" href="{{ route('rrhh.organizational-units.index') }}">
-                            <i class="fas fa-sitemap fa-chevron-right"></i> Unidades organizacionales
-                        </a>
-                        @endcan
+                            <a class="dropdown-item" href="{{ route('rrhh.organizational-units.index') }}">
+                                <i class="fas fa-sitemap fa-chevron-right"></i> Unidades organizacionales
+                            </a>
+                            @endcan
 
-                        @canany(['Shift Management: view'])
-                        <a class="dropdown-item {{ active('rrhh.shiftManag.index') }}" href="{{ route('rrhh.shiftManag.index') }}">
-                            <i class="fa fa-calendar fa-fw"></i> Modulo Turnos
-                        </a>
-                        @endcan
+                            @canany(['Shift Management: view'])
+                            <a class="dropdown-item {{ active('rrhh.shiftManag.index') }}" href="{{ route('rrhh.shiftManag.index') }}">
+                                <i class="fa fa-calendar fa-fw"></i> Modulo Turnos
+                            </a>
+                            @endcan
 
-                        @if((auth()->user()->manager->count() > 0 ||
-                            auth()->user()->can('Replacement Staff: assign request') ||
-                            auth()->user()->can('Replacement Staff: create request') ||
-                            auth()->user()->can('Replacement Staff: create staff') ||
-                            auth()->user()->can('Replacement Staff: list rrhh') ||
-                            auth()->user()->can('Replacement Staff: manage') ||
-                            auth()->user()->can('Replacement Staff: personal sign') ||
-                            auth()->user()->can('Replacement Staff: staff manage') ||
-                            auth()->user()->can('Replacement Staff: technical evaluation') ||
-                            auth()->user()->can('Replacement Staff: view requests') ||
-                            auth()->user()->can('Job Position Profile: all') ||
-                            auth()->user()->can('Job Position Profile: audit') ||
-                            auth()->user()->can('Job Position Profile: create') ||
-                            auth()->user()->can('Job Position Profile: edit') ||
-                            auth()->user()->can('Job Position Profile: review')) &&
-                            in_array(auth()->user()->establishment_id, [App\Models\Parameters\Parameter::get('establishment', 'SSTarapaca'), 
-                            App\Models\Parameters\Parameter::get('establishment', 'HospitalAltoHospicio')])
-                        )
-                        <div class="dropdown-divider"></div>
-                        <h6 class="dropdown-header">Depto. Desarrollo y Gestión del Talento</h6>
-                        @if(auth()->user()->manager->count() > 0 ||
-                            auth()->user()->can('Replacement Staff: assign request') ||
-                            auth()->user()->can('Replacement Staff: create request') ||
-                            auth()->user()->can('Replacement Staff: create staff') ||
-                            auth()->user()->can('Replacement Staff: list rrhh') ||
-                            auth()->user()->can('Replacement Staff: manage') ||
-                            auth()->user()->can('Replacement Staff: personal sign') ||
-                            auth()->user()->can('Replacement Staff: staff manage') ||
-                            auth()->user()->can('Replacement Staff: technical evaluation') ||
-                            auth()->user()->can('Replacement Staff: view requests')
-                        )
-                        <a class="dropdown-item {{ active('replacement_staff.request.own_index') }}" href="{{ route('replacement_staff.request.own_index') }}">
-                            <i class="far fa-id-card fa-fw"></i> Solicitudes de Contratación
-                        </a>
-                        @endif
+                            @if((auth()->user()->manager->count() > 0 ||
+                                auth()->user()->can('Replacement Staff: assign request') ||
+                                auth()->user()->can('Replacement Staff: create request') ||
+                                auth()->user()->can('Replacement Staff: create staff') ||
+                                auth()->user()->can('Replacement Staff: list rrhh') ||
+                                auth()->user()->can('Replacement Staff: manage') ||
+                                auth()->user()->can('Replacement Staff: personal sign') ||
+                                auth()->user()->can('Replacement Staff: staff manage') ||
+                                auth()->user()->can('Replacement Staff: technical evaluation') ||
+                                auth()->user()->can('Replacement Staff: view requests') ||
+                                auth()->user()->can('Job Position Profile: all') ||
+                                auth()->user()->can('Job Position Profile: audit') ||
+                                auth()->user()->can('Job Position Profile: create') ||
+                                auth()->user()->can('Job Position Profile: edit') ||
+                                auth()->user()->can('Job Position Profile: review')) &&
+                                in_array(auth()->user()->establishment_id, [App\Models\Parameters\Parameter::get('establishment', 'SSTarapaca'), 
+                                App\Models\Parameters\Parameter::get('establishment', 'HospitalAltoHospicio')])
+                            )
+                            <div class="dropdown-divider"></div>
+                            <h6 class="dropdown-header">Depto. Desarrollo y Gestión del Talento</h6>
+                            @if(auth()->user()->manager->count() > 0 ||
+                                auth()->user()->can('Replacement Staff: assign request') ||
+                                auth()->user()->can('Replacement Staff: create request') ||
+                                auth()->user()->can('Replacement Staff: create staff') ||
+                                auth()->user()->can('Replacement Staff: list rrhh') ||
+                                auth()->user()->can('Replacement Staff: manage') ||
+                                auth()->user()->can('Replacement Staff: personal sign') ||
+                                auth()->user()->can('Replacement Staff: staff manage') ||
+                                auth()->user()->can('Replacement Staff: technical evaluation') ||
+                                auth()->user()->can('Replacement Staff: view requests')
+                            )
+                            <a class="dropdown-item {{ active('replacement_staff.request.own_index') }}" href="{{ route('replacement_staff.request.own_index') }}">
+                                <i class="far fa-id-card fa-fw"></i> Solicitudes de Contratación
+                            </a>
+                            @endif
 
-                        @if(auth()->user()->manager->count() > 0 ||
-                            auth()->user()->can('Job Position Profile: all') ||
-                            auth()->user()->can('Job Position Profile: audit') ||
-                            auth()->user()->can('Job Position Profile: create') ||
-                            auth()->user()->can('Job Position Profile: edit') ||
-                            auth()->user()->can('Job Position Profile: review')
-                        )
-                        <a class="dropdown-item {{ active('job_position_profile.index') }}" href="{{ route('job_position_profile.index') }}">
-                            <i class="fas fa-id-badge fa-fw"></i> Perfil de Cargos
-                        </a>
-                        @endif
+                            @if(auth()->user()->manager->count() > 0 ||
+                                auth()->user()->can('Job Position Profile: all') ||
+                                auth()->user()->can('Job Position Profile: audit') ||
+                                auth()->user()->can('Job Position Profile: create') ||
+                                auth()->user()->can('Job Position Profile: edit') ||
+                                auth()->user()->can('Job Position Profile: review')
+                            )
+                            <a class="dropdown-item {{ active('job_position_profile.index') }}" href="{{ route('job_position_profile.index') }}">
+                                <i class="fas fa-id-badge fa-fw"></i> Perfil de Cargos
+                            </a>
+                            @endif
 
-                        @endif
-                        
-                        @can('Trainings: create')
-                        <a class="dropdown-item {{ active('trainings.*') }}" href="{{ route('trainings.own_index') }}">
-                            <i class="fas fa-chalkboard-teacher"></i> Solicitud Permiso Capacitación
-                        </a>
+                            @endif
+                            
+                            @can('Trainings: create')
+                            <a class="dropdown-item {{ active('trainings.*') }}" href="{{ route('trainings.own_index') }}">
+                                <i class="fas fa-chalkboard-teacher"></i> Solicitud Permiso Capacitación
+                            </a>
+                            @endcan
+
                         @endcan
                     </ul>
-
                 </li>
-                @endcan
 
                 @can('Drugs')
                 <li class="nav-item {{ active('drugs.*') }}">
