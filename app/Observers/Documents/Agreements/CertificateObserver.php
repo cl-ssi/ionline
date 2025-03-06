@@ -27,7 +27,8 @@ class CertificateObserver
      */
     public function deleted(Certificate $certificate): void
     {
-        //
+        // Borrar todos los apprvals
+        $certificate->endorses()->delete();
     }
 
     /**
