@@ -351,14 +351,6 @@
 
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
 
-                        @if(auth()->user()->organizationalUnit)
-                            <a class="dropdown-item {{ active('prof_agenda.home') }}" href="{{ route('prof_agenda.home') }}">
-                                <i class="fas fa-fw fa-user"></i> Agenda UST
-                            </a>
-                            
-                            <div class="dropdown-divider"></div>
-                        @endif
-
                         @canany([
                             'Users: create', 'Users: edit','Users: delete',
                             'OrganizationalUnits: create',
@@ -518,6 +510,14 @@
                             @endcan
 
                         @endcan
+
+                        @if(auth()->user()->organizationalUnit)
+                            <div class="dropdown-divider"></div>
+
+                            <a class="dropdown-item {{ active('prof_agenda.home') }}" href="{{ route('prof_agenda.home') }}">
+                                <i class="fas fa-fw fa-user"></i> Agenda UST
+                            </a>
+                        @endif
                     </ul>
                 </li>
 
