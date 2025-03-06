@@ -14,6 +14,7 @@ use App\Models\Parameters\ApprovalFlow;
 use App\Models\Rrhh\OrganizationalUnit;
 use Illuminate\Database\Eloquent\Model;
 use App\Enums\Documents\Agreements\Status;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
@@ -24,6 +25,8 @@ use App\Filament\Clusters\Documents\Resources\Agreements\CertificateResource;
 #[ObservedBy([CertificateObserver::class])]
 class Certificate extends Model
 {
+    use SoftDeletes;
+    
     protected $table = 'agr_certificates';
 
     protected $fillable = [
