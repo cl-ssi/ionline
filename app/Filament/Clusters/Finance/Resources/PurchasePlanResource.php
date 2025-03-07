@@ -18,6 +18,9 @@ use Filament\Tables\Actions\ExportAction;
 use App\Filament\Exports\PurchasePlans\PurchasePlanExporter;
 use Filament\Actions\Exports\Enums\ExportFormat;
 use Filament\Actions\Exports\Models\Export;
+use Filament\Tables\Enums\FiltersLayout;
+use Filament\Forms\Components\DatePicker;
+use Filament\Tables\Filters\TrashedFilter;
 
 
 class PurchasePlanResource extends Resource
@@ -83,21 +86,82 @@ class PurchasePlanResource extends Resource
                 Tables\Columns\TextColumn::make('created_at_year')
                     ->label('Periodo')
                     ->getStateUsing(fn ($record) => $record->created_at->format('Y')),
+                Tables\Columns\TextColumn::make('subject')
+                    ->label('Asunto')
+                    ->limit(50) // Limita el texto a 50 caracteres
+                    ->tooltip(fn ($record) => $record->subject) // Muestra el texto completo al pasar el mouse,
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('userResponsible.TinyName')
-                    ->label('Responsable'),
+                    ->label('Responsable')
+                    ->searchable(query: function (Builder $query, string $search) {
+                        $query->whereHas('userResponsible', function (Builder $subQuery) use ($search) {
+                            $subQuery->where('name', 'like', "%{$search}%")
+                                     ->orWhere('fathers_family', 'like', "%{$search}%");
+                        });
+                    }),
+                Tables\Columns\TextColumn::make('userCreator.TinyName')
+                    ->label('Usuario Creador')
+                    ->searchable(query: function (Builder $query, string $search) {
+                        $query->whereHas('userResponsible', function (Builder $subQuery) use ($search) {
+                            $subQuery->where('name', 'like', "%{$search}%")
+                                     ->orWhere('fathers_family', 'like', "%{$search}%");
+                        });
+                    }),
                 Tables\Columns\TextColumn::make('organizationalUnit.name')
                     ->label('Unidad Organizacional'),
                 Tables\Columns\TextColumn::make('program')
-                    ->label('Programa'),
+                    ->label('Programa')
+                    ->searchable(),
                 Tables\Columns\ImageColumn::make('approvals.avatar')
                     ->label('Aprobaciones')
                     ->circular()
                     ->sortable(),
+                Tables\Columns\IconColumn::make('deleted_at')
+                    ->label('Eliminado')
+                    ->boolean()
+                    ->trueIcon('heroicon-o-x-circle') // 🔴 Si está eliminado, muestra X roja
+                    ->trueColor('danger') // Rojo
+                    ->alignment('center'),
+                Tables\Columns\TextColumn::make('date_deleted_at')
+                    ->label('Fecha Eliminación')
+                    ->getStateUsing(fn ($record) => $record->deleted_at ? $record->deleted_at->format('d-m-Y H:i:s') : ''),
             ])
             ->defaultSort('id', 'desc')
             ->filters([
-                //
-            ])
+                Tables\Filters\SelectFilter::make('status')
+                    ->label('Estado de Plan')
+                    ->options([
+                        'approved'  => 'Aprobado',
+                        'published' => 'Aprobado y Publicado',
+                        'sent'      => 'Enviado',
+                        'saved'     => 'Guardado',
+                        'rejected'  => 'Rechazado',
+                    ])
+                    ->multiple()
+                    ->searchable(),
+                Tables\Filters\SelectFilter::make('organizational_unit_id')
+                    ->label('Unidad Organizacional')
+                    ->relationship('organizationalUnit','name', fn (Builder $query) => $query->where('establishment_id', auth()->user()->establishment_id))
+                    ->searchable()
+                    ->preload(),
+                Tables\Filters\Filter::make('created_at_range')
+                    ->label('Periodo de Creación')
+                    ->form([
+                        DatePicker::make('start_date')
+                            ->label('Desde')
+                            ->native(false), // Esto permite usar el picker de Filament en lugar del nativo del navegador
+                        DatePicker::make('end_date')
+                            ->label('Hasta')
+                            ->native(false),
+                    ])
+                    ->columns(2)
+                    ->query(function (Builder $query, array $data) {
+                        return $query
+                            ->when($data['start_date'] ?? null, fn ($q, $start) => $q->whereDate('created_at', '>=', $start))
+                            ->when($data['end_date'] ?? null, fn ($q, $end) => $q->whereDate('created_at', '<=', $end));
+                    }),
+                Tables\Filters\TrashedFilter::make()
+            ], layout: FiltersLayout::AboveContent)
             ->actions([
                 Tables\Actions\EditAction::make(),
             ])
