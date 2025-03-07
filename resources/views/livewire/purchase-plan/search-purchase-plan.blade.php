@@ -82,9 +82,12 @@
             <div class="col">
                 <p class="font-weight-lighter">Total de Registros: <b>{{ $purchasePlans->total() }}</b></p>
             </div>
-            {{--<div class="col">
-                <a class="btn btn-success btn-sm mb-1 float-right" onclick="tableExcel('reporte_plan_compras_{{Carbon\Carbon::now()}}')"><i class="fas fa-file-excel"></i> Exportar formularios</a></h6>
-            </div>--}}
+            <div class="col mt-2">
+                <a class="btn btn-success btn-sm mb-1 float-end" 
+                    href="{{ route('filament.intranet.finance.resources.purchase-plans.index') }}">
+                    <i class="fas fa-file-excel"></i> Exportar formularios
+                </a></h6>
+            </div>
         </div>
         @if($purchasePlans->count() > 0)
             <div class="table-responsive ">
