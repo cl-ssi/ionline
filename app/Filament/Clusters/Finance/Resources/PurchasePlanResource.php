@@ -14,6 +14,11 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Pages\SubNavigationPosition;
+use Filament\Tables\Actions\ExportAction;
+use App\Filament\Exports\PurchasePlans\PurchasePlanExporter;
+use Filament\Actions\Exports\Enums\ExportFormat;
+use Filament\Actions\Exports\Models\Export;
+
 
 class PurchasePlanResource extends Resource
 {
@@ -40,6 +45,19 @@ class PurchasePlanResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->headerActions([
+                ExportAction::make()
+                    ->exporter(PurchasePlanExporter::class)
+                    ->label('Exportar')
+                    ->color('success')
+                    ->icon('heroicon-o-table-cells')
+                    ->modalHeading('Exportar Planes de Compras')
+                    ->columnMapping(false)
+                    ->formats([
+                        ExportFormat::Xlsx,
+                    ])
+                    ->fileName(fn (Export $export): string => "planes-de-compras"),
+            ])
             ->columns([
                 Tables\Columns\TextColumn::make('id')
                     ->label('ID')
