@@ -25,6 +25,12 @@ class PsiRequest extends Model
         'country',
         'start_date',
         'disability',
+        'status_inhability',
+        'signed_at',
+        'test_send_at',
+        'approved_at',
+        'rejected_at',
+        'certificated_at'
     ];
 
     public function user(){
