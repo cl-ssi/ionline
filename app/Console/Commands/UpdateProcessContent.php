@@ -109,10 +109,10 @@ class UpdateProcessContent extends Command
             'establishmentsList',
             'establishments', // TODO: WTF ????
         ];
-        foreach($replacements as $ref){
-            $val = '{{'. $ref . '}}';
+        foreach($replacements as $name){
+            $val = '{{'. $name . '}}';
             if(str_contains($template->content, $val)){
-                $this->replaceTextInNode($dom, $ref, $val);            
+                $this->replaceTextInNode($dom, $name, $val);            
             }
         }
         $template->content = htmlspecialchars_decode($dom->saveHTML());
@@ -132,29 +132,31 @@ class UpdateProcessContent extends Command
         $this->newLine();
         foreach($proceses as $process){
             $this->info('Process ID:' . $process->id . ' - ' . $process->processType->name);
-            if($process->document_content){                
+            if($process->document_content){
+
+                /*
                 $this->replaceDateInDocumentContent($process);
                 $replacement = array();
                 $replacements['period'] = array(
-                    'reference' => 'period',
+                    'name' => 'period',
                     'value' => $process->period,
                     'prefix' => 'A&Ntilde;O ',
                     'affix' => '&rdquo;',
                 );
                 $replacements['total_amount_format'] = array(
-                    'reference' => 'total_amount_format',
+                    'name' => 'total_amount_format',
                     'value' => $process->total_amount_format,
                     'prefix' => 'la suma anual y &uacute;nica de $',
                     'affix' => ' (' . $process->total_amount_in_words . ' pesos) para alcanzar el prop&oacute',
                 );
                 $replacements['total_amount_in_words'] = array(
-                    'reference' => 'total_amount_in_words',
+                    'name' => 'total_amount_in_words',
                     'value' => $process->total_amount_in_words,
                     'prefix' => 'la suma anual y &uacute;nica de $' . $process->total_amount_format . ' (',
                     'affix' => ' pesos) para alcanzar el prop&oacute',
                 );
                 $replacements['nextPeriod'] = array(
-                    'reference' => 'nextPeriod',
+                    'name' => 'nextPeriod',
                     'value' => $process->nextPeriod,
                     'prefix' => 'El periodo a rendir del mes de enero ',
                     'affix' => ', corresponde',
@@ -230,12 +232,12 @@ class UpdateProcessContent extends Command
                     $replacement = array();
                     foreach($process->monthsArray as $month => $amount){
                         $replacements[$month] = array(
-                            'reference' => 'month',
-                            'value' => $amount,                            
-                            'affix' => ': $ ' . $amount . '.',
+                            'name' => 'month',
+                            'value' => $month,                                                        
+                            'ref' => $month,
                         );
                         $replacements[$month] = array(
-                            'reference' => 'month',
+                            'name' => 'month',
                             'value' => $amount,                            
                             'affix' => ': $ ' . $amount . '.',
                         );
@@ -246,31 +248,101 @@ class UpdateProcessContent extends Command
                     $replacement = array();
                     foreach($process->quotas as $quota){
                         $replacements['description'] = array(
-                            'reference' => 'description',
+                            'name' => 'description',
                             'value' => $quota->description,
                             'prefix' => 'La ',
                             'affix' => ', de $  (' . $quota->amountInWords . ' pesos), correspondiente al ',
+                            'ref' => $quota->id,
                         );
                         $replacements['total_amount_format'] = array(
-                            'reference' => 'total_amount_format',
+                            'name' => 'total_amount_format',
                             'value' => $quota->amount_format,
                             'prefix' => 'La ' . $quota->description . ' de $ ',
                             'affix' => ' (' . $quota->amountInWords . ' pesos), correspondiente al ',
+                            'ref' => $quota->id,
                         );
                         $replacements['total_amount_in_words'] = array(
-                            'reference' => 'total_amount_in_words',
+                            'name' => 'total_amount_in_words',
                             'value' => $quota->amountInWords,
                             'prefix' => '$ ' . $quota->amountFormat . ' (',
                             'affix' => ' pesos), correspondiente al '. $quota->percentage . '% del total de los recursos',
+                            'ref' => $quota->id,
                         );
                         $replacements['percentage'] = array(
-                            'reference' => 'percentage',
+                            'name' => 'percentage',
                             'value' => $quota->percentage,
                             'prefix' => $quota->amountInWords . ' pesos), correspondiente al ',
                             'affix' => '% del total de los recursos',
+                            'ref' => $quota->id,
                         );
                     }                
                 }
+            }
+            */
+                $replacements = array();
+
+                $replacements['period'] = array(
+                    'name'  => 'period',
+                    'value' => $process->period,
+                    'positions' => array(
+                        [
+                            'prefix' => 'A&Ntilde;O ',
+                            'affix'  => '&rdquo;',
+                        ],
+                        // [
+                        //     'prefix' => '',
+                        //     'affix'  => '',
+                        //     'ref'    => 'span_center'
+                        // ],
+                        ['prefix' => 'Enero '],
+                        ['prefix' => 'Febrero '],
+                        ['prefix' => 'Marzo '],
+                        ['prefix' => 'Abril '],
+                        ['prefix' => 'Mayo '],
+                        ['prefix' => 'Junio '],
+                        ['prefix' => 'Agosto '],
+                        ['prefix' => 'Septiembre '],
+                        ['prefix' => 'Octubre '],
+                        ['prefix' => 'Noviembre '],
+                        ['prefix' => 'Diciembre '],
+                        [
+                            'prefix' => '31 de diciembre de ',
+                            'affix'  => ', y respecto al',
+                        ],
+                        [
+                            'prefix' => '&ldquo;' . $process->program->name . ' A&Ntilde;O ',
+                            'affix'  => '&rdquo;',
+                        ],
+                        [
+                            'prefix' => 'Servicio de Salud Tarapac&aacute; a&ntilde;o ',
+                            'affix'  => '.',
+                        ]
+                    )
+                );
+                $replacements['nextPeriod'] = array(
+                    'name'  => 'nextPeriod',
+                    'value' => $process->nextPeriod,
+                    'positions' => array(
+                        ['prefix' => 'Enero '],
+                        ['prefix' => 'Febrero&nbsp;'],
+                    )
+                );
+                $replacements['program.name'] = array(
+                    'name'  => 'program.name',
+                    'value' => $process->program->name,
+                    'positions' => array(
+                        [
+                            'prefix' => '&ldquo;',
+                            'affix'  => ' A&Ntilde;O ',
+                        ],
+                        [
+                            'prefix' => 'ha decidido desarrollar el &ldquo;',
+                            'affix'  => '&rdquo; en adelante el',
+                        ]
+                    )
+                );
+                $this->replaceInDocumentContent($process, $replacements);
+                
             }
             $bar->advance();
         }
@@ -297,41 +369,73 @@ class UpdateProcessContent extends Command
 
     private function replaceInDocumentContent(Process $process, array $replacements): void
     {
-        $dom = new \DOMDocument();
-        @$dom->loadHTML(mb_convert_encoding($process->document_content, 'HTML-ENTITIES', 'UTF-8'), LIBXML_HTML_NODEFDTD);
+        // $dom = new \DOMDocument();
+        // @$dom->loadHTML(mb_convert_encoding($process->document_content, 'HTML-ENTITIES', 'UTF-8'), LIBXML_HTML_NODEFDTD);
 
-        foreach ($replacements as $ref => $val) {
-            if(!is_null($val))
-            $this->replaceTextInNode($dom, $ref, $val);
+        foreach ($replacements as $replacement) {
+            if(!is_null($replacement['value'])){
+                $process->document_content = $this->agregarAnchors($process->document_content, $replacement['name'], $replacement['value'], $replacement['positions']);
+            }
+            // $this->replaceTextInNode($dom, $replacement['name'], $replacement['value'], $replacement['value']);
         }
 
-        $process->document_content = htmlspecialchars_decode($dom->saveHTML());
+        // $process->document_content = htmlspecialchars_decode($dom->saveHTML());
 
         // Guardar los cambios sin triggear el observer
         $process->saveQuietly();
     }
 
-    private function replaceTextInNode(\DOMNode $node, string $ref, string $val, string $prefix = '', string $affix = ''): void
+    private function replaceTextInNode(\DOMNode $node, string $name, string $val, string $prefix = '', string $affix = '', int $ref = null): void
     {
         if ($node->nodeType === XML_TEXT_NODE && str_contains($node->nodeValue, $val)) {
             $pass = true;
             foreach($node->parentNode->attributes as $attr){
                 if($attr->name=='data-lw' && $node->nodeValue == $val){
                     $pass = false;
-                    $this->line('   - ' . $ref . ' Skipped');
+                    $this->line('   - ' . $name . ' Skipped');
                 }
             }
             if($pass){
-                $new = '<a data-lw="'. $ref .'">' . $val . '</a>';
+                $new = '<a data-lw="'. $name .'">' . $val . '</a>';
                 $node->nodeValue = str_replace($val, $new, $node->nodeValue);
-                $this->line('   - ' . $ref . ' Replaced');
+                $this->line('   - ' . $name . ' Replaced');
             }
             
         }
         if ($node->hasChildNodes()) {
             foreach ($node->childNodes as $childNode) {
-                $this->replaceTextInNode($childNode, $ref, $val);
+                $this->replaceTextInNode($childNode, $name, $val);
             }
         }
     }
+
+    function agregarAnchors(string $document_content, string $name, string $value, array $positions) {
+        if (isset($positions) && is_array($positions)) {
+            foreach ($positions as $pos) {
+                $search = $pos['prefix'] ?? '';
+                $search .= $value;
+                $search .= $pos['affix'] ?? '';
+                $replacement = '<a data-lw="' . $name . '"';
+                
+                if (isset($pos['ref'])) {
+                    $replacement .= ' data-ref="' . $pos['ref'] . '"';
+                }
+                $replacement .= '>' . $value . '</a>';
+                $search = html_entity_decode($search);
+                $replacement = html_entity_decode($replacement);
+                $document_content = html_entity_decode($document_content);
+                if(str_contains($document_content, $search) && !str_contains($document_content, $replacement)){
+                    $document_content = str_replace(
+                        $search,
+                        $replacement,
+                        $document_content
+                    );
+                    $document_content = htmlspecialchars_decode($document_content);
+                    $this->line('   - ' . $name . ' Replaced');
+                }
+            }
+            return $document_content;
+        }
+    }
+
 }
