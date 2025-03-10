@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Route;
 use App\Traits\SingleSignature;
 use App\Traits\ApprovalTrait;
 use App\Models\Documents\Approval;
+use App\Models\Rrhh\Authority;
 use Livewire\WithPagination;
 
 class ApprovalsMgr extends Component
@@ -72,6 +73,12 @@ class ApprovalsMgr extends Component
     {
         /** Soy manager de alguna OU hoy? */
         $ous = auth()->user()->amIAuthorityFromOu->pluck('organizational_unit_id')->toArray();
+        $ous_secretary = Authority::getAmIAuthorityFromOu(today(), 'secretary', auth()->id());
+        foreach ($ous_secretary as $sOu) {
+            if($sOu->organizational_unit_id == 1){
+                $ous = array_merge($ous, [$sOu->organizational_unit_id]);
+            }
+        }
 
         $query = Approval::query();
 
