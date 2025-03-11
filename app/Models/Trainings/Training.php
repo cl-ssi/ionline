@@ -106,6 +106,7 @@ class Training extends Model implements Auditable
         return $this->belongsTo('\App\Models\ClCommune', 'commune_id');
     }
 
+    /*
     public function getStatusValueAttribute() {
         switch($this->status) {
             case 'saved':
@@ -128,6 +129,24 @@ class Training extends Model implements Auditable
                 return 'Rechazado';
                 break;
         }
+    }*/
+
+    /**
+     * Get the status value attribute.
+     *
+     * @return string|null
+     */
+    public function getStatusValueAttribute(): ?string
+    {
+        $statuses = [
+            'save'                  => 'Guardado',
+            'sent'                  => 'Enviado',
+            'complete'              => 'Finalizado',
+            'pending certificate'   => 'Certificado Pendiente',
+            'rejected'              => 'Rechazado'
+        ];
+
+        return $statuses[$this->status] ?? null;
     }
 
     public function canEdit(){
