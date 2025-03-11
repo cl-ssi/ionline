@@ -263,8 +263,12 @@ class ReportController extends Controller
 
 
 
-  public function bankPaymentFile($establishment_id = NULL, $pay_type = NULL, $programm_name = NULL)
+  public function bankPaymentFile(Request $request)
   {
+    $establishment_id = $request->establishment_id; 
+    $pay_type = $request->pay_type;
+    $programm_name = $request->programm_name;
+
     $fulfillments = [];
     
     $fulfillments1 = Fulfillment::whereHas("ServiceRequest", function ($subQuery) {

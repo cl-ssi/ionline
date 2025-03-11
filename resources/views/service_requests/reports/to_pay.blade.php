@@ -96,7 +96,7 @@
         <div class="form-group col-3 col-md-2">
             <label>&nbsp;</label>
             @if($request)
-                <a class="btn btn-outline-success form-control" href="{{route('rrhh.service-request.report.bank-payment-file',[$request->establishment_id, $request->pay_type, $request->programm_name])}}">
+                <a class="btn btn-outline-success form-control" href="{{ route('rrhh.service-request.report.bank-payment-file') }}?establishment_id={{ $request->establishment_id }}&pay_type={{ $request->pay_type }}&programm_name={{ $request->programm_name }}">
                     <i class="fas fa-file"></i>Archivo de pago
                 </a>
             @endif
