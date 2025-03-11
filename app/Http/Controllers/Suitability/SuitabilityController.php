@@ -321,7 +321,6 @@ class SuitabilityController extends Controller
     }
     public function storeSuitabilityExternal(Request $request)
     {
-
         $existingRequest = PsiRequest::where('user_external_id', $request->input('id'))
         ->where('school_id', $request->input('school_id'))
         ->first();
@@ -346,6 +345,8 @@ class SuitabilityController extends Controller
         $psirequest->user_external_id = $request->input('id');
         $psirequest->user_creator_id = Auth::guard('external')->user()->id;
         $psirequest->school_id = $request->input('school_id');
+        $psirequest->status_inhability = $request->input('inhability');
+        
         $psirequest->save();
         Mail::to('maria.zuniga@redsalud.gob.cl')
             // Mail::to('tebiccr@gmail.com')

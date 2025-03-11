@@ -8,6 +8,9 @@
         <p> <strong>Colegio:</strong> {{ $psirequest->school->name??'' }}</p>
         <p> <strong>Nombre Completo:</strong> {{ $psirequest->user->fullName??'' }}</p>
         <p> <strong>Cargo:</strong> {{$psirequest->job?? ''}}</p>
+        @if ($psirequest->status_inhability)
+        <p> <strong>Inhabilidad:</strong> {{$psirequest->inhabilidad?? ''}}</p>            
+        @endif
         <br><br>
         Saludos cordiales.
     </div>

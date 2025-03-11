@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('psi_requests', function (Blueprint $table) {
-            $table->enum('status_inhability', ['none', 'in_progress', 'enabled', 'disabled'])->default('none')->nullable()->after('disability');
+            $table->enum('status_inhability', ['none', 'in_progress', 'enabled', 'disabled'])->nullable()->after('disability');
             $table->date('signed_at')->nullable()->after('status_inhability');
             $table->date('test_send_at')->nullable()->after('signed_at');
             $table->date('approved_at')->nullable()->after('test_send_at');
@@ -28,7 +28,7 @@ return new class extends Migration
 
      public function down(): void
      {
-         Schema::table('psi_request', function (Blueprint $table) {
+         Schema::table('psi_requests', function (Blueprint $table) {
              $table->dropColumn([
                  'status_inhability',
                  'signed_at',

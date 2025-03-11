@@ -4,7 +4,7 @@
 
 <h3 class="mb-3">Nueva Solicitud de Evaluación de Idoneidad Psicológica para {{ $school->name ?? ''}}</h3>
 <h6 class="mb-3"><strong>Recordar revisar el Historico de Solicitudes en "Mis Solitudes" antes de generar una nueva</strong></h6>
-<h6 class="mb-3"><strong>Para personas que ingresaron a trabajar antes del 01-03-2014 NO se le debe generar solicitud de idoneidad</strong></h6>
+<h6 class="mb-3"><strong>Para personas que ingresaron a trabajar antes del 01-03-2015 NO se le debe generar solicitud de idoneidad</strong></h6>
 
 
 
@@ -15,7 +15,7 @@
     <div class="form-row align-items-end">
         <fieldset class="form-group col-5 col-sm-4 col-md-4 col-lg-2">
             <label for="for_run">Run</label>
-            <input type="number" class="form-control" id="for_run" name="id" autocomplete="off" max="50000000"  required>
+            <input type="number" class="form-control" id="for_run" name="id" autocomplete="off" max="50000000"  required="">
         </fieldset>
         <fieldset class="form-group col-2 col-sm-2 col-md-1 col-lg-1">
             <label for="for_dv">DV</label>
@@ -33,7 +33,7 @@
 
         <fieldset class="form-group col-5 col-sm-4 col-md-4 col-lg-2">
             <label for="for_phone">Telefono*</label>
-            <input type="text" class="form-control" id="for_phone_number" name="phone_number" autocomplete="off" placeholder="ej: +56982064875"  required>
+            <input type="text" class="form-control" id="for_phone_number" name="phone_number" autocomplete="off" placeholder="ej: +56982064875"  required="">
         </fieldset>
     </div>
 
@@ -76,16 +76,26 @@
             <label for="for_country">Nacionalidad*</label>
             <input type="text" class="form-control" id="for_country" placeholder="" name="country" required="">
         </fieldset>
+        <fieldset class="form-group col-6">
+            <label>Certificado de Inhabilidades (Ley 20.594)*</label>
+            <select class="form-control" name="inhability" required="">
+                <option selected value="">Eliga una Opción</option>
+                <option value="none">No Tiene Certificado</option>
+                <option value="in_progress">Certificado En tramite</option>
+                <option value="enabled">Sin Inhabilidades</option>
+                <option value="disabled">Inhabilitado</option>
+            </select>
+        </fieldset>
     </div>
 
     <label for="forBrand">Presenta Discapacidad*</label>
     <fieldset class="form-group">
         <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" name="disability" id="RadioType1" value="1" required>
+            <input class="form-check-input" type="radio" name="disability" id="RadioType1" value="1" required="">
             <label class="form-check-label" for="inlineRadio1">Sí</label>
         </div>
         <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" name="disability" id="RadioType2" value="0" required>
+            <input class="form-check-input" type="radio" name="disability" id="RadioType2" value="0" required="">
             <label class="form-check-label" for="inlineRadio2">No</label>
         </div>
     </fieldset>

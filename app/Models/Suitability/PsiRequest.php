@@ -2,6 +2,7 @@
 
 namespace App\Models\Suitability;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -35,15 +36,28 @@ class PsiRequest extends Model
 
     public function user(){
         return $this->belongsTo('App\Models\UserExternal','user_external_id');
-      }
+    }
 
     public function school(){
         return $this->belongsTo('App\Models\Suitability\School','school_id');
-      }
+    }
 
-      public function result(){
+    public function result(){
         return $this->belongsTo('App\Models\Suitability\Result','id','request_id');
-      }
+    }
 
+    public function inhabilidad(): Attribute
+    {
+        $status = [
+            'none' => 'No tiene Certificado',
+            'in_progress' => 'Certificado en progreso',
+            'enabled' => 'Habilitado',
+            'disabled' => 'Inhabilitado',
+        ];
+        return Attribute::make(
+            get: fn ()=> $status[$this->status_inhability]??null,
+            // set: fn ($value) => $value,
+        );
+    }
 
 }

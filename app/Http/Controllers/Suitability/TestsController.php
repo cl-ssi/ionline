@@ -28,7 +28,8 @@ class TestsController extends Controller
 
     public function index($psi_request_id)
     {
-        //
+        $psi_request = PsiRequest::find($psi_request_id);
+        $inhability = $psi_request->status_inhability == 'enabled';
         $categories = Category::with(['categoryQuestions' => function ($query) {
             $query->inRandomOrder()
                 ->with(['questionOptions' => function ($query) {
@@ -39,7 +40,7 @@ class TestsController extends Controller
         ->get();
 
     // return view('suitability.test', compact('categories','psi_request_id'));
-    return view('external.suitability.test', compact('categories','psi_request_id'));
+    return view('external.suitability.test', compact('categories', 'psi_request'));
     }
 
     /**
