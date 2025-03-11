@@ -72,6 +72,9 @@ class ReportConfiscated extends Page implements Tables\Contracts\HasTable
                             END
                         ) as total_without_result'
                     ) // Total sin sustancia resultante
+                    ->selectRaw(
+                        'COUNT(DISTINCT reception_id) as total_receptions'
+                    ) // Total de actas únicas (receptions) por sustancia
                     ->groupBy('substance_id')
                     ->with(['substance']);
             })
@@ -86,6 +89,11 @@ class ReportConfiscated extends Page implements Tables\Contracts\HasTable
                     ->label('Total de Items')
                     ->sortable()
                     ->formatStateUsing(fn (string|float $state): string => number_format($state, 0, ',', '.')) // Formato con separación de miles y 2 decimales,
+                    ->alignEnd(),
+                Tables\Columns\TextColumn::make('total_receptions')
+                    ->label('Cantidad de Actas')
+                    ->sortable()
+                    ->formatStateUsing(fn (string|float $state): string => number_format($state, 0, ',', '.'))
                     ->alignEnd(),
                 Tables\Columns\TextColumn::make('total_net_weight')
                     ->label('Recibidos')
