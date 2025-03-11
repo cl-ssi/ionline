@@ -593,23 +593,25 @@ class ReportController extends Controller
         }
         
       } 
-      else if (
-        $ServiceRequest->responsabilityCenter->establishment_id == 38 and
-        $ServiceRequest->start_date >= "2022-01-01 00:00:00" and
-        $ServiceRequest->programm_name == "Covid 2022") {
-          //dd($ServiceRequest->programm_name);
-          $pdf->loadView('service_requests.report_resolution_covid_2022_ssi', compact('ServiceRequest'));
-      } 
-      else if (
-        $ServiceRequest->responsabilityCenter->establishment_id == 38 and
-        $ServiceRequest->start_date >= "2022-01-01 00:00:00" and
-        $ServiceRequest->programm_name != "Covid 2022") {
-          //dd('No es Covid');
-          $pdf->loadView('service_requests.report_resolution_hsa', compact('ServiceRequest'));
-      } 
-      else {
-        $pdf->loadView('service_requests.report_resolution_hsa', compact('ServiceRequest'));
-      }
+        else if (
+            $ServiceRequest->responsabilityCenter->establishment_id == 38 and
+            $ServiceRequest->start_date >= "2022-01-01 00:00:00" and
+            $ServiceRequest->programm_name == "Covid 2022") {
+            $pdf->loadView('service_requests.report_resolution_covid_2022_ssi', compact('ServiceRequest'));
+        } 
+        else if (
+            $ServiceRequest->responsabilityCenter->establishment_id == 38 and
+            $ServiceRequest->start_date >= "2022-01-01 00:00:00" and
+            $ServiceRequest->programm_name != "Covid 2022") {
+            $pdf->loadView('service_requests.report_resolution_hsa', compact('ServiceRequest'));
+        } 
+        else {
+            if($ServiceRequest->hetg_resources){
+                $pdf->loadView('service_requests.hah_hetg_report_resolution_hsa', compact('ServiceRequest'));
+            }else{
+                $pdf->loadView('service_requests.report_resolution_hsa', compact('ServiceRequest'));
+            }
+        }
     }
 
 
