@@ -32,6 +32,18 @@
   @csrf
   @method('PUT')
 
+    <div class="form-row mb-3" >
+        <div class="col-4 col-md-2">
+            <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" 
+                        name="hetg_resources" 
+                        id="hetg_resources"
+                        @if($serviceRequest->hetg_resources == 1) checked @endif>
+                <label class="custom-control-label" for="hetg_resources">Recursos de HETG</label>
+            </div>
+        </div>
+    </div>
+
 	<div class="form-row">
 
     <fieldset class="form-group col-6 col-md-2">
@@ -781,13 +793,14 @@
     <table class="card-table table table-sm table-bordered small">
         <thead>
             <tr>
-            <th scope="col">Fecha</th>
-            <th scope="col">U.Organizacional</th>
-            <th scope="col">Cargo</th>
-            <th scope="col">Usuario</th>
-            <th scope="col">Tipo</th>
-            <th scope="col">Estado</th>
-            <th scope="col">Observación</th>
+                <th scope="col">Fecha</th>
+                <th scope="col">U.Organizacional</th>
+                <th scope="col">Cargo</th>
+                <th scope="col">Usuario</th>
+                <th scope="col">Tipo</th>
+                <th scope="col">Estado</th>
+                <th scope="col">Observación</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -795,7 +808,10 @@
             <!-- creado -->
             <tr>
                 <td>{{ $serviceRequest->created_at }}</td>
-                <td>{!! optional($serviceRequest->creator->organizationalUnit)->name ?? '<span class="text-danger">SIN UNIDAD ORGANIZACIONAL</span>' !!}</td>
+                <td>
+                    {{ $serviceRequest->creator->establishment->alias }} - 
+                    {!! optional($serviceRequest->creator->organizationalUnit)->name ?? '<span class="text-danger">SIN UNIDAD ORGANIZACIONAL</span>' !!}
+                </td>
                 <td>{{ $serviceRequest->creator->position }}</td>
                 <td>{{ $serviceRequest->creator->fullName }}</td>
                 <td>Creador</td>
@@ -810,7 +826,10 @@
             @foreach($serviceRequest->SignatureFlows->where('status',2)->sortBy('sign_position') as $key => $SignatureFlow)
                 <tr class="bg-warning">
                     <td>{{ $SignatureFlow->signature_date}}</td>
-                    <td>{{ $SignatureFlow->organizationalUnit->name}}</td>
+                    <td>
+                        {{ $SignatureFlow->user->establishment->alias }} - 
+                        {{ $SignatureFlow->organizationalUnit->name}}
+                    </td>
                     <td>{{ $SignatureFlow->employee }}</td>
                     <td>{{ $SignatureFlow->user->fullName }}</td>
                     <td>{{ $SignatureFlow->type }}</td>
@@ -836,7 +855,10 @@
                 <tr>
                 @endif
                     <td>{{ $SignatureFlow->signature_date}}</td>
-                    <td>{!! optional($SignatureFlow->user->organizationalUnit)->name ?? '<span class="text-danger">SIN UNIDAD ORGANIZACIONAL</span>' !!}</td>
+                    <td>
+                        {{ optional($SignatureFlow->user->establishment)->alias }} - 
+                        {!! optional($SignatureFlow->user->organizationalUnit)->name ?? '<span class="text-danger">SIN UNIDAD ORGANIZACIONAL</span>' !!}
+                    </td>
                     <td>{{ $SignatureFlow->user->position }}</td>
                     <td>
                         {{ $SignatureFlow->user->fullName }}

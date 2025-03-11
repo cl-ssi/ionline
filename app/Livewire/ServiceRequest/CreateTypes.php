@@ -21,6 +21,7 @@ class CreateTypes extends Component
     public $signatureFlows = [];
     public $active_mensual_contract_count;
     public $active_horas_contract_count;
+    public $hetg_resources;
 
     public function change_responsability_center_ou_id(){
         
@@ -89,26 +90,35 @@ class CreateTypes extends Component
         }
 
         $this->signatureFlows = [];
-        if (auth()->user()->organizationalUnit->establishment_id == 1){
-            $this->signatureFlows[Authority::getAuthorityFromDate(424, now(), ['manager'])->position . " - " . Authority::getAuthorityFromDate(424, now(), ['manager'])->organizationalUnit->name] = Authority::getAuthorityFromDate(424, now(), ['manager'])->user->id;
-            $this->signatureFlows[Authority::getAuthorityFromDate(86, now(), ['manager'])->position . " - " . Authority::getAuthorityFromDate(86, now(), ['manager'])->organizationalUnit->name] = Authority::getAuthorityFromDate(86, now(), ['manager'])->user->id;
-            $this->signatureFlows[Authority::getAuthorityFromDate(111, now(), ['manager'])->position . " - " . Authority::getAuthorityFromDate(111, now(), ['manager'])->organizationalUnit->name] = Authority::getAuthorityFromDate(111, now(), ['manager'])->user->id;
-            if ($this->subdirection_ou_id == 85){
-                $this->signatureFlows[Authority::getAuthorityFromDate(85, now(), ['manager'])->position . " - " . Authority::getAuthorityFromDate(85, now(), ['manager'])->organizationalUnit->name] = Authority::getAuthorityFromDate(85, now(), ['manager'])->user->id;
-            }
-            $this->signatureFlows[Authority::getAuthorityFromDate(87, now(), ['manager'])->position . " - " . Authority::getAuthorityFromDate(87, now(), ['manager'])->organizationalUnit->name] = Authority::getAuthorityFromDate(87, now(), ['manager'])->user->id;
-            $this->signatureFlows[Authority::getAuthorityFromDate(84, now(), ['manager'])->position . " - " . Authority::getAuthorityFromDate(84, now(), ['manager'])->organizationalUnit->name] = Authority::getAuthorityFromDate(84, now(), ['manager'])->user->id;
-        }elseif(auth()->user()->organizationalUnit->establishment_id == 41){
+
+        if($this->hetg_resources){
             $this->signatureFlows[Authority::getAuthorityFromDate(364, now(), ['manager'])->position . " - " . Authority::getAuthorityFromDate(364, now(), ['manager'])->organizationalUnit->name] = Authority::getAuthorityFromDate(364, now(), ['manager'])->user->id;
-            $this->signatureFlows[Authority::getAuthorityFromDate(337, now(), ['manager'])->position . " - " . Authority::getAuthorityFromDate(337, now(), ['manager'])->organizationalUnit->name] = Authority::getAuthorityFromDate(337, now(), ['manager'])->user->id; 
+            $this->signatureFlows[Authority::getAuthorityFromDate(247, now(), ['manager'])->position . " - " . Authority::getAuthorityFromDate(247, now(), ['manager'])->organizationalUnit->name] = Authority::getAuthorityFromDate(247, now(), ['manager'])->user->id;
+            // $this->signatureFlows[Authority::getAuthorityFromDate(337, now(), ['manager'])->position . " - " . Authority::getAuthorityFromDate(337, now(), ['manager'])->organizationalUnit->name] = Authority::getAuthorityFromDate(337, now(), ['manager'])->user->id; 
             $this->signatureFlows[Authority::getAuthorityFromDate(246, now(), ['manager'])->position . " - " . Authority::getAuthorityFromDate(246, now(), ['manager'])->organizationalUnit->name] = Authority::getAuthorityFromDate(246, now(), ['manager'])->user->id;
+            $this->signatureFlows[Authority::getAuthorityFromDate(111, now(), ['manager'])->position . " - " . Authority::getAuthorityFromDate(111, now(), ['manager'])->organizationalUnit->name] = Authority::getAuthorityFromDate(111, now(), ['manager'])->user->id;
+            $this->signatureFlows[Authority::getAuthorityFromDate(84, now(), ['manager'])->position . " - " . Authority::getAuthorityFromDate(84, now(), ['manager'])->organizationalUnit->name] = Authority::getAuthorityFromDate(84, now(), ['manager'])->user->id;
         }else{
-            $this->signatureFlows[Authority::getAuthorityFromDate(59, now(), ['manager'])->position . " - " . Authority::getAuthorityFromDate(59, now(), ['manager'])->organizationalUnit->name] = Authority::getAuthorityFromDate(59, now(), ['manager'])->user->id; // 59 - Planificación y Control de Gestión de Recursos Humanos
-            $this->signatureFlows[Authority::getAuthorityFromDate(44, now(), ['manager'])->position . " - " . Authority::getAuthorityFromDate(44, now(), ['manager'])->organizationalUnit->name] = Authority::getAuthorityFromDate(44, now(), ['manager'])->user->id; // 44 - Subdirección de Gestión y Desarrollo de las Personas
-            $this->signatureFlows[Authority::getAuthorityFromDate(40, now(), ['manager'])->position . " - " . Authority::getAuthorityFromDate(40, now(), ['manager'])->organizationalUnit->name] = Authority::getAuthorityFromDate(40, now(), ['manager'])->user->id; // 31 - Subdirección de Recursos Físicos y Financieros
+            if (auth()->user()->organizationalUnit->establishment_id == 1){
+                $this->signatureFlows[Authority::getAuthorityFromDate(424, now(), ['manager'])->position . " - " . Authority::getAuthorityFromDate(424, now(), ['manager'])->organizationalUnit->name] = Authority::getAuthorityFromDate(424, now(), ['manager'])->user->id;
+                $this->signatureFlows[Authority::getAuthorityFromDate(86, now(), ['manager'])->position . " - " . Authority::getAuthorityFromDate(86, now(), ['manager'])->organizationalUnit->name] = Authority::getAuthorityFromDate(86, now(), ['manager'])->user->id;
+                $this->signatureFlows[Authority::getAuthorityFromDate(111, now(), ['manager'])->position . " - " . Authority::getAuthorityFromDate(111, now(), ['manager'])->organizationalUnit->name] = Authority::getAuthorityFromDate(111, now(), ['manager'])->user->id;
+                if ($this->subdirection_ou_id == 85){
+                    $this->signatureFlows[Authority::getAuthorityFromDate(85, now(), ['manager'])->position . " - " . Authority::getAuthorityFromDate(85, now(), ['manager'])->organizationalUnit->name] = Authority::getAuthorityFromDate(85, now(), ['manager'])->user->id;
+                }
+                $this->signatureFlows[Authority::getAuthorityFromDate(87, now(), ['manager'])->position . " - " . Authority::getAuthorityFromDate(87, now(), ['manager'])->organizationalUnit->name] = Authority::getAuthorityFromDate(87, now(), ['manager'])->user->id;
+                $this->signatureFlows[Authority::getAuthorityFromDate(84, now(), ['manager'])->position . " - " . Authority::getAuthorityFromDate(84, now(), ['manager'])->organizationalUnit->name] = Authority::getAuthorityFromDate(84, now(), ['manager'])->user->id;
+            }elseif(auth()->user()->organizationalUnit->establishment_id == 41){
+                $this->signatureFlows[Authority::getAuthorityFromDate(364, now(), ['manager'])->position . " - " . Authority::getAuthorityFromDate(364, now(), ['manager'])->organizationalUnit->name] = Authority::getAuthorityFromDate(364, now(), ['manager'])->user->id;
+                $this->signatureFlows[Authority::getAuthorityFromDate(337, now(), ['manager'])->position . " - " . Authority::getAuthorityFromDate(337, now(), ['manager'])->organizationalUnit->name] = Authority::getAuthorityFromDate(337, now(), ['manager'])->user->id; 
+                $this->signatureFlows[Authority::getAuthorityFromDate(246, now(), ['manager'])->position . " - " . Authority::getAuthorityFromDate(246, now(), ['manager'])->organizationalUnit->name] = Authority::getAuthorityFromDate(246, now(), ['manager'])->user->id;
+            }else{
+                $this->signatureFlows[Authority::getAuthorityFromDate(59, now(), ['manager'])->position . " - " . Authority::getAuthorityFromDate(59, now(), ['manager'])->organizationalUnit->name] = Authority::getAuthorityFromDate(59, now(), ['manager'])->user->id; // 59 - Planificación y Control de Gestión de Recursos Humanos
+                $this->signatureFlows[Authority::getAuthorityFromDate(44, now(), ['manager'])->position . " - " . Authority::getAuthorityFromDate(44, now(), ['manager'])->organizationalUnit->name] = Authority::getAuthorityFromDate(44, now(), ['manager'])->user->id; // 44 - Subdirección de Gestión y Desarrollo de las Personas
+                $this->signatureFlows[Authority::getAuthorityFromDate(40, now(), ['manager'])->position . " - " . Authority::getAuthorityFromDate(40, now(), ['manager'])->organizationalUnit->name] = Authority::getAuthorityFromDate(40, now(), ['manager'])->user->id; // 31 - Subdirección de Recursos Físicos y Financieros
+            }
         }
-
-
+        
         $this->signatures = [];
         foreach($this->signatureFlows as $ou_name => $user_id)
         {

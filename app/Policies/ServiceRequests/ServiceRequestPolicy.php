@@ -51,6 +51,12 @@ class ServiceRequestPolicy
             // Obtener el establishment_id del usuario autenticado
             $user_establishment_id = $user->organizationalUnit->establishment_id;
 
+            // si es que la solicitud es para HAH pero con recursos de HETG, se deja visualizar a los funcionarios del HETG
+            // esta solicitud que pertenece al HAH (para poder visar)
+            if($serviceRequest->hetg_resources && $user_establishment_id == 1) {
+                return true;
+            }
+
             // Si el establecimiento del usuario es 38 (sst), solo permitir si el servicio no es de los establecimientos 1 y 41
             if ($user_establishment_id == 38) {
                 return !in_array($serviceRequest->policy_establishment_id, [1, 41]);

@@ -88,6 +88,7 @@ class FulfillmentController extends Controller
                                             ->when($establishment_id != 38, function ($q) use ($establishment_id) {
                                                 return $q->where('establishment_id',$establishment_id);
                                             })
+                                            ->where('hetg_resources',false)
                                             ->orderBy('id','desc')
                                             ->paginate(100);
 
@@ -124,6 +125,7 @@ class FulfillmentController extends Controller
                                                 return $q->where('establishment_id',$establishment_id);
                                             })
                                            // ->where('program_contract_type','Mensual')
+                                           ->where('hetg_resources',false)
                                            ->orderBy('id','desc')
                                            ->paginate(100);
                                            // ->get();
@@ -160,6 +162,117 @@ class FulfillmentController extends Controller
         $professions = Profession::orderBy('name', 'ASC')->get();
 
         return view('service_requests.requests.fulfillments.index',compact('serviceRequests','responsabilityCenters','request','professions'));
+    }
+
+    // funcion que muestra los cumplimientos creados para hah pero con recursos de hetg
+    public function index_hah_hetg(Request $request)
+    {
+        $user = auth()->user();
+        $serviceRequests = null;
+
+        $responsability_center_ou_id = $request->responsability_center_ou_id;
+        $program_contract_type = $request->program_contract_type;
+        // $estate = $request->estate;
+        $profession_id = $request->profession_id;
+        $name = $request->name;
+        $id = $request->id;
+
+        $authorities = Authority::getAmIAuthorityFromOu(now(),['manager','secretary','delegate'],$user->id);
+        $array = array();
+        foreach ($authorities as $key => $authority) {
+          $array[] = $authority->organizational_unit_id;
+        }
+
+        $establishment_id = auth()->user()->organizationalUnit->establishment_id;
+        // $establishment_id = $request->establishment_id;
+
+        if (auth()->user()->can('Service Request: fulfillments responsable')) {
+            $serviceRequests = ServiceRequest::whereHas("SignatureFlows", function($subQuery) use($user, $array){
+                                                $subQuery->where('responsable_id',$user->id);
+                                                // $subQuery->orwhere('user_id',$user->id);
+                                                $subQuery->orWhereIn('ou_id',$array);
+                                            })
+                                            ->when($responsability_center_ou_id != NULL, function ($q) use ($responsability_center_ou_id) {
+                                                return $q->where('responsability_center_ou_id',$responsability_center_ou_id);
+                                                })
+                                            ->when($program_contract_type != NULL, function ($q) use ($program_contract_type) {
+                                                    return $q->where('program_contract_type',$program_contract_type);
+                                                })
+                                            ->when($profession_id != NULL, function ($q) use ($profession_id) {
+                                                return $q->where('profession_id', $profession_id);
+                                            })
+                                            ->when(($name != NULL), function ($q) use ($name) {
+                                                    return $q->whereHas("employee", function($subQuery) use ($name){
+                                                                $subQuery->where('name','LIKE','%'.$name.'%');
+                                                                $subQuery->orwhere('fathers_family', 'LIKE', '%' . $name . '%');
+                                                                $subQuery->orwhere('mothers_family', 'LIKE', '%' . $name . '%');
+                                                            });
+                                                    })
+                                            ->when($id != NULL, function ($q) use ($id) {
+                                                    return $q->where('id',$id);
+                                                })
+                                            ->where('hetg_resources',true)
+                                            ->orderBy('id','desc')
+                                            ->paginate(100);
+
+        }
+        // Service Request: fulfillments rrhh - Service Request: fulfillments finance
+        else{
+          $serviceRequests = ServiceRequest::when($responsability_center_ou_id != NULL, function ($q) use ($responsability_center_ou_id) {
+                                                return $q->where('responsability_center_ou_id',$responsability_center_ou_id);
+                                            })
+                                          ->when($program_contract_type != NULL, function ($q) use ($program_contract_type) {
+                                                 return $q->where('program_contract_type',$program_contract_type);
+                                               })
+                                           ->when($profession_id != NULL, function ($q) use ($profession_id) {
+                                             return $q->where('profession_id', $profession_id);
+                                           })
+                                           ->when(($name != NULL), function ($q) use ($name) {
+                                                   return $q->whereHas("employee", function($subQuery) use ($name){
+                                                              $subQuery->where('name','LIKE','%'.$name.'%');
+                                                              $subQuery->orwhere('fathers_family', 'LIKE', '%' . $name . '%');
+                                                              $subQuery->orwhere('mothers_family', 'LIKE', '%' . $name . '%');
+                                                         });
+                                                })
+                                          ->when($id != NULL, function ($q) use ($id) {
+                                                return $q->where('id',$id);
+                                               })
+                                           ->where('hetg_resources',true)
+                                           ->orderBy('id','desc')
+                                           ->paginate(100);
+        }
+
+
+        if (auth()->user()->can('Service Request: fulfillments')) {
+          foreach ($serviceRequests as $key => $serviceRequest) {
+            //mensual -
+            if ($serviceRequest->program_contract_type == "Mensual") {
+              //only completed
+              if ($serviceRequest->SignatureFlows->where('status','===',0)->count() == 0 && $serviceRequest->SignatureFlows->whereNull('status')->count() == 0) {
+
+              }else{
+                $serviceRequests->forget($key);
+              }
+            }
+            //"turno"
+            else{
+
+              //only completed
+              if ($serviceRequest->SignatureFlows->where('status','===',0)->count() == 0 && $serviceRequest->SignatureFlows->whereNull('status')->count() == 0) {
+
+              }else{
+                $serviceRequests->forget($key);
+              }
+            }
+
+          }
+        }
+
+        $responsabilityCenters = OrganizationalUnit::where('establishment_id',$establishment_id)
+                                                    ->orderBy('name')->get();
+        $professions = Profession::orderBy('name', 'ASC')->get();
+
+        return view('service_requests.requests.fulfillments.hah_hetg.index',compact('serviceRequests','responsabilityCenters','request','professions'));
     }
 
     /**
@@ -320,6 +433,86 @@ class FulfillmentController extends Controller
         }
 
         return view('service_requests.requests.fulfillments.edit',compact('serviceRequest'));
+    }
+
+    public function edit_fulfillment_hah_hetg(ServiceRequest $serviceRequest)
+    {
+        if($serviceRequest->SignatureFlows->isEmpty())
+        {
+            /* Envío al log de errores el id para su chequeo */
+            logger("El ServiceRequest no tiene signature flows creados", ['id' => $serviceRequest->id]);
+        }
+
+        //se hizo esto para los casos en que no existan fulfillments
+        if ($serviceRequest->fulfillments->count() == 0) {
+
+            $start    = new DateTime($serviceRequest->start_date);
+            $start->modify('first day of this month');
+            $end      = new DateTime($serviceRequest->end_date);
+            $end->modify('first day of next month');
+            $interval = DateInterval::createFromDateString('1 month');
+            $periods   = new DatePeriod($start, $interval, $end);
+            $cont_periods = iterator_count($periods);
+
+            // crea de forma automática las cabeceras
+            if ($serviceRequest->program_contract_type == "Mensual" || ($serviceRequest->program_contract_type == "Horas" && $serviceRequest->working_day_type == "HORA MÉDICA")) {
+                if ($serviceRequest->fulfillments->count() == 0) {
+
+                    foreach ($periods as $key => $period) {
+                    $program_contract_type = "Mensual";
+                    $start_date_period = $period->format("d-m-Y");
+                    $end_date_period = Carbon::createFromFormat('d-m-Y', $period->format("d-m-Y"))->endOfMonth()->format("d-m-Y");
+                    if($key == 0){
+                        $start_date_period = $serviceRequest->start_date->format("d-m-Y");
+                    }
+                    if (($cont_periods - 1) == $key) {
+                        $end_date_period = $serviceRequest->end_date->format("d-m-Y");
+                        $program_contract_type = "Parcial";
+                    }
+
+                    $fulfillment = new Fulfillment();
+                    $fulfillment->service_request_id = $serviceRequest->id;
+                    if ($serviceRequest->program_contract_type == "Mensual") {
+                        $fulfillment->year = $period->format("Y");
+                        $fulfillment->month = $period->format("m");
+                    }else{
+                        $program_contract_type = "Horas Médicas";
+                        $fulfillment->year = $period->format("Y");
+                        $fulfillment->month = $period->format("m");
+                    }
+                    $fulfillment->type = $program_contract_type;
+                    $fulfillment->start_date = $start_date_period;
+                    $fulfillment->end_date = $end_date_period;
+                    $fulfillment->user_id = auth()->id();
+
+                    $fulfillment->save();
+                    }
+                }
+            }
+
+            elseif($serviceRequest->program_contract_type == "Horas"){
+                if ($serviceRequest->fulfillments->count() == 0) {
+                    $fulfillment = new Fulfillment();
+                    $fulfillment->service_request_id = $serviceRequest->id;
+                    $fulfillment->type = "Horas No Médicas";
+                    $fulfillment->year = $serviceRequest->start_date->format("Y");
+                    $fulfillment->month = $serviceRequest->start_date->format("m");
+                    $fulfillment->start_date = $serviceRequest->start_date;
+                    $fulfillment->end_date = $serviceRequest->end_date;
+                    // $fulfillment->observation = "Aprobaciones en flujo de firmas";
+                    $fulfillment->user_id = auth()->id();
+                    $fulfillment->save();
+                }else {
+                    $fulfillment = $serviceRequest->fulfillments->first();
+                }
+            }
+
+            //tuve que hacer esto ya que no me devolvia fulfillments guardados.
+            $serviceRequest = ServiceRequest::find($serviceRequest->id);
+
+        }
+
+        return view('service_requests.requests.fulfillments.hah_hetg.edit',compact('serviceRequest'));
     }
 
     public function save_approbed_fulfillment(ServiceRequest $serviceRequest)

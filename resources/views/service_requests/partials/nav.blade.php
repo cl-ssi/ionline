@@ -42,6 +42,11 @@
                     href="{{ route('rrhh.service-request.fulfillment.index') }}">
                     <i class="fas fa-clipboard-check"></i> Cumplimientos
                 </a>
+
+                <a class="dropdown-item {{ active('rrhh.service-request.fulfillment.index_hah_hetg') }}"
+                    href="{{ route('rrhh.service-request.fulfillment.index_hah_hetg') }}">
+                    <i class="fas fa-clipboard-check"></i> Cumplimientos HAH - HETG
+                </a>
             @endcan
 
             @can('Service Request: fulfillments responsable')

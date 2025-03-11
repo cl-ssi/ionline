@@ -98,6 +98,7 @@ class ServiceRequest extends Model implements Auditable
         'phone_number',
         'email',
         'signature_page_break',
+        'hetg_resources'
     ];
 
     /**
@@ -113,6 +114,7 @@ class ServiceRequest extends Model implements Auditable
         'payment_date' => 'date:Y-m-d',
         'resolution_date' => 'date:Y-m-d',
         'has_resolution_file_at' => 'datetime',
+        'hetg_resources' => 'boolean',
     ];
 
     /**
@@ -230,6 +232,14 @@ class ServiceRequest extends Model implements Auditable
     {
         return Attribute::make(
             get: fn () => 'Honorario',
+        );
+    }
+
+    protected function hetgResources(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => (bool) $value,
+            set: fn ($value) => in_array($value, ['on', true, 1, '1'], true)
         );
     }
 
