@@ -1186,10 +1186,12 @@
         2027: 0.16,
         2028: 0.17
     }
-    var year = new Date().getFullYear();
+    //var year = new Date().getFullYear();
+
+    var year = {{ \Carbon\Carbon::parse($requestForm->created_at)->year }};
 
     // se imprime valor % boleta de honorarios que corresponda segun el año vigente
-    $('#for_tax option[value=bh],#for_new_tax option[value=bh]').text("Boleta de Honorarios " + (withholding_tax[year] ? withholding_tax[year] * 100 : withholding_tax[Object.keys(withholding_tax).pop()] * 100) + "%");
+    $('#for_tax option[value=bh],#for_new_tax option[value=bh]').text("Boleta de Honorarios " + (withholding_tax[year] ? withholding_tax[year] * 100 : withholding_tax[Object.keys(withholding_tax).pop()] * 100).toFixed(2) + "%");
 
     calculateAmount();
     calculateNewAmount();
