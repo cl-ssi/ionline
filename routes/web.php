@@ -1,7 +1,5 @@
 <?php
 
-use App\Http\Controllers\Documents\Agreements\CertificateController;
-use App\Http\Controllers\Documents\Agreements\ProcessController;
 use Illuminate\Http\Request;
 use App\Livewire\TicResources;
 use App\Livewire\Rem\ImportMdb;
@@ -70,9 +68,9 @@ use App\Livewire\Inventory\InventorySheet;
 use App\Livewire\Inventory\PrintCodeQueue;
 use App\Livewire\Resources\ComputerCreate;
 use App\Livewire\Resources\ComputerFusion;
-// use App\Http\Controllers\Lobby\MeetingController;
 use App\Livewire\Trainings\TrainingCreate;
 use App\Livewire\Indicators\QueryGenerator;
+// use App\Http\Controllers\Lobby\MeetingController;
 use App\Livewire\Parameters\AccessLogIndex;
 use App\Livewire\Rrhh\Attendance\ReasonMgr;
 use App\Livewire\Welfare\Benefits\Requests;
@@ -123,6 +121,7 @@ use App\Http\Controllers\Rem\RemSerieController;
 use App\Http\Controllers\Summary\LinkController;
 use App\Http\Controllers\Unspsc\ClassController;
 use App\Http\Controllers\Welfare\LoanController;
+use App\Http\Controllers\Welfare\SirhController;
 use App\Livewire\Documents\DocDigital\Recibidos;
 use App\Livewire\Inventory\InventoryManageUsers;
 use App\Livewire\Inventory\InventoryUploadExcel;
@@ -197,11 +196,11 @@ use App\Http\Controllers\Rem\RemPeriodSerieController;
 use App\Http\Controllers\Requirements\EventController;
 use App\Http\Controllers\Requirements\LabelController;
 use App\Http\Controllers\Resources\ComputerController;
+use App\Livewire\Parameters\Parameter\ParameterCreate;
 
 
 //use App\Http\Controllers\RequestForms\SupplyPurchaseController;
 //use App\Http\Controllers\Suitability\ResultsController;
-use App\Livewire\Parameters\Parameter\ParameterCreate;
 use App\Livewire\Warehouse\Invoices\InvoiceManagement;
 use App\Http\Controllers\Agreements\AddendumController;
 use App\Http\Controllers\Agreements\WordTestController;
@@ -230,8 +229,8 @@ use App\Livewire\Welfare\Benefits\Benefits as BenefitLw;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use App\Http\Controllers\Finance\PurchaseOrderController;
 use App\Http\Controllers\HealthPlan\HealthPlanController;
-// use App\Http\Controllers\IdentifyNeeds\ProjectController;
 use App\Http\Controllers\Indicators\HealthGoalController;
+// use App\Http\Controllers\IdentifyNeeds\ProjectController;
 use App\Http\Controllers\Indicators\ProgramApsController;
 use App\Http\Controllers\Parameters\BudgetItemController;
 use App\Http\Controllers\Parameters\PermissionController;
@@ -293,6 +292,7 @@ use App\Http\Controllers\ReplacementStaff\CommissionController;
 use App\Http\Controllers\ReplacementStaff\ExperienceController;
 use App\Http\Controllers\ServiceRequests\FulfillmentController;
 use App\Http\Controllers\Agreements\ProgramResolutionController;
+use App\Http\Controllers\Documents\Agreements\ProcessController;
 use App\Http\Controllers\Parameters\EstablishmentTypeController;
 use App\Http\Controllers\Parameters\PurchaseMechanismController;
 use App\Http\Controllers\Parameters\UnitOfMeasurementController;
@@ -325,6 +325,7 @@ use App\Http\Controllers\Documents\DocDigital\DocDigitalController;
 use App\Http\Controllers\Programmings\MinisterialProgramController;
 use App\Http\Controllers\RequestForms\RequestFormMessageController;
 use App\Http\Controllers\ServiceRequests\FulfillmentItemController;
+use App\Http\Controllers\Documents\Agreements\CertificateController;
 use App\Http\Controllers\ServiceRequests\Denomination1121Controller;
 use App\Http\Controllers\Agreements\WordCollaborationAgreeController;
 use App\Http\Controllers\ReplacementStaff\ReplacementStaffController;
@@ -2767,6 +2768,10 @@ Route::prefix('welfare')->as('welfare.')->middleware(['auth', 'must.change.passw
     Route::get('/export-balance', [WelfareController::class, 'exportBalance'])->name('exportBalance');
     Route::get('/welfare-users-import', WelfareUsersImport::class)->name('welfare-users-import');
     Route::get('/download/{file}',  [WelfareController::class, 'download'])->name('download');
+
+    Route::get('welfare-users',  [SirhController::class, 'welfareUsers'])->name('sirh.welfareUsers');
+    Route::get('existing-contract',  [SirhController::class, 'existingContract'])->name('sirh.existingContract');
+    Route::get('rsal-unidad',  [SirhController::class, 'rsalUnidad'])->name('sirh.rsalUnidad');
 
     Route::prefix('loans')->as('loans.')->group(function () {
         Route::get('/', [LoanController::class, 'index'])->name('index');

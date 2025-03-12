@@ -29,7 +29,8 @@ class WelfareUser extends Model
         'establ',
         'cargo',
         'cuota_mes',
-        'afil_fecha_desafiliacion'
+        'afil_fecha_desafiliacion',
+        'updated_at'
     ];
 
     protected $table = 'sirh_welfare_users';

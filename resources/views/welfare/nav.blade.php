@@ -127,6 +127,32 @@
 
 
     @if(auth()->user()->can('welfare: amipass') || auth()->user()->can('be god'))
+
+        <li class="nav-item dropdown ">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" data-bs-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false">
+                <i class="fas fa-file-invoice"></i> Integración con SIRH</a>
+
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+
+                <a class="dropdown-item" href="{{ route('welfare.sirh.welfareUsers') }}">
+                    <i class="fas fa-list"></i> Usuarios
+                </a>
+
+                <a class="dropdown-item" href="{{ route('welfare.sirh.rsalUnidad') }}">
+                    <i class="fas fa-list"></i> Rsal Unidad
+                </a>
+
+                <a class="dropdown-item" href="{{ route('welfare.sirh.existingContract') }}">
+                    <i class="fas fa-list"></i> Contratos existentes
+                </a>
+
+            </div>
+        </li>
+
+
+
+
         <li class="nav-item dropdown ">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" data-bs-toggle="dropdown"
                 aria-haspopup="true" aria-expanded="false">

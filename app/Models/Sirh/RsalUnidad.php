@@ -15,7 +15,8 @@ class RsalUnidad extends Model
         'unid_descripcion',
         'unid_codigo_deis',
         'unid_comuna',
-        'unid_cod_dipres'
+        'unid_cod_dipres',
+        'updated_at'
     ];
 
     protected $table = 'sirh_rsal_unidades';

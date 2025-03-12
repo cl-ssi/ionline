@@ -47,7 +47,8 @@ class ExistingContract extends Model
         'direccion',
         'comuna',
         'ciudad',
-        'fono'
+        'fono',
+        'updated_at'
     ];
 
     protected $table = 'sirh_existing_contracts';
