@@ -142,6 +142,7 @@ class TrainingResource extends Resource
                 Forms\Components\Section::make('Antecedentes de la Actividad')
                     ->schema([
                         Grid::make(12)->schema([
+                            /*
                             Forms\Components\Select::make('strategic_axes_id')
                                 ->label('Eje estratégico asociados a la Actividad')
                                 ->relationship('strategicAxis', 'name')
@@ -152,6 +153,21 @@ class TrainingResource extends Resource
                                         ->icon('heroicon-o-information-circle')
                                         // ->url('https://www.saludtarapaca.gob.cl/wp-content/uploads/2024/01/REX-N%C2%B0-5.181-DICCIONARIO-DE-COMPETENCIAS.pdf')
                                         ->openUrlInNewTab() // Esto abre el enlace en una nueva pestaña
+                                )
+                                ->columnSpan(6)
+                                ->required(),
+                            */
+                            Forms\Components\Select::make('strategic_axes_id')
+                                ->label('Eje estratégico asociados a la Actividad')
+                                ->relationship('strategicAxis', 'name')
+                                ->searchable()
+                                ->preload()
+                                ->suffixAction(
+                                    \Filament\Forms\Components\Actions\Action::make('verEjesEstrategicos')
+                                        ->icon('heroicon-o-information-circle')
+                                        ->label('Ver Ejes Estratégicos')
+                                        ->url(fn () => \App\Filament\Clusters\TalentManagement\Resources\TrainingResource\Pages\StrategicAxisList::getUrl())
+                                        ->openUrlInNewTab()
                                 )
                                 ->columnSpan(6)
                                 ->required(),
@@ -383,9 +399,10 @@ class TrainingResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListTrainings::route('/'),
-            'create' => Pages\CreateTraining::route('/create'),
-            'edit' => Pages\EditTraining::route('/{record}/edit'),
+            'index'                 => Pages\ListTrainings::route('/'),
+            'create'                => Pages\CreateTraining::route('/create'),
+            'edit'                  => Pages\EditTraining::route('/{record}/edit'),
+            'strategic-axis-list'   => Pages\StrategicAxisList::route('/strategic-axis-list'),
         ];
     }
 }
