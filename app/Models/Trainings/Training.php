@@ -7,6 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use OwenIt\Auditing\Contracts\Auditable;
 
+use App\Models\User;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use App\Models\File;
 
@@ -28,8 +31,7 @@ class Training extends Model implements Auditable
 
     protected $fillable = [
         'status', 
-        'user_training_id',
-        'user_training_type', 
+        'user_id',
         'estament_id',
         'law',
         'degree',
@@ -64,15 +66,21 @@ class Training extends Model implements Auditable
         'user_creator_id'
     ];
 
-    public function userTraining(): MorphTo {
-        return $this->morphTo();
+    /**
+     * Get the user that owns the identify need.
+     *
+     * @return BelongsTo
+     */
+    public function user(): BelongsTo
+    {
+       return $this->belongsTo(User::class, 'user_id')->withTrashed();
     }
 
-    public function userTrainingOu() {
+    public function organizationalUnit() {
         return $this->belongsTo('App\Models\Rrhh\OrganizationalUnit', 'organizational_unit_id')->withTrashed();
     }
 
-    public function userTrainingEstablishment() {
+    public function establishment() {
         return $this->belongsTo('App\Models\Establishment', 'establishment_id');
     }
 
@@ -139,7 +147,7 @@ class Training extends Model implements Auditable
     public function getStatusValueAttribute(): ?string
     {
         $statuses = [
-            'save'                  => 'Guardado',
+            'saved'                 => 'Guardado',
             'sent'                  => 'Enviado',
             'complete'              => 'Finalizado',
             'pending certificate'   => 'Certificado Pendiente',

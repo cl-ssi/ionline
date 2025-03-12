@@ -16,9 +16,7 @@ return new class extends Migration
         Schema::create('tng_trainings', function (Blueprint $table) {
             $table->id();
             $table->string('status')->nullable();
-            //$table->foreignId('user_training_id')->nullable()->constrained('users');
-            $table->unsignedBigInteger('user_training_id')->nullable();
-            $table->string('user_training_type')->nullable();
+            $table->foreignId('user_id')->nullable()->constrained('users');
             $table->foreignId('estament_id')->nullable()->constrained('cfg_estaments');
             $table->string('law')->nullable();
             $table->string('degree')->nullable();
@@ -47,8 +45,6 @@ return new class extends Migration
             $table->string('place')->nullable();
             $table->string('working_day')->nullable();
             $table->text('technical_reasons')->nullable();
-            $table->string('feedback_type')->nullable();
-            $table->string('municipal_profile')->nullable();
             $table->foreignId('user_creator_id')->nullable()->constrained('users');
 
             $table->timestamps();

@@ -42,17 +42,22 @@ class TrainingResource extends Resource
                         Grid::make(12)->schema([
                             Forms\Components\TextInput::make('user_full_name')
                                 ->label('Funcionario')
-                                ->default(fn ($record) => $record ? $record->userTraining->full_name : auth()->user()->full_name)
+                                ->afterStateHydrated(function (callable $set, $record) {
+                                    $set('user_full_name', $record && $record->user ? $record->user->full_name : auth()->user()->full_name ?? '');
+                                })
                                 ->readOnly()
                                 ->columnSpan(4),
-                            Forms\Components\TextInput::make('user_training_id')
+                            Forms\Components\TextInput::make('user_id')
                                 ->label('RUN')
-                                ->default(fn ($record) => $record ? $record->user_training_id : auth()->id())
+                                ->default(fn ($record) => $record ? $record->user_id : auth()->id())
                                 ->readOnly()
                                 ->columnSpan(3),
-                            Forms\Components\TextInput::make('user_training_dv')
+                            Forms\Components\TextInput::make('user_dv')
                                 ->label('DV')
-                                ->default(fn ($record) => $record ? $record->userTraining->dv : auth()->user()->dv)
+                                ->afterStateHydrated(function (callable $set, $record) {
+                                    // Precarga el valor desde el usuario relacionado o el autenticado
+                                    $set('user_dv', $record && $record->user ? $record->user->dv : auth()->user()->dv ?? '');
+                                })
                                 ->readOnly()
                                 ->columnSpan(1),
                         ]),
@@ -106,25 +111,30 @@ class TrainingResource extends Resource
                                 ->numeric()
                                 ->disabled(fn (callable $get) => $get('law') !== '19664')
                                 ->columnSpan(4),
-                            Forms\Components\TextInput::make('organizational_unit_id')
+                            Forms\Components\TextInput::make('organizational_unit_name')
                                 ->label('Servicio/Unidad')
-                                ->default(fn ($record) => $record ? $record->userTraining->organizationalUnit->name : auth()->user()->organizationalUnit->name)
+                                // ->default(fn ($record) => $record ? $record->organizationalUnit->name : auth()->user()->organizationalUnit->name)
+                                ->afterStateHydrated(function (callable $set, $record) {
+                                    $set('organizational_unit_name', $record && $record->organizationalUnit ? $record->organizationalUnit->name : auth()->user()->organizationalUnit->name ?? '');
+                                })
                                 ->readOnly()
                                 ->columnSpan(8),
-                            Forms\Components\TextInput::make('establishment_id')
+                            Forms\Components\TextInput::make('establishment_name')
                                 ->label('Servicio/Unidad')
-                                ->default(fn ($record) => $record ? $record->userTraining->establishment->name : auth()->user()->establishment->name)
+                                // ->default(fn ($record) => $record ? $record->establishment->name : auth()->user()->establishment->name)
+                                ->afterStateHydrated(function (callable $set, $record) {
+                                    $set('establishment_name', $record && $record->establishment ? $record->establishment->name : auth()->user()->establishment->name ?? '');
+                                })
                                 ->readOnly()
                                 ->columnSpan(4),
                             Forms\Components\TextInput::make('email')
                                 ->label('Correo electrónico')
-                                ->default(fn ($record) => $record ? $record->userTraining->email : auth()->user()->email)
+                                ->default(fn ($record) => $record ? $record->email : auth()->user()->email)
                                 ->readOnly()
                                 ->columnSpan(4),
                             Forms\Components\TextInput::make('telephone')
                                 ->label('Teléfono')
-                                ->default(fn ($record) => $record ? $record->userTraining->telephone : auth()->user()->telephone)
-                                ->readOnly()
+                                ->default(fn ($record) => $record ? $record->telephone : auth()->user()->telephone)
                                 ->columnSpan(4),
                         ]),
                     ]),
@@ -164,13 +174,25 @@ class TrainingResource extends Resource
                                     'otro'                          => 'Otro',
                                 ])
                                 ->searchable()
+                                ->live()
+                                ->afterStateUpdated(function (callable $set, $state) {
+                                    if ($state !== 'otro') {
+                                        $set('other_activity_type', null); // Limpia el campo cuando el valor no es "otro"
+                                    }
+                                })
                                 ->preload()
                                 ->columnSpan(4)
                                 ->required(),
                             Forms\Components\TextInput::make('other_activity_type')
                                 ->label('Nombre de Otro Tipo Actividad')
+                                ->reactive()
                                 ->columnSpan(4)
-                                ->required(),
+                                ->disabled(fn (callable $get) => 
+                                    $get('activity_type') !== 'otro' || 
+                                    in_array($get('status'), ['pending'])
+                                )
+                                ->dehydrated()
+                                ->required(fn (callable $get) => $get('activity_type') === 'otro'),
                         ]),
                         Grid::make(12)->schema([
                             Forms\Components\Select::make('activity_in')
@@ -180,9 +202,28 @@ class TrainingResource extends Resource
                                     'international' => 'Internacional',
                                 ])
                                 ->searchable()
+                                ->live()
+                                ->afterStateUpdated(function (callable $set, $state) {
+                                    if ($state !== 'national') {
+                                        $set('commune_id', null); // Limpia el campo cuando el valor no es "otro"
+                                    }
+                                })
                                 ->preload()
                                 ->columnSpan(4)
                                 ->required(),
+                            Forms\Components\Select::make('commune_id')
+                                ->label('Nacional / Internacional')
+                                ->relationship('clCommune', 'name')
+                                ->reactive()
+                                ->searchable()
+                                ->preload()
+                                ->columnSpan(4)
+                                ->disabled(fn (callable $get) => 
+                                    $get('activity_in') !== 'national' || 
+                                    in_array($get('status'), ['pending'])
+                                )
+                                ->dehydrated()
+                                ->required(fn (callable $get) => $get('activity_in') === 'national'),
                             Forms\Components\Group::make([
                                     Forms\Components\Radio::make('allowance')
                                         ->label('Viático')
@@ -257,8 +298,8 @@ class TrainingResource extends Resource
                                 ->label('Lugar')
                                 ->columnSpan(4)
                                 ->required(),
-                            Forms\Components\Select::make('Jornada y Horarios')
-                                ->label('Actividad Programada')
+                            Forms\Components\Select::make('working_day')
+                                ->label('Jornada y Horarios')
                                 ->options([
                                     'completa'  => 'Jornada Completa', 
                                     'mañana'    => 'Jornada Mañana',
@@ -267,7 +308,7 @@ class TrainingResource extends Resource
                                 ->searchable()
                                 ->columnSpan(4)
                                 ->required(),
-                            Forms\Components\TextInput::make('activity_name')
+                            Forms\Components\TextInput::make('technical_reasons')
                                 ->label('Fundamento o Razones Técnicas para la asistencia del funcionario')
                                 ->columnSpanFull()
                                 ->required(),
@@ -300,9 +341,9 @@ class TrainingResource extends Resource
                 Tables\Columns\TextColumn::make('created_at')
                     ->label('Fecha Creación')
                     ->dateTime('d-m-Y H:i:s'),
-                Tables\Columns\TextColumn::make('userTraining.TinyName')
+                Tables\Columns\TextColumn::make('user.TinyName')
                     ->label('Funcionario'),
-                Tables\Columns\TextColumn::make('userTrainingOu.name')
+                Tables\Columns\TextColumn::make('organizationalUnit.name')
                     ->label('Unidad Organizacional'),
                 Tables\Columns\TextColumn::make('activity_name')
                     ->label('Nombre de la Actividad')
