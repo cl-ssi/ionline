@@ -56,7 +56,6 @@
     <span data-feather="plus-circle"></span>
     </a>
 </h6>
---}}
 
 <br>
 
@@ -74,6 +73,7 @@
         </a>
     </li>
 </ul>
+--}}
 
 <ul class="nav flex-column">
     <!-- <li class="nav-item">
