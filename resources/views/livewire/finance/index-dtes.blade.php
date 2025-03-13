@@ -234,6 +234,7 @@
                                 @switch($dte->tipo_documento)
                                     @case('guias_despacho')
                                     @case('nota_credito')
+                                    @case('nota_de_crédito_electrónica')
                                     @case('nota_debito')
                                         <!-- TODO: Si es guia, se puede asociar a multiple
                                             si es nota de crédito o débito se debería poder asociar sólo a una
@@ -253,7 +254,9 @@
                                     @break
 
                                     @case('factura_electronica')
+                                    @case('factura_electrónica')
                                     @case('factura_exenta')
+                                    @case('factura_no_afecta_o_exenta_electrónica')
                                     @case('boleta_honorarios')
                                     @case('boleta_electronica')
                                         @if ( !$dte->requestForm )
@@ -285,7 +288,9 @@
 
                             @switch($dte->tipo_documento)
                                 @case('factura_electronica')
+                                @case('factura_electrónica')
                                 @case('factura_exenta')
+                                @case('factura_no_afecta_o_exenta_electrónica')
                                 @case('boleta_honorarios')
                                 @case('boleta_electronica')
                                     <div class="row">
@@ -344,6 +349,7 @@
                                     @break
                                 @case('guias_despacho')
                                 @case('nota_credito')
+                                @case('nota_de_crédito_electrónica')
                                 @case('nota_debito')
                                     @break
                             @endswitch
