@@ -374,6 +374,7 @@ class TrainingResource extends Resource
                     ->circular()
                     ->sortable(),
             ])
+            ->defaultSort('id', 'desc')
             ->filters([
                 //
             ])
