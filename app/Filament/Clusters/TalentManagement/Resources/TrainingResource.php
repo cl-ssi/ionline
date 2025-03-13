@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Pages\SubNavigationPosition;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Actions\Action;
+use Illuminate\Support\Facades\Storage;
 
 class TrainingResource extends Resource
 {
@@ -328,6 +329,81 @@ class TrainingResource extends Resource
                                 ->label('Fundamento o Razones Técnicas para la asistencia del funcionario')
                                 ->columnSpanFull()
                                 ->required(),
+                        ]),
+                    ]),
+                
+                Forms\Components\Section::make('Adjuntos')
+                    ->schema([
+                        Grid::make(12)->schema([
+                            /**
+                             * Ejemplo completo de uso de relación file
+                             */
+                            Forms\Components\Group::make()
+                                ->relationship(
+                                    'permissionFile',
+                                    condition: fn (?array $state): bool => filled($state['storage_path']),
+                                ) // Nombre de la relación que está con MorphOne
+                                ->schema([
+                                    Forms\Components\FileUpload::make('storage_path') // Ruta donde quedará almacenado el archivo
+                                        ->label('Permiso')
+                                        ->directory('ionline/trainings/permission')
+                                        ->storeFileNamesIn('name')
+                                        ->acceptedFileTypes(['application/pdf'])
+                                        ->downloadable()
+                                        ->required(),
+                                    Forms\Components\Hidden::make('type') // Campo oculto para almacenar el tipo de archivo dentro del modelo File
+                                        ->default('permission_file')
+                                        ->columnSpanFull(),
+                                ])
+                                ->columnSpanFull(),
+                            /* Fin del uso de relacion MorphOne de File */
+                        ]),
+                        Grid::make(12)->schema([
+                            /**
+                             * Ejemplo completo de uso de relación file
+                             */
+                            Forms\Components\Group::make()
+                                ->relationship(
+                                    'rejoinderFile',
+                                    condition: fn (?array $state): bool => filled($state['storage_path']),
+                                ) // Nombre de la relación que está con MorphOne
+                                ->schema([
+                                    Forms\Components\FileUpload::make('storage_path') // Ruta donde quedará almacenado el archivo
+                                        ->label('Contrato replica')
+                                        ->directory('ionline/trainings/rejoinder')
+                                        ->storeFileNamesIn('name')
+                                        ->acceptedFileTypes(['application/pdf'])
+                                        ->downloadable(),
+                                    Forms\Components\Hidden::make('type') // Campo oculto para almacenar el tipo de archivo dentro del modelo File
+                                        ->default('rejoinder_file')
+                                        ->columnSpanFull(),
+                                ])
+                                ->columnSpanFull(),
+                            /* Fin del uso de relacion MorphOne de File */
+                        ]),
+                        Grid::make(12)->schema([
+                            /**
+                             * Ejemplo completo de uso de relación file
+                             */
+                            Forms\Components\Group::make()
+                                ->relationship(
+                                    'programFile',
+                                    condition: fn (?array $state): bool => filled($state['storage_path']),
+                                ) // Nombre de la relación que está con MorphOne
+                                ->schema([
+                                    Forms\Components\FileUpload::make('storage_path') // Ruta donde quedará almacenado el archivo
+                                        ->label('Programa')
+                                        ->directory('ionline/trainings/program')
+                                        ->storeFileNamesIn('name')
+                                        ->acceptedFileTypes(['application/pdf'])
+                                        ->downloadable()
+                                        ->required(),
+                                    Forms\Components\Hidden::make('type') // Campo oculto para almacenar el tipo de archivo dentro del modelo File
+                                        ->default('program_file')
+                                        ->columnSpanFull(),
+                                ])
+                                ->columnSpanFull(),
+                            /* Fin del uso de relacion MorphOne de File */
                         ]),
                     ]),
             ]);

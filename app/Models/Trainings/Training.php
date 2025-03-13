@@ -98,12 +98,28 @@ class Training extends Model implements Auditable
         return $this->belongsTo('App\Models\Trainings\StrategicAxis', 'strategic_axes_id');
     }
 
+    public function permissionFile(): MorphOne
+    {
+        return $this->morphOne(File::class, 'fileable')->where('type', 'permission_file');
+    }
+
+    public function rejoinderFile(): MorphOne
+    {
+        return $this->morphOne(File::class, 'fileable')->where('type', 'rejoinder_file');
+    }
+
+    public function programFile(): MorphOne
+    {
+        return $this->morphOne(File::class, 'fileable')->where('type', 'program_file');
+    }
+
     /**
      * Get all of the files of a model.
      */
     public function files(): MorphMany{
         return $this->morphMany(File::class, 'fileable');
     }
+    
 
     /**
      * Get all of the ModificationRequest's approvations.
