@@ -44,16 +44,15 @@ class EditTraining extends EditRecord
                         abort(403, 'No tienes permiso para enviar este formulario.');
                     }
 
-                    /* Verificar si hay al menos un archivo por...
-                    if ($this->record->availablePlaces()->count() === 0) {
+                    /* Verificar si es obligatorio es Contrato Réplica */
+                    if (in_array($this->data['activity_type'], ['estadia pasantia', 'perfeccionamiento diplomado']) && count($this->data['rejoinderFile']['storage_path']) == 0) {
                         Notification::make()
                             ->title('Error')
                             ->danger()
-                            ->body('Debe agregar al menos un Cupo por Estamento antes de enviar el formulario.')
+                            ->body('Debe agregar adjunto "Contrato Réplica" para los tipos de actividad "Estadía Pasantía" o "Perfeccionamiento Diplomado"')
                             ->send();
                         return;
                     }
-                    */
 
                     // Guardar los cambios en la base de datos
                     $user = User::find($this->record->user_id);

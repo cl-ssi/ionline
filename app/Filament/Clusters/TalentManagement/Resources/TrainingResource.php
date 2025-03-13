@@ -369,7 +369,7 @@ class TrainingResource extends Resource
                                 ) // Nombre de la relación que está con MorphOne
                                 ->schema([
                                     Forms\Components\FileUpload::make('storage_path') // Ruta donde quedará almacenado el archivo
-                                        ->label('Contrato replica')
+                                        ->label('Contrato Réplica')
                                         ->directory('ionline/trainings/rejoinder')
                                         ->storeFileNamesIn('name')
                                         ->acceptedFileTypes(['application/pdf'])
