@@ -6,7 +6,6 @@
             @if(auth()->user()->organizational_unit_id == App\Models\Parameters\Parameter::get('ou','FinanzasSSI') || auth()->user()->hasPermissionTo('Purchase Plan: all'))
                 <li><a class="dropdown-item" href="{{ route('purchase_plan.all_index') }}"><i class="fas fa-inbox"></i> Todos los Plan de Compras</a></li>
             @endif
-            <li><a class="dropdown-item" href="{{ route('purchase_plan.pending_index') }}"><i class="fas fa-inbox"></i> Pendientes de firmar</a></li>
             <li><hr class="dropdown-divider"></li>
             <li><a class="dropdown-item" href="{{ route('purchase_plan.create') }}"><i class="fas fa-plus"></i> Nuevo Plan de Compras</a></li>
         </ul>
