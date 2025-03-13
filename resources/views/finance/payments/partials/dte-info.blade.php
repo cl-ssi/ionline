@@ -5,6 +5,8 @@
 
 @switch($dte->tipo_documento)
     @case('factura_electronica')
+    @case('factura_electrónica')
+    @case('factura_no_afecta_o_exenta_electrónica')
     @case('factura_exenta')
     @case('guias_despacho')
     @case('nota_debito')
