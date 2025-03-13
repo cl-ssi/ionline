@@ -87,10 +87,13 @@
                                 <label>
                                     @switch($dte->tipo_documento)
                                         @case('factura_electronica')
+                                        @case('factura_electrónica')
                                         @case('factura_exenta')
+                                        @case('factura_no_afecta_o_exenta_electrónica')
                                         @case('guias_despacho')
                                         @case('nota_debito')
                                         @case('nota_credito')
+                                        @case('nota_de_crédito_electrónica')
                                             <a target="_blank" class="link-primary"
                                                 href="{{ $dte->uri }}">
                                             @break

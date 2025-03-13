@@ -92,7 +92,7 @@ class IndexDtes extends Component
             $q->where('id', $this->filter['id']);
         })
         ->when(isset($this->filter['emisor']), function($q){
-            if(trim($this->filter['emisor']) == ''){
+            if(trim($this->filter['emisor']) != ''){
                 $value = preg_replace('/[^0-9K]/', '', strtoupper(trim($this->filter['emisor'])));
                 $dv = substr($value, -1);
                 $id = substr($value, 0, -1);
