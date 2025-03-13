@@ -11,6 +11,7 @@
     @case('guias_despacho')
     @case('nota_debito')
     @case('nota_credito')
+    @case('nota_de_crédito_electrónica')
         <a 
             href="{{ $dte->uri }}"
             target="_blank" class="btn btn-sm mb-1 btn-outline-secondary">
