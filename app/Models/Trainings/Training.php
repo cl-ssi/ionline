@@ -22,6 +22,8 @@ use App\Models\Parameters\Holiday;
 
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
+use App\Models\Rrhh\Authority;
+use App\Models\Parameters\Parameter;
 
 class Training extends Model implements Auditable
 {
@@ -144,14 +146,13 @@ class Training extends Model implements Auditable
      *
      * @return string|null
      */
+    
     public function getStatusValueAttribute(): ?string
     {
         $statuses = [
             'saved'                 => 'Guardado',
             'sent'                  => 'Enviado',
-            'complete'              => 'Finalizado',
-            'pending certificate'   => 'Certificado Pendiente',
-            'rejected'              => 'Rechazado'
+            'rejected'              => 'Rechazado',
         ];
 
         return $statuses[$this->status] ?? null;
@@ -323,6 +324,83 @@ class Training extends Model implements Auditable
         }
 
         return $fecha;
+    }
+
+    public function sendForm()
+    {   
+        /* BUSCO SI SOY AUTORIDAD DE MI U.O. */
+        if(Authority::getAmIAuthorityOfMyOu(now(), 'manager', $this->user_id) === true){
+            $authority = Authority::getAuthorityFromDate($this->organizational_unit_id, now(), 'manager');
+
+            /* APROBACIÓN DE JEFATURA DIRECTA */
+            $approval = $this->approvals()->create([
+                "module"                            => "Permisos de Capacitación",
+                "module_icon"                       => "bi bi-person-video",
+                "subject"                           => 'ID '.$this->id.'<br>
+                                                        Funcionario: '.$this->user->TinyName,
+                "sent_to_ou_id"                     =>  ($authority->organizationalUnit->level == 2) ? Parameter::get('ou', 'DireccionSSI') : $this->user->organizationalUnit->father->id,
+                "document_route_name"               => "trainings.show_approval",
+                "document_route_params"             => json_encode([
+                    "training_id"   => $this->id,
+                ]),
+                "active"                            => true,
+                "previous_approval_id"              => null,
+                "status"                            => null,
+                "callback_controller_method"        => "App\Http\Controllers\Trainings\TrainingController@approvalCallback",
+                "callback_controller_params"        => json_encode([
+                    'training_id'  => $this->id,
+                    'process'      => null
+                ])
+            ]);
+        }
+        else{
+            /* APROBACIÓN DE JEFATURA DIRECTA */
+            $approval = $this->approvals()->create([
+                "module"                            => "Permisos de Capacitación",
+                "module_icon"                       => "bi bi-person-video",
+                "subject"                           => 'ID '.$this->id.'<br>
+                                                        Funcionario: '.$this->user->TinyName,
+                "sent_to_ou_id"                     =>  $this->organizational_unit_id,
+                "document_route_name"               => "trainings.show_approval",
+                "document_route_params"             => json_encode([
+                    "training_id"   => $this->id,
+                ]),
+                "active"                            => true,
+                "previous_approval_id"              => null,
+                "status"                            => null,
+                "callback_controller_method"        => "App\Http\Controllers\Trainings\TrainingController@approvalCallback",
+                "callback_controller_params"        => json_encode([
+                    'training_id'  => $this->id,
+                    'process'      => null
+                ])
+            ]);
+        }
+
+        /* APROBACIÓN DE UNIDAD CAPACITACIÓN */
+        $approval = $this->approvals()->create([
+            "module"                            => "Permisos de Capacitación",
+            "module_icon"                       => "bi bi-person-video",
+            "subject"                           => 'ID '.$this->id.'<br>
+                                                    Funcionario: '.$this->user->TinyName,
+            "sent_to_ou_id"                     => Parameter::get('ou', 'Capacitación', $this->establishment_id),
+            "document_route_name"               => "trainings.show_approval",
+            "document_route_params"             => json_encode([
+                "training_id"   => $this->id,
+            ]),
+            "active"                            => false,
+            "previous_approval_id"              => null,
+            "status"                            => null,
+            "callback_controller_method"        => "App\Http\Controllers\Trainings\TrainingController@approvalCallback",
+            "callback_controller_params"        => json_encode([
+                'training_id'  => $this->id,
+                'process'      => 'end'
+            ])
+        ]);
+
+        // Cambiar estado del registro
+        $this->update(['status' => 'sent']);
+
+        // ------------------------------------------------------------------------------------------------------------------------
     }
 
     protected $casts = [

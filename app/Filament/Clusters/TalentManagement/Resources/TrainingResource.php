@@ -347,11 +347,9 @@ class TrainingResource extends Resource
                     ->sortable()
                     ->badge()
                     ->color(fn (string $state): string => match ($state) {
-                        'Certificado Pendiente'     => 'gray',
-                        'Finalizado'                => 'success',
-                        'Enviado'                   => 'primary',
-                        'Guardado'                  => 'info',
-                        'Rechazado'                 => 'danger',
+                        'Guardado'  => 'info',
+                        'Enviado'   => 'warning',
+                        'Rechazado' => 'danger',
                     })
                     ->alignment('center'),
                 Tables\Columns\TextColumn::make('created_at')

@@ -3,7 +3,7 @@
 
 <div class="row">
     <div class="col-12 col-md-12">
-        <h5 class="mt-2 mb-3">Formulario Solicitud DE Capacitación ID: {{ $training->id }}
+        <h5 class="mt-2 mb-3">Formulario Solicitud de Capacitación ID: {{ $training->id }}
             @switch($training->StatusValue)
                 @case('Guardado')
                     <span class="badge text-bg-primary">{{ $training->StatusValue }}</span>
@@ -25,6 +25,7 @@
                     <span class="badge text-bg-success">{{ $training->StatusValue }}</span>
                     @break
             @endswitch
+
         </h5>
     </div>
 </div>
@@ -39,8 +40,8 @@
                 <th width="45%" colspan="2" class="table-secondary">RUN</th>
             </tr>
             <tr>
-                <td colspan="2">{{ ($training->userTraining) ? $training->userTraining->fullName : null }}</td>
-                <td colspan="2">{{ $training->userTraining->id }}-{{ $training->userTraining->dv }}</td>
+                <td colspan="2">{{ ($training->user) ? $training->user->fullName : null }}</td>
+                <td colspan="2">{{ $training->user->id }}-{{ $training->user->dv }}</td>
             </tr>
             <tr>
                 <th width="22.5%" class="table-secondary">Estamento</th>
@@ -71,8 +72,8 @@
                 <th colspan="2" class="table-secondary">Establecimiento</th>
             </tr>
             <tr>
-                <td colspan="2">{{ ($training->userTrainingOu) ? $training->userTrainingOu->name : null }}</td>
-                <td colspan="2">{{ ($training->userTrainingEstablishment) ? $training->userTrainingEstablishment->name : null }}</td>
+                <td colspan="2">{{ ($training->organizationalUnit) ? $training->organizationalUnit->name : null }}</td>
+                <td colspan="2">{{ ($training->establishment) ? $training->establishment->name : null }}</td>
             </tr>
             <tr>
                 <th colspan="2" class="table-secondary">Correo electrónico</th>
