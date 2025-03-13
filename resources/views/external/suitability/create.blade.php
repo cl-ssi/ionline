@@ -80,10 +80,10 @@
             <label>Certificado de Inhabilidades (Ley 20.594)*</label>
             <select class="form-control" name="inhability" required="">
                 <option selected value="">Eliga una Opción</option>
-                <option value="none">No Tiene Certificado</option>
-                <option value="in_progress">Certificado En tramite</option>
+                <option value="none" disabled>No Tiene Certificado</option>
+                <option value="in_progress" disabled>Certificado En tramite</option>
                 <option value="enabled">Sin Inhabilidades</option>
-                <option value="disabled">Inhabilitado</option>
+                <option value="disabled" disabled>Inhabilitado</option>
             </select>
         </fieldset>
     </div>
