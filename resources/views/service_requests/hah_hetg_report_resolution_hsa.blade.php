@@ -289,17 +289,12 @@
 
       <p class="justify">
         <strong>SEXTO:</strong>
-        El Hospital “Dr. Ernesto Torres Galdames” de Iquique podrá poner término anticipadamente a este convenio sin expresión de causa, previo aviso por escrito a la afectada con a lo menos 1 mes de anticipación.
-      </p>
-
-      <p class="justify">
-        <strong>SÉPTIMO:</strong>
-        En este caso, el Hospital “Dr. Ernesto Torres Galdames” de Iquique, pagará a la persona en referencia sólo hasta el porcentaje de la mensualidad correspondiente al período efectivamente prestado.
+        El hospital “Dr. Ernesto Torres Galdames” de Iquique podrá poner término anticipadamente a este convenio en el evento que el presentador incumpla los servicios por los cuales fue contratado sea que esto nos entreguen en la forma estipulada o se califiquen de deficientes. Asimismo, el hospital podrá poner término a los servicios de forma anticipada si estos se dejasen de necesitar o por otras causales debidamente fundamentadas. En estos casos se dará aviso del desahucio, con a lo menos 7 días corridos al término efectivo de los servicios.
       </p>
 
       @if($ServiceRequest->program_contract_type == "Mensual")
         <p class="justify">
-          <strong>OCTAVO:</strong> La presente contratación se efectuará sobre la base de honorarios, por una suma alzada de ${{number_format($ServiceRequest->gross_amount)}}.- ({{$ServiceRequest->gross_amount_description}} PESOS), impuesto incluido, en conformidad a lo dispuesto en el inciso segundo del Art. 2º del Decreto Nº 98 de 1991 del Ministerio de Hacienda y se cancelará en @livewire('service-request.monthly-quotes', ['serviceRequest' => $ServiceRequest]) se deberá acreditar contra presentación de certificado extendido por el Jefe del {{$ServiceRequest->responsabilityCenter->name}}, dependiente del
+          <strong>SÉPTIMO:</strong> La presente contratación se efectuará sobre la base de honorarios, por una suma alzada de ${{number_format($ServiceRequest->gross_amount)}}.- ({{$ServiceRequest->gross_amount_description}} PESOS), impuesto incluido, en conformidad a lo dispuesto en el inciso segundo del Art. 2º del Decreto Nº 98 de 1991 del Ministerio de Hacienda y se cancelará en @livewire('service-request.monthly-quotes', ['serviceRequest' => $ServiceRequest]) se deberá acreditar contra presentación de certificado extendido por el Jefe del {{$ServiceRequest->responsabilityCenter->name}}, dependiente del
           Hospital Regional de Iquique,
           en que conste el cumplimiento de las labores estipuladas en el contrato. El pago será efectuado el día
           10
@@ -311,7 +306,7 @@
         </p>
       @elseif($ServiceRequest->program_contract_type == "Horas")
         <p class="justify">
-          <strong>OCTAVO:</strong> El
+          <strong>SÉPTIMO:</strong> El
           @if($ServiceRequest->working_day_type == 'HORA EXTRA')
             valor total por horas extras del mes
           @else
@@ -330,60 +325,29 @@
       @endif
 
       <p class="justify">
-        <strong>NOVENO:</strong> El profesional deberá cumplir las prestaciones de servicios pactadas entre las partes en el presente convenio, y se deberá acreditar su porcentaje de cumplimiento conforme al verificador establecido, contra presentación de certificado extendido por la jefatura del área donde presta servicios.
+        <strong>OCTAVO:</strong> El profesional deberá cumplir las prestaciones de servicios pactadas entre las partes en el presente convenio, y se deberá acreditar su porcentaje de cumplimiento conforme al verificador establecido, contra presentación de certificado extendido por la jefatura del área donde presta servicios.
       </p>
 
       <p class="justify">
-        <strong>DÉCIMO:</strong> El prestador cumplirá una jornada
-        @switch($ServiceRequest->working_day_type)
-          @case('DIURNO')
-            {{$ServiceRequest->schedule_detail}}.
-            @break
-          @case('TERCER TURNO')
-            de turnos rotativos, en TERCER TURNO, 2 largo de 08:00 a 20:00 hrs, 2 noche de 20:00 a 08:00 hrs y 2 días libres.
-            @break
-          @case('TERCER TURNO - MODIFICADO')
-            de turnos rotativos, en TERCER TURNO, modificado por necesidades del servicio.
-            @break
-          @case('CUARTO TURNO')
-            de turnos rotativos, en CUARTO TURNO, 1 largo de 08:00 a 20:00 hrs, 1 noche de 20:00 a 08:00 hrs y 2 días libres.
-            @break
-          @case('CUARTO TURNO - MODIFICADO')
-            de turnos rotativos, en CUARTO TURNO, modificado por necesidades del servicio.
-            @break
-          @default
-            --
-            @break
-        @endswitch
-        @if($ServiceRequest->working_day_type_other)
-          {{$ServiceRequest->working_day_type_other}}<br>
-        @endif
-
-        Se deja establecido que, el horario en el cual debe realizar sus servicios el prestador,
-        se indica con el fin de verificar la realización de éstos, sin que altere la naturaleza
-        jurídica del convenio, en virtud del Dictamen N°26.092/2017 de la C.G.R.,
-        si durante una jornada de trabajo existiese un cambio de hora, se pagarán las horas efectivamente trabajadas.
-        Los atrasos superiores a una hora, serán descontados de la cuota mensual correspondiente,
-        como también los días de inasistencia, los cuales deberán quedar informados en el respectivo
-        informe de prestaciones mensual. Los reiterados atrasos e inasistencias deberán ser amonestados.
+        <strong>NOVENO:</strong> El prestador cumplirá una jornada en sistema de turno, conforme a la necesidad de servicio para el que se le contrata y se pagarán las horas efectivamente trabajadas, siempre y cuando no exista superposición horaria con las obligaciones contractuales con este Establecimiento.
       </p>
 
       <p class="justify">
-        <strong>DÉCIMO PRIMERO:</strong> Déjese establecido que el incumplimiento de los términos del presente contrato implica la caducidad inmediata de éste.
+        <strong>DÉCIMO:</strong> Déjese establecido que el incumplimiento de los términos del presente contrato implica la caducidad inmediata de éste.
       </p>
 
       <p class="justify">
-        <strong>DÉCIMO SEGUNDO:</strong> Déjese establecido que el trabajador se regirá por el procedimiento establecido en el “Manual de Procedimientos de Denuncia, Prevención y Sanación del Maltrato, Acoso Laboral y/o Sexual y Discriminación, conforme resolución vigente en el Servicio de Salud Tarapacá.
+        <strong>DÉCIMO PRIMERO:</strong> Déjese establecido que el trabajador se regirá por el procedimiento establecido en el “Manual de Procedimientos de Denuncia, Prevención y Sanación del Maltrato, Acoso Laboral y/o Sexual y Discriminación, conforme resolución vigente en el Servicio de Salud Tarapacá.
       </p>
 
       <p class="justify">
-        <strong>DECIMO TERCERO:</strong> Déjese establecido que el trabajador tendrá derecho a presentar licencias médicas, la cual sólo justificará los días de inasistencia, no procediendo el pago de éstos y siendo responsabilidad del prestador del servicio, la tramitación de la licencia médica ante el organismo que corresponda; además deberá dejar copia de licencia médica en la Subdirección de Gestión y Desarrollo de las Personas. Las ausencias por esta causa serán descontadas de la cuota mensual.<br><br>
+        <strong>DECIMO SEGUNDO:</strong> Déjese establecido que el trabajador tendrá derecho a presentar licencias médicas, la cual sólo justificará los días de inasistencia, no procediendo el pago de éstos y siendo responsabilidad del prestador del servicio, la tramitación de la licencia médica ante el organismo que corresponda; además deberá dejar copia de licencia médica en la Subdirección de Gestión y Desarrollo de las Personas. Las ausencias por esta causa serán descontadas de la cuota mensual.<br><br>
         Las mujeres podrán solicitar permiso post-natal parental, los cuales sólo justificará los días de inasistencia, no procediendo el pago por los días mientras dure el permiso; el beneficio es sólo para la persona definida en el convenio e intransferible
       </p>
 
       @if($ServiceRequest->additional_benefits != null)
         <p class="justify">
-          <strong>DECIMO CUARTO:</strong> El prestador (a) individualizado (a) en la presente resolución tendrá los siguientes beneficios adicionales:<br><br>
+          <strong>DECIMO TERCERO:</strong> El prestador (a) individualizado (a) en la presente resolución tendrá los siguientes beneficios adicionales:<br><br>
           {!! nl2br($ServiceRequest->additional_benefits) !!}
         </p>
       @endif
