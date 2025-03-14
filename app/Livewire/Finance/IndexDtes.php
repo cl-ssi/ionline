@@ -144,7 +144,7 @@ class IndexDtes extends Component
         })
         ->when(isset($this->filter['tipo_documento']), function($q){
             $q->when($this->filter['tipo_documento'] == 'facturas',  function($q){
-                $q->whereIn('tipo_documento', ['factura_electronica', 'factura_exenta']);
+                $q->whereIn('tipo_documento', ['factura_electronica', 'factura_electrónica', 'factura_exenta', 'factura_no_afecta_o_exenta_electrónica']);
             }, function($q){
                 $q->where('tipo_documento', $this->filter['tipo_documento']);
             });

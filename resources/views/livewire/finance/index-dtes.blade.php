@@ -65,6 +65,7 @@
                 <option value="factura_exenta">FE: Factura Exenta</option>
                 <option value="guias_despacho">GD: Guias Despacho</option>
                 <option value="nota_credito">NC: Nota Crédito</option>
+                <option value="nota_de_crédito_electrónica">NCE: Nota Crédito Electrónica</option>
                 <option value="nota_debito">ND: Nota Débito</option>
                 <option value="boleta_honorarios">BH: Boleta Honorarios</option>
                 <option value="boleta_electronica">BE: Boleta Electrónica</option>

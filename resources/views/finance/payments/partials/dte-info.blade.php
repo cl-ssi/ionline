@@ -44,6 +44,7 @@
         @case('guias_despacho')
         @case('nota_debito')
         @case('nota_credito')
+        @case('nota_de_crédito_electrónica')
             <a href="http://dipres2303.acepta.com/ca4webv3/PdfView?url={{ $dteAsociate->uri }}"
                 target="_blank" class="btn btn-sm mb-1 btn-outline-secondary">
                 <i class="fas fa-file-pdf text-danger"></i>
@@ -73,12 +74,15 @@
 <!-- Mostrar las facturas asociadas, sólo para algunos tipos de documentos: guias y notas -->
 @switch($dte->tipo_documento)
     @case('factura_electronica')
+    @case('factura_electrónica')
     @case('factura_exenta')
+    @case('factura_no_afecta_o_exenta_electrónica')
         @break
 
     @case('guias_despacho')
     @case('nota_debito')
     @case('nota_credito')
+    @case('nota_de_crédito_electrónica')
         @forelse ($dte->invoices as $invoiceAsociate)
             <!-- Siempre deberían ser facturas de acepta, de lo contrario habrá que poner el switch que está arriba -->
             <a href="http://dipres2303.acepta.com/ca4webv3/PdfView?url={{ $invoiceAsociate->uri }}"
