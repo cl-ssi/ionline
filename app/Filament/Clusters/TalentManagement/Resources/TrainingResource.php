@@ -126,18 +126,22 @@ class TrainingResource extends Resource
                                 ])->columnSpan(4), // Mantiene el mismo espacio en la grid
                             Forms\Components\TextInput::make('degree')
                                 ->label('Grado')
+                                ->reactive()
                                 ->disabled(fn (callable $get) => 
                                     $get('law') !== '18834' || 
                                     in_array($get('status'), ['sent',  'pending certificate', 'completed'])
                                 )
+                                ->dehydrated()
                                 ->columnSpan(4),
                             Forms\Components\TextInput::make('work_hours')
                                 ->label('Horas de Desempeño')
                                 ->numeric()
+                                ->reactive()
                                 ->disabled(fn (callable $get) => 
                                     $get('law') !== '19664' || 
                                     in_array($get('status'), ['sent',  'pending certificate', 'completed'])
                                 )
+                                ->dehydrated()
                                 ->columnSpan(4),
                             Forms\Components\TextInput::make('organizational_unit_name')
                                 ->label('Servicio/Unidad')
@@ -148,7 +152,7 @@ class TrainingResource extends Resource
                                 ->readOnly()
                                 ->columnSpan(8),
                             Forms\Components\TextInput::make('establishment_name')
-                                ->label('Servicio/Unidad')
+                                ->label('Establecimiento')
                                 // ->default(fn ($record) => $record ? $record->establishment->name : auth()->user()->establishment->name)
                                 ->afterStateHydrated(function (callable $set, $record) {
                                     $set('establishment_name', $record && $record->establishment ? $record->establishment->name : auth()->user()->establishment->name ?? '');
@@ -247,7 +251,7 @@ class TrainingResource extends Resource
                                 ->disabled(fn (callable $get) => in_array($get('status'), ['sent',  'pending certificate', 'completed']))
                                 ->required(),
                             Forms\Components\Select::make('commune_id')
-                                ->label('Nacional / Internacional')
+                                ->label('Comuna')
                                 ->relationship('clCommune', 'name')
                                 ->reactive()
                                 ->searchable()
@@ -281,6 +285,14 @@ class TrainingResource extends Resource
                                 ])
                                 ->searchable()
                                 ->live()
+                                ->afterStateUpdated(function (callable $set, $state) {
+                                    if (is_null($state) || $state === 'presencial') {
+                                        $set('online_type', null);
+                                    }
+                                    if ($state === 'online') {
+                                        $set('place', null);
+                                    }
+                                })
                                 ->preload()
                                 ->columnSpan(4)
                                 ->disabled(fn (callable $get) => in_array($get('status'), ['sent',  'pending certificate', 'completed']))
@@ -293,7 +305,7 @@ class TrainingResource extends Resource
                                     'mixta'         => 'Mixta',
                                 ])
                                 ->searchable()
-                                // ->live()
+                                ->reactive()
                                 ->columnSpan(4)
                                 ->disabled(fn (callable $get) => 
                                     $get('mechanism') !== 'online' || 
@@ -340,8 +352,13 @@ class TrainingResource extends Resource
                             Forms\Components\TextInput::make('place')
                                 ->label('Lugar')
                                 ->columnSpan(4)
-                                ->disabled(fn (callable $get) => in_array($get('status'), ['sent',  'pending certificate', 'completed']))
-                                ->required(),
+                                ->reactive()
+                                ->disabled(fn (callable $get) => 
+                                    $get('mechanism') === 'online' || 
+                                    in_array($get('status'), ['sent',  'pending certificate', 'completed'])
+                                )
+                                ->dehydrated()
+                                ->required(fn (callable $get) => $get('mechanism') !== 'online'),
                             Forms\Components\Select::make('working_day')
                                 ->label('Jornada y Horarios')
                                 ->options([
@@ -363,10 +380,12 @@ class TrainingResource extends Resource
                 
                 Forms\Components\Section::make('Adjuntos')
                     ->schema([
+                        /*
                         Grid::make(12)->schema([
                             /**
                              * Ejemplo completo de uso de relación file
-                             */
+                             *
+                            
                             Forms\Components\Group::make()
                                 ->relationship(
                                     'permissionFile',
@@ -386,8 +405,9 @@ class TrainingResource extends Resource
                                         ->columnSpanFull(),
                                 ])
                                 ->columnSpanFull(),
-                            /* Fin del uso de relacion MorphOne de File */
+                            /* Fin del uso de relacion MorphOne de File
                         ]),
+                        */
                         Grid::make(12)->schema([
                             /**
                              * Ejemplo completo de uso de relación file

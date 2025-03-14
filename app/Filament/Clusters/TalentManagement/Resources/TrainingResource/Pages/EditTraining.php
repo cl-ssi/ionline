@@ -28,6 +28,9 @@ class EditTraining extends EditRecord
                     // Guardar cambios en el registro
                     $this->record->status = 'saved';
                     $this->save();
+
+                    // Redirigir al índice de Training
+                    $this->redirectRoute('filament.intranet.talent-management.resources.trainings.index');
                 })
                 ->visible(fn () => in_array($this->record->status_value, ['Guardado', 'Rechazado'])), // Permite cuando el estado es Guardado o Rechazado
 
@@ -83,6 +86,9 @@ class EditTraining extends EditRecord
                         ->success()
                         ->body('El formulario ha sido enviado exitosamente.')
                         ->send();
+
+                    // Redirigir al índice de Training
+                    $this->redirectRoute('filament.intranet.talent-management.resources.trainings.index');
                 })
                 ->requiresConfirmation()
                 ->modalHeading('Confirmar Envío')
