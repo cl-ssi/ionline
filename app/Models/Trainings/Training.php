@@ -370,6 +370,8 @@ class Training extends Model implements Auditable
     public function sendForm()
     {   
         /* BUSCO SI SOY AUTORIDAD DE MI U.O. */
+        $lastApproval = null;
+
         if(Authority::getAmIAuthorityOfMyOu(now(), 'manager', $this->user_id) === true){
             $authority = Authority::getAuthorityFromDate($this->organizational_unit_id, now(), 'manager');
 
@@ -393,6 +395,8 @@ class Training extends Model implements Auditable
                     'process'      => null
                 ])
             ]);
+
+            $lastApproval = $approval->id;
         }
         else{
             /* APROBACIÓN DE JEFATURA DIRECTA */
@@ -415,6 +419,8 @@ class Training extends Model implements Auditable
                     'process'      => null
                 ])
             ]);
+
+            $lastApproval = $approval->id;
         }
 
         /* APROBACIÓN DE UNIDAD CAPACITACIÓN */
@@ -429,7 +435,7 @@ class Training extends Model implements Auditable
                 "training_id"   => $this->id,
             ]),
             "active"                            => false,
-            "previous_approval_id"              => null,
+            "previous_approval_id"              => $lastApproval ,
             "status"                            => null,
             "callback_controller_method"        => "App\Http\Controllers\Trainings\TrainingController@approvalCallback",
             "callback_controller_params"        => json_encode([
