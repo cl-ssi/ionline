@@ -114,6 +114,16 @@ class Training extends Model implements Auditable
         return $this->morphOne(File::class, 'fileable')->where('type', 'program_file');
     }
 
+    public function certificateFile(): MorphOne
+    {
+        return $this->morphOne(File::class, 'fileable')->where('type', 'certificate_file');
+    }
+
+    public function attachedFile(): MorphOne
+    {
+        return $this->morphOne(File::class, 'fileable')->where('type', 'attached_file');
+    }
+
     /**
      * Get all of the files of a model.
      */
@@ -400,27 +410,29 @@ class Training extends Model implements Auditable
         }
         else{
             /* APROBACIÓN DE JEFATURA DIRECTA */
-            $approval = $this->approvals()->create([
-                "module"                            => "Permisos de Capacitación",
-                "module_icon"                       => "bi bi-person-video",
-                "subject"                           => 'ID '.$this->id.'<br>
-                                                        Funcionario: '.$this->user->TinyName,
-                "sent_to_ou_id"                     =>  $this->organizational_unit_id,
-                "document_route_name"               => "trainings.show_approval",
-                "document_route_params"             => json_encode([
-                    "training_id"   => $this->id,
-                ]),
-                "active"                            => true,
-                "previous_approval_id"              => null,
-                "status"                            => null,
-                "callback_controller_method"        => "App\Http\Controllers\Trainings\TrainingController@approvalCallback",
-                "callback_controller_params"        => json_encode([
-                    'training_id'  => $this->id,
-                    'process'      => null
-                ])
-            ]);
+            if($this->organizational_unit_id != Parameter::get('ou', 'Capacitación', $this->establishment_id)){
+                $approval = $this->approvals()->create([
+                    "module"                            => "Permisos de Capacitación",
+                    "module_icon"                       => "bi bi-person-video",
+                    "subject"                           => 'ID '.$this->id.'<br>
+                                                            Funcionario: '.$this->user->TinyName,
+                    "sent_to_ou_id"                     =>  $this->organizational_unit_id,
+                    "document_route_name"               => "trainings.show_approval",
+                    "document_route_params"             => json_encode([
+                        "training_id"   => $this->id,
+                    ]),
+                    "active"                            => true,
+                    "previous_approval_id"              => null,
+                    "status"                            => null,
+                    "callback_controller_method"        => "App\Http\Controllers\Trainings\TrainingController@approvalCallback",
+                    "callback_controller_params"        => json_encode([
+                        'training_id'  => $this->id,
+                        'process'      => null
+                    ])
+                ]);
 
-            $lastApproval = $approval->id;
+                $lastApproval = $approval->id;
+            }
         }
 
         /* APROBACIÓN DE UNIDAD CAPACITACIÓN */
@@ -435,7 +447,7 @@ class Training extends Model implements Auditable
                 "training_id"   => $this->id,
             ]),
             "active"                            => false,
-            "previous_approval_id"              => $lastApproval ,
+            "previous_approval_id"              => $lastApproval,
             "status"                            => null,
             "callback_controller_method"        => "App\Http\Controllers\Trainings\TrainingController@approvalCallback",
             "callback_controller_params"        => json_encode([

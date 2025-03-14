@@ -436,6 +436,57 @@ class TrainingResource extends Resource
                             /* Fin del uso de relacion MorphOne de File */
                         ]),
                     ]),
+                Forms\Components\Section::make('Información Adicional para Certificación')
+                    ->schema([
+                        Grid::make(12)->schema([
+                            /**
+                             * Ejemplo completo de uso de relación file
+                             */
+                            Forms\Components\Group::make()
+                                ->relationship(
+                                    'certificateFile',
+                                    condition: fn (?array $state): bool => filled($state['storage_path']),
+                                ) // Nombre de la relación que está con MorphOne
+                                ->schema([
+                                    Forms\Components\FileUpload::make('storage_path') // Ruta donde quedará almacenado el archivo
+                                        ->label('Certificado')
+                                        ->directory('ionline/trainings/certificate')
+                                        ->storeFileNamesIn('name')
+                                        ->acceptedFileTypes(['application/pdf'])
+                                        ->downloadable()
+                                        ->required(),
+                                    Forms\Components\Hidden::make('type') // Campo oculto para almacenar el tipo de archivo dentro del modelo File
+                                        ->default('certificate_file')
+                                        ->columnSpanFull(),
+                                ])
+                                ->columnSpanFull(),
+                            /* Fin del uso de relacion MorphOne de File */
+
+                            /**
+                             * Ejemplo completo de uso de relación file
+                             */
+                            Forms\Components\Group::make()
+                                ->relationship(
+                                    'attachedFile',
+                                    condition: fn (?array $state): bool => filled($state['storage_path']),
+                                ) // Nombre de la relación que está con MorphOne
+                                ->schema([
+                                    Forms\Components\FileUpload::make('storage_path') // Ruta donde quedará almacenado el archivo
+                                        ->label('Adjunto, (Si va a adjuntar documentos anexos, por favor consolídelos en un solo archivo PDF.)')
+                                        ->directory('ionline/trainings/attached')
+                                        ->storeFileNamesIn('name')
+                                        ->acceptedFileTypes(['application/pdf'])
+                                        ->downloadable()
+                                        ->required(),
+                                    Forms\Components\Hidden::make('type') // Campo oculto para almacenar el tipo de archivo dentro del modelo File
+                                        ->default('attached_file')
+                                        ->columnSpanFull(),
+                                ])
+                                ->columnSpanFull(),
+                            /* Fin del uso de relacion MorphOne de File */
+                        ]),
+                    ])
+                    ->visible(fn (callable $get) => $get('status') === 'pending certificate'),
             ]);
     }
 
