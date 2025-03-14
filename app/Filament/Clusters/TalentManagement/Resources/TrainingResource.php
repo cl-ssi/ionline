@@ -68,20 +68,40 @@ class TrainingResource extends Resource
                                 ->relationship('estament', 'name')
                                 ->searchable()
                                 ->preload()
-                                // ->live()
-                                // ->afterStateUpdated(fn (Set $set) => $set('impact_objective_id', null))
                                 ->columnSpan(4)
-                                // ->disabled(fn (callable $get) => in_array($get('status'), ['pending', 'completed']))
+                                ->disabled(fn (callable $get) => in_array($get('status'), ['sent',  'pending certificate', 'completed']))
+                                ->required(),
+                            Forms\Components\Select::make('family_position')
+                                ->label('Familia de Cargo')
+                                ->options([
+                                    'profesional directivo'         => 'Profesional Directivo', 
+                                    'profesional gestion'           => 'Profesional de Gestión',
+                                    'profesional asistencial'       => 'Profesional Asistencial',
+                                    'tecnico de apoyo a la gestion' => 'Técnico de Apoyo a la Gestión',
+                                    'tecnico asistencial'           => 'Técnico Asistencial',
+                                    'administrativo apoyo gestion'  => 'Administrativo(a) de Apoyo a la Gestión',
+                                    'administrativo asistencial'    => 'Administrativo(a) Asistencial',
+                                    'auxiliar apoyo operaciones'    => 'Auxiliar de Apoyo de Operaciones',
+                                    'auxiliar conductor'            => 'Auxiliar Conductor',
+                                ])
+                                ->searchable()
+                                ->preload()
+                                ->suffixAction(
+                                    Action::make('descargar')
+                                        ->icon('heroicon-o-information-circle')
+                                        ->url('https://www.saludtarapaca.gob.cl/wp-content/uploads/2024/01/REX-N%C2%B0-5.181-DICCIONARIO-DE-COMPETENCIAS.pdf')
+                                        ->openUrlInNewTab() // Esto abre el enlace en una nueva pestaña
+                                )
+                                ->columnSpan(4)
+                                ->disabled(fn (callable $get) => in_array($get('status'), ['sent',  'pending certificate', 'completed']))
                                 ->required(),
                             Forms\Components\Select::make('contractual_condition_id')
                                 ->label('Calidad Contractual')
                                 ->relationship('contractualCondition', 'name')
                                 ->searchable()
                                 ->preload()
-                                // ->live()
-                                // ->afterStateUpdated(fn (Set $set) => $set('impact_objective_id', null))
                                 ->columnSpan(4)
-                                // ->disabled(fn (callable $get) => in_array($get('status'), ['pending', 'completed']))
+                                ->disabled(fn (callable $get) => in_array($get('status'), ['sent',  'pending certificate', 'completed']))
                                 ->required(),
                             Forms\Components\Group::make([
                                     Forms\Components\Radio::make('law')
@@ -101,16 +121,23 @@ class TrainingResource extends Resource
                                             }
                                         })
                                         ->columns(2) // Organiza las opciones en 2 columnas
+                                        ->disabled(fn (callable $get) => in_array($get('status'), ['sent',  'pending certificate', 'completed']))
                                         ->required(),
                                 ])->columnSpan(4), // Mantiene el mismo espacio en la grid
                             Forms\Components\TextInput::make('degree')
                                 ->label('Grado')
-                                ->disabled(fn (callable $get) => $get('law') !== '18834')
+                                ->disabled(fn (callable $get) => 
+                                    $get('law') !== '18834' || 
+                                    in_array($get('status'), ['sent',  'pending certificate', 'completed'])
+                                )
                                 ->columnSpan(4),
                             Forms\Components\TextInput::make('work_hours')
                                 ->label('Horas de Desempeño')
                                 ->numeric()
-                                ->disabled(fn (callable $get) => $get('law') !== '19664')
+                                ->disabled(fn (callable $get) => 
+                                    $get('law') !== '19664' || 
+                                    in_array($get('status'), ['sent',  'pending certificate', 'completed'])
+                                )
                                 ->columnSpan(4),
                             Forms\Components\TextInput::make('organizational_unit_name')
                                 ->label('Servicio/Unidad')
@@ -136,6 +163,7 @@ class TrainingResource extends Resource
                             Forms\Components\TextInput::make('telephone')
                                 ->label('Teléfono')
                                 ->default(fn ($record) => $record ? $record->telephone : auth()->user()->telephone)
+                                ->disabled(fn (callable $get) => in_array($get('status'), ['sent',  'pending certificate', 'completed']))
                                 ->columnSpan(4),
                         ]),
                     ]),
@@ -143,21 +171,6 @@ class TrainingResource extends Resource
                 Forms\Components\Section::make('Antecedentes de la Actividad')
                     ->schema([
                         Grid::make(12)->schema([
-                            /*
-                            Forms\Components\Select::make('strategic_axes_id')
-                                ->label('Eje estratégico asociados a la Actividad')
-                                ->relationship('strategicAxis', 'name')
-                                ->searchable()
-                                ->preload()
-                                ->suffixAction(
-                                    Action::make('descargar')
-                                        ->icon('heroicon-o-information-circle')
-                                        // ->url('https://www.saludtarapaca.gob.cl/wp-content/uploads/2024/01/REX-N%C2%B0-5.181-DICCIONARIO-DE-COMPETENCIAS.pdf')
-                                        ->openUrlInNewTab() // Esto abre el enlace en una nueva pestaña
-                                )
-                                ->columnSpan(6)
-                                ->required(),
-                            */
                             Forms\Components\Select::make('strategic_axes_id')
                                 ->label('Eje estratégico asociados a la Actividad')
                                 ->relationship('strategicAxis', 'name')
@@ -171,14 +184,17 @@ class TrainingResource extends Resource
                                         ->openUrlInNewTab()
                                 )
                                 ->columnSpan(6)
+                                ->disabled(fn (callable $get) => in_array($get('status'), ['sent',  'pending certificate', 'completed']))
                                 ->required(),
                             Forms\Components\TextInput::make('objective')
                                 ->label('Objetivo')
                                 ->columnSpanFull()
+                                ->disabled(fn (callable $get) => in_array($get('status'), ['sent',  'pending certificate', 'completed']))
                                 ->required(),
                             Forms\Components\TextInput::make('activity_name')
                                 ->label('Nombre de la Actividad')
                                 ->columnSpanFull()
+                                ->disabled(fn (callable $get) => in_array($get('status'), ['sent',  'pending certificate', 'completed']))
                                 ->required(),
                             Forms\Components\Select::make('activity_type')
                                 ->label('Tipo de Actividad')
@@ -199,14 +215,15 @@ class TrainingResource extends Resource
                                 })
                                 ->preload()
                                 ->columnSpan(4)
+                                ->disabled(fn (callable $get) => in_array($get('status'), ['sent',  'pending certificate', 'completed']))
                                 ->required(),
                             Forms\Components\TextInput::make('other_activity_type')
                                 ->label('Nombre de Otro Tipo Actividad')
                                 ->reactive()
                                 ->columnSpan(4)
                                 ->disabled(fn (callable $get) => 
-                                    $get('activity_type') !== 'otro' || 
-                                    in_array($get('status'), ['pending'])
+                                    $get('activity_type') !== 'otro'  || 
+                                    in_array($get('status'), ['sent',  'pending certificate', 'completed'])
                                 )
                                 ->dehydrated()
                                 ->required(fn (callable $get) => $get('activity_type') === 'otro'),
@@ -227,6 +244,7 @@ class TrainingResource extends Resource
                                 })
                                 ->preload()
                                 ->columnSpan(4)
+                                ->disabled(fn (callable $get) => in_array($get('status'), ['sent',  'pending certificate', 'completed']))
                                 ->required(),
                             Forms\Components\Select::make('commune_id')
                                 ->label('Nacional / Internacional')
@@ -237,7 +255,7 @@ class TrainingResource extends Resource
                                 ->columnSpan(4)
                                 ->disabled(fn (callable $get) => 
                                     $get('activity_in') !== 'national' || 
-                                    in_array($get('status'), ['pending'])
+                                    in_array($get('status'), ['sent',  'pending certificate', 'completed'])
                                 )
                                 ->dehydrated()
                                 ->required(fn (callable $get) => $get('activity_in') === 'national'),
@@ -249,6 +267,7 @@ class TrainingResource extends Resource
                                             '0' => 'No',
                                         ])
                                         ->columns(4) // Organiza las opciones en 2 columnas
+                                        ->disabled(fn (callable $get) => in_array($get('status'), ['sent',  'pending certificate', 'completed']))
                                         ->required(),
                                 ])->columnSpan(4), // Mantiene el mismo espacio en la grid
                         ]),
@@ -264,6 +283,7 @@ class TrainingResource extends Resource
                                 ->live()
                                 ->preload()
                                 ->columnSpan(4)
+                                ->disabled(fn (callable $get) => in_array($get('status'), ['sent',  'pending certificate', 'completed']))
                                 ->required(),
                             Forms\Components\Select::make('online_type')
                                 ->label('Modalidad Online')
@@ -276,8 +296,8 @@ class TrainingResource extends Resource
                                 // ->live()
                                 ->columnSpan(4)
                                 ->disabled(fn (callable $get) => 
-                                    $get('mechanism') !== 'online' /*|| 
-                                    in_array($get('status'), ['pending', 'completed'])*/
+                                    $get('mechanism') !== 'online' || 
+                                    in_array($get('status'), ['sent',  'pending certificate', 'completed'])
                                 )
                                 ->dehydrated()
                                 ->required(fn (callable $get) => $get('mechanism') === 'online'),
@@ -289,31 +309,38 @@ class TrainingResource extends Resource
                                 ])
                                 ->searchable()
                                 ->columnSpan(4)
+                                ->disabled(fn (callable $get) => in_array($get('status'), ['sent',  'pending certificate', 'completed']))
                                 ->required(),
                             Forms\Components\DatePicker::make('activity_date_start_at')
                                 ->label('Fecha Inicio de Actividad')
                                 ->columnSpan(4)
+                                ->disabled(fn (callable $get) => in_array($get('status'), ['sent',  'pending certificate', 'completed']))
                                 ->required(),
                             Forms\Components\DatePicker::make('activity_date_end_at')
                                 ->label('Fecha Termino de Actividad')
                                 ->columnSpan(4)
+                                ->disabled(fn (callable $get) => in_array($get('status'), ['sent',  'pending certificate', 'completed']))
                                 ->required(),
                             Forms\Components\TextInput::make('total_hours')
                                 ->label('Total Horas Pedagógicas')
                                 ->numeric()
                                 ->columnSpan(4)
+                                ->disabled(fn (callable $get) => in_array($get('status'), ['sent',  'pending certificate', 'completed']))
                                 ->required(),
                             Forms\Components\DatePicker::make('permission_date_start_at')
                                 ->label('Solicita Permiso Desde')
                                 ->columnSpan(4)
+                                ->disabled(fn (callable $get) => in_array($get('status'), ['sent',  'pending certificate', 'completed']))
                                 ->required(),
                             Forms\Components\DatePicker::make('permission_date_end_at')
                                 ->label('Solicita Permiso Hasta')
                                 ->columnSpan(4)
+                                ->disabled(fn (callable $get) => in_array($get('status'), ['sent',  'pending certificate', 'completed']))
                                 ->required(),
                             Forms\Components\TextInput::make('place')
                                 ->label('Lugar')
                                 ->columnSpan(4)
+                                ->disabled(fn (callable $get) => in_array($get('status'), ['sent',  'pending certificate', 'completed']))
                                 ->required(),
                             Forms\Components\Select::make('working_day')
                                 ->label('Jornada y Horarios')
@@ -324,10 +351,12 @@ class TrainingResource extends Resource
                                 ])
                                 ->searchable()
                                 ->columnSpan(4)
+                                ->disabled(fn (callable $get) => in_array($get('status'), ['sent',  'pending certificate', 'completed']))
                                 ->required(),
                             Forms\Components\TextInput::make('technical_reasons')
                                 ->label('Fundamento o Razones Técnicas para la asistencia del funcionario')
                                 ->columnSpanFull()
+                                ->disabled(fn (callable $get) => in_array($get('status'), ['sent',  'pending certificate', 'completed']))
                                 ->required(),
                         ]),
                     ]),
@@ -350,6 +379,7 @@ class TrainingResource extends Resource
                                         ->storeFileNamesIn('name')
                                         ->acceptedFileTypes(['application/pdf'])
                                         ->downloadable()
+                                        ->disabled(fn (callable $get) => in_array($get('status'), ['sent',  'pending certificate', 'completed']))
                                         ->required(),
                                     Forms\Components\Hidden::make('type') // Campo oculto para almacenar el tipo de archivo dentro del modelo File
                                         ->default('permission_file')
@@ -423,9 +453,11 @@ class TrainingResource extends Resource
                     ->sortable()
                     ->badge()
                     ->color(fn (string $state): string => match ($state) {
-                        'Guardado'  => 'info',
-                        'Enviado'   => 'warning',
-                        'Rechazado' => 'danger',
+                        'Guardado'              => 'info',
+                        'Enviado'               => 'warning',
+                        'Certificado Pendiente' => 'gray',
+                        'Finalizado'            => 'succes',
+                        'Rechazado'             => 'danger',
                     })
                     ->alignment('center'),
                 Tables\Columns\TextColumn::make('created_at')

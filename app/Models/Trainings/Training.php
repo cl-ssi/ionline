@@ -35,6 +35,7 @@ class Training extends Model implements Auditable
         'status', 
         'user_id',
         'estament_id',
+        'family_position',
         'law',
         'degree',
         'work_hours',
@@ -168,10 +169,34 @@ class Training extends Model implements Auditable
         $statuses = [
             'saved'                 => 'Guardado',
             'sent'                  => 'Enviado',
+            'pending certificate'   => 'Certificado Pendiente',
+            'completed'             => 'Finalizado',
             'rejected'              => 'Rechazado',
         ];
 
         return $statuses[$this->status] ?? null;
+    }
+
+    /**
+     * Get the family position value attribute.
+     *
+     * @return string|null
+     */
+    public function getFamilyPositionValueAttribute(): ?string
+    {
+        $familyPositions = [
+            'profesional directivo'         => 'Profesional Directivo', 
+            'profesional gestion'           => 'Profesional de Gestión',
+            'profesional asistencial'       => 'Profesional Asistencial',
+            'tecnico de apoyo a la gestion' => 'Técnico de Apoyo a la Gestión',
+            'tecnico asistencial'           => 'Técnico Asistencial',
+            'administrativo apoyo gestion'  => 'Administrativo(a) de Apoyo a la Gestión',
+            'administrativo asistencial'    => 'Administrativo(a) Asistencial',
+            'auxiliar apoyo operaciones'    => 'Auxiliar de Apoyo de Operaciones',
+            'auxiliar conductor'            => 'Auxiliar Conductor',
+        ];
+
+        return $familyPositions[$this->family_position] ?? null;
     }
 
     public function canEdit(){

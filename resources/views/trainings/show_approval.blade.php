@@ -37,17 +37,18 @@
         <tbody>
             <tr>
                 <th width="45%" colspan="2" class="table-secondary">Nombre</th>
-                <th width="45%" colspan="2" class="table-secondary">RUN</th>
+                <th width="45%" colspan="3" class="table-secondary">RUN</th>
             </tr>
             <tr>
                 <td colspan="2">{{ ($training->user) ? $training->user->fullName : null }}</td>
-                <td colspan="2">{{ $training->user->id }}-{{ $training->user->dv }}</td>
+                <td colspan="3">{{ $training->user->id }}-{{ $training->user->dv }}</td>
             </tr>
             <tr>
                 <th width="22.5%" class="table-secondary">Estamento</th>
                 <th width="22.5%" class="table-secondary">Calidad Contractual</th>
-                <th width="22.5%" class="table-secondary">Ley</th>
-                <th width="22.5%" width="15%" class="table-secondary">
+                <th width="15%" class="table-secondary">Familia de Cargo</th>
+                <th width="15%" class="table-secondary">Ley</th>
+                <th width="15%" class="table-secondary">
                     @if($training->law == 18834)
                         Grado
                     @else
@@ -58,6 +59,7 @@
             <tr>
                 <td>{{ $training->estament->name }}</td>
                 <td>{{ $training->contractualCondition->name }}</td>
+                <td>{{ $training->family_position_value }}</td>
                 <td>N° {{ number_format($training->law, 0, ",", ".") }}</td>
                 <td>
                     @if($training->law == 18834)
@@ -69,19 +71,19 @@
             </tr>
             <tr>
                 <th colspan="2" class="table-secondary">Servicio/Unidad</th>
-                <th colspan="2" class="table-secondary">Establecimiento</th>
+                <th colspan="3" class="table-secondary">Establecimiento</th>
             </tr>
             <tr>
                 <td colspan="2">{{ ($training->organizationalUnit) ? $training->organizationalUnit->name : null }}</td>
-                <td colspan="2">{{ ($training->establishment) ? $training->establishment->name : null }}</td>
+                <td colspan="3">{{ ($training->establishment) ? $training->establishment->name : null }}</td>
             </tr>
             <tr>
                 <th colspan="2" class="table-secondary">Correo electrónico</th>
-                <th colspan="2" class="table-secondary">Fono contacto</th>
+                <th colspan="3" class="table-secondary">Fono contacto</th>
             </tr>
             <tr>
                 <td colspan="2">{{ $training->email }}</td>
-                <td colspan="2" >{{ $training->telephone }}</td>
+                <td colspan="3" >{{ $training->telephone }}</td>
             </tr>
         </tbody>
     </table>
@@ -140,8 +142,8 @@
                 <th width="25%" class="table-secondary">Total Horas Pedagógicas</th>
             </tr>
             <tr>
-                <td colspan="2" width="50%">{{ $training->activity_date_start_at }}</td>
-                <td width="25%">{{ $training->activity_date_end_at }}</td>
+                <td colspan="2" width="50%">{{ $training->activity_date_start_at->format('d-m-Y') }}</td>
+                <td width="25%">{{ $training->activity_date_end_at->format('d-m-Y') }}</td>
                 <td width="25%">{{ $training->total_hours }}</td>
             </tr>
             <tr>
@@ -150,8 +152,8 @@
                 <th width="25%" class="table-secondary">Lugar</th>
             </tr>
             <tr>
-                <td colspan="2" width="50%">{{ $training->permission_date_start_at }}</td>
-                <td width="25%">{{ $training->permission_date_end_at }}</td>
+                <td colspan="2" width="50%">{{ $training->permission_date_start_at->format('d-m-Y') }}</td>
+                <td width="25%">{{ $training->permission_date_end_at->format('d-m-Y') }}</td>
                 <td width="25%">{{ $training->place }}</td>
             </tr>
             <tr>

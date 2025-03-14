@@ -13,7 +13,7 @@ class TrainingPolicy
      */
     public function viewAny(User $user): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -21,7 +21,7 @@ class TrainingPolicy
      */
     public function view(User $user, Training $training): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -29,7 +29,7 @@ class TrainingPolicy
      */
     public function create(User $user): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -37,7 +37,7 @@ class TrainingPolicy
      */
     public function update(User $user, Training $training): bool
     {
-        return false;
+        return ($user->can('Trainings: all') || $user->id === $training->user_id);
     }
 
     /**

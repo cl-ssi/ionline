@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('status')->nullable();
             $table->foreignId('user_id')->nullable()->constrained('users');
             $table->foreignId('estament_id')->nullable()->constrained('cfg_estaments');
+            $table->string('family_position')->nullable();
             $table->string('law')->nullable();
             $table->string('degree')->nullable();
             $table->string('work_hours')->nullable();
