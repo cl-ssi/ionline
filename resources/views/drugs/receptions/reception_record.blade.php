@@ -53,47 +53,49 @@
                 <tr>
                     <td class="center">{{ $item->nue }}</td>
                     <td>{{ $item->substance->name }}</td>
+                        @php
+                            if (!function_exists('formatDecimal')) {
+                                function formatDecimal($number) {
+                                    if ($number === null) {
+                                        return null; // Si es nulo, no muestra nada
+                                    }
+                                    if (fmod($number, 1) == 0) {
+                                        return number_format($number, 0, ',', '.'); // Sin decimales si es entero
+                                    }
+
+                                    $formatted = number_format($number, 3, ',', '.'); // Formato con tres decimales
+                                    
+                                    // Si los últimos decimales son 00 o 000, recortamos a los necesarios
+                                    if (preg_match('/,(\d)00$/', $formatted)) {
+                                        return number_format($number, 1, ',', '.'); // 123.450 → 123,45
+                                    } elseif (preg_match('/,(\d\d)0$/', $formatted)) {
+                                        return number_format($number, 2, ',', '.'); // 123.456 → 123,456
+                                    }
+
+                                    return $formatted; // Si tiene tres decimales útiles, los mantiene
+                                }
+                            }
+                        @endphp
                     <td class="center" nowrap>
                         @if($item->document_weight)
-                            @php
-                                $formattedWeight = fmod($item->document_weight, 1) > 0
-                                    ? number_format($item->document_weight, 3, ',', '.')
-                                    : number_format($item->document_weight, 0, ',', '.');
-                            @endphp
-                            {{ $formattedWeight }} {{ $item->substance->unit }}
+                            {{ formatDecimal($item->document_weight) }} {{ $item->substance->unit }}
                         @else
                             No informado
                         @endif
-                        
+
                         {{-- $item->document_weight ? $item->document_weight .' '.$item->substance->unit : 'No informado' --}}
                     </td>
                     <td class="center" nowrap>
-                        @php
-                            $formattedGrossWeight = fmod($item->gross_weight, 1) > 0
-                                ? number_format($item->gross_weight, 3, ',', '.')
-                                : number_format($item->gross_weight, 0, ',', '.');
-                        @endphp
-
-                        {{ $formattedGrossWeight }} {{ $item->substance->unit }}
+                        {{ formatDecimal($item->gross_weight) }} {{ $item->substance->unit }}
 
                         {{-- $item->gross_weight }} {{ $item->substance->unit --}}
                     </td>
                     <td class="center" nowrap>
-                    @if($item->net_weight !== null)
-                            @php
-                                $formattedNetWeight = fmod($item->net_weight, 1) > 0
-                                    ? number_format($item->net_weight, 3, ',', '.')
-                                    : number_format($item->net_weight, 0, ',', '.');
-                            @endphp
-                            {{ $formattedNetWeight }} {{ $item->substance->unit }}
+                        @if($item->net_weight !== null)
+                            {{ formatDecimal($item->net_weight) }} {{ $item->substance->unit }}
                         @endif
                         @if($item->estimated_net_weight)
-                            @php
-                                $formattedEstimatedNetWeight = fmod($item->estimated_net_weight, 1) > 0
-                                    ? number_format($item->estimated_net_weight, 3, ',', '.')
-                                    : number_format($item->estimated_net_weight, 0, ',', '.');
-                            @endphp
-                            (* {{ $formattedEstimatedNetWeight }} {{ $item->substance->unit }})
+                            (* {{ formatDecimal($item->estimated_net_weight) }} {{ $item->substance->unit }})
                         @endif
 
                         {{--
@@ -109,13 +111,7 @@
                         @if($item->sample == 0)
                             -
                         @else
-                            ({{ $item->sample_number }})
-                            @php
-                                $formattedSample = fmod($item->sample, 1) > 0
-                                    ? number_format($item->sample, 3, ',', '.')
-                                    : number_format($item->sample, 0, ',', '.');
-                            @endphp
-                            {{ $formattedSample }} {{ $item->substance->unit }}
+                            ({{ $item->sample_number }}) {{ formatDecimal($item->sample) }} {{ $item->substance->unit }}
                         @endif
 
                         {{--
@@ -132,13 +128,7 @@
                         @if($item->countersample == 0)
                             -
                         @else
-                            ({{ $item->sample_number }})
-                            @php
-                                $formattedCounterSample = fmod($item->countersample, 1) > 0
-                                    ? number_format($item->countersample, 3, ',', '.')
-                                    : number_format($item->countersample, 0, ',', '.');
-                            @endphp
-                            {{ $formattedCounterSample }} {{ $item->substance->unit }}
+                            ({{ $item->sample_number }}) {{ formatDecimal($item->countersample) }} {{ $item->substance->unit }}
                         @endif
 
                         {{--
