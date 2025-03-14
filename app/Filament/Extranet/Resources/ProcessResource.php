@@ -132,7 +132,7 @@ class ProcessResource extends Resource
                                         ->storeFileNamesIn('name')
                                         ->acceptedFileTypes(['application/pdf'])
                                         ->maxSize(3072) // Tamaño máximo de archivo en KB (3MB)
-                                        ->helperText('El tamaño máximo del archivo es de 3MB.'),
+                                        ->helperText('El archivo a cargar debe tener menos de 3MB, se sugiere comprimir el documento en la herramienta gratuita ilovepdf antes de cargar. Se ruega asegurar que el documento escaneado esté legible, derecho y que los márgenes sean los mismos que en el documento original. De lo contrario la firma electrónica del SST quedará mal posicionada'),
                                     Forms\Components\Hidden::make('type') // Campo oculto para almacenar el tipo de archivo dentro del modelo File
                                         ->default('signed_commune_file')
                                         ->columnSpanFull(),
