@@ -7,6 +7,7 @@ use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
 use Filament\Resources\Pages\ListRecords\Tab;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Redirect;
 
 class ListTrainings extends ListRecords
 {
@@ -17,6 +18,18 @@ class ListTrainings extends ListRecords
         return [
             Actions\CreateAction::make(),
         ];
+    }
+
+    /**
+     * Redirigir si el usuario intenta acceder sin permiso
+     */
+    public function mount(): void
+    {
+        parent::mount();
+
+        if ($this->activeTab === 'Todos' && !auth()->user()->can('Trainings: all')) {
+            Redirect::route('filament.intranet.talent-management.resources.trainings.index');
+        }
     }
 
     public function getTabs(): array
