@@ -17,6 +17,7 @@ use Filament\Pages\SubNavigationPosition;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Actions\Action;
 use Illuminate\Support\Facades\Storage;
+use Filament\Support\Colors;
 
 class TrainingResource extends Resource
 {
@@ -145,7 +146,6 @@ class TrainingResource extends Resource
                                 ->columnSpan(4),
                             Forms\Components\TextInput::make('organizational_unit_name')
                                 ->label('Servicio/Unidad')
-                                // ->default(fn ($record) => $record ? $record->organizationalUnit->name : auth()->user()->organizationalUnit->name)
                                 ->afterStateHydrated(function (callable $set, $record) {
                                     $set('organizational_unit_name', $record && $record->organizationalUnit ? $record->organizationalUnit->name : auth()->user()->organizationalUnit->name ?? '');
                                 })
@@ -153,7 +153,6 @@ class TrainingResource extends Resource
                                 ->columnSpan(8),
                             Forms\Components\TextInput::make('establishment_name')
                                 ->label('Establecimiento')
-                                // ->default(fn ($record) => $record ? $record->establishment->name : auth()->user()->establishment->name)
                                 ->afterStateHydrated(function (callable $set, $record) {
                                     $set('establishment_name', $record && $record->establishment ? $record->establishment->name : auth()->user()->establishment->name ?? '');
                                 })
@@ -496,8 +495,7 @@ class TrainingResource extends Resource
                                         ->directory('ionline/trainings/attached')
                                         ->storeFileNamesIn('name')
                                         ->acceptedFileTypes(['application/pdf'])
-                                        ->downloadable()
-                                        ->required(),
+                                        ->downloadable(),
                                     Forms\Components\Hidden::make('type') // Campo oculto para almacenar el tipo de archivo dentro del modelo File
                                         ->default('attached_file')
                                         ->columnSpanFull(),
@@ -506,7 +504,7 @@ class TrainingResource extends Resource
                             /* Fin del uso de relacion MorphOne de File */
                         ]),
                     ])
-                    ->visible(fn (callable $get) => $get('status') === 'pending certificate'),
+                    ->visible(fn (callable $get) => in_array($get('status'), ['pending certificate', 'uploaded certificate'])),
             ]);
     }
 
@@ -527,6 +525,7 @@ class TrainingResource extends Resource
                         'Guardado'              => 'info',
                         'Enviado'               => 'warning',
                         'Certificado Pendiente' => 'gray',
+                        'Certificado Enviado'   => 'gray',
                         'Finalizado'            => 'succes',
                         'Rechazado'             => 'danger',
                     })

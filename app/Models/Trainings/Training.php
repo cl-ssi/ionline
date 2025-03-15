@@ -180,6 +180,7 @@ class Training extends Model implements Auditable
             'saved'                 => 'Guardado',
             'sent'                  => 'Enviado',
             'pending certificate'   => 'Certificado Pendiente',
+            'uploaded certificate'  => 'Certificado Enviado',
             'completed'             => 'Finalizado',
             'rejected'              => 'Rechazado',
         ];

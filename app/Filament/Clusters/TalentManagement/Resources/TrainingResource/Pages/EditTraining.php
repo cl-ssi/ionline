@@ -102,22 +102,37 @@ class EditTraining extends EditRecord
                 ->color('success')
                 ->action(function () {
                     if (in_array($this->record->status_value, ['Guardado','Finalizado'])) {
-                        abort(403, 'No tienes permiso para enviar este formulario.');
+                        abort(403, 'No tienes permiso para enviar el certificado.');
                     }
 
-                    //Si tenía approvals se eliminan y crean nuevos
-                    if($this->record->approvals){
-                        $this->record->approvals()->delete();
+                    // Validar que el certificado sea obligatorio
+                    if (empty($this->data['certificateFile']['storage_path'])) {
+                        Notification::make()
+                            ->title('Error')
+                            ->danger()
+                            ->body('Debe agregar el archivo "Certificado" antes de continuar.')
+                            ->send();
+                        return;
                     }
 
-                    $this->record->sendForm(); // Llama al método en el modelo
-                    
-                    // Mostrar notificación
+                    // Mutar datos antes de guardar si es necesario
+                    $data = $this->mutateFormDataBeforeSave($this->form->getState());
+
+                    // Asignar los datos manualmente
+                    $this->record->fill($data);
+
+                    // Cambiar estado del registro
+                    $this->record->update(['status' => 'uploaded certificate']);
+
+                    // Mostrar notificación de éxito
                     Notification::make()
-                        ->title('Formulario enviado')
+                        ->title('Certificado Enviado')
                         ->success()
-                        ->body('El formulario ha sido enviado exitosamente.')
+                        ->body('El certificado ha sido enviado exitosamente.')
                         ->send();
+
+                    // Redirigir al índice de Training
+                    $this->redirectRoute('filament.intranet.talent-management.resources.trainings.index');
                 })
                 ->requiresConfirmation()
                 ->modalHeading('Confirmar Envío')
