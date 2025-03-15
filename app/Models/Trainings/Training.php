@@ -463,6 +463,59 @@ class Training extends Model implements Auditable
         // ------------------------------------------------------------------------------------------------------------------------
     }
 
+    public function sendFormExternal()
+    {   
+        /* BUSCO SI SOY AUTORIDAD DE MI U.O. */
+        $lastApproval = null;
+
+        /* APROBACIÓN DE JEFATURA DIRECTA */
+        $approval = $this->approvals()->create([
+            "module"                            => "Permisos de Capacitación",
+            "module_icon"                       => "bi bi-person-video",
+            "subject"                           => 'ID '.$this->id.'<br>
+                                                    Funcionario: '.$this->user->TinyName,
+            "sent_to_ou_id"                     => Parameter::get('ou', 'DireccionAPS', Parameter::get('establishment', 'SSTarapaca')),
+            "document_route_name"               => "trainings.show_approval",
+            "document_route_params"             => json_encode([
+                "training_id"   => $this->id,
+            ]),
+            "active"                            => true,
+            "previous_approval_id"              => null,
+            "status"                            => null,
+            "callback_controller_method"        => "App\Http\Controllers\Trainings\TrainingController@approvalCallback",
+            "callback_controller_params"        => json_encode([
+                'training_id'  => $this->id,
+                'process'      => null
+            ])
+        ]);
+
+        $lastApproval = $approval->id;
+
+        /* APROBACIÓN DE UNIDAD CAPACITACIÓN */
+        $approval = $this->approvals()->create([
+            "module"                            => "Permisos de Capacitación",
+            "module_icon"                       => "bi bi-person-video",
+            "subject"                           => 'ID '.$this->id.'<br>
+                                                    Funcionario: '.$this->user->TinyName,
+            "sent_to_ou_id"                     => Parameter::get('ou', 'Capacitación', $this->establishment_id),
+            "document_route_name"               => "trainings.show_approval",
+            "document_route_params"             => json_encode([
+                "training_id"   => $this->id,
+            ]),
+            "active"                            => false,
+            "previous_approval_id"              => $lastApproval,
+            "status"                            => null,
+            "callback_controller_method"        => "App\Http\Controllers\Trainings\TrainingController@approvalCallback",
+            "callback_controller_params"        => json_encode([
+                'training_id'  => $this->id,
+                'process'      => 'end'
+            ])
+        ]);
+
+        // Cambiar estado del registro
+        $this->update(['status' => 'sent']);
+    }
+
     protected $casts = [
         'activity_date_start_at'    => 'date:Y-m-d',
         'activity_date_end_at'      => 'date:Y-m-d',

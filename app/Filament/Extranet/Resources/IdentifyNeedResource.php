@@ -27,9 +27,11 @@ class IdentifyNeedResource extends Resource
 {
     protected static ?string $model = IdentifyNeed::class;
 
+    protected static ?string $navigationGroup = 'Gestión del Talento';
+
     protected static ?string $modelLabel = 'Necesidades de Capacitaciones';
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-academic-cap';
 
     protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
 

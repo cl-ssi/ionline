@@ -1,10 +1,9 @@
 <?php
 
-namespace App\Filament\Clusters\TalentManagement\Resources;
+namespace App\Filament\Extranet\Resources;
 
-use App\Filament\Clusters\TalentManagement;
-use App\Filament\Clusters\TalentManagement\Resources\TrainingResource\Pages;
-use App\Filament\Clusters\TalentManagement\Resources\TrainingResource\RelationManagers;
+use App\Filament\Extranet\Resources\TrainingResource\Pages;
+use App\Filament\Extranet\Resources\TrainingResource\RelationManagers;
 use App\Models\Trainings\Training;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -13,27 +12,20 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Filament\Pages\SubNavigationPosition;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Actions\Action;
-use Illuminate\Support\Facades\Storage;
-use Filament\Support\Colors;
 
 class TrainingResource extends Resource
 {
     protected static ?string $model = Training::class;
 
-    protected static ?string $modelLabel = 'Solicitud';
+    protected static ?string $navigationGroup = 'Gestión del Talento';
 
-    protected static ?string $pluralModelLabel = 'Solicitudes';
+    protected static ?string $modelLabel = 'Solicitud de Capacitación';
+
+    protected static ?string $pluralModelLabel = 'Solicitudes de Capacitación';
 
     protected static ?string $navigationIcon = 'heroicon-o-academic-cap';
-
-    protected static ?string $cluster = TalentManagement::class;
-
-    protected static ?string $navigationGroup = 'Permisos de Capacitación';
-
-    protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
 
     public static function form(Form $form): Form
     {
@@ -160,30 +152,31 @@ class TrainingResource extends Resource
                                 ->columnSpan(4),
                             Forms\Components\TextInput::make('email')
                                 ->label('Correo electrónico')
-                                ->default(fn ($record) => $record ? $record->email : auth()->user()->email)
-                                ->readOnly()
-                                ->columnSpan(4),
+                                ->default(fn ($record) => $record ? $record->email : auth()->user()->email_personal)
+                                ->disabled(fn (callable $get) => in_array($get('status'), ['sent',  'pending certificate', 'uploaded certificate', 'completed']))
+                                ->columnSpan(4)
+                                ->required(),
                             Forms\Components\TextInput::make('telephone')
                                 ->label('Teléfono')
                                 ->default(fn ($record) => $record ? $record->telephone : auth()->user()->telephone)
                                 ->disabled(fn (callable $get) => in_array($get('status'), ['sent',  'pending certificate', 'uploaded certificate', 'completed']))
-                                ->columnSpan(4),
+                                ->columnSpan(4)
+                                ->required(),
                         ]),
                     ]),
-                
                 Forms\Components\Section::make('Antecedentes de la Actividad')
                     ->schema([
                         Grid::make(12)->schema([
                             Forms\Components\Select::make('strategic_axes_id')
                                 ->label('Eje estratégico asociados a la Actividad')
-                                ->relationship('strategicAxis', 'name')
+                                ->relationship('strategicAxis', 'name', fn ($query) => $query->orderBy('id'))
                                 ->searchable()
                                 ->preload()
                                 ->suffixAction(
                                     \Filament\Forms\Components\Actions\Action::make('verEjesEstrategicos')
                                         ->icon('heroicon-o-information-circle')
                                         ->label('Ver Ejes Estratégicos')
-                                        ->url(fn () => \App\Filament\Clusters\TalentManagement\Resources\TrainingResource\Pages\StrategicAxisList::getUrl())
+                                        ->url(fn () => \App\Filament\Extranet\Resources\TrainingResource\Pages\StrategicAxisList::getUrl())
                                         ->openUrlInNewTab()
                                 )
                                 ->columnSpan(6)
@@ -226,7 +219,7 @@ class TrainingResource extends Resource
                                 ->columnSpan(4)
                                 ->disabled(fn (callable $get) => 
                                     $get('activity_type') !== 'otro'  || 
-                                    in_array($get('status'), ['sent',  'pending certificate', 'uploaded certificate', 'uploaded certificate', 'completed'])
+                                    in_array($get('status'), ['sent',  'pending certificate', 'uploaded certificate', 'completed'])
                                 )
                                 ->dehydrated()
                                 ->required(fn (callable $get) => $get('activity_type') === 'otro'),
@@ -376,9 +369,33 @@ class TrainingResource extends Resource
                                 ->required(),
                         ]),
                     ]),
-                
                 Forms\Components\Section::make('Adjuntos')
                     ->schema([
+                        Grid::make(12)->schema([
+                            /**
+                             * Ejemplo completo de uso de relación file
+                             */
+                            Forms\Components\Group::make()
+                                ->relationship(
+                                    'permissionFile',
+                                    condition: fn (?array $state): bool => filled($state['storage_path']),
+                                ) // Nombre de la relación que está con MorphOne
+                                ->schema([
+                                    Forms\Components\FileUpload::make('storage_path') // Ruta donde quedará almacenado el archivo
+                                        ->label('Permiso')
+                                        ->directory('ionline/trainings/permission')
+                                        ->storeFileNamesIn('name')
+                                        ->acceptedFileTypes(['application/pdf'])
+                                        ->downloadable()
+                                        ->disabled(fn (callable $get) => in_array($get('status'), ['sent',  'pending certificate', 'uploaded certificate', 'completed']))
+                                        ->required(),
+                                    Forms\Components\Hidden::make('type') // Campo oculto para almacenar el tipo de archivo dentro del modelo File
+                                        ->default('permission_file')
+                                        ->columnSpanFull(),
+                                ])
+                                ->columnSpanFull(),
+                            /* Fin del uso de relacion MorphOne de File */
+                        ]),
                         Grid::make(12)->schema([
                             /**
                              * Ejemplo completo de uso de relación file
@@ -394,8 +411,8 @@ class TrainingResource extends Resource
                                         ->directory('ionline/trainings/rejoinder')
                                         ->storeFileNamesIn('name')
                                         ->acceptedFileTypes(['application/pdf'])
-                                        ->downloadable()
-                                        ->disabled(fn (callable $get) => in_array($get('status'), ['sent',  'pending certificate', 'uploaded certificate', 'completed'])),
+                                        ->disabled(fn (callable $get) => in_array($get('status'), ['sent',  'pending certificate', 'uploaded certificate', 'completed']))
+                                        ->downloadable(),
                                     Forms\Components\Hidden::make('type') // Campo oculto para almacenar el tipo de archivo dentro del modelo File
                                         ->default('rejoinder_file')
                                         ->columnSpanFull(),
@@ -528,7 +545,6 @@ class TrainingResource extends Resource
                     ->circular()
                     ->sortable(),
             ])
-            ->defaultSort('id', 'desc')
             ->filters([
                 //
             ])
