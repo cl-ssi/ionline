@@ -29,10 +29,10 @@ class StrategicAxisList extends Page implements Tables\Contracts\HasTable
                     ->label('#')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('name')
-                    ->label('Nombre')
+                    ->label('Objetivos Estratégicos')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('impactObjectives.description')
-                    ->label('Nombre')
+                    ->label('Objetivos de Impacto')
                     ->bulleted(),
 
                     // impactObjectives
