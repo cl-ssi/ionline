@@ -61,6 +61,9 @@
                             <i class="fa fa-users" aria-hidden="true"></i> Administrador de solicitudes
                         </a>
 
+                        <a class="dropdown-item" href="{{ route('welfare.benefits.accepted-requests-admin') }}">
+                            <i class="fa fa-check" aria-hidden="true"></i> Solicitudes aceptadas
+                        </a>
                     @endif
 
                 </div>

@@ -2816,6 +2816,7 @@ Route::prefix('welfare')->as('welfare.')->middleware(['auth', 'must.change.passw
         Route::get('/requests', Requests::class)->name('requests');
         // Route::get('/requests-admin', RequestsAdmin::class)->name('requests-admin');
         Route::get('/requests-admin', [RequestAdminController::class, 'index'])->name('requests-admin');
+        Route::get('/accepted-requests-admin', [RequestAdminController::class, 'acceptedRequestsIndex'])->name('accepted-requests-admin');
     }); 
     
 });

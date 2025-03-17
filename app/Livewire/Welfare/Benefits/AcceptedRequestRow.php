@@ -9,7 +9,7 @@ use App\Notifications\Welfare\Benefits\RequestAccept;
 use App\Notifications\Welfare\Benefits\RequestReject;
 use Illuminate\Support\Facades\Storage;
 
-class RequestRow extends Component
+class AcceptedRequestRow extends Component
 {
     public $request;
     public $showTextarea = 0;
@@ -32,7 +32,6 @@ class RequestRow extends Component
         $this->request->update([
             'status' => 'Aceptado',
             'status_update_date' => now(),
-            'status_update_responsable_id' => auth()->id(),
         ]);
 
         if ($this->request->applicant && $this->request->applicant->email_personal) {
@@ -62,7 +61,6 @@ class RequestRow extends Component
         $this->request->update([
             'status_update_observation' => $this->observation,
             'status_update_date' => now(),
-            'status_update_responsable_id' => auth()->id(),
         ]);
 
         session()->flash('message', 'Se guardó la observación.');
@@ -78,7 +76,6 @@ class RequestRow extends Component
             'status' => 'Rechazado',
             'status_update_observation' => $this->observation,
             'status_update_date' => now(),
-            'status_update_responsable_id' => auth()->id(),
         ]);
 
         $this->observation = $this->request->status_update_observation; // Actualizar la propiedad con el valor guardado
@@ -93,7 +90,6 @@ class RequestRow extends Component
         $this->request->update([
             'accepted_amount' => $this->acceptedAmount,
             'accepted_amount_date' => now(),
-            'accepted_amount_responsable_id' => auth()->id(),
         ]);
 
         session()->flash('message', 'Se registró el monto aprobado.');
@@ -127,7 +123,6 @@ class RequestRow extends Component
         $this->request->update([
             'status' => 'Pagado',
             'payed_date' => now(),
-            'payed_responsable_id' => auth()->id(),
             'payed_amount' => $this->request->accepted_amount,
         ]);
 
@@ -140,6 +135,6 @@ class RequestRow extends Component
 
     public function render()
     {
-        return view('livewire.welfare.benefits.request-row');
+        return view('livewire.welfare.benefits.accepted-request-row');
     }
 }
