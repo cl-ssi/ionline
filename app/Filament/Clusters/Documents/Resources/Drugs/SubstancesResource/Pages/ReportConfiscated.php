@@ -24,44 +24,16 @@ class ReportConfiscated extends Page implements Tables\Contracts\HasTable
     public function table(Tables\Table $table): Tables\Table
     {
         return $table
-            /*
             ->query(function (Builder $query) {
-                /*
-                $query = ReceptionItem::query()
-                    ->select('substance_id')
-                    ->selectRaw('COUNT(*) as total_items, SUM(net_weight) as total_net_weight')
-                    // ->selectRaw('SUM(CASE WHEN result_substance_id IS NULL THEN 1 ELSE 0 END) as total_without_result')
-                    ->groupBy('substance_id')
-                    ->with(['substance', 'resultSubstance', 'reception']);
-                */
+                $selectedYear = request('tableFilters')['created_at'] ?? Carbon::now()->year;
+                $previousYear = $selectedYear - 1;
 
-                /*
-                // Aplica el filtro de sustancia si está seleccionado
-                if ($substanceId = request('tableFilters')['substance_id'] ?? null) {
-                    $query->where('substance_id', $substanceId);
-                }
-                *
-
-                $query = ReceptionItem::query()
-                    ->select('substance_id')
-                    ->selectRaw('COUNT(*) as total_items') // Total de ítems por sustancia
-                    ->selectRaw('SUM(net_weight) as total_net_weight') // Peso neto total
-                    ->selectRaw(
-                        'SUM(
-                            CASE 
-                                WHEN result_substance_id IS NULL AND 
-                                        (SELECT COUNT(*) FROM drg_protocols WHERE drg_protocols.reception_item_id = drg_reception_items.id) = 0 
-                                THEN 1 ELSE 0 
-                            END
-                        ) as total_without_result'
-                    ) // Total sin sustancia resultante
-                    ->groupBy('substance_id')
-                    ->with(['substance']);
-            })*/
-            ->query(function (Builder $query) {
                 return ReceptionItem::query()
                     ->select('substance_id')
                     ->selectRaw('COUNT(*) as total_items') // Total de ítems por sustancia
+                    ->selectRaw(
+                        'COUNT(DISTINCT reception_id) as total_receptions'
+                    ) // Total de actas únicas (receptions) por sustancia
                     ->selectRaw('SUM(net_weight) as total_net_weight') // Peso neto total
                     ->selectRaw(
                         'SUM(
@@ -73,15 +45,34 @@ class ReportConfiscated extends Page implements Tables\Contracts\HasTable
                         ) as total_without_result'
                     ) // Total sin sustancia resultante
                     ->selectRaw(
-                        'COUNT(DISTINCT reception_id) as total_receptions'
-                    ) // Total de actas únicas (receptions) por sustancia
+                        'COUNT(DISTINCT CASE 
+                            WHEN result_substance_id IS NULL AND 
+                                 (SELECT COUNT(*) FROM drg_protocols WHERE drg_protocols.reception_item_id = drg_reception_items.id) = 0 
+                            THEN reception_id ELSE NULL 
+                        END) as total_receptions_without_result'
+                    ) // Total de actas únicas sin sustancia resultante
+                    ->selectRaw(
+                        'SUM(
+                            CASE 
+                                WHEN result_substance_id IS NULL AND 
+                                     (SELECT COUNT(*) FROM drg_protocols WHERE drg_protocols.reception_item_id = drg_reception_items.id) = 0 
+                                THEN net_weight ELSE 0 
+                            END
+                        ) as total_net_weight_without_result'
+                    ) // Peso neto total de ítems sin sustancia resultante
+                    ->selectRaw(
+                        'SUM(
+                            CASE 
+                                WHEN result_substance_id IS NOT NULL OR 
+                                     (SELECT COUNT(*) FROM drg_protocols WHERE drg_protocols.reception_item_id = drg_reception_items.id) > 0 
+                                THEN net_weight ELSE 0 
+                            END
+                        ) as total_net_weight_with_result'
+                    ) // Peso neto total de ítems con sustancia resultante
                     ->groupBy('substance_id')
                     ->with(['substance']);
             })
             ->columns([
-                Tables\Columns\TextColumn::make('substance_id')
-                    ->label('ID de Sustancia')
-                    ->sortable(),
                 Tables\Columns\TextColumn::make('substance.name')
                     ->label('Nombre de Sustancia')
                     ->sortable(),
@@ -103,6 +94,21 @@ class ReportConfiscated extends Page implements Tables\Contracts\HasTable
                     ->label('Sin Sustancia Resultante')
                     ->sortable()
                     ->formatStateUsing(fn (string|float $state): string => number_format($state, 0, ',', '.'))
+                    ->alignEnd(),
+                Tables\Columns\TextColumn::make('total_receptions_without_result')
+                    ->label('Actas sin Sustancia Resultante')
+                    ->sortable()
+                    ->formatStateUsing(fn (string|float $state): string => number_format($state, 0, ',', '.'))
+                    ->alignEnd(),
+                Tables\Columns\TextColumn::make('total_net_weight_without_result')
+                    ->label('Peso Neto sin Sustancia Resultante')
+                    ->sortable()
+                    ->formatStateUsing(fn (string|float $state): string => number_format($state, 2, ',', '.')) // Formato con separación de miles y 2 decimales
+                    ->alignEnd(),
+                Tables\Columns\TextColumn::make('total_net_weight_with_result')
+                    ->label('Peso Neto con Sustancia Resultante')
+                    ->sortable()
+                    ->formatStateUsing(fn (string|float $state): string => number_format($state, 2, ',', '.')) // Formato con separación de miles y 2 decimales
                     ->alignEnd(),
             ])
             ->filters([
