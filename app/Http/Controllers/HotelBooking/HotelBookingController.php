@@ -71,7 +71,7 @@ class HotelBookingController extends Controller
 
             // Calcular el rango máximo permitido para las fechas
             $maxDate = $today->day >= 15
-                ? $today->copy()->endOfMonth()->addMonth()->endOfMonth()
+                ? $today->copy()->addMonth()->endOfMonth()
                 : $today->copy()->endOfMonth();
 
             if ($start_date->greaterThan($maxDate) || $end_date->greaterThan($maxDate)) {

@@ -23,7 +23,7 @@
                     $today = \Carbon\Carbon::now();
                     // Si es el día 15 o posterior, permite hasta el final del próximo mes
                     $maxDate = $today->day >= 15 
-                        ? $today->copy()->endOfMonth()->addMonth()->endOfMonth()->toDateString() 
+                        ? $today->copy()->addMonth()->endOfMonth()->toDateString() 
                         : $today->copy()->endOfMonth()->toDateString();
                 @endphp
             @endcannot
