@@ -213,7 +213,49 @@ class ProcessResource extends Resource
                         titleAttribute: 'name',
                     )
                     ->searchable(),
-            ])
+
+                Tables\Filters\TernaryFilter::make('pending_lawyer_review')
+                    ->label('Pendiente revisión jurídico')
+                    ->queries(
+                        true: fn (Builder $query) => $query->whereNull('revision_by_lawyer_at')
+                            ->whereNotNull('sended_revision_lawyer_at'),
+                        false: fn (Builder $query) => $query->whereNotNull('revision_by_lawyer_at'),
+                        blank: fn (Builder $query) => $query
+                    )
+                    ->default(fn () => auth()->user()->hasRole('Convenios: Jurídico') ? true : null),
+
+                Tables\Filters\TernaryFilter::make('pending_commune_review')
+                    ->label('Pendiente revisión comuna')
+                    ->queries(
+                        true: fn (Builder $query) => $query->whereNull('revision_by_commune_at')
+                            ->whereNotNull('sended_revision_commune_at'),
+                        false: fn (Builder $query) => $query->whereNotNull('revision_by_commune_at'),
+                        blank: fn (Builder $query) => $query
+                    ),
+
+                Tables\Filters\TernaryFilter::make('pending_endorses')
+                    ->label('Pendiente visaciones')
+                    ->queries(
+                        true: fn (Builder $query) => $query->whereNotNull('sended_endorses_at')
+                            ->whereDoesntHave('endorses', function ($query) {
+                                $query->where('status', true);
+                            }),
+                        false: fn (Builder $query) => $query->whereNotNull('sended_endorses_at')
+                            ->whereDoesntHave('endorses', function ($query) {
+                                $query->where('status', false)->orWhereNull('status');
+                            }),
+                        blank: fn (Builder $query) => $query
+                    ),
+
+                Tables\Filters\TernaryFilter::make('pending_commune_signature')
+                    ->label('Pendiente firma comuna')
+                    ->queries(
+                        true: fn (Builder $query) => $query->whereNull('returned_from_commune_at')
+                            ->whereNotNull('sended_to_commune_at'),
+                        false: fn (Builder $query) => $query->whereNotNull('returned_from_commune_at'),
+                        blank: fn (Builder $query) => $query
+                    ),
+            ], layout: Tables\Enums\FiltersLayout::AboveContent) // Agregar esta configuración
             ->actions([
                 // Tables\Actions\Action::make('Ver')
                 //     ->icon('heroicon-m-eye')

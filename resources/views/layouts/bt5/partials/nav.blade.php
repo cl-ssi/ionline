@@ -111,10 +111,17 @@
                         @endcan
 
                         @can('Agreement: view')
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item {{ active('agreements.tracking.*') }}" href="{{ route('agreements.tracking.index') }}">
-                            <i class="fas fa-fw fa-file"></i> Convenios
-                        </a>
+                            <div class="dropdown-divider"></div>
+                            <!--<a class="dropdown-item {{ active('agreements.tracking.*') }}" href="{{ route('agreements.tracking.index') }}">
+                                <i class="fas fa-fw fa-file"></i> Convenios
+                            </a> -->
+                            <a class="dropdown-item" href="{{ route('filament.intranet.documents.resources.agreements.processes.index') }}">
+                                <i class="fas fa-fw fa-file"></i> Convenios
+                            </a>
+                            <!-- <a class="dropdown-item" href="{{ route('filament.intranet.documents.resources.agreements.certificates.index') }}">
+                                <i class="fas fa-fw fa-certificate"></i> Certificados
+                            </a> -->
+                            
                         @endcan
 
                         @can('HIS Modification Request: User')
