@@ -1,4 +1,11 @@
 <tr>
+    <style>
+        .disabled-row * {
+            pointer-events: none;
+            opacity: 0.6;
+        }
+    </style>
+
     <td colspan="8">
     <table class="table table-bordered table-sm mb-0" style="table-layout: fixed; width: 100%;">
             <!-- Colgroup para igualar anchos -->
@@ -13,8 +20,11 @@
                 <col style="width: 15%;">
             </colgroup>
             <tbody>
-            <tr>
+            <tr class="{{ $request->status_update_responsable_id && $request->status_update_responsable_id != auth()->id() ? 'disabled-row' : '' }}">
                 <td>
+                    <input type="checkbox" @checked($request->status_update_responsable_id) 
+                                           @disabled($request->status_update_responsable_id && $request->status_update_responsable_id != auth()->id())
+                                           wire:change="toggleResponsable">
                     {{ $request->id }}
                 </td>
                 <td>{{ $request->created_at->format('Y-m-d') }}</td>
@@ -58,10 +68,10 @@
                             <i class="fas fa-spinner fa-spin text-primary"></i> Procesando...
                         </div>
                         <div wire:loading.remove wire:target="accept, reject">
-                            <button wire:click="accept" class="btn btn-outline-success btn-sm" type="button">
+                            <button wire:click="accept" class="btn btn-outline-success btn-sm" type="button" wire:loading.attr="disabled">
                                 <i class="fa fa-check"></i> Aceptar
                             </button>
-                            <button wire:click="reject" class="btn btn-outline-danger btn-sm" type="button">
+                            <button wire:click="reject" class="btn btn-outline-danger btn-sm" type="button" wire:loading.attr="disabled">
                                 <i class="fa fa-times"></i> Rechazar
                             </button>
                         </div>
@@ -73,7 +83,7 @@
                             <button class="btn btn-success btn-sm" disabled>
                                 <i class="fa fa-check"></i> Aceptado
                             </button>
-                            <button wire:click="reject" class="btn btn-outline-danger btn-sm" type="button">
+                            <button wire:click="reject" class="btn btn-outline-danger btn-sm" type="button" wire:loading.attr="disabled">
                                 <i class="fa fa-times"></i> Rechazar
                             </button>
                         </div>
@@ -82,7 +92,7 @@
                             <i class="fas fa-spinner fa-spin text-primary"></i> Procesando...
                         </div>
                         <div wire:loading.remove wire:target="accept">
-                            <button wire:click="accept" class="btn btn-outline-success btn-sm" type="button">
+                            <button wire:click="accept" class="btn btn-outline-success btn-sm" type="button" wire:loading.attr="disabled">
                                 <i class="fa fa-check"></i> Aceptar
                             </button>
                             <button class="btn btn-danger btn-sm" disabled>
@@ -103,7 +113,7 @@
                             </div>
                             <div wire:loading.remove wire:target="saveCancelObservation">
                                 <div class="mt-2">
-                                    <button class="btn btn-primary" wire:click="saveCancelObservation">
+                                    <button class="btn btn-primary" wire:click="saveCancelObservation" wire:loading.attr="disabled">
                                         <i class="bi bi-save"></i> Guardar
                                     </button>
                                     <button class="btn btn-secondary" wire:click="cancel">
