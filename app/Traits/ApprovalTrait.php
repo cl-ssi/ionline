@@ -30,12 +30,7 @@ trait ApprovalTrait
 
         /** Soy manager de alguna OU hoy? */
         $ous = auth()->user()->amIAuthorityFromOu->pluck('organizational_unit_id')->toArray();
-        $ous_secretary = Authority::getAmIAuthorityFromOu(today(), 'secretary', auth()->id());
-        foreach ($ous_secretary as $sOu) {
-            if($sOu->organizational_unit_id == 1){
-                $ous = array_merge($ous, [$sOu->organizational_unit_id]);
-            }
-        }
+        $ous = in_array('1', auth()->user()->IamSecretaryOf->pluck('organizational_unit_id')->toArray()) ? array_merge($ous, [1]) : $ous;
 
         /** Mostrar sólo approvals activos */
         if($approval->active ) {

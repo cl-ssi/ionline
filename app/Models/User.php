@@ -1117,6 +1117,13 @@ class User extends Authenticatable implements Auditable, FilamentUser
 
     }
 
+    public function IamSecretaryOf(): Attribute
+    {
+        return new Attribute(
+            get: fn () => Authority::getAmIAuthorityFromOu(today(), 'secretary', $this->id)->pluck('organizational_unit_id')->toArray(),
+        );
+    }
+
     /**
      * Get either a Gravatar URL for a specified email address.
      *

@@ -41,6 +41,10 @@ class ListAttendanceRecords extends ListRecords
         if (auth()->user()->can(abilities: 'be god')) {
             $tabs['todos'] = Tab::make();
         }
+        if(in_array('1', auth()->user()->IamSecretaryOf->pluck('organizational_unit_id')->toArray())){
+            $tabs['Direccion (SST)'] = Tab::make()
+                ->modifyQueryUsing(callback: fn (Builder $query): Builder => $query->where('establishment_id', 1));
+        }
         return $tabs;
     }
 }
