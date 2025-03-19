@@ -8,6 +8,7 @@ use Livewire\WithPagination;
 use App\Traits\NumerateTrait;
 use App\Models\Finance\Receptions\Reception;
 use App\Models\Finance\Receptions\ReceptionType;
+use Illuminate\Support\Facades\DB;
 
 class IndexReception extends Component
 {
@@ -18,6 +19,7 @@ class IndexReception extends Component
 
     public $filter_id;
     public $filter_purchase_order;
+    public $filter_provider;
     public $filter_reception_type_id;
     public $filter_date;
     public $filter_number;
@@ -72,6 +74,15 @@ class IndexReception extends Component
             })
             ->when($this->filter_purchase_order, function($query) {
                 $query->where('purchase_order', $this->filter_purchase_order);
+            })
+            ->when($this->filter_provider, function($query) {
+                $query->whereHas('purchaseOrder', function($subQuery) {
+                    // $subQuery->whereJsonContains('data->Listado[0]->Proveedor->Nombre', $this->filter_provider);
+                    $subQuery->where('data->Listado[0]->Proveedor->Nombre', 'like', '%' . $this->filter_provider . '%');
+                    // $subQuery->where(DB::raw('lower(data->Listado[0]->Proveedor->Nombre)'), 'like', '%' . $this->filter_provider . '%');
+                    // $subQuery->whereRaw('LOWER(data->Listado[0]->Proveedor->Nombre)', 'like', 'LOWER(%' . $this->filter_provider . '%)');
+                    // $subQuery->DB::RAW('LOWER(data->Listado[0]->Proveedor->Nombre)', 'like', '%' . strtolower($this->filter_provider) . '%');
+                });
             })
             ->when($this->filter_reception_type_id, function($query) {
                 $query->where('reception_type_id', $this->filter_reception_type_id);

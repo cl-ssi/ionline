@@ -20,6 +20,14 @@
                 class="form-control"
                 autocomplete="off">
         </fieldset>
+        
+        <fieldset class="form-group col-md-3">
+            <label for="provider">Proveedor</label>
+            <input wire:model="filter_provider"
+                id="filter_provider"
+                class="form-control"
+                autocomplete="off">
+        </fieldset>
 
         <fieldset class="form-group col-md-2">
             <label for="receptionType">Tipo</label>
@@ -32,7 +40,7 @@
             </select>
         </fieldset>
 
-        <fieldset class="form-group col-md-2">
+        <fieldset class="form-group col-md-3">
             <label for="number">Fecha Recepción</label>
             <input wire:model="filter_date"
                 id="date"
