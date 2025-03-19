@@ -82,11 +82,22 @@ class ApprovalsMgr extends Component
         /** Sólo mostrar los activos */
         $query->whereActive(true);
 
-        /** Filtrar los que son dirigidos a mi lista de ous o mi persona */
-        $query->where(function ($query) use($ous) {
-            $query->whereIn('sent_to_ou_id',$ous)
-                  ->orWhere('sent_to_user_id',auth()->id());
-        });
+        // si es la secretaria, devuelve los documentos de la OU y además las solicitudes de todas las personas 
+        // que pertenescan al área
+        if(count($ous) == 2) {
+            $query->where(function($query) use ($ous) {
+                $query->whereIn('sent_to_ou_id', $ous)
+                      ->orWhereHas('sentToUser', function($q) use ($ous) {
+                          $q->whereIn('organizational_unit_id', $ous);
+                      });
+            });
+        }else{
+            /** Filtrar los que son dirigidos a mi lista de ous o mi persona */
+            $query->where(function ($query) use($ous) {
+                $query->whereIn('sent_to_ou_id',$ous)
+                    ->orWhere('sent_to_user_id',auth()->id());
+            });
+        }
 
         /** Filtro */
         switch($this->filter['status']) {
