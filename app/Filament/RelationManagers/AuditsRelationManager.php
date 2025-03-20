@@ -47,6 +47,15 @@ class AuditsRelationManager extends RelationManager
                         foreach ($modified as $key => $values) {
                             $oldValue = $values['old'] ?? '';
                             $newValue = $values['new'] ?? '';
+                            
+                            // Handle enum values
+                            if (is_object($oldValue)) {
+                                $oldValue = method_exists($oldValue, 'value') ? $oldValue->value : (string) $oldValue;
+                            }
+                            if (is_object($newValue)) {
+                                $newValue = method_exists($newValue, 'value') ? $newValue->value : (string) $newValue;
+                            }
+                            
                             $formatted[] = "<b>$key</b>: $oldValue => $newValue";
                         }
 
