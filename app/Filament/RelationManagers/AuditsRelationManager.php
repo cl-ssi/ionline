@@ -1,6 +1,7 @@
 <?php
 namespace App\Filament\RelationManagers;
 
+use App\Models\Documents\Agreements\Process;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
@@ -26,6 +27,37 @@ class AuditsRelationManager extends RelationManager
             ]);
     }
 
+    protected function formatValue($value, string $key = ''): string 
+    {
+        if (is_null($value)) {
+            return 'null';
+        }
+
+        if (is_array($value)) {
+            return json_encode($value);
+        }
+
+        // Special handling for Process document_content
+        if ($key === 'document_content' && $this->getOwnerRecord() instanceof Process) {
+            $strippedContent = strip_tags($value);
+            return mb_strlen($strippedContent) > 100 ? 
+                mb_substr($strippedContent, 0, 100) . '...' : 
+                $strippedContent;
+        }
+
+        if (is_object($value)) {
+            if (method_exists($value, 'value')) {
+                return $value->value;
+            }
+            if (method_exists($value, '__toString')) {
+                return (string) $value;
+            }
+            return get_class($value);
+        }
+
+        return (string) $value;
+    }
+
     public function table(Table $table): Table
     {
         return $table
@@ -45,16 +77,8 @@ class AuditsRelationManager extends RelationManager
                         $formatted = [];
 
                         foreach ($modified as $key => $values) {
-                            $oldValue = $values['old'] ?? '';
-                            $newValue = $values['new'] ?? '';
-                            
-                            // Handle enum values
-                            if (is_object($oldValue)) {
-                                $oldValue = method_exists($oldValue, 'value') ? $oldValue->value : (string) $oldValue;
-                            }
-                            if (is_object($newValue)) {
-                                $newValue = method_exists($newValue, 'value') ? $newValue->value : (string) $newValue;
-                            }
+                            $oldValue = $this->formatValue($values['old'] ?? '', $key);
+                            $newValue = $this->formatValue($values['new'] ?? '', $key);
                             
                             $formatted[] = "<b>$key</b>: $oldValue => $newValue";
                         }
