@@ -49,23 +49,71 @@
             </thead>
             <tbody>
                 <tr>
+                    @php
+                        if (!function_exists('formatDecimal')) {
+                            function formatDecimal($number) {
+                                if ($number === null) {
+                                    return null; // No muestra nada si el valor es nulo
+                                }
+                                if (fmod($number, 1) == 0) {
+                                    return number_format($number, 0, ',', '.'); // Sin decimales si es entero
+                                }
+                                $formatted = number_format($number, 3, ',', '.'); // Formato con tres decimales
+                                
+                                // Ajusta los decimales según las reglas establecidas
+                                if (preg_match('/,(\d)00$/', $formatted)) {
+                                    return number_format($number, 1, ',', '.'); // 123.450 → 123,45
+                                } elseif (preg_match('/,(\d\d)0$/', $formatted)) {
+                                    return number_format($number, 2, ',', '.'); // 123.456 → 123,456
+                                }
+
+                                return $formatted; // Mantiene los tres decimales si son significativos
+                            }
+                        }
+                    @endphp
                     <td class="center">{{ $item->nue }}</td>
                     <td>{{ $item->substance->name }}</td>
                     <td class="center">
-                        {{ $item->document_weight ? $item->document_weight .' '.$item->substance->unit : 'No informado'}}
+                        @if($item->document_weight)
+                            {{ formatDecimal($item->document_weight) }} {{ $item->substance->unit }}
+                        @else
+                            No informado
+                        @endif
+
+                        {{-- $item->document_weight ? $item->document_weight .' '.$item->substance->unit : 'No informado' --}}
                     </td>
                     <td class="center">
-                        {{ $item->gross_weight }} {{ $item->substance->unit }}
+                        {{ formatDecimal($item->gross_weight) }} {{ $item->substance->unit }}
+
+                        {{-- $item->gross_weight }} {{ $item->substance->unit --}}
                     </td>
                     <td nowrap class="center">
+                        @if($item->net_weight !== null)
+                            {{ formatDecimal($item->net_weight) }} {{ $item->substance->unit }}
+                        @endif
+                        @if($item->estimated_net_weight)
+                            (* {{ formatDecimal($item->estimated_net_weight) }} {{ $item->substance->unit }})
+                        @endif
+
+                        {{--
                         @if($item->net_weight OR ($item->net_weight == 0))
                             {{ $item->net_weight }} {{ $item->substance->unit }}
                         @endif
                         @if($item->estimated_net_weight)
                             (* {{ $item->estimated_net_weight }} {{ $item->substance->unit }})
                         @endif
+                        --}}
                     </td>
                     <td class="center">
+                        @if($item->sample == 0)
+                            -
+                        @else
+                            ({{ $item->sample_number }})
+                            {{ formatDecimal($item->sample) }}
+                            {{ $item->substance->unit }}
+                        @endif
+
+                        {{--
                         @if($item->sample == 0)
                             -
                         @else
@@ -73,8 +121,18 @@
                             {{ $item->sample }}
                             {{ $item->substance->unit }}
                         @endif
+                        --}}
                     </td>
                     <td class="center">
+                        @if($item->countersample == 0)
+                            -
+                        @else
+                            ({{ $item->sample_number }})
+                            {{ formatDecimal($item->countersample) }}
+                            {{ $item->substance->unit }}
+                        @endif
+
+                        {{--
                         @if($item->countersample == 0)
                             -
                         @else
@@ -82,8 +140,13 @@
                             {{ $item->countersample }}
                             {{ $item->substance->unit }}
                         @endif
+                        --}}
                     </td>
-                    <td class="center">{{ $item->destruct }} {{ $item->substance->unit }}</td>
+                    <td class="center">
+                        {{ formatDecimal($item->destruct) }} {{ $item->substance->unit }}
+                        
+                        {{-- $item->destruct }} {{ $item->substance->unit --}}
+                    </td>
                 </tr>
 
             </tbody>
