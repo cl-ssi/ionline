@@ -316,28 +316,36 @@ class ProcessResource extends Resource
     //     ];
     // }
 
-    public static function boot()
-    {
-        parent::boot();
+    // public static function boot()
+    // {
+    //     parent::boot();
 
-        static::addGlobalScope('audits', function (Builder $builder) {
-            if (auth()->check() && auth()->user()->can('Agreement: admin')) {
-                $builder->with(['audits']);
-            }
-        });
-    }
+    //     static::addGlobalScope('audits', function (Builder $builder) {
+    //         if (auth()->check() && auth()->user()->can('Agreement: admin')) {
+    //             $builder->with(['audits']);
+    //         }
+    //     });
+    // }
+
+    // public static function getRelations(): array
+    // {
+    //     $relations = [
+    //         CommentsRelationManager::class,
+    //     ];
+
+    //     if (auth()->check() && auth()->user()->can('Agreement: admin')) {
+    //         $relations[] = \App\Filament\RelationManagers\AuditsRelationManager::class;
+    //     }
+
+    //     return $relations;
+    // }
 
     public static function getRelations(): array
     {
-        $relations = [
+        return [
             CommentsRelationManager::class,
+            \App\Filament\RelationManagers\AuditsRelationManager::class,
         ];
-
-        if (auth()->check() && auth()->user()->can('Agreement: admin')) {
-            $relations[] = \App\Filament\RelationManagers\AuditsRelationManager::class;
-        }
-
-        return $relations;
     }
 
     public static function getWidgets(): array
