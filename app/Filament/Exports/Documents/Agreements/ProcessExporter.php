@@ -15,6 +15,31 @@ class ProcessExporter extends Exporter
 
     // public $maxExceptions = 1;
 
+    // Add buffer handling
+    protected function setUp(): void
+    {
+        if (ob_get_level()) {
+            ob_end_clean();
+        }
+        ob_start();
+    }
+
+    protected function tearDown(): void
+    {
+        if (ob_get_level()) {
+            ob_end_clean();
+        }
+    }
+
+    // Optionally add XLSX specific configuration
+    public static function getXlsxWriterOptions(): array
+    {
+        return [
+            'should_use_inline_strings' => true,
+            'buffer_size' => 100,
+        ];
+    }
+
     public static function getColumns(): array
     {
         return [
@@ -83,10 +108,10 @@ class ProcessExporter extends Exporter
 
     public static function getCompletedNotificationBody(Export $export): string
     {
-        $body = 'Your process export has completed and ' . number_format($export->successful_rows) . ' ' . str('row')->plural($export->successful_rows) . ' exported.';
+        $body = 'La exportación ha completado y ' . number_format($export->successful_rows) . ' ' . str('registro')->plural($export->successful_rows) . ' exportados.';
 
         if ($failedRowsCount = $export->getFailedRowsCount()) {
-            $body .= ' ' . number_format($failedRowsCount) . ' ' . str('row')->plural($failedRowsCount) . ' failed to export.';
+            $body .= ' ' . number_format($failedRowsCount) . ' ' . str('registro')->plural($failedRowsCount) . ' fallaron al exportar.';
         }
 
         return $body;
