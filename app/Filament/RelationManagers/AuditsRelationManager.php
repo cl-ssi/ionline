@@ -2,6 +2,7 @@
 namespace App\Filament\RelationManagers;
 
 use App\Models\Documents\Agreements\Process;
+use BackedEnum;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
@@ -33,8 +34,25 @@ class AuditsRelationManager extends RelationManager
             return 'null';
         }
 
+        if ($value instanceof BackedEnum) {
+            return $value->value;
+        }
+
         if (is_array($value)) {
             return json_encode($value);
+        }
+
+        // Special case for enums that might be serialized
+        if (is_string($value) && str_contains($value, 'App\\Enums\\')) {
+            try {
+                $enumClass = substr($value, 0, strpos($value, ':'));
+                if (class_exists($enumClass)) {
+                    return $enumClass::from($value)->value;
+                }
+            } catch (\Throwable $th) {
+                // If anything goes wrong, just return the string value
+                return $value;
+            }
         }
 
         // Convert to string first
