@@ -25,7 +25,7 @@ class RemController extends Controller
         $Nseries = $Nseries->unique('Nserie');
         foreach($Nseries as $nserie){
             $nserie->active = Seccion::year($year)->where('serie', $serie)->where('Nserie', $nserie->Nserie)->exists();
-            if($nserie->Nserie == 'A21') $nserie->otherSections = Seccion::year($year)->where('serie', $serie)->where('Nserie', $nserie->Nserie)->where('name', '!=', 'A')->select('name')->distinct()->pluck('name')->toArray();
+            if($nserie->Nserie == 'A21') $nserie->otherSections = Seccion::year($year)->where('serie', $serie)->where('Nserie', $nserie->Nserie)->whereNotIn('name', ['A','H'])->select('name')->distinct()->pluck('name')->toArray();
         }
         return view('indicators.rem.list', compact('Nseries', 'year', 'serie'));
     }
@@ -76,7 +76,12 @@ class RemController extends Controller
         if ($request->has('submit')) {
             $secciones = Seccion::year($year)->where('serie', $serie)->where('Nserie', $nserie)
                                 ->when($nserie == 'A21', function($q) use ($unique){
-                                    return $q->where('name', $unique ? '=' : '!=', 'A');
+                                    if($unique == 'A'){
+                                        return $q->whereIn('name', ['A', 'H']);
+                                    }
+                                    else{
+                                        return $q->whereNotIn('name', ['A', 'H']);
+                                    }
                                 })->orderBy('name')->get();
             foreach($secciones as $seccion){
                 $seccion->cods = array_map('trim', explode(',', $seccion->cods));

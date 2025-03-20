@@ -15,7 +15,7 @@
             @if($nserie->otherSections)
             <li>REM-{{$nserie->Nserie}} - {{$nserie->nombre_serie}}
                 <ul>
-                    <li><a href="{{ route('indicators.rem.show', [$year, $serie, $nserie->Nserie, 'A']) }}">SECCION A</a></li>
+                    <li><a href="{{ route('indicators.rem.show', [$year, $serie, $nserie->Nserie, 'A']) }}">SECCION A @if($year > '2024'), H @endif</a></li>
                     <li><a href="{{ route('indicators.rem.show', [$year, $serie, $nserie->Nserie]) }}">SECCION {{implode(', ', $nserie->otherSections)}}</a></li>
                 </ul>
             </li>
