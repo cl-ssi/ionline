@@ -12,24 +12,7 @@ class ProcessExporter extends Exporter
     protected static ?string $model = Process::class;
 
     // public $tries = 1;
-
     // public $maxExceptions = 1;
-
-    // Add buffer handling
-    protected function setUp(): void
-    {
-        if (ob_get_level()) {
-            ob_end_clean();
-        }
-        ob_start();
-    }
-
-    protected function tearDown(): void
-    {
-        if (ob_get_level()) {
-            ob_end_clean();
-        }
-    }
 
     // Optionally add XLSX specific configuration
     public static function getXlsxWriterOptions(): array
