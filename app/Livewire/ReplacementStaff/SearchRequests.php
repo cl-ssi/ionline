@@ -32,6 +32,7 @@ class SearchRequests extends Component
     public $selectedSub             = null;
     public $ou_dependents_array     = [];
     public $selectedAssigned        = null;
+    public $selectedEstablishment   = null;
 
     public $selectedFundamentInputStatus = '';
     public $selectedFundamentDetailInputStatus = '';
@@ -67,9 +68,16 @@ class SearchRequests extends Component
                         $this->selectedFundament,
                         $this->selectedFundamentDetail,
                         $this->selectedNameToReplace,
-                        $this->ou_dependents_array
+                        $this->ou_dependents_array,
+                        $this->selectedEstablishment
                     )
-                    ->where('establishment_id', auth()->user()->establishment->id)
+                    // ->where('establishment_id', auth()->user()->establishment->id)
+                    ->when(auth()->user()->can('Replacement Staff: all establishment'), function ($query) {
+                        $query->where('establishment_id', ($this->selectedEstablishment) ? $this->selectedEstablishment : auth()->user()->establishment->id);
+                    })
+                    ->when(!auth()->user()->can('Replacement Staff: all establishment'), function ($query) {
+                        $query->where('establishment_id', auth()->user()->establishment->id);
+                    })
                     ->paginate(50);
             }
 
@@ -90,7 +98,8 @@ class SearchRequests extends Component
                         $this->selectedFundament,
                         $this->selectedFundamentDetail,
                         $this->selectedNameToReplace,
-                        $this->ou_dependents_array
+                        $this->ou_dependents_array,
+                        $this->selectedEstablishment
                     )
                     ->paginate(50);
             }
@@ -111,7 +120,8 @@ class SearchRequests extends Component
                     $this->selectedFundament,
                     $this->selectedFundamentDetail,
                     $this->selectedNameToReplace,
-                    $this->ou_dependents_array
+                    $this->ou_dependents_array,
+                    $this->selectedEstablishment
                 )
                 ->paginate(50);
         }
@@ -133,7 +143,8 @@ class SearchRequests extends Component
                     $this->selectedFundament,
                     $this->selectedFundamentDetail,
                     $this->selectedNameToReplace,
-                    $this->ou_dependents_array
+                    $this->ou_dependents_array,
+                    $this->selectedEstablishment
                 )
                 ->paginate(50);
         }
@@ -157,7 +168,8 @@ class SearchRequests extends Component
                     $this->selectedFundament,
                     $this->selectedFundamentDetail,
                     $this->selectedNameToReplace,
-                    $this->ou_dependents_array
+                    $this->ou_dependents_array,
+                    $this->selectedEstablishment
                 )
                 ->paginate(50);
         }
@@ -177,7 +189,8 @@ class SearchRequests extends Component
                     $this->selectedFundament,
                     $this->selectedFundamentDetail,
                     $this->selectedNameToReplace,
-                    $this->ou_dependents_array
+                    $this->ou_dependents_array,
+                    $this->selectedEstablishment
                 )
                 ->paginate(50);
         }
@@ -203,7 +216,8 @@ class SearchRequests extends Component
                     $this->selectedFundament,
                     $this->selectedFundamentDetail,
                     $this->selectedNameToReplace,
-                    $this->ou_dependents_array
+                    $this->ou_dependents_array,
+                    $this->selectedEstablishment
                 )
                 ->paginate(50);
         }
@@ -266,6 +280,11 @@ class SearchRequests extends Component
             $this->selectedFundamentInputStatus = '';
             $this->selectedFundamentDetailInputStatus = '';
         }
+    }
+
+    public function updatedselectedEstablishment($value_id)
+    {
+        //
     }
 
     protected function messages(){

@@ -100,6 +100,17 @@
                 </select>
             </fieldset>
             @endif
+
+            @if($typeIndex == 'assign' && auth()->user()->hasPermissionTo('Replacement Staff: all establishment'))
+            <fieldset class="form-group col-12 col-md-3">
+                <label for="for_establishment_search">Establecimiento</label>
+                <select name="establishment_search" class="form-control" wire:model.live.debounce.500ms="selectedEstablishment">
+                    <option value="">Seleccione...</option>
+                    <option value="{{ App\Models\Parameters\Parameter::get('establishment', 'SSTarapaca') }}">Servicio de Salud Tarapacá</option>
+                    <option value="{{ App\Models\Parameters\Parameter::get('establishment', 'HospitalAltoHospicio') }}">Hospital Alto Hospicio</option>
+                </select>
+            </fieldset>
+            @endif
         </div>
     </div>
     <p class="font-weight-lighter">Total de Registros: <b>{{ $requests->total() }}</b></p>

@@ -178,6 +178,7 @@ class RoleAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'Rem: admin', 'description' => 'Administrador de carga de REMs']);
         Permission::create(['name' => 'Rem: user', 'description' => 'Usuario cargador de REMs']);
         Permission::create(['name' => 'Replacement Staff: admin', 'description' => 'Administrador de staff de reemplazo']);
+        Permission::create(['name' => 'Replacement Staff: all establishment', 'description' => 'Permite visualizar los requerimientos de todos los establecimientos']);
         Permission::create(['name' => 'Replacement Staff: assign request', 'description' => 'Permite asignar solicitudes a funcionarios de la unidad de reclutamiento y selección']);
         Permission::create(['name' => 'Replacement Staff: create request', 'description' => 'Permite crear solicitudes de reemplazo']);
         Permission::create(['name' => 'Replacement Staff: create staff', 'description' => 'Permite crear staff (postulantes)']);

@@ -373,10 +373,10 @@ class RequestReplacementStaff extends Model implements Auditable
 
     public function scopeSearch($query, $form_type_search, $status_search, $id_search, $start_date_search, 
         $end_date_search, $name_search, $fundament_search, $fundament_detail_search, $name_to_replace_search,
-        $sub_search)
+        $sub_search, $establishment_search)
     {
         if ($form_type_search || $status_search || $id_search || $start_date_search || $end_date_search || $name_search || 
-            $fundament_search || $fundament_detail_search || $name_to_replace_search || $sub_search) {
+            $fundament_search || $fundament_detail_search || $name_to_replace_search || $sub_search || $establishment_search) {
             if ($form_type_search != '') {
                 $query->where(function($q) use($form_type_search) {
                     $q->where('form_type', $form_type_search);
@@ -421,6 +421,12 @@ class RequestReplacementStaff extends Model implements Auditable
             if (!empty($sub_search)) {
                 $query->where(function($q) use($sub_search) {
                     $q->whereIn('organizational_unit_id', $sub_search);
+                });
+            }
+
+            if (!empty($establishment_search)) {
+                $query->where(function($q) use($establishment_search) {
+                    $q->where('establishment_id', $establishment_search);
                 });
             }
         }
