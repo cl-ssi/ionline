@@ -34,26 +34,13 @@
     </div>
     
     <div style="clear: both; padding-bottom: 20px">&nbsp;</div>
-    
-    {{--
-    <div style="text-align: justify;" class="ocho">
-        De conformidad a lo dispuesto en el Artículo 11 de Ley 21.516 del Ministerio de Hacienda, que aprueba el presupuesto del Sector Público 
-        para el año 2024, vengo en certificar que la Dirección del Servicio de Salud Tarapacá, cuenta con presupuesto para la contratación del funcionario (a) 
-        {{ $requestReplacementStaff->technicalEvaluation->applicants->where('selected', 1)->where('desist', NULL)->first()->replacementStaff->fullName }} - 
-        RUT {{ $requestReplacementStaff->technicalEvaluation->applicants->where('selected', 1)->where('desist', NULL)->first()->replacementStaff->run }}-{{ $requestReplacementStaff->technicalEvaluation->applicants->where('selected', 1)->where('desist', NULL)->first()->replacementStaff->dv }} 
-        que se individualiza, por el periodo {{ $requestReplacementStaff->technicalEvaluation->applicants->where('selected', 1)->where('desist', NULL)->first()->start_date->format('d-m-Y') }} - 
-        {{ $requestReplacementStaff->technicalEvaluation->applicants->where('selected', 1)->where('desist', NULL)->first()->end_date->format('d-m-Y') }} 
-        señalado en la presente solicitud y resolución, con cargo al subtítulo {{ $requestReplacementStaff->budgetItem->code }} - {{ $requestReplacementStaff->budgetItem->name }}.
-    </div>
-    --}}
 
     <div style="text-align: justify;" class="ocho">
         De conformidad a lo dispuesto en el Artículo 11 de Ley 21.516 del Ministerio de Hacienda, que aprueba el presupuesto del Sector Público 
         para el año 2024, vengo en certificar que la Dirección del Servicio de Salud Tarapacá, cuenta con presupuesto para la contratación del funcionario (a) 
-        {{ $requestReplacementStaff->technicalEvaluation->applicants->where('selected', 1)->first()->replacementStaff->fullName }} - 
-        RUT {{ $requestReplacementStaff->technicalEvaluation->applicants->where('selected', 1)->first()->replacementStaff->run }}-{{ $requestReplacementStaff->technicalEvaluation->applicants->where('selected', 1)->first()->replacementStaff->dv }} 
-        que se individualiza, por el periodo {{ $requestReplacementStaff->technicalEvaluation->applicants->where('selected', 1)->first()->start_date->format('d-m-Y') }} - 
-        {{ $requestReplacementStaff->technicalEvaluation->applicants->where('selected', 1)->first()->end_date->format('d-m-Y') }} 
+        {{ $applicant->replacementStaff->full_name }} - RUT {{ $applicant->replacementStaff->run }}-{{ $applicant->replacementStaff->dv }} 
+        que se individualiza, por el periodo {{ $applicant->start_date->format('d-m-Y') }} - 
+        {{ $applicant->end_date->format('d-m-Y') }} 
         señalado en la presente solicitud y resolución, con cargo al subtítulo {{ $requestReplacementStaff->budgetItem->code }} - {{ $requestReplacementStaff->budgetItem->name }}.
     </div>
 
@@ -93,12 +80,16 @@
 
         </div>
         <div class="signature">
-            @if($approvals = $requestReplacementStaff->approvals->where('position', 'right'))
-                @foreach($approvals as $approval)
-                    @include('sign.approvation', [
-                        'approval' => $approval,
-                    ])
-                @endforeach
+            @php
+                $approval = $requestReplacementStaff->approvals
+                    ->first(function ($approval) use ($applicant) {
+                        $params = json_decode($approval->document_route_params);
+                        return isset($params->applicant_id) && $params->applicant_id == $applicant->id;
+                    });
+            @endphp
+
+            @if($approval)
+                @include('sign.approvation', ['approval' => $approval])
             @endif
         </div>
     </div>

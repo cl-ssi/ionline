@@ -530,7 +530,7 @@ Route::prefix('replacement_staff')->as('replacement_staff.')->middleware(['auth'
             Route::put('massive_update', [RequestSignController::class, 'massive_update'])->name('massive_update');
         });
         Route::get('/{requestReplacementStaff}/create_budget_availability_certificate_view', [RequestReplacementStaffController::class, 'create_budget_availability_certificate_view'])->name('create_budget_availability_certificate_view');
-        Route::get('/{request_replacement_staff_id}/show_new_budget_availability_certificate_pdf', [RequestReplacementStaffController::class, 'show_new_budget_availability_certificate_pdf'])->name('show_new_budget_availability_certificate_pdf');
+        Route::get('/{request_replacement_staff_id}/show_new_budget_availability_certificate_pdf/{applicant_id}', [RequestReplacementStaffController::class, 'show_new_budget_availability_certificate_pdf'])->name('show_new_budget_availability_certificate_pdf');
 
         Route::get('create_budget_availability_certificate_document/{requestReplacementStaff}/', [RequestReplacementStaffController::class, 'create_budget_availability_certificate_document'])->name('create_budget_availability_certificate_document');
         Route::get('/budget_availability_certificate_callbackSign/{message}/{modelId}/{signaturesFile?}', [RequestReplacementStaffController::class, 'callbackSign'])->name('callbackSign');

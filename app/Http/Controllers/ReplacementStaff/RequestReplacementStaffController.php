@@ -818,13 +818,14 @@ class RequestReplacementStaffController extends Controller
     }
     */
 
-    public function show_new_budget_availability_certificate_pdf($request_replacement_staff_id){
-
+    public function show_new_budget_availability_certificate_pdf($request_replacement_staff_id, $applicant_id){
         $requestReplacementStaff = RequestReplacementStaff::find($request_replacement_staff_id);
+        $applicant = Applicant::find($applicant_id);
         $establishment = $requestReplacementStaff->organizationalUnit->establishment;
         return Pdf::loadView('replacement_staff.request.documents.new_budget_availability_certificate_pdf', [
-            'requestReplacementStaff' => $requestReplacementStaff,
-            'establishment' => $establishment
+            'requestReplacementStaff'   => $requestReplacementStaff,
+            'applicant'                 => $applicant,
+            'establishment'             => $establishment
         ])->stream('download.pdf');
     }
 
@@ -956,16 +957,33 @@ class RequestReplacementStaffController extends Controller
                 $applicant->approval_id = $approval_id;
                 $applicant->save();
 
+                
                 // SE FINALIZA SOLICITUD: FINALIZADO
-                $requestReplacementStaff->request_status = 'complete';
-                $requestReplacementStaff->save();
+                if(!$approval->nextApproval){
+                    // SE CAMBIA EL ESTADO DE LA EVALUACION TECNICA
+                    $requestReplacementStaff->technicalEvaluation->date_end = now();
+                    $requestReplacementStaff->technicalEvaluation->technical_evaluation_status = 'complete';
+                    $requestReplacementStaff->technicalEvaluation->save();
+
+                    // SE CAMBIA EL ESTADO DE LA SOLICITUD
+                    $requestReplacementStaff->request_status = 'complete';
+                    $requestReplacementStaff->save();
+                }
             }
         }   
 
         // RECHAZAR
         if($approval->status == 0){
-            $requestReplacementStaff->request_status = 'rejected';
-            $requestReplacementStaff->save();
+            if(!$approval->nextApproval){
+                // SE CAMBIA EL ESTADO DE LA EVALUACION TECNICA
+                $requestReplacementStaff->technicalEvaluation->date_end = now();
+                $requestReplacementStaff->technicalEvaluation->technical_evaluation_status = 'complete';
+                $requestReplacementStaff->technicalEvaluation->save();
+
+                // SE CAMBIA EL ESTADO DE LA SOLICITUD
+                $requestReplacementStaff->request_status = 'rejected';
+                $requestReplacementStaff->save();
+            }
         }
     }
 }

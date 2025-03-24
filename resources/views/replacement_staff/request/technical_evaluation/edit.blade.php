@@ -1089,12 +1089,10 @@
                                     </button>
                             </form>
                             @elseif($applicant->selected == 1 && $applicant->desist == NULL)
-                                {{--
                                 <button type="button" class="btn btn-outline-danger btn-sm" data-toggle="modal"
                                 data-target="#exampleModal-to-change-selected-applicant-{{ $applicant->id }}">
                                     <i class="fas fa-window-close"></i>
                                 </button>
-                                --}}
                                 @include('replacement_staff.modals.modal_to_change_selected_applicant')
                             @endif
                         </td>
@@ -1130,9 +1128,8 @@
             </table>
         </div>
       @endif
-
-      @if($requestReplacementStaff->technicalEvaluation->applicants->count() > 0 && 
-        $requestReplacementStaff->technicalEvaluation->date_end == NULL)
+    
+      @if($requestReplacementStaff->technicalEvaluation->applicants->count() > 0 && $requestReplacementStaff->technicalEvaluation->applicants->where('selected', 1)->whereNull('desist')->count() == 0)
 
           @if($requestReplacementStaff->assignEvaluations->last()->to_user_id == auth()->id() ||
             auth()->user()->can('Replacement Staff: admin'))
@@ -1149,7 +1146,7 @@
           @endif
       @endif
 
-      @if($requestReplacementStaff->technicalEvaluation->technical_evaluation_status == 'pending')
+      @if($requestReplacementStaff->technicalEvaluation->applicants->where('selected', 1)->whereNull('desist')->count() == 0)
 
       <hr>
 

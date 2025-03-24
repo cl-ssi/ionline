@@ -157,11 +157,6 @@ class ApplicantController extends Controller
             //PETICIÓN DE NO CAMBIAR ESTADO A SELECCIONADO: TODOS DISPONIBLES
             $applicant_evaluated->replacementStaff->save();
 
-            // SE CAMBIA EL ESTADO DE LA EVALUACION TECNICA
-            $applicant_evaluated->technicalEvaluation->date_end = now();
-            $applicant_evaluated->technicalEvaluation->technical_evaluation_status = 'complete';
-            $applicant_evaluated->technicalEvaluation->save();
-
             // SE CAMBIA EL ESTADO DE LA SOLICITUD: "FINANCE SIGN"
             $applicant_evaluated->technicalEvaluation->requestReplacementStaff->request_status = 'finance sign';
             $applicant_evaluated->technicalEvaluation->requestReplacementStaff->save();
@@ -202,7 +197,8 @@ class ApplicantController extends Controller
                 "sent_to_ou_id"                     => ($applicant_evaluated->technicalEvaluation->requestReplacementStaff->establishment_id == Parameter::get('establishment','SSTarapaca')) ? Parameter::get('ou','FinanzasSSI') : (($applicant_evaluated->technicalEvaluation->requestReplacementStaff->establishment_id == Parameter::get('establishment','HospitalAltoHospicio')) ? Parameter::get('ou','FinanzasHAH') : ''),
                 "document_route_name"               => "replacement_staff.request.show_new_budget_availability_certificate_pdf",
                 "document_route_params"             => json_encode([
-                    "request_replacement_staff_id" => $applicant_evaluated->technicalEvaluation->requestReplacementStaff->id
+                    "request_replacement_staff_id" => $applicant_evaluated->technicalEvaluation->requestReplacementStaff->id,
+                    "applicant_id"                 => $applicant_evaluated->id
                 ]),
                 "document_pdf_path"                 => null,
                 "active"                            => true,
@@ -304,7 +300,7 @@ class ApplicantController extends Controller
     }
 
     public function decline_selected_applicant(Request $request, Applicant $applicant){
-        //POSTULANTE DESISTE
+        // POSTULANTE DESISTE
         $applicant->fill($request->all());
         $applicant->desist = 1;
         $applicant->save();
@@ -314,33 +310,32 @@ class ApplicantController extends Controller
             ->where('desist', NULL)
             ->get();
 
-        if($applicantsSelected->count() == 0){
-            //SE CAMBIA ESTADO DE E.T. A PENDIENTE
-            $applicant->technicalEvaluation->technical_evaluation_status = 'pending';
-            $applicant->technicalEvaluation->date_end = NULL;
-            $applicant->technicalEvaluation->save();
+        // SE CAMBIA ESTADO DE E.T. A PENDIENTE
+        $applicant->technicalEvaluation->technical_evaluation_status = 'pending';
+        $applicant->technicalEvaluation->date_end = NULL;
+        $applicant->technicalEvaluation->save();
 
-            //SE CAMBIA ESTADO DE SOLICITUD A PENDIENTE
-            $applicant->technicalEvaluation->requestReplacementStaff->request_status = 'pending';
-            $applicant->technicalEvaluation->requestReplacementStaff->save();
+        //SE CAMBIA ESTADO DE SOLICITUD A PENDIENTE 
+        $applicant->technicalEvaluation->requestReplacementStaff->request_status = 'to assign';
+        $applicant->technicalEvaluation->requestReplacementStaff->save();
 
-            // RR.HH. DISPONIBLE
-            $applicant->replacementStaff->status = 'immediate_availability';
-            $applicant->replacementStaff->save();
+        // RR.HH. DISPONIBLE
+        $applicant->replacementStaff->status = 'immediate_availability';
+        $applicant->replacementStaff->save();
 
-            //SE ELIMINA CONTRATO EN SIRH
-            $applicant->technicalEvaluation->requestReplacementStaff->sirh_contract = NULL;
-            $applicant->technicalEvaluation->requestReplacementStaff->save();
+        //SE ELIMINA CONTRATO EN SIRH
+        $applicant->technicalEvaluation->requestReplacementStaff->sirh_contract = NULL;
+        $applicant->technicalEvaluation->requestReplacementStaff->save();
 
-            // ELIMINAR APPROVALS DE FINANZAS
-            if($request->reason == 'rechazo oferta laboral' || $request->reason == 'error digitacion'){
-                $approval = $applicant->technicalEvaluation->requestReplacementStaff->approvals->last();
-                if(str_contains($approval->subject, 'Certificado de disponibilidad presupuestaria') &&
-                    $approval->status == NULL){
-                    $approval->delete();
-                }
+        // ELIMINAR APPROVALS DE FINANZAS
+        if($request->reason == 'rechazo oferta laboral' || $request->reason == 'error digitacion'){
+            $approval = $applicant->technicalEvaluation->requestReplacementStaff->approvals->last();
+            if(str_contains($approval->subject, 'Certificado de disponibilidad presupuestaria') &&
+                $approval->status == NULL){
+                $approval->delete();
             }
         }
+
         return redirect()
             ->to(route('replacement_staff.request.technical_evaluation.edit', $applicant->technicalEvaluation->requestReplacementStaff).'#applicant')
             ->with('message-danger-aplicant-desist', 'Estimado usuario, se ha registrado el postulante ha desestimado el proceso de selección');
