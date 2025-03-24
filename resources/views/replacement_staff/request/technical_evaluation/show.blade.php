@@ -159,6 +159,10 @@
                   @endif
                 </td>
             </tr>
+            <tr>
+                <th class="table-active">Fecha de Cierre</th>
+                <td colspan="2">{{ $requestReplacementStaff->technicalEvaluation->date_end ? $requestReplacementStaff->technicalEvaluation->date_end->format('d-m-Y H:i:s') : null }}</td>
+            </tr>
         </tbody>
     </table>
 </div>
@@ -666,24 +670,6 @@
 
 <br>
 
-@if($requestReplacementStaff->technicalEvaluation)
-  @if($requestReplacementStaff->technicalEvaluation->technical_evaluation_status == 'complete' ||
-    $requestReplacementStaff->technicalEvaluation->technical_evaluation_status == 'rejected')
-    <div class="table-responsive">
-        <table class="table table-sm table-bordered small">
-            <tr>
-                <th class="table-active" style="width: 33%">Estado de Solicitud</th>
-                <td colspan="2">{{ $requestReplacementStaff->StatusValue }}</td>
-            </tr>
-            <tr>
-                <th class="table-active">Fecha de Cierre</th>
-                <td colspan="2">{{ $requestReplacementStaff->technicalEvaluation->date_end->format('d-m-Y H:i:s') }}</td>
-            </tr>
-        </table>
-    </div>
-  @endif
-@endif
-
 <div class="row">
     <div class="col">
         @if($requestReplacementStaff->technicalEvaluation && $requestReplacementStaff->request_id == NULL &&
@@ -701,33 +687,6 @@
 </div>
 
 <br>
-
-@if($requestReplacementStaff->technicalEvaluation &&
-  $requestReplacementStaff->technicalEvaluation->commissions->count() > 0)
-    <h6><i class="fas fa-users"></i> Integrantes Comisión</h6>
-
-    <div class="table-responsive">
-        <table class="table table-sm table-bordered">
-            <thead class="text-center table-active small">
-                <tr>
-                    <th>Nombre</th>
-                    <th>Unidad Organizacional</th>
-                    <th>Cargo</th>
-                </tr>
-            </thead>
-            <tbody class="small">
-              @foreach($requestReplacementStaff->technicalEvaluation->commissions as $commission)
-                <tr>
-                    <td>{{ $commission->user->fullName }}</td>
-                    <td>{{ $commission->user->organizationalUnit->name }}</td>
-                    <td>{{ $commission->job_title }}</td>
-                </tr>
-              @endforeach
-            </tbody>
-        </table>
-    </div>
-    <br>
-@endif
 
 @if($requestReplacementStaff->technicalEvaluation &&
   $requestReplacementStaff->technicalEvaluation->reason != NULL)
@@ -870,6 +829,33 @@
             </tbody>
         </table>
     </div>
+@endif
+
+@if($requestReplacementStaff->technicalEvaluation &&
+  $requestReplacementStaff->technicalEvaluation->commissions->count() > 0)
+    <h6><i class="fas fa-users"></i> Integrantes Comisión</h6>
+
+    <div class="table-responsive">
+        <table class="table table-sm table-bordered">
+            <thead class="text-center table-active small">
+                <tr>
+                    <th>Nombre</th>
+                    <th>Unidad Organizacional</th>
+                    <th>Cargo</th>
+                </tr>
+            </thead>
+            <tbody class="small">
+              @foreach($requestReplacementStaff->technicalEvaluation->commissions as $commission)
+                <tr>
+                    <td>{{ $commission->user->fullName }}</td>
+                    <td>{{ $commission->user->organizationalUnit->name }}</td>
+                    <td>{{ $commission->job_title }}</td>
+                </tr>
+              @endforeach
+            </tbody>
+        </table>
+    </div>
+    <br>
 @endif
 
 @if($requestReplacementStaff->requestChilds->count() > 0)

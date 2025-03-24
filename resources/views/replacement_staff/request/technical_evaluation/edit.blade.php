@@ -144,6 +144,10 @@
                     @endif
                 </td>
             </tr>
+            <tr>
+                <th class="table-active">Fecha de Cierre</th>
+                <td colspan="2">{{ $requestReplacementStaff->technicalEvaluation->date_end ? $requestReplacementStaff->technicalEvaluation->date_end->format('d-m-Y H:i:s') : null }}</td>
+            </tr>
         </tbody>
     </table>
 </div>
@@ -779,23 +783,6 @@
     </table>
 </div>
 
-<!-- CUADRO DE ESTADO DE SOLICITUD -->
-@if($requestReplacementStaff->technicalEvaluation && ($requestReplacementStaff->technicalEvaluation->technical_evaluation_status == 'complete' || $requestReplacementStaff->technicalEvaluation->technical_evaluation_status == 'rejected'))
-    <br>
-    <div class="table-responsive">
-        <table class="table table-sm table-bordered small">
-            <tr>
-                <th class="table-active" style="width: 33%">Estado de Solicitud</th>
-                <td colspan="2">{{ $requestReplacementStaff->StatusValue }}</td>
-            </tr>
-            <tr>
-                <th class="table-active">Fecha de Cierre</th>
-                <td colspan="2">{{ $requestReplacementStaff->technicalEvaluation->date_end->format('d-m-Y H:i:s') }}</td>
-            </tr>
-        </table>
-    </div>
-@endif
-
 <br>
 
 <!-- FUNCIONARIOS ASIGNADOS -->
@@ -870,83 +857,6 @@
             </div>
         @endif
     </div>
-</div>
-
-<br>
-
-<div class="card" id="commission">
-    <div class="card-header">
-        <h6>Integrantes Comisión</h6>
-    </div>
-    <div class="card-body">
-        @if (session('message-success-commission'))
-          <div class="alert alert-success alert-dismissible fade show">
-              {{ session('message-success-commission') }}
-              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-          </div>
-        @endif
-        @if (session('message-danger-commission'))
-          <div class="alert alert-danger alert-dismissible fade show" role="alert">
-              {{ session('message-danger-commission') }}
-              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-          </div>
-        @endif
-
-        <div class="table-responsive">
-            <table class="table table-sm table-striped table-bordered">
-                <thead class="text-center small">
-                    <tr>
-                      <th>Nombre</th>
-                      <th>Unidad Organizacional</th>
-                      <th>Cargo</th>
-                      <th></th>
-                    </tr>
-                </thead>
-                <tbody class="small">
-                    @foreach($requestReplacementStaff->technicalEvaluation->commissions as $commission)
-                    <tr>
-                        <td>{{ $commission->user->fullName }}</td>
-                        <td>{{ $commission->user->organizationalUnit->name }}</td>
-                        <td>{{ $commission->job_title }}</td>
-                        <td>
-                          @if($requestReplacementStaff->technicalEvaluation->technical_evaluation_status == 'pending')
-                            <form method="POST" class="form-horizontal" action="{{ route('replacement_staff.request.technical_evaluation.commission.destroy', $commission) }}">
-                                @csrf
-                                @method('DELETE')
-                                    <button type="submit" class="btn btn-outline-danger btn-sm"
-                                        onclick="return confirm('¿Está seguro que desea eliminar el Integrante de Comisión?')">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                            </form>
-                          @else
-                            <form method="POST" class="form-horizontal" action="{{ route('replacement_staff.request.technical_evaluation.commission.destroy', $commission) }}">
-                                @csrf
-                                @method('DELETE')
-                                    <button type="submit" class="btn btn-outline-danger btn-sm"
-                                        onclick="return confirm('¿Está seguro que desea eliminar el Integrante de Comisión?')" disabled>
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                            </form>
-                          @endif
-                        </td>
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        </div>
-
-        @if($requestReplacementStaff->assignEvaluations->last()->to_user_id == auth()->id() ||
-          auth()->user()->can('Replacement Staff: admin'))
-            @livewire('replacement-staff.commission', [
-                'technicalEvaluation' => $requestReplacementStaff->technicalEvaluation
-            ])
-        @endif
-    </div>
-    <br>
 </div>
 
 @if($requestReplacementStaff->form_type == 'replacement' || $requestReplacementStaff->form_type == NULL)
@@ -1412,6 +1322,83 @@
         @if($requestReplacementStaff->assignEvaluations->last()->to_user_id == auth()->id() ||
           auth()->user()->can('Replacement Staff: admin'))
             @livewire('replacement-staff.files', [
+                'technicalEvaluation' => $requestReplacementStaff->technicalEvaluation
+            ])
+        @endif
+    </div>
+    <br>
+</div>
+
+<br>
+
+<div class="card" id="commission">
+    <div class="card-header">
+        <h6>Integrantes Comisión</h6>
+    </div>
+    <div class="card-body">
+        @if (session('message-success-commission'))
+          <div class="alert alert-success alert-dismissible fade show">
+              {{ session('message-success-commission') }}
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+          </div>
+        @endif
+        @if (session('message-danger-commission'))
+          <div class="alert alert-danger alert-dismissible fade show" role="alert">
+              {{ session('message-danger-commission') }}
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+          </div>
+        @endif
+
+        <div class="table-responsive">
+            <table class="table table-sm table-striped table-bordered">
+                <thead class="text-center small">
+                    <tr>
+                      <th>Nombre</th>
+                      <th>Unidad Organizacional</th>
+                      <th>Cargo</th>
+                      <th></th>
+                    </tr>
+                </thead>
+                <tbody class="small">
+                    @foreach($requestReplacementStaff->technicalEvaluation->commissions as $commission)
+                    <tr>
+                        <td>{{ $commission->user->fullName }}</td>
+                        <td>{{ $commission->user->organizationalUnit->name }}</td>
+                        <td>{{ $commission->job_title }}</td>
+                        <td>
+                          @if($requestReplacementStaff->technicalEvaluation->technical_evaluation_status == 'pending')
+                            <form method="POST" class="form-horizontal" action="{{ route('replacement_staff.request.technical_evaluation.commission.destroy', $commission) }}">
+                                @csrf
+                                @method('DELETE')
+                                    <button type="submit" class="btn btn-outline-danger btn-sm"
+                                        onclick="return confirm('¿Está seguro que desea eliminar el Integrante de Comisión?')">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                            </form>
+                          @else
+                            <form method="POST" class="form-horizontal" action="{{ route('replacement_staff.request.technical_evaluation.commission.destroy', $commission) }}">
+                                @csrf
+                                @method('DELETE')
+                                    <button type="submit" class="btn btn-outline-danger btn-sm"
+                                        onclick="return confirm('¿Está seguro que desea eliminar el Integrante de Comisión?')" disabled>
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                            </form>
+                          @endif
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+
+        @if($requestReplacementStaff->assignEvaluations->last()->to_user_id == auth()->id() ||
+          auth()->user()->can('Replacement Staff: admin'))
+            @livewire('replacement-staff.commission', [
                 'technicalEvaluation' => $requestReplacementStaff->technicalEvaluation
             ])
         @endif
