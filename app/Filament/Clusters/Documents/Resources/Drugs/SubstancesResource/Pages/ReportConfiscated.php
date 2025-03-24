@@ -25,7 +25,7 @@ class ReportConfiscated extends Page implements Tables\Contracts\HasTable
     {
         return $table
             ->query(function (Builder $query) {
-                $selectedYear = request('tableFilters')['created_at'] ?? Carbon::now()->year;
+                $selectedYear = $selectedYear = $this->getTableFilters()['created_at'] ?? Carbon::now()->year;
                 $previousYear = $selectedYear - 1;
 
                 return ReceptionItem::query()
@@ -69,6 +69,15 @@ class ReportConfiscated extends Page implements Tables\Contracts\HasTable
                             END
                         ) as total_net_weight_with_result'
                     ) // Peso neto total de ítems con sustancia resultante
+                    ->selectRaw('SUM(countersample) as total_countersample') // Columna para la suma de countersample
+                    ->selectRaw(
+                        '(SELECT SUM(ri2.countersample) 
+                            FROM drg_reception_items ri2
+                            JOIN drg_receptions r2 ON ri2.reception_id = r2.id
+                            WHERE ri2.substance_id = drg_reception_items.substance_id
+                            AND YEAR(r2.date) = ?) as total_countersample_previous_year',
+                        [$previousYear]
+                    ) // Columna para la suma de countersample del año anterior
                     ->groupBy('substance_id')
                     ->with(['substance']);
             })
@@ -109,6 +118,16 @@ class ReportConfiscated extends Page implements Tables\Contracts\HasTable
                     ->label('Peso Neto con Sustancia Resultante')
                     ->sortable()
                     ->formatStateUsing(fn (string|float $state): string => number_format($state, 2, ',', '.')) // Formato con separación de miles y 2 decimales
+                    ->alignEnd(),
+                Tables\Columns\TextColumn::make('total_countersample') // Nueva columna
+                    ->label('Total de Contramuestras')
+                    ->sortable()
+                    ->formatStateUsing(fn (string|float $state): string => number_format($state, 2, ',', '.'))
+                    ->alignEnd(),
+                Tables\Columns\TextColumn::make('total_countersample_previous_year') // Nueva columna
+                    ->label('Total de Contramuestras Año Anterior')
+                    ->sortable()
+                    ->formatStateUsing(fn (?string $state): string => $state ? number_format($state, 2, ',', '.') : '0')
                     ->alignEnd(),
             ])
             ->filters([
