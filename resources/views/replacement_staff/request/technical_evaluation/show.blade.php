@@ -161,7 +161,7 @@
             </tr>
             <tr>
                 <th class="table-active">Fecha de Cierre</th>
-                <td colspan="2">{{ $requestReplacementStaff->technicalEvaluation->date_end ? $requestReplacementStaff->technicalEvaluation->date_end->format('d-m-Y H:i:s') : null }}</td>
+                <td colspan="2">{{ ($requestReplacementStaff->technicalEvaluation && $requestReplacementStaff->technicalEvaluation->date_end) ? $requestReplacementStaff->technicalEvaluation->date_end->format('d-m-Y H:i:s') : null }}</td>
             </tr>
         </tbody>
     </table>
