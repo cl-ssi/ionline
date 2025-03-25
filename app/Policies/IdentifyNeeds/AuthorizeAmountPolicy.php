@@ -13,7 +13,7 @@ class AuthorizeAmountPolicy
      */
     public function viewAny(User $user): bool
     {
-        return true;
+        return ($user->can('DNC: authorize amount'));
     }
 
     /**
