@@ -18,6 +18,9 @@ use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Actions\Action;
 use Illuminate\Support\Facades\Storage;
 use Filament\Support\Colors;
+use App\Models\ClRegion;
+use App\Models\ClCommune;
+use App\Models\Parameters\Parameter;
 
 class TrainingResource extends Resource
 {
@@ -134,9 +137,16 @@ class TrainingResource extends Resource
                                 )
                                 ->dehydrated()
                                 ->columnSpan(4),
-                            Forms\Components\TextInput::make('work_hours')
+                            Forms\Components\Select::make('work_hours')
                                 ->label('Horas de Desempeño')
-                                ->numeric()
+                                ->options([
+                                    '11' => '11', 
+                                    '22' => '22',
+                                    '33' => '33',
+                                    '44' => '44',
+                                ])
+                                ->searchable()
+                                ->preload()
                                 ->reactive()
                                 ->disabled(fn (callable $get) => 
                                     $get('law') !== '19664' || 
@@ -215,6 +225,9 @@ class TrainingResource extends Resource
                                     if ($state !== 'otro') {
                                         $set('other_activity_type', null); // Limpia el campo cuando el valor no es "otro"
                                     }
+                                    if(!in_array($state, ['curso', 'taller'])){
+                                        $set('role_type', null); // Limpia el campo cuando el valor no es "otro"
+                                    } 
                                 })
                                 ->preload()
                                 ->columnSpan(4)
@@ -230,50 +243,124 @@ class TrainingResource extends Resource
                                 )
                                 ->dehydrated()
                                 ->required(fn (callable $get) => $get('activity_type') === 'otro'),
-                        ]),
-                        Grid::make(12)->schema([
-                            Forms\Components\Select::make('activity_in')
-                                ->label('Nacional / Internacional')
+                            Forms\Components\Select::make('role_type')
+                                ->label('Tipo de Participación')
                                 ->options([
-                                    'national'      => 'Nacional', 
-                                    'international' => 'Internacional',
+                                    'student' => 'Estudiante',
+                                    'speaker' => 'Expositor',
                                 ])
                                 ->searchable()
-                                ->live()
-                                ->afterStateUpdated(function (callable $set, $state) {
-                                    if ($state !== 'national') {
-                                        $set('commune_id', null); // Limpia el campo cuando el valor no es "otro"
-                                    }
-                                })
+                                ->reactive()
                                 ->preload()
                                 ->columnSpan(4)
-                                ->disabled(fn (callable $get) => in_array($get('status'), ['sent',  'pending certificate', 'uploaded certificate', 'completed']))
+                                ->disabled(fn (callable $get) => 
+                                    !in_array($get('activity_type'), ['curso',  'taller', 'jornada']) || 
+                                    in_array($get('status'), ['sent',  'pending certificate', 'uploaded certificate', 'completed'])
+                                )
+                                ->dehydrated()
+                                ->required(fn (callable $get) => in_array($get('activity_type'), ['curso',  'taller', 'jornada'])),
+                        ]),
+                        Grid::make(12)->schema([
+                            Forms\Components\Select::make('region_id')
+                                ->label('Región')
+                                ->options(ClRegion::all()->pluck('name', 'id')->toArray())
+                                ->reactive()
+                                ->afterStateUpdated(function (callable $set, $state) {
+                                    if (is_null($state)) {
+                                        $set('commune_id', null);
+                                    }
+                                    if ($state === '1') {
+                                        $set('allowance', 'No');
+                                    }
+                                })
+                                ->searchable()
+                                ->preload()
+                                ->columnSpan(4)
+                                ->disabled(fn (callable $get) => 
+                                    in_array($get('status'), ['sent',  'pending certificate', 'uploaded certificate', 'completed'])
+                                )
+                                ->dehydrated()
                                 ->required(),
                             Forms\Components\Select::make('commune_id')
                                 ->label('Comuna')
-                                ->relationship('clCommune', 'name')
+                                ->options(function (callable $get) {
+                                    $region = ClRegion::find($get('region_id'));
+                                    if(!$region){
+                                        return ClCommune::all()->pluck('name', 'id');
+                                    }
+                                    return ClCommune::where('region_id', $get('region_id'))->pluck('name', 'id');
+                                })
                                 ->reactive()
                                 ->searchable()
                                 ->preload()
                                 ->columnSpan(4)
                                 ->disabled(fn (callable $get) => 
-                                    $get('activity_in') !== 'national' || 
                                     in_array($get('status'), ['sent',  'pending certificate', 'uploaded certificate', 'completed'])
                                 )
                                 ->dehydrated()
-                                ->required(fn (callable $get) => $get('activity_in') === 'national'),
+                                ->required(),
                             Forms\Components\Group::make([
                                     Forms\Components\Radio::make('allowance')
                                         ->label('Viático')
+                                        ->reactive()
                                         ->options([
                                             '1' => 'Sí',
                                             '0' => 'No',
                                         ])
                                         ->columns(4) // Organiza las opciones en 2 columnas
-                                        ->disabled(fn (callable $get) => in_array($get('status'), ['sent',  'pending certificate', 'uploaded certificate', 'completed']))
+                                        ->disabled(/*fn (callable $get) => 
+                                            $get('region_id') === '1' &&
+                                            !in_array($get('status'), ['sent', 'pending certificate', 'uploaded certificate', 'completed'])
+                                            */
+                                            function (callable $get) {
+                                                return ($get('region_id') === 1) || ($get('region_id') === '1')  ||
+                                                in_array($get('status'), ['sent', 'pending certificate', 'uploaded certificate', 'completed']);
+                                            }
+                                        )
+                                        ->afterStateHydrated(function (callable $get, callable $set, $state) {
+                                            // Si la región es 1, establece el valor '0' (No) automáticamente
+                                            if ($get('region_id') === '1') {
+                                                $set('allowance', '0');
+                                            }
+                                        })
                                         ->required(),
-                                ])->columnSpan(4), // Mantiene el mismo espacio en la grid
+                                ])
+                                ->columnSpan(4), // Mantiene el mismo espacio en la grid
                         ]),
+                        Grid::make(12)->schema([
+                            Forms\Components\Select::make('schuduled')
+                                ->label('Actividad Programada')
+                                ->options([
+                                    'pac' => 'PAC', 
+                                    'pim' => 'PIM',
+                                    'no'  => 'No',
+                                ])
+                                ->live()
+                                ->searchable()
+                                ->afterStateUpdated(function (callable $set, $state) {
+                                    if (is_null($state)) {
+                                        $set('planning_source', null);
+                                    }
+                                })
+                                ->columnSpan(4)
+                                ->disabled(fn (callable $get) => in_array($get('status'), ['sent',  'pending certificate', 'uploaded certificate', 'completed']))
+                                ->required(),
+                            Forms\Components\Select::make('planning_source')
+                                ->label('Financiamiento')
+                                ->options([
+                                    'self'  => 'Auto-financiamiento',
+                                    'sst'   => 'Servicio de Salud Tarapacá',
+                                ])
+                                ->reactive()
+                                ->searchable()
+                                ->columnSpan(4)
+                                ->disabled(fn (callable $get) => 
+                                    $get('schuduled') !== 'no' &&
+                                    !in_array($get('status'), ['sent', 'pending certificate', 'uploaded certificate', 'completed'])
+                                )
+                                ->required(),
+                        ]),
+
                         Grid::make(12)->schema([
                             Forms\Components\Select::make('mechanism')
                                 ->label('Modalidad de aprendizaje')
@@ -312,16 +399,8 @@ class TrainingResource extends Resource
                                 )
                                 ->dehydrated()
                                 ->required(fn (callable $get) => $get('mechanism') === 'online'),
-                            Forms\Components\Select::make('schuduled')
-                                ->label('Actividad Programada')
-                                ->options([
-                                    'pac'               => 'Programada en PAC', 
-                                    'no planificada'    => 'No planificada',
-                                ])
-                                ->searchable()
-                                ->columnSpan(4)
-                                ->disabled(fn (callable $get) => in_array($get('status'), ['sent',  'pending certificate', 'uploaded certificate', 'completed']))
-                                ->required(),
+                        ]),
+                        Grid::make(12)->schema([
                             Forms\Components\DatePicker::make('activity_date_start_at')
                                 ->label('Fecha Inicio de Actividad')
                                 ->columnSpan(4)
@@ -348,8 +427,10 @@ class TrainingResource extends Resource
                                 ->columnSpan(4)
                                 ->disabled(fn (callable $get) => in_array($get('status'), ['sent',  'pending certificate', 'uploaded certificate', 'completed']))
                                 ->required(),
+                        ]),
+                        Grid::make(12)->schema([
                             Forms\Components\TextInput::make('place')
-                                ->label('Lugar')
+                                ->label('Lugar de Actividad')
                                 ->columnSpan(4)
                                 ->reactive()
                                 ->disabled(fn (callable $get) => 

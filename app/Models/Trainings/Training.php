@@ -24,6 +24,7 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 use App\Models\Rrhh\Authority;
 use App\Models\Parameters\Parameter;
+use App\Models\ClRegion;
 
 class Training extends Model implements Auditable
 {
@@ -50,12 +51,14 @@ class Training extends Model implements Auditable
         'activity_name',
         'activity_type',
         'other_activity_type',
-        'activity_in',
+        'role_type',
+        'region_id',
         'commune_id',
         'allowance',
         'mechanism',
         'online_type',
         'schuduled',
+        'planning_source',
         'activity_date_start_at',
         'activity_date_end_at',
         'total_hours',
@@ -137,6 +140,16 @@ class Training extends Model implements Auditable
      */
     public function approvals(): MorphMany{
         return $this->morphMany(Approval::class, 'approvable');
+    }
+
+    /**
+     * Get the region that owns the commune.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function region(): BelongsTo
+    {
+        return $this->belongsTo(ClRegion::class, 'region_id');
     }
 
     public function clCommune() {
@@ -296,8 +309,12 @@ class Training extends Model implements Auditable
                 return 'Programada en PAC';
                 break;
             
-            case 'no planificada':
-                return 'No planificada';
+            case 'pim':
+                return '';
+                break;
+            
+            case 'no':
+                return 'No';
                 break;
         }
     }
@@ -314,18 +331,6 @@ class Training extends Model implements Auditable
             
             case 'tarde':
                 return 'Jornada Tarde';
-                break;
-        }
-    }
-
-    public function getActivityInValueAttribute() {
-        switch($this->activity_in) {
-            case 'national':
-                return 'Nacional';
-                break;
-            
-            case 'international':
-                return 'Internacional';
                 break;
         }
     }

@@ -32,12 +32,14 @@ return new class extends Migration
             $table->string('activity_name')->nullable();
             $table->string('activity_type')->nullable();
             $table->string('other_activity_type')->nullable();
-            $table->string('activity_in')->nullable();
+            $table->string('role_type')->nullable();
+            $table->foreignId('region_id')->nullable()->constrained('cl_regions');
             $table->foreignId('commune_id')->nullable()->constrained('cl_communes');
-            $table->boolean('allowance')->nullable();
+            $table->boolean('allowance')->default(false);
             $table->string('mechanism')->nullable();
             $table->string('online_type')->nullable();
             $table->string('schuduled')->nullable();
+            $table->string('planning_source')->nullable();
             $table->date('activity_date_start_at')->nullable();
             $table->date('activity_date_end_at')->nullable();
             $table->decimal('total_hours', 4, 1)->nullable();
