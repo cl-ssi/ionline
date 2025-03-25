@@ -10,16 +10,73 @@ use Carbon\Carbon;
 use Filament\Resources\Pages\Page;
 use Filament\Tables;
 use Illuminate\Database\Eloquent\Builder;
+use Filament\Tables\Actions\Action;
+
+use Filament\Forms\Contracts\HasForms;
+use Filament\Forms\Concerns\InteractsWithForms;
+use Filament\Forms;
+
+use Filament\Forms\Components\Grid;
 
 class ReportConfiscated extends Page implements Tables\Contracts\HasTable
 {
     use Tables\Concerns\InteractsWithTable;
+    use InteractsWithForms;
 
     protected static string $resource = SubstancesResource::class;
 
     protected static string $view = 'filament.clusters.documents.resources.drugs.substances-resource.pages.report-confiscated';
 
     protected static ?string $title = 'Reporte ISP';
+
+    public int $year;
+    public array $selectedSubstances = [];
+    public bool $shouldApplyFilters = false;
+
+    /*
+    public function mount(): void
+    {
+        $this->year = now()->year;
+    }
+    */
+
+    public function mount(): void
+    {
+        $this->form->fill([
+            'year' => now()->year,
+            'selectedSubstances' => [],
+        ]);
+    }
+
+    public function form(Forms\Form $form): Forms\Form
+    {
+        return $form
+            ->schema([
+                Grid::make(12)->schema([
+                    Forms\Components\Select::make('year')
+                        ->label('Año')
+                        ->options($this->getYearsOptions())
+                        ->required()
+                        ->columnSpan(6),
+
+                    Forms\Components\Select::make('selectedSubstances')
+                        ->label('Sustancias')
+                        ->options($this->getSubstanceOptions())
+                        ->multiple()
+                        ->searchable()
+                        ->columnSpan(6),
+                ]),
+            ])
+            ->statePath(null); // Usa propiedades públicas directamente
+    }
+
+    public function applyFilters(): void
+    {
+        $data = $this->form->getState();
+        $this->year = $data['year'];
+        $this->selectedSubstances = $data['selectedSubstances'];
+        $this->shouldApplyFilters = true;
+    }
 
     public function table(Tables\Table $table): Tables\Table
     {
@@ -78,6 +135,28 @@ class ReportConfiscated extends Page implements Tables\Contracts\HasTable
                             END
                         ) as total_countersample
                     ")// Columna para la suma de countersample
+                    ->selectRaw("
+                        (
+                            SELECT SUM(
+                                CASE 
+                                    WHEN ri.countersample_number > 0 
+                                        THEN ri.countersample * ri.countersample_number
+                                    ELSE ri.countersample
+                                END
+                            )
+                            FROM drg_reception_items ri
+                            JOIN drg_receptions r ON r.id = ri.reception_id
+                            WHERE ri.substance_id = drg_reception_items.substance_id
+                            AND YEAR(r.date) = ?
+                        ) as total_countersample_previous_year
+                    ", [$this->year - 1])
+                    ->when($this->shouldApplyFilters, function ($query) {
+                        $query->whereHas('reception', fn ($q) => $q->whereYear('date', $this->year));
+                
+                        if (!empty($this->selectedSubstances)) {
+                            $query->whereIn('substance_id', $this->selectedSubstances);
+                        }
+                    })
                     ->groupBy('substance_id')
                     ->with(['substance']);
             })
@@ -124,25 +203,17 @@ class ReportConfiscated extends Page implements Tables\Contracts\HasTable
                     ->sortable()
                     ->formatStateUsing(fn (string|float $state): string => number_format($state, 2, ',', '.'))
                     ->alignEnd(),
+                Tables\Columns\TextColumn::make('total_countersample_previous_year')
+                    ->label('Contramuestras Año Anterior')
+                    ->sortable()
+                    ->formatStateUsing(fn (string|float $state): string => number_format($state, 2, ',', '.'))
+                    ->alignEnd(),
             ])
+            ->headerActions([
+                //
+            ]) 
             ->filters([
-                Tables\Filters\SelectFilter::make('created_at')
-                    ->label('Filtrar por Año')
-                    ->options( $this->getYearsOptions())
-                    ->query(function ($query, $data) {
-                        if ($data) {
-                            $query->whereHas('reception', function ($query) use ($data) {
-                                $query->whereYear('created_at', $data);
-                            });
-                        }
-                    })
-                    ->placeholder('Selecciona un Año'),
-                Tables\Filters\SelectFilter::make('substance_id')
-                    ->label('Filtrar por Sustancia')
-                    ->options($this->getSubstanceOptions())
-                    ->placeholder('Selecciona una Sustancia')
-                    ->searchable() // Agrega el campo de búsqueda
-                    ->multiple(),
+                //
             ], layout: Tables\Enums\FiltersLayout::AboveContent)
             ->actions([
                 // Define aquí tus acciones
