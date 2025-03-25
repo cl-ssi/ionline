@@ -67,7 +67,7 @@ class ReportConfiscated extends Page implements Tables\Contracts\HasTable
                         ->columnSpan(6),
                 ]),
             ])
-            ->statePath(null); // Usa propiedades públicas directamente
+            ->statePath(null);
     }
 
     public function applyFilters(): void
@@ -134,7 +134,7 @@ class ReportConfiscated extends Page implements Tables\Contracts\HasTable
                                 ELSE countersample
                             END
                         ) as total_countersample
-                    ")// Columna para la suma de countersample
+                    ")// Suma de countersample
                     ->selectRaw("
                         (
                             SELECT SUM(
