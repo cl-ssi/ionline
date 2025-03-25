@@ -69,7 +69,15 @@ class ReportConfiscated extends Page implements Tables\Contracts\HasTable
                             END
                         ) as total_net_weight_with_result'
                     ) // Peso neto total de ítems con sustancia resultante
-                    ->selectRaw('SUM(countersample) as total_countersample') // Columna para la suma de countersamplex
+                    ->selectRaw("
+                        SUM(
+                            CASE 
+                                WHEN countersample_number > 0 
+                                    THEN countersample * countersample_number
+                                ELSE countersample
+                            END
+                        ) as total_countersample
+                    ")// Columna para la suma de countersample
                     ->groupBy('substance_id')
                     ->with(['substance']);
             })
