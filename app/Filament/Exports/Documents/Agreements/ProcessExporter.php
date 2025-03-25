@@ -11,15 +11,18 @@ class ProcessExporter extends Exporter
 {
     protected static ?string $model = Process::class;
 
-    // public $tries = 1;
-    // public $maxExceptions = 1;
-
-    // Optionally add XLSX specific configuration
     public static function getXlsxWriterOptions(): array
     {
+        // Start output buffering
+        if (ob_get_level() == 0) {
+            ob_start();
+        }
+        
         return [
             'should_use_inline_strings' => true,
             'buffer_size' => 100,
+            'pre_calculate_formulas' => false,
+            'store_in_memory' => true,
         ];
     }
 
