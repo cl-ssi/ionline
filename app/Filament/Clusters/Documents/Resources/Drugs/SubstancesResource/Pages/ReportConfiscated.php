@@ -33,13 +33,6 @@ class ReportConfiscated extends Page implements Tables\Contracts\HasTable
     public array $selectedSubstances = [];
     public bool $shouldApplyFilters = false;
 
-    /*
-    public function mount(): void
-    {
-        $this->year = now()->year;
-    }
-    */
-
     public function mount(): void
     {
         $this->form->fill([
@@ -72,13 +65,6 @@ class ReportConfiscated extends Page implements Tables\Contracts\HasTable
 
     public function applyFilters(): void
     {
-        /*
-        $data = $this->form->getState();
-        $this->year = $data['year'];
-        $this->selectedSubstances = $data['selectedSubstances'];
-        $this->shouldApplyFilters = true;
-        */
-
         $data = $this->form->getState();
 
         // Verifica que el año esté presente y sea numérico
@@ -154,6 +140,7 @@ class ReportConfiscated extends Page implements Tables\Contracts\HasTable
                             END
                         ) as total_countersample
                     ")// Suma de countersample
+                    /*
                     ->selectRaw("
                         (
                             SELECT SUM(
@@ -169,6 +156,7 @@ class ReportConfiscated extends Page implements Tables\Contracts\HasTable
                             AND YEAR(r.date) = ?
                         ) as total_countersample_previous_year
                     ", [$this->year - 1])
+                    */
                     ->when($this->shouldApplyFilters, function ($query) {
                         $query->whereHas('reception', fn ($q) => $q->whereYear('date', $this->year));
                 
@@ -222,11 +210,13 @@ class ReportConfiscated extends Page implements Tables\Contracts\HasTable
                     ->sortable()
                     ->formatStateUsing(fn (string|float $state): string => number_format($state, 2, ',', '.'))
                     ->alignEnd(),
+                /*
                 Tables\Columns\TextColumn::make('total_countersample_previous_year')
                     ->label('Contramuestras Año Anterior')
                     ->sortable()
                     ->formatStateUsing(fn (string|float $state): string => number_format($state, 2, ',', '.'))
                     ->alignEnd(),
+                */
             ])
             ->headerActions([
                 //
