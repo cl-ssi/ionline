@@ -153,25 +153,10 @@ class ReportConfiscated extends Page implements Tables\Contracts\HasTable
                             FROM drg_reception_items ri
                             JOIN drg_receptions r ON r.id = ri.reception_id
                             WHERE ri.substance_id = drg_reception_items.substance_id
-                            AND YEAR(r.date) = ?
-                        ) as total_countersample_previous_year
-                    ", [$this->year - 1])
-                    */
-                    ->selectRaw("
-                        (
-                            SELECT SUM(
-                                CASE 
-                                    WHEN ri.countersample_number > 0 
-                                        THEN ri.countersample * ri.countersample_number
-                                    ELSE ri.countersample
-                                END
-                            )
-                            FROM drg_reception_items ri
-                            JOIN drg_receptions r ON r.id = ri.reception_id
-                            WHERE ri.substance_id = drg_reception_items.substance_id
                             AND r.date BETWEEN ? AND ?
                         ) as total_countersample_previous_year
                     ", [$start, $end])
+                    */
                     ->when($this->shouldApplyFilters, function ($query) {
                         $query->whereHas('reception', fn ($q) => $q->whereYear('date', $this->year));
                 
@@ -225,11 +210,13 @@ class ReportConfiscated extends Page implements Tables\Contracts\HasTable
                     ->sortable()
                     ->formatStateUsing(fn (string|float $state): string => number_format($state, 2, ',', '.'))
                     ->alignEnd(),
+                /*
                 Tables\Columns\TextColumn::make('total_countersample_previous_year')
                     ->label('Contramuestras Año Anterior')
                     ->sortable()
                     ->formatStateUsing(fn (string|float $state): string => number_format($state, 2, ',', '.'))
                     ->alignEnd(),
+                */
             ])
             ->headerActions([
                 //
