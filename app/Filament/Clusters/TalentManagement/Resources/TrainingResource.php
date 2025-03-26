@@ -60,7 +60,6 @@ class TrainingResource extends Resource
                             Forms\Components\TextInput::make('user_dv')
                                 ->label('DV')
                                 ->afterStateHydrated(function (callable $set, $record) {
-                                    // Precarga el valor desde el usuario relacionado o el autenticado
                                     $set('user_dv', $record && $record->user ? $record->user->dv : auth()->user()->dv ?? '');
                                 })
                                 ->readOnly()
@@ -94,7 +93,7 @@ class TrainingResource extends Resource
                                     Action::make('descargar')
                                         ->icon('heroicon-o-information-circle')
                                         ->url('https://www.saludtarapaca.gob.cl/wp-content/uploads/2024/01/REX-N%C2%B0-5.181-DICCIONARIO-DE-COMPETENCIAS.pdf')
-                                        ->openUrlInNewTab() // Esto abre el enlace en una nueva pestaña
+                                        ->openUrlInNewTab()
                                 )
                                 ->columnSpan(4)
                                 ->disabled(fn (callable $get) => in_array($get('status'), ['sent',  'pending certificate', 'uploaded certificate', 'completed']))
@@ -124,10 +123,10 @@ class TrainingResource extends Resource
                                                 $set('degree', null);
                                             }
                                         })
-                                        ->columns(2) // Organiza las opciones en 2 columnas
+                                        ->columns(2)
                                         ->disabled(fn (callable $get) => in_array($get('status'), ['sent',  'pending certificate', 'uploaded certificate', 'completed']))
                                         ->required(),
-                                ])->columnSpan(4), // Mantiene el mismo espacio en la grid
+                                ])->columnSpan(4),
                             Forms\Components\TextInput::make('degree')
                                 ->label('Grado')
                                 ->reactive()
@@ -223,10 +222,10 @@ class TrainingResource extends Resource
                                 ->live()
                                 ->afterStateUpdated(function (callable $set, $state) {
                                     if ($state !== 'otro') {
-                                        $set('other_activity_type', null); // Limpia el campo cuando el valor no es "otro"
+                                        $set('other_activity_type', null);
                                     }
                                     if(!in_array($state, ['curso', 'taller'])){
-                                        $set('role_type', null); // Limpia el campo cuando el valor no es "otro"
+                                        $set('role_type', null);
                                     } 
                                 })
                                 ->preload()
@@ -307,25 +306,21 @@ class TrainingResource extends Resource
                                             '1' => 'Sí',
                                             '0' => 'No',
                                         ])
-                                        ->columns(4) // Organiza las opciones en 2 columnas
-                                        ->disabled(/*fn (callable $get) => 
-                                            $get('region_id') === '1' &&
-                                            !in_array($get('status'), ['sent', 'pending certificate', 'uploaded certificate', 'completed'])
-                                            */
+                                        ->columns(4)
+                                        ->disabled(
                                             function (callable $get) {
                                                 return ($get('region_id') === 1) || ($get('region_id') === '1')  ||
                                                 in_array($get('status'), ['sent', 'pending certificate', 'uploaded certificate', 'completed']);
                                             }
                                         )
                                         ->afterStateHydrated(function (callable $get, callable $set, $state) {
-                                            // Si la región es 1, establece el valor '0' (No) automáticamente
                                             if ($get('region_id') === '1') {
                                                 $set('allowance', '0');
                                             }
                                         })
                                         ->required(),
                                 ])
-                                ->columnSpan(4), // Mantiene el mismo espacio en la grid
+                                ->columnSpan(4),
                         ]),
                         Grid::make(12)->schema([
                             Forms\Components\Select::make('schuduled')
@@ -596,8 +591,8 @@ class TrainingResource extends Resource
                     ->label('Unidad Organizacional'),
                 Tables\Columns\TextColumn::make('activity_name')
                     ->label('Nombre de la Actividad')
-                    ->limit(50) // Limita el texto a 50 caracteres
-                    ->tooltip(fn ($record) => $record->activity_name), // Muestra el texto completo al pasar el mouse,
+                    ->limit(50)
+                    ->tooltip(fn ($record) => $record->activity_name),
                 Tables\Columns\TextColumn::make('activity_date_start_at')
                     ->label('Inicio')
                     ->dateTime('d-m-Y'),
