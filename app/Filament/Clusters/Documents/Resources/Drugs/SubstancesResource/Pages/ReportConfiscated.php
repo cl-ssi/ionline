@@ -34,7 +34,7 @@ class ReportConfiscated extends Page implements Tables\Contracts\HasTable
 
     protected static ?string $title = 'Reporte ISP';
 
-    public int $year;
+    public ?int $year = null;
     public array $selectedSubstances = [];
     public bool $shouldApplyFilters = false;
 
