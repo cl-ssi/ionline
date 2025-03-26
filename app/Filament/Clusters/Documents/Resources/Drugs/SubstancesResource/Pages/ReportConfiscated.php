@@ -72,9 +72,23 @@ class ReportConfiscated extends Page implements Tables\Contracts\HasTable
 
     public function applyFilters(): void
     {
+        /*
         $data = $this->form->getState();
         $this->year = $data['year'];
         $this->selectedSubstances = $data['selectedSubstances'];
+        $this->shouldApplyFilters = true;
+        */
+
+        $data = $this->form->getState();
+
+        // Verifica que el año esté presente y sea numérico
+        if (empty($data['year']) || !is_numeric($data['year'])) {
+            $this->notify('danger', 'Debe seleccionar un año válido antes de aplicar filtros.');
+            return;
+        }
+
+        $this->year = (int) $data['year'];
+        $this->selectedSubstances = $data['selectedSubstances'] ?? [];
         $this->shouldApplyFilters = true;
     }
 
@@ -82,6 +96,11 @@ class ReportConfiscated extends Page implements Tables\Contracts\HasTable
     {
         return $table
             ->query(function (Builder $query) {
+                if (!$this->shouldApplyFilters || !$this->year) {
+                    // Evita ejecutar la query si no hay año válido o no se ha aplicado el filtro
+                    return ReceptionItem::query()->whereRaw('1 = 0'); // Retorna nada
+                }
+
                 $selectedYear = $this->getTableFilters()['created_at'] ?? Carbon::now()->year;
                 $previousYear = $selectedYear - 1;
 
