@@ -18,6 +18,11 @@ use Filament\Forms;
 
 use Filament\Forms\Components\Grid;
 
+use Filament\Tables\Actions\ExportAction;
+use Filament\Actions\Exports\Models\Export;
+use Filament\Actions\Exports\Enums\ExportFormat;
+use App\Filament\Exports\Documents\Drugs\ReportConfiscatedExporter;
+
 class ReportConfiscated extends Page implements Tables\Contracts\HasTable
 {
     use Tables\Concerns\InteractsWithTable;
@@ -219,8 +224,20 @@ class ReportConfiscated extends Page implements Tables\Contracts\HasTable
                 */
             ])
             ->headerActions([
-                //
-            ]) 
+                Action::make('export')
+                    ->label('Exportar')
+                    ->icon('heroicon-o-arrow-down-tray')
+                    ->color('success')
+                    ->icon('heroicon-o-table-cells')
+                    ->action(function () {
+                        $data = $this->getExportData();
+
+                        return \Maatwebsite\Excel\Facades\Excel::download(
+                            new \App\Exports\Drugs\ReportConfiscatedExport($data),
+                            'reporte_isp_' . $this->year . '.xlsx'
+                        );
+                    }),
+        ]) 
             ->filters([
                 //
             ], layout: Tables\Enums\FiltersLayout::AboveContent)
@@ -264,4 +281,52 @@ class ReportConfiscated extends Page implements Tables\Contracts\HasTable
             ->pluck('year', 'year')
             ->toArray();
     }
+
+    private function getExportData(): \Illuminate\Support\Collection
+    {
+        if (!$this->shouldApplyFilters || !$this->year) {
+            return collect();
+        }
+
+        $start = Carbon::create($this->year - 1)->startOfYear()->format('Y-m-d');
+        $end = Carbon::create($this->year - 1)->endOfYear()->format('Y-m-d');
+
+        return ReceptionItem::query()
+            ->select('substance_id')
+            ->selectRaw('COUNT(*) as total_items')
+            ->selectRaw('COUNT(DISTINCT reception_id) as total_receptions')
+            ->selectRaw('SUM(net_weight) as total_net_weight')
+            ->selectRaw('SUM(CASE WHEN result_substance_id IS NULL AND 
+                            (SELECT COUNT(*) FROM drg_protocols WHERE drg_protocols.reception_item_id = drg_reception_items.id) = 0 THEN 1 ELSE 0 END) as total_without_result')
+            ->selectRaw('COUNT(DISTINCT CASE WHEN result_substance_id IS NULL AND 
+                            (SELECT COUNT(*) FROM drg_protocols WHERE drg_protocols.reception_item_id = drg_reception_items.id) = 0 THEN reception_id ELSE NULL END) as total_receptions_without_result')
+            ->selectRaw('SUM(CASE WHEN result_substance_id IS NULL AND 
+                            (SELECT COUNT(*) FROM drg_protocols WHERE drg_protocols.reception_item_id = drg_reception_items.id) = 0 THEN net_weight ELSE 0 END) as total_net_weight_without_result')
+            ->selectRaw('SUM(CASE WHEN result_substance_id IS NOT NULL OR 
+                            (SELECT COUNT(*) FROM drg_protocols WHERE drg_protocols.reception_item_id = drg_reception_items.id) > 0 THEN net_weight ELSE 0 END) as total_net_weight_with_result')
+            ->selectRaw('SUM(CASE WHEN countersample_number > 0 THEN countersample * countersample_number ELSE countersample END) as total_countersample')
+            ->with('substance')
+            ->when($this->shouldApplyFilters, function ($query) {
+                $query->whereHas('reception', fn ($q) => $q->whereYear('date', $this->year));
+                if (!empty($this->selectedSubstances)) {
+                    $query->whereIn('substance_id', $this->selectedSubstances);
+                }
+            })
+            ->groupBy('substance_id')
+            ->get()
+            ->map(function ($item) {
+                return [
+                    $item->substance->name ?? '(Sin nombre)',
+                    $item->total_items,
+                    $item->total_receptions,
+                    $item->total_net_weight,
+                    $item->total_without_result,
+                    $item->total_receptions_without_result,
+                    $item->total_net_weight_without_result,
+                    $item->total_net_weight_with_result,
+                    $item->total_countersample,
+                ];
+            });
+    }
+
 }
