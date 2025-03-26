@@ -87,8 +87,8 @@ class ReportConfiscated extends Page implements Tables\Contracts\HasTable
                     return ReceptionItem::query()->whereRaw('1 = 0'); // Retorna nada
                 }
 
-                $selectedYear = $this->getTableFilters()['created_at'] ?? Carbon::now()->year;
-                $previousYear = $selectedYear - 1;
+                $start = Carbon::create($this->year - 1)->startOfYear()->format('Y-m-d');
+                $end = Carbon::create($this->year - 1)->endOfYear()->format('Y-m-d');
 
                 return ReceptionItem::query()
                     ->select('substance_id')
@@ -157,6 +157,21 @@ class ReportConfiscated extends Page implements Tables\Contracts\HasTable
                         ) as total_countersample_previous_year
                     ", [$this->year - 1])
                     */
+                    ->selectRaw("
+                        (
+                            SELECT SUM(
+                                CASE 
+                                    WHEN ri.countersample_number > 0 
+                                        THEN ri.countersample * ri.countersample_number
+                                    ELSE ri.countersample
+                                END
+                            )
+                            FROM drg_reception_items ri
+                            JOIN drg_receptions r ON r.id = ri.reception_id
+                            WHERE ri.substance_id = drg_reception_items.substance_id
+                            AND r.date BETWEEN ? AND ?
+                        ) as total_countersample_previous_year
+                    ", [$start, $end])
                     ->when($this->shouldApplyFilters, function ($query) {
                         $query->whereHas('reception', fn ($q) => $q->whereYear('date', $this->year));
                 
@@ -210,13 +225,11 @@ class ReportConfiscated extends Page implements Tables\Contracts\HasTable
                     ->sortable()
                     ->formatStateUsing(fn (string|float $state): string => number_format($state, 2, ',', '.'))
                     ->alignEnd(),
-                /*
                 Tables\Columns\TextColumn::make('total_countersample_previous_year')
                     ->label('Contramuestras Año Anterior')
                     ->sortable()
                     ->formatStateUsing(fn (string|float $state): string => number_format($state, 2, ',', '.'))
                     ->alignEnd(),
-                */
             ])
             ->headerActions([
                 //
