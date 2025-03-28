@@ -120,12 +120,12 @@
             <td>{{ $i->nue }}</td>
             <td>{{ $i->sample_number }}</td>
             <td>{{ $i->countersample_number }}</td>
-            <td>{{ $i->document_weight }}</td>
-            <td>{{ $i->gross_weight }}</td>
-            <td>{{ $i->net_weight }}</td>
-            <td>{{ $i->sample }}</td>
-            <td>{{ $i->countersample }}</td>
-            <td>{{ $i->destruct }}</td>
+            <td>{{ $i->document_weight_formatted }}</td>
+            <td>{{ $i->gross_weight_formatted }}</td>
+            <td>{{ $i->net_weight_formatted }}</td>
+            <td>{{ $i->sample_formatted }}</td>
+            <td>{{ $i->countersample_formatted }}</td>
+            <td>{{ $i->destruct_formatted }}</td>
             <td>
                 <a href="{{ route('drugs.receptions.edit_item', $i->id ) }}" class="btn btn-outline-secondary btn-sm"><i class="fas fa-edit"></i></a>
             </td>

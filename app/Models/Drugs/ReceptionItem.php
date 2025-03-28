@@ -133,4 +133,73 @@ class ReceptionItem extends Model implements Auditable
 
         return $this->getLetterFormPosition($position);
     }
+
+    /**
+     * Get the decimal formatted attribute.
+     */
+    private function formatDecimal(?float $value): ?string
+    {
+        if ($value === null) return null;
+
+        if (fmod($value, 1) == 0) {
+            return number_format($value, 0, ',', '.');
+        }
+
+        $formatted = number_format($value, 3, ',', '.');
+
+        if (preg_match('/,(\d)00$/', $formatted)) {
+            return number_format($value, 1, ',', '.');
+        } elseif (preg_match('/,(\d\d)0$/', $formatted)) {
+            return number_format($value, 2, ',', '.');
+        }
+
+        return $formatted;
+    }
+
+    /**
+     * Get the document weight formatted attribute.
+     */
+    public function getDocumentWeightFormattedAttribute(): ?string
+    {
+        return $this->formatDecimal($this->document_weight);
+    }
+
+    /**
+     * Get the gross weight formatted attribute.
+     */
+    public function getGrossWeightFormattedAttribute(): ?string
+    {
+        return $this->formatDecimal($this->gross_weight);
+    }
+
+    /**
+     * Get the net weight formatted attribute.
+     */
+    public function getNetWeightFormattedAttribute(): ?string
+    {
+        return $this->formatDecimal($this->net_weight);
+    }
+
+    /**
+     * Get the sample formatted attribute.
+     */
+    public function getSampleFormattedAttribute(): ?string
+    {
+        return $this->formatDecimal($this->sample);
+    }
+    /**
+     * Get the countersample formatted attribute.
+     */
+    public function getCountersampleFormattedAttribute(): ?string
+    {
+        return $this->formatDecimal($this->countersample);
+    }
+
+    /**
+     * Get the destruct formatted attribute.
+     */
+    public function getDestructFormattedAttribute(): ?string
+    {
+        return $this->formatDecimal($this->destruct);
+    }
 }
