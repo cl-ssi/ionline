@@ -21,13 +21,15 @@
                 <tr>
                     <th>Sustancia Presunta</th>
                     <th class="text-center">Cantidad</th>
+                    <th class="text-center">Unidad Mediad</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach($items_sin_destruir as $nombre => $data)
                 <tr>
                     <td>{{ $nombre }}</td>
-                    <td class="text-center">{{ $data['sum'] }} {{ $data['unit'] }}</td>
+                    <td class="text-end">{{ $data['sum'] }}</td>
+                    <td class="text-center">{{ $data['unit'] }}</td>
                 </tr>
                 @endforeach
             </tbody>

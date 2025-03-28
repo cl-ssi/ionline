@@ -263,7 +263,7 @@ class ReceptionController extends Controller
          */
         $items_sin_destruir = $items->groupBy('substance.name')->map(function ($item, $key) {
             return [
-                'sum' => $item->sum('destruct'),
+                'sum' => Reception::formatDecimalStatic($item->sum('destruct')),
                 'unit' => $item->pluck('substance.unit')->unique()->first(),
             ];
         });

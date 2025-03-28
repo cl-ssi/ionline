@@ -194,4 +194,30 @@ class Reception extends Model implements Auditable
             return $query;
         }
     }
+
+    /**
+     * Formatea un número decimal con reglas personalizadas:
+     * - Sin decimales si es entero.
+     * - Un decimal si termina en ,x00.
+     * - Dos decimales si termina en ,xx0.
+     * - Tres decimales si tiene decimales significativos.
+     */
+    public static function formatDecimalStatic(?float $value): ?string
+    {
+        if ($value === null) return null;
+
+        if (fmod($value, 1) == 0) {
+            return number_format($value, 0, ',', '.');
+        }
+
+        $formatted = number_format($value, 3, ',', '.');
+
+        if (preg_match('/,(\d)00$/', $formatted)) {
+            return number_format($value, 1, ',', '.');
+        } elseif (preg_match('/,(\d\d)0$/', $formatted)) {
+            return number_format($value, 2, ',', '.');
+        }
+
+        return $formatted;
+    }
 }
