@@ -74,17 +74,17 @@
                 @endforeach
                 {{ ($item->resultSubstance) ? $item->resultSubstance->name:'' }}
             </td>
-            <td class="text-right">{{ $item->document_weight }}</td>
-            <td class="text-right">{{ $item->gross_weight }}</td>
-            <td class="text-right">{{ $item->net_weight }}</td>
+            <td class="text-right">{{ $item->document_weight_formatted }}</td>
+            <td class="text-right">{{ $item->gross_weight_formatted }}</td>
+            <td class="text-right">{{ $item->net_weight_formatted }}</td>
             <td class="text-right">{{ $item->sample_number }}</td>
-            <td class="text-right">{{ $item->sample }}</td>
+            <td class="text-right">{{ $item->sample_formatted }}</td>
             <td class="text-right">{{ $item->countersample_number }}</td>
-            <td class="text-right">{{ $item->countersample }}</td>
+            <td class="text-right">{{ $item->countersample_formatted }}</td>
             <td class="text-center">{{ @$item->reception->destruction->user->Initials ?: '' }}</td>
             <td class="text-right">
                 @if( ! $item->reception->wasDestructed() )
-                    {{ $item->destruct }}
+                    {{ $item->destruct_formatted }}
                 @endif
             </td>
             <td nowrap>
@@ -94,7 +94,7 @@
             </td>
             <td class="text-right">
                 @if( $item->reception->wasDestructed() )
-                    {{ $item->destruct }}
+                    {{ $item->destruct_formatted }}
                 @endif
             </td>
             <td>
