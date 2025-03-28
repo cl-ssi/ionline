@@ -32,6 +32,9 @@ class ReportConfiscatedExport implements FromCollection, WithHeadings
             'Peso Neto sin Sustancia Resultante',
             'Peso Neto con Sustancia Resultante',
             'Total de Contramuestras',
+            'Cantidad por Destruir',
+            'Cantidad Destruida',
+            'Sustancias Resultantes (Destruidas)',
         ];
     }
 }

@@ -38,6 +38,11 @@ class ReportConfiscated extends Page implements Tables\Contracts\HasTable
     public array $selectedSubstances = [];
     public bool $shouldApplyFilters = false;
 
+    public array $destructTotalsBySubstance = [];
+
+    public array $destructGroupedByResultSubstance = [];
+
+
     public function mount(): void
     {
         $this->form->fill([
@@ -81,6 +86,9 @@ class ReportConfiscated extends Page implements Tables\Contracts\HasTable
         $this->year = (int) $data['year'];
         $this->selectedSubstances = $data['selectedSubstances'] ?? [];
         $this->shouldApplyFilters = true;
+
+        $this->destructTotalsBySubstance = $this->getDestructWeightBySubstance();
+        $this->destructGroupedByResultSubstance = $this->getDestructGroupedByResultSubstance();
     }
 
     public function table(Tables\Table $table): Tables\Table
@@ -144,24 +152,8 @@ class ReportConfiscated extends Page implements Tables\Contracts\HasTable
                                 ELSE countersample
                             END
                         ) as total_countersample
-                    ")// Suma de countersample
-                    /*
-                    ->selectRaw("
-                        (
-                            SELECT SUM(
-                                CASE 
-                                    WHEN ri.countersample_number > 0 
-                                        THEN ri.countersample * ri.countersample_number
-                                    ELSE ri.countersample
-                                END
-                            )
-                            FROM drg_reception_items ri
-                            JOIN drg_receptions r ON r.id = ri.reception_id
-                            WHERE ri.substance_id = drg_reception_items.substance_id
-                            AND r.date BETWEEN ? AND ?
-                        ) as total_countersample_previous_year
-                    ", [$start, $end])
-                    */
+                    ")
+                    ->selectRaw('SUM(destruct) as total_destruct')
                     ->when($this->shouldApplyFilters, function ($query) {
                         $query->whereHas('reception', fn ($q) => $q->whereYear('date', $this->year));
                 
@@ -177,21 +169,21 @@ class ReportConfiscated extends Page implements Tables\Contracts\HasTable
                     ->label('Nombre de Sustancia')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('total_items')
-                    ->label('Total de Items')
+                    ->label('Total Items')
                     ->sortable()
                     ->formatStateUsing(fn (string|float $state): string => number_format($state, 0, ',', '.')) // Formato con separación de miles y 2 decimales,
                     ->alignEnd(),
                 Tables\Columns\TextColumn::make('total_receptions')
-                    ->label('Cantidad de Actas')
+                    ->label('Total Actas')
                     ->sortable()
                     ->formatStateUsing(fn (string|float $state): string => number_format($state, 0, ',', '.'))
                     ->alignEnd(),
                 Tables\Columns\TextColumn::make('total_net_weight')
-                    ->label('Recibidos')
+                    ->label('P. Recibido')
                     ->formatStateUsing(fn (string|float $state): string => number_format($state, 2, ',', '.')) // Formato con separación de miles y 2 decimales,
                     ->alignEnd(),
                 Tables\Columns\TextColumn::make('total_without_result')
-                    ->label('Sin Sustancia Resultante')
+                    ->label('Items Sin Sustancia Resultante')
                     ->sortable()
                     ->formatStateUsing(fn (string|float $state): string => number_format($state, 0, ',', '.'))
                     ->alignEnd(),
@@ -201,12 +193,12 @@ class ReportConfiscated extends Page implements Tables\Contracts\HasTable
                     ->formatStateUsing(fn (string|float $state): string => number_format($state, 0, ',', '.'))
                     ->alignEnd(),
                 Tables\Columns\TextColumn::make('total_net_weight_without_result')
-                    ->label('Peso Neto sin Sustancia Resultante')
+                    ->label('P. Neto sin Sustancia Resultante')
                     ->sortable()
                     ->formatStateUsing(fn (string|float $state): string => number_format($state, 2, ',', '.')) // Formato con separación de miles y 2 decimales
                     ->alignEnd(),
                 Tables\Columns\TextColumn::make('total_net_weight_with_result')
-                    ->label('Peso Neto con Sustancia Resultante')
+                    ->label('P. Neto con Sustancia Resultante')
                     ->sortable()
                     ->formatStateUsing(fn (string|float $state): string => number_format($state, 2, ',', '.')) // Formato con separación de miles y 2 decimales
                     ->alignEnd(),
@@ -215,15 +207,45 @@ class ReportConfiscated extends Page implements Tables\Contracts\HasTable
                     ->sortable()
                     ->formatStateUsing(fn (string|float $state): string => number_format($state, 2, ',', '.'))
                     ->alignEnd(),
-                /*
-                Tables\Columns\TextColumn::make('total_countersample_previous_year')
-                    ->label('Contramuestras Año Anterior')
+                Tables\Columns\TextColumn::make('total_destruct')
+                    ->label('Cantidad por Destruir')
                     ->sortable()
                     ->formatStateUsing(fn (string|float $state): string => number_format($state, 2, ',', '.'))
                     ->alignEnd(),
-                */
+                Tables\Columns\TextColumn::make('substance_id')
+                    ->label('Cantidad Destruida')
+                    ->getStateUsing(function ($record) {
+                        return $this->destructTotalsBySubstance[$record->substance_id] ?? 0;
+                    })
+                    ->formatStateUsing(fn ($state) => number_format($state, 2, ',', '.'))
+                    ->alignEnd(),
+                Tables\Columns\TextColumn::make('result_substance_name')
+                    ->label('Sustancias Resultantes')
+                    ->getStateUsing(function ($record) {
+                        $items = $this->destructGroupedByResultSubstance[$record->substance_id] ?? [];
+                
+                        return collect($items)
+                            ->pluck('name')
+                            ->filter() // quita null o vacíos
+                            ->map(fn ($name) => (string) $name)
+                            ->all();
+                    })
+                    ->bulleted()
+                    ->extraAttributes(['class' => 'whitespace-nowrap']),
+                Tables\Columns\TextColumn::make('result_substance_weight')
+                    ->label('Destruidos por Resultado')
+                    ->getStateUsing(function ($record) {
+                        $items = $this->destructGroupedByResultSubstance[$record->substance_id] ?? [];
+                
+                        return collect($items)->map(function ($item) {
+                            return number_format($item['destruct'], 2, ',', '.');
+                        })->all();
+                    })
+                    ->bulleted()
+                    ->alignEnd(),
             ])
             ->headerActions([
+                /*
                 Action::make('export')
                     ->label('Exportar')
                     ->icon('heroicon-o-arrow-down-tray')
@@ -237,6 +259,7 @@ class ReportConfiscated extends Page implements Tables\Contracts\HasTable
                             'reporte_isp_' . $this->year . '.xlsx'
                         );
                     }),
+                */
         ]) 
             ->filters([
                 //
@@ -282,51 +305,122 @@ class ReportConfiscated extends Page implements Tables\Contracts\HasTable
             ->toArray();
     }
 
+    /**
+     * Obtiene el peso de destrucción por sustancia.
+     */
+    private function getDestructWeightBySubstance(): array
+    {
+        if (!$this->shouldApplyFilters || !$this->year) {
+            return [];
+        }
+
+        $query = ReceptionItem::with('reception')
+            ->whereHas('reception', fn ($q) => $q->whereYear('date', $this->year))
+            ->when($this->selectedSubstances, fn ($q) =>
+                $q->whereIn('substance_id', $this->selectedSubstances)
+            )
+            ->get()
+            ->filter(fn ($item) => $item->reception && $item->reception->wasDestructed())
+            ->groupBy('substance_id')
+            ->map(fn ($group) => $group->sum('destruct'))
+            ->toArray();
+
+        return $query;
+    }
+
+    /**
+     * Obtiene los datos de destrucción agrupados por sustancia resultante.
+     */
+    private function getDestructGroupedByResultSubstance(): array
+    {
+        if (!$this->shouldApplyFilters || !$this->year) {
+            return [];
+        }
+
+        return ReceptionItem::with(['reception', 'resultSubstance'])
+            ->whereHas('reception', fn ($q) => $q->whereYear('date', $this->year))
+            ->whereNotNull('result_substance_id')
+            ->when($this->selectedSubstances, fn ($q) =>
+                $q->whereIn('substance_id', $this->selectedSubstances)
+            )
+            ->get()
+            ->filter(fn ($item) => $item->reception && $item->reception->wasDestructed())
+            ->groupBy('substance_id')
+            ->map(function ($itemsBySubstance) {
+                return $itemsBySubstance
+                    ->groupBy('result_substance_id')
+                    ->map(function ($group) {
+                        return [
+                            'name' => $group->first()?->resultSubstance?->name ?? '(Sin nombre)',
+                            'destruct' => $group->sum('destruct'),
+                        ];
+                    })
+                    ->values();
+            })
+            ->toArray();
+    }
+
+    /**
+     * Obtiene los datos para la exportación.
+     */
     private function getExportData(): \Illuminate\Support\Collection
     {
         if (!$this->shouldApplyFilters || !$this->year) {
             return collect();
         }
 
-        $start = Carbon::create($this->year - 1)->startOfYear()->format('Y-m-d');
-        $end = Carbon::create($this->year - 1)->endOfYear()->format('Y-m-d');
+        $destructByPresumed = $this->getDestructWeightBySubstance();
 
-        return ReceptionItem::query()
+        $destructByResult = $this->getDestructGroupedByResultSubstance();
+
+        $presumedMetrics = ReceptionItem::query()
             ->select('substance_id')
             ->selectRaw('COUNT(*) as total_items')
             ->selectRaw('COUNT(DISTINCT reception_id) as total_receptions')
             ->selectRaw('SUM(net_weight) as total_net_weight')
             ->selectRaw('SUM(CASE WHEN result_substance_id IS NULL AND 
-                            (SELECT COUNT(*) FROM drg_protocols WHERE drg_protocols.reception_item_id = drg_reception_items.id) = 0 THEN 1 ELSE 0 END) as total_without_result')
+                (SELECT COUNT(*) FROM drg_protocols WHERE drg_protocols.reception_item_id = drg_reception_items.id) = 0 THEN 1 ELSE 0 END) as total_without_result')
             ->selectRaw('COUNT(DISTINCT CASE WHEN result_substance_id IS NULL AND 
-                            (SELECT COUNT(*) FROM drg_protocols WHERE drg_protocols.reception_item_id = drg_reception_items.id) = 0 THEN reception_id ELSE NULL END) as total_receptions_without_result')
+                (SELECT COUNT(*) FROM drg_protocols WHERE drg_protocols.reception_item_id = drg_reception_items.id) = 0 THEN reception_id ELSE NULL END) as total_receptions_without_result')
             ->selectRaw('SUM(CASE WHEN result_substance_id IS NULL AND 
-                            (SELECT COUNT(*) FROM drg_protocols WHERE drg_protocols.reception_item_id = drg_reception_items.id) = 0 THEN net_weight ELSE 0 END) as total_net_weight_without_result')
+                (SELECT COUNT(*) FROM drg_protocols WHERE drg_protocols.reception_item_id = drg_reception_items.id) = 0 THEN net_weight ELSE 0 END) as total_net_weight_without_result')
             ->selectRaw('SUM(CASE WHEN result_substance_id IS NOT NULL OR 
-                            (SELECT COUNT(*) FROM drg_protocols WHERE drg_protocols.reception_item_id = drg_reception_items.id) > 0 THEN net_weight ELSE 0 END) as total_net_weight_with_result')
+                (SELECT COUNT(*) FROM drg_protocols WHERE drg_protocols.reception_item_id = drg_reception_items.id) > 0 THEN net_weight ELSE 0 END) as total_net_weight_with_result')
             ->selectRaw('SUM(CASE WHEN countersample_number > 0 THEN countersample * countersample_number ELSE countersample END) as total_countersample')
+            ->selectRaw('SUM(destruct) as total_destruct')
             ->with('substance')
-            ->when($this->shouldApplyFilters, function ($query) {
-                $query->whereHas('reception', fn ($q) => $q->whereYear('date', $this->year));
-                if (!empty($this->selectedSubstances)) {
-                    $query->whereIn('substance_id', $this->selectedSubstances);
-                }
-            })
+            ->whereHas('reception', fn ($q) => $q->whereYear('date', $this->year))
+            ->when($this->selectedSubstances, fn ($query) =>
+                $query->whereIn('substance_id', $this->selectedSubstances)
+            )
             ->groupBy('substance_id')
-            ->get()
-            ->map(function ($item) {
-                return [
-                    $item->substance->name ?? '(Sin nombre)',
-                    $item->total_items,
-                    $item->total_receptions,
-                    $item->total_net_weight,
-                    $item->total_without_result,
-                    $item->total_receptions_without_result,
-                    $item->total_net_weight_without_result,
-                    $item->total_net_weight_with_result,
-                    $item->total_countersample,
-                ];
-            });
-    }
+            ->get();
 
+        return $presumedMetrics->map(function ($item) use ($destructByResult, $destructByPresumed) {
+            $substanceId = $item->substance_id;
+
+            $resultList = collect($destructByResult[$substanceId] ?? []);
+            $resultText = $resultList
+                ->map(fn ($res) => $res['name'] . ': ' . number_format($res['destruct'], 2, ',', '.') . ' g')
+                ->implode('; ');
+
+            $totalDestruido = $destructByPresumed[$substanceId] ?? 0;
+            $totalPorDestruir = $item->total_destruct ?? 0;
+
+            return [
+                'Nombre de Sustancia' => $item->substance->name ?? '(Sin nombre)',
+                'Total de Items' => $item->total_items,
+                'Cantidad de Actas' => $item->total_receptions,
+                'Recibidos' => round($item->total_net_weight ?? 0, 2),
+                'Sin Sustancia Resultante' => $item->total_without_result,
+                'Actas sin Sustancia Resultante' => $item->total_receptions_without_result,
+                'Peso Neto sin Sustancia Resultante' => round($item->total_net_weight_without_result ?? 0, 2),
+                'Peso Neto con Sustancia Resultante' => round($item->total_net_weight_with_result ?? 0, 2),
+                'Total de Contramuestras' => round($item->total_countersample ?? 0, 2),
+                'Cantidad por Destruir' => round($totalPorDestruir, 2),
+                'Cantidad Destruida' => round($totalDestruido, 2),
+                'Sustancias Resultantes (Destruidas)' => $resultText,
+            ];
+        });
+    }
 }
