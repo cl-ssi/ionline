@@ -39,9 +39,8 @@ class ReportConfiscated extends Page implements Tables\Contracts\HasTable
     public bool $shouldApplyFilters = false;
 
     public array $destructTotalsBySubstance = [];
-
     public array $destructGroupedByResultSubstance = [];
-
+    public array $destructReceptionsGroupedByResultSubstance = [];
 
     public function mount(): void
     {
@@ -89,6 +88,7 @@ class ReportConfiscated extends Page implements Tables\Contracts\HasTable
 
         $this->destructTotalsBySubstance = $this->getDestructWeightBySubstance();
         $this->destructGroupedByResultSubstance = $this->getDestructGroupedByResultSubstance();
+        $this->destructReceptionsGroupedByResultSubstance = $this->getDestructReceptionsByResultSubstance();
     }
 
     public function table(Tables\Table $table): Tables\Table
@@ -243,6 +243,17 @@ class ReportConfiscated extends Page implements Tables\Contracts\HasTable
                     })
                     ->bulleted()
                     ->alignEnd(),
+                Tables\Columns\TextColumn::make('result_substance_receptions')
+                    ->label('Total Actas de Destrucción')
+                    ->getStateUsing(function ($record) {
+                        $items = $this->destructReceptionsGroupedByResultSubstance[$record->substance_id] ?? [];
+                
+                        return collect($items)->map(function ($item) {
+                            return number_format($item['actas'], 0, ',', '.');
+                        })->all();
+                    })
+                    ->bulleted()
+                    ->alignEnd(),
             ])
             ->headerActions([
                 /*
@@ -353,6 +364,40 @@ class ReportConfiscated extends Page implements Tables\Contracts\HasTable
                         return [
                             'name' => $group->first()?->resultSubstance?->name ?? '(Sin nombre)',
                             'destruct' => $group->sum('destruct'),
+                        ];
+                    })
+                    ->values();
+            })
+            ->toArray();
+    }
+
+    /**
+     * Obtiene los actas de destrucción agrupados por sustancia resultante.
+     */
+    private function getDestructReceptionsByResultSubstance(): array
+    {
+        if (!$this->shouldApplyFilters || !$this->year) {
+            return [];
+        }
+
+        return ReceptionItem::with(['reception'])
+            ->whereHas('reception', fn ($q) => $q->whereYear('date', $this->year))
+            ->whereNotNull('result_substance_id')
+            ->when($this->selectedSubstances, fn ($q) =>
+                $q->whereIn('substance_id', $this->selectedSubstances)
+            )
+            ->get()
+            ->filter(fn ($item) => $item->reception && $item->reception->wasDestructed())
+            ->groupBy('substance_id')
+            ->map(function ($itemsBySubstance) {
+                return $itemsBySubstance
+                    ->groupBy('result_substance_id')
+                    ->map(function ($group) {
+                        $actas = $group->pluck('reception_id')->unique()->count();
+
+                        return [
+                            'name' => $group->first()?->resultSubstance?->name ?? '(Sin nombre)',
+                            'actas' => $actas,
                         ];
                     })
                     ->values();
