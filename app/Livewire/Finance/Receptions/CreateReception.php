@@ -73,7 +73,7 @@ class CreateReception extends Component
             'reception.establishment_id'=> 'nullable',
             'reception.creator_id'      => 'nullable',
             'reception.creator_ou_id'   => 'nullable',
-            'receptionItemsWithCantidad'=> 'required|array|min:1',
+            'receptionItemsWithCantidad'=> 'required|array|min:0',
             'file_signed'               => 'nullable|mimes:pdf|max:10240',
             'approvals'                 => 'required|array|min:1',
         ];
@@ -524,7 +524,7 @@ class CreateReception extends Component
         /* Guardar Items */
         foreach($this->receptionItems as $item) {
             if($item['Cantidad'] > 0) {
-                $item['Cantidad'] = ($item['Cantidad'] == (int)$item['Cantidad'])?$item['Cantidad']:ceil($item['Cantidad']);
+                // $item['Cantidad'] = ($item['Cantidad'] == (int)$item['Cantidad'])?$item['Cantidad']:ceil($item['Cantidad']);
                 $reception->items()->updateOrCreate(
                     ['id' => $item['id'] ?? null],
                     $item
