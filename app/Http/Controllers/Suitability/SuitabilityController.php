@@ -23,11 +23,11 @@ use App\Mail\NewPsiRequest;
 use App\Models\Documents\Type;
 use Illuminate\Support\Facades\Mail;
 use App\Models\Rrhh\Authority;
+use Livewire\Component;
 
 class SuitabilityController extends Controller
 {
-    //
-
+    
     public function index(Request $request)
     {
         //return view('replacement_staff.index', compact('request'));
@@ -171,8 +171,7 @@ class SuitabilityController extends Controller
 
     public function listOwn(School $school)
     {
-
-
+        $this->school = $school;
         return view('external.suitability.index', compact('school'));
     }
 
@@ -563,9 +562,6 @@ class SuitabilityController extends Controller
         return view('suitability.report.slep', compact('years', 'selectedYear', 'slepData'));
     }
     
-
-
     
-
 
 }
