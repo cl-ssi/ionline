@@ -182,7 +182,7 @@
           @if($ServiceRequest->programm_name == "OTROS PROGRAMAS HETG" or $ServiceRequest->programm_name == "LEQ Fonasa" or $ServiceRequest->programm_name == "CONTINGENCIA RESPIRATORIA")
             <strong>RESOLUCIÓN EXENTA N°: {{$ServiceRequest->resolution_number}}</strong>
           @else
-            <strong>RESOLUCIÓN N°: {{$ServiceRequest->resolution_number}}</strong>
+            <strong>RESOLUCIÓN EXENTA N°: {{$ServiceRequest->resolution_number}}</strong>
           @endif
         </div>
         <div class="left" style="padding-bottom: 2px;">
