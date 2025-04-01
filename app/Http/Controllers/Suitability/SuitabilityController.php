@@ -27,7 +27,8 @@ use Livewire\Component;
 
 class SuitabilityController extends Controller
 {
-    
+    public School $school;
+
     public function index(Request $request)
     {
         //return view('replacement_staff.index', compact('request'));

@@ -1,4 +1,4 @@
-<div>
+
     <tr class="{{ $psirequest->status_inhability != 'enabled' ? 'table-danger' : '' }}">
         <td>{{ $psirequest->id }}</td>
         <td>{{ $psirequest->user_external_id }}</td>
@@ -9,7 +9,7 @@
             {{ $psirequest->inhabilidad }}
             @if($psirequest->status_inhability != 'enabled')
                 <button class="btn btn-sm btn-link text-primary" 
-                    wire:click="asdasdasdasd">
+                        wire:click="changeInhability">
                     <i class="fas fa-edit"></i>
                 </button>
             @endif
@@ -24,4 +24,3 @@
             @endif
         </td>
     </tr>
-</div>

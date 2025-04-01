@@ -15,9 +15,7 @@
         </thead>
         <tbody>
             @forelse($school->psirequests as $psirequest)
-                <div>
-                    @livewire('suitability.school-request-row', ['psirequest' => $psirequest], key('request-'.$psirequest->id))
-                </div>
+                @livewire('suitability.school-request-row', ['psirequest' => $psirequest], key('request-'.$psirequest->id))            
                 @empty
                     <tr>
                         <td colspan="8" class="text-center py-4">
