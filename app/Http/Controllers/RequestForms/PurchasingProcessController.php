@@ -144,13 +144,15 @@ class PurchasingProcessController extends Controller
     {
         //total del monto por items seleccionados + item registrados no debe sobrepasar el total del presupuesto asignado al formulario de requerimiento
         $totalItemPurchased = 0;
-        if ($requestForm->purchasingProcess && ($requestForm->purchasingProcess->details || $requestForm->purchasingProcess->detailsPassenger)) $totalItemPurchased = $requestForm->purchasingProcess->getExpense();
+        if ($requestForm->purchasingProcess && ($requestForm->purchasingProcess->details || $requestForm->purchasingProcess->detailsPassenger)) {
+            $totalItemPurchased = $requestForm->purchasingProcess->getExpense();
+        }
 
         $totalItemSelected = 0;
         foreach ((request()->has('item_id') ? request()->item_id : request()->passenger_id) as $key => $item)
             $totalItemSelected += request()->item_total[$key];
 
-        return $totalItemPurchased + $totalItemSelected > $requestForm->estimated_expense;
+        return $totalItemPurchased + $totalItemSelected >= $requestForm->estimated_expense + 1;
     }
 
     public function create_internal_oc(Request $request, RequestForm $requestForm)
