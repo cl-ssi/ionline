@@ -1161,7 +1161,7 @@ class RequirementController extends Controller
                     'body' => $request->body,
                     'status' => 'en copia',
                     'from_user_id' => auth()->id(),
-                    'form_ou_id' => auth()->user()->organizational_unit_id,
+                    'from_ou_id' => auth()->user()->organizational_unit_id,
                     'to_user_id' => $toCopia->id,
                     'to_ou_id' => $toCopia->organizational_unit_id,
                     'requirement_id' => $requirement->id,
