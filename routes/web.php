@@ -2116,6 +2116,11 @@ Route::prefix('prof_agenda')->as('prof_agenda.')->middleware(['auth'])->group(fu
 });
 
 // Inventories
+/* Ruta que redirecciona hoja de inventario sin edición a modulo inventario ERP Hospital Alto Hospicio */
+Route::get('inventories/establishment/41/number/{code}', function(string $code){
+    return redirect()->away('https://10.63.99.178:8443/qr/asset_info.jsp?codigo='.$code);
+});
+
 Route::prefix('inventories')->as('inventories.')->middleware(['auth', 'must.change.password'])->group(function () {
     Route::get('sheet', InventorySheet::class)->name('sheet');
     Route::get('/accounting-update', AccountingUpdate::class)->name('accounting-update');
