@@ -395,6 +395,7 @@
                     <thead class="text-center">
                         <tr>
                             <th>#</th>
+                            <th>ID</th>
                             <th>Tipo compra</th>
                             <th>ID Licitación</th>
                             <th>Fechas</th>
@@ -418,6 +419,15 @@
                         @foreach(($requestForm->purchasingProcess->details->count() > 0 ? $requestForm->purchasingProcess->details : $requestForm->purchasingProcess->detailsPassenger) as $key => $detail)
                         <tr>
                             <td>{{ $key+1 }}</td>
+                            <td>{{ $detail->pivot->id}}<br>
+                                @if($detail->pivot->status != 'total')
+                                <a href="">
+                                    <span style="color: Tomato;">
+                                        <i class="fas fa-times-circle" title="{!! $detail->pivot->release_observation !!}"></i>
+                                    </span>
+                                </a>
+                                @endif
+                            </td>
                             <td>{{ $detail->pivot->getPurchasingTypeName() }}</td>
                             <td>{{ $detail->pivot->tender ? $detail->pivot->tender->tender_number : '-' }}</td>
                             <td align="center">@if($detail->pivot->tender)
