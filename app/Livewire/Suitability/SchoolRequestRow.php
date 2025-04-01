@@ -9,9 +9,8 @@ class SchoolRequestRow extends Component
 {
     public PsiRequest $psirequest;
 
-    public function asdasdasdasd()
+    public function changeInhability()
     {
-        dd('asdasdads');
         $this->dispatch('prepareModal', $this->psirequest->id);
         // $this->dispatch('editInhability', $this->psirequest->id)->to(SchoolRequests::class);;
         // $emit('editInhability', $this->psirequest->id);

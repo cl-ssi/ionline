@@ -3,12 +3,13 @@
 namespace App\Livewire\Suitability;
 
 use App\Models\Suitability\PsiRequest;
+use App\Models\Suitability\School;
 use Livewire\Component;
 use Livewire\Attributes\On; 
 
 class SchoolRequests extends Component
 {
-    public $school;
+    public School $school;
     public $editingRequest;
     public $selectedInhability;
     public $showModal = false;
@@ -39,11 +40,10 @@ class SchoolRequests extends Component
         // $this->validate([
         //     'selectedInhability' => 'required|in:none,in_progress,enabled,disabled'
         // ]);
-
         $this->editingRequest->update([
             'status_inhability' => $this->selectedInhability
         ]);
-
         $this->closeModal();
+        $this->school= School::findOrFail($this->school->id);
     }
 }
