@@ -77,11 +77,6 @@ class InventoryAdjustmentController extends Controller
             return redirect()->back();
         }
 
-        // se ajusta valor en tabla productos
-        $product = Product::find($request->product_id);
-        $product->stock = $request->amount;
-        $product->save();
-
         // si es mayor a lo que existe, se hace un ingreso
         if($request->amount > $request->count){
             // si no tiene creada una cabecera de ingresos, se crea una nueva
@@ -94,6 +89,11 @@ class InventoryAdjustmentController extends Controller
                 $receiving->user_id = $inventoryAdjustment->user_id;
                 $receiving->save();
             }
+
+            // se ajusta valor en tabla productos
+            $product = Product::find($request->product_id);
+            $product->stock = ($request->amount - $request->count);
+            $product->save();
 
             $receivingItem = new ReceivingItem();
             $receivingItem->barcode = $product->barcode;
@@ -121,6 +121,11 @@ class InventoryAdjustmentController extends Controller
                 $dispatch->user_id = $inventoryAdjustment->user_id;
                 $dispatch->save();
             }
+
+            // se ajusta valor en tabla productos
+            $product = Product::find($request->product_id);
+            $product->stock = ($request->count - $request->amount);
+            $product->save();
 
             $dispatchItem = new DispatchItem();
             $dispatchItem->barcode = $product->barcode;
