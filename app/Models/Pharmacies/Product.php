@@ -58,6 +58,11 @@ class Product extends Model implements Auditable
       return $this->hasMany('App\Models\Pharmacies\DispatchItem');
     }
 
+    public function fractionationItems()
+    {
+      return $this->hasMany('App\Models\Pharmacies\FractionationItem');
+    }
+
     public function batchs()
     {
       return $this->hasMany('App\Models\Pharmacies\Batch')->orderBy('due_date');
@@ -75,252 +80,133 @@ class Product extends Model implements Auditable
     }
 
     public function scopeSearchBincard($query, $dateFrom, $dateTo, $product_id) {
-
-        $matrix = null;
-        $matrix[0]['tipo'] = '';
-
-        if($dateFrom != "" AND $dateTo != "") {
-            $data = collect();
-
-            /* compras */
-            $purchaseItems = PurchaseItem::whereHas('purchase', function ($query) use ($dateFrom,$dateTo){
-                                                     //$query->whereBetween('date', [$dateFrom,$dateTo]);
-                                                     $query->where('date', '>=', $dateFrom);
-                                                   })
-                                      ->WhereHas('product', function($query) use ($product_id) {
-                                                        $query->when($product_id, function ($q, $product_id) {
-                                                           return $q->where('id', $product_id);
-                                                        });
-                                                   })->get();
-            $purchaseItems->each(function($purchaseItems){
-                $purchaseItems->purchase;
-                $purchaseItems->product;
-            });
-            $data->push($purchaseItems);
-
-            /* ingresos */
-            $receivingItems= ReceivingItem::whereHas('receiving', function ($query) use ($dateFrom,$dateTo) {
-                                                     //$query->whereBetween('date', [$dateFrom,$dateTo]);
-                                                     $query->where('date', '>=', $dateFrom);
-                                                   })
-                                        ->WhereHas('product', function($query) use ($product_id) {
-                                                      $query->when($product_id, function ($q, $product_id) {
-                                                         return $q->where('id', $product_id);
-                                                      });
-                                                   })->get();
-            $receivingItems->each(function($receivingItems){
-                $receivingItems->receiving;
-                $receivingItems->product;
-            });
-            $data->push($receivingItems);
-
-            /* entregas */
-            $dispatchItems= DispatchItem::whereHas('dispatch', function ($query) use ($dateFrom,$dateTo) {
-                                                     //$query->whereBetween('date', [$dateFrom,$dateTo]);
-                                                     $query->where('date', '>=', $dateFrom);
-                                                   })
-                                        ->WhereHas('product', function($query) use ($product_id) {
-                                                      $query->when($product_id, function ($q, $product_id) {
-                                                         return $q->where('id', $product_id);
-                                                      });
-                                                   })->get();
-            $dispatchItems->each(function($dispatchItems){
-                $dispatchItems->dispatch;
-                $dispatchItems->product;
-            });
-            $data->push($dispatchItems);
-
-            //dd($data);
-
-            //obtener saldo del Product
-            $producto = Product::find($product_id);
-            $saldo = $producto->stock;
-
-            //ciclo para generar estructura para enviar a informe
-            $cont = 0;
-            foreach ($data as $key1 => $Collection) {
-                foreach ($Collection as $key2 => $CollectionItem) {
-                    if ($key1==0) {
-                        //$saldo = $saldo + $CollectionItem->amount;
-                        $matrix[$cont]['tipo'] = 'Compra';
-                        $matrix[$cont]['type'] = 'purchase';
-                        $matrix[$cont]['id'] = $CollectionItem->purchase->id;
-                        //$matrix[$cont]['date'] = $CollectionItem->created_at->format("Y-m-d H:i:s");
-                        $matrix[$cont]['date'] = $CollectionItem->purchase->date->format("Y-m-d");
-                        $matrix[$cont]['origen_destino'] = $CollectionItem->purchase->supplier->name;
-                        //$matrix[$cont]['ingreso'] = $CollectionItem->amount;
-                        //$matrix[$cont]['salida'] = 0;
-                        //$matrix[$cont]['saldo'] = $saldo;
-                        $matrix[$cont]['amount'] = $CollectionItem->amount;
-                        $matrix[$cont]['notas'] = $CollectionItem->purchase->notes;
-
-                        $matrix[$cont]['act_number'] = null;
-                        $matrix[$cont]['product_batch'] = null;
-                        $matrix[$cont]['file'] = null;
-                    }
-                    if ($key1==1) {
-                        //$saldo = $saldo + $CollectionItem->amount;
-                        $matrix[$cont]['tipo'] = 'Ingreso';
-                        $matrix[$cont]['type'] = 'receiving';
-                        $matrix[$cont]['id'] = $CollectionItem->receiving->id;
-                        //$matrix[$cont]['date'] = $CollectionItem->created_at->format("Y-m-d H:i:s");
-                        $matrix[$cont]['date'] = $CollectionItem->receiving->date->format("Y-m-d");
-                        $matrix[$cont]['origen_destino'] = $CollectionItem->receiving->destiny ? $CollectionItem->receiving->destiny->name : '';
-                        //$matrix[$cont]['ingreso'] = $CollectionItem->amount;
-                        //$matrix[$cont]['salida'] = 0;
-                        //$matrix[$cont]['saldo'] = $saldo;
-                        $matrix[$cont]['amount'] = $CollectionItem->amount;
-                        $matrix[$cont]['notas'] = $CollectionItem->receiving->notes;
-
-                        $matrix[$cont]['act_number'] = null;
-                        $matrix[$cont]['product_batch'] = null;
-                        $matrix[$cont]['file'] = null;
-                    }
-                    if ($key1==2) {
-                        //$saldo = $saldo - $CollectionItem->amount;
-                        $matrix[$cont]['tipo'] = 'Salida';
-                        $matrix[$cont]['type'] = 'dispatch';
-                        $matrix[$cont]['id'] = $CollectionItem->dispatch->id;
-                        //$matrix[$cont]['date'] = $CollectionItem->created_at->format("Y-m-d H:i:s");
-                        $matrix[$cont]['date'] = $CollectionItem->dispatch->date->format("Y-m-d");
-                        $matrix[$cont]['origen_destino'] = ($CollectionItem->dispatch->destiny ? $CollectionItem->dispatch->destiny->name : '') . ' ' . ($CollectionItem->dispatch->receiver ? $CollectionItem->dispatch->receiver->shortName : '');
-                        //$matrix[$cont]['ingreso'] = 0;
-                        //$matrix[$cont]['salida'] = $CollectionItem->amount;
-                        //$matrix[$cont]['saldo'] = $saldo;
-                        $matrix[$cont]['amount'] = $CollectionItem->amount;
-                        $matrix[$cont]['notas'] = $CollectionItem->dispatch->notes;
-
-                        $matrix[$cont]['act_number'] = $CollectionItem->dispatch->id;
-                        $matrix[$cont]['product_batch'] = $CollectionItem->batch;
-                        $matrix[$cont]['file'] = $CollectionItem->dispatch;
-                    }
-
-                    $cont = $cont + 1;
-                }
-            }
-
-            //si no hay datos
-            if ($matrix == NULL) {
-              goto salida;
-            }
-
-            //se ordena según fecha
-            usort($matrix, array($this, "ordenamiento_lejano"));
-
-            //dd($matrix[0]['tipo']);
-
-            if($matrix[0]['tipo']<>"")
-            {
-
-            //obtiene saldos
-            foreach ($matrix as $key => $item) {
-              if ($key == 0) {
-                if ($item['type'] == 'dispatch') {
-                  $matrix[$key]['ingreso'] = 0;
-                  $matrix[$key]['salida'] = $item['amount'];
-                  $matrix[$key]['saldo'] = $saldo;
-                }
-                else{
-                  $matrix[$key]['ingreso'] = $item['amount'];
-                  $matrix[$key]['salida'] = 0;
-                  $matrix[$key]['saldo'] = $saldo;
-                }
-              }
-
-              else{
-                if ($matrix[$key-1]['type'] == 'purchase') {
-                  $saldo = $saldo - $matrix[$key-1]['amount'];//$item['amount'];
-                  $matrix[$key]['saldo'] = $saldo;
-                }
-                if ($matrix[$key-1]['type'] == 'receiving') {
-                  $saldo = $saldo - $matrix[$key-1]['amount'];//$item['amount'];
-                  $matrix[$key]['saldo'] = $saldo;
-                }
-                if ($matrix[$key-1]['type'] == 'dispatch') {
-                  $saldo = $saldo + $matrix[$key-1]['amount'];//$item['amount'];
-                  $matrix[$key]['saldo'] = $saldo;
-                }
-              }
-            }
-
-            //muestra ingresos y salidas
-            foreach ($matrix as $key => $item) {
-              if ($key <> 0) {
-                if ($matrix[$key]['type'] == 'purchase') {
-                  $matrix[$key]['ingreso'] = $item['amount'];
-                  $matrix[$key]['salida'] = 0;
-                }
-                if ($matrix[$key]['type'] == 'receiving') {
-                  $matrix[$key]['ingreso'] = $item['amount'];
-                  $matrix[$key]['salida'] = 0;
-                }
-                if ($matrix[$key]['type'] == 'dispatch') {
-                  $matrix[$key]['ingreso'] = 0;
-                  $matrix[$key]['salida'] = $item['amount'];
-                }
-              }
-            }
-
-            }
-
-
-            //dd($matrix);
-            //dd($matrix);
-            /*foreach ($data as $key1 => $Collection) {
-                foreach ($Collection as $key2 => $CollectionItem) {
-                    //compras
-                    if ($key1==0) {
-                      //si es el primer dato, se deja el saldo (según formato de informe)
-                      if ($key1 == 0 && $key2 == 0) {
-                        $saldo = $saldo;
-                      }
-                      else{
-                        $saldo = $saldo + $CollectionItem->amount;
-                      }
-                      //$saldo = $saldo + $CollectionItem->amount;
-                      $matrix[$cont]['ingreso'] = $CollectionItem->amount;
-                      $matrix[$cont]['salida'] = 0;
-                      $matrix[$cont]['saldo'] = $saldo;
-                    }
-                    //ingresos
-                    if ($key1==1) {
-                      //si es el primer dato, se deja el saldo (según formato de informe)
-                      if ($key1 == 0 && $key2 == 0) {
-                        $saldo = $saldo;
-                      }
-                      else{
-                        $saldo = $saldo + $CollectionItem->amount;
-                      }
-                      //$saldo = $saldo + $CollectionItem->amount;
-                      $matrix[$cont]['ingreso'] = $CollectionItem->amount;
-                      $matrix[$cont]['salida'] = 0;
-                      $matrix[$cont]['saldo'] = $saldo;
-                    }
-                    //egresos
-                    if ($key1==2) {
-                      //si es el primer dato, se deja el saldo (según formato de informe)
-                      if ($key1 == 0 && $key2 == 0) {
-                        $saldo = $saldo;
-                      }
-                      else{
-                        $saldo = $saldo - $CollectionItem->amount;
-                      }
-                      //$saldo = $saldo - $CollectionItem->amount;
-                      $matrix[$cont]['ingreso'] = 0;
-                      $matrix[$cont]['salida'] = $CollectionItem->amount;
-                      $matrix[$cont]['saldo'] = $saldo;
-                    }
-                    $cont = $cont + 1;
-                }
-            }*/
-
-            //se vuelve a ordenar por fecha pero al revez (más antiguas al principio)
-            //usort($matrix, array($this, "ordenamiento_cercano"));
+        if (!$product_id) {
+            return [['tipo' => '']];
         }
 
-        salida:
-        //dd($matrix);
-        return $matrix;
+        // Obtener todas las transacciones sin filtro de fecha inicial
+        $purchases = PurchaseItem::with(['purchase' => function ($q) {
+                $q->with('supplier');
+            }])
+            ->where('product_id', $product_id)
+            ->whereHas('purchase')
+            ->get()
+            ->map(function ($item) {
+                return [
+                    'tipo' => 'Compra',
+                    'type' => 'purchase',
+                    'id' => $item->purchase->id,
+                    'date' => $item->purchase->date->format('Y-m-d'),
+                    'origen_destino' => $item->purchase->supplier->name ?? '',
+                    'amount' => $item->amount,
+                    'notas' => $item->purchase->notes,
+                    'act_number' => null,
+                    'product_batch' => null,
+                    'file' => null,
+                    'ingreso' => $item->amount,
+                    'salida' => 0
+                ];
+            });
+
+        $receivings = ReceivingItem::with(['receiving.destiny'])
+            ->where('product_id', $product_id)
+            ->whereHas('receiving')
+            ->get()
+            ->map(function ($item) {
+                return [
+                    'tipo' => 'Ingreso',
+                    'type' => 'receiving',
+                    'id' => $item->receiving->id,
+                    'date' => $item->receiving->date->format('Y-m-d'),
+                    'origen_destino' => $item->receiving->destiny->name ?? '',
+                    'amount' => $item->amount,
+                    'notas' => $item->receiving->notes,
+                    'act_number' => null,
+                    'product_batch' => null,
+                    'file' => null,
+                    'ingreso' => $item->amount,
+                    'salida' => 0
+                ];
+            });
+
+        $dispatches = DispatchItem::with(['dispatch.destiny', 'dispatch.receiver'])
+            ->where('product_id', $product_id)
+            ->whereHas('dispatch')
+            ->get()
+            ->map(function ($item) {
+                return [
+                    'tipo' => 'Salida',
+                    'type' => 'dispatch',
+                    'id' => $item->dispatch->id,
+                    'date' => $item->dispatch->date->format('Y-m-d'),
+                    'origen_destino' => ($item->dispatch->destiny->name ?? '') . ' ' . ($item->dispatch->receiver->shortName ?? ''),
+                    'amount' => $item->amount,
+                    'notas' => $item->dispatch->notes,
+                    'act_number' => $item->dispatch->id,
+                    'product_batch' => $item->batch,
+                    'file' => $item->dispatch,
+                    'ingreso' => 0,
+                    'salida' => $item->amount
+                ];
+            });
+
+        $fractionations = FractionationItem::with(['fractionation.patient', 'fractionation.medic'])
+            ->where('product_id', $product_id)
+            ->whereHas('fractionation')
+            ->get()
+            ->map(function ($item) {
+                return [
+                    'tipo' => 'Fraccionamiento',
+                    'type' => 'fractionation',
+                    'id' => $item->fractionation->id,
+                    'date' => $item->fractionation->date->format('Y-m-d'),
+                    'origen_destino' => ($item->fractionation->patient->name ?? '') . ' ' . ($item->fractionation->medic->shortName ?? ''),
+                    'amount' => $item->amount,
+                    'notas' => $item->fractionation->notes,
+                    'act_number' => null,
+                    'product_batch' => null,
+                    'file' => null,
+                    'ingreso' => 0,
+                    'salida' => $item->amount
+                ];
+            });
+
+        // Ordenar y calcular saldos para todos los movimientos
+        $allMovements = $purchases->concat($receivings)
+            ->concat($dispatches)
+            ->concat($fractionations)
+            ->sortBy('date')
+            ->values();
+
+        // Calcular saldos para todos los movimientos
+        $saldo = 0;
+        $allMovements = $allMovements->map(function($item) use (&$saldo) {
+            if ($item['tipo'] == 'Compra' || $item['tipo'] == 'Ingreso') {
+                $saldo += $item['amount'];
+            } else {
+                $saldo -= $item['amount'];
+            }
+            $item['saldo'] = $saldo;
+            return $item;
+        });
+
+        // Filtrar por rango de fechas solicitado
+        $filteredMovements = $allMovements
+            ->when($dateFrom, function($collection) use ($dateFrom) {
+                return $collection->filter(function($item) use ($dateFrom) {
+                    return $item['date'] >= $dateFrom;
+                });
+            })
+            ->when($dateTo, function($collection) use ($dateTo) {
+                return $collection->filter(function($item) use ($dateTo) {
+                    return $item['date'] <= $dateTo;
+                });
+            })
+            ->reverse()  // Invertir el orden final para mostrar más reciente primero
+            ->values()
+            ->toArray();
+
+        return $filteredMovements ?: [['tipo' => '']];
     }
 
     //función para order arreglo según fechas - más lejano primero

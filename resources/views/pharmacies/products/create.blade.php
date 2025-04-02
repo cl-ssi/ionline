@@ -15,7 +15,7 @@
     <div class="form-row">
         <fieldset class="form-group col-2">
             <label for="for_barcode">Código barra*</label>
-            <input type="text" class="form-control" id="for_barcode" placeholder="Código interno del producto" name="barcode" required="">
+            <input type="text" class="form-control" id="for_barcode" placeholder="Código interno del producto" name="barcode">
         </fieldset>
 
         <fieldset class="form-group col-2">

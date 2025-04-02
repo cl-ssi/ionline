@@ -2193,6 +2193,7 @@ Route::prefix('pharmacies')->as('pharmacies.')->middleware(['auth', 'must.change
 
     Route::resource('programs', App\Http\Controllers\Pharmacies\ProgramController::class);
     Route::resource('suppliers', App\Http\Controllers\Pharmacies\SupplierController::class);
+    Route::resource('patients', App\Http\Controllers\Pharmacies\PatientController::class);
 
     Route::prefix('products')->as('products.')->middleware('auth')->group(function () {
         Route::resource('receiving', App\Http\Controllers\Pharmacies\ReceivingController::class);
@@ -2212,6 +2213,16 @@ Route::prefix('pharmacies')->as('pharmacies.')->middleware(['auth', 'must.change
         Route::post('dispatch/{dispatch}/file', [App\Http\Controllers\Pharmacies\DispatchController::class, 'storeFile'])->name('dispatch.storeFile');
         Route::get('dispatch/{dispatch}/file', [App\Http\Controllers\Pharmacies\DispatchController::class, 'openFile'])->name('dispatch.openFile');
         Route::get('dispatch/storePrivateVerification/{dispatch}', [App\Http\Controllers\Pharmacies\DispatchController::class, 'storePrivateVerification'])->name('dispatch.storePrivateVerification');
+
+
+        Route::get('fractionation/product/due_date/{product_id?}', [App\Http\Controllers\Pharmacies\FractionationController::class, 'getFromProduct_due_date'])->name('fractionation.product.due_date')->middleware('auth');
+        Route::get('fractionation/product/batch/{product_id?}/{due_date?}', [App\Http\Controllers\Pharmacies\FractionationController::class, 'getFromProduct_batch'])->name('fractionation.product.batch')->middleware('auth');
+        Route::get('fractionation/product/count/{product_id?}/{due_date?}/{batch?}', [App\Http\Controllers\Pharmacies\FractionationController::class, 'getFromProduct_count'])->name('fractionation.product.count')->middleware('auth');
+        // Route::get('/exportExcel', [App\Http\Controllers\Pharmacies\FractionationController::class, 'exportExcel'])->name('exportExcel')->middleware('auth');
+        Route::get('fractionation/sendEmailValidation/{fractionation}', [App\Http\Controllers\Pharmacies\FractionationController::class, 'sendEmailValidation'])->name('fractionation.sendEmailValidation')->middleware('auth');
+        Route::resource('fractionation', App\Http\Controllers\Pharmacies\FractionationController::class);
+        Route::resource('fractionation_item', App\Http\Controllers\Pharmacies\FractionationItemController::class);
+        Route::get('fractionation/record/{fractionation}', [App\Http\Controllers\Pharmacies\FractionationController::class, 'record'])->name('fractionation.record');
 
         // Route::get('purchase/importReception', ImportReception::class)->name('purchase.import-reception');
         Route::get('purchase/importReception', [PurchaseController::class, 'importReception'])->name('purchase.import-reception');

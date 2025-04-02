@@ -57,42 +57,42 @@
 				<th scope="col">LOTE</th>
 				<th scope="col"></th>
 				<th>
-					<button type="button" class="btn btn-sm btn-outline-primary"
-						onclick="tableToExcel('tabla_bincard', 'Bincard')">
+					<button type="button" class="btn btn-sm btn-outline-primary" onclick="exportTableToExcel('tabla_bincard', 'Bincard')">
 						<i class="fas fa-download"></i>
 					</button>
 				</th>
 			</tr>
 		</thead>
 		<tbody>
-			@if($matrix[0]['tipo'] <> '')
-					@for($i = count($matrix)-1; $i >= 0; $i--)
+			@foreach($matrix as $item)
+				@if($item['tipo'] != '')
 					<tr>
-						<td>{{ $matrix[$i]['tipo'] }}</td>
-						<td>{{ $matrix[$i]['date'] }}</td>
-						<td>{{ $matrix[$i]['origen_destino'] }}</td>
-						<td>{{ $matrix[$i]['ingreso'] }}</td>
-						<td>{{ $matrix[$i]['salida'] }}</td>
-						<td>{{ $matrix[$i]['saldo'] }}</td>
-						<td>{{ $matrix[$i]['notas'] }}</td>
-						<td>{{ $matrix[$i]['act_number'] }}</td>
-						<td>{{ $matrix[$i]['product_batch'] }}</td>
+						<td>{{ $item['tipo'] }}</td>
+						<td>{{ $item['date'] }}</td>
+						<td>{{ $item['origen_destino'] }}</td>
+						<td>{{ $item['ingreso'] }}</td>
+						<td>{{ $item['salida'] }}</td>
+						<td>{{ $item['saldo'] }}</td>
+						<td>{{ $item['notas'] }}</td>
+						<td>{{ $item['act_number'] }}</td>
+						<td>{{ $item['product_batch'] }}</td>
 						<td>
-							@if($matrix[$i]['tipo'] == "Salida")
-								<a href="{{ route('pharmacies.products.dispatch.openFile', $matrix[$i]['file']) }}"
+							@if($item['tipo'] == "Salida")
+								<a href="{{ route('pharmacies.products.dispatch.openFile', $item['file']) }}"
 										class="btn btn-outline-secondary btn-sm" target="_blank">
 									<span class="fas fa-download" aria-hidden="true" style="color: green;"></span>
 								</a>
 							@endif
 						</td>
 						<td>
-							<a href="{{ route('pharmacies.products.'.$matrix[$i]['type'].'.edit', $matrix[$i]['id']) }}"
+							<a href="{{ route('pharmacies.products.'.$item['type'].'.edit', $item['id']) }}"
 								class="btn btn-outline-secondary btn-sm">
-							<span class="fas fa-edit" aria-hidden="true"></span></a>
+								<span class="fas fa-edit" aria-hidden="true"></span>
+							</a>
 						</td>
 					</tr>
-					@endfor
-			@endif
+				@endif
+			@endforeach
 		</tbody>
 	</table>
 </div>
@@ -100,17 +100,11 @@
 @endsection
 
 @section('custom_js')
-<script type="text/javascript">
-	var tableToExcel = (function() {
-	    var uri = 'data:application/vnd.ms-excel;base64,'
-	    , template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8"></head><body><table>{table}</table></body></html>'
-	    , base64 = function(s) { return window.btoa(unescape(encodeURIComponent(s))) }
-	    , format = function(s, c) { return s.replace(/{(\w+)}/g, function(m, p) { return c[p]; }) }
-	    return function(table, name) {
-	    if (!table.nodeType) table = document.getElementById(table)
-	    var ctx = {worksheet: name || 'Worksheet', table: table.innerHTML}
-	    window.location.href = uri + base64(format(template, ctx))
-	    }
-	})()
+<script>
+function exportTableToExcel(tableId, filename = '') {
+    const table = document.getElementById(tableId);
+    const wb = XLSX.utils.table_to_book(table, {sheet: "Sheet JS"});
+    XLSX.writeFile(wb, filename + '.xlsx');
+}
 </script>
 @endsection

@@ -4,9 +4,9 @@
             <label for="for_barcode">Código producto</label>
 
             @if($defer_active)
-                <input type="text" class="form-control" id="for_barcode_defer" placeholder="" name="barcode" wire:model="barcode_defer" required>
+                <input type="text" class="form-control" id="for_barcode_defer" placeholder="" name="barcode" wire:model="barcode_defer" >
             @else
-                <input type="text" class="form-control" id="for_barcode" placeholder="" name="barcode" wire:model.live.debounce.300ms="barcode" required>
+                <input type="text" class="form-control" id="for_barcode" placeholder="" name="barcode" wire:model.live.debounce.300ms="barcode" >
             @endif
             
         </fieldset>

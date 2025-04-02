@@ -7,6 +7,7 @@ use App\Models\Pharmacies\DispatchVerificationMailing;
 use App\Models\Pharmacies\Destiny;
 use App\Models\Pharmacies\File;
 use App\Models\Pharmacies\InventoryAdjustment;
+use App\Models\Pharmacies\Patient;
 use App\Models\Pharmacies\Pharmacy;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
@@ -41,6 +42,10 @@ class Dispatch extends Model
         'receiver_id',
         'sendC19',
         'created_at',
+        'patient_id',
+        'acquirer_id',
+        'qf_supervisor_id',
+        'fractionator_id',
     ];
 
     /**
@@ -130,5 +135,45 @@ class Dispatch extends Model
     public function inventoryAdjustment(): BelongsTo
     {
         return $this->belongsTo(InventoryAdjustment::class);
+    }
+
+    /**
+     * Get the patient that owns the dispatch.
+     *
+     * @return BelongsTo
+     */
+    public function patient(): BelongsTo
+    {
+        return $this->belongsTo(Patient::class, 'patient_id');
+    }
+
+    /**
+     * Get the acquirer that owns the dispatch.
+     *
+     * @return BelongsTo
+     */
+    public function acquirer(): BelongsTo
+    {
+        return $this->belongsTo(Patient::class, 'acquirer_id');
+    }
+
+    /**
+     * Get the QF supervisor that owns the dispatch.
+     *
+     * @return BelongsTo
+     */
+    public function qfSupervisor(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'qf_supervisor_id')->withTrashed();
+    }
+
+    /**
+     * Get the fractionator that owns the dispatch.
+     *
+     * @return BelongsTo
+     */
+    public function fractionator(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'fractionator_id')->withTrashed();
     }
 }

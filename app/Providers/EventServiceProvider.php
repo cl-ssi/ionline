@@ -6,9 +6,11 @@ use App\Models\Inv\InventoryLabel;
 use App\Models\Pharmacies\PurchaseItem;
 use App\Models\Pharmacies\ReceivingItem;
 use App\Models\Pharmacies\DispatchItem;
+use App\Models\Pharmacies\FractionationItem;
 use App\Observers\PurchaseItemObserver;
 use App\Observers\ReceivingItemObserver;
 use App\Observers\DispatchItemObserver;
+use App\Observers\FractionationItemObserver;
 use App\Observers\InventoryLabelObserver;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
@@ -41,6 +43,7 @@ class EventServiceProvider extends ServiceProvider
         PurchaseItem::observe(PurchaseItemObserver::class);
         ReceivingItem::observe(ReceivingItemObserver::class);
         DispatchItem::observe(DispatchItemObserver::class);
+        FractionationItem::observe(FractionationItemObserver::class);
         InventoryLabel::observe(InventoryLabelObserver::class);
     }
 }

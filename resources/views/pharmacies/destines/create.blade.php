@@ -20,7 +20,7 @@
 
 		<fieldset class="form-group col">
 		    <label for="for_name">Correo electrónico</label>
-		    <input type="text" class="form-control" id="for_name" placeholder="Correo electrónico" name="email" required="required">
+		    <input type="text" class="form-control" id="for_name" placeholder="Correo electrónico" name="email" >
 		</fieldset>
 
 	</div>

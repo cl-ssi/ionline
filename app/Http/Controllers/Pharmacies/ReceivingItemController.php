@@ -38,7 +38,7 @@ class ReceivingItemController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'barcode' => 'required|string',
+            // 'barcode' => 'required|string',
             'amount' => 'required|numeric'
         ]);
 
