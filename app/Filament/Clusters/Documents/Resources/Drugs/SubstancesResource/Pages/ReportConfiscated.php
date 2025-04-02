@@ -88,11 +88,15 @@ class ReportConfiscated extends Page implements Tables\Contracts\HasTable
         $this->selectedSubstances = $data['selectedSubstances'] ?? [];
         $this->shouldApplyFilters = true;
 
+        /*
         $this->destructTotalsBySubstance = $this->getDestructWeightBySubstance();
         $this->destructGroupedByResultSubstance = $this->getDestructGroupedByResultSubstance();
         $this->destructReceptionsGroupedByResultSubstance = $this->getDestructReceptionsByResultSubstance();
         $this->netWeightGroupedByResultSubstance = $this->getNetWeightGroupedByResultSubstance();
         $this->countersampleGroupedByResultSubstance = $this->getCountersampleGroupedByResultSubstance();
+        */
+
+        $this->calculateMetrics();
     }
 
     public function table(Tables\Table $table): Tables\Table
@@ -280,7 +284,6 @@ class ReportConfiscated extends Page implements Tables\Contracts\HasTable
                     })
                     ->bulleted()
                     ->alignEnd(),
-                
             ])
             ->headerActions([
                 /*
@@ -343,9 +346,9 @@ class ReportConfiscated extends Page implements Tables\Contracts\HasTable
             ->toArray();
     }
 
-    /**
+    /*
      * Obtiene el peso de destrucción por sustancia.
-     */
+     *
     private function getDestructWeightBySubstance(): array
     {
         if (!$this->shouldApplyFilters || !$this->year) {
@@ -368,7 +371,7 @@ class ReportConfiscated extends Page implements Tables\Contracts\HasTable
 
     /**
      * Obtiene los datos de destrucción agrupados por sustancia resultante.
-     */
+     *
     private function getDestructGroupedByResultSubstance(): array
     {
         if (!$this->shouldApplyFilters || !$this->year) {
@@ -400,7 +403,7 @@ class ReportConfiscated extends Page implements Tables\Contracts\HasTable
 
     /**
      * Obtiene los actas de destrucción agrupados por sustancia resultante.
-     */
+     *
     private function getDestructReceptionsByResultSubstance(): array
     {
         if (!$this->shouldApplyFilters || !$this->year) {
@@ -434,7 +437,7 @@ class ReportConfiscated extends Page implements Tables\Contracts\HasTable
 
     /**
      * Obtiene el peso neto agrupado por sustancia resultante.
-     */
+     *
     private function getNetWeightGroupedByResultSubstance(): array
     {
         if (!$this->shouldApplyFilters || !$this->year) {
@@ -466,7 +469,7 @@ class ReportConfiscated extends Page implements Tables\Contracts\HasTable
 
     /**
      * Obtiene las contramuestras agrupadas por sustancia resultante.
-     */
+     *
     private function getCountersampleGroupedByResultSubstance(): array
     {
         if (!$this->shouldApplyFilters || !$this->year) {
@@ -503,6 +506,77 @@ class ReportConfiscated extends Page implements Tables\Contracts\HasTable
     /**
      * Obtiene los datos para la exportación.
      */
+
+     private function getFilteredReceptionItems(): \Illuminate\Support\Collection
+    {
+        return ReceptionItem::with(['reception', 'resultSubstance'])
+            ->whereHas('reception', fn ($q) => $q->whereYear('date', $this->year))
+            ->where(function ($q) {
+                $q->whereNotNull('result_substance_id')
+                ->orWhereHas('protocols'); // si quieres mantener esa lógica
+            })
+            ->when($this->selectedSubstances, fn ($q) =>
+                $q->whereIn('substance_id', $this->selectedSubstances)
+            )
+            ->get()
+            ->filter(fn ($item) => $item->reception && $item->reception->wasDestructed());
+    }
+
+    private function calculateMetrics()
+    {
+        $items = $this->getFilteredReceptionItems();
+
+        $this->destructTotalsBySubstance = $items
+            ->groupBy('substance_id')
+            ->map(fn ($group) => $group->sum('destruct'))
+            ->toArray();
+
+        $this->destructGroupedByResultSubstance = $items
+            ->whereNotNull('result_substance_id')
+            ->groupBy('substance_id')
+            ->map(fn ($group) =>
+                $group->groupBy('result_substance_id')->map(fn ($g) => [
+                    'name' => $g->first()?->resultSubstance?->name ?? '(Sin nombre)',
+                    'destruct' => $g->sum('destruct'),
+                ])->values()
+            )->toArray();
+
+        $this->destructReceptionsGroupedByResultSubstance = $items
+            ->whereNotNull('result_substance_id')
+            ->groupBy('substance_id')
+            ->map(fn ($group) =>
+                $group->groupBy('result_substance_id')->map(fn ($g) => [
+                    'name' => $g->first()?->resultSubstance?->name ?? '(Sin nombre)',
+                    'actas' => $g->pluck('reception_id')->unique()->count(),
+                ])->values()
+            )->toArray();
+
+        $this->netWeightGroupedByResultSubstance = $items
+            ->whereNotNull('result_substance_id')
+            ->groupBy('substance_id')
+            ->map(fn ($group) =>
+                $group->groupBy('result_substance_id')->map(fn ($g) => [
+                    'name' => $g->first()?->resultSubstance?->name ?? '(Sin nombre)',
+                    'net_weight' => $g->sum('net_weight'),
+                ])->values()
+            )->toArray();
+
+        $this->countersampleGroupedByResultSubstance = $items
+            ->whereNotNull('result_substance_id')
+            ->groupBy('substance_id')
+            ->map(fn ($group) =>
+                $group->groupBy('result_substance_id')->map(fn ($g) => [
+                    'name' => $g->first()?->resultSubstance?->name ?? '(Sin nombre)',
+                    'countersample_total' => $g->sum(fn ($item) =>
+                        $item->countersample_number > 0
+                            ? $item->countersample * $item->countersample_number
+                            : $item->countersample
+                    ),
+                ])->values()
+            )->toArray();
+    }
+
+
     private function getExportData(): \Illuminate\Support\Collection
     {
         if (!$this->shouldApplyFilters || !$this->year) {
