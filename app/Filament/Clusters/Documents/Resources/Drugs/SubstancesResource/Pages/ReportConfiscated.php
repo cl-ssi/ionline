@@ -41,6 +41,8 @@ class ReportConfiscated extends Page implements Tables\Contracts\HasTable
     public array $destructTotalsBySubstance = [];
     public array $destructGroupedByResultSubstance = [];
     public array $destructReceptionsGroupedByResultSubstance = [];
+    public array $netWeightGroupedByResultSubstance = [];
+    public array $countersampleGroupedByResultSubstance = [];
 
     public function mount(): void
     {
@@ -62,7 +64,7 @@ class ReportConfiscated extends Page implements Tables\Contracts\HasTable
                         ->columnSpan(6),
 
                     Forms\Components\Select::make('selectedSubstances')
-                        ->label('Sustancias')
+                        ->label('Sustancias Presuntas')
                         ->options($this->getSubstanceOptions())
                         ->multiple()
                         ->searchable()
@@ -89,6 +91,8 @@ class ReportConfiscated extends Page implements Tables\Contracts\HasTable
         $this->destructTotalsBySubstance = $this->getDestructWeightBySubstance();
         $this->destructGroupedByResultSubstance = $this->getDestructGroupedByResultSubstance();
         $this->destructReceptionsGroupedByResultSubstance = $this->getDestructReceptionsByResultSubstance();
+        $this->netWeightGroupedByResultSubstance = $this->getNetWeightGroupedByResultSubstance();
+        $this->countersampleGroupedByResultSubstance = $this->getCountersampleGroupedByResultSubstance();
     }
 
     public function table(Tables\Table $table): Tables\Table
@@ -232,8 +236,30 @@ class ReportConfiscated extends Page implements Tables\Contracts\HasTable
                     })
                     ->bulleted()
                     ->extraAttributes(['class' => 'whitespace-nowrap']),
+                Tables\Columns\TextColumn::make('net_weight_by_result_substance')
+                    ->label('P. Neto por Sustancia Resultante')
+                    ->getStateUsing(function ($record) {
+                        $items = $this->netWeightGroupedByResultSubstance[$record->substance_id] ?? [];
+                
+                        return collect($items)->map(function ($item) {
+                            return number_format($item['net_weight'], 2, ',', '.');
+                        })->all();
+                    })
+                    ->bulleted()
+                    ->alignEnd(),
+                Tables\Columns\TextColumn::make('countersample_by_result_substance')
+                    ->label('P. Contramuestras por Sustancia Resultante')
+                    ->getStateUsing(function ($record) {
+                        $items = $this->countersampleGroupedByResultSubstance[$record->substance_id] ?? [];
+                
+                        return collect($items)->map(function ($item) {
+                            return number_format($item['countersample_total'], 2, ',', '.');
+                        })->all();
+                    })
+                    ->bulleted()
+                    ->alignEnd(),
                 Tables\Columns\TextColumn::make('result_substance_weight')
-                    ->label('Destruidos por Resultado')
+                    ->label('P. Destruidos por Resultado')
                     ->getStateUsing(function ($record) {
                         $items = $this->destructGroupedByResultSubstance[$record->substance_id] ?? [];
                 
@@ -254,6 +280,7 @@ class ReportConfiscated extends Page implements Tables\Contracts\HasTable
                     })
                     ->bulleted()
                     ->alignEnd(),
+                
             ])
             ->headerActions([
                 /*
@@ -398,6 +425,74 @@ class ReportConfiscated extends Page implements Tables\Contracts\HasTable
                         return [
                             'name' => $group->first()?->resultSubstance?->name ?? '(Sin nombre)',
                             'actas' => $actas,
+                        ];
+                    })
+                    ->values();
+            })
+            ->toArray();
+    }
+
+    /**
+     * Obtiene el peso neto agrupado por sustancia resultante.
+     */
+    private function getNetWeightGroupedByResultSubstance(): array
+    {
+        if (!$this->shouldApplyFilters || !$this->year) {
+            return [];
+        }
+
+        return ReceptionItem::with(['reception', 'resultSubstance'])
+            ->whereHas('reception', fn ($q) => $q->whereYear('date', $this->year))
+            ->whereNotNull('result_substance_id')
+            ->when($this->selectedSubstances, fn ($q) =>
+                $q->whereIn('substance_id', $this->selectedSubstances)
+            )
+            ->get()
+            ->filter(fn ($item) => $item->reception && $item->reception->wasDestructed())
+            ->groupBy('substance_id')
+            ->map(function ($itemsBySubstance) {
+                return $itemsBySubstance
+                    ->groupBy('result_substance_id')
+                    ->map(function ($group) {
+                        return [
+                            'name' => $group->first()?->resultSubstance?->name ?? '(Sin nombre)',
+                            'net_weight' => $group->sum('net_weight'),
+                        ];
+                    })
+                    ->values();
+            })
+            ->toArray();
+    }
+
+    /**
+     * Obtiene las contramuestras agrupadas por sustancia resultante.
+     */
+    private function getCountersampleGroupedByResultSubstance(): array
+    {
+        if (!$this->shouldApplyFilters || !$this->year) {
+            return [];
+        }
+
+        return ReceptionItem::with(['reception', 'resultSubstance'])
+            ->whereHas('reception', fn ($q) => $q->whereYear('date', $this->year))
+            ->whereNotNull('result_substance_id')
+            ->when($this->selectedSubstances, fn ($q) =>
+                $q->whereIn('substance_id', $this->selectedSubstances)
+            )
+            ->get()
+            ->filter(fn ($item) => $item->reception && $item->reception->wasDestructed())
+            ->groupBy('substance_id')
+            ->map(function ($itemsBySubstance) {
+                return $itemsBySubstance
+                    ->groupBy('result_substance_id')
+                    ->map(function ($group) {
+                        return [
+                            'name' => $group->first()?->resultSubstance?->name ?? '(Sin nombre)',
+                            'countersample_total' => $group->sum(fn ($item) =>
+                                $item->countersample_number > 0
+                                    ? $item->countersample * $item->countersample_number
+                                    : $item->countersample
+                            ),
                         ];
                     })
                     ->values();
