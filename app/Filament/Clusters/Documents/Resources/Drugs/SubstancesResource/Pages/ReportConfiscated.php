@@ -43,6 +43,9 @@ class ReportConfiscated extends Page implements Tables\Contracts\HasTable
     public array $destructReceptionsGroupedByResultSubstance = [];
     public array $netWeightGroupedByResultSubstance = [];
     public array $countersampleGroupedByResultSubstance = [];
+    public array $itemsCountGroupedByResultSubstance = [];
+    public array $receptionsCountGroupedByResultSubstance = [];
+
 
     public function mount(): void
     {
@@ -240,6 +243,28 @@ class ReportConfiscated extends Page implements Tables\Contracts\HasTable
                     })
                     ->bulleted()
                     ->extraAttributes(['class' => 'whitespace-nowrap']),
+                Tables\Columns\TextColumn::make('items_by_result_substance')
+                    ->label('Total Ítems por Sustancia Resultante')
+                    ->getStateUsing(function ($record) {
+                        $items = $this->itemsCountGroupedByResultSubstance[$record->substance_id] ?? [];
+                
+                        return collect($items)->map(function ($item) {
+                            return number_format($item['items'], 0, ',', '.');
+                        })->all();
+                    })
+                    ->bulleted()
+                    ->alignEnd(),
+                Tables\Columns\TextColumn::make('receptions_by_result_substance')
+                    ->label('Actas por Sustancia Resultante')
+                    ->getStateUsing(function ($record) {
+                        $items = $this->receptionsCountGroupedByResultSubstance[$record->substance_id] ?? [];
+
+                        return collect($items)->map(function ($item) {
+                            return number_format($item['actas'], 0, ',', '.');
+                        })->all();
+                    })
+                    ->bulleted()
+                    ->alignEnd(),
                 Tables\Columns\TextColumn::make('net_weight_by_result_substance')
                     ->label('P. Neto por Sustancia Resultante')
                     ->getStateUsing(function ($record) {
@@ -572,6 +597,26 @@ class ReportConfiscated extends Page implements Tables\Contracts\HasTable
                             ? $item->countersample * $item->countersample_number
                             : $item->countersample
                     ),
+                ])->values()
+            )->toArray();
+
+        $this->itemsCountGroupedByResultSubstance = $items
+            ->whereNotNull('result_substance_id')
+            ->groupBy('substance_id')
+            ->map(fn ($group) =>
+                $group->groupBy('result_substance_id')->map(fn ($g) => [
+                    'name' => $g->first()?->resultSubstance?->name ?? '(Sin nombre)',
+                    'items' => $g->count(),
+                ])->values()
+            )->toArray();
+        
+        $this->receptionsCountGroupedByResultSubstance = $items
+            ->whereNotNull('result_substance_id')
+            ->groupBy('substance_id')
+            ->map(fn ($group) =>
+                $group->groupBy('result_substance_id')->map(fn ($g) => [
+                    'name' => $g->first()?->resultSubstance?->name ?? '(Sin nombre)',
+                    'actas' => $g->pluck('reception_id')->unique()->count(),
                 ])->values()
             )->toArray();
     }
