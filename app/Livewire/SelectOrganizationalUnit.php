@@ -116,7 +116,7 @@ class SelectOrganizationalUnit extends Component
          * Si se seteo por parametro un listener, entonces le enviamos a ese listener la ou_id
          */
         if(isset($this->emitToListener)) {
-            $this->dispatch($this->emitToListener, organizationalUnitId: $this->organizational_unit_id);
+            $this->dispatch($this->emitToListener, organizational_unit_id: $this->organizational_unit_id);
         }
 
         /**

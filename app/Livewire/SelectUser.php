@@ -21,8 +21,8 @@ class SelectUser extends Component
     public $parte_id;
     public $enCopia = [];
  
-    #[On('selectUser')] 
-    public function selectUser($organizational_unit_id)
+    #[On('setOuId')] 
+    public function setOrganizationalUnit($organizational_unit_id)
     {
         $this->to_ou_id = $organizational_unit_id;
     }

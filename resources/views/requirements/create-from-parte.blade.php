@@ -42,7 +42,7 @@
                         'establishment_id' => auth()->user()->organizationalUnit->establishment->id,
                         'mobile' => true,
                         'selectpicker' => false,
-                        'emitToListener' => 'selectUser',
+                        'emitToListener' => 'setOuId',
                         'selected_id' => 'to_ou_id',
                     ])
                 </fieldset>
