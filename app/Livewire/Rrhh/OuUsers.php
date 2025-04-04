@@ -24,10 +24,10 @@ class OuUsers extends Component
     }
 
     #[On('getOuId')]
-    public function getUsersFromOu($organizationalUnitId = null)
+    public function getUsersFromOu($organizational_unit_id = null)
     {
-        if(isset($organizationalUnitId) && $organizationalUnitId != '') {
-            $ou = OrganizationalUnit::find($organizationalUnitId);
+        if(isset($organizational_unit_id) && $organizational_unit_id != '') {
+            $ou = OrganizationalUnit::find($organizational_unit_id);
             $this->users = $ou->users;
             $this->authority_id = $ou->currentManager->user_id ?? null;
         } else {
