@@ -187,6 +187,7 @@
 
     <div class="table-responsive mt-3">
         <h6><i class="fas fa-signature"></i> Proceso de Firmas</h6>
+        @if($requestForm->eventRequestForms->count() > 0)
         <table class="table table-sm table-striped table-bordered">
             <tbody class="text-center small">
             <tr>
@@ -255,6 +256,11 @@
             </tr>
             </tbody>
         </table>
+        @else
+            <div class="alert alert-info" role="alert">
+                <i class="fas fa-info-circle"></i> Estimado/a usuario/a: Le informamos que el proceso de firmas aún no ha comenzado.
+            </div>
+        @endif
     </div>
 
     @if($requestForm->eventRequestForms->whereNotNull('deleted_at')->whereNotNull('comment')->count() > 0)
@@ -286,7 +292,7 @@
     @endif
 
     @if($requestForm->type_form == 'bienes y/o servicios')
-        <div class="table-responsive">
+        <div class="table-responsive mt-3">
             <h6><i class="fas fa-info-circle"></i> Lista de Bienes y/o Servicios</h6>
             <table class="table table-condensed table-hover table-bordered table-sm">
                 <thead class="text-center small">
