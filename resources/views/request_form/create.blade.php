@@ -10,6 +10,26 @@
 
 @include('request_form.partials.nav')
 
+<div class="alert alert-info alert-sm" role="alert">
+    <div class="row">
+        <div class="col-sm">
+            <i class="fas fa-info-circle"></i> <b>Estimado/a usuario/a:</b>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm text-justify">
+            <br />
+            Conforme a lo establecido en la <b>Ley N° 19.886 de Bases sobre Contratos Administrativos de 
+            Suministro y Prestación de Servicios y su Reglamento, si el requerimiento no se encuentra 
+            debidamente planificado en el Plan Anual de Compras</b>, este será <b>rechazado</b>, a fin de asegurar 
+            el cumplimiento de los principios de eficiencia, responsabilidad y uso de los recursos 
+            públicos. No obstante, el sistema permitirá la generación de requerimientos no planificados 
+            de manera <b>excepcional</b>, los cuales deberán contar con justificación técnica debidamente 
+            fundada y serán evaluados caso a caso.
+        </div>
+    </div>
+</div>
+
 <div class="card">
   <div class="card-header">
     <i class="fas fa-user"></i> Datos del Solicitante:</h6>
