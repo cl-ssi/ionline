@@ -81,7 +81,7 @@ class AttendanceRecordResource extends Resource
                 Tables\Columns\TextColumn::make('user.shortName')
                     ->label('Usuario')
                     ->sortable(['full_name'])
-                    ->searchable(['full_name']),
+                    ->searchable(['full_name', 'id']),
                 Tables\Columns\TextColumn::make('record_at')
                     ->label('Fecha y hora')
                     ->dateTime('Y-m-d H:i')

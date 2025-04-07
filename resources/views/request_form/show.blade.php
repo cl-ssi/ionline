@@ -29,7 +29,7 @@
                 <table class="table table-sm table-bordered">
                     <tbody class="small">
                     <tr>
-                        <th class="table-active" colspan="2" scope="row">Folio</th>
+                        <th class="table-active" colspan="2" width="35%" scope="row">Folio</th>
                         <td>{{ $requestForm->folio }}
                             @if($requestForm->father)
                                 <br>(<a href="{{ route('request_forms.show', $requestForm->father->id) }}"
@@ -124,6 +124,7 @@
                 </table>
             </div>
         </div>
+
         <div class="col-sm-4">
             <h6><i class="fas fa-paperclip"></i> Adjuntos</h6>
             <div class="list-group">
@@ -147,8 +148,46 @@
         </div>
     </div>
 
-    <div class="table-responsive">
+    @if($requestForm->purchase_plan_id != null) 
+    <div class="row">
+        <div class="col-sm-8">
+            <div class="table-responsive">
+                <h6><i class="fas fa-info-circle"></i> Plan de Compras ID {{ $requestForm->purchase_plan_id }}
+                <table class="table table-sm table-bordered">
+                    <tbody class="small">
+                        <tr>
+                            <th class="table-active" colspan="2" width="35%" scope="row">Fecha Creación</th>
+                            <td>{{ $requestForm->purchasePlan->created_at->format('d-m-Y H:i:s') }}</td>
+                        </tr>
+                        <tr>
+                            <th class="table-active" colspan="2" width="35%" scope="row">Asunto</th>
+                            <td>{{ $requestForm->purchasePlan->subject }}</td>
+                        </tr>
+                        <tr>
+                            <th class="table-active" colspan="2" scope="row">Funcionario Responsable</th>
+                            <td>{{ $requestForm->purchasePlan->userResponsible->fullName }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            @if(in_array(auth()->id(), [$requestForm->purchasePlan->user_creator_id, $requestForm->purchasePlan->user_responsible_id]) ||
+                auth()->user()->organizational_unit_id == $requestForm->purchasePlan->organizational_unit_id ||
+                auth()->id() == $requestForm->purchasePlan->assigned_user_id ||
+                auth()->user()->hasPermissionTo('Request Forms: all') || auth()->user()->hasPermissionTo('Purchase Plan: all'))
+                <a type="button" 
+                    class="btn btn-info float-right btn-sm" 
+                    href="{{ route('purchase_plan.show', $requestForm->purchasePlan) }}"
+                    target="_blank">
+                    <i class="fas fa-fw fa-shopping-cart"></i> Mas información...
+                </a>
+            @endif
+        </div>
+    </div>
+    @endif
+
+    <div class="table-responsive mt-3">
         <h6><i class="fas fa-signature"></i> Proceso de Firmas</h6>
+        @if($requestForm->eventRequestForms->count() > 0)
         <table class="table table-sm table-striped table-bordered">
             <tbody class="text-center small">
             <tr>
@@ -217,6 +256,11 @@
             </tr>
             </tbody>
         </table>
+        @else
+            <div class="alert alert-info" role="alert">
+                <i class="fas fa-info-circle"></i> Estimado/a usuario/a: Le informamos que el proceso de firmas aún no ha comenzado.
+            </div>
+        @endif
     </div>
 
     @if($requestForm->eventRequestForms->whereNotNull('deleted_at')->whereNotNull('comment')->count() > 0)
@@ -248,7 +292,7 @@
     @endif
 
     @if($requestForm->type_form == 'bienes y/o servicios')
-        <div class="table-responsive">
+        <div class="table-responsive mt-3">
             <h6><i class="fas fa-info-circle"></i> Lista de Bienes y/o Servicios</h6>
             <table class="table table-condensed table-hover table-bordered table-sm">
                 <thead class="text-center small">
