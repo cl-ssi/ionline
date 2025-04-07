@@ -148,6 +148,38 @@
     </div>
 </div>
 
+@if($requestForm->purchase_plan_id != null) 
+<div class="row mt-3">
+    <div class="col-sm-8">
+        <div class="table-responsive">
+            <h6><i class="fas fa-info-circle"></i> Plan de Compras ID {{ $requestForm->purchase_plan_id }}
+            <table class="table table-sm table-bordered">
+                <tbody class="small">
+                    <tr>
+                        <th class="table-active" colspan="2" width="35%" scope="row">Fecha Creación</th>
+                        <td>{{ $requestForm->purchasePlan->created_at->format('d-m-Y H:i:s') }}</td>
+                    </tr>
+                    <tr>
+                        <th class="table-active" colspan="2" width="35%" scope="row">Asunto</th>
+                        <td>{{ $requestForm->purchasePlan->subject }}</td>
+                    </tr>
+                    <tr>
+                        <th class="table-active" colspan="2" scope="row">Funcionario Responsable</th>
+                        <td>{{ $requestForm->purchasePlan->userResponsible->fullName }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <a type="button" 
+            class="btn btn-info float-right btn-sm" 
+            href="{{ route('purchase_plan.show', $requestForm->purchasePlan) }}"
+            target="_blank">
+            <i class="fas fa-fw fa-shopping-cart"></i> Mas información...
+        </a>
+    </div>
+</div>
+@endif
+
 <br>
 
 </div>
