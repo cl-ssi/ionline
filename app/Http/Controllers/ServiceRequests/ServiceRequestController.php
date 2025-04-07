@@ -341,7 +341,8 @@ class ServiceRequestController extends Controller
             return $q->whereNotIn('establishment_id', [1, 41]);
         })
         ->when($establishment_id != 38, function ($q) use ($establishment_id) {
-            return $q->where('establishment_id',$establishment_id);
+            return $q->where('establishment_id',$establishment_id)
+                    ->orWhere('policy_establishment_id',$establishment_id);
         })
         ->orderBy('id', 'desc')
         ->paginate(100);
@@ -369,7 +370,8 @@ class ServiceRequestController extends Controller
                                             return $q->whereNotIn('establishment_id', [1, 41]);
                                         })
                                         ->when($establishment_id != 38, function ($q) use ($establishment_id) {
-                                            return $q->where('establishment_id',$establishment_id);
+                                            return $q->where('establishment_id',$establishment_id)
+                                                    ->orWhere('policy_establishment_id',$establishment_id);
                                         })
                                         ->first();
     return view('service_requests.requests.change_signature_flow', compact('users', 'request', 'serviceRequests'));
@@ -1625,7 +1627,8 @@ class ServiceRequestController extends Controller
                         return $q->whereNotIn('establishment_id', [1, 41]);
                     })
                     ->when($establishment_id != 38, function ($q) use ($establishment_id) {
-                        return $q->where('establishment_id',$establishment_id);
+                        return $q->where('establishment_id',$establishment_id)
+                                ->orWhere('policy_establishment_id', $establishment_id);
                     })
                     ->get();
 
