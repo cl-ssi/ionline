@@ -167,6 +167,16 @@
                         <th class="table-active" colspan="2" scope="row">Funcionario Responsable</th>
                         <td>{{ $requestForm->purchasePlan->userResponsible->fullName }}</td>
                     </tr>
+                    @foreach($requestForm->purchasePlan->purchasePlanPublications as $purchasePlanPublication)
+                    <tr>
+                        <th class="table-active" colspan="2" scope="row">Fecha Publicación M.P.</th>
+                        <td>{{ $purchasePlanPublication->date }}</td>
+                    </tr>
+                    <tr>
+                        <th class="table-active" colspan="2" scope="row">ID Publicación M.P.</th>
+                        <td>{{ $purchasePlanPublication->mercado_publico_id }}</td>
+                    </tr>
+                    @endforeach
                 </tbody>
             </table>
         </div>
