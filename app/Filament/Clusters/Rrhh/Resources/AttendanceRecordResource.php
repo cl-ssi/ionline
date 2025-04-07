@@ -81,7 +81,7 @@ class AttendanceRecordResource extends Resource
                 Tables\Columns\TextColumn::make('user.shortName')
                     ->label('Usuario')
                     ->sortable(['full_name'])
-                    ->searchable(['full_name']),
+                    ->searchable(['full_name', 'id']),
                 Tables\Columns\TextColumn::make('record_at')
                     ->label('Fecha y hora')
                     ->dateTime('Y-m-d H:i')
@@ -152,10 +152,14 @@ class AttendanceRecordResource extends Resource
                                 $data['created_until'],
                                 fn (Builder $query, $date): Builder => $query->whereDate('record_at', '<=', $date),
                             );
-                    })
-                
-                
-            ])
+                    }),
+                Tables\Filters\SelectFilter::make('type')
+                    ->label('Tipo')
+                    ->options([
+                        1 => 'Entrada',
+                        0 => 'Salida',
+                    ]),
+                ])
             ->actions([
                 Tables\Actions\Action::make('markAsProcessed')
                     ->label('Sirh OK')
