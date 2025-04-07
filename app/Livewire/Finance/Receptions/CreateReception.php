@@ -462,13 +462,13 @@ class CreateReception extends Component
     * Setea el signer_id
     */
     #[On('ouSelected')]
-    public function ouSelected($organizationalUnitId)
+    public function ouSelected($organizational_unit_id)
     {
-        if($organizationalUnitId) {
-            $ou = OrganizationalUnit::find($organizationalUnitId);
+        if($organizational_unit_id) {
+            $ou = OrganizationalUnit::find($organizational_unit_id);
             if($ou->currentManager) {
                 $this->authority = $ou->currentManager->user->shortName;
-                $this->signer_ou_id = $organizationalUnitId;
+                $this->signer_ou_id = $organizational_unit_id;
             }
             else {
                 $this->signer_ou_id = null;
