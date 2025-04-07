@@ -152,9 +152,24 @@ class AttendanceRecordResource extends Resource
                                 $data['created_until'],
                                 fn (Builder $query, $date): Builder => $query->whereDate('record_at', '<=', $date),
                             );
-                    })
-                
-                
+                    }),
+                Tables\Filters\SelectFilter::make('clock_ip')
+                    ->label('Ubicación')
+                    ->options([
+                        '10.8.119.20' => 'DSST',
+                        '192.168.1.200' => 'Hospital Diurno Adolescente',
+                        '192.168.1.201' => 'UHCIP',
+                        '10.66.75.30' => 'RRHH',
+                        '10.8.226.18' => 'Servicios Generales',
+                        '10.1.118.77' => 'Cosam Allende',
+                        '10.66.142.45' => 'SAMU',
+                        '10.1.4.25' => 'Cosam París',
+                        '10.0.179.70' => 'Cosam Seguel',
+                        '10.6.55.142' => 'HETG - Thompson 1847',
+                    ])
+                    ->searchable()
+                    ->preload()
+                    ->visible(fn() => auth()->user()->canAny(['be god', 'Attendance records: admin'])),
             ])
             ->actions([
                 Tables\Actions\Action::make('markAsProcessed')
