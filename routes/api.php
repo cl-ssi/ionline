@@ -8,6 +8,7 @@ use App\Http\Controllers\TestController;
 use App\Http\Controllers\ServiceRequests\ServiceRequestController;
 use App\Http\Controllers\Pharmacies\ReceivingController;
 use App\Http\Controllers\Pharmacies\DispatchController;
+use App\Http\Controllers\Pharmacies\FractionationController;
 use App\Http\Controllers\WebserviceController;
 use App\Http\Controllers\Rrhh\UserController;
 use App\Http\Controllers\Rrhh\AttendanceRecordController;
@@ -37,6 +38,7 @@ Route::prefix('service_request')->name('service_request.')->middleware('client')
 Route::prefix('pharmacies')->name('pharmacies.')->middleware('client')->group(function (){
     Route::post('/receivingProductsWs', [ReceivingController::class, 'receivingProductsWs']);
     Route::post('/dispatchingProductsWs', [DispatchController::class, 'dispatchingProductsWs']);
+    Route::post('/print-labels', [FractionationController::class, 'printLabels']);
 });
 
 Route::prefix('rrhh')->name('rrhh.')->middleware('auth.basic')->group(function (){

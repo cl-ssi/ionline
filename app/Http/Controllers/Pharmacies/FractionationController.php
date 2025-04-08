@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Pharmacies;
 
 use Illuminate\Http\Request;
+use Symfony\Component\Process\Process;
 use App\Http\Controllers\Controller;
 use App\Models\Pharmacies\Batch;
 use App\Models\Pharmacies\Fractionation;
@@ -236,5 +237,55 @@ class FractionationController extends Controller
 
     public function exportExcel(){
         return Excel::download(new FractionationExport, 'entregas.xlsx');
+    }
+
+    public function printLabels(Request $request)
+    {
+        // Validate incoming data
+        $request->validate([
+            'lines' => 'required|array',
+            'lines.*' => 'array',
+            'dosificaciones' => 'required|array',
+            'dosificaciones.*' => 'string',
+            'config' => 'array',
+        ]);
+
+        $lines = $request->input('lines');
+        $dosificaciones = $request->input('dosificaciones');
+        $config = $request->input('config', []);
+
+        // Validate line length and dosificacion count
+        foreach ($lines as $line) {
+            if (count($line) < 18) {
+                return response()->json(['error' => 'Each line must have at least 18 elements'], 400);
+            }
+        }
+
+        if (count($lines) !== count($dosificaciones)) {
+            return response()->json(['error' => 'Number of lines and dosificaciones must match'], 400);
+        }
+
+        // Prepare data for Python script
+        $data = [
+            'lines' => $lines,
+            'dosificaciones' => $dosificaciones,
+            'config' => $config,
+        ];
+
+        // Path to the Python script
+        $scriptPath = base_path('scripts/PrintLabelsCLI/print_labels_cli.py');
+
+        // Execute the script using Symfony Process Component
+        $process = new Process(['python', $scriptPath]);
+        $process->setInput(json_encode($data));
+        $process->run();
+
+        if (!$process->isSuccessful()) {
+            return response()->json([
+                'error' => $process->getErrorOutput()
+            ], 500);
+        }
+
+        return response()->json(['status' => 'Labels printed successfully']);
     }
 }
