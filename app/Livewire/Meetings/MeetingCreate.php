@@ -233,7 +233,7 @@ class MeetingCreate extends Component
                     'type'          => $grouping->type,
                     'name'          => $grouping->name,
                     'user_id'       => $grouping->user_id,
-                    'user_name'     => ($grouping->type == "funcionario") ? $grouping->groupingUser->fullName  : null,
+                    'user_name'     => ($grouping->type == "funcionario") ? $grouping->user->fullName  : null,
                     'meeting_id'    => $grouping->meeting_id
                 ];
             }

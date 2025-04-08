@@ -4,7 +4,7 @@ namespace App\Filament\Clusters\Documents\Resources\Meetings;
 
 use App\Filament\Clusters\Documents;
 use App\Filament\Clusters\Documents\Resources\Meetings\MeetingResource\Pages;
-// use App\Filament\Clusters\Documents\Resources\Meetings\MeetingResource\RelationManagers;
+use App\Filament\Clusters\Documents\Resources\Meetings\MeetingResource\RelationManagers;
 use App\Models\Meetings\Meeting;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -96,9 +96,7 @@ class MeetingResource extends Resource
                             ])
                             ->columnSpan(9),
                     ]),
-                    
                 ]),
-
         ]);
     }
 
@@ -157,7 +155,8 @@ class MeetingResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            RelationManagers\GroupingsRelationManager::class,
+            RelationManagers\CommitmentsRelationManager::class,
         ];
     }
 
@@ -167,6 +166,7 @@ class MeetingResource extends Resource
             'index' => Pages\ListMeetings::route('/'),
             'create' => Pages\CreateMeeting::route('/create'),
             'edit' => Pages\EditMeeting::route('/{record}/edit'),
+
         ];
     }
 }

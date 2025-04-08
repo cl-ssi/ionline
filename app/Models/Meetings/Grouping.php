@@ -24,7 +24,7 @@ class Grouping extends Model implements Auditable
         return $this->belongsTo(Meeting::class);
     }
 
-    public function groupingUser(): BelongsTo
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id')->withTrashed();
     }

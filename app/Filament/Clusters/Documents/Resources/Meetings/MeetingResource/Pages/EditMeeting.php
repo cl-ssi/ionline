@@ -6,6 +6,7 @@ use App\Filament\Clusters\Documents\Resources\Meetings\MeetingResource;
 use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\HtmlString;
 
 class EditMeeting extends EditRecord
 {
@@ -27,7 +28,6 @@ class EditMeeting extends EditRecord
         //Manejo de archivo
         if (!empty($data['attachment'])) {
             $existingFile = $this->record->file; // Obtén el archivo relacionado actual
-
 
             if ($existingFile) {
                 Storage::delete($existingFile->storage_path);
