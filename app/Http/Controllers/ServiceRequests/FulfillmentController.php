@@ -86,8 +86,10 @@ class FulfillmentController extends Controller
                                                 return $q->whereNotIn('establishment_id', [1, 41]);
                                             })
                                             ->when($establishment_id != 38, function ($q) use ($establishment_id) {
-                                                return $q->where('establishment_id',$establishment_id)
+                                                return $q->where(function($query) use ($establishment_id) {
+                                                    $query->where('establishment_id', $establishment_id)
                                                         ->orWhere('policy_establishment_id', $establishment_id);
+                                                });
                                             })
                                             ->where('hetg_resources',false)
                                             ->orderBy('id','desc')
@@ -123,8 +125,10 @@ class FulfillmentController extends Controller
                                                 return $q->whereNotIn('establishment_id', [1, 41]);
                                             })
                                             ->when($establishment_id != 38, function ($q) use ($establishment_id) {
-                                                return $q->where('establishment_id',$establishment_id)
+                                                return $q->where(function($query) use ($establishment_id) {
+                                                    $query->where('establishment_id', $establishment_id)
                                                         ->orWhere('policy_establishment_id', $establishment_id);
+                                                });
                                             })
                                            // ->where('program_contract_type','Mensual')
                                            ->where('hetg_resources',false)
