@@ -1,4 +1,4 @@
-import cx_Oracle
+import oracledb  # Cambiamos cx_Oracle por oracledb
 import json
 import os
 import requests
@@ -40,8 +40,8 @@ bdPassword = "123456"
 
 # Datos del servicio web de salida
 wsURL = cfg_data["endpoint"]
-wsUser = "sistemas.ssi@redsalud.gob.cl"  # Si el campo wsUser no está presente, usar una cadena vacía por defecto
-wsPassword = "12345678"  # Si el campo wsPassword no está presente, usar una cadena vacía por defecto
+wsUser = "sistemas.ssi@redsalud.gob.cl"
+wsPassword = "12345678"
 
 # Obtener los conjuntos de datos del archivo cfg.json
 data_sets = cfg_data.get("data_sets", [])
@@ -52,8 +52,11 @@ print_title()
 # Función para conectar y ejecutar la consulta
 def ejecutar_consulta(jdbcURL, bdUser, bdPassword, consultaSQL, model_route, column_mapping, primary_keys):
     try:
-        # Conectar a la base de datos
-        connection = cx_Oracle.connect(bdUser, bdPassword, jdbcURL)
+        # Configurar oracledb en modo thin (no requiere Oracle Client)
+        # oracledb.init_oracle_client(lib_dir=None)
+        
+        # Conectar a la base de datos (formato diferente a cx_Oracle)
+        connection = oracledb.connect(user=bdUser, password=bdPassword, dsn=jdbcURL)
 
         # Crear un cursor
         cursor = connection.cursor()
@@ -74,16 +77,11 @@ def ejecutar_consulta(jdbcURL, bdUser, bdPassword, consultaSQL, model_route, col
             for i, column_name in enumerate(column_names):
                 # Convertir los objetos datetime a cadenas de texto
                 if isinstance(row[i], datetime):
-                    row_data[column_name] = row[i].strftime("%Y-%m-%d")  # Formato YYYY-MM-DD
+                    row_data[column_name] = row[i].strftime("%Y-%m-%d")
                 else:
                     row_data[column_name] = row[i]
             model_data.append(row_data)
             
-        # print(model_route)
-        # print(model_data)
-        # print(column_mapping)
-        # print(primary_keys)
-        
         # Crear el JSON con el formato especificado
         json_data = {
             "model_route": model_route,
@@ -92,36 +90,27 @@ def ejecutar_consulta(jdbcURL, bdUser, bdPassword, consultaSQL, model_route, col
             "primary_keys": primary_keys
         }
 
-        # Imprimir el JSON antes de enviarlo al servicio web
-        # print("JSON enviado al servicio web:")
-        # print(json.dumps(json_data, indent=4))
-        
         # Enviar el JSON al servicio web
         response = requests.post(wsURL, json=json_data, auth=HTTPBasicAuth(wsUser, wsPassword))
 
-        # Imprimir el mensaje devuelto por el servidor con el título bonito
-        # print_title()
         print("Mensaje devuelto por el servidor:")
         print(response.text)
 
-        # Registrar en el archivo de registro que la ejecución fue exitosa
         write_to_log("Ejecución exitosa")
 
     except Exception as e:
-        # Escribir el error en el archivo de registro y mostrar en la consola
         error_message = f"Error: {str(e)}\nTraceback: {traceback.format_exc()}"
         write_to_log(error_message)
         print("Ocurrió un error. Detalles en el archivo de registro.")
         print(error_message)
 
     finally:
-        # Cerrar el cursor y la conexión
         if 'cursor' in locals():
             cursor.close()
         if 'connection' in locals() and connection:
             connection.close()
 
-# Llamar a la función para ejecutar las consultas para cada conjunto de datos
+# Ejecutar las consultas para cada conjunto de datos
 for data_set in data_sets:
     consultaSQL = data_set.get("sql_query")
     model_route = data_set.get("model_route")
@@ -131,4 +120,3 @@ for data_set in data_sets:
 
 # Solicitar al usuario que presione Enter antes de salir
 input("Presione Enter para salir...")
-
