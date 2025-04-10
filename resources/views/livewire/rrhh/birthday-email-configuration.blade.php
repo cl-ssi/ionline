@@ -8,7 +8,7 @@
         <div class="card-header">
             {{$configuration->subject}}
             <span style="float:right">
-                <a href="#" wire:click="edit()">Editar</a>
+                <a href="#" wire:click="$dispatch('edit')">Editar</a>
             </span>
         </div>
         <div class="card-body">
@@ -25,14 +25,14 @@
         <div class="form-row">
             <fieldset class="form-group col-6">
                 <label>Asunto</label>
-                <input type="text" class="form-control" wire:model.live="subject">
+                <input type="text" class="form-control" wire:model="subject">
             </fieldset>
         </div>
 
         <div class="form-row">
             <fieldset class="form-group col-6">
                 <label>Título</label>
-                <input type="text" class="form-control" wire:model.live="tittle">
+                <input type="text" class="form-control" wire:model="tittle">
             </fieldset>
         </div>
 
@@ -43,15 +43,15 @@
                 <div wire:ignore>
                     <div class="form-group pt-1" style="width: 940px;">
                         <label for="contenido">Contenido*</label>
-                        <textarea class="form-control" id="message" cols="30" rows="18" wire:model.blur="message">
+                        <textarea class="form-control" id="message" cols="30" rows="18" wire:model="message">
                         </textarea>
                     </div>
                 </div>
             </fieldset>
         </div>
         
-        <button type="button" class="btn btn-primary mt-1 mb-4" wire:click="save()">Guardar</button>
-        <button type="button" class="btn btn-secondary mt-1 mb-4" wire:click="cancel()">Cancelar</button>
+        <button type="button" class="btn btn-primary mt-1 mb-4" wire:click="$dispatch('save')">Guardar</button>
+        <button type="button" class="btn btn-secondary mt-1 mb-4" wire:click="$dispatch('cancel')">Cancelar</button>
 
     </div>
 
@@ -62,8 +62,8 @@
         </div>
     @endif
 
-    <a href="#" wire:click="review_users()" style="{{ $review_users ? 'display:none' : '' }}" >Próximos cumpleaños</a>
-    <a href="#" wire:click="review_users()" style="{{ $review_users ? '' : 'display:none' }}" >Ocultar próximos cumpleaños</a>
+    <a href="#" wire:click="$dispatch('review_users')" style="{{ $review_users ? 'display:none' : '' }}" >Próximos cumpleaños</a>
+    <a href="#" wire:click="$dispatch('review_users')" style="{{ $review_users ? '' : 'display:none' }}" >Ocultar próximos cumpleaños</a>
 
     <div style="{{ $review_users ? '' : 'display:none' }}">
         <br><hr>

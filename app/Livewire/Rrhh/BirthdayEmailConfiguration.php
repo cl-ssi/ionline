@@ -3,6 +3,7 @@
 namespace App\Livewire\Rrhh;
 
 use Livewire\Component;
+use Livewire\Attributes\On;
 use App\Models\User;
 use App\Models\Rrhh\SirhActiveUser;
 use Carbon\Carbon;
@@ -33,12 +34,14 @@ class BirthdayEmailConfiguration extends Component
         $this->message = $this->configuration->message;
     }
 
+    #[On('edit')]
     public function edit()
     {
         $this->edit = true;
         $this->system_message = null;
     }
 
+    #[On('save')]
     public function save()
     {
         $BirthdayEmailConfiguration = BirthdayEmailConfigurationModel::all()->last();
@@ -54,6 +57,7 @@ class BirthdayEmailConfiguration extends Component
 
     }
 
+    #[On('review_users')]
     public function review_users(){
         if($this->review_users){
             $this->review_users = false;
@@ -83,6 +87,7 @@ class BirthdayEmailConfiguration extends Component
         // dd($this->sirh_users_array);
     }
 
+    #[On('cancel')]
     public function cancel(){
         $this->edit = false;
     }
