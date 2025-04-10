@@ -961,9 +961,20 @@ class RequestReplacementStaffController extends Controller
                 // SE FINALIZA SOLICITUD: FINALIZADO
                 if(!$approval->nextApproval){
                     // SE CAMBIA EL ESTADO DE LA EVALUACION TECNICA
+
+                    /*
                     $requestReplacementStaff->technicalEvaluation->date_end = now();
                     $requestReplacementStaff->technicalEvaluation->technical_evaluation_status = 'complete';
                     $requestReplacementStaff->technicalEvaluation->save();
+                    */
+
+                    $technicalEvaluation = $requestReplacementStaff->technicalEvaluation;
+
+                    if ($technicalEvaluation) {
+                        $technicalEvaluation->date_end = now();
+                        $technicalEvaluation->technical_evaluation_status = 'complete';
+                        $technicalEvaluation->save();
+                    }
 
                     // SE CAMBIA EL ESTADO DE LA SOLICITUD
                     $requestReplacementStaff->request_status = 'complete';
@@ -976,9 +987,19 @@ class RequestReplacementStaffController extends Controller
         if($approval->status == 0){
             if(!$approval->nextApproval){
                 // SE CAMBIA EL ESTADO DE LA EVALUACION TECNICA
+                /*
                 $requestReplacementStaff->technicalEvaluation->date_end = now();
                 $requestReplacementStaff->technicalEvaluation->technical_evaluation_status = 'complete';
                 $requestReplacementStaff->technicalEvaluation->save();
+                */
+
+                $technicalEvaluation = $requestReplacementStaff->technicalEvaluation;
+
+                if ($technicalEvaluation) {
+                    $technicalEvaluation->date_end = now();
+                    $technicalEvaluation->technical_evaluation_status = 'complete';
+                    $technicalEvaluation->save();
+                }
 
                 // SE CAMBIA EL ESTADO DE LA SOLICITUD
                 $requestReplacementStaff->request_status = 'rejected';
