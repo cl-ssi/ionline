@@ -2,8 +2,8 @@
 Script de procesamiento de registros de asistencia desde dispositivos biométricos.
 
 Descripción:
-Este script interactúa con dispositivos biométricos conectados en red para obtener registros de asistencia,
-procesarlos y enviarlos al sistema IOnline (modelo `AttendanceRecords`) mediante una API REST.
+Este script interactúa con dispositivos biométricos conectados en red para obtener registros de asistencia, 
+procesarlos y enviarlos al sistema IOnline (modelo `AttendanceRecords`) mediante una API REST. 
 Se ejecuta de forma automatizada a través de cron jobs en el servidor `10.66.142.123` (Red MINSAL).
 
 Funcionalidades:
@@ -93,12 +93,12 @@ def log_python_message(ip, message, log_type="error"):
 
         # Enviar solicitud
         response = requests.post(
-            log_error_api_url,
-            json=payload,
-            headers=headers,
+            log_error_api_url, 
+            json=payload, 
+            headers=headers, 
             auth=HTTPBasicAuth(user, password)
         )
-
+        
         # Verificar respuesta
         if response.status_code == 200:
             print(f"Log '{log_type}' registrado exitosamente para IP {ip}.")

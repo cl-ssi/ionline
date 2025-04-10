@@ -1,0 +1,97 @@
+{
+    "endpoint": "https://i.saludtarapaca.gob.cl/api/pending-json-to-insert",
+    "data_sets": [
+		{
+            "sql_query": "SELECT * FROM UTABLAS.rsal_unidades",
+            "model_route": "App\\Models\\Sirh\\RsalUnidad",
+            "column_mapping": {
+                "UNID_CODIGO": "unid_codigo",
+                "UNID_DESCRIPCION": "unid_descripcion",
+                "UNID_CODIGO_DEIS": "unid_codigo_deis",
+                "UNID_COMUNA": "unid_comuna",
+                "UNID_COD_DIPRES": "unid_cod_dipres"
+            },
+			"primary_keys": {
+				"unid_codigo": true
+			}
+        },
+        {
+            "sql_query": "SELECT DCON_RUT, DCON_DV, DCON_CORR, C1NOMBRES, TO_CHAR(DCON_FECHA,'YYYY-MM-DD') AS DCON_FECHA, DECODE(DCON_LEY_AFECTO,1,'15.076',2,'18.834',3,'19.664') AS DCON_LEY_AFECTO, DECODE(DCON_LEY_AFECTO,2,DECODE(DCON_CALIDAD_JURIDICA,21,'21 Titulares',22,'22 Contratos',23,'23 Codigo del Trabajo',24,'24 Honorarios',25,'25 Cargos en Extincion',26,'26 Suplente',' '),DECODE(DCON_CALIDAD_JURIDICA,11,'11 Titular',12,'12 Contratos',13,'13 Ciclo de Destinacion',14,'14 Suplente',15,'15 Cargos en Extincion',' ')) AS DCON_CALIDAD_JURIDICA, DECODE(DCON_LEY_AFECTO,2,DECODE(DCON_PLANTA,0,'Directivos',1,'Profesionales',2,'Técnicos',3,'Administrativos',4,'Auxiliares',5,'Código del Trabajo',6,'Honorarios',7,'Cargos en Extinción',' '),DECODE(DCON_PLANTA,0,'Médicos',1,'Odontologos',2,'Químicos',3,'Bioquímicos',4,'Farmaceuticos',5,'C. Destinación',6,'Cargos en Extinción',7,'Directivos',' ')) AS DCON_PLANTA, DCON_UNIDAD, UNID_DESCRIPCION, DCON_GRADO, DCON_HORA_SEMANA, DCON_CODIGO_ESTA, ESTA_NOMBRE, TO_CHAR(DCON_FECHA_INI,'YYYY-MM-DD') AS DCON_FECHA_INI, TO_CHAR(DCON_FECHA_FIN,'YYYY-MM-DD') AS DCON_FECHA_FIN, DECODE(DCON_COD_CARGO,NULL,' ',DCON_COD_CARGO) AS DCON_COD_CARGO, DECODE(CARG_NOMBRE,NULL,' ',CARG_NOMBRE) AS CARG_NOMBRE, DCON_NUM_DOCU, DECODE(DCON_TIPO_DOCUMENTO,1,'EXENTA',2,'TOMA DE RAZON',3,'REGISTRO',4,'PROYECTO',5,'DECRETO') AS DCON_TIPO_DOCUMENTO, TO_CHAR(DCON_FECHA_RESOLUCION,'YYYY-MM-DD') AS DCON_FECHA_RESOLUCION, DCON_COD_FUNCION, FUNC_DESCRIPCION AS FUNCION, DECODE(DCON_LEY_AFECTO,3,DECODE(DCON_ETAPA_CARRERA,1,'Destinación y Formación',2,'Planta Superior',3,'Planta Directiva')) AS DCON_ETAPA_CARRERA, DECODE(DCON_LEY_AFECTO,3,DECODE(DCON_NIVEL_ETAPA,1,'Nivel 1',2,'Nivel 2',3,'Nivel 3')) AS DCON_NIVEL_ETAPA, DCON_MOVI_PLANTA, C4DESCRIP AS TIPO_MOVIMIENTO, DECODE(DCON_TRANSITORIO,'S','SI','NO') AS DCON_TRANSITORIO, DECODE(DCON_LIB_GUARDIA,'S','SI','NO') AS DCON_LIB_GUARDIA, DECODE(C1FEC_NAC,NULL,' ',TO_CHAR(C1FEC_NAC,'YYYY-MM-DD')) AS FECHA_NACIMIENTO, DECODE(C1LUGAR_NAC,NULL,' ',C1LUGAR_NAC) AS LUGAR_DE_NACIMIENTO, DECODE(C1EST_CIVIL,'C','CASADO','S','SOLTERO','V','VIUDO','O','OTROS',NULL,' ') AS ESTADO_CIVIL, DECODE(C1SEXO,'M','MASCULINO','F','FEMENINO',NULL,' ') AS SEXO, DECODE(C1DIRECC,NULL,' ',C1DIRECC) AS DIRECCION, COMU_DESCRIPCION AS COMUNA, CIUD_NOMBRE AS CIUDAD, C1FONO1 AS FONO FROM UHVIDA.HVID_DATOS_CONTRACTUALES, UHVIDA.HVID_ALEJAMIENTOS, UHVIDA.ACEN01XX, UHVIDA.RSAL_FUNCION, UTABLAS.ACENTABLA, UTABLAS.RSAL_ESTABLECIMIENTO, UTABLAS.RSAL_UNIDADES, UTABLAS.RSAL_CARGOS, UTABLAS.RSAL_COMUNAS, UTABLAS.RSAL_CIUDADES WHERE DCON_RUT = HVID_ALEJAMIENTOS_DCON_RUT(+) AND DCON_DV = HVID_ALEJAMIENTOS_DCON_DV(+) AND DCON_CORR = HVID_ALEJAMIENTOS_DCON_CORR(+) AND DCON_FECHA = HVID_ALEJAMIENTOS_DCON_FECHA(+) AND (TO_CHAR(DCON_FECHA_FIN,'YYYYMM') >= TO_CHAR(SYSDATE,'YYYYMM') OR DCON_FECHA_FIN IS NULL) AND (TO_CHAR(ALEJ_FECHA,'YYYYMM') >= TO_CHAR(SYSDATE,'YYYYMM') OR ALEJ_FECHA IS NULL) AND TO_CHAR(DCON_FECHA_INI,'YYYYMM') <= TO_CHAR(SYSDATE,'YYYYMM') AND DCON_RUT = C1RUT AND DCON_COD_FUNCION = FUNC_CODIGO AND C4CODTIP = 26 AND (DCON_MOVI_PLANTA + 1) = C4CODIGO AND DCON_CODIGO_ESTA = ESTA_CODIGO AND DCON_UNIDAD = UNID_CODIGO AND CARG_ANO(+) = TO_NUMBER(TO_CHAR(DCON_FECHA_INI,'YYYY')) AND CARG_MES(+) = TO_NUMBER(TO_CHAR(DCON_FECHA_INI,'MM')) AND CARG_LEY_AFECTO(+) = DECODE(DCON_LEY_AFECTO,2,2,1) AND CARG_CODIGO(+) = DCON_COD_CARGO AND COMU_CODIGO(+) = C1COMUNA AND CIUD_CODIGO(+) = C1CIUDAD AND (DCON_FECHA_FIN IS NULL OR DCON_FECHA_FIN >= TO_DATE('2024-05-02', 'YYYY-MM-DD')) AND DCON_CODIGO_ESTA = 125",
+            "model_route": "App\\Models\\Sirh\\ExistingContract", 
+			"column_mapping": {
+				"DCON_RUT": "rut",
+				"DCON_DV": "dv",
+				"DCON_CORR": "corr",
+				"C1NOMBRES": "nombres",
+				"DCON_FECHA": "fecha",
+				"DCON_LEY_AFECTO": "ley_afecto",
+				"DCON_CALIDAD_JURIDICA": "calidad_juridica",
+				"DCON_PLANTA": "planta",
+				"DCON_UNIDAD": "unidad",
+				"UNID_DESCRIPCION": "unid_descripcion",
+				"DCON_GRADO": "grado",
+				"DCON_HORA_SEMANA": "hora_semana",
+				"DCON_CODIGO_ESTA": "codigo_esta",
+				"ESTA_NOMBRE": "esta_nombre",
+				"DCON_FECHA_INI": "fecha_ini",
+				"DCON_FECHA_FIN": "fecha_fin",
+				"DCON_COD_CARGO": "cod_cargo",
+				"CARG_NOMBRE": "carg_nombre",
+				"DCON_NUM_DOCU": "num_docu",
+				"DCON_TIPO_DOCUMENTO": "tipo_documento",
+				"DCON_FECHA_RESOLUCION": "fecha_resolucion",
+				"DCON_COD_FUNCION": "cod_funcion",
+				"FUNCION": "funcion",
+				"DCON_ETAPA_CARRERA": "etapa_carrera",
+				"DCON_NIVEL_ETAPA": "nivel_etapa",
+				"DCON_MOVI_PLANTA": "movi_planta",
+				"TIPO_MOVIMIENTO": "tipo_movimiento",
+				"DCON_TRANSITORIO": "transitorio",
+				"DCON_LIB_GUARDIA": "lib_guardia",
+				"FECHA_NACIMIENTO": "fecha_nacimiento",
+				"LUGAR_DE_NACIMIENTO": "lugar_de_nacimiento",
+				"ESTADO_CIVIL": "estado_civil",
+				"SEXO": "sexo",
+				"DIRECCION": "direccion",
+				"COMUNA": "comuna",
+				"CIUDAD": "ciudad",
+				"FONO": "fono"
+			},
+			"primary_keys": {
+				"rut": true,
+				"dv": true,
+				"corr": true,
+				"fecha": true
+			}
+        },
+		{
+            "sql_query": "select * from UBIENEST.NOMINA_AFILIADOS where NA_VIGENCIA = 'Vig.'",
+            "model_route": "App\\Models\\Sirh\\WelfareUser",
+            "column_mapping": {
+				"NA_RUT": "rut",
+				"NA_DV": "dv",
+				"NA_FECHA": "fecha",
+				"NA_NOMBRE": "nombre",
+				"NA_FECHA_NAC": "fecha_nac",
+				"NA_EDAD": "edad",
+				"NA_SEXO": "sexo",
+				"NA_TIPO_AFILIA": "tipo_afilia",
+				"NA_VIGENCIA": "vigencia",
+				"NA_DIRECCION": "direccion",
+				"NA_TELEFONO": "telefono",
+				"NA_SALUD": "salud",
+				"NA_PREVISION": "prevision",
+				"NA_CONTRATO": "contrato",
+				"NA_UNIDAD": "unidad",
+				"NA_ESTABL": "establ",
+				"NA_CARGO": "cargo",
+				"NA_CUOTA_MES": "cuota_mes",
+				"NA_FECDES": "afil_fecha_desafiliacion"
+			},
+			"primary_keys": {
+				"rut": true,
+				"fecha": true
+			}
+        }
+    ]
+}
