@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use App\Models\Rrhh\AttendanceRecord;
+use App\Notifications\Rrhh\AttendanceRecordNotification;
+use Illuminate\Support\Facades\Notification;
 
 class AttendanceRecordController extends Controller
 {
@@ -71,6 +73,11 @@ class AttendanceRecordController extends Controller
                 }
 
                 DB::commit();
+
+                // Enviar notificación al finalizar exitosamente
+                Notification::route('mail', 'sistemas.sst@redsalud.gob.cl')
+                    ->notify(new AttendanceRecordNotification("Registros de asistencia guardados exitosamente."));
+
                 return response()->json(['message' => 'Registros de asistencia guardados exitosamente.']);
             } catch (\Exception $e) {
                 DB::rollBack();
