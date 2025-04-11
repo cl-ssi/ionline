@@ -518,7 +518,7 @@ class ProcessResource extends Resource
                             Forms\Components\Placeholder::make('body')
                                 ->hiddenLabel()
                                 ->content(fn (Comment $record): string => $record->body)
-                                ->helperText(fn (Comment $record): string => $record->author->shortName.' '.$record->created_at->diffForHumans()),
+                                ->helperText(fn (Comment $record): string => $record->author?->shortName.' '.$record->created_at->diffForHumans()),
                         ])
                         ->columnSpan(['lg' => 1])
                         ->hidden(fn (?Process $record) => $record === null),
