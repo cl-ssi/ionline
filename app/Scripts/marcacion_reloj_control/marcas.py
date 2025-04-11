@@ -33,7 +33,7 @@ from datetime import datetime, timedelta
 import requests
 
 # Leer configuración desde un archivo
-def load_configuration(file_path="configuration.txt"):
+def load_configuration(file_path="/root/scripts/configuration.txt"):
     config = {}
     try:
         with open(file_path, 'r') as f:
