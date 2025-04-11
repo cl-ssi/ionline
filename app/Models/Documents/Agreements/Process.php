@@ -226,7 +226,7 @@ class Process extends Model implements Auditable
      */
     public function comments(): MorphMany
     {
-        return $this->morphMany(Comment::class, 'commentable');
+        return $this->morphMany(Comment::class, 'commentable')->with(['author' => fn ($query) => $query->withTrashed()]);
     }
 
     /**
