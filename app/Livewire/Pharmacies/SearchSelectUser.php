@@ -48,6 +48,11 @@ class SearchSelectUser extends Component
 
     public $restrict = [];
 
+    public $originEstablishmentName = ''; // Add this property for the establishment name
+    public $originEstablishmentId = null; // Add this property for the establishment ID
+
+    public $date; // Add this property to accept the date parameter
+
     protected function rules(){
         return [
             'query'  => 'required',
@@ -71,10 +76,13 @@ class SearchSelectUser extends Component
         $this->users = [];
         $this->user = null;
         $this->selectedName = null;
+        $this->originEstablishmentName = ''; // Reset establishment name
+        $this->originEstablishmentId = null; // Reset establishment ID
     }
 
-    public function mount()
+    public function mount($date = null)
     {
+        $this->date = $date; // Initialize the date if provided
         if($this->user) {
             $this->setUser($this->user);
         }
@@ -85,6 +93,8 @@ class SearchSelectUser extends Component
         $this->resetx();
         $this->user = $user;
         $this->selectedName = $user->full_name;
+        $this->originEstablishmentName = $user->establishment->name ?? 'Establecimiento no disponible'; // Set establishment name
+        $this->originEstablishmentId = $user->establishment->id ?? null; // Set establishment ID
         /** Emite a cualquier otro componente que user_id seleccionó */
         $this->dispatch('userSelected', user: $user);
     }

@@ -14,41 +14,23 @@
   @method('PUT')
 	@csrf
 
-<div class="form-row">
-      <fieldset class="form-group col-3">
-          <label for="for_date">Fecha</label>
-          <input type="date" class="form-control" id="for_date" name="date" required="required" value="{{$fractionation->date->format('Y-m-d')}}">
-      </fieldset>
-
-      <fieldset class="form-group col">
-          <label for="for_origin">Origen</label>
-          <select name="establishment_id" class="form-control selectpicker" data-live-search="true">
-            <option value=""></option>
-            @foreach ($establishments as $key => $establishment)
-              <option value="{{$establishment->id}}" @if ($fractionation->establishment_id == $establishment->id)
-                selected
-              @endif>{{$establishment->name}}</option>
-            @endforeach
-          </select>
-      </fieldset>
-
-        <fieldset class="form-group col">
-            <label for="for_origin">Médico</label>
-            @livewire('search-select-user', ['selected_id' => 'medic_id',
-                                            'user' => $fractionation->medic])
-        </fieldset>
-</div>
+@livewire('pharmacies.search-select-user', [
+    'selected_id' => 'patient_id',
+    'user' => $fractionation->patient,
+    'date' => $fractionation->date // Pass the date parameter
+])
 
 <div class="form-row">
-    <fieldset class="form-group col">
-        <label for="for_patient">Paciente</label>
-        @livewire('pharmacies.search-select-user', ['selected_id' => 'patient_id',
-                                        'user' => $fractionation->patient])
-    </fieldset>
 
     <fieldset class="form-group col">
         <label for="for_acquirer">Adquiriente</label>
         <input type="text" name="acquirer" class="form-control" id="for_acquirer" placeholder="Nombre del adquiriente" value="{{$fractionation->acquirer}}">
+    </fieldset>
+
+    <fieldset class="form-group col">
+        <label for="for_origin">Médico</label>
+        @livewire('search-select-user', ['selected_id' => 'medic_id',
+                                        'user' => $fractionation->medic])
     </fieldset>
 </div>
 

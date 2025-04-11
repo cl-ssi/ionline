@@ -33,7 +33,17 @@ class PatientController extends Controller
 
     public function store(Request $request)
     {
-        $patient = new Patient($request->All());
+        $validated = $request->validate([
+            'id' => 'required|integer|unique:frm_patients,id',
+            'dv' => 'required|string|max:1',
+            'full_name' => 'required|string|max:255',
+            'phone' => 'nullable|string|max:20',
+            'observation' => 'nullable|string|max:255',
+            'address' => 'required|string|max:255',
+            'establishment_id' => 'required|exists:establishments,id',
+        ]);
+
+        $patient = new Patient($validated);
         $patient->save();
 
         session()->flash('info', 'El paciente '.$patient->full_name.' ha sido creado.');
@@ -53,7 +63,17 @@ class PatientController extends Controller
 
     public function update(Request $request, Patient $patient)
     {
-        $patient->fill($request->all());
+        $validated = $request->validate([
+            'id' => 'required|integer|unique:frm_patients,id,'.$patient->id.',id',
+            'dv' => 'required|string|max:1',
+            'full_name' => 'required|string|max:255',
+            'phone' => 'nullable|string|max:20',
+            'observation' => 'nullable|string|max:255',
+            'address' => 'required|string|max:255',
+            'establishment_id' => 'required|exists:establishments,id',
+        ]);
+
+        $patient->fill($validated);
         $patient->save();
 
         session()->flash('info', 'El paciente '.$patient->full_name.' ha sido editado.');

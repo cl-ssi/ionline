@@ -32,8 +32,8 @@
 <table class="table table-striped table-sm table-bordered">
     <thead>
         <tr>
+            <th>ID - DV</th>
             <th>Nombre</th>
-            <th>RUT</th>
             <th>Teléfono</th>
             <th>Dirección</th>
             <th>Centro Médico</th>
@@ -43,11 +43,11 @@
     <tbody>
     @foreach($patients as $patient)
         <tr>
+            <td>{{ $patient->id }}-{{ $patient->dv }}</td>
             <td>{{ $patient->full_name }}</td>
-            <td>{{ $patient->rut }}</td>
             <td>{{ $patient->phone }}</td>
             <td>{{ $patient->address }}</td>
-            <td>{{ $patient->medical_center }}</td>
+            <td>{{ $patient->establishment->name ?? 'N/A' }}</td>
             <td>
                 <a href="{{ route('pharmacies.patients.edit', $patient) }}"
                     class="btn btn-sm btn-outline-secondary">

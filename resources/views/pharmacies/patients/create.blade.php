@@ -12,39 +12,75 @@
     @csrf
 
     <div class="form-row">
+        <fieldset class="form-group col-md-4">
+            <label for="for_id">ID</label>
+            <input type="text" class="form-control @error('id') is-invalid @enderror" id="for_id" name="id" 
+                value="{{ old('id') }}" required>
+            @error('id')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
+        </fieldset>
+
+        <fieldset class="form-group col-md-2">
+            <label for="for_dv">DV</label>
+            <input type="text" class="form-control @error('dv') is-invalid @enderror" id="for_dv" name="dv" 
+                value="{{ old('dv') }}" required>
+            @error('dv')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
+        </fieldset>
+
         <fieldset class="form-group col-md-6">
             <label for="for_full_name">Nombre Completo</label>
-            <input type="text" class="form-control" id="for_full_name" name="full_name" required>
+            <input type="text" class="form-control @error('full_name') is-invalid @enderror" id="for_full_name" name="full_name" 
+                value="{{ old('full_name') }}" required>
+            @error('full_name')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
         </fieldset>
+    </div>
 
-        <fieldset class="form-group col-md-6">
-            <label for="for_rut">RUT</label>
-            <input type="text" class="form-control" id="for_rut" name="rut" required>
-        </fieldset>
-
+    <div class="form-row">
         <fieldset class="form-group col-md-6">
             <label for="for_phone">Teléfono</label>
-            <input type="text" class="form-control" id="for_phone" name="phone">
+            <input type="text" class="form-control @error('phone') is-invalid @enderror" id="for_phone" name="phone" 
+                value="{{ old('phone') }}">
+            @error('phone')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
         </fieldset>
 
         <fieldset class="form-group col-md-6">
-            <label for="for_phone_note">Nota Teléfono</label>
-            <input type="text" class="form-control" id="for_phone_note" name="phone_note">
+            <label for="for_observation">Observación</label>
+            <input type="text" class="form-control @error('observation') is-invalid @enderror" id="for_observation" name="observation" 
+                value="{{ old('observation') }}">
+            @error('observation')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
         </fieldset>
 
         <fieldset class="form-group col-md-6">
             <label for="for_address">Dirección</label>
-            <input type="text" class="form-control" id="for_address" name="address">
+            <input type="text" class="form-control @error('address') is-invalid @enderror" id="for_address" name="address" 
+                value="{{ old('address') }}" required>
+            @error('address')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
         </fieldset>
 
         <fieldset class="form-group col-md-6">
-            <label for="for_medical_center">Centro Médico</label>
-            <select class="form-control" id="for_medical_center" name="medical_center">
+            <label for="for_establishment_id">Centro Médico</label>
+            <select class="form-control @error('establishment_id') is-invalid @enderror" id="for_establishment_id" name="establishment_id">
                 <option value="">Seleccione un centro médico</option>
                 @foreach($establishments as $establishment)
-                    <option value="{{ $establishment->name }}">{{ $establishment->name }}</option>
+                    <option value="{{ $establishment->id }}" {{ old('establishment_id') == $establishment->id ? 'selected' : '' }}>
+                        {{ $establishment->name }}
+                    </option>
                 @endforeach
             </select>
+            @error('establishment_id')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
         </fieldset>
     </div>
 

@@ -2,6 +2,7 @@
 
 namespace App\Models\Pharmacies;
 
+use App\Models\Establishment;
 use App\Models\Pharmacies\Patient;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;

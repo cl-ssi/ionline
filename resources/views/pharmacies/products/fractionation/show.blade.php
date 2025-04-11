@@ -17,26 +17,27 @@
       </fieldset>
 
       <fieldset class="form-group col">
-            <label for="for_origin">Origen</label>
-            <input class="form-control" type="text" disabled @if($establishment) value="{{$establishment->name}}" @endif>
-      </fieldset>
+        <label for="for_patient">Paciente</label>
+        <input type="text" class="form-control" value="{{$fractionation->patient ? $fractionation->patient->full_name : ''}}" disabled>
+    </fieldset>
 
       <fieldset class="form-group col">
-            <label for="for_medic">Médico</label>
-            <input type="text" class="form-control" value="{{$fractionation->medic ? $fractionation->medic->shortName : ''}}" disabled>
+            <label for="for_origin">Origen</label>
+            <input class="form-control" type="text" disabled @if($establishment) value="{{$establishment->name}}" @endif>
       </fieldset>
 </div>
 
 <div class="form-row">
-    <fieldset class="form-group col">
-        <label for="for_patient">Paciente</label>
-        <input type="text" class="form-control" value="{{$fractionation->patient ? $fractionation->patient->full_name : ''}}" disabled>
-    </fieldset>
 
     <fieldset class="form-group col">
         <label for="for_acquirer">Adquiriente</label>
         <input type="text" class="form-control" value="{{$fractionation->acquirer}}" disabled>
     </fieldset>
+
+    <fieldset class="form-group col">
+            <label for="for_medic">Médico</label>
+            <input type="text" class="form-control" value="{{$fractionation->medic ? $fractionation->medic->shortName : ''}}" disabled>
+      </fieldset>
 </div>
 
 <div class="form-row">
