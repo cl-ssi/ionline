@@ -78,8 +78,8 @@ class CreateTypes extends Component
             }
         }
         elseif(auth()->user()->organizationalUnit->establishment_id == 41) {
-            if (Authority::getAuthorityFromDate(364, now(), ['manager']) == null) {
-                dd("falta ingresar autoridad de " . OrganizationalUnit::find(364)->name);
+            if (Authority::getAuthorityFromDate(357, now(), ['manager']) == null) {
+                dd("falta ingresar autoridad de " . OrganizationalUnit::find(357)->name);
             }
             if (Authority::getAuthorityFromDate(337, now(), ['manager']) == null) {
                 dd("falta ingresar autoridad de " . OrganizationalUnit::find(337)->name);
@@ -92,7 +92,7 @@ class CreateTypes extends Component
         $this->signatureFlows = [];
 
         if($this->hetg_resources){
-            $this->signatureFlows[Authority::getAuthorityFromDate(364, now(), ['manager'])->position . " - " . Authority::getAuthorityFromDate(364, now(), ['manager'])->organizationalUnit->name] = Authority::getAuthorityFromDate(364, now(), ['manager'])->user->id;
+            $this->signatureFlows[Authority::getAuthorityFromDate(357, now(), ['manager'])->position . " - " . Authority::getAuthorityFromDate(357, now(), ['manager'])->organizationalUnit->name] = Authority::getAuthorityFromDate(357, now(), ['manager'])->user->id;
             $this->signatureFlows[Authority::getAuthorityFromDate(247, now(), ['manager'])->position . " - " . Authority::getAuthorityFromDate(247, now(), ['manager'])->organizationalUnit->name] = Authority::getAuthorityFromDate(247, now(), ['manager'])->user->id;
             // $this->signatureFlows[Authority::getAuthorityFromDate(337, now(), ['manager'])->position . " - " . Authority::getAuthorityFromDate(337, now(), ['manager'])->organizationalUnit->name] = Authority::getAuthorityFromDate(337, now(), ['manager'])->user->id; 
             $this->signatureFlows[Authority::getAuthorityFromDate(246, now(), ['manager'])->position . " - " . Authority::getAuthorityFromDate(246, now(), ['manager'])->organizationalUnit->name] = Authority::getAuthorityFromDate(246, now(), ['manager'])->user->id;
@@ -109,7 +109,7 @@ class CreateTypes extends Component
                 $this->signatureFlows[Authority::getAuthorityFromDate(87, now(), ['manager'])->position . " - " . Authority::getAuthorityFromDate(87, now(), ['manager'])->organizationalUnit->name] = Authority::getAuthorityFromDate(87, now(), ['manager'])->user->id;
                 $this->signatureFlows[Authority::getAuthorityFromDate(84, now(), ['manager'])->position . " - " . Authority::getAuthorityFromDate(84, now(), ['manager'])->organizationalUnit->name] = Authority::getAuthorityFromDate(84, now(), ['manager'])->user->id;
             }elseif(auth()->user()->organizationalUnit->establishment_id == 41){
-                $this->signatureFlows[Authority::getAuthorityFromDate(364, now(), ['manager'])->position . " - " . Authority::getAuthorityFromDate(364, now(), ['manager'])->organizationalUnit->name] = Authority::getAuthorityFromDate(364, now(), ['manager'])->user->id;
+                $this->signatureFlows[Authority::getAuthorityFromDate(357, now(), ['manager'])->position . " - " . Authority::getAuthorityFromDate(357, now(), ['manager'])->organizationalUnit->name] = Authority::getAuthorityFromDate(357, now(), ['manager'])->user->id;
                 $this->signatureFlows[Authority::getAuthorityFromDate(337, now(), ['manager'])->position . " - " . Authority::getAuthorityFromDate(337, now(), ['manager'])->organizationalUnit->name] = Authority::getAuthorityFromDate(337, now(), ['manager'])->user->id; 
                 $this->signatureFlows[Authority::getAuthorityFromDate(246, now(), ['manager'])->position . " - " . Authority::getAuthorityFromDate(246, now(), ['manager'])->organizationalUnit->name] = Authority::getAuthorityFromDate(246, now(), ['manager'])->user->id;
             }else{
