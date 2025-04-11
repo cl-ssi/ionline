@@ -39,7 +39,12 @@ class DestinyController extends Controller
      */
     public function store(Request $request)
     {
-        $destiny = new Destiny($request->All());
+        $request->validate([
+            'name' => 'required|unique:frm_destines,name',
+            'email' => 'nullable|email',
+        ]);
+
+        $destiny = new Destiny($request->all());
         $destiny->pharmacy_id = session('pharmacy_id');
         $destiny->save();
 
@@ -82,6 +87,11 @@ class DestinyController extends Controller
      */
     public function update(Request $request, Destiny $destiny)
     {
+        $request->validate([
+            'name' => 'required|unique:frm_destines,name,' . $destiny->id,
+            'email' => 'nullable|email',
+        ]);
+
         $destiny->fill($request->all());
         $destiny->save();
 

@@ -16,11 +16,17 @@
 		<fieldset class="form-group col">
 		    <label for="for_name">Nombre</label>
 		    <input type="text" class="form-control" id="for_name" placeholder="Nombre del destino" name="name" required="required">
+		    @error('name')
+		        <span class="text-danger">{{ $message }}</span>
+		    @enderror
 		</fieldset>
 
 		<fieldset class="form-group col">
-		    <label for="for_name">Correo electrónico</label>
-		    <input type="text" class="form-control" id="for_name" placeholder="Correo electrónico" name="email" >
+		    <label for="for_email">Correo electrónico</label>
+		    <input type="text" class="form-control" id="for_email" placeholder="Correo electrónico" name="email">
+		    @error('email')
+		        <span class="text-danger">{{ $message }}</span>
+		    @enderror
 		</fieldset>
 
 	</div>

@@ -20,12 +20,18 @@
 		    <label for="for_name">Nombre</label>
 		    <input type="text" class="form-control" id="for_name"
 				value="{{ $destiny->name }}" name="name" required="required">
+		    @error('name')
+		        <span class="text-danger">{{ $message }}</span>
+		    @enderror
 		</fieldset>
 
 		<fieldset class="form-group col">
-		    <label for="for_name">Correo electrónico</label>
+		    <label for="for_email">Correo electrónico</label>
 		    <input type="text" class="form-control" id="for_email"
 				value="{{ $destiny->email }}" name="email" required="required">
+		    @error('email')
+		        <span class="text-danger">{{ $message }}</span>
+		    @enderror
 		</fieldset>
 	</div>
 	<div class="form-row">
