@@ -2,29 +2,31 @@
 
 namespace App\Http\Controllers\ServiceRequests;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Illuminate\Pagination\Paginator;
-use Illuminate\Support\Collection;
-use Illuminate\Pagination\LengthAwarePaginator;
-use App\Models\ServiceRequests\ServiceRequest;
-use App\Models\ServiceRequests\Fulfillment;
-use App\Models\Rrhh\UserBankAccount;
-use App\Models\Rrhh\Authority;
-use Luecano\NumeroALetras\NumeroALetras;
 use Carbon\Carbon;
-use Symfony\Component\HttpFoundation\ResponseHeaderBag;
-use Symfony\Component\HttpFoundation\StreamedResponse;
-use Illuminate\Support\Facades\Auth;
-use App\Models\Establishment;
-use App\Models\Rrhh\OrganizationalUnit;
-use Maatwebsite\Excel\Facades\Excel;
-use App\Exports\ComplianceExport;
-use App\Exports\PayedExport;
-use App\Exports\ContractExport;
 use App\Models\User;
+use App\Exports\PayedExport;
+use Illuminate\Http\Request;
+use App\Models\Establishment;
+use App\Models\Rrhh\Authority;
+use App\Exports\ContractExport;
+use App\Exports\ComplianceExport;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use App\Models\Rrhh\UserBankAccount;
+use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
 use App\Models\Parameters\Profession;
-
+use App\Models\Rrhh\OrganizationalUnit;
+use Luecano\NumeroALetras\NumeroALetras;
+use App\Models\ServiceRequests\Fulfillment;
+use App\Models\ServiceRequests\ShiftControl;
+use App\Models\ServiceRequests\ServiceRequest;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Symfony\Component\HttpFoundation\StreamedResponse;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+use App\Exports\HoursReportExport;
 
 class ReportController extends Controller
 {
@@ -1901,40 +1903,91 @@ class ReportController extends Controller
     return view('service_requests.reports.service_request_continuity', compact('request', 'results'));
   }
 
-  public function mySignatures(Request $request){
-    $auth_user_id = auth()->id();
-    $type = $request->type;
-    $user_id = $request->user_id;
+    public function mySignatures(Request $request){
+        $auth_user_id = auth()->id();
+        $type = $request->type;
+        $user_id = $request->user_id;
 
-    $serviceRequests = null;
-    if($request->year){
-        $serviceRequests = ServiceRequest::whereHas("SignatureFlows", function ($subQuery) use ($auth_user_id) {
-            $subQuery->where('responsable_id', $auth_user_id);
-        })
-        ->when($type == "Pendientes", function ($q) use ($auth_user_id){
-            return $q->whereHas("SignatureFlows", function ($subQuery) use ($auth_user_id) {
+        $serviceRequests = null;
+        if($request->year){
+            $serviceRequests = ServiceRequest::whereHas("SignatureFlows", function ($subQuery) use ($auth_user_id) {
                 $subQuery->where('responsable_id', $auth_user_id);
-                $subQuery->whereNull('status');
-            });
-        })
-        ->when($type == "Visadas", function ($q) use ($auth_user_id){
-            return $q->whereHas("SignatureFlows", function ($subQuery) use ($auth_user_id) {
-                $subQuery->where('responsable_id', $auth_user_id);
-                $subQuery->where('status',1);
-            });
-        })
-        ->when($user_id != null, function ($q) use ($user_id){
-            return $q->where('user_id',$user_id);
-        })
-        ->orderBy('id', 'desc')
-        ->whereYear('start_date',$request->year)
-        ->paginate(100);
+            })
+            ->when($type == "Pendientes", function ($q) use ($auth_user_id){
+                return $q->whereHas("SignatureFlows", function ($subQuery) use ($auth_user_id) {
+                    $subQuery->where('responsable_id', $auth_user_id);
+                    $subQuery->whereNull('status');
+                });
+            })
+            ->when($type == "Visadas", function ($q) use ($auth_user_id){
+                return $q->whereHas("SignatureFlows", function ($subQuery) use ($auth_user_id) {
+                    $subQuery->where('responsable_id', $auth_user_id);
+                    $subQuery->where('status',1);
+                });
+            })
+            ->when($user_id != null, function ($q) use ($user_id){
+                return $q->where('user_id',$user_id);
+            })
+            ->orderBy('id', 'desc')
+            ->whereYear('start_date',$request->year)
+            ->paginate(100);
+        }
+
+        $user = null;
+        if($user_id){$user=User::find($user_id);}
+
+        return view('service_requests.reports.my_signatures', compact('request', 'serviceRequests','user'));
+        
     }
 
-    $user = null;
-    if($user_id){$user=User::find($user_id);}
+    public function HoursReport(Request $request)
+    {
+        $startDate = $request->input('start_date', now()->startOfMonth()->format('Y-m-d 00:00:00'));
+        $endDate = $request->input('end_date', now()->format('Y-m-d 23:59:59'));
 
-    return view('service_requests.reports.my_signatures', compact('request', 'serviceRequests','user'));
-    
-  }
+        $shiftControls = ShiftControl::with(['serviceRequest', 'serviceRequest.employee', 'serviceRequest.fulfillments'])
+            ->whereBetween('start_date', [$startDate, $endDate])
+            ->get();
+
+        $reportData = [];
+        $months = [];
+
+        foreach ($shiftControls as $shift) {
+            if (!$shift->serviceRequest) {
+                continue; // Skip if serviceRequest is null
+            }
+
+            $month = $shift->start_date->format('Y-m');
+            $months[$month] = $month;
+
+            $serviceRequestId = $shift->serviceRequest->id;
+            $employee = $shift->serviceRequest->employee->fullName;
+
+            if (!isset($reportData[$serviceRequestId])) {
+                $reportData[$serviceRequestId] = [
+                    'employee' => $employee,
+                    'service_request_id' => $serviceRequestId,
+                    'monthly_hours' => [],
+                    'total_hours' => 0,
+                ];
+            }
+
+            $hoursWorked = abs($shift->end_date->diffInMinutes($shift->start_date) / 60); // Convert minutes to hours
+            $reportData[$serviceRequestId]['monthly_hours'][$month] = ($reportData[$serviceRequestId]['monthly_hours'][$month] ?? 0) + $hoursWorked;
+            $reportData[$serviceRequestId]['total_hours'] += $hoursWorked;
+        }
+
+        ksort($months); // Sort months chronologically
+
+        // Sort report data by employee name
+        usort($reportData, fn($a, $b) => strcmp($a['employee'], $b['employee']));
+
+        $totalHoursOverall = array_sum(array_column($reportData, 'total_hours'));
+
+        if ($request->has('excel')) {
+            return Excel::download(new HoursReportExport($reportData, $months, $totalHoursOverall), 'hours_report.xlsx');
+        }
+
+        return view('service_requests.reports.hours_report', compact('reportData', 'totalHoursOverall', 'startDate', 'endDate', 'months'));
+    }
 }

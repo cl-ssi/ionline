@@ -276,9 +276,12 @@
                 </a>
             @endcan
 
-            <!-- <div class="dropdown-divider"></div>
-
-            <a class="dropdown-item" href="#">Temp</a> -->
+            @canany(['Service Request: pending requests'])
+                <a class="dropdown-item {{ active('rrhh.service-request.report.hours-report') }}"
+                    href="{{ route('rrhh.service-request.report.hours-report') }}">
+                    <i class="fas fa-clone"></i> Reporte de horas
+                </a>
+            @endcan
 
         </div>
     </li>
