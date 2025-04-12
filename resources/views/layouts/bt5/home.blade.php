@@ -429,6 +429,11 @@
                     class="list-group-item list-group-item-action small" target="_blank">
                     Solicitud de Firmas iOnline
                 </a>
+
+                <a href="https://docs.google.com/document/d/1XDzXMWzaNgMENtmPSXqtp1bHXyC1gCgtrmApcwFumJA/edit"
+                    class="list-group-item list-group-item-action small" target="_blank">
+                    Modulo Revisión Registro Asistencias y Informe Mensual
+                </a>
             </ul>
 
         </div>
