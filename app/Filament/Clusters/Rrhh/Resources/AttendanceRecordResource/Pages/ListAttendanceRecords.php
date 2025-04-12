@@ -4,6 +4,7 @@ namespace App\Filament\Clusters\Rrhh\Resources\AttendanceRecordResource\Pages;
 
 use App\Filament\Clusters\Rrhh\Resources\AttendanceRecordResource;
 use App\Filament\Exports\Rrhh\AttendanceRecordExporter;
+use App\Models\User;
 use Filament\Actions;
 use Filament\Actions\Exports\Enums\ExportFormat;
 use Filament\Resources\Components\Tab;
@@ -45,6 +46,14 @@ class ListAttendanceRecords extends ListRecords
             $tabs['Direccion (SST)'] = Tab::make()
                 ->modifyQueryUsing(callback: fn (Builder $query): Builder => $query->where('establishment_id', 1));
         }
+
+        if (auth()->user()->isManagerOf()->exists()) {
+            $userIds = User::whereIn('organizational_unit_id', auth()->user()->isManagerOf->pluck('id'))->pluck('id');
+    
+            $tabs['Mi Unidad'] = Tab::make()
+                ->modifyQueryUsing(fn (Builder $query) => $query->whereIn('user_id', $userIds));
+        }
+
         return $tabs;
     }
 }
