@@ -118,15 +118,16 @@ class RequestFormCreate extends Component
                 if ($this->isRFItems && $this->purchasePlan->purchasePlanItems) {
                     foreach ($this->purchasePlan->purchasePlanItems as $item) {
                         $this->items[] = [
-                            'id' => $item->id,
-                            'product_id' => $item->product_id,
-                            'unitOfMeasurement' => $item->unit_of_measurement,
-                            'technicalSpecifications' => $item->specification,
-                            'quantity' => $item->quantity,
-                            'unitValue' => $item->unit_value,
-                            'taxes' => $item->tax,
-                            'totalValue' => $item->expense,
-                            'articleFile' => $item->article_file
+                            // 'id' => $item->id, // NO SE PUEDE ASIGNAR ID DE PLAN DE COMPRAS, SOBRE-ESCRIBE EL ID DE ITEM     
+                            'id' => null, // Se asigna null para que se genere un nuevo ID al guardar
+                            'product_id' => $item->unspsc_product_id,
+                            'unitOfMeasurement'         => $item->unit_of_measurement,
+                            'technicalSpecifications'   => $item->specification,
+                            'quantity'                  => $item->quantity,
+                            'unitValue'                 => $item->unit_value,
+                            'taxes'                     => $item->tax,
+                            'totalValue'                => $item->expense,
+                            'articleFile'               => $item->article_file
                         ];
                     }
                 }
