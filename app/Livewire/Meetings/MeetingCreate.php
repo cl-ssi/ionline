@@ -195,8 +195,8 @@ class MeetingCreate extends Component
     }
 
     #[On('searchedUser')]
-    public function searchedUser($userId){
-        $this->searchedUser = User::find($userId);
+    public function searchedUser(User $user){
+        $this->searchedUser = $user;
     }
 
     public function addGrouping(){
