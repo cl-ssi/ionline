@@ -1953,8 +1953,8 @@ class ReportController extends Controller
         $months = [];
 
         foreach ($shiftControls as $shift) {
-            if (!$shift->serviceRequest) {
-                continue; // Skip if serviceRequest is null
+            if (!$shift->serviceRequest || !$shift->start_date || !$shift->end_date) {
+                continue; // Skip if serviceRequest, start_date, or end_date is null
             }
 
             $month = $shift->start_date->format('Y-m');
