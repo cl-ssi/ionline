@@ -1942,12 +1942,22 @@ class ReportController extends Controller
 
     public function HoursReport(Request $request)
     {
+        $establishment_id = auth()->user()->organizationalUnit->establishment_id;
         $startDate = $request->input('start_date', now()->startOfMonth()->format('Y-m-d 00:00:00'));
         $endDate = $request->input('end_date', now()->format('Y-m-d 23:59:59'));
 
         $shiftControls = ShiftControl::with(['serviceRequest', 'serviceRequest.employee', 'serviceRequest.fulfillments'])
             ->whereBetween('start_date', [$startDate, $endDate])
+            ->whereHas("serviceRequest", function ($subQuery) use ($establishment_id) {
+                $subQuery->when($establishment_id == 38, function ($q) {
+                    return $q->whereNotIn('establishment_id', [1, 41]);
+                })
+                ->when($establishment_id != 38, function ($q) use ($establishment_id) {
+                    return $q->where('establishment_id',$establishment_id);
+                });
+            })
             ->get();
+            // dd($establishment_id, $shiftControls);
 
         $reportData = [];
         $months = [];
