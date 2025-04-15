@@ -761,40 +761,53 @@ class ReportController extends Controller
     );
   }
 
-  public function compliance(Request $request)
-  {
-    $establishment_id = auth()->user()->organizationalUnit->establishment_id;
+    public function compliance(Request $request)
+    {
+        $establishment_id = auth()->user()->organizationalUnit->establishment_id;
 
-    $fulfillments = Fulfillment::Search($request)
-        ->whereHas('ServiceRequest')
-        ->whereHas("ServiceRequest", function ($subQuery) use ($establishment_id) {
-            $subQuery->when($establishment_id == 38, function ($q) {
-                return $q->whereNotIn('establishment_id', [1, 41]);
+        // Set default year if not provided
+        if (!$request->filled('year')) {
+            $request->merge(['year' => now()->year]);
+        }
+        
+        // Set default month/semester if not provided
+        if (!$request->filled('month')) {
+            // If current month is between January-June (1-6) set to 1, else set to 2
+            $defaultSemester = now()->month <= 6 ? '1' : '2';
+            $request->merge(['month' => $defaultSemester]);
+        }
+
+        $fulfillments = Fulfillment::Search($request)
+            ->with(['serviceRequest', 'serviceRequest.employee']) 
+            ->whereHas('ServiceRequest')
+            ->whereHas("ServiceRequest", function ($subQuery) use ($establishment_id) {
+                $subQuery->when($establishment_id == 38, function ($q) {
+                    return $q->whereNotIn('establishment_id', [1, 41]);
+                })
+                ->when($establishment_id != 38, function ($q) use ($establishment_id) {
+                    return $q->where('establishment_id',$establishment_id);
+                });
             })
-            ->when($establishment_id != 38, function ($q) use ($establishment_id) {
-                return $q->where('establishment_id',$establishment_id);
-            });
-        })
-        ->orderBy('id', 'Desc')
-        ->paginate(200);
+            ->orderBy('id', 'Desc')
+            ->paginate(100);
 
-    /* Año actual y año anterior */
-    $years[] = now()->format('Y');
-    $years[] = now()->subYear(1)->format('Y');
-    $years[] = now()->addYear(1)->format('Y');
+        /* Año actual y año anterior */
+        $years[] = now()->format('Y');
+        $years[] = now()->subYear(1)->format('Y');
+        $years[] = now()->addYear(1)->format('Y');
 
-    $request->flash();
-    if ($request->has('excel')) {
-      return Excel::download(new ComplianceExport($request), 'reporte-de-cumplimiento.xlsx');
+        $request->flash();
+        if ($request->has('excel')) {
+        return Excel::download(new ComplianceExport($request), 'reporte-de-cumplimiento.xlsx');
+        }
+
+        else {
+        return view(
+            'service_requests.requests.fulfillments.reports.compliance',
+            compact('years', 'fulfillments', 'request')
+        );
+        }
     }
-
-    else {
-      return view(
-        'service_requests.requests.fulfillments.reports.compliance',
-        compact('years', 'fulfillments', 'request')
-      );
-    }
-  }
 
 
 

@@ -25,10 +25,10 @@ class ComplianceExport implements FromCollection, WithHeadings, WithMapping, Sho
     public function collection()
     {
         
-        return Fulfillment::
-        Search($this->request)
-        ->whereHas('ServiceRequest')
-        ->orderBy('id','Desc')->get();        
+        return Fulfillment::Search($this->request)
+                            ->whereHas('ServiceRequest')
+                            ->orderBy('id','Desc')
+                            ->get();        
     }
 
 
@@ -50,13 +50,15 @@ class ComplianceExport implements FromCollection, WithHeadings, WithMapping, Sho
     {
         return [
             $fulfillment->id,
-            ($fulfillment->servicerequest)?$fulfillment->servicerequest->employee->runFormat(): '',
-            ($fulfillment->servicerequest->employee)? strtoupper($fulfillment->servicerequest->employee->fullname) : '',
-            $fulfillment->servicerequest->responsabilityCenter->name,
-            $fulfillment->year - $fulfillment->month,
-            $fulfillment->servicerequest->type,
-            $fulfillment->servicerequest->program_contract_type,
-            $fulfillment->servicerequest->working_day_type            
+            $fulfillment->servicerequest?->employee?->runFormat() ?? '',
+            $fulfillment->servicerequest?->employee?->fullname 
+                ? strtoupper($fulfillment->servicerequest->employee->fullname) 
+                : '',
+            $fulfillment->servicerequest?->responsabilityCenter?->name ?? '',
+            $fulfillment->year . '-' . $fulfillment->month,  // Fixed period format
+            $fulfillment->servicerequest?->type ?? '',
+            $fulfillment->servicerequest?->program_contract_type ?? '',
+            $fulfillment->servicerequest?->working_day_type ?? ''
         ];
     }
 }

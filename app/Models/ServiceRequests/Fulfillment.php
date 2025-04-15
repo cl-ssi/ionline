@@ -255,20 +255,27 @@ class Fulfillment extends Model implements AuditableContract
 
     public function scopeSearch($query, Request $request)
     {
+        $establishment_id = auth()->user()->organizationalUnit->establishment_id;
+        
         if ($request->input('establishment') != "") {
-            $query->whereHas('servicerequest', function ($q) use ($request) {
-                $q->where('establishment_id', $request->input('establishment'));
+            $query->whereHas("ServiceRequest", function ($subQuery) use ($establishment_id) {
+                $subQuery->when($establishment_id == 38, function ($q) {
+                    return $q->whereNotIn('establishment_id', [1, 41]);
+                })
+                ->when($establishment_id != 38, function ($q) use ($establishment_id) {
+                    return $q->where('establishment_id',$establishment_id);
+                });
             });
         }
 
         if ($request->input('sr_id') != "") {
-            $query->whereHas('servicerequest', function ($q) use ($request) {
+            $query->whereHas('serviceRequest', function ($q) use ($request) {
                 $q->Where('id', $request->input('sr_id'));
             });
         }
 
         if ($request->input('rut') != "") {
-            $query->whereHas('servicerequest', function ($q) use ($request) {
+            $query->whereHas('serviceRequest', function ($q) use ($request) {
                 $q->whereHas('employee', function ($q) use ($request) {
                     $users = User::getUsersBySearch($request->input('rut'));
                     $q->whereIn('id', $users->get('id'));
@@ -276,28 +283,32 @@ class Fulfillment extends Model implements AuditableContract
             });
         }
 
-        if ($request->input('year') != "") {
+        if ($request->filled('year')) {
             $query->where('year', $request->input('year'));
         }
 
-        if ($request->input('month') != "") {
-            $query->where('month', $request->input('month'));
+        if ($request->filled('month')) {
+            if($request->month == '1') {
+                $query->whereIn('month', [1,2,3,4,5,6]);
+            } else if($request->month == '2') {
+                $query->whereIn('month', [7,8,9,10,11,12]); 
+            }
         }
 
         if ($request->input('program_contract_type') != "") {
-            $query->whereHas('servicerequest', function ($q) use ($request) {
+            $query->whereHas('serviceRequest', function ($q) use ($request) {
                 $q->Where('program_contract_type', $request->input('program_contract_type'));
             });
         }
 
         if ($request->input('type') != "") {
-            $query->whereHas('servicerequest', function ($q) use ($request) {
+            $query->whereHas('serviceRequest', function ($q) use ($request) {
                 $q->Where('type', $request->input('type'));
             });
         }
 
         if ($request->input('programm_name') != "") {
-            $query->whereHas('servicerequest', function ($q) use ($request) {
+            $query->whereHas('serviceRequest', function ($q) use ($request) {
                 $q->Where('programm_name', $request->input('programm_name'));
             });
         }
