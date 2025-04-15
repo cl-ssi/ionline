@@ -13,7 +13,7 @@
 <div class="alert alert-info" role="alert">
     <div class="row">
         <div class="col-md-10 col-12">
-            Revisa aquí el <b>Calendario de Cierre Remuneraciones 2024</b>
+            Revisa aquí el <b>Calendario de Cierre Remuneraciones 2025</b>
         </div>
         <div class="col-md-2 col-12">
             @livewire('replacement-staff.remuneration-schedule')
