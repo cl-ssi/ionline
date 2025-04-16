@@ -798,7 +798,9 @@ class ReportController extends Controller
 
         $request->flash();
         if ($request->has('excel')) {
-        return Excel::download(new ComplianceExport($request), 'reporte-de-cumplimiento.xlsx');
+            ini_set('max_execution_time', 300); // 5 minutes
+            return (new ComplianceExport($request))
+                    ->download('reporte-de-cumplimiento.xlsx');
         }
 
         else {
