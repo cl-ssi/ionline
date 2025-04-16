@@ -3,6 +3,7 @@
 namespace App\Filament\Clusters\Rrhh\Resources\MonthlyAttendanceResource\Pages;
 
 use App\Filament\Clusters\Rrhh\Resources\MonthlyAttendanceResource;
+use App\Models\User;
 use Filament\Actions;
 use Filament\Resources\Components\Tab;
 use Filament\Resources\Pages\ListRecords;
@@ -32,6 +33,14 @@ class ListMonthlyAttendances extends ListRecords
         if (auth()->user()->can(abilities: 'be god')) {
             $tabs['todos'] = Tab::make();
         }
+
+        if (auth()->user()->isManagerOf()->exists()) {
+            $userIds = User::whereIn('organizational_unit_id', auth()->user()->isManagerOf->pluck('id'))->pluck('id');
+    
+            $tabs['Mi Unidad'] = Tab::make()
+                ->modifyQueryUsing(fn (Builder $query) => $query->whereIn('user_id', $userIds));
+        }
+
         return $tabs;
     }
 }
