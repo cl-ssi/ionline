@@ -291,7 +291,6 @@
                         <strong class="text-muted d-block text-center">
                         <br>
                         {{ optional($user->organizationalUnit)->establishment->official_name ?? '' }}<br>
-                        <br>
                         Gobierno de Chile
                         </strong>
                     </span>
