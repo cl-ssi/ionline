@@ -30,7 +30,7 @@ class ListMonthlyAttendances extends ListRecords
                 ->modifyQueryUsing(callback: fn (Builder $query): Builder => $query->where('establishment_id', auth()->user()->establishment_id));
         }
 
-        if (auth()->user()->can(abilities: ['be god','Attendance records: admin'])) {
+        if (auth()->user()->canAny(abilities: ['be god','Attendance records: admin'])) {
             $tabs['todos'] = Tab::make();
         }
 
