@@ -303,7 +303,7 @@ class ReportController extends Controller
 
   public function bankPaymentFile(Request $request)
   {
-    $establishment_id = $request->establishment_id; 
+    $establishment_id = auth()->user()->organizationalUnit->establishment_id;
     $pay_type = $request->pay_type;
     $programm_name = $request->programm_name;
 
