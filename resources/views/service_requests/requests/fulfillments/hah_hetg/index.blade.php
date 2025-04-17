@@ -1,12 +1,12 @@
 @extends('layouts.bt4.app')
 
-@section('title', 'Cumplimiento solicitudes de contratación')
+@section('title', 'Cumplimiento solicitudes de contratación HAH con recursos HETG')
 
 @section('content')
 
 @include('service_requests.partials.nav')
 
-<h3 class="mb-3">Cumplimiento solicitudes de contratación</h3>
+<h3 class="mb-3">Cumplimiento solicitudes de contratación HAH con recursos HETG</h3>
 
 <form method="GET" class="form-horizontal" action="{{ route('rrhh.service-request.fulfillment.index') }}">
     <div class="form-row">

@@ -75,7 +75,16 @@ class ReportController extends Controller
                 return $q->whereNotIn('establishment_id', [1, 41]);
             })
             ->when($establishment_id != 38, function ($q) use ($establishment_id) {
-                return $q->where('establishment_id',$establishment_id);
+                return $q->where(function($query) use ($establishment_id) {
+                    $query->where(function($q) use ($establishment_id) {
+                        $q->where('hetg_resources', true)
+                          ->whereIn('establishment_id', [41, $establishment_id]);
+                    })
+                    ->orWhere(function($q) use ($establishment_id) {
+                        $q->where('hetg_resources', false)
+                          ->where('establishment_id', $establishment_id);
+                    });
+                });
             });
         })
         ->whereNull('total_paid')
@@ -105,7 +114,16 @@ class ReportController extends Controller
                     return $q->whereNotIn('establishment_id', [1, 41]);
                 })
                 ->when($establishment_id != 38, function ($q) use ($establishment_id) {
-                    return $q->where('establishment_id',$establishment_id);
+                    return $q->where(function($query) use ($establishment_id) {
+                        $query->where(function($q) use ($establishment_id) {
+                            $q->where('hetg_resources', true)
+                              ->whereIn('establishment_id', [41, $establishment_id]);
+                        })
+                        ->orWhere(function($q) use ($establishment_id) {
+                            $q->where('hetg_resources', false)
+                              ->where('establishment_id', $establishment_id);
+                        });
+                    });
                 });
             })
             ->get();
@@ -144,12 +162,21 @@ class ReportController extends Controller
     })
     ->when($establishment_id != null, function ($q) use ($establishment_id) {
         return $q->whereHas("ServiceRequest", function ($subQuery) use ($establishment_id) {
-          $subQuery->when($establishment_id == 38, function ($q) {
-                        return $q->whereNotIn('establishment_id', [1, 41]);
+            $subQuery->when($establishment_id == 38, function ($q) {
+                return $q->whereNotIn('establishment_id', [1, 41]);
+            })
+            ->when($establishment_id != 38, function ($q) use ($establishment_id) {
+                return $q->where(function($query) use ($establishment_id) {
+                    $query->where(function($q) use ($establishment_id) {
+                        $q->where('hetg_resources', true)
+                          ->whereIn('establishment_id', [41, $establishment_id]);
                     })
-                    ->when($establishment_id != 38, function ($q) use ($establishment_id) {
-                        return $q->where('establishment_id',$establishment_id);
+                    ->orWhere(function($q) use ($establishment_id) {
+                        $q->where('hetg_resources', false)
+                          ->where('establishment_id', $establishment_id);
                     });
+                });
+            });
         });
     })
     ->when($service_request_id != null, function ($q) use ($service_request_id) {
@@ -178,12 +205,21 @@ class ReportController extends Controller
     })
     ->when($establishment_id != null, function ($q) use ($establishment_id) {
         return $q->whereHas("ServiceRequest", function ($subQuery) use ($establishment_id) {
-          $subQuery->when($establishment_id == 38, function ($q) {
-                        return $q->whereNotIn('establishment_id', [1, 41]);
+            $subQuery->when($establishment_id == 38, function ($q) {
+                return $q->whereNotIn('establishment_id', [1, 41]);
+            })
+            ->when($establishment_id != 38, function ($q) use ($establishment_id) {
+                return $q->where(function($query) use ($establishment_id) {
+                    $query->where(function($q) use ($establishment_id) {
+                        $q->where('hetg_resources', true)
+                          ->whereIn('establishment_id', [41, $establishment_id]);
                     })
-                    ->when($establishment_id != 38, function ($q) use ($establishment_id) {
-                        return $q->where('establishment_id',$establishment_id);
+                    ->orWhere(function($q) use ($establishment_id) {
+                        $q->where('hetg_resources', false)
+                          ->where('establishment_id', $establishment_id);
                     });
+                });
+            });
         });
     })
     ->when($service_request_id != null, function ($q) use ($service_request_id) {
@@ -278,12 +314,21 @@ class ReportController extends Controller
     })
     ->when($establishment_id != null, function ($q) use ($establishment_id) {
         return $q->whereHas("ServiceRequest", function ($subQuery) use ($establishment_id) {
-          $subQuery->when($establishment_id == 38, function ($q) {
-                        return $q->whereNotIn('establishment_id', [1, 41]);
+            $subQuery->when($establishment_id == 38, function ($q) {
+                return $q->whereNotIn('establishment_id', [1, 41]);
+            })
+            ->when($establishment_id != 38, function ($q) use ($establishment_id) {
+                return $q->where(function($query) use ($establishment_id) {
+                    $query->where(function($q) use ($establishment_id) {
+                        $q->where('hetg_resources', true)
+                          ->whereIn('establishment_id', [41, $establishment_id]);
                     })
-                    ->when($establishment_id != 38, function ($q) use ($establishment_id) {
-                        return $q->where('establishment_id',$establishment_id);
+                    ->orWhere(function($q) use ($establishment_id) {
+                        $q->where('hetg_resources', false)
+                          ->where('establishment_id', $establishment_id);
                     });
+                });
+            });
         });
     })
     ->when($programm_name != null, function ($q) use ($programm_name) {
@@ -313,12 +358,21 @@ class ReportController extends Controller
         })
         ->when($establishment_id != null, function ($q) use ($establishment_id) {
             return $q->whereHas("ServiceRequest", function ($subQuery) use ($establishment_id) {
-              $subQuery->when($establishment_id == 38, function ($q) {
-                            return $q->whereNotIn('establishment_id', [1, 41]);
+                $subQuery->when($establishment_id == 38, function ($q) {
+                    return $q->whereNotIn('establishment_id', [1, 41]);
+                })
+                ->when($establishment_id != 38, function ($q) use ($establishment_id) {
+                    return $q->where(function($query) use ($establishment_id) {
+                        $query->where(function($q) use ($establishment_id) {
+                            $q->where('hetg_resources', true)
+                              ->whereIn('establishment_id', [41, $establishment_id]);
                         })
-                        ->when($establishment_id != 38, function ($q) use ($establishment_id) {
-                            return $q->where('establishment_id',$establishment_id);
+                        ->orWhere(function($q) use ($establishment_id) {
+                            $q->where('hetg_resources', false)
+                              ->where('establishment_id', $establishment_id);
                         });
+                    });
+                });
             });
         })
         ->when($programm_name != null, function ($q) use ($programm_name) {
@@ -659,12 +713,21 @@ class ReportController extends Controller
       })
       ->when($establishment_id != null, function ($q) use ($establishment_id) {
         return $q->whereHas("ServiceRequest", function ($subQuery) use ($establishment_id) {
-          $subQuery->when($establishment_id == 38, function ($q) {
-                        return $q->whereNotIn('establishment_id', [1, 41]);
+            $subQuery->when($establishment_id == 38, function ($q) {
+                return $q->whereNotIn('establishment_id', [1, 41]);
+            })
+            ->when($establishment_id != 38, function ($q) use ($establishment_id) {
+                return $q->where(function($query) use ($establishment_id) {
+                    $query->where(function($q) use ($establishment_id) {
+                        $q->where('hetg_resources', true)
+                          ->whereIn('establishment_id', [41, $establishment_id]);
                     })
-                    ->when($establishment_id != 38, function ($q) use ($establishment_id) {
-                        return $q->where('establishment_id',$establishment_id);
+                    ->orWhere(function($q) use ($establishment_id) {
+                        $q->where('hetg_resources', false)
+                          ->where('establishment_id', $establishment_id);
                     });
+                });
+            });
         });
       })
       ->when($type != null, function ($q) use ($type) {
@@ -715,16 +778,25 @@ class ReportController extends Controller
           $subQuery->where('responsability_center_ou_id', $responsability_center);
         });
       })
-      ->whereHas("serviceRequest", function ($subQuery) use ($establishment_id) {
+      ->whereHas("ServiceRequest", function ($subQuery) use ($establishment_id) {
             $subQuery->when($establishment_id == 38, function ($q) {
-                            return $q->whereNotIn('establishment_id', [1, 41]);
-                        })
-                        ->when($establishment_id != 38, function ($q) use ($establishment_id) {
-                            return $q->where('establishment_id',$establishment_id);
-                        });
-      })
-      ->orderBy('year')
-      ->orderBy('month');
+                return $q->whereNotIn('establishment_id', [1, 41]);
+            })
+            ->when($establishment_id != 38, function ($q) use ($establishment_id) {
+                return $q->where(function($query) use ($establishment_id) {
+                    $query->where(function($q) use ($establishment_id) {
+                        $q->where('hetg_resources', true)
+                        ->whereIn('establishment_id', [41, $establishment_id]);
+                    })
+                    ->orWhere(function($q) use ($establishment_id) {
+                        $q->where('hetg_resources', false)
+                        ->where('establishment_id', $establishment_id);
+                    });
+                });
+            });
+        })
+        ->orderBy('year')
+        ->orderBy('month');
 
     switch ($who) {
       case 'responsable':
@@ -785,7 +857,16 @@ class ReportController extends Controller
                     return $q->whereNotIn('establishment_id', [1, 41]);
                 })
                 ->when($establishment_id != 38, function ($q) use ($establishment_id) {
-                    return $q->where('establishment_id',$establishment_id);
+                    return $q->where(function($query) use ($establishment_id) {
+                        $query->where(function($q) use ($establishment_id) {
+                            $q->where('hetg_resources', true)
+                              ->whereIn('establishment_id', [41, $establishment_id]);
+                        })
+                        ->orWhere(function($q) use ($establishment_id) {
+                            $q->where('hetg_resources', false)
+                              ->where('establishment_id', $establishment_id);
+                        });
+                    });
                 });
             })
             ->orderBy('id', 'Desc')
@@ -1963,12 +2044,21 @@ class ReportController extends Controller
 
         $shiftControls = ShiftControl::with(['serviceRequest', 'serviceRequest.employee', 'serviceRequest.fulfillments'])
             ->whereBetween('start_date', [$startDate, $endDate])
-            ->whereHas("serviceRequest", function ($subQuery) use ($establishment_id) {
+            ->whereHas("ServiceRequest", function ($subQuery) use ($establishment_id) {
                 $subQuery->when($establishment_id == 38, function ($q) {
                     return $q->whereNotIn('establishment_id', [1, 41]);
                 })
                 ->when($establishment_id != 38, function ($q) use ($establishment_id) {
-                    return $q->where('establishment_id',$establishment_id);
+                    return $q->where(function($query) use ($establishment_id) {
+                        $query->where(function($q) use ($establishment_id) {
+                            $q->where('hetg_resources', true)
+                              ->whereIn('establishment_id', [41, $establishment_id]);
+                        })
+                        ->orWhere(function($q) use ($establishment_id) {
+                            $q->where('hetg_resources', false)
+                              ->where('establishment_id', $establishment_id);
+                        });
+                    });
                 });
             })
             ->get();
