@@ -39,7 +39,7 @@ class ListAttendanceRecords extends ListRecords
             $tabs[auth()->user()->establishment->name] = Tab::make()
                 ->modifyQueryUsing(callback: fn (Builder $query): Builder => $query->where('establishment_id', auth()->user()->establishment_id));
         }
-        if (auth()->user()->can(abilities: 'be god')) {
+        if (auth()->user()->can(abilities: ['be god','Attendance records: admin'])) {
             $tabs['todos'] = Tab::make();
         }
         if(in_array('1', auth()->user()->IamSecretaryOf->pluck('organizational_unit_id')->toArray())){
